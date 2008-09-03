@@ -33,7 +33,6 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.ComponentSetEnableTask.disable;
 import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -41,6 +40,7 @@ import static org.fest.swing.driver.JSliderMaximumQuery.maximumOf;
 import static org.fest.swing.driver.JSliderOrientationQuery.orientationOf;
 import static org.fest.swing.driver.JSliderSetValueTask.setValueTask;
 import static org.fest.swing.driver.JSliderValueQuery.valueOf;
+import static org.fest.swing.task.ComponentSetEnableTask.disable;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

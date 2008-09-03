@@ -1,5 +1,5 @@
 /*
- * Created on Feb 23, 2008
+ * Created on Sep 1, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,34 +13,31 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core;
+package org.fest.swing.task;
 
 import java.awt.Component;
-import java.lang.reflect.Method;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.RequestFocusTask;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 /**
- * Tests for <code>{@link RequestFocusTask}</code>.
+ * Tests for <code>{@link ComponentRequestFocusTask}</code>.
  *
  * @author Alex Ruiz
  */
-public class RequestFocusTaskTest {
+public class ComponentRequestFocusTaskTest {
 
-  private RequestFocusTask task;
   private Component component;
+  private ComponentRequestFocusTask task;
   
   @BeforeMethod public void setUp() throws Exception {
-    Method requestFocusInWindow = Component.class.getDeclaredMethod("requestFocusInWindow");
-    component = createMock(Component.class, new Method[] { requestFocusInWindow });
-    task = new RequestFocusTask(component);
+    component = createMock(Component.class);
+    task = new ComponentRequestFocusTask(component);
   }
   
   @Test public void shouldCallRequestFocusInWindow() {
@@ -51,7 +48,7 @@ public class RequestFocusTaskTest {
       }
       
       protected void codeToTest() {
-        task.run();
+        task.executeInEDT();
       }
     }.run();
   }

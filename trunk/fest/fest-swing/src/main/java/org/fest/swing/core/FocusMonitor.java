@@ -29,12 +29,7 @@ final class FocusMonitor extends FocusAdapter {
 
   private volatile boolean focused = false;
 
-  static FocusMonitor addFocusMonitorTo(Component c) {
-    return new FocusMonitor(c);
-  }
-
-  private FocusMonitor(Component c) {
-    c.addFocusListener(this);
+  FocusMonitor(Component c) {
     focused = focusOwner() == c;
   }
 

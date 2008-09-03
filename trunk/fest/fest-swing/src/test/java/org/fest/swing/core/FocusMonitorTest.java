@@ -25,6 +25,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.ComponentAddFocusListenerTask.addFocusListenerTask;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.FocusSetter.setFocusOn;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -43,7 +44,8 @@ public class FocusMonitorTest {
   @BeforeMethod public void setUp() {
     window = MyWindow.createAndShowInEDT();
     setFocusOn(window.button);
-    monitor = FocusMonitor.addFocusMonitorTo(window.button);
+    monitor = new FocusMonitor(window.button);
+    execute(addFocusListenerTask(window.button, monitor));
     assertThat(monitor.hasFocus()).isTrue();
   }
   
@@ -58,7 +60,8 @@ public class FocusMonitorTest {
 
   public void shouldNotHaveFocusIsComponentIsNotFocusOwner() {
     setFocusOn(window.textBox);
-    monitor = FocusMonitor.addFocusMonitorTo(window.button);
+    monitor = new FocusMonitor(window.button);
+    execute(addFocusListenerTask(window.button, monitor));
     assertThat(monitor.hasFocus()).isFalse();
   }
   

@@ -16,7 +16,6 @@
 package org.fest.swing.core;
 
 import java.awt.Window;
-import java.lang.reflect.Method;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -37,8 +36,7 @@ public class ActivateWindowTaskTest {
   private Window w;
   
   @BeforeMethod public void setUp() throws Exception {
-    Method toFront = Window.class.getDeclaredMethod("toFront");
-    w = createMock(Window.class, new Method[] { toFront });
+    w = createMock(Window.class);
     task = new ActivateWindowTask(w);
   }
   
@@ -50,7 +48,7 @@ public class ActivateWindowTaskTest {
       }
 
       protected void codeToTest() {
-        task.run();
+        task.executeInEDT();
       }
     }.run();
   }

@@ -16,11 +16,12 @@
 package org.fest.swing.core;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JButtons.button;
+import static org.fest.swing.factory.JLabels.label;
 
 /**
  * Tests for <code>{@link GenericTypeMatcher}</code>.
@@ -35,7 +36,7 @@ public class GenericTypeMatcherTest {
         return true;
       }
     };
-    assertThat(matcher.matches(new JButton())).isTrue();
+    assertThat(matcher.matches(button().createInEDT())).isTrue();
   }
   
   @Test public void shouldReturnFalseIfTypeMatchesButNotSearchCriteria() {
@@ -44,7 +45,7 @@ public class GenericTypeMatcherTest {
         return false;
       }
     };
-    assertThat(matcher.matches(new JButton())).isFalse();
+    assertThat(matcher.matches(button().createInEDT())).isFalse();
   }
 
   @Test public void shouldReturnFalseIfSearchCriteriaMatchesButNotType() {
@@ -53,7 +54,7 @@ public class GenericTypeMatcherTest {
         return true;
       }
     };
-    assertThat(matcher.matches(new JLabel())).isFalse();
+    assertThat(matcher.matches(label().createInEDT())).isFalse();
   }
 
   @Test public void shouldReturnFalseIfSearchCriteriaAndTypeNotMatching() {
@@ -62,7 +63,7 @@ public class GenericTypeMatcherTest {
         return false;
       }
     };
-    assertThat(matcher.matches(new JLabel())).isFalse();
+    assertThat(matcher.matches(label().createInEDT())).isFalse();
   }
 
   @Test public void shouldReturnFalseIfComponentIsNull() {
@@ -80,6 +81,6 @@ public class GenericTypeMatcherTest {
         return true;
       }
     };
-    assertThat(matcher.matches(new JButton())).isFalse();
+    assertThat(matcher.matches(button().createInEDT())).isFalse();
   }
 }

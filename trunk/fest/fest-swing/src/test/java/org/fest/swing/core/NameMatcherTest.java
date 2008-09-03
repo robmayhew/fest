@@ -24,6 +24,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.factory.JButtons.button;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -39,8 +40,9 @@ public class NameMatcherTest {
   private NameMatcher matcher;
   
   @BeforeMethod public void setUp() {
-    button = new JButton("Click Me");
-    button.setName(NAME);
+    button = button().withName(NAME)
+                     .withText("Click Me")
+                     .createInEDT();
     matcher = new NameMatcher(NAME);
     assertThat(matcher.requireShowing()).isFalse();
   }

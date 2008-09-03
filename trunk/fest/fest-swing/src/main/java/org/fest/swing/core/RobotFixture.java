@@ -36,23 +36,30 @@ import org.fest.swing.util.TimeoutWatch;
 
 import static java.awt.event.InputEvent.*;
 import static java.awt.event.KeyEvent.*;
+import static java.awt.event.WindowEvent.WINDOW_CLOSING;
 import static java.lang.System.currentTimeMillis;
 import static javax.swing.SwingUtilities.*;
 
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.ActivateWindowTask.activateWindowTask;
+import static org.fest.swing.core.ComponentAddFocusListenerTask.addFocusListenerTask;
+import static org.fest.swing.core.ComponentRemoveFocusListenerTask.removeFocusListenerTask;
 import static org.fest.swing.core.EventMode.*;
-import static org.fest.swing.core.FocusMonitor.addFocusMonitorTo;
 import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
 import static org.fest.swing.core.InputModifiers.unify;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
+import static org.fest.swing.core.WindowHideAndDisposeTask.hideAndDisposeTask;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
 import static org.fest.swing.keystroke.KeyStrokeMap.keyStrokeFor;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
+import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
+import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
+import static org.fest.swing.task.ComponentRequestFocusTask.requestFocusTask;
 import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.swing.util.Modifiers.*;
 import static org.fest.swing.util.Platform.isOSX;
@@ -181,12 +188,12 @@ public class RobotFixture implements Robot {
       Point p = closeLocation(w);
       moveMouse(w, p.x, p.y);
     } catch (RuntimeException e) {}
-    WindowEvent event = new WindowEvent(w, WindowEvent.WINDOW_CLOSING);
+    WindowEvent event = new WindowEvent(w, WINDOW_CLOSING);
     // If the window contains an applet, send the event on the applet's queue instead to ensure a shutdown from the
     // applet's context (assists AppletViewer cleanup).
     Component applet = findAppletDescendent(w);
-    EventQueue eq = windowMonitor.eventQueueFor(applet != null ? applet : w);
-    eq.postEvent(event);
+    EventQueue eventQueue = windowMonitor.eventQueueFor(applet != null ? applet : w);
+    eventQueue.postEvent(event);
   }
 
   /**
@@ -205,12 +212,12 @@ public class RobotFixture implements Robot {
 
   private Point closeLocation(Container c) {
     if (isOSX()) return closeLocationForOSX(c);
-    Insets insets = c.getInsets();
-    return new Point(c.getSize().width - insets.right - 10, insets.top / 2);
+    Insets insets = insetsOf(c);
+    return new Point(sizeOf(c).width - insets.right - 10, insets.top / 2);
   }
 
   private Point closeLocationForOSX(Container c) {
-    Insets insets = c.getInsets();
+    Insets insets = insetsOf(c);
     return new Point(insets.left + 15, insets.top / 2);
   }
 
@@ -227,7 +234,8 @@ public class RobotFixture implements Robot {
   private void focus(final Component c, boolean wait) {
     Component currentOwner = focusOwner();
     if (currentOwner == c) return;
-    FocusMonitor focusMonitor = addFocusMonitorTo(c);
+    FocusMonitor focusMonitor = new FocusMonitor(c);
+    invokeAndWait(addFocusListenerTask(c, focusMonitor));
     // for pointer focus
     moveMouse(c);
     waitForIdle();
@@ -238,7 +246,7 @@ public class RobotFixture implements Robot {
       activate(componentAncestor);
       waitForIdle();
     }
-    invokeAndWait(c, new RequestFocusTask(c));
+    invokeAndWait(c, requestFocusTask(c));
     try {
       if (wait) {
         TimeoutWatch watch = startWatchWithTimeoutOf(settings().timeoutToBeVisible());
@@ -248,7 +256,7 @@ public class RobotFixture implements Robot {
         }
       }
     } finally {
-      c.removeFocusListener(focusMonitor);
+      invokeAndWait(removeFocusListenerTask(c, focusMonitor));
     }
   }
 
@@ -257,7 +265,7 @@ public class RobotFixture implements Robot {
    * @param w the window to activate.
    */
   private void activate(Window w) {
-    invokeAndWait(w, new ActivateWindowTask(w));
+    invokeAndWait(w, activateWindowTask(w));
     moveMouse(w); // For pointer-focus systems
   }
 
@@ -299,8 +307,7 @@ public class RobotFixture implements Robot {
       if (!(c instanceof Window)) continue;
       Window w = (Window) c;
       hierarchy.dispose(w);
-      w.setVisible(false);
-      w.dispose();
+      invokeLater(w, hideAndDisposeTask(w));
     }
   }
 
@@ -432,8 +439,7 @@ public class RobotFixture implements Robot {
       if (c instanceof JPopupMenu) {
         // wiggle the mouse over the parent menu item to ensure the sub-menu shows
         Component invoker = invokerOf((JPopupMenu)c);
-        if (invoker instanceof JMenu)
-          jitter(invoker, new Point(invoker.getWidth() / 2, invoker.getHeight() / 2));
+        if (invoker instanceof JMenu) jitter(invoker, centerOf(invoker));
       }
       if (watch.isTimeOut()) return false;
       pause();

@@ -27,6 +27,10 @@ class ActivateWindowTask extends GuiTask {
 
   private final Window w;
 
+  static ActivateWindowTask activateWindowTask(Window w) {
+    return new ActivateWindowTask(w);
+  }
+  
   ActivateWindowTask(Window w) {
     this.w = w;
   }

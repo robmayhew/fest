@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -34,6 +33,8 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JButtons.button;
+import static org.fest.swing.factory.JDialogs.dialog;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.util.Collections.list;
 
@@ -58,9 +59,9 @@ public class FinderDelegateTest {
         return c instanceof JButton;
       }
     };
-    dialog = new JDialog();
+    dialog = dialog().createInEDT();
     textField = textField().createInEDT();
-    button = new JButton();
+    button = button().createInEDT();
     finder = new FinderDelegate();
   }
   

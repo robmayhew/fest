@@ -35,11 +35,11 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.ComponentSetEnableTask.disable;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
 import static org.fest.swing.task.AbstractButtonSetSelectedTask.setSelected;
+import static org.fest.swing.task.ComponentSetEnableTask.disable;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

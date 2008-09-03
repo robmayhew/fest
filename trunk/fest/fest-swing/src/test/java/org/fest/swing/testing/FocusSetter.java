@@ -18,8 +18,11 @@ package org.fest.swing.testing;
 import java.awt.Component;
 
 import org.fest.swing.core.Condition;
+import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.task.ComponentRequestFocusTask.requestFocusTask;
 
 /**
  * Understands setting focus on a <code>{@link Component}</code>.
@@ -29,13 +32,21 @@ import static org.fest.swing.core.Pause.pause;
 public final class FocusSetter {
 
   public static void setFocusOn(final Component c) {
-    c.requestFocusInWindow();
+    execute(requestFocusTask(c));
     pause(new Condition("component gets focus") {
       public boolean test() {
-        return c.hasFocus();
+        return hasFocus(c);
       }          
     });
   }
 
+  static boolean hasFocus(final Component c) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return c.hasFocus();
+      }
+    });
+  }
+  
   private FocusSetter() {}
 }

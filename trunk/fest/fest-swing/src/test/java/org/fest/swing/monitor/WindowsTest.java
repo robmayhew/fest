@@ -48,6 +48,7 @@ public class WindowsTest {
   @BeforeMethod public void setUp() {
     frame = new TestWindow(getClass());
     windows = new Windows();
+    // TODO use real maps
     pending = mapField("pending", windows);
     open = mapField("open", windows);
     closed = mapField("closed", windows);
