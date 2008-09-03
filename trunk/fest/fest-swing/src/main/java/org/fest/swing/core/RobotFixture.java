@@ -46,6 +46,7 @@ import static org.fest.swing.core.ComponentAddFocusListenerTask.addFocusListener
 import static org.fest.swing.core.ComponentRemoveFocusListenerTask.removeFocusListenerTask;
 import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
+import static org.fest.swing.core.GuiActionRunner.rethrowCatchedExceptionIn;
 import static org.fest.swing.core.InputModifiers.unify;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
@@ -267,6 +268,17 @@ public class RobotFixture implements Robot {
   private void activate(Window w) {
     invokeAndWait(w, activateWindowTask(w));
     moveMouse(w); // For pointer-focus systems
+  }
+
+  /** {@inheritDoc} */
+  public void invokeAndWait(GuiTask task) {
+    invokeAndWait(null, task);
+  }
+
+  /** {@inheritDoc} */
+  public void invokeAndWait(Component c, GuiTask task) {
+    invokeAndWait(c, (Runnable)task);
+    rethrowCatchedExceptionIn(task);
   }
 
   /** {@inheritDoc} */

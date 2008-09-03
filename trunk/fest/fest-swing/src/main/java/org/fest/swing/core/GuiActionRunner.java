@@ -73,7 +73,7 @@ public class GuiActionRunner {
     return query.result();
   }
 
-  private static void rethrowCatchedExceptionIn(GuiAction action) {
+  static void rethrowCatchedExceptionIn(GuiAction action) {
     Throwable catchedException = action.catchedException();
     if (catchedException != null) throw unexpected(catchedException);
   }
