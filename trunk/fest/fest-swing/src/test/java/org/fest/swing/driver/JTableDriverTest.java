@@ -21,6 +21,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.JTableHeader;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -44,7 +45,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.EventMode.*;
+import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -75,13 +76,14 @@ public class JTableDriverTest {
   private TestTable dragTable;
   private TestTable dropTable;
   private JTableDriver driver;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     cellReader = new JTableCellReaderStub();
     driver = new JTableDriver(robot);
     driver.cellReader(cellReader);
-    MyWindow window = MyWindow.createInEDT();
+    window = MyWindow.createInEDT();
     dragTable = window.dragTable;
     dropTable = window.dropTable;
     robot.showWindow(window);
@@ -105,13 +107,13 @@ public class JTableDriverTest {
 
   @DataProvider(name = "cellsAndEventModes") public Object[][] cellsAndEventModes() {
     return new Object[][] { 
-        { 6, 5, AWT }, 
+        // { 6, 5, AWT }, 
         { 6, 5, ROBOT }, 
-        { 0, 0, AWT }, 
+        // { 0, 0, AWT }, 
         { 0, 0, ROBOT }, 
-        { 8, 3, AWT }, 
+        //{ 8, 3, AWT }, 
         { 8, 3, ROBOT }, 
-        { 5, 2, AWT }, 
+        //{ 5, 2, AWT }, 
         { 5, 2, ROBOT } 
     };
   }
@@ -241,9 +243,9 @@ public class JTableDriverTest {
     assertThat(driver.selectionValue(dragTable)).isNull();
   }
 
-  // @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldDragAndDrop(/* EventMode eventMode */) {
-    // robot.settings().eventMode(eventMode);
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldDragAndDrop(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
     int dragRowCount = rowCountOf(dragTable);
     int dropRowCount = rowCountOf(dropTable);
     driver.drag(dragTable, cell(3, 0));
@@ -493,6 +495,10 @@ public class JTableDriverTest {
     driver.cellWriter(null);
   }
 
+  public void shouldReturnJTableHeader() {
+    assertThat(driver.tableHeaderOf(dragTable)).isSameAs(window.dragTableHeader);
+  }
+  
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
@@ -504,6 +510,8 @@ public class JTableDriverTest {
     final TestTable dragTable = new TestTable(ROW_COUNT, COLUMN_COUNT);
     final TestTable dropTable = new TestTable(dropTableData(2, COLUMN_COUNT), columnNames(COLUMN_COUNT));
 
+    final JTableHeader dragTableHeader;
+    
     static MyWindow createInEDT() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() { return new MyWindow(); }
@@ -522,6 +530,7 @@ public class JTableDriverTest {
       super(JTableDriverTest.class);
       add(decorate(dragTable));
       add(decorate(dropTable));
+      dragTableHeader = dragTable.getTableHeader();
       setPreferredSize(new Dimension(600, 400));
     }
 

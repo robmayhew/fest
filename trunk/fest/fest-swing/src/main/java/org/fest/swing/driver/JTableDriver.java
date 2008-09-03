@@ -21,6 +21,7 @@ import java.awt.Point;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.table.JTableHeader;
 
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
@@ -37,6 +38,7 @@ import static org.fest.swing.driver.CommonValidations.*;
 import static org.fest.swing.driver.JTableCell.*;
 import static org.fest.swing.driver.JTableCellEditableQuery.isCellEditable;
 import static org.fest.swing.driver.JTableColumnCountQuery.columnCountOf;
+import static org.fest.swing.driver.JTableHeaderQuery.tableHeader;
 import static org.fest.swing.driver.JTableRowCountQuery.rowCountOf;
 import static org.fest.swing.driver.JTableSelectedCellQuery.selectedCellOf;
 import static org.fest.swing.driver.JTableSelectedRowCountQuery.selectedRowCountOf;
@@ -75,6 +77,15 @@ public class JTableDriver extends JComponentDriver {
     super(robot);
     cellReader(new BasicJTableCellReader());
     cellWriter(new BasicJTableCellWriter(robot));
+  }
+  
+  /**
+   * Returns the <code>{@link JTableHeader}</code> of the given <code>{@link JTable}</code>. 
+   * @param table the given <code>JTable</code>.
+   * @return the <code>JTableHeader</code> of the given <code>JTable</code>.
+   */
+  public JTableHeader tableHeaderOf(JTable table) {
+    return tableHeader(table);
   }
 
   /**
