@@ -162,7 +162,7 @@ public class AppletLauncher {
   public AppletLauncher withParameters(Map<String, String> newParameters) {
     if (newParameters == null) throw new NullPointerException("The map of parameters should not be null");
     parameters.clear();
-    if (newParameters != null) parameters.putAll(newParameters);
+    parameters.putAll(newParameters);
     return this;
   }
 
@@ -176,8 +176,7 @@ public class AppletLauncher {
   public AppletLauncher withParameters(AppletParameter... newParameters) {
     if (newParameters == null) throw new NullPointerException("The array of parameters should not be null");
     parameters.clear();
-    if (newParameters != null)
-      for (AppletParameter parameter : newParameters) add(parameter);
+    for (AppletParameter parameter : newParameters) add(parameter);
     return this;
   }
 
