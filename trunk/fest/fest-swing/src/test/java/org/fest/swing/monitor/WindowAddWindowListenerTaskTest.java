@@ -1,5 +1,5 @@
 /*
- * Created on Aug 31, 2008
+ * Created on Sep 2, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,10 +13,10 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.monitor;
 
-import java.awt.Component;
-import java.awt.event.ComponentListener;
+import java.awt.Window;
+import java.awt.event.WindowListener;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -29,28 +29,28 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
- * Tests for <code>{@link AddComponentListenerTask}</code>.
+ * Tests for <code>{@link WindowAddWindowListenerTask}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
 @Test(groups = EDT_ACTION)
-public class AddComponentListenerTaskTest {
+public class WindowAddWindowListenerTaskTest {
 
-  private Component component;
-  private ComponentListener listener;
-  private AddComponentListenerTask task;
+  private Window window;
+  private WindowListener listener;
+  private WindowAddWindowListenerTask task;
 
   @BeforeMethod public void setUp() {
-    component = createMock(Component.class);
-    listener = createMock(ComponentListener.class);
-    task = new AddComponentListenerTask(component, listener);
+    window = createMock(Window.class);
+    listener = createMock(WindowListener.class);
+    task = new WindowAddWindowListenerTask(window, listener);
   }
 
-  public void shouldAddComponentListener() {
-    new EasyMockTemplate(component) {
+  public void shouldAddWindowListener() {
+    new EasyMockTemplate(window) {
       protected void expectations() {
-        component.addComponentListener(listener);
+        window.addWindowListener(listener);
         expectLastCall().once();
       }
 

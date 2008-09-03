@@ -27,22 +27,22 @@ import org.fest.swing.core.GuiTask;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class AddComponentListenerTask extends GuiTask {
+public class ComponentAddComponentListenerTask extends GuiTask {
 
   private final Component c;
   private final ComponentListener l;
 
   /**
-   * Creates a new <code>{@link AddComponentListenerTask}</code>.
+   * Creates a new <code>{@link ComponentAddComponentListenerTask}</code>.
    * @param c the <code>Component</code> to add a <code>ComponentListener</code> to.
    * @param l the <code>ComponentListener</code> to add.
    * @return the created task.
    */
-  public static AddComponentListenerTask addComponentListenerTask(Component c, ComponentListener l) {
-    return new AddComponentListenerTask(c, l);
+  public static ComponentAddComponentListenerTask addComponentListenerTask(Component c, ComponentListener l) {
+    return new ComponentAddComponentListenerTask(c, l);
   }
 
-  AddComponentListenerTask(Component c, ComponentListener l) {
+  ComponentAddComponentListenerTask(Component c, ComponentListener l) {
     this.c = c;
     this.l = l;
   }
