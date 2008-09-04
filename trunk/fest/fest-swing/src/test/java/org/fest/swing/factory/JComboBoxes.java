@@ -40,7 +40,7 @@ public final class JComboBoxes {
     boolean editable;
     Object items[];
     String name;
-    int selectedIndex;
+    int selectedIndex = -1;
 
     public JComboBoxFactory editable(boolean isEditable) {
       editable = isEditable;
