@@ -28,11 +28,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Condition;
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.factory.JComboBoxes.comboBox;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;

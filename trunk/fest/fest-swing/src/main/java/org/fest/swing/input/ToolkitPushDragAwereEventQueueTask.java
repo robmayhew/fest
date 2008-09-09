@@ -17,7 +17,7 @@ package org.fest.swing.input;
 
 import java.awt.Toolkit;
 
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 
 /**
  * Understands a task that replaces the system event queue with a <code>{@link DragAwareEventQueue}</code>. This task

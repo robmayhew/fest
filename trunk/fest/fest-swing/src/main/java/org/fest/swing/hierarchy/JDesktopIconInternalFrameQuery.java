@@ -3,9 +3,9 @@ package org.fest.swing.hierarchy;
 import javax.swing.JInternalFrame;
 import javax.swing.JInternalFrame.JDesktopIcon;
 
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.core.GuiQuery;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link JInternalFrame}</code>

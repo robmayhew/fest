@@ -18,7 +18,7 @@ package org.fest.swing.monitor;
 import java.awt.Window;
 import java.awt.event.WindowListener;
 
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 
 /**
  * Understands a task that adds a <code>{@link WindowListener}</code> to a given <code>{@link Window}</code>.

@@ -3,7 +3,7 @@ package org.fest.swing.driver;
 import javax.swing.JComboBox;
 
 import org.fest.swing.core.Condition;
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 
 import static javax.swing.SwingUtilities.invokeLater;
 

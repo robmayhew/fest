@@ -27,12 +27,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Condition;
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.testing.TestWindow;
 import org.fest.util.Strings;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.task.JTreeSelectRowTask.selectRow;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.*;

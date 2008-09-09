@@ -17,10 +17,10 @@ package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.core.GuiQuery;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.driver.JTableCell.cell;
-import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the indices of the selected row and column 

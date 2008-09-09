@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JSpinner;
 
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 
 /**
  * Understands a template for tasks that set the value of a <code>{@link JSpinner}</code>. Implementations of this class

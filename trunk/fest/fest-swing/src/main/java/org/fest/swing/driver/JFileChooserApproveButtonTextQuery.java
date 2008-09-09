@@ -17,9 +17,9 @@ package org.fest.swing.driver;
 
 import javax.swing.JFileChooser;
 
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.core.GuiQuery;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Strings.isEmpty;
 
 /**

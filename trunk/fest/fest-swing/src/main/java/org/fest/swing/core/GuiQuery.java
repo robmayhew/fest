@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.edt;
+package org.fest.swing.core;
 
 import org.fest.swing.exception.ActionFailedException;
 

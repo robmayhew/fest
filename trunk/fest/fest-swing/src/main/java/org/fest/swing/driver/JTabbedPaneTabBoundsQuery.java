@@ -19,8 +19,8 @@ import java.awt.Rectangle;
 
 import javax.swing.JTabbedPane;
 
-import org.fest.swing.edt.GuiActionRunner;
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.core.GuiActionRunner;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the bounds of a tab in a 

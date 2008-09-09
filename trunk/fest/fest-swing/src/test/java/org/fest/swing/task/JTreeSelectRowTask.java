@@ -18,12 +18,12 @@ package org.fest.swing.task;
 import javax.swing.JTree;
 
 import org.fest.swing.core.Condition;
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 import org.fest.util.Strings;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Understands a task that selects a single row in a <code>{@link JTree}</code>.

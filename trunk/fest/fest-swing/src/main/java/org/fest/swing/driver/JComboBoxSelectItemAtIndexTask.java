@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 
 /**
  * Understands a task that selects the element in the given index in the given <code>{@link JComboBox}</code>. This task

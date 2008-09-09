@@ -25,7 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.monitor.WindowMonitor;
 import org.fest.swing.testing.TestWindow;
 
@@ -33,7 +33,7 @@ import static java.util.Collections.emptyList;
 import static org.easymock.EasyMock.expect;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.testing.TestGroups.GUI;
 

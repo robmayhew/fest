@@ -19,7 +19,7 @@ package org.fest.swing.task;
 import java.awt.Component;
 
 import org.fest.swing.core.Condition;
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 import org.fest.util.Strings;
 
 import static javax.swing.SwingUtilities.invokeLater;

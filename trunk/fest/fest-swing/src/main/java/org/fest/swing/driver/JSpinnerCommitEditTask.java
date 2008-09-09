@@ -19,7 +19,7 @@ import java.text.ParseException;
 
 import javax.swing.JSpinner;
 
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 
 /**
  * Understands a task that commits the currently edited value to a <code>{@link JSpinner}</code> .This task should be 

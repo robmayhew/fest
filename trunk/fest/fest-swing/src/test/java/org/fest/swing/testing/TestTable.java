@@ -19,11 +19,11 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import org.fest.swing.core.Condition;
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Strings.concat;
 
 

@@ -16,9 +16,9 @@ package org.fest.swing.driver;
 
 import javax.swing.JScrollBar;
 
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.core.GuiQuery;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the value of a

@@ -19,8 +19,8 @@ import java.awt.Point;
 
 import javax.swing.JTree;
 
-import org.fest.swing.edt.GuiActionRunner;
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.core.GuiActionRunner;
+import org.fest.swing.core.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the row in a <code>{@link JTree}</code>

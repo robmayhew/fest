@@ -8,7 +8,7 @@ import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreePath;
 
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.core.Reflection.method;

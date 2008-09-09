@@ -13,12 +13,12 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.edt;
+package org.fest.swing.core;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.edt.GuiActionRunner;
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.core.GuiActionRunner;
+import org.fest.swing.core.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 
 import static javax.swing.SwingUtilities.isEventDispatchThread;

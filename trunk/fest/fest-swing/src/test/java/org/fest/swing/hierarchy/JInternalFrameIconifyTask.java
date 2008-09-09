@@ -5,9 +5,9 @@ import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
 
 import org.fest.swing.core.Condition;
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Understands a task that iconifies a given <code>{@link JInternalFrame}</code>.

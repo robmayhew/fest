@@ -18,9 +18,9 @@ package org.fest.swing.task;
 import javax.swing.AbstractButton;
 
 import org.fest.swing.core.Condition;
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Strings.concat;
 
 /**

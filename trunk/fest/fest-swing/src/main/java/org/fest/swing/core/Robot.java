@@ -7,7 +7,6 @@ import java.awt.Window;
 
 import javax.swing.JPopupMenu;
 
-import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.UnexpectedException;

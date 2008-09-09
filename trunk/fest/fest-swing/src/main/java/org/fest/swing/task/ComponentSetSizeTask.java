@@ -18,9 +18,9 @@ package org.fest.swing.task;
 import java.awt.Component;
 import java.awt.Dimension;
 
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.core.GuiQuery;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Understands a task that sets the size of a <code>{@link Component}</code>. This task is executed in the event 

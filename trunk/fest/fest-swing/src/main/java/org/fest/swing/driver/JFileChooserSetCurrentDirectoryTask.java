@@ -19,7 +19,7 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 
 /**
  * Understands a task that sets the current directory in a <code>{@link JFileChooser}</code>. This task should be 

@@ -18,7 +18,7 @@ package org.fest.swing.driver;
 import java.awt.Component;
 import java.awt.Point;
 
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 
 /**
  * Understands a task that sets the location of a <code>{@link Component}</code>. This task should be executed in the

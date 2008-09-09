@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JTabbedPane;
 
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 
 /**
  * Understands a task that selects the tab with the given index in a <code>{@link JTabbedPane}</code>. This task should

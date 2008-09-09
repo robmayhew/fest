@@ -13,15 +13,14 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.edt;
+package org.fest.swing.core;
 
-import org.fest.swing.core.Condition;
 import org.fest.swing.exception.UnexpectedException;
 
 import static javax.swing.SwingUtilities.*;
 
+import static org.fest.swing.core.GuiActionRunner.ActionExecutedCondition.untilExecuted;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.edt.GuiActionRunner.ActionExecutedCondition.untilExecuted;
 import static org.fest.swing.exception.UnexpectedException.unexpected;
 
 /**

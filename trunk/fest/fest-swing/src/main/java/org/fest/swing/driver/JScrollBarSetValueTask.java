@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JScrollBar;
 
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.core.GuiTask;
 
 /**
  * Understands a task that sets the value of a <code>{@link JScrollBar}</code>.This task should be executed in the event 
