@@ -15,43 +15,39 @@
  */
 package org.fest.swing.task;
 
-import java.awt.Component;
 import java.awt.Dimension;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.task.ComponentSetSizeTask;
+import org.fest.swing.testing.TestWindow;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Test for <code>{@link ComponentSetSizeTask}</code>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = { GUI, EDT_ACTION })
 public class ComponentSetSizeTaskTest {
 
-  private Component c;
+  private TestWindow window;
   private Dimension size;
 
-  @BeforeMethod public void setUp() throws Exception {
-    c = createMock(Component.class);
-    size = new Dimension(80, 60);
+  @BeforeMethod public void setUp() {
+    window = TestWindow.showNewInTest(getClass());
+    size = new Dimension(200, 100);
+  }
+  
+  @AfterMethod public void tearDown() {
+    window.destroy();
   }
 
   @Test public void shouldSetSize() {
-    new EasyMockTemplate(c) {
-      protected void expectations() {
-        c.setSize(size);
-        expectLastCall();
-      }
-
-      protected void codeToTest() {
-        ComponentSetSizeTask.setSizeTask(c, size).executeInEDT();
-      }
-    }.run();
+    ComponentSetSizeTask.setSize(window, size);
+    assertThat(window.getSize()).isEqualTo(size);
   }
 }

@@ -17,12 +17,8 @@ package org.fest.swing.factory;
 
 import javax.swing.JFileChooser;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JFileChooser}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JFileChooser}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -42,14 +38,10 @@ public final class JFileChoosers {
       return this;
     }
     
-    public JFileChooser createInEDT() {
-      return execute(new GuiQuery<JFileChooser>() {
-        protected JFileChooser executeInEDT()  {
-          JFileChooser fileChooser = new JFileChooser();
-          fileChooser.setName(name);
-          return fileChooser;
-        }
-      });
+    public JFileChooser createNew() {
+      JFileChooser fileChooser = new JFileChooser();
+      fileChooser.setName(name);
+      return fileChooser;
     }
   }
 }

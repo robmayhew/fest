@@ -23,13 +23,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static javax.swing.JFileChooser.OPEN_DIALOG;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
@@ -48,7 +48,7 @@ public class JFileChooserFormatterTest {
   private JFileChooserFormatter formatter;
   
   @BeforeClass public void setUp() {
-    window = MyWindow.createAndShowInEDT();
+    window = MyWindow.createAndShow();
     fileChooser = window.fileChooser;
     formatter = new JFileChooserFormatter();
   }
@@ -59,7 +59,7 @@ public class JFileChooserFormatterTest {
   
   @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJFileChooser() {
-    formatter.format(textField().createInEDT());
+    formatter.format(textField().createNew());
   }
 
   public void shouldFormatJFileChooser() {
@@ -86,17 +86,15 @@ public class JFileChooserFormatterTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
     
-    static MyWindow createAndShowInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createAndShow() {
+      MyWindow window = new MyWindow();
       window.display();
       return window;
     }
     
     final JFileChooser fileChooser = new JFileChooser();
 
-    MyWindow() {
+    private MyWindow() {
       super(JFileChooserFormatterTest.class);
       fileChooser.setDialogTitle("A file chooser");
       fileChooser.setName("fileChooser");

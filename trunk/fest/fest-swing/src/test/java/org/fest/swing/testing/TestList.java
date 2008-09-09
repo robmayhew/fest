@@ -20,12 +20,12 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.util.Collections;
 
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a list that:

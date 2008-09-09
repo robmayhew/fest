@@ -40,7 +40,7 @@ public class JPanelFixtureTest extends CommonComponentFixtureTestCase<JPanel> {
   
   void onSetUp() {
     driver = createMock(JComponentDriver.class);
-    target = panel().createInEDT();
+    target = panel().createNew();
     fixture = new JPanelFixture(robot(), target);
     fixture.updateDriver(driver);
   }

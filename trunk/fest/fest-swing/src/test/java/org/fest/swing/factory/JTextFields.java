@@ -17,12 +17,8 @@ package org.fest.swing.factory;
 
 import javax.swing.JTextField;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JTextField}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JTextField}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -54,16 +50,12 @@ public final class JTextFields {
       return this;
     }
     
-    public JTextField createInEDT() {
-      return execute(new GuiQuery<JTextField>() {
-        protected JTextField executeInEDT()  {
-          JTextField textField = new JTextField();
-          textField.setColumns(columns);
-          textField.setName(name);
-          textField.setText(text);
-          return textField;
-        }
-      });
+    public JTextField createNew() {
+      JTextField textField = new JTextField();
+      textField.setColumns(columns);
+      textField.setName(name);
+      textField.setText(text);
+      return textField;
     }
   }
 }

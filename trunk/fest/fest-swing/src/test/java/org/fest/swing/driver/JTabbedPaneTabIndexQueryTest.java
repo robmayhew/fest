@@ -23,13 +23,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiActionRunner;
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
 import org.fest.swing.testing.TestWindow;
 
+import static javax.swing.SwingUtilities.invokeLater;
+
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -43,7 +43,7 @@ public class JTabbedPaneTabIndexQueryTest {
   private MyWindow window;
   
   @BeforeMethod public void setUp() {
-    window = MyWindow.createAndShowInEDT();
+    window = MyWindow.createAndShow();
   }
   
   @AfterMethod public void tearDown() {
@@ -76,9 +76,14 @@ public class JTabbedPaneTabIndexQueryTest {
   }
 
   private static void removeAllTabsIn(final JTabbedPane tabbedPane) {
-    GuiActionRunner.execute(new GuiTask() {
-      protected void executeInEDT() {
+    invokeLater(new Runnable() {
+      public void run() {
         tabbedPane.removeAll();
+      }
+    });
+    pause(new Condition("JTabbedPane has not tabs") {
+      public boolean test() {
+        return tabbedPane.getTabCount() == 0;
       }
     });
   }
@@ -88,15 +93,13 @@ public class JTabbedPaneTabIndexQueryTest {
 
     final JTabbedPane tabbedPane = new JTabbedPane();
     
-    static MyWindow createAndShowInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createAndShow() {
+      MyWindow window = new MyWindow();
       window.display();
       return window;
     }
     
-    MyWindow() {
+    private MyWindow() {
       super(JTabbedPaneTabIndexQueryTest.class);
       tabbedPane.addTab("First", new JPanel());
       tabbedPane.addTab("Second", new JPanel());

@@ -21,22 +21,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.factory.JMenus;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.hierarchy.ContainerComponentsQuery.componentsOf;
 import static org.fest.swing.hierarchy.JFrameContentPaneQuery.contentPaneOf;
-import static org.fest.swing.hierarchy.JInternalFrameIconifyTask.iconifyTask;
+import static org.fest.swing.hierarchy.JInternalFrameIconifyTask.iconify;
 import static org.fest.swing.hierarchy.MDIFrame.showInTest;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -72,21 +70,9 @@ public class ChildrenFinderTest {
     }
   }
 
-  private static void iconify(JInternalFrame internalFrame) {
-    execute(iconifyTask(internalFrame));
-  }
-
   @Test public void shouldReturnPopupMenuIfComponentIsJMenu() {
-    JMenu menu = newJMenu();
+    JMenu menu = JMenus.menu().createNew();
     assertThat(finder.childrenOf(menu)).containsOnly(childrenOf(menu));
-  }
-
-  private static JMenu newJMenu() {
-    return execute(new GuiQuery<JMenu>() {
-      protected JMenu executeInEDT() {
-        return new JMenu();
-      }
-    });
   }
 
   @Test(groups = GUI) public void shouldReturnOwnedWindowsIfComponentIsWindow() {
@@ -101,7 +87,7 @@ public class ChildrenFinderTest {
   }
 
   @Test(groups = GUI) public void shouldReturnChildrenOfContainer() {
-    MyWindow frame = MyWindow.createAndShowInEDT();
+    MyWindow frame = MyWindow.createAndShow();
     try {
       assertThat(finder.childrenOf(contentPaneOf(frame))).containsOnly(frame.textField);
     } finally {
@@ -112,17 +98,15 @@ public class ChildrenFinderTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createAndShowInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createAndShow() {
+      MyWindow window = new MyWindow();
       window.display();
       return window;
     }
     
-    final JTextField textField = new JTextField();
+    final JTextField textField = new JTextField(20);
     
-    MyWindow() {
+    private MyWindow() {
       super(ChildrenFinderTest.class);
       addComponents(textField);
     }

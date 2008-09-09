@@ -3,9 +3,9 @@ package org.fest.swing.query;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the pop-up menu associated with a 

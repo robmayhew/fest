@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.hierarchy.ComponentHierarchy;
@@ -46,12 +47,12 @@ import static org.fest.swing.core.ComponentAddFocusListenerTask.addFocusListener
 import static org.fest.swing.core.ComponentRemoveFocusListenerTask.removeFocusListenerTask;
 import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
-import static org.fest.swing.core.GuiActionRunner.rethrowCatchedExceptionIn;
 import static org.fest.swing.core.InputModifiers.unify;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
 import static org.fest.swing.core.WindowHideAndDisposeTask.hideAndDisposeTask;
+import static org.fest.swing.edt.GuiActionRunner.rethrowCatchedExceptionIn;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;

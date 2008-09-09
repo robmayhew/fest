@@ -31,8 +31,12 @@ import org.testng.annotations.Test;
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
-import org.fest.swing.core.*;
+import org.fest.swing.core.Condition;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
@@ -46,7 +50,6 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.ROBOT;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTableCell.cell;
@@ -55,8 +58,9 @@ import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
 import static org.fest.swing.driver.JTableClearSelectionTask.clearSelectionOf;
 import static org.fest.swing.driver.JTableRowCountQuery.rowCountOf;
 import static org.fest.swing.driver.JTableSelectedRowCountQuery.selectedRowCountOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTextFields.textField;
-import static org.fest.swing.task.ComponentSetEnableTask.disable;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.task.ComponentSetPopupMenuTask.setPopupMenu;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -83,7 +87,7 @@ public class JTableDriverTest {
     cellReader = new JTableCellReaderStub();
     driver = new JTableDriver(robot);
     driver.cellReader(cellReader);
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     dragTable = window.dragTable;
     dropTable = window.dropTable;
     robot.showWindow(window);
@@ -235,6 +239,11 @@ public class JTableDriverTest {
       protected void executeInEDT() {
         table.changeSelection(0, 0, false, false);
       }
+    }, new Condition("First cell in JTable is selected") {
+      public boolean test() {
+        return table.getSelectedRowCount() == 1 && table.getSelectedColumnCount() == 1 &&
+               table.getSelectedRow() == 0 && table.getSelectedColumn() == 0;
+      }
     });
   }
 
@@ -265,7 +274,6 @@ public class JTableDriverTest {
       driver.requireCellValue(dragTable, cell(0, 0), "0-1");
       fail();
     } catch (AssertionError e) {
-      e.printStackTrace();
       assertThat(e).message().contains("[row=0, column=0]")
                              .contains("property:'value'")
                              .contains("expected:<'0-1'> but was:<'0-0'>");
@@ -370,7 +378,7 @@ public class JTableDriverTest {
 
   @Test public void shouldReturnEditorComponentInCell() {
     final JTableCellWriter cellWriter = mockCellWriter();
-    final Component editor = textField().withText("Hello").createInEDT();
+    final Component editor = textField().withText("Hello").createNew();
     driver.cellWriter(cellWriter);
     new EasyMockTemplate(cellWriter) {
       protected void expectations() {
@@ -512,10 +520,8 @@ public class JTableDriverTest {
 
     final JTableHeader dragTableHeader;
     
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
     private static Object[][] dropTableData(int rowCount, int columnCount) {
@@ -526,7 +532,7 @@ public class JTableDriverTest {
       return data;
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(JTableDriverTest.class);
       add(decorate(dragTable));
       add(decorate(dropTable));

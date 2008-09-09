@@ -46,7 +46,7 @@ import static org.fest.swing.factory.JFileChoosers.fileChooser;
   
   void onSetUp() {
     driver = createMock(JFileChooserDriver.class);
-    target = fileChooser().createInEDT();
+    target = fileChooser().createNew();
     fixture = new JFileChooserFixture(robot(), target);
     fixture.updateDriver(driver);
   }

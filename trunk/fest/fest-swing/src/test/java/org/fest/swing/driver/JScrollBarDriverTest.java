@@ -25,18 +25,16 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JScrollBarSetValueTask.setValueTask;
 import static org.fest.swing.driver.JScrollBarValueQuery.valueOf;
-import static org.fest.swing.task.ComponentSetEnableTask.disable;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
@@ -55,7 +53,7 @@ public class JScrollBarDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JScrollBarDriver(robot);
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     scrollBar = window.scrollBar;
     robot.showWindow(window);
   }
@@ -308,13 +306,11 @@ public class JScrollBarDriverTest {
 
     final JScrollBar scrollBar = new JScrollBar();
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(JScrollBarDriverTest.class);
       add(scrollBar);
       scrollBar.setPreferredSize(new Dimension(20, 100));

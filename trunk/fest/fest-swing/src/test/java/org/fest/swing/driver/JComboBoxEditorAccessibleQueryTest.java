@@ -22,15 +22,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JComboBoxSetEditableTask.setEditable;
-import static org.fest.swing.task.ComponentSetEnableTask.setEnabled;
+import static org.fest.swing.task.ComponentSetEnabledTask.setEnabled;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.array;
 
@@ -47,7 +45,7 @@ public class JComboBoxEditorAccessibleQueryTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     comboBox = window.comboBox;
     robot.showWindow(window);
   }
@@ -77,13 +75,11 @@ public class JComboBoxEditorAccessibleQueryTest {
 
     final JComboBox comboBox = new JComboBox(array("first", "second", "third"));
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
-    public MyWindow() {
+    private MyWindow() {
       super(JComboBoxDriverTest.class);
       add(comboBox);
     }

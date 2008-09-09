@@ -17,29 +17,30 @@ package org.fest.swing.driver;
 
 import javax.swing.JSlider;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
+import org.fest.swing.edt.GuiTask;
+
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.util.Strings.concat;
 
 /**
- * Understands a task that sets the value of a <code>{@link JSlider}</code>. This task should be executed in the event 
- * dispatch thread.
+ * Understands a task that sets the value of a <code>{@link JSlider}</code>.
  *
  * @author Alex Ruiz 
  */
-class JSliderSetValueTask extends GuiTask {
+class JSliderSetValueTask {
   
-  private final JSlider slider;
-  private final int value;
-
-  static JSliderSetValueTask setValueTask(JSlider slider, int value) {
-    return new JSliderSetValueTask(slider, value);
-  }
-  
-  private JSliderSetValueTask(JSlider slider, int value) {
-    this.slider = slider;
-    this.value = value;
-  }
-
-  protected void executeInEDT() {
-    slider.setValue(value);
+  static void setValue(final JSlider slider, final int newValue) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        slider.setValue(newValue);
+      }
+    }, new Condition(concat("JSlider's value is set to ", valueOf(newValue))) {
+      public boolean test() {
+        return slider.getValue() == newValue;
+      }
+    });
   }
 }

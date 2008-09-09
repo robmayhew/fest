@@ -19,12 +19,8 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JPanel}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JPanel}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -50,15 +46,11 @@ public final class JPanels {
       return this;
     }
     
-    public JPanel createInEDT() {
-      return execute(new GuiQuery<JPanel>() {
-        protected JPanel executeInEDT()  {
-          JPanel panel = new JPanel();
-          if (background != null) panel.setBackground(background);
-          panel.setName(name);
-          return panel;
-        }
-      });
+    public JPanel createNew() {
+      JPanel panel = new JPanel();
+      if (background != null) panel.setBackground(background);
+      panel.setName(name);
+      return panel;
     }
   }
 }

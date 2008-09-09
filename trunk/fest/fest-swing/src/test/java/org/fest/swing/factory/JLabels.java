@@ -17,12 +17,8 @@ package org.fest.swing.factory;
 
 import javax.swing.JLabel;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JLabel}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JLabel}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -48,15 +44,11 @@ public final class JLabels {
       return this;
     }
     
-    public JLabel createInEDT() {
-      return execute(new GuiQuery<JLabel>() {
-        protected JLabel executeInEDT()  {
-          JLabel label = new JLabel();
-          label.setName(name);
-          label.setText(text);
-          return label;
-        }
-      });
+    public JLabel createNew() {
+      JLabel label = new JLabel();
+      label.setName(name);
+      label.setText(text);
+      return label;
     }
   }
 }

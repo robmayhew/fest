@@ -31,7 +31,7 @@ import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.driver.ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionTask;
+import static org.fest.swing.driver.ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
@@ -348,7 +348,7 @@ public class ComponentDriver {
    * @throws ActionFailedException if <code>action</code> is <code>null</code> or empty.
    */
   protected final void performAccessibleActionOf(Component c) {
-    robot.invokeLater(c, performDefaultAccessibleActionTask(c));
+    performDefaultAccessibleAction(c);
   }
 
   /**

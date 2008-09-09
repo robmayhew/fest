@@ -20,14 +20,14 @@ import java.awt.Point;
 
 import javax.swing.JSlider;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 
 import static javax.swing.SwingConstants.VERTICAL;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.driver.JSliderLocation.JSliderHorizontalLocationQueryStrategy.locationForHorizontalOrientation;
 import static org.fest.swing.driver.JSliderLocation.JSliderVerticalLocationQueryStrategy.locationForVerticalOrientation;
 import static org.fest.swing.driver.JSliderOrientationQuery.orientationOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.util.AWT.centerOf;
 
 /**

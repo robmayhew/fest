@@ -23,7 +23,6 @@ import org.testng.annotations.Test;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.factory.JButtons.button;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -42,7 +41,7 @@ public class NameMatcherTest {
   @BeforeMethod public void setUp() {
     button = button().withName(NAME)
                      .withText("Click Me")
-                     .createInEDT();
+                     .createNew();
     matcher = new NameMatcher(NAME);
     assertThat(matcher.requireShowing()).isFalse();
   }
@@ -68,14 +67,14 @@ public class NameMatcherTest {
 
   @Test(groups = GUI) 
   public void shouldReturnTrueIfNameMatchingAndIsShowing() {
-    MyWindow window = MyWindow.createAndShowInEDT();
+    MyWindow window = MyWindow.createAndShow();
     assertThat(matcher.matches(window.button)).isTrue();
     window.destroy();
   }
 
   @Test(groups = GUI) 
   public void shouldReturnFalseIfNameNotMatchingAndIsShowing() {
-    MyWindow window = MyWindow.createAndShowInEDT();
+    MyWindow window = MyWindow.createAndShow();
     matcher = new NameMatcher("b", true);
     assertThat(matcher.matches(window.button)).isFalse();
     window.destroy();
@@ -100,15 +99,13 @@ public class NameMatcherTest {
 
     final JButton button = new JButton("A Button");
 
-    static MyWindow createAndShowInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createAndShow() {
+      MyWindow window = new MyWindow();
       window.display();
       return window;
     }
     
-    MyWindow() {
+    private MyWindow() {
       super(NameMatcherTest.class);
       addComponents(button);
       button.setName(NAME);

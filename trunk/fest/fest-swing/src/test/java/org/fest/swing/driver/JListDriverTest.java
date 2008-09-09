@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.Arrays;
 
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -27,7 +28,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.Condition;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestList;
@@ -37,10 +43,10 @@ import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JMenuItems.menuItem;
 import static org.fest.swing.factory.JPopupMenus.popupMenu;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
@@ -48,7 +54,8 @@ import static org.fest.swing.task.ComponentSetPopupMenuTask.setPopupMenu;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.Range.*;
-import static org.fest.util.Arrays.array;
+import static org.fest.util.Arrays.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link JListDriver}</code>.
@@ -70,7 +77,7 @@ public class JListDriverTest {
     cellReader = new JListCellReaderStub();
     driver = new JListDriver(robot);
     driver.cellReader(cellReader);
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     dragList = window.dragList;
     dropList = window.dropList;
     robot.showWindow(window);
@@ -127,10 +134,15 @@ public class JListDriverTest {
   }
 
   private static void select(final JList list, final int[] indices) {
+    final int selectionMode = MULTIPLE_INTERVAL_SELECTION;
     execute(new GuiTask() {
       protected void executeInEDT() {
-        list.setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
+        list.setSelectionMode(selectionMode);
         list.setSelectedIndices(indices);
+      }
+    }, new Condition(concat("JList's 'selectedIndices' property is ", format(indices))) {
+      public boolean test() {
+        return list.getSelectionMode() == selectionMode && Arrays.equals(list.getSelectedIndices(), indices);
       }
     });
   }
@@ -157,6 +169,10 @@ public class JListDriverTest {
     execute(new GuiTask() {
       protected void executeInEDT() {
         list.setSelectedIndex(index);
+      }
+    }, new Condition(concat("JList's 'selectedIndex' property is ", index)) {
+      public boolean test() {
+        return list.getSelectedIndex() == index;
       }
     });
   }
@@ -432,8 +448,8 @@ public class JListDriverTest {
   }
 
   private JPopupMenu popupMenuFor(JList list) {
-    JMenuItem menuItem = menuItem().withText("Frodo").createInEDT();
-    JPopupMenu popupMenu = popupMenu().withMenuItems(menuItem).createInEDT();
+    JMenuItem menuItem = menuItem().withText("Frodo").createNew();
+    JPopupMenu popupMenu = popupMenu().withMenuItems(menuItem).createNew();
     setPopupMenu(list, popupMenu);
     return popupMenu;
   }
@@ -476,6 +492,10 @@ public class JListDriverTest {
         list.setSelectedIndex(-1);
         list.setEnabled(false);
       }
+    }, new Condition("JList is cleared and disabled") {
+      public boolean test() {
+        return list.getSelectedIndex() == -1 && !list.isEnabled();
+      }
     });
   }
 
@@ -499,13 +519,11 @@ public class JListDriverTest {
     final TestList dragList = new TestList("one", "two", "three");
     final TestList dropList = new TestList("four", "five", "six");
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(JListDriverTest.class);
       dragList.setName("dragList");
       dropList.setName("dropList");

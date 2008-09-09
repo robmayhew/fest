@@ -26,13 +26,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
@@ -52,7 +50,7 @@ public class JPopupMenuDriverTest {
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     robot.showWindow(window);
     driver = new JPopupMenuDriver(robot);
   }
@@ -67,7 +65,7 @@ public class JPopupMenuDriverTest {
   }
 
   public void shouldReturnDashIfNotMenuItem() {
-    MenuElement e = MyMenuElement.newMenuElement();
+    MenuElement e = MyMenuElement.createNew();
     assertThat(JPopupMenuDriver.asString(e)).isEqualTo("-");
   }
 
@@ -103,13 +101,11 @@ public class JPopupMenuDriverTest {
     final JMenuItem menuItem1 = new JMenuItem("First");
     final JMenuItem menuItem2 = new JMenuItem("Second");
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(JPopupMenuDriverTest.class);
       add(withPopup);
       withPopup.setComponentPopupMenu(popupMenu);
@@ -122,15 +118,11 @@ public class JPopupMenuDriverTest {
   private static class MyMenuElement implements MenuElement {
     private final JButton button = new JButton();
 
-    static MenuElement newMenuElement() {
-      return execute(new GuiQuery<MenuElement>() {
-        protected MenuElement executeInEDT() throws Throwable {
-          return new MyMenuElement();
-        }
-      });
+    static MenuElement createNew() {
+      return new MyMenuElement();
     }
     
-    MyMenuElement() {}
+    private MyMenuElement() {}
     
     public Component getComponent() {
       return button;

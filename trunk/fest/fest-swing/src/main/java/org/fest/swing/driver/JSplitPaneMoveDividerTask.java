@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JSplitPane;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
 /**
  * Understands a task that sets the location of the divider of a <code>{@link JSplitPane}</code>. This task should be

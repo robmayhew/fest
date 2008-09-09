@@ -43,7 +43,7 @@ public class JRadioButtonFixtureTest extends CommonComponentFixtureTestCase<JRad
   
   void onSetUp() {
     driver = createMock(AbstractButtonDriver.class);
-    target = radioButton().createInEDT();
+    target = radioButton().createNew();
     fixture = new JRadioButtonFixture(robot(), target);
     fixture.updateDriver(driver);
   }

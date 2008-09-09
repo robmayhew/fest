@@ -19,12 +19,14 @@ import java.awt.Frame;
 
 import javax.swing.JDialog;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.Condition;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static javax.swing.SwingUtilities.invokeLater;
+
+import static org.fest.swing.core.Pause.pause;
 
 /**
- * Understands creation of <code>{@link JDialog}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JDialog}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -56,23 +58,24 @@ public final class JDialogs {
       return this;
     }
 
-    public JDialog createInEDT() {
-      return execute(new GuiQuery<JDialog>() {
-        protected JDialog executeInEDT()  {
-          return create();
-        }
-      });
+    public JDialog createNew() {
+      return create();
     }
     
-    public JDialog createAndShowInEDT() {
-      return execute(new GuiQuery<JDialog>() {
-        protected JDialog executeInEDT()  {
-          JDialog dialog = create();
+    public JDialog createAndShow() {
+      final JDialog dialog = create();
+      invokeLater(new Runnable() {
+        public void run() {
           dialog.pack();
           dialog.setVisible(true);
-          return dialog;
         }
       });
+      pause(new Condition("dialog is displayed") {
+        public boolean test() {
+          return dialog.isShowing();
+        }
+      });
+      return dialog;
     }
 
     JDialog create() {

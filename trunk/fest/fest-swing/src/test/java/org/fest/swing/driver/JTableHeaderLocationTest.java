@@ -29,13 +29,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -53,17 +53,9 @@ public class JTableHeaderLocationTest {
   
   @BeforeMethod public void setUp() {
     location = new JTableHeaderLocation();
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     window.display();
-    tableHeader = headerOf(window.table);
-  }
-
-  private static JTableHeader headerOf(final JTable table) {
-    return execute(new GuiQuery<JTableHeader>() {
-      protected JTableHeader executeInEDT() throws Throwable {
-        return table.getTableHeader();
-      }
-    });
+    tableHeader = window.tableHeader;
   }
 
   @AfterMethod public void tearDown() {
@@ -125,16 +117,16 @@ public class JTableHeaderLocationTest {
     private static final Dimension TABLE_SIZE = new Dimension(400, 200);
 
     final TestTable table;
+    final JTableHeader tableHeader;
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow(); 
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(JTableHeaderLocationTest.class);
       table = new TestTable(6, 2);
+      tableHeader = table.getTableHeader();
       add(decorate(table));
       setPreferredSize(new Dimension(600, 400));
     }

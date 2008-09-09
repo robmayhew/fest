@@ -47,7 +47,7 @@ public class WindowChildrenFinderTest {
   }
   
   @Test public void shouldReturnEmptyCollectionIfComponentIsNotWindow() {
-    Container container = textField().createInEDT();
+    Container container = textField().createNew();
     assertThat(finder.nonExplicitChildrenOf(container)).isEmpty();
   }
 
@@ -56,7 +56,7 @@ public class WindowChildrenFinderTest {
   }
 
   @Test public void shouldReturnEmptyCollectionIfWindowNotHavingOwnedWindows() {
-    JFrame frame = frame().createInEDT();
+    JFrame frame = frame().createNew();
     assertThat(finder.nonExplicitChildrenOf(frame)).isEmpty();
   }
   

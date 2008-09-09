@@ -20,14 +20,10 @@ import java.awt.Dimension;
 
 import javax.swing.JScrollPane;
 
-import org.fest.swing.core.GuiQuery;
-
 import static javax.swing.ScrollPaneConstants.*;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JScrollPane}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JScrollPane}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -59,17 +55,13 @@ public final class JScrollPanes {
       return this;
     }
 
-    public JScrollPane createInEDT() {
-      return execute(new GuiQuery<JScrollPane>() {
-        protected JScrollPane executeInEDT()  {
-          JScrollPane scrollPane = view != null ? new JScrollPane(view) : new JScrollPane();
-          scrollPane.setName(name);
-          if (preferredSize != null) scrollPane.setPreferredSize(preferredSize);
-          scrollPane.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
-          scrollPane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_ALWAYS);
-          return scrollPane;
-        }
-      });
+    public JScrollPane createNew() {
+      JScrollPane scrollPane = view != null ? new JScrollPane(view) : new JScrollPane();
+      scrollPane.setName(name);
+      if (preferredSize != null) scrollPane.setPreferredSize(preferredSize);
+      scrollPane.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
+      scrollPane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_ALWAYS);
+      return scrollPane;
     }
   }
 }

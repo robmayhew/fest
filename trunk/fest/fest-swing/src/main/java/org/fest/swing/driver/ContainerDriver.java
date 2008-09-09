@@ -25,7 +25,7 @@ import static org.fest.swing.driver.ComponentMoveTask.moveTask;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
-import static org.fest.swing.task.ComponentSetSizeTask.setSizeTask;
+import static org.fest.swing.task.ComponentSetSizeTask.setSize;
 import static org.fest.swing.util.AWT.locationOnScreenOf;
 import static org.fest.util.Strings.concat;
 
@@ -67,7 +67,7 @@ public abstract class ContainerDriver extends ComponentDriver {
     simulateResizeStarted(c, horizontally, vertically);
     Dimension size = sizeOf(c);
     Dimension newSize = new Dimension(size.width + horizontally, size.height + vertically);
-    robot.invokeAndWait(c, setSizeTask(c, newSize));
+    setSize(c, newSize);
     simulateResizeComplete(c);
     robot.waitForIdle();
   }

@@ -25,7 +25,6 @@ import javax.swing.text.JTextComponent;
 
 import org.testng.annotations.*;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JTextComponentDriver;
 import org.fest.swing.testing.KeyRecorder;
@@ -34,7 +33,6 @@ import org.fest.swing.testing.TestWindow;
 import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -69,7 +67,7 @@ public abstract class KeyStrokeMappingProviderTestCase {
   
   @BeforeMethod public final void setUp() {
     robot = robotWithNewAwtHierarchy();
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     textArea = window.textArea;
     robot.showWindow(window);
     driver = new JTextComponentDriver(robot); 
@@ -126,15 +124,13 @@ public abstract class KeyStrokeMappingProviderTestCase {
   static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
     final JTextArea textArea = new JTextArea(3, 8);
     
-    MyWindow() {
+    private MyWindow() {
       super(KeyStrokeMappingProvider_enTest.class);
       add(textArea);
       setPreferredSize(new Dimension(200, 200));

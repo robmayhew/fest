@@ -15,25 +15,25 @@
  */
 package org.fest.swing.driver;
 
-import static javax.swing.JOptionPane.*;
-import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-import org.fest.assertions.Assertions;
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.assertions.Assertions;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
+
+import static javax.swing.JOptionPane.*;
+
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JOptionPaneTitleQuery}</code>.
@@ -48,7 +48,7 @@ public class JOptionPaneTitleQueryTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     robot.showWindow(window);
     robot.click(window.button);
     pause(100);
@@ -69,13 +69,11 @@ public class JOptionPaneTitleQueryTest {
 
     final JButton button = new JButton("Click Me");
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(JPopupMenuDriverTest.class);
       add(button);
       button.addActionListener(new ActionListener() {

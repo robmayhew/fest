@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.AbstractButton;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
 /**
  * Understands a task that clicks a <code>{@link AbstractButton}</code>. This task should be executed in the event 

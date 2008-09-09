@@ -50,7 +50,7 @@ public class JListFixtureTest extends CommonComponentFixtureTestCase<JList> {
   
   void onSetUp() {
     driver = createMock(JListDriver.class);
-    target = list().createInEDT();
+    target = list().createNew();
     fixture = new JListFixture(robot(), target);
     fixture.updateDriver(driver);
   }

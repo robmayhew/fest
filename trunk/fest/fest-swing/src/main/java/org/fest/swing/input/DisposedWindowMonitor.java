@@ -23,9 +23,6 @@ import java.util.WeakHashMap;
 
 import static java.awt.event.WindowEvent.*;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.task.ComponentAddComponentListenerTask.addComponentListenerTask;
-
 /**
  * Verifies that a notification of the disposal of a <code>{@link Window}</code> is not duplicated.
  *
@@ -46,7 +43,8 @@ class DisposedWindowMonitor {
       Window w = windowEvent.getWindow();
       if (disposedWindows.containsKey(w)) return true;
       disposedWindows.put(w, true);
-      execute(addComponentListenerTask(w, new DisposalMonitor(disposedWindows)));
+      // execute(addComponentListenerTask(w, new DisposalMonitor(disposedWindows)));
+      w.addComponentListener(new DisposalMonitor(disposedWindows));
       return false;
     }
     disposedWindows.remove(windowEvent.getWindow());

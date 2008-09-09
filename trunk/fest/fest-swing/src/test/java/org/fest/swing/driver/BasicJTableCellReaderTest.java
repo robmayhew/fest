@@ -19,22 +19,23 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.GuiTask;
 import org.fest.swing.testing.BooleanProvider;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.factory.JComboBoxes.comboBox;
 import static org.fest.swing.factory.JLabels.label;
 import static org.fest.swing.factory.JTables.table;
+import static org.fest.swing.factory.JToolBars.toolBar;
 import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
 import static org.fest.swing.query.ComponentFontQuery.fontOf;
 import static org.fest.swing.query.ComponentForegroundQuery.foregroundOf;
@@ -56,7 +57,7 @@ public class BasicJTableCellReaderTest {
   @BeforeMethod public void setUp() {
     table = table().withColumnCount(1)
                    .withRowCount(1)
-                   .createInEDT();
+                   .createNew();
     reader = new BasicJTableCellReader();
   }
 
@@ -67,20 +68,13 @@ public class BasicJTableCellReaderTest {
     assertThat(value).isNull();
   }
 
-  private static void setModelData(final JTable table, final Object[][] data, final Object[] columnNames) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        table.setModel(new DefaultTableModel(data, columnNames));
-      }
-    });
+  private static void setModelData(JTable table, Object[][] data, Object[] columnNames) {
+    DefaultTableModel model = new DefaultTableModel(data, columnNames);
+    table.setModel(model);
   }
   
   private static Component unrecognizedRenderer() {
-    return execute(new GuiQuery<Component>() {
-      protected Component executeInEDT() {
-        return new JToolBar();
-      }
-    });
+    return toolBar().createNew();
   }
   
   public void shouldReturnFontFromRenderer() {
@@ -108,7 +102,7 @@ public class BasicJTableCellReaderTest {
   }
 
   private static JLabel setJLabelAsCellRenderer(JTable table) {
-    JLabel label = label().withText("Hello").createInEDT(); 
+    JLabel label = label().withText("Hello").createNew(); 
     setCellRendererComponent(table, label);
     return label;
   }
@@ -128,23 +122,20 @@ public class BasicJTableCellReaderTest {
   private static void setJComboBoxAsCellRenderer(JTable table, int comboBoxSelectedIndex) {
     JComboBox renderer = comboBox().withItems("One", "Two")
                                    .withSelectedIndex(comboBoxSelectedIndex)
-                                   .createInEDT(); 
+                                   .createNew(); 
     setCellRendererComponent(table, renderer);
   }
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
-  public void shouldReturnIsSelectedIfRendererIsJCheckBox(final boolean selected) {
+  public void shouldReturnIsSelectedIfRendererIsJCheckBox(boolean selected) {
     JCheckBox checkBox = new JCheckBox("Hello", selected);
     setCellRendererComponent(table, checkBox);
     Object value = reader.valueAt(table, 0, 0);
     assertThat(value).isEqualTo(String.valueOf(selected));
   }
 
-  private static void setCellRendererComponent(final JTable table, final Component renderer) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        table.getColumnModel().getColumn(0).setCellRenderer(new CustomCellRenderer(renderer));
-      }
-    });
+  private static void setCellRendererComponent(JTable table, Component renderer) {
+    CustomCellRenderer cellRenderer = new CustomCellRenderer(renderer);
+    table.getColumnModel().getColumn(0).setCellRenderer(cellRenderer);
   }
 }

@@ -26,15 +26,15 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestTree;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -49,7 +49,7 @@ public class ScrollJTreeElementTest {
   private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     fixture = new FrameFixture(window);
     fixture.show();
   }
@@ -109,13 +109,11 @@ public class ScrollJTreeElementTest {
     final JTree dragTree = new TestTree("drag");
     final JTree dropTree = new TestTree("drop");
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    public MyWindow() {
+    private MyWindow() {
       super(ScrollJTreeElementTest.class);
       dragTree.setModel(model());
       add(scrollPaneFor(dragTree));

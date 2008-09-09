@@ -17,12 +17,8 @@ package org.fest.swing.factory;
 
 import javax.swing.JFrame;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JFrame}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JFrame}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -48,15 +44,11 @@ public final class JFrames {
       return this;
     }
     
-    public JFrame createInEDT() {
-      return execute(new GuiQuery<JFrame>() {
-        protected JFrame executeInEDT()  {
-          JFrame frame = new JFrame();
-          frame.setName(name);
-          frame.setTitle(title);
-          return frame;
-        }
-      });
+    public JFrame createNew() {
+      JFrame frame = new JFrame();
+      frame.setName(name);
+      frame.setTitle(title);
+      return frame;
     }
   }
 }

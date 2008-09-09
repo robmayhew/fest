@@ -21,10 +21,12 @@ import javax.swing.JTabbedPane;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
+import org.fest.swing.edt.GuiTask;
+import org.fest.util.Strings;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTabbedPanes.tabbedPane;
 import static org.fest.swing.factory.JTextFields.textField;
 
@@ -40,13 +42,13 @@ import static org.fest.swing.factory.JTextFields.textField;
   private JTabbedPaneFormatter formatter;
   
   @BeforeMethod public void setUp() {
-    tabbedPane = tabbedPane().withName("tabbedPane").createInEDT();
+    tabbedPane = tabbedPane().withName("tabbedPane").createNew();
     formatter = new JTabbedPaneFormatter();
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJTabbedPane() {
-    formatter.format(textField().createInEDT());
+    formatter.format(textField().createNew());
   }
 
   public void shouldFormatJTabbedPaneWithTabsAndSelection() {
@@ -85,6 +87,10 @@ import static org.fest.swing.factory.JTextFields.textField;
         tabbedPane.addTab("One", new JPanel());
         tabbedPane.addTab("Two", new JPanel());
       }
+    }, new Condition("JTabbedPane has two tabs") {
+      public boolean test() {
+        return tabbedPane.getTabCount() == 2;
+      }
     });
   }
   
@@ -92,6 +98,10 @@ import static org.fest.swing.factory.JTextFields.textField;
     execute(new GuiTask() {
       protected void executeInEDT() {
         tabbedPane.setSelectedIndex(index);
+      }
+    }, new Condition(Strings.concat("JTabbedPane's 'selectedIndex' property is ", index)) {
+      public boolean test() {
+        return tabbedPane.getSelectedIndex() == index;
       }
     });
   }

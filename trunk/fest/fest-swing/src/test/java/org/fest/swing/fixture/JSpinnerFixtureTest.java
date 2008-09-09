@@ -41,7 +41,7 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
 
   void onSetUp() {
     driver = createMock(JSpinnerDriver.class);
-    target = spinner().createInEDT();
+    target = spinner().createNew();
     fixture = new JSpinnerFixture(robot(), target);
     fixture.updateDriver(driver);
   }

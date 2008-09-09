@@ -18,13 +18,10 @@ package org.fest.swing.factory;
 import javax.swing.JTree;
 import javax.swing.tree.TreeNode;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
- * Understands creation of <code>{@link JTree}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JTree}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -56,19 +53,15 @@ public final class JTrees {
       return this;
     }
     
-    public JTree createInEDT() {
-      return execute(new GuiQuery<JTree>() {
-        protected JTree executeInEDT()  {
-          if (root != null && !isEmpty(values)) 
-            throw new IllegalStateException("Either set root or values, but not both");
-          JTree tree = null;
-          if (root != null) tree = new JTree(root);
-          else if (!isEmpty(values)) tree = new JTree(values);
-          else tree = new JTree();
-          tree.setName(name);
-          return tree;
-        }
-      });
+    public JTree createNew() {
+      if (root != null && !isEmpty(values)) 
+        throw new IllegalStateException("Either set root or values, but not both");
+      JTree tree = null;
+      if (root != null) tree = new JTree(root);
+      else if (!isEmpty(values)) tree = new JTree(values);
+      else tree = new JTree();
+      tree.setName(name);
+      return tree;
     }
   }
 }

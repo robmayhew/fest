@@ -28,8 +28,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestWindow;
@@ -38,7 +36,6 @@ import static javax.swing.JOptionPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
@@ -60,7 +57,7 @@ public class JOptionPaneDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JOptionPaneDriver(robot);
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     robot.showWindow(window);
   }
 
@@ -276,18 +273,16 @@ public class JOptionPaneDriverTest {
     return robot.finder().findByType(JOptionPane.class, true);
   }
 
-  public static class MyWindow extends TestWindow {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JButton button = new JButton("Click me");
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
-    MyWindow() {
+    private MyWindow() {
       super(JOptionPaneDriverTest.class);
       add(button);
     }
@@ -368,13 +363,9 @@ public class JOptionPaneDriverTest {
     }
 
     private void setUpOptionPaneOnMouseClick(final MouseListener toAdd) {
-      execute(new GuiTask() {
-        protected void executeInEDT() {
-          for (MouseListener toRemove : button.getMouseListeners()) 
-            button.removeMouseListener(toRemove);
-          button.addMouseListener(toAdd);
-        }
-      });
+      for (MouseListener toRemove : button.getMouseListeners()) 
+        button.removeMouseListener(toRemove);
+      button.addMouseListener(toAdd);
     }
   }
 }

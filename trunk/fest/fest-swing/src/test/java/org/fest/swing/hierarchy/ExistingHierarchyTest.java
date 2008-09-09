@@ -25,7 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.monitor.WindowMonitor;
 import org.fest.swing.testing.TestWindow;
 
@@ -33,7 +33,7 @@ import static java.util.Collections.emptyList;
 import static org.easymock.EasyMock.expect;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -56,13 +56,13 @@ public class ExistingHierarchyTest {
   }
   
   @Test public void shouldAlwaysContainGivenComponent() {
-    Component component = textField().createInEDT();
+    Component component = textField().createNew();
     assertThat(hierarchy.contains(component)).isTrue();
   }
 
   @Test public void shouldReturnParentOfComponent() {
-    final TestWindow frame = newTestWindow();
-    final JTextField textField = textField().createInEDT();
+    final TestWindow frame = TestWindow.createNew(ExistingHierarchyTest.class);
+    final JTextField textField = textField().createNew();
     final ParentFinder parentFinder = MockParentFinder.mock();
     hierarchy = new ExistingHierarchy(parentFinder, new ChildrenFinder());
     new EasyMockTemplate(parentFinder) {
@@ -77,16 +77,8 @@ public class ExistingHierarchyTest {
     frame.destroy();
   }
 
-  private static TestWindow newTestWindow() {
-    return execute(new GuiQuery<TestWindow>() {
-      protected TestWindow executeInEDT() {
-        return new TestWindow(ExistingHierarchyTest.class);
-      }
-    });
-  }
-  
   @Test public void shouldReturnSubcomponents() {
-    final Component c = textField().createInEDT();
+    final Component c = textField().createNew();
     final ChildrenFinder childrenFinder = MockChildrenFinder.mock();
     hierarchy = new ExistingHierarchy(new ParentFinder(), childrenFinder);
     final Collection<Component> children = emptyList();
@@ -102,7 +94,7 @@ public class ExistingHierarchyTest {
   }
   
   @Test(groups = GUI) public void shouldDisposeWindow() {
-    final MyWindow window = MyWindow.createInEDT();
+    final MyWindow window = MyWindow.createNew();
     window.display();
     hierarchy.dispose(window);
     assertThat(disposed(window)).isTrue();
@@ -121,13 +113,11 @@ public class ExistingHierarchyTest {
 
     boolean disposed;
     
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
-    public MyWindow() {
+    private MyWindow() {
       super(ExistingHierarchyTest.class);
     }
 

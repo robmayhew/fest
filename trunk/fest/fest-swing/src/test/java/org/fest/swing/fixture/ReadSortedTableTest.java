@@ -27,14 +27,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
 
 import static javax.swing.RowFilter.regexFilter;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.fixture.TableCell.row;
 import static org.fest.swing.testing.TestGroups.*;
 
@@ -49,7 +47,7 @@ public class ReadSortedTableTest {
   private FrameFixture frame;
   
   @BeforeMethod public void setUp() {
-    frame = new FrameFixture(MyWindow.createInEDT());
+    frame = new FrameFixture(MyWindow.createNew());
     frame.show();
   }
   
@@ -67,13 +65,11 @@ public class ReadSortedTableTest {
     
     final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>();
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(ReadSortedTableTest.class);
       add(textBox());
       add(table());

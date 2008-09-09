@@ -24,7 +24,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.listener.WeakEventListener;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
@@ -32,7 +31,6 @@ import org.fest.swing.testing.ToolkitStub;
 import static java.awt.AWTEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.hierarchy.JFrameContentPaneQuery.contentPaneOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
@@ -53,7 +51,8 @@ public class NewHierarchyTest {
 
   @BeforeMethod public void setUp() {
     toolkit = ToolkitStub.createNew();
-    window = MyWindow.createAndShowInEDT();
+    window = MyWindow.createNew();
+    window.display();
     filter = new WindowFilter();
   }
 
@@ -123,18 +122,14 @@ public class NewHierarchyTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createAndShowInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
-      window.display();
-      return window;
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
     final JComboBox comboBox = new JComboBox(array("One", "Two"));
     final JTextField textField = new JTextField(20);
 
-    MyWindow() {
+    private MyWindow() {
       super(NewHierarchyTest.class);
       addComponents(comboBox, textField);
     }

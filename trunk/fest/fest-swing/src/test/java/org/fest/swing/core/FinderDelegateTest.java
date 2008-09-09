@@ -59,9 +59,9 @@ public class FinderDelegateTest {
         return c instanceof JButton;
       }
     };
-    dialog = dialog().createInEDT();
-    textField = textField().createInEDT();
-    button = button().createInEDT();
+    dialog = dialog().createNew();
+    textField = textField().createNew();
+    button = button().createNew();
     finder = new FinderDelegate();
   }
   

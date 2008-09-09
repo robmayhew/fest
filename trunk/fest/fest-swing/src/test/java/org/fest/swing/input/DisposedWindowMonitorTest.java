@@ -44,7 +44,7 @@ public class DisposedWindowMonitorTest {
   
   @BeforeMethod public void setUp() {
     monitor = new DisposedWindowMonitor();
-    window = frame().createInEDT();
+    window = frame().createNew();
   }
 
   public void shouldReturnIsNotDuplicateIfEventIsNotWindowEvent() {

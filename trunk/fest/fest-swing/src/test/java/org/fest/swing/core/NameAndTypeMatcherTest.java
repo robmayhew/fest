@@ -22,7 +22,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link NameAndTypeMatcher}</code>.
@@ -34,7 +33,7 @@ public class NameAndTypeMatcherTest {
   private MyTextField textField;
   
   @BeforeMethod public void setUp() {
-    textField = MyTextField.createInEDT("myTextField");
+    textField = MyTextField.createNew("myTextField");
   }
   
   @Test(expectedExceptions = NullPointerException.class) 
@@ -75,17 +74,13 @@ public class NameAndTypeMatcherTest {
 
     private boolean showing;
 
-    static MyTextField createInEDT(final String name) {
-      return execute(new GuiQuery<MyTextField>() {
-        protected MyTextField executeInEDT() {
-          MyTextField textField = new MyTextField();
-          textField.setName(name);
-          return textField;
-        }
-      });
+    static MyTextField createNew(final String name) {
+      MyTextField textField = new MyTextField();
+      textField.setName(name);
+      return textField;
     }
     
-    MyTextField() {}
+    private MyTextField() {}
     
     public synchronized void setShowing(boolean showing) {
       this.showing = showing;

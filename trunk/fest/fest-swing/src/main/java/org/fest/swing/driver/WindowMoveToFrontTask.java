@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import java.awt.Window;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
 /**
  * Understands a task that moves a <code>{@link Window}</code> to the front and gives it input focus. This task should

@@ -19,7 +19,7 @@ import java.beans.PropertyVetoException;
 
 import javax.swing.JInternalFrame;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
 /**
  * Understands a template for tasks that set a property in a <code>{@link JInternalFrame}</code>. This task should be 

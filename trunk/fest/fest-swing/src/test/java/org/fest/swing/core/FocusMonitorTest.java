@@ -25,8 +25,6 @@ import org.testng.annotations.Test;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.ComponentAddFocusListenerTask.addFocusListenerTask;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.FocusSetter.setFocusOn;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -42,10 +40,10 @@ public class FocusMonitorTest {
   private MyWindow window;
   
   @BeforeMethod public void setUp() {
-    window = MyWindow.createAndShowInEDT();
+    window = MyWindow.createAndShow();
     setFocusOn(window.button);
     monitor = new FocusMonitor(window.button);
-    execute(addFocusListenerTask(window.button, monitor));
+    window.button.addFocusListener(monitor);
     assertThat(monitor.hasFocus()).isTrue();
   }
   
@@ -61,7 +59,7 @@ public class FocusMonitorTest {
   public void shouldNotHaveFocusIsComponentIsNotFocusOwner() {
     setFocusOn(window.textBox);
     monitor = new FocusMonitor(window.button);
-    execute(addFocusListenerTask(window.button, monitor));
+    window.button.addFocusListener(monitor);
     assertThat(monitor.hasFocus()).isFalse();
   }
   
@@ -71,15 +69,13 @@ public class FocusMonitorTest {
     final JButton button = new JButton("Click Me");
     final JTextField textBox = new JTextField(20); 
     
-    static MyWindow createAndShowInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createAndShow() {
+      MyWindow window = new MyWindow();
       window.display();
       return window;
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(FocusMonitorTest.class);
       addComponents(button, textBox);
     }

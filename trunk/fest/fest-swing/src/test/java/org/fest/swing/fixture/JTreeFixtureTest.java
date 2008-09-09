@@ -47,7 +47,7 @@ public class JTreeFixtureTest extends CommonComponentFixtureTestCase<JTree> {
   
   void onSetUp() {
     driver = createMock(JTreeDriver.class);
-    target = tree().createInEDT();
+    target = tree().createNew();
     fixture = new JTreeFixture(robot(), target);
     fixture.updateDriver(driver);
   }

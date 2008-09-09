@@ -22,16 +22,17 @@ import java.awt.Point;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.FrameDriver;
+import org.fest.swing.edt.GuiTask;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JFrames.frame;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -51,7 +52,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
     driver = createMock(FrameDriver.class);
     target = frame().withName("frame")
                     .withTitle("A Frame")
-                    .createInEDT();
+                    .createNew();
     fixture = new FrameFixture(robot(), target);
     fixture.updateDriver(driver);
   }
@@ -89,6 +90,10 @@ import static org.fest.swing.testing.TestGroups.GUI;
       protected void executeInEDT() {
         frame.pack();
         frame.setVisible(true);
+      }
+    }, new Condition("Frame is showing") {
+      public boolean test() {
+        return frame.isShowing();
       }
     });
   }

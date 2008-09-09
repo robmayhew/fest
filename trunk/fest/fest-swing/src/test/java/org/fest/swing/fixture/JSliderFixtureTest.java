@@ -41,7 +41,7 @@ public class JSliderFixtureTest extends CommonComponentFixtureTestCase<JSlider> 
 
   void onSetUp() {
     driver = createMock(JSliderDriver.class);
-    target = slider().createInEDT();
+    target = slider().createNew();
     fixture = new JSliderFixture(robot(), target);
     fixture.updateDriver(driver);
   }

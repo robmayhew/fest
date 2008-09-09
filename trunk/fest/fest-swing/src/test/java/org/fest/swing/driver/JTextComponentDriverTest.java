@@ -23,18 +23,24 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.Condition;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTextComponentSelectedTextQuery.selectedTextOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
-import static org.fest.swing.task.ComponentSetEnableTask.disable;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link JTextComponentDriver}</code>.
@@ -52,7 +58,7 @@ public class JTextComponentDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTextComponentDriver(robot);
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     textField = window.textField;
     robot.showWindow(window);
   }
@@ -79,7 +85,7 @@ public class JTextComponentDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldDeleteTextInEmptyTextComponent(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setTextFieldTextTo(textField, "");
+    setTextFieldText(textField, "");
     driver.deleteText(textField);
     assertThat(textOf(textField)).isNullOrEmpty();
   }
@@ -87,7 +93,7 @@ public class JTextComponentDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldReplaceText(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setTextFieldTextTo(textField, "Hi");
+    setTextFieldText(textField, "Hi");
     driver.replaceText(textField, "Bye");
     assertThat(textOf(textField)).isEqualTo("Bye");
   }
@@ -95,7 +101,7 @@ public class JTextComponentDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldSelectAllText(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setTextFieldTextTo(textField, "Hello");
+    setTextFieldText(textField, "Hello");
     driver.selectAll(textField);
     assertThat(selectedTextOf(textField)).isEqualTo(textOf(textField));
   }
@@ -111,7 +117,7 @@ public class JTextComponentDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldEnterText(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setTextFieldTextTo(textField, "");
+    setTextFieldText(textField, "");
     String textToEnter = "Entering text";
     driver.enterText(textField, textToEnter);
     assertThat(textOf(textField)).isEqualTo(textToEnter);
@@ -153,7 +159,7 @@ public class JTextComponentDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldSelectGivenTextOnly(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    setTextFieldTextTo(textField, "Hello World");
+    setTextFieldText(textField, "Hello World");
     driver.selectText(textField, "llo W");
     assertThat(selectedTextOf(textField)).isEqualTo("llo W");
   }
@@ -197,12 +203,12 @@ public class JTextComponentDriverTest {
   }
 
   public void shouldPassIfHasExpectedText() {
-    setTextFieldTextTo(textField, "Hi");
+    setTextFieldText(textField, "Hi");
     driver.requireText(textField, "Hi");
   }
 
   public void shouldFailIfDoesNotHaveExpectedText() {
-    setTextFieldTextTo(textField, "Hi");
+    setTextFieldText(textField, "Hi");
     try {
       driver.requireText(textField, "Bye");
       fail();
@@ -212,17 +218,17 @@ public class JTextComponentDriverTest {
   }
 
   public void shouldPassIfEmpty() {
-    setTextFieldTextTo(textField, "");
+    setTextFieldText(textField, "");
     driver.requireEmpty(textField);
   }
 
   public void shouldPassIfTextIsNull() {
-    setTextFieldTextTo(textField, null);
+    setTextFieldText(textField, null);
     driver.requireEmpty(textField);
   }
 
   public void shouldFailIfNotEmpty() {
-    setTextFieldTextTo(textField, "Hi");
+    setTextFieldText(textField, "Hi");
     try {
       driver.requireEmpty(textField);
       fail();
@@ -240,19 +246,27 @@ public class JTextComponentDriverTest {
       protected void executeInEDT() {
         textField.setEditable(editable);
       }
+    }, new Condition(concat("JTextField's 'editable' property is ", editable)) {
+      public boolean test() {
+        return textField.isEditable() == editable;
+      }
     });
   }
 
-  private static void setTextFieldTextTo(final JTextField textField, final String text) {
+  private static void setTextFieldText(final JTextField textField, final String text) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         textField.setText(text);
+      }
+    }, new Condition(concat("JTextField's 'text' property is ", text)) {
+      public boolean test() {
+        return areEqual(textField.getText(), text);
       }
     });
   }
   
   private void setTextAndDisableTextField(final JTextField textField, final String text) {
-    setTextFieldTextTo(textField, text);
+    setTextFieldText(textField, text);
     disable(textField);
   }
 
@@ -261,13 +275,11 @@ public class JTextComponentDriverTest {
 
     final JTextField textField = new JTextField("This is a test");
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(JTextComponentDriverTest.class);
       add(textField);
       setPreferredSize(new Dimension(200, 200));

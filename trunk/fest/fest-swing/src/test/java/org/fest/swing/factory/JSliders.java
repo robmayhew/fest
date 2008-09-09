@@ -17,12 +17,8 @@ package org.fest.swing.factory;
 
 import javax.swing.JSlider;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JSlider}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JSlider}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -60,17 +56,13 @@ public final class JSliders {
       return this;
     }
 
-    public JSlider createInEDT() {
-      return execute(new GuiQuery<JSlider>() {
-        protected JSlider executeInEDT()  {
-          JSlider slider = new JSlider();
-          slider.setMaximum(maximum);
-          slider.setMinimum(minimum);
-          slider.setName(name);
-          slider.setValue(value);
-          return slider;
-        }
-      });
+    public JSlider createNew() {
+      JSlider slider = new JSlider();
+      slider.setMaximum(maximum);
+      slider.setMinimum(minimum);
+      slider.setName(name);
+      slider.setValue(value);
+      return slider;
     }
   }
 }

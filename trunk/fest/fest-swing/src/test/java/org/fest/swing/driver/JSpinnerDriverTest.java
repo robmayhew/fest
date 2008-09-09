@@ -26,18 +26,22 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.Condition;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JSpinnerValueQuery.valueOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
-import static org.fest.swing.task.ComponentSetEnableTask.disable;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
@@ -57,7 +61,7 @@ public class JSpinnerDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JSpinnerDriver(robot);
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     spinner = window.spinner;
     robot.showWindow(window);
   }
@@ -173,9 +177,14 @@ public class JSpinnerDriverTest {
   }
 
   private static void setJLabelAsEditorIn(final JSpinner spinner) {
+    final JLabel newEditor = new JLabel();
     execute(new GuiTask() {
       protected void executeInEDT() {
-        spinner.setEditor(new JLabel());
+        spinner.setEditor(newEditor);
+      }
+    }, new Condition("JSpinner's editor is set") {
+      public boolean test() {
+        return spinner.getEditor() == newEditor;
       }
     });
   }
@@ -242,6 +251,10 @@ public class JSpinnerDriverTest {
       protected void executeInEDT() {
         spinner.setValue(value);
       }
+    }, new Condition(concat("JSpinner's 'value' property is ", value)) {
+      public boolean test() {
+        return spinner.getValue() == value;
+      }
     });
   }
 
@@ -259,13 +272,11 @@ public class JSpinnerDriverTest {
 
     final JSpinner spinner = new JSpinner(new SpinnerListModel(array("Frodo", "Sam", "Gandalf")));
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
-    MyWindow() {
+    private MyWindow() {
       super(JSpinnerDriverTest.class);
       add(spinner);
       setPreferredSize(new Dimension(160, 80));

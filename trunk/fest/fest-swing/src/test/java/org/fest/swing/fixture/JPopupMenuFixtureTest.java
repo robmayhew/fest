@@ -45,7 +45,7 @@ public class JPopupMenuFixtureTest extends CommonComponentFixtureTestCase<JPopup
   
   void onSetUp() {
     driver = createMock(JPopupMenuDriver.class);
-    target = popupMenu().createInEDT();
+    target = popupMenu().createNew();
     fixture = new JPopupMenuFixture(robot(), target);
     fixture.updateDriver(driver);
   }

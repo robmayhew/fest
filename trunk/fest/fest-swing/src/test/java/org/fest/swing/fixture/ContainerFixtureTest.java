@@ -29,19 +29,19 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.query.AbstractButtonTextQuery;
 import org.fest.swing.query.JLabelTextQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static java.awt.Color.RED;
+import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.SwingConstants.HORIZONTAL;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JButtons.button;
 import static org.fest.swing.factory.JCheckBoxes.checkBox;
 import static org.fest.swing.factory.JComboBoxes.comboBox;
@@ -89,7 +89,7 @@ public class ContainerFixtureTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = TestWindow.showNewInTest(getClass());
+    window = TestWindow.createNew(getClass());
     fixture = new ContainerFixture<TestWindow>(robot, window) {};
   }
 
@@ -123,7 +123,7 @@ public class ContainerFixtureTest {
   private JButton addJButton() {
     JButton button = button().withName("button")
                              .withText("A Button")
-                             .createInEDT();
+                             .createNew();
     showWindowWith(button);
     return button;
   }
@@ -154,7 +154,7 @@ public class ContainerFixtureTest {
   private JCheckBox addJCheckBox() {
     JCheckBox checkBox = checkBox().withName("checkBox")
                                    .withText("A CheckBox")
-                                   .createInEDT();
+                                   .createNew();
     showWindowWith(checkBox);
     return checkBox;
   }
@@ -185,7 +185,7 @@ public class ContainerFixtureTest {
   private JComboBox addJComboBox() {
     JComboBox comboBox = comboBox().withItems("first", "second", "third")
                                    .withName("comboBox")
-                                   .createInEDT();
+                                   .createNew();
     showWindowWith(comboBox);
     return comboBox;
   }
@@ -218,7 +218,7 @@ public class ContainerFixtureTest {
     JDialog dialog = dialog().withName("dialog")
                              .withOwner(window)
                              .withTitle("A Dialog")
-                             .createAndShowInEDT();
+                             .createAndShow();
     return dialog;
   }
 
@@ -247,7 +247,7 @@ public class ContainerFixtureTest {
 
   private JFileChooser addJFileChooser() {
     JFileChooser fileChooser = fileChooser().withName("fileChooser")
-                                            .createInEDT();
+                                            .createNew();
     showWindowWith(fileChooser);
     return fileChooser;
   }
@@ -278,7 +278,7 @@ public class ContainerFixtureTest {
   private JLabel addJLabel() {
     JLabel label = label().withName("label")
                           .withText("A Label")
-                          .createInEDT();
+                          .createNew();
     showWindowWith(label);
     return label;
   }
@@ -307,7 +307,7 @@ public class ContainerFixtureTest {
   }
 
   private JList addJList() {
-    JList list = list().withName("list").createInEDT();
+    JList list = list().withName("list").createNew();
     showWindowWith(list);
     return list;
   }
@@ -338,23 +338,19 @@ public class ContainerFixtureTest {
   private JMenuItem addJMenuItem() {
     JMenuItem menuItem = menuItem().withName("subMenu")
                                    .withText("A Submenu")
-                                   .createInEDT();
+                                   .createNew();
     JMenu menu = menu().withText("A Menu")
                        .withMenuItems(menuItem)
-                       .createInEDT();
+                       .createNew();
     JMenuBar menuBar = menuBar().withMenus(menu)
-                                .createInEDT();
+                                .createNew();
     setJMenuBar(window, menuBar);
     window.display();
     return menuItem;
   }
 
-  private static void setJMenuBar(final JFrame frame, final JMenuBar menuBar) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        frame.setJMenuBar(menuBar);
-      }
-    });
+  private static void setJMenuBar(JFrame frame, JMenuBar menuBar) {
+    frame.setJMenuBar(menuBar);
   }
 
   public void shouldFindPanelByType() {
@@ -383,18 +379,14 @@ public class ContainerFixtureTest {
   private JPanel addJPanel() {
     JPanel panel = panel().withBackground(RED)
                           .withName("panel")
-                          .createInEDT();
+                          .createNew();
     setContentPane(window, panel);
     window.display();
     return panel;
   }
 
-  private void setContentPane(final JFrame frame, final JPanel panel) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        frame.getRootPane().setContentPane(panel);
-      }
-    });
+  private void setContentPane(JFrame frame, JPanel panel) {
+    frame.getRootPane().setContentPane(panel);
   }
 
   public void shouldFindOptionPane() {
@@ -405,7 +397,7 @@ public class ContainerFixtureTest {
         button.setName("button");
         button.addMouseListener(new MouseAdapter() {
           @Override public void mousePressed(MouseEvent e) {
-            JOptionPane.showMessageDialog(window, "A Message");
+            showMessageDialog(window, "A Message");
           }
         });
       }
@@ -449,7 +441,7 @@ public class ContainerFixtureTest {
   private JRadioButton addJRadioButton() {
     JRadioButton radioButton = radioButton().withName("radioButton")
                                             .withText("A Radio Button")
-                                            .createInEDT();
+                                            .createNew();
     showWindowWith(radioButton);
     return radioButton;
   }
@@ -480,7 +472,7 @@ public class ContainerFixtureTest {
   private JScrollBar addJScrollBar() {
     JScrollBar scrollBar = scrollBar().withName("scrollBar")
                                       .withValue(10)
-                                      .createInEDT();
+                                      .createNew();
     showWindowWith(scrollBar);
     return scrollBar;
   }
@@ -511,7 +503,7 @@ public class ContainerFixtureTest {
   private JScrollPane addJScrollPane() {
     JScrollPane scrollPane = scrollPane().withName("scrollPane")
                                          .withPreferredSize(PREFERRED_DIMENSION)
-                                         .createInEDT();
+                                         .createNew();
     showWindowWith(scrollPane);
     return scrollPane;
   }
@@ -544,7 +536,7 @@ public class ContainerFixtureTest {
                              .withMaximum(20)
                              .withValue(15)
                              .withName("slider")
-                             .createInEDT();
+                             .createNew();
     showWindowWith(slider);
     return slider;
   }
@@ -575,7 +567,7 @@ public class ContainerFixtureTest {
   private JSpinner addJSpinner() {
     JSpinner spinner = spinner().withName("spinner")
                                 .withValues("One", "Two")
-                                .createInEDT();
+                                .createNew();
     showWindowWith(spinner);
     return spinner;
   }
@@ -590,12 +582,7 @@ public class ContainerFixtureTest {
     JSplitPane expectedSplitPane = addJSplitPane();
     GenericTypeMatcher<JSplitPane> matcher = new GenericTypeMatcher<JSplitPane>() {
       protected boolean isMatching(final JSplitPane splitPane) {
-        Component rightComponent = execute(new GuiQuery<Component>() {
-          protected Component executeInEDT() {
-            return splitPane.getRightComponent();
-          }
-        });
-        return rightComponent instanceof JList;
+        return splitPane.getRightComponent() instanceof JList;
       }
     };
     JSplitPaneFixture splitPaneFixture = fixture.splitPane(matcher);
@@ -611,13 +598,13 @@ public class ContainerFixtureTest {
   private JSplitPane addJSplitPane() {
     JSplitPane splitPane = splitPane().withName("splitPane")
                                       .withRightComponent(newList())
-                                      .createInEDT();
+                                      .createNew();
     showWindowWith(splitPane);
     return splitPane;
   }
 
   private JList newList() {
-    return list().createInEDT();
+    return list().createNew();
   }
 
   public void shouldFindTabbedPaneByType() {
@@ -646,7 +633,7 @@ public class ContainerFixtureTest {
   private JTabbedPane addJTabbedPane() {
     JTabbedPane tabbedPane = tabbedPane().withName("tabbedPane")
                                          .withTabs("A Tab")
-                                         .createInEDT();
+                                         .createNew();
     showWindowWith(tabbedPane);
     return tabbedPane;
   }
@@ -678,7 +665,7 @@ public class ContainerFixtureTest {
     JTable table = table().withRowCount(6)
                           .withColumnCount(8)
                           .withName("table")
-                          .createInEDT();
+                          .createNew();
     showWindowWith(table);
     return table;
   }
@@ -693,12 +680,7 @@ public class ContainerFixtureTest {
     JTextComponent expectedTextComponent = addJTextComponent();
     GenericTypeMatcher<JTextField> columnMatcher = new GenericTypeMatcher<JTextField>() {
       protected boolean isMatching(final JTextField textField) {
-        int columns = execute(new GuiQuery<Integer>() {
-          protected Integer executeInEDT() {
-            return textField.getColumns();
-          }
-        });
-        return columns == 10;
+        return textField.getColumns() == 10;
       }
     };
     JTextComponentFixture textComponentFixture = fixture.textBox(columnMatcher);
@@ -714,7 +696,7 @@ public class ContainerFixtureTest {
   private JTextComponent addJTextComponent() {
     JTextField textField = textField().withColumns(10)
                                       .withName("textField")
-                                      .createInEDT();
+                                      .createNew();
     showWindowWith(textField);
     return textField;
   }
@@ -745,7 +727,7 @@ public class ContainerFixtureTest {
   private JToggleButton addJToggleButton() {
     JToggleButton toggleButton = toggleButton().withName("toggleButton")
                                                .withText("A ToggleButton")
-                                               .createInEDT();
+                                               .createNew();
     showWindowWith(toggleButton);
     return toggleButton;
   }
@@ -776,7 +758,7 @@ public class ContainerFixtureTest {
   private JToolBar addJToolBar() {
     JToolBar toolBar = toolBar().withName("toolBar")
                                 .withOrientation(HORIZONTAL)
-                                .createInEDT();
+                                .createNew();
     showWindowWith(toolBar);
     return toolBar;
   }
@@ -807,7 +789,7 @@ public class ContainerFixtureTest {
   private JTree addJTree() {
     JTree tree = tree().withName("tree")
                        .withValues("One", "Two")
-                       .createInEDT();
+                       .createNew();
     showWindowWith(tree);
     return tree;
   }
@@ -818,10 +800,6 @@ public class ContainerFixtureTest {
   }
 
   private static void add(final Container container, final Component component) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        container.add(component);
-      }
-    });
+    container.add(component);
   }
 }

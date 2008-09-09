@@ -42,13 +42,13 @@ import static org.fest.swing.factory.JTextFields.textField;
                  .withName("list")
                  .withSelectedIndices(0, 1)
                  .withSelectionMode(MULTIPLE_INTERVAL_SELECTION)
-                 .createInEDT();
+                 .createNew();
     formatter = new JListFormatter();
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJList() {
-    formatter.format(textField().createInEDT());
+    formatter.format(textField().createNew());
   }
 
   public void shouldFormatJList() {

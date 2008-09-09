@@ -42,7 +42,7 @@ import static org.fest.swing.factory.JCheckBoxes.checkBox;
   
   void onSetUp() {
     driver = createMock(AbstractButtonDriver.class);
-    target = checkBox().createInEDT();
+    target = checkBox().createNew();
     fixture = new JCheckBoxFixture(robot(), target);
     fixture.updateDriver(driver);
   }

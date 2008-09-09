@@ -17,12 +17,8 @@ package org.fest.swing.factory;
 
 import javax.swing.JRadioButton;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JRadioButton}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JRadioButton}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -54,16 +50,12 @@ public final class JRadioButtons {
       return this;
     }
     
-    public JRadioButton createInEDT() {
-      return execute(new GuiQuery<JRadioButton>() {
-        protected JRadioButton executeInEDT()  {
-          JRadioButton radioButton = new JRadioButton();
-          radioButton.setName(name);
-          radioButton.setSelected(selected);
-          radioButton.setText(text);
-          return radioButton;
-        }
-      });
+    public JRadioButton createNew() {
+      JRadioButton radioButton = new JRadioButton();
+      radioButton.setName(name);
+      radioButton.setSelected(selected);
+      radioButton.setText(text);
+      return radioButton;
     }
   }
 }

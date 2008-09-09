@@ -25,8 +25,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.Condition;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
 
@@ -36,9 +39,9 @@ import static javax.swing.SwingUtilities.getWindowAncestor;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.*;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.ComponentBoundsQuery.boundsOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -58,7 +61,7 @@ public class JToolBarDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JToolBarDriver(robot);
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     toolBar = window.toolBar;
     robot.showWindow(window);
   }
@@ -83,6 +86,10 @@ public class JToolBarDriverTest {
     execute(new GuiTask() {
       protected void executeInEDT() {
         toolBar.setFloatable(false);
+      }
+    }, new Condition("JToolBar is not floatable") {
+      public boolean test() {
+        return !toolBar.isFloatable();
       }
     });
   }
@@ -159,12 +166,8 @@ public class JToolBarDriverTest {
       };
   }
 
-  private static Window ancestorOf(final JToolBar toolBar) {
-    return execute(new GuiQuery<Window>() {
-      protected Window executeInEDT() {
-        return getWindowAncestor(toolBar);
-      }
-    });
+  private static Window ancestorOf(JToolBar toolBar) {
+    return getWindowAncestor(toolBar);
   }
 
   private static class MyWindow extends TestWindow {
@@ -173,13 +176,11 @@ public class JToolBarDriverTest {
     final BorderLayout borderLayout = new BorderLayout();
     final JToolBar toolBar = new JToolBar();
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(JToolBarDriverTest.class);
       toolBar.setFloatable(true);
       setLayout(borderLayout);

@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -31,7 +32,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.Condition;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestTree;
@@ -40,11 +46,13 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.ROBOT;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.task.ComponentSetEnableTask.disable;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.task.JTreeSelectRowTask.selectRow;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
+import static org.fest.util.Strings.concat;
 
 /**
  * Test for <code>{@link JTreeDriver}</code>.
@@ -66,7 +74,7 @@ public class JTreeDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTreeDriver(robot);
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     dragTree = window.dragTree;
     dropTree = window.dropTree;
     robot.showWindow(window);
@@ -228,9 +236,14 @@ public class JTreeDriverTest {
   }
 
   private static void setDefaultSelectionModelTo(final JTree tree) {
+    final DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel();
     execute(new GuiTask() {
       protected void executeInEDT() {
-        tree.setSelectionModel(new DefaultTreeSelectionModel());
+        tree.setSelectionModel(selectionModel);
+      }
+    }, new Condition("JTree's selection model is set") {
+      public boolean test() {
+        return tree.getSelectionModel() == selectionModel;
       }
     });
   }
@@ -385,6 +398,10 @@ public class JTreeDriverTest {
       protected void executeInEDT() {
         tree.setSelectionPaths(paths);
       }
+    }, new Condition("JTree's selection paths are set") {
+      public boolean test() {
+        return Arrays.equals(tree.getSelectionPaths(), paths);
+      }
     });
   }
   
@@ -462,6 +479,10 @@ public class JTreeDriverTest {
       protected void executeInEDT() {
         tree.setSelectionPath(path);
       }
+    }, new Condition("JTree's selection path is set") {
+      public boolean test() {
+        return tree.getSelectionPath() == path;
+      }
     });
   }
   
@@ -481,6 +502,10 @@ public class JTreeDriverTest {
       protected void executeInEDT() {
         tree.clearSelection();
       }
+    }, new Condition("JTree's selection is cleared") {
+      public boolean test() {
+        return tree.getSelectionCount() == 0;
+      }
     });
   }
 
@@ -498,11 +523,7 @@ public class JTreeDriverTest {
   }
 
   private static void selectFirstRowOf(final JTree tree) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        tree.setSelectionRow(0);
-      }
-    });
+    selectRow(tree, 0);
   }
   
   public void shouldPassIfTreeIsEditable() {
@@ -539,6 +560,10 @@ public class JTreeDriverTest {
     execute(new GuiTask() {
       protected void executeInEDT() {
         tree.setEditable(editable);
+      }
+    }, new Condition(concat("JTree's 'editable' condition is ", editable)) {
+      public boolean test() {
+        return tree.isEditable() == editable;
       }
     });
   }
@@ -577,10 +602,8 @@ public class JTreeDriverTest {
 
     private static final Dimension TREE_SIZE = new Dimension(200, 100);
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
     final TestTree dragTree = new TestTree(nodes());
@@ -612,7 +635,7 @@ public class JTreeDriverTest {
       return node;
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(JTreeDriverTest.class);
       add(decorate(dragTree));
       dragTree.addMouseListener(new Listener(popupMenu));

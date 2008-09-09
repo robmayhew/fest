@@ -20,8 +20,6 @@ import java.awt.Dimension;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
-import org.fest.swing.core.GuiActionRunner;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 /**
@@ -33,14 +31,10 @@ public class MDIFrame extends TestWindow {
 
   private static final long serialVersionUID = 1L;
 
-  public static MDIFrame showInTest(final Class<?> testClass) {
-    MDIFrame f = GuiActionRunner.execute(new GuiQuery<MDIFrame>() {
-      protected MDIFrame executeInEDT() {
-        return new MDIFrame(testClass);
-      }
-    });
-    f.display();
-    return f;
+  public static MDIFrame showInTest(Class<?> testClass) {
+    MDIFrame frame = new MDIFrame(testClass);
+    frame.display();
+    return frame;
   }
   
   private JDesktopPane desktop;

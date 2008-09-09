@@ -45,7 +45,7 @@ public class ComponentFixtureValidatorTest {
   }
 
   public void shouldReturnTargetIfItIsNotNull() {
-    Component target = textField().createInEDT();
+    Component target = textField().createNew();
     assertThat(ComponentFixtureValidator.notNullTarget(target)).isSameAs(target);
   }
   

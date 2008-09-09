@@ -21,17 +21,14 @@ import javax.swing.*;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestWindow;
 
-import static org.fest.swing.core.EventMode.*;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.factory.JFrames.frame;
@@ -53,9 +50,9 @@ public class MoveParentToFrontWhenClickingMenuTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     window.display();
-    frameToFocus = frame().withTitle("To Focus").createInEDT();
+    frameToFocus = frame().withTitle("To Focus").createNew();
     robot.showWindow(frameToFocus, new Dimension(300, 200));
     robot.focus(frameToFocus);
   }
@@ -64,7 +61,7 @@ public class MoveParentToFrontWhenClickingMenuTest {
     robot.cleanUp();
   }
 
-  @Test(groups = { GUI, BUG }, dataProvider = "eventModes")
+  @Test(groups = { GUI, BUG }, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldSelectMenuFromMenuBar(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     JMenuItem menuItem = window.menuItemFromMenuBar;
@@ -75,7 +72,7 @@ public class MoveParentToFrontWhenClickingMenuTest {
     clickRecorder.wasClicked();
   }
 
-  @Test(groups = { GUI, BUG }, dataProvider = "eventModes")
+  @Test(groups = { GUI, BUG }, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldSelectMenuPopupMenu(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     JMenuItem menuItem = window.menuItemFromPopupMenu;
@@ -91,24 +88,18 @@ public class MoveParentToFrontWhenClickingMenuTest {
     return new JMenuItemFixture(robot, menuItem);
   }
 
-  @DataProvider(name = "eventModes") public Object[][] eventModes() {
-    return new Object[][] { { ROBOT }, { AWT } };
-  }
-  
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
     final JMenuItem menuItemFromMenuBar = new JMenuItem("New");
     final JMenuItem menuItemFromPopupMenu = new JMenuItem("Cut");
     final JTextField textField;
 
-    MyWindow() {
+    private MyWindow() {
       super(MoveParentToFrontWhenClickingMenuTest.class);
       setJMenuBar(new JMenuBar());
       JMenu menuFile = new JMenu("File");

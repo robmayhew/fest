@@ -19,15 +19,12 @@ import java.awt.Component;
 import java.awt.Container;
 import java.util.Collection;
 
-import javax.swing.JInternalFrame;
-
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTextFields.textField;
-import static org.fest.swing.hierarchy.JInternalFrameIconifyTask.iconifyTask;
+import static org.fest.swing.hierarchy.JInternalFrameIconifyTask.iconify;
 import static org.fest.swing.hierarchy.MDIFrame.showInTest;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -45,7 +42,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
   
   public void shouldReturnEmptyCollectionIfComponentIsNotJDesktopPane() {
-    Container container = textField().createInEDT();
+    Container container = textField().createNew();
     assertThat(finder.nonExplicitChildrenOf(container)).isEmpty();
   }
 
@@ -63,9 +60,5 @@ import static org.fest.swing.testing.TestGroups.GUI;
     } finally {
       frame.destroy();
     }
-  }
-
-  private static void iconify(JInternalFrame internalFrame) {
-    execute(iconifyTask(internalFrame));
   }
 }

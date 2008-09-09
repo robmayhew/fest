@@ -41,13 +41,13 @@ import static org.fest.swing.factory.JTextFields.textField;
     optionPane = optionPane().withMessage("A message")
                              .withMessageType(ERROR_MESSAGE)
                              .withOptionType(DEFAULT_OPTION)
-                             .createInEDT();
+                             .createNew();
     formatter = new JOptionPaneFormatter();
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJOptionPane() {
-    formatter.format(textField().createInEDT());
+    formatter.format(textField().createNew());
   }
 
   public void shouldFormatJOptionPane() {

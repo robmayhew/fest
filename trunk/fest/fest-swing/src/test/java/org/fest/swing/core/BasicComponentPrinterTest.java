@@ -27,7 +27,6 @@ import org.fest.swing.testing.PrintStreamStub;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -47,10 +46,8 @@ public class BasicComponentPrinterTest {
 
   @BeforeMethod public void setUp() {
     printer = (BasicComponentPrinter)BasicComponentPrinter.printerWithNewAwtHierarchy();
-    window1 = MyWindow.createAndShowInEDT();
-    window1.button.setName("button1");
-    window2 = MyWindow.createAndShowInEDT();
-    window2.button.setName("button2");
+    window1 = MyWindow.createAndShow("button1");
+    window2 = MyWindow.createAndShow("button2");
   }
 
   @AfterMethod public void tearDown() {
@@ -105,17 +102,16 @@ public class BasicComponentPrinterTest {
 
     final JButton button = new JButton("A button");
 
-    static MyWindow createAndShowInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createAndShow(String buttonName) {
+      MyWindow window = new MyWindow(buttonName); 
       window.display();
       return window;
     }
 
-    MyWindow() {
+    private MyWindow(String buttonName) {
       super(BasicComponentPrinterTest.class);
       addComponents(button);
+      button.setName(buttonName);
     }
   }
 }

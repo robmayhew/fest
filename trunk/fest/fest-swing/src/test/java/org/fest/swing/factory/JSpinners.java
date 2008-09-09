@@ -18,13 +18,10 @@ package org.fest.swing.factory;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
- * Understands creation of <code>{@link JSpinner}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JSpinner}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -50,15 +47,11 @@ public final class JSpinners {
       return this;
     }
     
-    public JSpinner createInEDT() {
-      return execute(new GuiQuery<JSpinner>() {
-        protected JSpinner executeInEDT()  {
-          JSpinner spinner = new JSpinner();
-          if (!isEmpty(values)) spinner.setModel(new SpinnerListModel(values));
-          spinner.setName(name);
-          return spinner;
-        }
-      });
+    public JSpinner createNew() {
+      JSpinner spinner = new JSpinner();
+      if (!isEmpty(values)) spinner.setModel(new SpinnerListModel(values));
+      spinner.setName(name);
+      return spinner;
     }
   }
 }

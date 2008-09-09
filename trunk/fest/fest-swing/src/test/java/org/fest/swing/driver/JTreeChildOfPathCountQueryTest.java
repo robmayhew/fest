@@ -24,11 +24,9 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Strings.concat;
 
@@ -45,7 +43,7 @@ public class JTreeChildOfPathCountQueryTest {
   
   @BeforeMethod public void setUp() {
     childCount = 8;
-    window = MyWindow.createAndShowInEDT(childCount);
+    window = MyWindow.createAndShow(childCount);
   }
   
   public void shouldReturnChildCountOfTreePath() {
@@ -62,12 +60,8 @@ public class JTreeChildOfPathCountQueryTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createAndShowInEDT(final int treeRootChildCount) {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow(treeRootChildCount);
-        }
-      });
+    static MyWindow createAndShow(final int treeRootChildCount) {
+      MyWindow window = new MyWindow(treeRootChildCount);
       window.display();
       return window;
     }
@@ -75,7 +69,7 @@ public class JTreeChildOfPathCountQueryTest {
     final JTree tree;
     final TreeNode treeRoot;
     
-    MyWindow(int treeRootChildCount) {
+    private MyWindow(int treeRootChildCount) {
       super(JTreeChildOfPathCountQueryTest.class);
       treeRoot = root(treeRootChildCount);
       tree = new JTree(treeRoot);

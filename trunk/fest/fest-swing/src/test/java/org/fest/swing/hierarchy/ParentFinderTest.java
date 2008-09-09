@@ -22,11 +22,11 @@ import javax.swing.JTextField;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.hierarchy.JFrameContentPaneQuery.contentPaneOf;
 import static org.fest.swing.hierarchy.MDIFrame.showInTest;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -46,7 +46,8 @@ public class ParentFinderTest {
   }
 
   public void shouldReturnParentOfComponent() {
-    MyWindow window = MyWindow.createAndShowInEDT();
+    MyWindow window = MyWindow.createNew();
+    window.display();
     try {
       assertThat(finder.parentOf(window.textField)).isSameAs(contentPaneOf(window));
     } finally {
@@ -57,17 +58,13 @@ public class ParentFinderTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createAndShowInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
-      window.display();
-      return window;
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
     final JTextField textField = new JTextField();
 
-    MyWindow() {
+    private MyWindow() {
       super(ParentFinderTest.class);
       addComponents(textField);
     }

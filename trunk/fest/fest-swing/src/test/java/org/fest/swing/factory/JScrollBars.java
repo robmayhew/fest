@@ -17,14 +17,10 @@ package org.fest.swing.factory;
 
 import javax.swing.JScrollBar;
 
-import org.fest.swing.core.GuiQuery;
-
 import static java.awt.Adjustable.HORIZONTAL;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JScrollBar}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JScrollBar}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -74,19 +70,15 @@ public final class JScrollBars {
       return this;
     }
 
-    public JScrollBar createInEDT() {
-      return execute(new GuiQuery<JScrollBar>() {
-        protected JScrollBar executeInEDT()  {
-          JScrollBar scrollBar = new JScrollBar();
-          scrollBar.setBlockIncrement(blockIncrement);
-          scrollBar.setOrientation(orientation);
-          scrollBar.setMaximum(maximum);
-          scrollBar.setMinimum(minimum);
-          scrollBar.setName(name);
-          scrollBar.setValue(value);
-          return scrollBar;
-        }
-      });
+    public JScrollBar createNew() {
+      JScrollBar scrollBar = new JScrollBar();
+      scrollBar.setBlockIncrement(blockIncrement);
+      scrollBar.setOrientation(orientation);
+      scrollBar.setMaximum(maximum);
+      scrollBar.setMinimum(minimum);
+      scrollBar.setName(name);
+      scrollBar.setValue(value);
+      return scrollBar;
     }
   }
 }

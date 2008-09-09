@@ -20,43 +20,32 @@ import java.awt.Component;
 import javax.accessibility.AccessibleAction;
 import javax.swing.Action;
 
-import org.fest.swing.core.GuiTask;
-import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.edt.GuiQuery;
 
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.util.Strings.concat;
 
 /**
  * Understands execution of the default (first) <code>{@link Action}</code> in a <code>{@link Component}</code>'s
- * <code>{@link AccessibleAction}</code>. This task should be executed in the event dispatch thread.
+ * <code>{@link AccessibleAction}</code>. This task is executed in the event dispatch thread.
  *
  * @author Alex Ruiz
  */
-class ComponentPerformDefaultAccessibleActionTask extends GuiTask {
+class ComponentPerformDefaultAccessibleActionTask {
 
   private static final int DEFAULT_ACTION_INDEX = 0;
 
-  private final Component component;
-
-  static ComponentPerformDefaultAccessibleActionTask performDefaultAccessibleActionTask(Component component) {
-    return new ComponentPerformDefaultAccessibleActionTask(component);
-  }
-  
-  /**
-   * Creates a new </code>{@link ComponentPerformDefaultAccessibleActionTask}</code>.
-   * @param component the <code>Component</code> containing the <code>AccessibleAction</code> to execute.
-   * @throws ActionFailedException if the <code>Component</code> does not contain an <code>AccessibleAction</code>
-   * or if the <code>AccessibleAction</code> is empty.
-   */
-  private ComponentPerformDefaultAccessibleActionTask(Component component) {
-    this.component = component;
-  }
-
-  protected void executeInEDT() {
-    AccessibleAction action = component.getAccessibleContext().getAccessibleAction();
-    if (action == null || action.getAccessibleActionCount() == 0)
-      throw actionFailure(concat("Unable to perform accessible action for ", format(component)));
-    action.doAccessibleAction(DEFAULT_ACTION_INDEX);
+  static void performDefaultAccessibleAction(final Component c) {
+    execute(new GuiQuery<Void>() {
+      protected Void executeInEDT() {
+        AccessibleAction action = c.getAccessibleContext().getAccessibleAction();
+        if (action == null || action.getAccessibleActionCount() == 0)
+          throw actionFailure(concat("Unable to perform accessible action for ", format(c)));
+        action.doAccessibleAction(DEFAULT_ACTION_INDEX);
+        return null;
+      }
+    });
   }
 }

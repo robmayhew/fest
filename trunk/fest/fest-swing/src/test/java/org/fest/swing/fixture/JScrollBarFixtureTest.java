@@ -41,7 +41,7 @@ public class JScrollBarFixtureTest extends CommonComponentFixtureTestCase<JScrol
   
   void onSetUp() {
     driver = createMock(JScrollBarDriver.class);
-    target = scrollBar().createInEDT();
+    target = scrollBar().createNew();
     fixture = new JScrollBarFixture(robot(), target);
     fixture.updateDriver(driver);
   }

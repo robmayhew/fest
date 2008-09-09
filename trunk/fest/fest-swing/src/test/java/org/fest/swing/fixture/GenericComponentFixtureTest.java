@@ -39,7 +39,7 @@ import static org.fest.swing.factory.JButtons.button;
   
   void onSetUp() {
     driver = createMock(ComponentDriver.class);
-    target = button().createInEDT();
+    target = button().createNew();
     fixture = new GenericComponentFixture<Component>(robot(), driver, target) {};
   }
 

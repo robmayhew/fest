@@ -59,7 +59,7 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
 
   void onSetUp() {
     driver = createMock(JTableDriver.class);
-    target = table().createInEDT();
+    target = table().createNew();
     fixture = new JTableFixture(robot(), target);
     fixture.updateDriver(driver);
     cell = row(6).column(8);

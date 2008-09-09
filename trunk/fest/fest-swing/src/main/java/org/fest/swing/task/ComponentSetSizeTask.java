@@ -18,39 +18,32 @@ package org.fest.swing.task;
 import java.awt.Component;
 import java.awt.Dimension;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands a task that sets the size of a <code>{@link Component}</code>. This task should be executed in the
- * event dispatch thread.
+ * Understands a task that sets the size of a <code>{@link Component}</code>. This task is executed in the event 
+ * dispatch thread.
  *
  * @author Alex Ruiz
  */
-public class ComponentSetSizeTask extends GuiTask {
-
-  private final Component c;
-  private final Dimension size;
+public class ComponentSetSizeTask {
 
   /**
-   * Creates a new <code>{@link ComponentSetSizeTask}</code>
-   * @param c the <code>Component</code> to resize.
+   * Sets the size of a <code>{@link Component}</code>.
+   * @param c the <code>Component</code> to set the size to.
    * @param size the new size for the given <code>Component</code>.
-   * @return the created task.
    */
-  public static ComponentSetSizeTask setSizeTask(Component c, Dimension size) {
-    return new ComponentSetSizeTask(c, size);
-  }
-
-  private ComponentSetSizeTask(Component c, Dimension size) {
-    this.c = c;
-    this.size = size;
-  }
-
-  /**
-   * Sets this task's <code>{@link Dimension}</code> as the new size of this task's <code>{@link Component}</code>. This
-   * action is executed in the event dispatch thread.
-   */
-  protected void executeInEDT() {
-    c.setSize(size);
+  public static void setSize(final Component c, final Dimension size) {
+    execute(new GuiQuery<Void>() {
+      // we cannot use a GuiTask because we cannot depend on the size of the component after being resized will be the
+      // same to the given one (e.g. when resizing a frame, we need to count the size of the title bar.
+      // TODO find a way to use a GuiTask
+      protected Void executeInEDT() {
+        c.setSize(size);
+        return null;
+      }
+    });
   }
 }

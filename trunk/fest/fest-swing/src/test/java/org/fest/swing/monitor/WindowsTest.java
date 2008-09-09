@@ -46,7 +46,7 @@ public class WindowsTest {
   private Map<Window, Boolean> hidden;
   
   @BeforeMethod public void setUp() {
-    frame = new TestWindow(getClass());
+    frame = TestWindow.createNew(getClass());
     windows = new Windows();
     // TODO use real maps
     pending = mapField("pending", windows);

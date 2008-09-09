@@ -30,7 +30,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
@@ -38,7 +37,6 @@ import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.factory.JMenuItems.menuItem;
@@ -63,7 +61,7 @@ public class JTableHeaderDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTableHeaderDriver(robot);
-    MyWindow frame = MyWindow.createInEDT();
+    MyWindow frame = MyWindow.createNew();
     tableHeader = frame.table.getTableHeader();
     robot.showWindow(frame);
   }
@@ -129,8 +127,8 @@ public class JTableHeaderDriverTest {
   }
 
   private static JPopupMenu popupMenuFor(JTableHeader tableHeader) {
-    JMenuItem menuItem = menuItem().withText("Frodo").createInEDT();
-    JPopupMenu popupMenu = popupMenu().withMenuItems(menuItem).createInEDT();
+    JMenuItem menuItem = menuItem().withText("Frodo").createNew();
+    JPopupMenu popupMenu = popupMenu().withMenuItems(menuItem).createNew();
     setPopupMenu(tableHeader, popupMenu);
     return popupMenu;
   }
@@ -151,13 +149,11 @@ public class JTableHeaderDriverTest {
 
     final TestTable table;
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
-    MyWindow() {
+    private MyWindow() {
       super(JTableHeaderDriverTest.class);
       table = new TestTable(6, 2);
       add(decorate(table));

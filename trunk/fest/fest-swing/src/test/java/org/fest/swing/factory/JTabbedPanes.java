@@ -20,14 +20,11 @@ import java.awt.Component;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTabbedPanes.Tab.tab;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
- * Understands creation of <code>{@link JTabbedPane}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JTabbedPane}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -61,16 +58,12 @@ public final class JTabbedPanes {
       return this;
     }
     
-    public JTabbedPane createInEDT() {
-      return execute(new GuiQuery<JTabbedPane>() {
-        protected JTabbedPane executeInEDT()  {
-          JTabbedPane tabbedPane = new JTabbedPane();
-          tabbedPane.setName(name);
-          if (!isEmpty(tabs))
-            for (Tab tab : tabs) tabbedPane.addTab(tab.title, tab.component);
-          return tabbedPane;
-        }
-      });
+    public JTabbedPane createNew() {
+      JTabbedPane tabbedPane = new JTabbedPane();
+      tabbedPane.setName(name);
+      if (!isEmpty(tabs))
+        for (Tab tab : tabs) tabbedPane.addTab(tab.title, tab.component);
+      return tabbedPane;
     }
   }
   

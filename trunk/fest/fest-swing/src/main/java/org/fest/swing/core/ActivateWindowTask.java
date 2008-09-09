@@ -17,6 +17,8 @@ package org.fest.swing.core;
 
 import java.awt.Window;
 
+import org.fest.swing.edt.GuiTask;
+
 /**
  * Understands activating a <code>{@link Window}</code>. "Activate" means that the given window gets the keyboard focus.
  * This task should be executed in the event dispatch thread.

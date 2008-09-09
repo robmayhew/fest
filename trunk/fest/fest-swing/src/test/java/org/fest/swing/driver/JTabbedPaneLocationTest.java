@@ -41,7 +41,7 @@ public class JTabbedPaneLocationTest {
 
   @BeforeMethod public void setUp() {
     tabbedPane = tabbedPane().withTabs("one", "two")
-                             .createInEDT();
+                             .createNew();
     location = new JTabbedPaneLocation();
   }
 

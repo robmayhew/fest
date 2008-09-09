@@ -27,12 +27,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.ComponentFinder;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.BasicComponentFinder.finderWithNewAwtHierarchy;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -49,7 +47,7 @@ public class JMenuItemMatcherTest {
   
   @BeforeMethod public void setUp() {
     finder = finderWithNewAwtHierarchy();
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     window.display();
     matcher = new JMenuItemMatcher("Logout", "Logout");
   }
@@ -72,15 +70,11 @@ public class JMenuItemMatcherTest {
 
     final JMenuItem logoutMenuItem = new JMenuItem("Logout"); 
     
-    static MyWindow createInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
-      window.display();
-      return window;
+    static MyWindow createNew() {
+     return new MyWindow();
     }
     
-    public MyWindow() {
+    private MyWindow() {
       super(JMenuItemMatcherTest.class);
       JMenuBar menuBar = new JMenuBar();
       JMenu logoutMenu = new JMenu("Logout");

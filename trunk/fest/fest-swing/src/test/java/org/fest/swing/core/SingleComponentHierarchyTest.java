@@ -49,7 +49,7 @@ public class SingleComponentHierarchyTest {
   
   @BeforeMethod public void setUp() {
     delegate = createMock(ComponentHierarchy.class);
-    root = TestWindow.createInEDT(SingleComponentHierarchyTest.class);
+    root = TestWindow.createNew(SingleComponentHierarchyTest.class);
     hierarchy = new SingleComponentHierarchy(root, delegate);
   }
   

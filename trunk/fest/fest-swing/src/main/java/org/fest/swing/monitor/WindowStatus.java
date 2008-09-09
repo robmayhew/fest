@@ -19,9 +19,7 @@ import java.awt.*;
 
 import static java.lang.Math.max;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
-import static org.fest.swing.task.ComponentSetSizeTask.setSizeTask;
 import static org.fest.swing.util.AWT.insetsFrom;
 
 /**
@@ -91,7 +89,8 @@ class WindowStatus {
     Dimension windowSize = sizeOf(window);
     int w = max(windowSize.width, proposedWidth(metrics));
     int h = max(windowSize.height, proposedHeight(metrics));
-    execute(setSizeTask(window, new Dimension(w, h)));
+    window.setSize(new Dimension(w, h));
+    // execute(setSizeTask(window, new Dimension(w, h)));
   }
 
   private int proposedWidth(WindowMetrics metrics) {

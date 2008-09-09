@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
 /**
  * Understands a task that shows/hides the drop-down menu of a <code>{@link JComboBox}</code>. This task should be 

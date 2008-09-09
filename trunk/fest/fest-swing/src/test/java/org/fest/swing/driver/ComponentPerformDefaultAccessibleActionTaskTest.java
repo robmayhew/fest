@@ -25,7 +25,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.testing.TestGroups;
@@ -35,7 +34,6 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link ComponentPerformDefaultAccessibleActionTask}</code>.
@@ -48,13 +46,11 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
   private AccessibleAction accessibleAction;
   private AccessibleContextStub accessibleContext;
   private Component component;
-  private ComponentPerformDefaultAccessibleActionTask task;
 
   @BeforeMethod public void setUp() {
     accessibleAction = createMock(AccessibleAction.class);
     accessibleContext = new AccessibleContextStub(accessibleAction);
     component = MyComponent.newComponent(accessibleContext);
-    task = ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleActionTask(component);
   }
 
   public void shouldExecuteFirstActionInAccessibleAction() {
@@ -65,7 +61,7 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
       }
 
       protected void codeToTest() {
-        execute(task);
+        ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction(component);
       }
     }.run();
   }
@@ -77,7 +73,7 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
         protected void expectations() {}
   
         protected void codeToTest() {
-          execute(task);
+          ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction(component);
         }
       }.run();
       fail();
@@ -94,7 +90,7 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
         }
   
         protected void codeToTest() {
-          execute(task);
+          ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction(component);
         }
       }.run();
       fail();
@@ -113,12 +109,8 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
     
     private final AccessibleContext accessibleContext;
 
-    static MyComponent newComponent(final AccessibleContext accessibleContext) {
-      return execute(new GuiQuery<MyComponent>() {
-        protected MyComponent executeInEDT() {
-          return new MyComponent(accessibleContext);
-        }
-      });
+    static MyComponent newComponent(AccessibleContext accessibleContext) {
+      return new MyComponent(accessibleContext);
     }
     
     MyComponent(AccessibleContext accessibleContext) {

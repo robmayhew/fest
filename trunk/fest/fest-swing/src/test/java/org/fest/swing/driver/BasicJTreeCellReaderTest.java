@@ -25,14 +25,15 @@ import javax.swing.tree.DefaultTreeModel;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
 import org.fest.swing.factory.JLabels;
 import org.fest.swing.factory.JTrees;
 import org.fest.swing.testing.CustomCellRenderer;
 
+import static javax.swing.SwingUtilities.invokeLater;
+
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.factory.JToolBars.toolBar;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -51,22 +52,18 @@ public class BasicJTreeCellReaderTest {
 
   @BeforeMethod public void setUp() {
     root = newRoot();
-    tree = JTrees.tree().withRoot(root).createInEDT();
+    tree = JTrees.tree().withRoot(root).createNew();
     reader = new BasicJTreeCellReader();
   }
 
   private static DefaultMutableTreeNode newRoot() {
-    return execute(new GuiQuery<DefaultMutableTreeNode>() {
-      protected DefaultMutableTreeNode executeInEDT() {
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("root");
-        rootNode.add(new DefaultMutableTreeNode("Node1"));
-        return rootNode;
-      }
-    });
+    DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("root");
+    rootNode.add(new DefaultMutableTreeNode("Node1"));
+    return rootNode;
   }
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
-    JLabel label = JLabels.label().withText("First").createInEDT();
+    JLabel label = JLabels.label().withText("First").createNew();
     setCellRendererComponent(tree, label);
     Object value = reader.valueAt(tree, root);
     assertThat(value).isEqualTo("First");
@@ -80,11 +77,7 @@ public class BasicJTreeCellReaderTest {
 
   public void shouldReturnNullIfTextOfModelValueIsDefaultToString() {
     class Person {}
-    root = execute(new GuiQuery<DefaultMutableTreeNode>() {
-      protected DefaultMutableTreeNode executeInEDT() {
-        return new DefaultMutableTreeNode(new Person());
-      }
-    });
+    root = new DefaultMutableTreeNode(new Person());
     setRootInTree(tree, root);
     setCellRendererComponent(tree, unrecognizedRenderer());
     Object value = reader.valueAt(tree, root);
@@ -92,22 +85,23 @@ public class BasicJTreeCellReaderTest {
   }
 
   private static void setRootInTree(final JTree tree, final DefaultMutableTreeNode root) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
+    invokeLater(new Runnable() {
+      public void run() {
         ((DefaultTreeModel)tree.getModel()).setRoot(root);
+      }
+    });
+    pause(new Condition("JTree's root is set") {
+      public boolean test() {
+        return tree.getModel().getRoot() == root;
       }
     });
   }
 
   private static void setCellRendererComponent(final JTree tree, final Component renderer) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        tree.setCellRenderer(new CustomCellRenderer(renderer));
-      }
-    });
+    tree.setCellRenderer(new CustomCellRenderer(renderer));
   }
   
   private static Component unrecognizedRenderer() {
-    return toolBar().createInEDT();
+    return toolBar().createNew();
   }
 }

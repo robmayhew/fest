@@ -22,12 +22,9 @@ import javax.swing.*;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
-
 import static java.awt.Adjustable.VERTICAL;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.factory.JButtons.button;
 import static org.fest.swing.factory.JDialogs.dialog;
 import static org.fest.swing.factory.JFrames.frame;
@@ -75,7 +72,7 @@ import static org.fest.util.Strings.concat;
   public void shouldFormatDialog() {
     JDialog dialog = dialog().withName("dialog")
                              .withTitle("A dialog")
-                             .createInEDT();
+                             .createNew();
     assertThat(formatted(dialog)).contains(classNameOf(dialog))
                                  .contains("name='dialog'")
                                  .contains("title='A dialog'")
@@ -88,7 +85,7 @@ import static org.fest.util.Strings.concat;
   public void shouldFormatFrame() {
     JFrame frame = frame().withName("frame")
                           .withTitle("A frame")
-                          .createInEDT();
+                          .createNew();
     assertThat(formatted(frame)).contains(classNameOf(frame))
                                 .contains("name='frame'")
                                 .contains("title='A frame'")
@@ -105,7 +102,7 @@ import static org.fest.util.Strings.concat;
     JButton button = button().enabled(false)
                              .withName("button")
                              .withText("A button")
-                             .createInEDT();
+                             .createNew();
     assertThat(formatted(button)).contains(classNameOf(button))
                                  .contains("name='button'")
                                  .contains("text='A button'")
@@ -121,7 +118,7 @@ import static org.fest.util.Strings.concat;
   public void shouldFormatJLabel() {
     JLabel label = label().withName("label")
                           .withText("A label")
-                          .createInEDT();
+                          .createNew();
     assertThat(formatted(label)).contains(classNameOf(label))
                                 .contains("name='label'")
                                 .contains("text='A label'")
@@ -136,11 +133,7 @@ import static org.fest.util.Strings.concat;
   }
 
   private static JLayeredPane newJLayeredPane() {
-    return execute(new GuiQuery<JLayeredPane>() {
-      protected JLayeredPane executeInEDT() {
-        return new JLayeredPane();
-      }
-    });
+    return new JLayeredPane();
   }
 
   public void shouldFormatJList() {
@@ -148,7 +141,7 @@ import static org.fest.util.Strings.concat;
   }
 
   public void shouldFormatJMenuBar() {
-    JMenuBar menuBar = menuBar().createInEDT();
+    JMenuBar menuBar = menuBar().createNew();
     assertThat(formatted(menuBar)).isEqualTo(concat(classNameOf(menuBar), "[]"));
   }
 
@@ -156,7 +149,7 @@ import static org.fest.util.Strings.concat;
     JMenuItem menuItem = menuItem().withName("menuItem")
                                    .selected(true)
                                    .withText("A menu item")
-                                   .createInEDT();
+                                   .createNew();
     assertThat(formatted(menuItem)).contains(classNameOf(menuItem))
                                    .contains("name='menuItem'")
                                    .contains("text='A menu item'")
@@ -171,7 +164,7 @@ import static org.fest.util.Strings.concat;
   }
 
   public void shouldFormatJPanel() {
-    JPanel panel = panel().withName("panel").createInEDT();
+    JPanel panel = panel().withName("panel").createNew();
     assertThat(formatted(panel)).contains(classNameOf(panel))
                                 .contains("name='panel'");
   }
@@ -179,7 +172,7 @@ import static org.fest.util.Strings.concat;
   public void shouldFormatJPopupMenu() {
     JPopupMenu popupMenu = popupMenu().withLabel("Menu")
                                       .withName("popupMenu")
-                                      .createInEDT();
+                                      .createNew();
     assertThat(formatted(popupMenu)).contains(classNameOf(popupMenu))
                                     .contains("name='popupMenu'")
                                     .contains("label='Menu'")
@@ -194,11 +187,7 @@ import static org.fest.util.Strings.concat;
   }
 
   private static JRootPane newJRootPane() {
-    return execute(new GuiQuery<JRootPane>() {
-      protected JRootPane executeInEDT()  {
-        return new JRootPane();
-      }
-    });
+    return new JRootPane();
   }
 
   public void shouldFormatJScrollBar() {
@@ -208,7 +197,7 @@ import static org.fest.util.Strings.concat;
                                       .withName("scrollBar")
                                       .withOrientation(VERTICAL)
                                       .withValue(20)
-                                      .createInEDT();
+                                      .createNew();
     assertThat(formatted(scrollBar)).contains(classNameOf(scrollBar))
                                     .contains("name='scrollBar'")
                                     .contains("value=20")
@@ -221,7 +210,7 @@ import static org.fest.util.Strings.concat;
   }
 
   public void shouldFormatJScrollPane() {
-    JScrollPane scrollPane = scrollPane().withName("scrollPane").createInEDT();
+    JScrollPane scrollPane = scrollPane().withName("scrollPane").createNew();
     assertThat(formatted(scrollPane)).contains(classNameOf(scrollPane))
                                      .contains("name='scrollPane'")
                                      .contains("enabled=true")
@@ -234,7 +223,7 @@ import static org.fest.util.Strings.concat;
                              .withMinimum(2)
                              .withValue(6)
                              .withName("slider")
-                             .createInEDT();
+                             .createNew();
     assertThat(formatted(slider)).contains(classNameOf(slider))
                                  .contains("name='slider'")   
                                  .contains("value=6")   
@@ -248,7 +237,7 @@ import static org.fest.util.Strings.concat;
   public void shouldFormatJSpinner() {
     JSpinner spinner = spinner().withName("spinner")
                                 .withValues(6, 2, 8, 1)
-                                .createInEDT();
+                                .createNew();
     assertThat(formatted(spinner)).contains(classNameOf(spinner))
                                   .contains("name='spinner'")
                                   .contains("value=6")
@@ -275,19 +264,15 @@ import static org.fest.util.Strings.concat;
   }
 
   private static JPasswordField newJPasswordField() {
-    return execute(new GuiQuery<JPasswordField>() {
-      protected JPasswordField executeInEDT()  {
-        JPasswordField passwordField = new JPasswordField();
-        passwordField.setName("passwordField");
-        return passwordField;
-      }
-    });
+    JPasswordField passwordField = new JPasswordField();
+    passwordField.setName("passwordField");
+    return passwordField;
   }
 
   public void shouldFormatJTextComponent() {
     JTextField textField = textField().withName("textField")
                                       .withText("Hello")
-                                      .createInEDT();
+                                      .createNew();
     assertThat(formatted(textField)).contains(classNameOf(textField))
                                     .contains("name='textField'")
                                     .contains("text='Hello'")
@@ -300,7 +285,7 @@ import static org.fest.util.Strings.concat;
     JToggleButton toggleButton = toggleButton().withName("toggleButton")
                                                .selected(true)
                                                .withText("A toggle button")
-                                               .createInEDT();
+                                               .createNew();
     assertThat(formatted(toggleButton)).contains(classNameOf(toggleButton))
                                        .contains("name='toggleButton'")
                                        .contains("text='A toggle button'")

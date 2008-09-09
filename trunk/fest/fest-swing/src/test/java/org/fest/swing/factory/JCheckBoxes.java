@@ -17,12 +17,8 @@ package org.fest.swing.factory;
 
 import javax.swing.JCheckBox;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JCheckBox}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JCheckBox}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -54,16 +50,12 @@ public final class JCheckBoxes {
       return this;
     }
     
-    public JCheckBox createInEDT() {
-      return execute(new GuiQuery<JCheckBox>() {
-        protected JCheckBox executeInEDT()  {
-          JCheckBox checkBox = new JCheckBox();
-          checkBox.setName(name);
-          checkBox.setSelected(selected);
-          checkBox.setText(text);
-          return checkBox;
-        }
-      });
+    public JCheckBox createNew() {
+      JCheckBox checkBox = new JCheckBox();
+      checkBox.setName(name);
+      checkBox.setSelected(selected);
+      checkBox.setText(text);
+      return checkBox;
     }
   }
 }

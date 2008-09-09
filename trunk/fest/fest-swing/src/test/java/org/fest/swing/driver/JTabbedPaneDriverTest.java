@@ -28,8 +28,8 @@ import org.testng.annotations.Test;
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestWindow;
@@ -40,11 +40,11 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.*;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTabbedPaneSelectTabTask.selectTabTask;
-import static org.fest.swing.task.ComponentSetEnableTask.disable;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
@@ -65,7 +65,7 @@ public class JTabbedPaneDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTabbedPaneDriver(robot);
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     tabbedPane = window.tabbedPane;
     robot.showWindow(window);
   }
@@ -197,13 +197,11 @@ public class JTabbedPaneDriverTest {
 
     final JTabbedPane tabbedPane = new JTabbedPane();
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
-    MyWindow() {
+    private MyWindow() {
       super(JTabbedPaneDriverTest.class);
       tabbedPane.addTab("First", new JPanel());
       tabbedPane.addTab("Second", new JPanel());

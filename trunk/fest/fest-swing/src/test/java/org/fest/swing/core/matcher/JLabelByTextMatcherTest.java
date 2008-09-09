@@ -19,11 +19,9 @@ import javax.swing.JLabel;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -48,7 +46,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   
   @Test(groups = GUI)
   public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
-    MyWindow window = MyWindow.createAndShowInEDT();
+    MyWindow window = MyWindow.createAndShow();
     try {
       JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing("Hello");
       assertThat(matcher.matches(window.label)).isTrue();
@@ -66,7 +64,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @Test(groups = GUI)
   public void shouldReturnFalseIfFrameIsShowingAndTitleIsNotEqualToExpected() {
-    MyWindow window = MyWindow.createAndShowInEDT();
+    MyWindow window = MyWindow.createAndShow();
     try {
       JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing("Bye");
       assertThat(matcher.matches(window.label)).isFalse();
@@ -84,17 +82,15 @@ import static org.fest.swing.testing.TestGroups.GUI;
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createAndShowInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createAndShow() {
+      MyWindow window = new MyWindow();
       window.display();
       return window;
     }
     
     final JLabel label = new JLabel("Hello");
     
-    MyWindow() {
+    private MyWindow() {
       super(JLabelByTextMatcherTest.class);
       addComponents(label);
     }

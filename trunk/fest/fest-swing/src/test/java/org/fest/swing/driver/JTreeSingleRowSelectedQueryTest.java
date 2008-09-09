@@ -15,6 +15,9 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Dimension;
+import java.util.Arrays;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeSelectionModel;
@@ -23,14 +26,16 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestWindow;
+import org.fest.util.Strings;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.task.JTreeSelectRowTask.selectRow;
 import static org.fest.swing.testing.TestGroups.*;
-import static org.fest.util.Arrays.array;
+import static org.fest.util.Arrays.*;
 
 /**
  * Tests for <code>{@link JTreeSingleRowSelectedQuery}</code>.
@@ -44,7 +49,7 @@ public class JTreeSingleRowSelectedQueryTest {
   private JTree tree;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     tree = window.tree;
     window.display();
   }
@@ -70,6 +75,10 @@ public class JTreeSingleRowSelectedQueryTest {
       protected void executeInEDT() {
         tree.setSelectionRows(rows);
       }
+    }, new Condition(Strings.concat("JTree's selection rows are ", format(rows))) {
+      public boolean test() {
+        return Arrays.equals(tree.getSelectionRows(), rows);
+      }
     });
   }
 
@@ -82,29 +91,21 @@ public class JTreeSingleRowSelectedQueryTest {
     assertThat(JTreeSingleRowSelectedQuery.isSingleRowSelected(tree, 1)).isFalse();
   }
 
-  private static void selectRow(final JTree tree, final int row) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        tree.setSelectionRow(row);
-      }
-    });
-  }
-
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
     final JTree tree = new JTree(array("One", "Two"));
 
-    MyWindow() {
+    private MyWindow() {
       super(JTreeSingleRowSelectedQueryTest.class);
       tree.setSelectionModel(new DefaultTreeSelectionModel());
-      addComponents(new JScrollPane(tree));
+      JScrollPane scrollPane = new JScrollPane(tree);
+      scrollPane.setPreferredSize(new Dimension(80, 60));
+      addComponents(scrollPane);
     }
   }
 

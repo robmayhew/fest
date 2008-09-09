@@ -47,7 +47,7 @@ public class JPopupMenuInvokerFixtureTest {
   
   @BeforeMethod public void setUp() {
     robot = EasyMock.createMock(Robot.class);
-    target = textField().createInEDT();
+    target = textField().createNew();
     fixture = new JPopupMenuInvokerFixture<JTextComponent>(robot, target) {};
   }
   

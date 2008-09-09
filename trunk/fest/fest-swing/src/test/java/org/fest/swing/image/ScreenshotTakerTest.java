@@ -24,12 +24,10 @@ import javax.swing.JButton;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.ImageAssert.read;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.testing.TestWindow.showNewInTest;
@@ -81,7 +79,7 @@ public class ScreenshotTakerTest {
   }
 
   @Test(groups = GUI) public void shouldTakeScreenshotOfButtonAndSaveItInGivenPath() throws Exception {
-    MyWindow frame = MyWindow.createInEDT();
+    MyWindow frame = MyWindow.createNew();
     frame.display();
     String imagePath = concat(temporaryFolderPath(), imageFileName());
     taker.saveComponentAsPng(frame.button, imagePath);
@@ -97,17 +95,13 @@ public class ScreenshotTakerTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
     final JButton button = new JButton("Hello");
 
-    MyWindow() {
+    private MyWindow() {
       super(ScreenshotTakerTest.class);
       add(button);
     }

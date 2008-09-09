@@ -27,12 +27,10 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestWindow;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -53,7 +51,7 @@ public class JMenuItemDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JMenuItemDriver(robot);
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     menuItem = window.menuNew;
     robot.showWindow(window);
   }
@@ -76,13 +74,11 @@ public class JMenuItemDriverTest {
     final JMenu menuFile = new JMenu("File");
     final JMenuItem menuNew = new JMenuItem("New");
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }    
     
-    MyWindow() {
+    private MyWindow() {
       super(JMenuItemDriverTest.class);
       setJMenuBar(new JMenuBar());
       menuFile.add(menuNew);

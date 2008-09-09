@@ -17,32 +17,25 @@ package org.fest.swing.driver;
 
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands a task that selects text in a given <code>{@link JTextComponent}</code>. This task should be executed in 
- * the event dispatch thread.
+ * Understands a task that selects text in a given <code>{@link JTextComponent}</code>. This task is executed in the 
+ * event dispatch thread.
  *
  * @author Alex Ruiz
  */
-class JTextComponentSelectTextTask extends GuiTask {
+class JTextComponentSelectTextTask {
   
-  private final JTextComponent textBox;
-  private final int start;
-  private final int end;
-
-  static JTextComponentSelectTextTask selectTextTask(JTextComponent textBox, int start, int end) {
-    return new JTextComponentSelectTextTask(textBox, start, end);
-  }
-  
-  private JTextComponentSelectTextTask(JTextComponent textBox, int start, int end) {
-    this.textBox = textBox;
-    this.start = start;
-    this.end = end;
-  }
-
-  protected void executeInEDT() {
-    textBox.setCaretPosition(start);
-    textBox.moveCaretPosition(end);
+  static void selectTextInRange(final JTextComponent textBox, final int start, final int end) {
+    execute(new GuiQuery<Void>() {
+      protected Void executeInEDT() {
+        textBox.setCaretPosition(start);
+        textBox.moveCaretPosition(end);
+        return null;
+      }
+    });
   }
 }

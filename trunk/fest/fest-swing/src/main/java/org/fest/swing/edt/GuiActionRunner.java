@@ -13,12 +13,15 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core;
+package org.fest.swing.edt;
 
+import org.fest.swing.core.Condition;
 import org.fest.swing.exception.UnexpectedException;
 
 import static javax.swing.SwingUtilities.*;
 
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.edt.GuiActionRunner.ActionExecutedCondition.untilExecuted;
 import static org.fest.swing.exception.UnexpectedException.unexpected;
 
 /**
@@ -37,35 +40,31 @@ public class GuiActionRunner {
    * thread.
    */
   public static <T> T execute(GuiQuery<T> query) {
-    run(query);
+    run(query, untilExecuted(query));
     return resultOf(query);
   }
 
+  
   /**
-   * Executes the given task in the event dispatch thread. This method waits until the task has finish its execution.
+   * Executes the given task in the event dispatch thread. This method waits until the given condition has been 
+   * satisfied.
    * @param task the task to execute.
+   * @param toWaitFor the condition to meet to finish the execution of the given task.
    * @throws UnexpectedException wrapping any exception thrown when executing the given task in the event dispatch 
    * thread.
    */
-  public static void execute(GuiTask task) {
-    run(task);
+  public static void execute(GuiTask task, Condition toWaitFor) {
+    run(task, toWaitFor);
     rethrowCatchedExceptionIn(task);
   }
   
-  private static void run(GuiAction action) {
+  private static void run(GuiAction action, Condition toWaitFor) {
     if (isEventDispatchThread()) {
       action.run();
-      return;
+    } else {
+      invokeLater(action);
     }
-    invokeInEDTAndWait(action);
-  }
-
-  private static void invokeInEDTAndWait(GuiAction action) {
-    try {
-      invokeAndWait(action);
-    } catch (Exception e) {
-      throw unexpected(e);
-    }
+    pause(toWaitFor);
   }
   
   private static <T> T resultOf(GuiQuery<T> query) {
@@ -73,8 +72,30 @@ public class GuiActionRunner {
     return query.result();
   }
 
-  static void rethrowCatchedExceptionIn(GuiAction action) {
+  /**
+   * Wraps (with a <code>{@link UnexpectedException}</code>) and retrows any catched exception in the given action.
+   * @param action the given action that may have a catched exception during its execution.
+   * @throws UnexpectedException wrapping any catched exception during the execution of the given action.
+   */
+  public static void rethrowCatchedExceptionIn(GuiAction action) {
     Throwable catchedException = action.catchedException();
     if (catchedException != null) throw unexpected(catchedException);
+  }
+
+  static class ActionExecutedCondition extends Condition {
+    private final GuiAction action;
+
+    static ActionExecutedCondition untilExecuted(GuiAction action) {
+      return new ActionExecutedCondition(action);
+    }
+    
+    private ActionExecutedCondition(GuiAction action) {
+      super("action to be executed in the EDT");
+      this.action = action;
+    }
+
+    public boolean test() {
+      return action.wasExecutedInEDT();
+    }
   }
 }

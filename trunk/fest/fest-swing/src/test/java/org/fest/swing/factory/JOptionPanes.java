@@ -17,12 +17,8 @@ package org.fest.swing.factory;
 
 import javax.swing.JOptionPane;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JOptionPane}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JOptionPane}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -60,17 +56,13 @@ public final class JOptionPanes {
       return this;
     }
 
-    public JOptionPane createInEDT() {
-      return execute(new GuiQuery<JOptionPane>() {
-        protected JOptionPane executeInEDT()  {
-          JOptionPane optionPane = new JOptionPane();
-          optionPane.setMessage(message);
-          optionPane.setMessageType(messageType);
-          optionPane.setName(name);
-          optionPane.setOptionType(optionType);
-          return optionPane;
-        }
-      });
+    public JOptionPane createNew() {
+      JOptionPane optionPane = new JOptionPane();
+      optionPane.setMessage(message);
+      optionPane.setMessageType(messageType);
+      optionPane.setName(name);
+      optionPane.setOptionType(optionType);
+      return optionPane;
     }
   }
 }

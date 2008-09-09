@@ -25,13 +25,11 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.finder.WindowFinder.findDialog;
 
@@ -48,7 +46,7 @@ public class ModalDialogLookupTest {
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    frame = MyWindow.createInEDT();
+    frame = MyWindow.createNew();
     robot.showWindow(frame);
   }
   
@@ -66,18 +64,14 @@ public class ModalDialogLookupTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT()  {
-          return new MyWindow();
-        }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
     final JButton button = new JButton("Launch");
-    final TestDialog dialog = new TestDialog(this);
+    final TestDialog dialog = TestDialog.createNew(this);
     
-    MyWindow() {
+    private MyWindow() {
       super(ModalDialogLookupTest.class);
       button.setName("launch");
       add(button);

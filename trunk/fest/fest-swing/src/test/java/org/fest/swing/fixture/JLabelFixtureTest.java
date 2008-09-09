@@ -42,7 +42,7 @@ public class JLabelFixtureTest extends CommonComponentFixtureTestCase<JLabel> {
   
   void onSetUp() {
     driver = createMock(JLabelDriver.class);
-    target = label().createInEDT();
+    target = label().createNew();
     fixture = new JLabelFixture(robot(), target);
     fixture.updateDriver(driver);
   }

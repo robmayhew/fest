@@ -18,30 +18,29 @@ package org.fest.swing.task;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
+import org.fest.swing.edt.GuiTask;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that sets the <code>{@link JPopupMenu}</code> for a <code>{@link JComponent}</code>.
  *
  * @author Alex Ruiz 
  */
-public class ComponentSetPopupMenuTask extends GuiTask {
+public class ComponentSetPopupMenuTask {
   
-  private final JComponent component;
-  private final JPopupMenu popupMenu;
-
-  public static void setPopupMenu(JComponent component, JPopupMenu popupMenu) {
-    execute(new ComponentSetPopupMenuTask(component, popupMenu));
+  public static void setPopupMenu(final JComponent component, final JPopupMenu popupMenu) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        component.setComponentPopupMenu(popupMenu);
+      }
+    }, new Condition("JComponent's JPopupMenu is set") {
+      public boolean test() {
+        return component.getComponentPopupMenu() == popupMenu;
+      }
+    });
   }
   
-  private ComponentSetPopupMenuTask(JComponent component, JPopupMenu popupMenu) {
-    this.component = component;
-    this.popupMenu = popupMenu;
-  }
-
-  protected void executeInEDT() {
-    component.setComponentPopupMenu(popupMenu);
-  }
+  private ComponentSetPopupMenuTask() {}
 }

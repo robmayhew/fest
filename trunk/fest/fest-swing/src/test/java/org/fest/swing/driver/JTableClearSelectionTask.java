@@ -2,29 +2,28 @@ package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
+import org.fest.swing.edt.GuiTask;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands a task that clears the selection in a <code>{@link JTable}</code>. This task should be executed in the
- * event dispatch thread.
+ * Understands a task that clears the selection in a <code>{@link JTable}</code>. This task is executed in the event 
+ * dispatch thread.
  *
  * @author Alex Ruiz 
  */
-class JTableClearSelectionTask extends GuiTask {
+class JTableClearSelectionTask {
   
-  private final JTable table;
-
-  static void clearSelectionOf(JTable table) {
-    execute(new JTableClearSelectionTask(table));
-  }
-  
-  JTableClearSelectionTask(JTable table) {
-    this.table = table;
-  }
-
-  protected void executeInEDT() {
-    table.clearSelection();
+  static void clearSelectionOf(final JTable table) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        table.clearSelection();
+      }
+    }, new Condition("JTable's selection is cleared") {
+      public boolean test() {
+        return table.getSelectedRowCount() == 0;
+      }
+    });
   }
 }

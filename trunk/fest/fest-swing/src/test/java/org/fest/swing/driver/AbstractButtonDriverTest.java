@@ -29,17 +29,15 @@ import org.testng.annotations.Test;
 import org.fest.assertions.AssertExtension;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
 import static org.fest.swing.task.AbstractButtonSetSelectedTask.setSelected;
-import static org.fest.swing.task.ComponentSetEnableTask.disable;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -57,7 +55,7 @@ public class AbstractButtonDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new AbstractButtonDriver(robot);
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     checkBox = window.checkBox;
     robot.showWindow(window);
   }
@@ -184,15 +182,13 @@ public class AbstractButtonDriverTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow(); 
     }
     
     final JCheckBox checkBox = new JCheckBox("Hello", true);
 
-    public MyWindow() {
+    private MyWindow() {
       super(AbstractButtonDriverTest.class);
       add(checkBox);
       setPreferredSize(new Dimension(200, 200));

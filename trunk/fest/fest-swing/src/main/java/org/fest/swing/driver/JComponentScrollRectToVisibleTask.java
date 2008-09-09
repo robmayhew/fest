@@ -19,7 +19,7 @@ import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
 /**
  * Understands a request to scroll a <code>{@link JComponent}</code>'s parent to a visible

@@ -37,13 +37,12 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseClickInfo.button;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.Timeout.timeout;
 import static org.fest.swing.factory.JTextFields.textField;
-import static org.fest.swing.task.ComponentSetSizeTask.setSizeTask;
+import static org.fest.swing.task.ComponentSetSizeTask.setSize;
 import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.testing.StopWatch.startNewStopWatch;
 import static org.fest.swing.util.Platform.*;
@@ -64,7 +63,7 @@ import static org.fest.swing.util.Platform.*;
   @BeforeMethod public void setUp() {
     robot = createMock(Robot.class);
     dragAndDrop = createMock(DragAndDrop.class);
-    c = textField().createInEDT();
+    c = textField().createNew();
     driver = new ComponentDriver(robot, dragAndDrop);
   }
 
@@ -201,12 +200,12 @@ import static org.fest.swing.util.Platform.*;
 
   public void shouldPassIfSizeIsEqualToExpected() {
     Dimension size = new Dimension(10, 10);
-    execute(setSizeTask(c, size));
+    setSize(c, size);
     driver.requireSize(c, size);
   }
 
   public void shouldFailIfSizeIsNotEqualToExpected() {
-    execute(setSizeTask(c, new Dimension(10, 10)));
+    setSize(c, new Dimension(10, 10));
     try {
       driver.requireSize(c, new Dimension(20, 20));
       fail();
@@ -463,13 +462,13 @@ import static org.fest.swing.util.Platform.*;
 
   public void shouldReturnIsResizableIfComponentIsNotDialogOrFrameAndPlatformIsNotWindowsOrMac() {
     if (isWindowsOrMac()) return;
-    JTextField textField = textField().createInEDT();
+    JTextField textField = textField().createNew();
     assertThat(driver.isUserResizable(textField)).isTrue();
   }
 
   public void shouldReturnIsNotResizableIfComponentIsNotDialogOrFrameAndPlatformIsWindowsOrMac() {
     if (!isWindowsOrMac()) return;
-    JTextField textField = textField().createInEDT();
+    JTextField textField = textField().createNew();
     assertThat(driver.isUserResizable(textField)).isFalse();
     return;
   }
@@ -486,13 +485,13 @@ import static org.fest.swing.util.Platform.*;
 
   public void shouldReturnIsMovableIfComponentIsNotDialogOrFrameAndPlatformIsNotWindowsOrMac() {
     if (isWindowsOrMac()) return;
-    JTextField textField = textField().createInEDT();
+    JTextField textField = textField().createNew();
     assertThat(driver.isUserMovable(textField)).isTrue();
   }
 
   public void shouldReturnIsNotMovableIfComponentIsNotDialogOrFrameAndPlatformIsWindowsOrMac() {
     if (!isWindowsOrMac()) return;
-    JTextField textField = textField().createInEDT();
+    JTextField textField = textField().createNew();
     assertThat(driver.isUserMovable(textField)).isFalse();
     return;
   }

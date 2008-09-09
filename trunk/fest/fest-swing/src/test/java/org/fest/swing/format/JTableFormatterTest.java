@@ -42,13 +42,13 @@ import static org.fest.swing.factory.JTextFields.textField;
                    .withColumnCount(6)
                    .withName("table")
                    .withSelectionMode(MULTIPLE_INTERVAL_SELECTION)
-                   .createInEDT();
+                   .createNew();
     formatter = new JTableFormatter();
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJTable() {
-    formatter.format(textField().createInEDT());
+    formatter.format(textField().createNew());
   }
 
   public void shouldFormatJTable() {

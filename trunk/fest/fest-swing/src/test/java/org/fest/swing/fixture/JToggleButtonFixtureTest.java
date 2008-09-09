@@ -42,7 +42,7 @@ public class JToggleButtonFixtureTest extends CommonComponentFixtureTestCase<JTo
   
   void onSetUp() {
     driver = createMock(AbstractButtonDriver.class);
-    target = toggleButton().createInEDT();
+    target = toggleButton().createNew();
     fixture = new JToggleButtonFixture(robot(), target);
     fixture.updateDriver(driver);
   }

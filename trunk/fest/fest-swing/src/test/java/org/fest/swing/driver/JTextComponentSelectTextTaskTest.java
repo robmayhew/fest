@@ -25,21 +25,18 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiActionRunner;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.driver.JTextComponentSelectedTextQuery.selectedTextOf;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTextComponentSelectTextTask}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = GUI) 
+@Test(groups = { GUI, EDT_ACTION }) 
 public class JTextComponentSelectTextTaskTest {
 
   static final String TEXTBOX_TEXT = "Hello World";
@@ -48,14 +45,14 @@ public class JTextComponentSelectTextTaskTest {
   private JTextComponent textBox;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     textBox = window.textBox;
     window.display();
   }
   
   @Test(dataProvider = "selectionIndices", groups = GUI)
   public void shouldSelectText(int start, int end) {
-    GuiActionRunner.execute(JTextComponentSelectTextTask.selectTextTask(textBox, start, end));
+    JTextComponentSelectTextTask.selectTextInRange(textBox, start, end);
     String selection = selectedTextOf(textBox);
     assertThat(selection).isEqualTo(TEXTBOX_TEXT.substring(start, end));
   }
@@ -77,13 +74,11 @@ public class JTextComponentSelectTextTaskTest {
 
     final JTextField textBox = new JTextField(20);
     
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
-    MyWindow() {
+    private MyWindow() {
       super(JTextComponentSelectTextTaskTest.class);
       setPreferredSize(new Dimension(80, 60));
       add(textBox);

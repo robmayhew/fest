@@ -17,12 +17,8 @@ package org.fest.swing.factory;
 
 import javax.swing.JInternalFrame;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JInternalFrame}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JInternalFrame}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -42,14 +38,10 @@ public final class JInternalFrames {
       return this;
     }
     
-    public JInternalFrame createInEDT() {
-      return execute(new GuiQuery<JInternalFrame>() {
-        protected JInternalFrame executeInEDT()  {
-          JInternalFrame internalFrame = new JInternalFrame();
-          internalFrame.setName(name);
-          return internalFrame;
-        }
-      });
+    public JInternalFrame createNew() {
+      JInternalFrame internalFrame = new JInternalFrame();
+      internalFrame.setName(name);
+      return internalFrame;
     }
   }
 }

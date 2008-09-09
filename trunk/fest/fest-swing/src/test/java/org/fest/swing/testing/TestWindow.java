@@ -22,10 +22,11 @@ import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static javax.swing.SwingUtilities.invokeLater;
+
+import static org.fest.swing.core.Pause.pause;
 
 /**
  * Understands the base window for all GUI tests.
@@ -37,24 +38,20 @@ public class TestWindow extends JFrame {
   private static final long serialVersionUID = 1L;
 
   public static TestWindow showNewInTest(final Class<?> testClass) {
-    TestWindow window = execute(new GuiQuery<TestWindow>() {
-      protected TestWindow executeInEDT() {
-        return new TestWindow(testClass);
-      }
-    });
+    TestWindow window = create(testClass);
     window.display();
     return window;
   }
   
-  public static TestWindow createInEDT(final Class<?> testClass) {
-    return execute(new GuiQuery<TestWindow>() {
-      protected TestWindow executeInEDT() {
-        return new TestWindow(testClass);
-      }
-    });
+  public static TestWindow createNew(final Class<?> testClass) {
+    return create(testClass);
+  }
+
+  private static TestWindow create(final Class<?> testClass) {
+    return new TestWindow(testClass);
   }
   
-  public TestWindow(Class<?> testClass) {
+  protected TestWindow(Class<?> testClass) {
     setTitle(testClass.getSimpleName());
     setLayout(new FlowLayout());
     chooseLookAndFeel();
@@ -69,13 +66,18 @@ public class TestWindow extends JFrame {
   }
   
   public void display(final Dimension size) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
+    invokeLater(new Runnable() {
+      public void run() {
         beforeDisplayed();
         setPreferredSize(size);
         pack();
         setLocation(100, 100);
         setVisible(true);
+      }
+    });
+    pause(new Condition("window is displayed") {
+      public boolean test() {
+        return TestWindow.this.isShowing();
       }
     });
   }
@@ -95,10 +97,15 @@ public class TestWindow extends JFrame {
   }
   
   public void destroy() {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
+    invokeLater(new Runnable() {
+      public void run() {
         setVisible(false);
         dispose();
+      }
+    });
+    pause(new Condition("window is closed") {
+      public boolean test() {
+        return !TestWindow.this.isShowing();
       }
     });
   }

@@ -22,8 +22,6 @@ import java.util.Collection;
 
 import org.fest.swing.monitor.WindowMonitor;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.hierarchy.WindowDisposeTask.disposeTask;
 import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
 import static org.fest.swing.util.AWT.*;
 
@@ -88,7 +86,8 @@ public class ExistingHierarchy implements ComponentHierarchy {
     if (isAppletViewer(w)) return;
     for (Window owned : ownedWindowsOf(w)) dispose(owned);
     if (isSharedInvisibleFrame(w)) return;
-    execute(disposeTask(w));
+    // execute(disposeTask(w));
+    w.dispose();
   }
 
   ParentFinder parentFinder() { return parentFinder; }

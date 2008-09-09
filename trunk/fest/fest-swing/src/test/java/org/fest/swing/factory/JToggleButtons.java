@@ -17,12 +17,8 @@ package org.fest.swing.factory;
 
 import javax.swing.JToggleButton;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JToggleButton}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JToggleButton}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -54,16 +50,12 @@ public final class JToggleButtons {
       return this;
     }
     
-    public JToggleButton createInEDT() {
-      return execute(new GuiQuery<JToggleButton>() {
-        protected JToggleButton executeInEDT()  {
-          JToggleButton toggleButton = new JToggleButton();
-          toggleButton.setName(name);
-          toggleButton.setSelected(selected);
-          toggleButton.setText(text);
-          return toggleButton;
-        }
-      });
+    public JToggleButton createNew() {
+      JToggleButton toggleButton = new JToggleButton();
+      toggleButton.setName(name);
+      toggleButton.setSelected(selected);
+      toggleButton.setText(text);
+      return toggleButton;
     }
   }
 }

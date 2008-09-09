@@ -27,18 +27,20 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
 
 import static javax.swing.JFileChooser.*;
+import static javax.swing.SwingUtilities.invokeLater;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Files.*;
@@ -60,7 +62,7 @@ public class JFileChooserDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JFileChooserDriver(robot);
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     fileChooser = window.fileChooser;
     robot.showWindow(window);
   }
@@ -122,11 +124,16 @@ public class JFileChooserDriverTest {
   }
 
   private static void setFileSelectionMode(final JFileChooser fileChooser, final int mode) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        fileChooser.setFileSelectionMode(mode);
+    invokeLater(new Runnable() {
+      public void run() {
+        fileChooser.setFileSelectionMode(mode);       
       }
     });
+    pause(new Condition("JFileChooser's selection mode is set") {
+      public boolean test() {
+        return fileChooser.getFileSelectionMode() == mode;
+      }
+    }); 
   }
 
   public void shouldFindApproveButton() {
@@ -136,13 +143,9 @@ public class JFileChooserDriverTest {
   }
 
   private static String approveButtonText(final JFileChooser fileChooser) {
-    return execute(new GuiQuery<String>() {
-      protected String executeInEDT() {
-        String text = fileChooser.getApproveButtonText();
-        if (!isEmpty(text)) return text;
-        return fileChooser.getUI().getApproveButtonText(fileChooser);
-      }
-    });
+    String text = fileChooser.getApproveButtonText();
+    if (!isEmpty(text)) return text;
+    return fileChooser.getUI().getApproveButtonText(fileChooser);
   }
 
   public void shouldFindFileNameTextBox() {
@@ -173,13 +176,11 @@ public class JFileChooserDriverTest {
 
     final JFileChooser fileChooser = new JFileChooser();
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
-    MyWindow() {
+    private MyWindow() {
       super(JFileChooserDriverTest.class);
       fileChooser.setCurrentDirectory(temporaryFolder());
       fileChooser.setDialogType(OPEN_DIALOG);

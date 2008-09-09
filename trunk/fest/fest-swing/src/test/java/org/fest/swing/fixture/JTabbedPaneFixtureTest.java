@@ -44,7 +44,7 @@ public class JTabbedPaneFixtureTest extends CommonComponentFixtureTestCase<JTabb
   
   void onSetUp() {
     driver = createMock(JTabbedPaneDriver.class);
-    target = tabbedPane().createInEDT();
+    target = tabbedPane().createNew();
     fixture = new JTabbedPaneFixture(robot(), target);
     fixture.updateDriver(driver);
   }

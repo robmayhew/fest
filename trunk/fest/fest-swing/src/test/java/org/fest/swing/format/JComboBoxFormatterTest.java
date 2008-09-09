@@ -45,12 +45,12 @@ public class JComboBoxFormatterTest {
                      .withItems("One", 2, "Three", 4)
                      .withName("comboBox")
                      .withSelectedIndex(1)
-                     .createInEDT();
+                     .createNew();
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJComboBox() {
-    formatter.format(textField().createInEDT());
+    formatter.format(textField().createNew());
   }
   
   @Test public void shouldFormatJComboBox() {

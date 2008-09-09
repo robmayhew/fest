@@ -24,8 +24,6 @@ import org.fest.swing.exception.UnexpectedException;
 
 import static java.util.logging.Level.WARNING;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.input.ToolkitPushDragAwereEventQueueTask.pushDragAwareEventQueueTask;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -47,7 +45,8 @@ class DragAwareEventNormalizer extends EventNormalizer {
     super.startListening(toolkit, delegate, mask);
     try {
       dragAwareEventQueue = newDragAwareEventQueue(toolkit, mask);
-      execute(pushDragAwareEventQueueTask(toolkit, dragAwareEventQueue));
+      toolkit.getSystemEventQueue().push(dragAwareEventQueue);
+      // execute(pushDragAwareEventQueueTask(toolkit, dragAwareEventQueue));
     } catch (UnexpectedException e) {
       String message = concat("Ignoring error when starting up ", DragAwareEventNormalizer.class.getName());
       logger.log(WARNING, message, e);

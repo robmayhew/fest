@@ -23,14 +23,11 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -49,7 +46,7 @@ public class JLabelDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JLabelDriver(robot);
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     label = window.label;
     robot.showWindow(window);
   }
@@ -59,12 +56,10 @@ public class JLabelDriverTest {
   }
 
   public void shouldPassIfHasExpectedText() {
-    setLabelText(label, "Hi");
     driver.requireText(label, "Hi");
   }
 
   public void shouldFailIfDoesNotHaveExpectedText() {
-    setLabelText(label, "Hi");
     try {
       driver.requireText(label, "Bye");
       fail();
@@ -73,26 +68,16 @@ public class JLabelDriverTest {
     }
   }
 
-  private static void setLabelText(final JLabel label, final String text) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        label.setText(text);
-      }
-    });
-  }
-
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    final JLabel label = new JLabel("This is a test");
+    final JLabel label = new JLabel("Hi");
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(JTextComponentDriverTest.class);
       add(label);
       setPreferredSize(new Dimension(200, 200));

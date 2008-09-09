@@ -43,7 +43,7 @@ public class JTextComponentFixtureTest extends CommonComponentFixtureTestCase<JT
   
   void onSetUp() {
     driver = createMock(JTextComponentDriver.class);
-    target = textField().withText("a text field").createInEDT();
+    target = textField().withText("a text field").createNew();
     fixture = new JTextComponentFixture(robot(), target);
     fixture.updateDriver(driver);
   }

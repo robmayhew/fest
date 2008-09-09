@@ -21,14 +21,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TableRenderDemo;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.Arrays.format;
@@ -49,7 +47,7 @@ public class TableContentsTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     robot.showWindow(window);
     fixture = new JTableFixture(robot, window.table);
   }
@@ -115,15 +113,13 @@ public class TableContentsTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
     final JTable table;
 
-    public MyWindow() {
+    private MyWindow() {
       super(TableContentsTest.class);
       TableRenderDemo newContentPane = new TableRenderDemo();
       table = newContentPane.table;

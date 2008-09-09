@@ -18,13 +18,10 @@ package org.fest.swing.factory;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
- * Understands creation of <code>{@link JMenu}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JMenu}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -62,18 +59,14 @@ public final class JMenus {
       return this;
     }
     
-    public JMenu createInEDT() {
-      return execute(new GuiQuery<JMenu>() {
-        protected JMenu executeInEDT()  {
-          JMenu menu = new JMenu();
-          menu.setName(name);
-          menu.setSelected(selected);
-          menu.setText(text);
-          if (!isEmpty(menuItems))
-            for (JMenuItem menuItem : menuItems) menu.add(menuItem);
-          return menu;
-        }
-      });
+    public JMenu createNew() {
+      JMenu menu = new JMenu();
+      menu.setName(name);
+      menu.setSelected(selected);
+      menu.setText(text);
+      if (!isEmpty(menuItems))
+        for (JMenuItem menuItem : menuItems) menu.add(menuItem);
+      return menu;
     }
   }
 }

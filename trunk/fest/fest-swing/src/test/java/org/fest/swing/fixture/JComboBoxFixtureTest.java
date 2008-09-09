@@ -47,7 +47,7 @@ import static org.fest.util.Arrays.array;
 
   void onSetUp() {
     driver = EasyMock.createMock(JComboBoxDriver.class);
-    target = comboBox().createInEDT();
+    target = comboBox().createNew();
     fixture = new JComboBoxFixture(robot(), target);
     fixture.updateDriver(driver);
   }

@@ -32,6 +32,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.ClickRecorder;
@@ -43,10 +44,10 @@ import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixtureTest.KeyAction.action;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreenOf;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
@@ -71,7 +72,7 @@ public class RobotFixtureTest {
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
-    window = MyWindow.createAndShowInEDT();
+    window = MyWindow.createAndShow();
     textFieldWithPopup = window.textFieldWithPopup;
     textFieldWithoutPopup = window.textFieldWithoutPopup;
     robot.showWindow(window); // implicitly test 'showWindow(Window)'
@@ -257,7 +258,7 @@ public class RobotFixtureTest {
   }
 
   public void shouldCloseWindow() {
-    final TestWindow w = new TestWindow(getClass());
+    final TestWindow w = TestWindow.createNew(getClass());
     w.display();
     robot.close(w);
     pause(new Condition("Window closed") {
@@ -269,10 +270,9 @@ public class RobotFixtureTest {
   }
 
   public void shouldNotCloseWindowIfWindowNotShowing() {
-    TestWindow w = new TestWindow(getClass());
+    TestWindow w = TestWindow.createNew(getClass());
     w.display();
     setVisible(w, false);
-    assertThat(isShowing(w)).isFalse();
     robot.close(w);
     assertThat(isShowing(w)).isFalse();
   }
@@ -378,15 +378,13 @@ public class RobotFixtureTest {
     final JButton button = new JButton("Click Me");
     final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
 
-    static MyWindow createAndShowInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createAndShow() {
+      MyWindow window = new MyWindow();
       window.display();
       return window;
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(RobotFixtureTest.class);
       addComponents(textFieldWithPopup, textFieldWithoutPopup, button);
       button.addActionListener(new ActionListener() {

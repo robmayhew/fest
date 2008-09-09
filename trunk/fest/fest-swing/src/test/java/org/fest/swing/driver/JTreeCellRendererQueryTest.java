@@ -25,11 +25,9 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -44,7 +42,7 @@ public class JTreeCellRendererQueryTest {
   private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     window.display();
   }
 
@@ -62,13 +60,11 @@ public class JTreeCellRendererQueryTest {
 
     final JTree tree = new JTree(new Object[] { "one", "two", "three" });
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(JTreeCellRendererQueryTest.class);
       tree.setPreferredSize(new Dimension(80, 60));
       add(tree);

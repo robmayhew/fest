@@ -18,13 +18,10 @@ package org.fest.swing.factory;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
- * Understands creation of <code>{@link JPopupMenu}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JPopupMenu}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -56,17 +53,13 @@ public final class JPopupMenus {
       return this;
     }
     
-    public JPopupMenu createInEDT() {
-      return execute(new GuiQuery<JPopupMenu>() {
-        protected JPopupMenu executeInEDT()  {
-          JPopupMenu popupMenu = new JPopupMenu();
-          popupMenu.setLabel(label);
-          popupMenu.setName(name);
-          if (!isEmpty(menuItems))
-            for (JMenuItem menuItem : menuItems) popupMenu.add(menuItem);
-          return popupMenu;
-        }
-      });
+    public JPopupMenu createNew() {
+      JPopupMenu popupMenu = new JPopupMenu();
+      popupMenu.setLabel(label);
+      popupMenu.setName(name);
+      if (!isEmpty(menuItems))
+        for (JMenuItem menuItem : menuItems) popupMenu.add(menuItem);
+      return popupMenu;
     }
   }
 }

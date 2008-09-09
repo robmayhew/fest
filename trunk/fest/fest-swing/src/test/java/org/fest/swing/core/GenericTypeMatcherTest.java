@@ -36,7 +36,7 @@ public class GenericTypeMatcherTest {
         return true;
       }
     };
-    assertThat(matcher.matches(button().createInEDT())).isTrue();
+    assertThat(matcher.matches(button().createNew())).isTrue();
   }
   
   @Test public void shouldReturnFalseIfTypeMatchesButNotSearchCriteria() {
@@ -45,7 +45,7 @@ public class GenericTypeMatcherTest {
         return false;
       }
     };
-    assertThat(matcher.matches(button().createInEDT())).isFalse();
+    assertThat(matcher.matches(button().createNew())).isFalse();
   }
 
   @Test public void shouldReturnFalseIfSearchCriteriaMatchesButNotType() {
@@ -54,7 +54,7 @@ public class GenericTypeMatcherTest {
         return true;
       }
     };
-    assertThat(matcher.matches(label().createInEDT())).isFalse();
+    assertThat(matcher.matches(label().createNew())).isFalse();
   }
 
   @Test public void shouldReturnFalseIfSearchCriteriaAndTypeNotMatching() {
@@ -63,7 +63,7 @@ public class GenericTypeMatcherTest {
         return false;
       }
     };
-    assertThat(matcher.matches(label().createInEDT())).isFalse();
+    assertThat(matcher.matches(label().createNew())).isFalse();
   }
 
   @Test public void shouldReturnFalseIfComponentIsNull() {
@@ -81,6 +81,6 @@ public class GenericTypeMatcherTest {
         return true;
       }
     };
-    assertThat(matcher.matches(button().createInEDT())).isFalse();
+    assertThat(matcher.matches(button().createNew())).isFalse();
   }
 }

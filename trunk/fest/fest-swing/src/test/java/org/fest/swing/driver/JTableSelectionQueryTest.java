@@ -19,14 +19,14 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.driver.JTableClearSelectionTask.clearSelectionOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
@@ -40,7 +40,7 @@ public class JTableSelectionQueryTest {
   private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createAndShowInEDT();
+    window = MyWindow.createAndShow();
   }
   
   @AfterMethod public void tearDown() {
@@ -62,23 +62,25 @@ public class JTableSelectionQueryTest {
       protected void executeInEDT() {
         table.selectAll();
       }
+    }, new Condition("All cells in JTable has been selected") {
+      public boolean test() {
+        return table.getSelectedRowCount() > 0;
+      }
     });
   }
   
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
     
-    static MyWindow createAndShowInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createAndShow() {
+      MyWindow window = new MyWindow();
       window.display();
       return window;
     }
     
     final TestTable table = new TestTable(2, 4);
 
-    MyWindow() {
+    private MyWindow() {
       super(JTableSelectionQueryTest.class);
       addComponents(table);
     }

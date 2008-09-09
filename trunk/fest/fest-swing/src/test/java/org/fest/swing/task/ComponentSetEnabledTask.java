@@ -17,19 +17,18 @@ package org.fest.swing.task;
 
 import java.awt.Component;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
+import org.fest.swing.edt.GuiTask;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands a task that enables or disables a <code>{@link Component}</code>.
  *
  * @author Alex Ruiz
  */
-public class ComponentSetEnableTask extends GuiTask {
-
-  private final Component component;
-  private final boolean enabled;
+public class ComponentSetEnabledTask {
 
   public static void enable(Component component) {
     setEnabled(component, true);
@@ -39,17 +38,15 @@ public class ComponentSetEnableTask extends GuiTask {
     setEnabled(component, false);
   }
 
-  public static void setEnabled(Component component, boolean enabled) {
-    execute(new ComponentSetEnableTask(component, enabled));
+  public static void setEnabled(final Component component, final boolean enabled) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        component.setEnabled(enabled);
+      }
+    }, new Condition(concat("Component's 'enabled' property is ", enabled)) {
+      public boolean test() {
+        return component.isEnabled() == enabled;
+      }
+    });
   }
-  
-  private ComponentSetEnableTask(Component component, boolean enabled) {
-    this.component = component;
-    this.enabled = enabled;
-  }
-  
-  protected void executeInEDT() {
-    component.setEnabled(enabled);
-  }
-
 }

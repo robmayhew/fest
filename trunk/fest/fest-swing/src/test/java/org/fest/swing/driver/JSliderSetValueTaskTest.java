@@ -17,40 +17,58 @@ package org.fest.swing.driver;
 
 import javax.swing.JSlider;
 
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.testing.TestWindow;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JSliderSetValueTask}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JSliderSetValueTaskTest {
+public class JSliderSetValueTaskTest {
 
-  private JSlider slider;
-  private int value;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    slider = createMock(JSlider.class);
-    value = 8;
+    window = MyWindow.createAndShow();
+  }
+
+  @AfterTest public void tearDown() {
+    window.destroy();
   }
   
-  public void shouldReturnValueOfJSlider() {
-    new EasyMockTemplate(slider) {
-      protected void expectations() {
-        slider.setValue(value);
-        expectLastCall().once();
-      }
-
-      protected void codeToTest() {
-        JSliderSetValueTask.setValueTask(slider, value).executeInEDT();
-      }
-    }.run();
+  @Test(dataProvider = "values", groups = { EDT_ACTION, GUI })   
+  public void shouldReturnValueOfJSlider(int value) {
+    JSliderSetValueTask.setValue(window.slider, value);
+    assertThat(window.slider.getValue()).isEqualTo(value);
   }
 
+  @DataProvider(name = "values") public Object[][] values() {
+    return new Object[][] { { 8 }, { 10 }, { 28 }, { 68 }, { 80 } };
+  }
+  
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+    
+    final JSlider slider = new JSlider(6, 80);
+    
+    static MyWindow createAndShow() {
+      MyWindow window = new MyWindow();
+      window.display();
+      return window;
+    }
+    
+    private MyWindow() {
+      super(JSliderSetValueTaskTest.class);
+      slider.setValue(6);
+      add(slider);
+    }
+  }
 }

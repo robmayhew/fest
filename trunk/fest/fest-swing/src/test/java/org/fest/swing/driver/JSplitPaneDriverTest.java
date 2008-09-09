@@ -26,7 +26,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
@@ -34,10 +33,9 @@ import static javax.swing.JSplitPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.EventMode.*;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
-import static org.fest.swing.task.ComponentSetEnableTask.disable;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -64,7 +62,7 @@ public class JSplitPaneDriverTest {
   @Test(groups = GUI, dataProvider = "orientations")
   public void shouldMoveDividerToGivenLocation(int orientation, EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    MyWindow window = MyWindow.createAndShowInEDT(orientation);
+    MyWindow window = MyWindow.createAndShow(orientation);
     splitPane = window.splitPane;
     int newLocation = splitPane.getDividerLocation() + 100;
     driver.moveDividerTo(splitPane, newLocation);
@@ -74,7 +72,7 @@ public class JSplitPaneDriverTest {
   @Test(groups = GUI, dataProvider = "orientations")
   public void shouldNotMoveDividerToGivenLocationIfSplitPaneIsNotEnabled(int orientation, EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    MyWindow window = MyWindow.createAndShowInEDT(orientation);
+    MyWindow window = MyWindow.createAndShow(orientation);
     splitPane = window.splitPane;
     disable(splitPane);
     assertThat(isEnabled(splitPane)).isFalse();
@@ -97,15 +95,13 @@ public class JSplitPaneDriverTest {
 
     final JSplitPane splitPane;
 
-    static MyWindow createAndShowInEDT(final int orientation) {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(orientation); }
-      });
+    static MyWindow createAndShow(final int orientation) {
+      MyWindow window = new MyWindow(orientation);
       window.display();
       return window;
     }
     
-    MyWindow(int orientation) {
+    private MyWindow(int orientation) {
       super(JSplitPaneDriverTest.class);
       splitPane = new JSplitPane(orientation, new JList(), new JList());
       splitPane.setDividerLocation(150);

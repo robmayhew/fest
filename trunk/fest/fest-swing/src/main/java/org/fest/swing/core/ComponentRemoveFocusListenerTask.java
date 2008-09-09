@@ -18,6 +18,8 @@ package org.fest.swing.core;
 import java.awt.Component;
 import java.awt.event.FocusListener;
 
+import org.fest.swing.edt.GuiTask;
+
 /**
  * Understands a task that removes a <code>{@link FocusListener}</code> from a <code>{@link Component}</code>. This task
  * should be called from the event dispatch thread.

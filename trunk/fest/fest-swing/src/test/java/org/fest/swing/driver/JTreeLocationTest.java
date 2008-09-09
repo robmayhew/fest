@@ -29,11 +29,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
@@ -50,7 +48,7 @@ public class JTreeLocationTest {
   private List<TreePath> paths;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     window.display(new Dimension(200, 200));
     location = new JTreeLocation();
     populatePaths();
@@ -115,15 +113,13 @@ public class JTreeLocationTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow(); 
     }
 
     final JTree tree = new JTree();
 
-    MyWindow() {
+    private MyWindow() {
       super(JTreeLocationTest.class);
       populateTree();
       tree.setPreferredSize(new Dimension(200, 200));

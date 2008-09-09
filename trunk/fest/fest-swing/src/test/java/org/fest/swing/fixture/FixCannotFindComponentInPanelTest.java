@@ -25,10 +25,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Fix for <a href="http://code.google.com/p/fest/issues/detail?id=20&can=2&q=" target="_blank">issue 20</a>.
@@ -40,7 +37,7 @@ public class FixCannotFindComponentInPanelTest {
   private FrameFixture frame;
   
   @BeforeClass public void setUp() {
-    frame = new FrameFixture(MyWindow.createInEDT());
+    frame = new FrameFixture(MyWindow.createNew());
     frame.show(new Dimension(400, 200));
   }
   
@@ -58,13 +55,11 @@ public class FixCannotFindComponentInPanelTest {
     private final JPanel panel = new JPanel();
     private final JList list = new JList();
     
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
-    MyWindow() {
+    private MyWindow() {
       super(FixCannotFindComponentInPanelTest.class);
       add(panel);
       panel.add(new JScrollPane(list));

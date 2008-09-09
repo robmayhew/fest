@@ -18,13 +18,10 @@ package org.fest.swing.factory;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
- * Understands creation of <code>{@link JMenuBar}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JMenuBar}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -50,16 +47,12 @@ public final class JMenuBars {
       return this;
     }
     
-    public JMenuBar createInEDT() {
-      return execute(new GuiQuery<JMenuBar>() {
-        protected JMenuBar executeInEDT()  {
-          JMenuBar menuBar = new JMenuBar();
-          menuBar.setName(name);
-          if (!isEmpty(menus))
-            for (JMenu menu : menus) menuBar.add(menu);
-          return menuBar;
-        }
-      });
+    public JMenuBar createNew() {
+      JMenuBar menuBar = new JMenuBar();
+      menuBar.setName(name);
+      if (!isEmpty(menus))
+        for (JMenu menu : menus) menuBar.add(menu);
+      return menuBar;
     }
   }
 }

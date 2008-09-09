@@ -22,10 +22,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.WeakHashMap;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.monitor.WindowAddWindowListenerTask.addWindowListenerTask;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
-import static org.fest.swing.task.ComponentAddComponentListenerTask.addComponentListenerTask;
 
 /**
  * Understands the information collected by the monitors in this package.
@@ -63,8 +60,10 @@ class Windows {
    */
   void attachNewWindowVisibilityMonitor(Window target) {
     WindowVisibilityMonitor monitor = new WindowVisibilityMonitor(this);
-    execute(addWindowListenerTask(target, monitor));
-    execute(addComponentListenerTask(target, monitor));
+    target.addWindowListener(monitor);
+    target.addComponentListener(monitor);
+//    execute(addWindowListenerTask(target, monitor));
+//    execute(addComponentListenerTask(target, monitor));
   }
   
   /**

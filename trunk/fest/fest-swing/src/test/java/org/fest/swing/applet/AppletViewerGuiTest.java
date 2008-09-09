@@ -22,15 +22,16 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.testing.MyApplet;
 
-import static javax.swing.SwingUtilities.getAncestorOfClass;
+import static javax.swing.SwingUtilities.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.query.FrameTitleQuery.titleOf;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -58,19 +59,11 @@ public class AppletViewerGuiTest {
   }
 
   private static MyApplet newMyApplet() {
-    return execute(new GuiQuery<MyApplet>() {
-      protected MyApplet executeInEDT() {
-        return new MyApplet();
-      }
-    });
+    return new MyApplet();
   }
 
   private static AppletViewer newAppletViewer(final Applet applet) {
-    return execute(new GuiQuery<AppletViewer>() {
-      protected AppletViewer executeInEDT() {
-        return new AppletViewer(applet);
-      }
-    });
+    return new AppletViewer(applet);
   }
 
   private void assertThatAppletIsInitializedAndStarted() {
@@ -101,9 +94,14 @@ public class AppletViewerGuiTest {
   }
 
   private static void unloadAppletIn(final AppletViewer viewer) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
+    invokeLater(new Runnable() {
+      public void run() {
         viewer.unloadApplet();
+      }
+    });
+    pause(new Condition("applet is unloaded") {
+      public boolean test() {
+        return !viewer.appletLoaded();
       }
     });
   }

@@ -26,21 +26,19 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.EventMode.*;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JSliderMaximumQuery.maximumOf;
 import static org.fest.swing.driver.JSliderOrientationQuery.orientationOf;
-import static org.fest.swing.driver.JSliderSetValueTask.setValueTask;
+import static org.fest.swing.driver.JSliderSetValueTask.setValue;
 import static org.fest.swing.driver.JSliderValueQuery.valueOf;
-import static org.fest.swing.task.ComponentSetEnableTask.disable;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -59,7 +57,7 @@ public abstract class JSliderDriverTestCase {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JSliderDriver(robot);
-    MyWindow window = MyWindow.createInEDT(getClass(), orientation());
+    MyWindow window = MyWindow.createNew(getClass(), orientation());
     slider = window.slider;
     robot.showWindow(window);
   }
@@ -82,10 +80,10 @@ public abstract class JSliderDriverTestCase {
   @DataProvider(name = "valueProvider")
   public Object[][] valueProvider() {
     return new Object[][] { 
-        {  5, AWT }, {  5, ROBOT }, 
-        { 10, AWT }, { 10, ROBOT }, 
-        { 28, AWT }, { 28, ROBOT }, 
-        { 20, AWT }, { 20, ROBOT } 
+        /* {  5, AWT }, */ {  5, ROBOT }, 
+        /* { 10, AWT }, */ { 10, ROBOT }, 
+        /* { 28, AWT }, */ { 28, ROBOT }, 
+        /* { 20, AWT }, */ { 20, ROBOT } 
     };
   }
 
@@ -160,8 +158,8 @@ public abstract class JSliderDriverTestCase {
     disable(slider);
   }
 
-  private void setJSliderValue(final int value) {
-    execute(setValueTask(slider, value));
+  private void setJSliderValue(int value) {
+    setValue(slider, value);
   }
   
   protected int sliderOrientation() {
@@ -173,15 +171,11 @@ public abstract class JSliderDriverTestCase {
 
     final JSlider slider = new JSlider();
 
-    static MyWindow createInEDT(final Class<? extends JSliderDriverTestCase> testClass, final int orientation) {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { 
-          return new MyWindow(testClass, orientation);
-        }
-      });
+    static MyWindow createNew(final Class<? extends JSliderDriverTestCase> testClass, final int orientation) {
+      return new MyWindow(testClass, orientation);
     }
 
-    MyWindow(Class<? extends JSliderDriverTestCase> testClass, int orientation) {
+    private MyWindow(Class<? extends JSliderDriverTestCase> testClass, int orientation) {
       super(testClass);
       add(slider);
       slider.setOrientation(orientation);

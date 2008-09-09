@@ -44,7 +44,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
   
   void onSetUp() {
     driver = createMock(JOptionPaneDriver.class);
-    target = optionPane().createInEDT();
+    target = optionPane().createNew();
     fixture = new JOptionPaneFixture(robot(), target);
     fixture.updateDriver(driver);
   }

@@ -45,8 +45,8 @@ public class JScrollPaneFixtureTest extends CommonComponentFixtureTestCase<JScro
 
   void onSetUp() {
     driver = createMock(JScrollPaneDriver.class);
-    target = scrollPane().withView(list().createInEDT())
-                         .createInEDT();
+    target = scrollPane().withView(list().createNew())
+                         .createNew();
     fixture = new JScrollPaneFixture(robot(), target);
     fixture.updateDriver(driver);
   }
@@ -58,7 +58,7 @@ public class JScrollPaneFixtureTest extends CommonComponentFixtureTestCase<JScro
   }
 
   @Test public void shouldReturnHorizontalScrollBar() {
-    final JScrollBar scrollBar = scrollBar().createInEDT();
+    final JScrollBar scrollBar = scrollBar().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.horizontalScrollBarIn(target)).andReturn(scrollBar);
@@ -72,7 +72,7 @@ public class JScrollPaneFixtureTest extends CommonComponentFixtureTestCase<JScro
   }
 
   @Test public void shouldReturnVerticalScrollBar() {
-    final JScrollBar scrollBar = scrollBar().createInEDT();
+    final JScrollBar scrollBar = scrollBar().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.verticalScrollBarIn(target)).andReturn(scrollBar);

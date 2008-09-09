@@ -17,6 +17,8 @@ package org.fest.swing.core;
 
 import java.awt.Window;
 
+import org.fest.swing.edt.GuiTask;
+
 /**
  * Understands a task that hides and disposes a <code>{@link Window}</code>. This task should be executed in the event
  * dispatch thread.

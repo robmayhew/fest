@@ -18,30 +18,52 @@ package org.fest.swing.task;
 
 import java.awt.Component;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
+import org.fest.swing.edt.GuiTask;
+import org.fest.util.Strings;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static javax.swing.SwingUtilities.invokeLater;
+
+import static org.fest.swing.core.Pause.pause;
 
 /**
  * Understands a task that makes a <code>{@link Component}</code> visible or invisible.
  *
  * @author Alex Ruiz
  */
-public class ComponentSetVisibleTask extends GuiTask {
-
-  private final Component c;
-  private final boolean visible;
+public class ComponentSetVisibleTask {
 
   public static void setVisible(Component c, boolean visible) {
-    execute(new ComponentSetVisibleTask(c, visible));
+    invokeLater(new ComponentSetVisibleGuiTask(c, visible));
+    pause(new ComponentIsVisibleCondition(c, visible));
+  }
+  
+  private static class ComponentSetVisibleGuiTask extends GuiTask {
+    private final Component c;
+    private final boolean visible;
+
+    ComponentSetVisibleGuiTask(Component c, boolean visible) {
+      this.c = c;
+      this.visible = visible;
+    }
+  
+    protected void executeInEDT() {
+      c.setVisible(visible);
+    }
   }
 
-  private ComponentSetVisibleTask(Component c, boolean visible) {
-    this.c = c;
-    this.visible = visible;
-  }
+  private static class ComponentIsVisibleCondition extends Condition {
+    private final Component c;
+    private final boolean visible;
 
-  protected void executeInEDT() {
-    c.setVisible(visible);
+    ComponentIsVisibleCondition(Component c, boolean visible) {
+      super(Strings.concat("Component's 'visible' property is ", visible));
+      this.c = c;
+      this.visible = visible;
+    }
+  
+    public boolean test() {
+      return c.isVisible() == visible;
+    }
   }
 }

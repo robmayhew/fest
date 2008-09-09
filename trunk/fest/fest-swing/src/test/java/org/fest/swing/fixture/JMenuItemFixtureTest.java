@@ -53,7 +53,7 @@ import static org.fest.swing.factory.JMenuItems.menuItem;
   
   void onSetUp() {
     driver = createMock(JMenuItemDriver.class);
-    target = menuItem().withText("A MenuItem").createInEDT();
+    target = menuItem().withText("A MenuItem").createNew();
     fixture = new JMenuItemFixture(robot(), target);
     fixture.updateDriver(driver);
   }

@@ -20,10 +20,11 @@ import java.awt.*;
 import javax.swing.JDialog;
 import javax.swing.UIManager;
 
-import org.fest.swing.core.GuiQuery;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static javax.swing.SwingUtilities.invokeLater;
+
+import static org.fest.swing.core.Pause.pause;
 
 /**
  * Understands the base window for all GUI tests.
@@ -35,25 +36,21 @@ public class TestDialog extends JDialog {
 
   private static final long serialVersionUID = 1L;
 
-  public static TestDialog showInTest(final Frame owner) {
-    TestDialog dialog = execute(new GuiQuery<TestDialog>() {
-      protected TestDialog executeInEDT() {
-        return new TestDialog(owner);
-      }
-    });
+  public static TestDialog showInTest(Frame owner) {
+    TestDialog dialog = create(owner);
     dialog.display();
     return dialog;
   }
   
-  public static TestDialog createInEDT(final Frame owner) {
-    return execute(new GuiQuery<TestDialog>() {
-      protected TestDialog executeInEDT() {
-        return new TestDialog(owner);
-      }
-    });
+  public static TestDialog createNew(Frame owner) {
+    return create(owner);
+  }
+
+  private static TestDialog create(Frame owner) {
+    return new TestDialog(owner);
   }
   
-  public TestDialog(Frame owner) {
+  protected TestDialog(Frame owner) {
     super(owner);
     setLayout(new FlowLayout());
   }
@@ -69,13 +66,18 @@ public class TestDialog extends JDialog {
   public void display(final Dimension size) {
     Window owner = getOwner();
     if (owner instanceof TestWindow && !owner.isShowing()) ((TestWindow)owner).display();
-    execute(new GuiTask() {
-      protected void executeInEDT() {
+    invokeLater(new Runnable() {
+      public void run() {
         beforeDisplayed();
-        chooseLookAndFeel();
         setPreferredSize(size);
         pack();
+        setLocation(100, 100);
         setVisible(true);
+      }
+    });
+    pause(new Condition("dialog is displayed") {
+      public boolean test() {
+        return TestDialog.this.isShowing();
       }
     });
   }
@@ -95,10 +97,15 @@ public class TestDialog extends JDialog {
   }
   
   public void destroy() {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
+    invokeLater(new Runnable() {
+      public void run() {
         setVisible(false);
         dispose();
+      }
+    });
+    pause(new Condition("dialog is closed") {
+      public boolean test() {
+        return !TestDialog.this.isShowing();
       }
     });
   }

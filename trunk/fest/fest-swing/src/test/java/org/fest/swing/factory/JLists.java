@@ -19,13 +19,10 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListModel;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
- * Understands creation of <code>{@link JList}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JList}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -63,18 +60,13 @@ public final class JLists {
       return this;
     }
 
-    public JList createInEDT() {
-      return execute(new GuiQuery<JList>() {
-
-        protected JList executeInEDT()  {
-          JList list = new JList();
-          if (!isEmpty(items)) list.setModel(modelWith(items));
-          list.setName(name);
-          if (selectedIndices != null) list.setSelectedIndices(selectedIndices);
-          list.setSelectionMode(selectionMode);
-          return list;
-        }
-      });
+    public JList createNew() {
+      JList list = new JList();
+      if (!isEmpty(items)) list.setModel(modelWith(items));
+      list.setName(name);
+      if (selectedIndices != null) list.setSelectedIndices(selectedIndices);
+      list.setSelectionMode(selectionMode);
+      return list;
     }
 
     static ListModel modelWith(Object[] items) {

@@ -26,7 +26,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.JOptionPaneFixture;
@@ -36,7 +35,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.swing.JOptionPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -57,7 +55,7 @@ public class JOptionPaneFinderTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     robot.showWindow(window);
   }
 
@@ -106,15 +104,13 @@ public class JOptionPaneFinderTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
     final JButton messageButton = new JButton("Message");
 
-    MyWindow() {
+    private MyWindow() {
       super(JOptionPaneFinderTest.class);
       setUp();
     }

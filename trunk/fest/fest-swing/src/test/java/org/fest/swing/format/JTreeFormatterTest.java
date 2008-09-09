@@ -22,14 +22,14 @@ import javax.swing.tree.TreeSelectionModel;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
 import org.fest.swing.factory.JTrees;
 
 import static javax.swing.tree.TreeSelectionModel.CONTIGUOUS_TREE_SELECTION;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.task.JTreeSelectRowTask.selectRow;
+import static org.fest.swing.task.JTreeSetSelectionModelTask.setSelectionModel;
 
 /**
  * Tests for <code>{@link JTreeFormatter}</code>.
@@ -45,13 +45,13 @@ import static org.fest.swing.factory.JTextFields.textField;
   @BeforeMethod public void setUp() {
     tree = JTrees.tree().withName("tree")
                         .withValues("One", "Two", "Three")
-                        .createInEDT();
+                        .createNew();
     formatter = new JTreeFormatter();
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentIsNotJTree() {
-    formatter.format(textField().createInEDT());
+    formatter.format(textField().createNew());
   }
   
   public void shouldFormatJTree() {
@@ -69,21 +69,13 @@ import static org.fest.swing.factory.JTextFields.textField;
   }
 
   private static void setContiguousSelectionModeTo(final JTree tree) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        TreeSelectionModel model = new DefaultTreeSelectionModel();
-        model.setSelectionMode(CONTIGUOUS_TREE_SELECTION);
-        tree.setSelectionModel(model);
-      }
-    });
+    TreeSelectionModel selectionModel = new DefaultTreeSelectionModel();
+    selectionModel.setSelectionMode(CONTIGUOUS_TREE_SELECTION);
+    setSelectionModel(tree, selectionModel);
   }
 
   private static void selectSecondRowIn(final JTree tree) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        tree.setSelectionRow(1);
-      }
-    });
+    selectRow(tree, 1);
   }
   
   public void shouldFormatJTreeWithoutSelectionModel() {
@@ -100,10 +92,6 @@ import static org.fest.swing.factory.JTextFields.textField;
   }
 
   private static void setDiscontiguousSelectionModeTo(final JTree tree) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        tree.setSelectionModel(null);
-      }
-    });
+    setSelectionModel(tree, null);
   }
 }

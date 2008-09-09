@@ -43,7 +43,7 @@ public class JButtonFixtureTest extends CommonComponentFixtureTestCase<JButton> 
   
   void onSetUp() {
     driver = createMock(AbstractButtonDriver.class);
-    target = button().createInEDT();
+    target = button().createNew();
     fixture = new JButtonFixture(robot(), target);
     fixture.updateDriver(driver);
   }

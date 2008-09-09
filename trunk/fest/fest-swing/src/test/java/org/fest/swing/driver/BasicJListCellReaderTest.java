@@ -24,12 +24,13 @@ import javax.swing.JList;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiActionRunner;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
+import org.fest.swing.edt.GuiActionRunner;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JLabels.label;
 import static org.fest.swing.factory.JLists.list;
 import static org.fest.swing.factory.JToolBars.toolBar;
@@ -48,7 +49,7 @@ public class BasicJListCellReaderTest {
   private BasicJListCellReader reader;
 
   @BeforeMethod public void setUp() {
-    list = list().createInEDT();
+    list = list().createNew();
     reader = new BasicJListCellReader();
   }
 
@@ -60,31 +61,41 @@ public class BasicJListCellReaderTest {
 
   public void shouldReturnNullIfRendererNotRecognizedAndModelValueIsNull() {
     setModelValue(list, null);
-    setRendererComponent(list, toolBar().createInEDT());
+    setRendererComponent(list, toolBar().createNew());
     Object value = reader.valueAt(list, 0);
     assertThat(value).isNull();
   }
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabelAndToStringFromModelReturnedNull() {
     setModelValue(list, new Jedi(null));
-    JLabel renderer = label().withText("First").createInEDT();
+    JLabel renderer = label().withText("First").createNew();
     setRendererComponent(this.list, renderer);
     Object value = reader.valueAt(this.list, 0);
     assertThat(value).isEqualTo("First");
   }
 
   private static void setModelValue(final JList list, final Object value) {
+    final MyListModel model = new MyListModel(value);
     GuiActionRunner.execute(new GuiTask() {
       protected void executeInEDT() {
-        list.setModel(new MyListModel(value));
+        list.setModel(model);
+      }
+    }, new Condition("JList's model is set") {
+      public boolean test() {
+        return list.getModel() == model;
       }
     });
   }
   
   private static void setRendererComponent(final JList list, final Component renderer) {
+    final CustomCellRenderer cellRenderer = new CustomCellRenderer(renderer);
     execute(new GuiTask() {
       protected void executeInEDT() {
-        list.setCellRenderer(new CustomCellRenderer(renderer));
+        list.setCellRenderer(cellRenderer);
+      }
+    }, new Condition("JList's cell renderer is set") {
+      public boolean test() {
+        return list.getCellRenderer() == cellRenderer;
       }
     });
   }

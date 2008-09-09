@@ -31,8 +31,12 @@ class TableDialogEditDemoFrame extends TestWindow {
 
   final JTable table;
 
-  public TableDialogEditDemoFrame() {
-    super(BasicJTableCellWriterTest.class);
+  public static TableDialogEditDemoFrame createNew(Class<?> testClass) {
+    return new TableDialogEditDemoFrame(testClass);
+  }
+  
+  private TableDialogEditDemoFrame(Class<?> testClass) {
+    super(testClass);
     TableDialogEditDemo newContentPane = new TableDialogEditDemo();
     table = newContentPane.table;
     newContentPane.setOpaque(true); // content panes must be opaque

@@ -48,7 +48,7 @@ public class JToolBarFixtureTest extends CommonComponentFixtureTestCase<JToolBar
   
   void onSetUp() {
     driver = createMock(JToolBarDriver.class);
-    target = toolBar().createInEDT();
+    target = toolBar().createNew();
     fixture = new JToolBarFixture(robot(), target);
     fixture.updateDriver(driver);
   }

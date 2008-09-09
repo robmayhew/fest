@@ -25,12 +25,10 @@ import java.util.Map;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link WindowEventQueueMapping}</code>.
@@ -48,7 +46,7 @@ public class WindowEventQueueMappingTest {
   @BeforeMethod public void setUp() {
     eventQueue = new EventQueue();
     toolkit = ToolkitStub.createNew(eventQueue);
-    window = MyWindow.createInEDT(toolkit);
+    window = MyWindow.createNew(toolkit);
     mapping = new WindowEventQueueMapping();
     queueMap = mapping.queueMap;
   }
@@ -102,7 +100,7 @@ public class WindowEventQueueMappingTest {
 
   @Test(dependsOnMethods = "shouldAddQueueForWindow")
   public void shouldReturnWindows() {
-    TestWindow anotherWindow = MyWindow.createInEDT(toolkit);
+    TestWindow anotherWindow = MyWindow.createNew(toolkit);
     mapping.addQueueFor(window);
     mapping.addQueueFor(anotherWindow);
     Collection<Window> windows = mapping.windows();
@@ -113,7 +111,7 @@ public class WindowEventQueueMappingTest {
   public void shouldReturnEventQueues() {
     EventQueue anotherEventQueue = new EventQueue();
     ToolkitStub anotherToolkit = ToolkitStub.createNew(anotherEventQueue);
-    TestWindow anotherWindow = MyWindow.createInEDT(anotherToolkit);
+    TestWindow anotherWindow = MyWindow.createNew(anotherToolkit);
     mapping.addQueueFor(window);
     mapping.addQueueFor(anotherWindow);
     Collection<EventQueue> eventQueues = mapping.eventQueues();
@@ -123,17 +121,13 @@ public class WindowEventQueueMappingTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createInEDT(final Toolkit toolkit) {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow(toolkit);
-        }
-      });
+    static MyWindow createNew(final Toolkit toolkit) {
+      return new MyWindow(toolkit);
     }
     
     private final Toolkit toolkit;
 
-    MyWindow(Toolkit toolkit) {
+    private MyWindow(Toolkit toolkit) {
       super(WindowEventQueueMappingTest.class);
       this.toolkit = toolkit;
     }

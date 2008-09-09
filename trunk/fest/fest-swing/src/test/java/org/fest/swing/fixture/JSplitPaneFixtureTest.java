@@ -41,7 +41,7 @@ import static org.fest.swing.factory.JSplitPanes.splitPane;
   
   void onSetUp() {
     driver = createMock(JSplitPaneDriver.class);
-    target = splitPane().createInEDT();
+    target = splitPane().createNew();
     fixture = new JSplitPaneFixture(robot(), target);
     fixture.updateDriver(driver);
   }

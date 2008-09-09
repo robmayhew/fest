@@ -26,11 +26,11 @@ import javax.swing.JPopupMenu;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -49,7 +49,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
   
   public void shouldReturnEmptyCollectionIfComponentIsNotJMenu() {
-    Container container = textField().createInEDT();
+    Container container = textField().createNew();
     assertThat(finder.nonExplicitChildrenOf(container)).isEmpty();
   }
 
@@ -59,7 +59,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   
   @Test(groups = GUI)
   public void shouldReturnPopupMenuIfComponentIsJMenu() {
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     Collection<Component> children = finder.nonExplicitChildrenOf(window.menu);
     try {
       assertThat(children).containsOnly(popupMenuOf(window.menu));
@@ -79,19 +79,15 @@ import static org.fest.swing.testing.TestGroups.GUI;
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() {
-          return new MyWindow();
-        }
-      });
+    static MyWindow createNew() {
+      MyWindow window = new MyWindow();
       window.display();
       return window;
     }
     
     final JMenu menu = new JMenu("Menu");
     
-    MyWindow() {
+    private MyWindow() {
       super(JMenuChildrenFinderTest.class);
       JMenuBar menuBar = new JMenuBar();
       menuBar.add(menu);

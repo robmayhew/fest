@@ -24,15 +24,15 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestList;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -51,7 +51,7 @@ public class JListLocationTest {
   @BeforeMethod public void setUp() {
     location = new JListLocation();
     robot = robotWithNewAwtHierarchy();
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     list = window.list;
     robot.showWindow(window);
   }
@@ -66,7 +66,7 @@ public class JListLocationTest {
     assertThat(index).isEqualTo(2);
   }
 
-  private static Integer locationToIndex(final JList list, final Point location) {
+  private static int locationToIndex(final JList list, final Point location) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() throws Throwable {
         return list.locationToIndex(location);
@@ -88,13 +88,11 @@ public class JListLocationTest {
 
     final TestList list = new TestList("one", "two", "three");
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(JListLocationTest.class);
       add(list);
       list.setPreferredSize(new Dimension(60, 80));

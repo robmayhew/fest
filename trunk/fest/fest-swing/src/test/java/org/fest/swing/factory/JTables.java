@@ -17,12 +17,8 @@ package org.fest.swing.factory;
 
 import javax.swing.JTable;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JTable}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JTable}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -60,15 +56,11 @@ public final class JTables {
       return this;
     }
     
-    public JTable createInEDT() {
-      return execute(new GuiQuery<JTable>() {
-        protected JTable executeInEDT()  {
-          JTable table = new JTable(rowCount, columnCount);
-          table.setName(name);
-          table.setSelectionMode(selectionMode);
-          return table;
-        }
-      });
+    public JTable createNew() {
+      JTable table = new JTable(rowCount, columnCount);
+      table.setName(name);
+      table.setSelectionMode(selectionMode);
+      return table;
     }
   }
 }

@@ -17,12 +17,8 @@ package org.fest.swing.factory;
 
 import javax.swing.JMenuItem;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands creation of <code>{@link JMenuItem}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JMenuItem}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -54,16 +50,12 @@ public final class JMenuItems {
       return this;
     }
     
-    public JMenuItem createInEDT() {
-      return execute(new GuiQuery<JMenuItem>() {
-        protected JMenuItem executeInEDT()  {
-          JMenuItem menuItem = new JMenuItem();
-          menuItem.setName(name);
-          menuItem.setSelected(selected);
-          menuItem.setText(text);
-          return menuItem;
-        }
-      });
+    public JMenuItem createNew() {
+      JMenuItem menuItem = new JMenuItem();
+      menuItem.setName(name);
+      menuItem.setSelected(selected);
+      menuItem.setText(text);
+      return menuItem;
     }
   }
 }

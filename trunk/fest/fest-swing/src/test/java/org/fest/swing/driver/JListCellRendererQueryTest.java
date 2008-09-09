@@ -26,11 +26,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.query.JLabelTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.*;
 
@@ -45,7 +43,7 @@ public class JListCellRendererQueryTest {
   private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createAndShowInEDT();
+    window = MyWindow.createNew();
     window.display();
   }
 
@@ -73,15 +71,11 @@ public class JListCellRendererQueryTest {
 
     final JList list = new JList(new Object[] { "one", "two", "three" });
 
-    static MyWindow createAndShowInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
-      window.display();
-      return window;
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(JListCellRendererQueryTest.class);
       list.setPreferredSize(new Dimension(80, 60));
       add(list);

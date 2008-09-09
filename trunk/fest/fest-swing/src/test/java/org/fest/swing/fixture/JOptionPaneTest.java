@@ -23,10 +23,8 @@ import javax.swing.*;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.finder.JOptionPaneFinder;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -76,14 +74,10 @@ public class JOptionPaneTest {
     private static final long serialVersionUID = 1L;
 
     static JOptionPaneStarter createNew(final Frame owner, final String message) {
-      return execute(new GuiQuery<JOptionPaneStarter>() {
-        protected JOptionPaneStarter executeInEDT() {
-          return new JOptionPaneStarter(owner, message);
-        }
-      });
+      return new JOptionPaneStarter(owner, message);
     }
     
-    JOptionPaneStarter(Frame owner, String message) {
+    private JOptionPaneStarter(Frame owner, String message) {
       super(owner, "JOptionPane Starter");
       setContentPane(createContentPane(message));
     }

@@ -18,13 +18,10 @@ package org.fest.swing.factory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
- * Understands creation of <code>{@link JComboBox}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JComboBox}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -62,17 +59,13 @@ public final class JComboBoxes {
       return this;
     }
     
-    public JComboBox createInEDT() {
-      return execute(new GuiQuery<JComboBox>() {
-        protected JComboBox executeInEDT()  {
-          JComboBox comboBox = new JComboBox();
-          comboBox.setEditable(editable);
-          if (!isEmpty(items)) comboBox.setModel(new DefaultComboBoxModel(items));
-          comboBox.setName(name);
-          comboBox.setSelectedIndex(selectedIndex);
-          return comboBox;
-        }
-      });
+    public JComboBox createNew() {
+      JComboBox comboBox = new JComboBox();
+      comboBox.setEditable(editable);
+      if (!isEmpty(items)) comboBox.setModel(new DefaultComboBoxModel(items));
+      comboBox.setName(name);
+      comboBox.setSelectedIndex(selectedIndex);
+      return comboBox;
     }
   }
 }

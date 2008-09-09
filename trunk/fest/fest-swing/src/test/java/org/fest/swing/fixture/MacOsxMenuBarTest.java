@@ -26,12 +26,10 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.finder.WindowFinder.findFrame;
 
@@ -49,7 +47,7 @@ public class MacOsxMenuBarTest {
   @BeforeMethod public void setUp() {
     System.setProperty("apple.laf.useScreenMenuBar", "true");
     robot = robotWithCurrentAwtHierarchy();
-    robot.showWindow(MyWindow.createInEDT());
+    robot.showWindow(MyWindow.createNew());
     FrameFixture frameFixture = findFrame("myWindow").withTimeout(2000).using(robot);
     menuItemFixture = frameFixture.menuItem("menuItem");
   }
@@ -73,13 +71,11 @@ public class MacOsxMenuBarTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
     
-    public static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    public static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(MacOsxMenuBarTest.class);
       setName("myWindow");
       setJMenuBar(menuBar(menu(menuItem())));

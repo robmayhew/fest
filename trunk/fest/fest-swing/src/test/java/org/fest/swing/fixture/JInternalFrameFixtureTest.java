@@ -45,7 +45,7 @@ public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JI
   
   void onSetUp() {
     driver = createMock(JInternalFrameDriver.class);
-    target = internalFrame().createInEDT();
+    target = internalFrame().createNew();
     fixture = new JInternalFrameFixture(robot(), target);
     fixture.updateDriver(driver);
   }

@@ -31,14 +31,12 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.ClickRecorder;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -64,11 +62,7 @@ public class AbstractJTableCellWriterTest {
   }
 
   private static TableDialogEditDemoFrame newFrame() {
-    return execute(new GuiQuery<TableDialogEditDemoFrame>() {
-      protected TableDialogEditDemoFrame executeInEDT() {
-        return new TableDialogEditDemoFrame();
-      }
-    });
+    return TableDialogEditDemoFrame.createNew(AbstractJTableCellWriterTest.class);
   }
 
   @AfterMethod public void tearDown() {

@@ -26,13 +26,11 @@ import org.testng.annotations.Test;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -53,16 +51,8 @@ public abstract class JTableCellWriterTestCase {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     writer = createWriter(robot);
-    frame = newFrame();
+    frame = TableDialogEditDemoFrame.createNew(getClass());
     robot.showWindow(frame, new Dimension(500, 100));
-  }
-
-  private static TableDialogEditDemoFrame newFrame() {
-    return execute(new GuiQuery<TableDialogEditDemoFrame>() {
-      protected TableDialogEditDemoFrame executeInEDT() {
-        return new TableDialogEditDemoFrame();
-      }
-    });
   }
 
   protected abstract JTableCellWriter createWriter(Robot robot);

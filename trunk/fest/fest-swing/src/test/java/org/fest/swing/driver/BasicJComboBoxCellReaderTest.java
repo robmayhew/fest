@@ -27,11 +27,12 @@ import javax.swing.JToolBar;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.CustomCellRenderer;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JComboBoxes.comboBox;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
@@ -48,7 +49,7 @@ public class BasicJComboBoxCellReaderTest {
   private BasicJComboBoxCellReader reader;
 
   @BeforeMethod public void setUp() {
-    comboBox = comboBox().withItems("First").createInEDT();
+    comboBox = comboBox().withItems("First").createNew();
     reader = new BasicJComboBoxCellReader();
   }
 
@@ -73,17 +74,27 @@ public class BasicJComboBoxCellReaderTest {
   }
   
   private static void setModelValues(final JComboBox comboBox, final Object[] values) {
+    final DefaultComboBoxModel model = new DefaultComboBoxModel(values);
     execute(new GuiTask() {
       protected void executeInEDT() {
-        comboBox.setModel(new DefaultComboBoxModel(values));
+        comboBox.setModel(model);
+      }
+    }, new Condition("JCombobox's model is set") {
+      public boolean test() {
+        return comboBox.getModel() == model;
       }
     });
   }
   
   private static void setRendererComponent(final JComboBox comboBox, final Component renderer) {
+    final CustomCellRenderer cellRenderer = new CustomCellRenderer(renderer);
     execute(new GuiTask() {
       protected void executeInEDT() throws Throwable {
-        comboBox.setRenderer(new CustomCellRenderer(renderer));
+        comboBox.setRenderer(cellRenderer);
+      }
+    }, new Condition("JCombobox's cell renderer is set") {
+      public boolean test() {
+        return comboBox.getRenderer() == cellRenderer;
       }
     });
   }

@@ -24,12 +24,10 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.testing.TestGroups.*;
@@ -48,7 +46,7 @@ public class FindContainerShowingOnly {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     robot.showWindow(window, new Dimension(400, 300));
   }
 
@@ -69,13 +67,11 @@ public class FindContainerShowingOnly {
     private final MyInternalFrame notShowing = new MyInternalFrame();
     private final MyInternalFrame showing = new MyInternalFrame();
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(FindContainerShowingOnly.class);
       setContentPane(desktop);
       addToDesktop(notShowing);

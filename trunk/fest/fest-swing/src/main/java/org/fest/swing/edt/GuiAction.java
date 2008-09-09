@@ -12,7 +12,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core;
+package org.fest.swing.edt;
 
 /**
  * Understands the base class for actions that are executed in the event dispatch thread.
@@ -21,11 +21,20 @@ package org.fest.swing.core;
  */
 abstract class GuiAction implements Runnable {
 
+  private boolean executedInEDT;
   private Throwable catchedException;
-
+  
   final Throwable catchedException() { return catchedException; }
   
   final void catchedException(Throwable catched) {
     catchedException = catched;
+  }
+
+  final synchronized void executedInEDT() {
+    executedInEDT = true;
+  }
+  
+  final synchronized boolean wasExecutedInEDT() {
+    return executedInEDT;
   }
 }

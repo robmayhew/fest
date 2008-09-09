@@ -4,27 +4,27 @@ import java.beans.PropertyVetoException;
 
 import javax.swing.JInternalFrame;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Condition;
+import org.fest.swing.edt.GuiTask;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands a task that iconifies a given <code>{@link JInternalFrame}</code>. This task should be executed in the
- * event dispatch thread.
+ * Understands a task that iconifies a given <code>{@link JInternalFrame}</code>.
  *
  * @author Alex Ruiz 
  */
-class JInternalFrameIconifyTask extends GuiTask {
+class JInternalFrameIconifyTask {
   
-  private final JInternalFrame internalFrame;
-
-  static JInternalFrameIconifyTask iconifyTask(JInternalFrame internalFrame) {
-    return new JInternalFrameIconifyTask(internalFrame);
-  }
-  
-  private JInternalFrameIconifyTask(JInternalFrame internalFrame) {
-    this.internalFrame = internalFrame;
-  }
-
-  protected void executeInEDT() throws PropertyVetoException {
-    internalFrame.setIcon(true);
+  static void iconify(final JInternalFrame internalFrame) {
+    execute(new GuiTask() {
+      protected void executeInEDT() throws PropertyVetoException {
+        internalFrame.setIcon(true);
+      }
+    }, new Condition("JInternalFrame is icondified") {
+      public boolean test() {
+        return internalFrame.isIcon();
+      }
+    });
   }
 }

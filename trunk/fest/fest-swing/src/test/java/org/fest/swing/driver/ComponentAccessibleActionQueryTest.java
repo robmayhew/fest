@@ -24,13 +24,11 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -47,7 +45,7 @@ public class ComponentAccessibleActionQueryTest {
 
   @BeforeMethod public void setUp() {
     action = createMock(AccessibleAction.class);
-    window = MyWindow.createAndShowInEDT(action);
+    window = MyWindow.createAndShow(action);
   }
 
   @AfterMethod public void tearDown() {
@@ -62,17 +60,15 @@ public class ComponentAccessibleActionQueryTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createAndShowInEDT(final AccessibleAction action) {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(action); }
-      });
+    static MyWindow createAndShow(final AccessibleAction action) {
+      MyWindow window = new MyWindow(action); 
       window.display();
       return window;
     }
     
     final MyButton button = new MyButton("Hello");
 
-    MyWindow(AccessibleAction action) {
+    private MyWindow(AccessibleAction action) {
       super(ComponentAccessibleActionQueryTest.class);
       AccessibleContext context = new MyAccessibleContext(action);
       button.accessibleContext(context);
@@ -85,9 +81,7 @@ public class ComponentAccessibleActionQueryTest {
 
     private AccessibleContext accessibleContext;
 
-    public MyButton(String text) {
-      super(text);
-    }
+    public MyButton(String text) { super(text); }
 
     void accessibleContext(AccessibleContext newAccessibleContext) {
       accessibleContext = newAccessibleContext;

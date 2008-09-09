@@ -34,7 +34,6 @@ import org.fest.swing.util.AWT;
 import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
@@ -56,7 +55,7 @@ public abstract class InputEventGeneratorTestCase {
   protected static final String MOVE_MOUSE_TEST = "Move Mouse Test";
 
   @BeforeMethod public void setUp() throws Exception {
-    frame = MyWindow.createInEDT(getClass());
+    frame = MyWindow.createNew(getClass());
     onSetUp();
     generator = generator();
     frame.display();
@@ -144,13 +143,11 @@ public abstract class InputEventGeneratorTestCase {
 
     final JTextField textBox = new JTextField(20);
 
-    static MyWindow createInEDT(final Class<? extends InputEventGeneratorTestCase> testClass) {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(testClass); }
-      });
+    static MyWindow createNew(Class<? extends InputEventGeneratorTestCase> testClass) {
+      return new MyWindow(testClass);
     }
     
-    public MyWindow(Class<? extends InputEventGeneratorTestCase> testClass) {
+    private MyWindow(Class<? extends InputEventGeneratorTestCase> testClass) {
       super(testClass);
       addComponents(textBox);
     }

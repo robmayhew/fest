@@ -2,7 +2,7 @@ package org.fest.swing.hierarchy;
 
 import java.awt.Window;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
 /**
  * Understands a task that disposes a <code>{@link Window}</code>. This task should be executed in the event dispatch

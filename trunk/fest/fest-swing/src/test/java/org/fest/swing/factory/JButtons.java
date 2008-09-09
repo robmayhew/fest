@@ -19,13 +19,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-import org.fest.swing.core.GuiQuery;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
- * Understands creation of <code>{@link JButton}</code>s in the event dispatch thread.
+ * Understands creation of <code>{@link JButton}</code>s.
  *
  * @author Alex Ruiz
  */
@@ -63,18 +60,14 @@ public final class JButtons {
       return this;
     }
     
-    public JButton createInEDT() {
-      return execute(new GuiQuery<JButton>() {
-        protected JButton executeInEDT()  {
-          JButton button = new JButton();
-          if (!isEmpty(actionListeners))
-            for (ActionListener l : actionListeners) button.addActionListener(l);
-          button.setEnabled(enabled);
-          button.setName(name);
-          button.setText(text);
-          return button;
-        }
-      });
+    public JButton createNew() {
+      JButton button = new JButton();
+      if (!isEmpty(actionListeners))
+        for (ActionListener l : actionListeners) button.addActionListener(l);
+      button.setEnabled(enabled);
+      button.setName(name);
+      button.setText(text);
+      return button;
     }
   }
 }

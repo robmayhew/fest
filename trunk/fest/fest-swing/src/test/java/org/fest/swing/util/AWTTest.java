@@ -25,17 +25,15 @@ import javax.swing.JTextField;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TestGroups;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.factory.JDialogs.dialog;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
-import static org.fest.swing.task.ComponentSetSizeTask.setSizeTask;
+import static org.fest.swing.task.ComponentSetSizeTask.setSize;
 import static org.fest.swing.testing.TestWindow.showNewInTest;
 
 /**
@@ -49,9 +47,9 @@ public class AWTTest {
   private static final Insets EMPTY_INSETS = new Insets(0, 0, 0, 0);
 
   public void shouldReturnCenterPosition() {
-    Component c = textField().createInEDT();
+    Component c = textField().createNew();
     Dimension size = new Dimension(80, 60);
-    execute(setSizeTask(c, size));
+    setSize(c, size);
     assertThat(sizeOf(c)).isEqualTo(size);
     Point center = AWT.centerOf(c);
     assertThat(center.x).isEqualTo(40);
@@ -71,7 +69,7 @@ public class AWTTest {
   }
 
   public void shouldReturnEmptyInsetsIfContainerInsetsIsNull() {
-    TestWindow window = WindowWithNullInsets.createInEDT();
+    TestWindow window = WindowWithNullInsets.createNew();
     Insets insets = AWT.insetsFrom(window);
     assertThat(insets).isEqualTo(EMPTY_INSETS);
   }
@@ -79,15 +77,11 @@ public class AWTTest {
   private static class WindowWithNullInsets extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static WindowWithNullInsets createInEDT() {
-      return execute(new GuiQuery<WindowWithNullInsets>() {
-        protected WindowWithNullInsets executeInEDT() {
-          return new WindowWithNullInsets();
-        }
-      });
+    static WindowWithNullInsets createNew() {
+      return new WindowWithNullInsets();
     }
     
-    WindowWithNullInsets() {
+    private WindowWithNullInsets() {
       super(AWTTest.class);
     }
 
@@ -97,7 +91,7 @@ public class AWTTest {
   }
 
   public void shouldReturnFalseIfComponentIsNotAppletViewer() {
-    assertThat(AWT.isAppletViewer(textField().createInEDT())).isFalse();
+    assertThat(AWT.isAppletViewer(textField().createNew())).isFalse();
   }
 
   public void shouldReturnFalseIfComponentIsNull() {
@@ -110,7 +104,7 @@ public class AWTTest {
   }
 
   private JDialog dialogWithSharedInvisibleFrameAsOwner() {
-    return dialog().withOwner(null).createInEDT();
+    return dialog().withOwner(null).createNew();
   }
 
   public void shouldReturnFalseIfComponentIsNotSharedInvisibleFrame() {
@@ -126,7 +120,7 @@ public class AWTTest {
   }
 
   public void shouldReturnComponentNameInQuotes() {
-    JTextField textField = textField().withName("firstName").createInEDT();
+    JTextField textField = textField().withName("firstName").createNew();
     assertThat(AWT.quoteNameOf(textField)).isEqualTo("'firstName'");
   }
 }

@@ -28,21 +28,25 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.*;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.query.JLabelTextQuery;
 import org.fest.swing.query.JTextComponentTextQuery;
 import org.fest.swing.testing.TestWindow;
 
+import static javax.swing.SwingUtilities.invokeLater;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.JComboBoxDropDownVisibleQuery.isDropDownVisible;
 import static org.fest.swing.driver.JComboBoxSetEditableTask.setEditable;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
-import static org.fest.swing.task.ComponentSetEnableTask.disable;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
+import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link JComboBoxDriver}</code>.
@@ -63,7 +67,7 @@ public class JComboBoxDriverTest {
     cellReader = new JComboBoxCellReaderStub();
     driver = new JComboBoxDriver(robot);
     driver.cellReader(cellReader);
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     comboBox = window.comboBox;
     robot.showWindow(window);
   }
@@ -156,14 +160,10 @@ public class JComboBoxDriverTest {
 
   private static void assertThatListContains(final JList list, final String...expected) {
     final int expectedSize = expected.length;
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        ListModel model = list.getModel();
-        assertThat(model.getSize()).isEqualTo(expectedSize);
-        for (int i = 0; i < expectedSize; i++)
-          assertThat(model.getElementAt(i)).isEqualTo(expected[i]);
-      }
-    });
+    ListModel model = list.getModel();
+    assertThat(model.getSize()).isEqualTo(expectedSize);
+    for (int i = 0; i < expectedSize; i++)
+      assertThat(model.getElementAt(i)).isEqualTo(expected[i]);
   }
 
   public void shouldPassIfHasExpectedSelection() {
@@ -337,9 +337,14 @@ public class JComboBoxDriverTest {
   }
 
   private static void selectIndex(final JComboBox comboBox, final int index) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
+    invokeLater(new Runnable() {
+      public void run() {
         comboBox.setSelectedIndex(index);
+      }
+    });
+    pause(new Condition(concat("JComboBox's selected index is ", index)) {
+      public boolean test() {
+        return comboBox.getSelectedIndex() == index;
       }
     });
   }
@@ -450,13 +455,11 @@ public class JComboBoxDriverTest {
 
     final JComboBox comboBox = new JComboBox(array("first", "second", "third"));
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
-    public MyWindow() {
+    private MyWindow() {
       super(JComboBoxDriverTest.class);
       add(comboBox);
     }

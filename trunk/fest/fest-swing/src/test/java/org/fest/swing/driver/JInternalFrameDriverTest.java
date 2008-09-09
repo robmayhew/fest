@@ -26,7 +26,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.Condition;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.FluentDimension;
 import org.fest.swing.testing.FluentPoint;
@@ -36,11 +41,11 @@ import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.ComponentLocationQuery.locationOf;
 import static org.fest.swing.driver.JInternalFrameAction.MAXIMIZE;
 import static org.fest.swing.driver.JInternalFrameIconQuery.isIconified;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
@@ -62,7 +67,7 @@ public class JInternalFrameDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JInternalFrameDriver(robot);
-    MyWindow window = MyWindow.createInEDT();
+    MyWindow window = MyWindow.createNew();
     internalFrame = window.internalFrame;
     desktopPane = window.desktopPane;
     robot.showWindow(window);
@@ -132,6 +137,10 @@ public class JInternalFrameDriverTest {
       protected void executeInEDT() {
         internalFrame.setIconifiable(false);
       }
+    }, new Condition("JInternalFrame is not iconifiable") {
+      public boolean test() {
+        return !internalFrame.isIconifiable();
+      }
     });
   }
 
@@ -168,6 +177,10 @@ public class JInternalFrameDriverTest {
       protected void executeInEDT() {
         internalFrame.setMaximizable(false);
       }
+    }, new Condition("JInternalFrame is not maximizable") {
+      public boolean test() {
+        return !internalFrame.isMaximizable();
+      }
     });
   }
 
@@ -192,6 +205,10 @@ public class JInternalFrameDriverTest {
       protected void executeInEDT() throws PropertyVetoException {
         internalFrame.setIcon(icon);
       }
+    }, new Condition(concat("JInternalFrame's 'icon' property is ", icon)) {
+      public boolean test() {
+        return internalFrame.isIcon() == icon;
+      } 
     });
   }
 
@@ -280,6 +297,10 @@ public class JInternalFrameDriverTest {
       protected void executeInEDT() {
         internalFrame.setClosable(false);
       }
+    }, new Condition("JInternalFrame is not closable") {
+      public boolean test() {
+        return !internalFrame.isClosable();
+      }
     });
   }
 
@@ -327,13 +348,11 @@ public class JInternalFrameDriverTest {
     final JDesktopPane desktopPane;
     final JInternalFrame internalFrame;
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
-    MyWindow() {
+    private MyWindow() {
       super(JInternalFrameDriverTest.class);
       MyInternalFrame.resetIndex();
       desktopPane = new JDesktopPane();

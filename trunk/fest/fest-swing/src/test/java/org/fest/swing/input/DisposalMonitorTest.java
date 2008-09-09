@@ -28,9 +28,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.input.ComponentListenersQuery.componentListenersIn;
-import static org.fest.swing.task.ComponentAddComponentListenerTask.addComponentListenerTask;
 
 /**
  * Tests for <code>{@link DisposalMonitor}</code>.
@@ -44,10 +42,10 @@ public class DisposalMonitorTest {
   private DisposalMonitor monitor;
   
   @BeforeMethod public void setUp() {
-    frame = TestWindow.createInEDT(DisposalMonitorTest.class);
+    frame = TestWindow.createNew(DisposalMonitorTest.class);
     disposedWindows = new HashMap<Window, Boolean>();
     monitor = new DisposalMonitor(disposedWindows);
-    execute(addComponentListenerTask(frame, monitor));
+    frame.addComponentListener(monitor);
   }
   
   @Test public void shouldRemoveComponentWhenShown() {

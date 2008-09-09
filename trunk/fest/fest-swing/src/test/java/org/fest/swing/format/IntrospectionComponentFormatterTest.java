@@ -21,10 +21,7 @@ import javax.swing.JComboBox;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
-
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.factory.JButtons.button;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
@@ -42,7 +39,7 @@ import static org.fest.util.Strings.concat;
   @BeforeMethod public void setUp() {
     button = button().withName("button")
                      .withText("Click Me")
-                     .createInEDT();
+                     .createNew();
     formatter = new IntrospectionComponentFormatter(JButton.class, "name", "text");
   }
   
@@ -70,11 +67,7 @@ import static org.fest.util.Strings.concat;
     private static final long serialVersionUID = 1L;
 
     static MyButton newButton(final String[] names) {
-      return execute(new GuiQuery<MyButton>() {
-        protected MyButton executeInEDT() {
-          return new MyButton(names);
-        }
-      });
+      return new MyButton(names);
     }
     
     final String[] names;

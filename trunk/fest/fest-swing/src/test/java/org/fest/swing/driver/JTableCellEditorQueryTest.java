@@ -27,12 +27,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.testing.TableRenderDemo;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -46,7 +44,7 @@ public class JTableCellEditorQueryTest {
   private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createInEDT();
+    window = MyWindow.createAndShow();
   }
 
   @AfterMethod public void tearDown() {
@@ -72,15 +70,13 @@ public class JTableCellEditorQueryTest {
 
     final JTable table;
 
-    static MyWindow createInEDT() {
-      MyWindow window = execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createAndShow() {
+      MyWindow window = new MyWindow();
       window.display();
       return window;
     }
     
-    MyWindow() {
+    private MyWindow() {
       super(JTableCellEditorQueryTest.class);
       TableRenderDemo newContentPane = new TableRenderDemo();
       newContentPane.setOpaque(true); // content panes must be opaque

@@ -26,13 +26,11 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
@@ -52,7 +50,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = MyWindow.createInEDT();
+    window = MyWindow.createNew();
     robot.showWindow(window, new Dimension(200, 200));
     JTextComponentFixture textBox = new JTextComponentFixture(robot, "textField");
     fixture = textBox.showPopupMenu();
@@ -79,17 +77,15 @@ import static org.fest.swing.testing.TestGroups.GUI;
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createInEDT() {
-      return execute(new GuiQuery<MyWindow>() {
-        protected MyWindow executeInEDT() { return new MyWindow(); }
-      });
+    static MyWindow createNew() {
+      return new MyWindow();
     }
     
     final JPopupMenu popupMenu = new JPopupMenu();
     final JMenu fileMenu = new JMenu("File");
     final JMenuItem openMenu = new JMenuItem("Open");
     
-    MyWindow() {
+    private MyWindow() {
       super(JPopupMenuFixtureGuiTest.class);
       JTextField textField = new JTextField(20);
       textField.setName("textField");
