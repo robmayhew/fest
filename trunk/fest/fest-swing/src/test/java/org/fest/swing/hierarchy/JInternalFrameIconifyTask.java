@@ -10,11 +10,12 @@ import org.fest.swing.core.GuiTask;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands a task that iconifies a given <code>{@link JInternalFrame}</code>.
+ * Understands a task that iconifies a given <code>{@link JInternalFrame}</code>. This task is executed in the event
+ * dispatch thread.
  *
  * @author Alex Ruiz 
  */
-class JInternalFrameIconifyTask {
+final class JInternalFrameIconifyTask {
   
   static void iconify(final JInternalFrame internalFrame) {
     execute(new GuiTask() {
@@ -27,4 +28,6 @@ class JInternalFrameIconifyTask {
       }
     });
   }
+  
+  private JInternalFrameIconifyTask() {}
 }

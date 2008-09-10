@@ -31,7 +31,7 @@ import org.fest.swing.testing.FluentDimension;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreenOf;
+import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
 import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
@@ -51,7 +51,7 @@ public class WindowDriverTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    frame = new JFrame(getClass().getName());
+    frame = new JFrame(getClass().getSimpleName());
     driver = new WindowDriver(robot);
     robot.showWindow(frame, new Dimension(100, 100));
   }
@@ -81,7 +81,7 @@ public class WindowDriverTest {
   public void shouldMoveWindow() {
     Point newPosition = new Point(200, 200);
     driver.moveTo(frame, newPosition);
-    assertThat(locationOnScreenOf(frame)).isEqualTo(newPosition);
+    assertThat(locationOnScreen(frame)).isEqualTo(newPosition);
   }
 
   public void shouldCloseWindow() {

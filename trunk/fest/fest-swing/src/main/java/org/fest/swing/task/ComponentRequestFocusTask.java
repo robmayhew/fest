@@ -17,36 +17,31 @@ package org.fest.swing.task;
 
 import java.awt.Component;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands a task that request input focus for a <code>{@link Component}</code>. This task should be executed in the
- * event dispatch thread.
- *
+ * Understands a task that request input focus for a <code>{@link Component}</code>. This task is executed in the event
+ * dispatch thread.
+ * 
  * @author Alex Ruiz
  */
-public class ComponentRequestFocusTask extends GuiTask {
+public final class ComponentRequestFocusTask {
   
-  private final Component c;
-
   /**
-   * Creates a new <code>{@link ComponentRequestFocusTask}</code>
-   * @param c the <code>Component</code> to give input focus to.
-   * @return the created task.
-   */
-  public static ComponentRequestFocusTask requestFocusTask(Component c) {
-    return new ComponentRequestFocusTask(c);
-  }
-  
-  ComponentRequestFocusTask(Component c) {
-    this.c = c;
-  }
-
-  /**
-   * Requests that this task's <code>{@link Component}</code> get the input focus. This action is executed in the event
+   * Requests that the given <code>{@link Component}</code> get the input focus. This action is executed in the event
    * dispatch thread.
+   * @param c the given <code>Component</code>.
    */
-  protected void executeInEDT() {
-    c.requestFocusInWindow();
+  public static void giveFocusTo(final Component c) {
+    execute(new GuiQuery<Void>() {
+      protected Void executeInEDT() {
+        c.requestFocusInWindow();
+        return null;
+      }
+    });
   }
+  
+  private ComponentRequestFocusTask() {}
 }

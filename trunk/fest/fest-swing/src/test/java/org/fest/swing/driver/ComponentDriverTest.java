@@ -42,7 +42,7 @@ import static org.fest.swing.core.MouseClickInfo.button;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.Timeout.timeout;
 import static org.fest.swing.factory.JTextFields.textField;
-import static org.fest.swing.task.ComponentSetSizeTask.setSize;
+import static org.fest.swing.task.ComponentSetSizeTask.setComponentSize;
 import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.testing.StopWatch.startNewStopWatch;
 import static org.fest.swing.util.Platform.*;
@@ -200,12 +200,12 @@ import static org.fest.swing.util.Platform.*;
 
   public void shouldPassIfSizeIsEqualToExpected() {
     Dimension size = new Dimension(10, 10);
-    setSize(c, size);
+    setComponentSize(c, size);
     driver.requireSize(c, size);
   }
 
   public void shouldFailIfSizeIsNotEqualToExpected() {
-    setSize(c, new Dimension(10, 10));
+    setComponentSize(c, new Dimension(10, 10));
     try {
       driver.requireSize(c, new Dimension(20, 20));
       fail();

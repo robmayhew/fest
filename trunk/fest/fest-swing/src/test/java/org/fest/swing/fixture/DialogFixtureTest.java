@@ -22,8 +22,6 @@ import java.awt.Point;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Condition;
-import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.DialogDriver;
@@ -32,8 +30,8 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.factory.JDialogs.dialog;
+import static org.fest.swing.task.DialogShowTask.packAndSetVisible;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -82,19 +80,6 @@ import static org.fest.swing.testing.TestGroups.GUI;
     } finally {
       fixture.cleanUp();
     }
-  }
-
-  private static void packAndSetVisible(final Dialog dialog) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        dialog.pack();
-        dialog.setVisible(true);
-      }
-    }, new Condition("Dialog is showing") {
-      public boolean test() {
-        return dialog.isShowing();
-      }
-    });
   }
 
   public void shouldRequireModal() {

@@ -17,6 +17,8 @@ package org.fest.swing.core;
 
 import java.awt.Window;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 
 /**
  * Understands activating a <code>{@link Window}</code>. "Activate" means that the given window gets the keyboard focus.
@@ -24,20 +26,16 @@ import java.awt.Window;
  *
  * @author Alex Ruiz
  */
-class ActivateWindowTask extends GuiTask {
+class ActivateWindowTask {
 
-  private final Window w;
+  static void activateWindow(final Window w) {
+    execute(new GuiQuery<Void>() {
+      protected Void executeInEDT() {
+        // FIXME figure out why two are sometimes needed
+        w.toFront(); w.toFront();
+        return null;
+      }
+    });
+  }
 
-  static ActivateWindowTask activateWindowTask(Window w) {
-    return new ActivateWindowTask(w);
-  }
-  
-  ActivateWindowTask(Window w) {
-    this.w = w;
-  }
-
-  protected void executeInEDT() {
-    // FIXME figure out why two are sometimes needed
-    w.toFront(); w.toFront();
-  }
 }

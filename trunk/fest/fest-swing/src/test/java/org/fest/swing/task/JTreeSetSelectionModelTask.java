@@ -24,11 +24,12 @@ import org.fest.swing.core.GuiTask;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands a task that sets a <code>{@link TreeSelectionModel}</code> in a <code>{@link JTree}</code>.
- *
- * @author Alex Ruiz 
+ * Understands a task that sets a <code>{@link TreeSelectionModel}</code> in a <code>{@link JTree}</code>. This task is
+ * executed in the event dispatch thread.
+ * 
+ * @author Alex Ruiz
  */
-public class JTreeSetSelectionModelTask {
+public final class JTreeSetSelectionModelTask {
 
   public static void setSelectionModel(final JTree tree, final TreeSelectionModel selectionModel) {
     execute(new GuiTask() {

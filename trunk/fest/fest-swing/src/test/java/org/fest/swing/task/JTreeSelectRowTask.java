@@ -26,11 +26,12 @@ import static java.lang.String.valueOf;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands a task that selects a single row in a <code>{@link JTree}</code>.
- *
+ * Understands a task that selects a single row in a <code>{@link JTree}</code>. This task is executed in the event
+ * dispatch thread.
+ * 
  * @author Alex Ruiz
  */
-public class JTreeSelectRowTask {
+public final class JTreeSelectRowTask {
 
   public static void selectRow(final JTree tree, final int row) {
     execute(new GuiTask() {

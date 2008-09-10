@@ -42,8 +42,7 @@ public class FocusMonitorTest {
   @BeforeMethod public void setUp() {
     window = MyWindow.createAndShow();
     setFocusOn(window.button);
-    monitor = new FocusMonitor(window.button);
-    window.button.addFocusListener(monitor);
+    monitor = FocusMonitor.attachTo(window.button);
     assertThat(monitor.hasFocus()).isTrue();
   }
   
@@ -58,8 +57,7 @@ public class FocusMonitorTest {
 
   public void shouldNotHaveFocusIsComponentIsNotFocusOwner() {
     setFocusOn(window.textBox);
-    monitor = new FocusMonitor(window.button);
-    window.button.addFocusListener(monitor);
+    monitor = FocusMonitor.attachTo(window.button);
     assertThat(monitor.hasFocus()).isFalse();
   }
   

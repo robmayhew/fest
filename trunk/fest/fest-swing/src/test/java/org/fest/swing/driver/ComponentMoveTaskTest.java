@@ -15,42 +15,40 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
 import java.awt.Point;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.testing.TestWindow;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Test for <code>{@link ComponentMoveTask}</code>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = { GUI, EDT_ACTION })
 public class ComponentMoveTaskTest {
 
-  private Component c;
+  private TestWindow window;
   private Point location;
 
-  @BeforeMethod public void setUp() throws Exception {
-    c = createMock(Component.class);
+  @BeforeMethod public void setUp() {
+    window = TestWindow.showNewInTest(getClass());
     location = new Point(80, 60);
+    assertThat(location).isNotEqualTo(window.getLocationOnScreen());
+  }
+  
+  @AfterMethod public void tearDown() {
+    window.destroy();
   }
 
   @Test public void shouldSetLocation() {
-    new EasyMockTemplate(c) {
-      protected void expectations() {
-        c.setLocation(location);
-        expectLastCall();
-      }
-
-      protected void codeToTest() {
-        ComponentMoveTask.moveTask(c, location).executeInEDT();
-      }
-    }.run();
+    ComponentMoveTask.moveComponent(window, location);
+    assertThat(location).isEqualTo(window.getLocationOnScreen());
   }
 }

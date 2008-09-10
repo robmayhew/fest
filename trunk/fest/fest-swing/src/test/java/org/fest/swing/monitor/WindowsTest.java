@@ -66,6 +66,7 @@ public class WindowsTest {
   }
 
   @Test public void shouldEvaluateWindowAsReadyAndHiddenIfNotVisible() {
+    // TODO call from EDT
     frame.pack();
     windows.markExisting(frame);
     assertThat(frameClosed()).isFalse();

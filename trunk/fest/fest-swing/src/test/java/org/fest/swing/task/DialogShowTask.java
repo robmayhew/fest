@@ -1,5 +1,5 @@
 /*
- * Created on Aug 29, 2008
+ * Created on Sep 9, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,8 +15,7 @@
  */
 package org.fest.swing.task;
 
-import javax.swing.JComponent;
-import javax.swing.JPopupMenu;
+import java.awt.Dialog;
 
 import org.fest.swing.core.Condition;
 import org.fest.swing.core.GuiTask;
@@ -24,24 +23,25 @@ import org.fest.swing.core.GuiTask;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands a task that sets the <code>{@link JPopupMenu}</code> for a <code>{@link JComponent}</code>. This task is
- * executed in the event dispatch thread.
- *
- * @author Alex Ruiz 
+ * Understands a task that makes a <code>{@link Dialog}</code> visible. This task is executed in the event dispatch
+ * thread.
+ * 
+ * @author Alex Ruiz
  */
-public final class ComponentSetPopupMenuTask {
-  
-  public static void setPopupMenu(final JComponent component, final JPopupMenu popupMenu) {
+public final class DialogShowTask {
+
+  public static void packAndSetVisible(final Dialog dialog) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        component.setComponentPopupMenu(popupMenu);
+        dialog.pack();
+        dialog.setVisible(true);
       }
-    }, new Condition("JComponent's JPopupMenu is set") {
+    }, new Condition("Dialog is showing") {
       public boolean test() {
-        return component.getComponentPopupMenu() == popupMenu;
+        return dialog.isShowing();
       }
     });
   }
   
-  private ComponentSetPopupMenuTask() {}
+  private DialogShowTask() {}
 }

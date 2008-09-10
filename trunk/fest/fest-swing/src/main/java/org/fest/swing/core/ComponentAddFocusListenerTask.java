@@ -18,28 +18,24 @@ package org.fest.swing.core;
 import java.awt.Component;
 import java.awt.event.FocusListener;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands a task that adds a <code>{@link FocusListener}</code> to a <code>{@link Component}</code>. This task
- * should be called from the event dispatch thread.
- *
+ * Understands a task that adds a <code>{@link FocusListener}</code> to a <code>{@link Component}</code>. This task is
+ * called from the event dispatch thread.
+ * 
  * @author Alex Ruiz
  */
-class ComponentAddFocusListenerTask extends GuiTask {
+final class ComponentAddFocusListenerTask {
 
-  private final Component c;
-  private final FocusListener l;
-
-  static ComponentAddFocusListenerTask addFocusListenerTask(Component c, FocusListener l) {
-    return new ComponentAddFocusListenerTask(c, l);
+  static void addFocusListener(final Component c, final FocusListener l) {
+    execute(new GuiQuery<Void>() {
+      protected Void executeInEDT() {
+        c.addFocusListener(l);
+        return null;
+      }
+    });
   }
   
-  ComponentAddFocusListenerTask(Component c, FocusListener l) {
-    this.c = c;
-    this.l = l;
-  }
-  
-  protected void executeInEDT() {
-    c.addFocusListener(l);
-  }
+  private ComponentAddFocusListenerTask() {}
 }

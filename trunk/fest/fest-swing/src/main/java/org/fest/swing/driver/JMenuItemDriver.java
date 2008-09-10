@@ -27,7 +27,6 @@ import static java.lang.Boolean.getBoolean;
 
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
-import static org.fest.swing.driver.AbstractButtonClickTask.clickTask;
 import static org.fest.swing.driver.WindowMoveToFrontTask.toFrontTask;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
@@ -125,7 +124,6 @@ public class JMenuItemDriver extends JComponentDriver {
   }
 
   private void clickMenuInMacOSMenuBar(JMenuItem menuItem) {
-    robot.invokeAndWait(clickTask(menuItem));
-    // TODO wait for idle
+    AbstractButtonClickTask.doClick(menuItem);
   }
 }

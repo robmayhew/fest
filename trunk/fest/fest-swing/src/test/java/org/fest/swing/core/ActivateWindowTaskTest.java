@@ -15,41 +15,64 @@
  */
 package org.fest.swing.core;
 
-import java.awt.Window;
+import java.awt.Component;
+import java.awt.Dimension;
 
+import javax.swing.JFrame;
+
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.util.Strings;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.factory.JFrames.frame;
+import static org.fest.swing.task.FrameShowTask.packAndSetVisible;
+import static org.fest.swing.task.WindowDestroyTask.destroy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ActivateWindowTask}</code>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = { GUI, EDT_ACTION })
 public class ActivateWindowTaskTest {
 
-  private ActivateWindowTask task;
-  private Window w;
+  private JFrame one;
+  private JFrame two;
   
-  @BeforeMethod public void setUp() throws Exception {
-    w = createMock(Window.class);
-    task = new ActivateWindowTask(w);
+  @BeforeMethod public void setUp() {
+    String testName = ActivateWindowTaskTest.class.getSimpleName();
+    Dimension size = new Dimension(300, 200);
+    one = frame().withTitle(Strings.concat(testName, " - One")).createNew();
+    packAndSetVisible(one, size);
+    two = frame().withTitle(Strings.concat(testName, " - Two")).createNew();
+    packAndSetVisible(two, size);
   }
   
-  @Test public void shouldActivateWindow() {
-    new EasyMockTemplate(w) {
-      protected void expectations() {
-        w.toFront();
-        expectLastCall().atLeastOnce();
-      }
+  @AfterMethod public void tearDown() {
+    destroy(one);
+    destroy(two);
+  }
+  
+  public void shouldActivateWindow() {
+    pause(new HasFocusCondition(two));
+    ActivateWindowTask.activateWindow(one);
+    pause(new HasFocusCondition(one));
+  }
+  
+  private static class HasFocusCondition extends Condition {
+    private final Component c;
 
-      protected void codeToTest() {
-        task.executeInEDT();
-      }
-    }.run();
+    HasFocusCondition(Component c) {
+      super("Component has focus");
+      this.c = c;
+    }
+
+    public boolean test() {
+      return c.hasFocus();
+    }
   }
 }

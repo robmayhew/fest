@@ -19,11 +19,7 @@ import java.awt.Frame;
 
 import javax.swing.JDialog;
 
-import org.fest.swing.core.Condition;
-
-import static javax.swing.SwingUtilities.invokeLater;
-
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.task.DialogShowTask.packAndSetVisible;
 
 /**
  * Understands creation of <code>{@link JDialog}</code>s.
@@ -63,18 +59,8 @@ public final class JDialogs {
     }
     
     public JDialog createAndShow() {
-      final JDialog dialog = create();
-      invokeLater(new Runnable() {
-        public void run() {
-          dialog.pack();
-          dialog.setVisible(true);
-        }
-      });
-      pause(new Condition("dialog is displayed") {
-        public boolean test() {
-          return dialog.isShowing();
-        }
-      });
+      JDialog dialog = create();
+      packAndSetVisible(dialog);
       return dialog;
     }
 

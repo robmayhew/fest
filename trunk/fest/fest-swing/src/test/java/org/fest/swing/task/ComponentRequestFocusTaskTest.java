@@ -15,41 +15,62 @@
  */
 package org.fest.swing.task;
 
-import java.awt.Component;
+import javax.swing.JButton;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Condition;
+import org.fest.swing.testing.TestWindow;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentRequestFocusTask}</code>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = { GUI, EDT_ACTION })
 public class ComponentRequestFocusTaskTest {
 
-  private Component component;
-  private ComponentRequestFocusTask task;
+  private MyWindow window;
   
-  @BeforeMethod public void setUp() throws Exception {
-    component = createMock(Component.class);
-    task = new ComponentRequestFocusTask(component);
+  @BeforeMethod public void setUp() {
+    window = MyWindow.createNew();
+    window.display();
+  }
+
+  @AfterMethod public void tearDown() {
+    window.destroy();
   }
   
-  @Test public void shouldCallRequestFocusInWindow() {
-    new EasyMockTemplate(component) {
+  public void shouldCallRequestFocusInWindow() {
+    final JButton toReceiveFocus = window.buttonTwo;
+    assertThat(toReceiveFocus.hasFocus()).isFalse();
+    ComponentRequestFocusTask.giveFocusTo(toReceiveFocus);
+    pause(new Condition("Component gets focus") {
+      public boolean test() {
+        return toReceiveFocus.hasFocus();
+      }
+    });
+  }
 
-      protected void expectations() {
-        expect(component.requestFocusInWindow()).andReturn(true);
-      }
-      
-      protected void codeToTest() {
-        task.executeInEDT();
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final JButton buttonOne = new JButton("One");
+    final JButton buttonTwo = new JButton("Two");
+    
+    private MyWindow() {
+      super(ComponentRequestFocusTaskTest.class);
+      addComponents(buttonOne, buttonTwo);
+    }
   }
 }

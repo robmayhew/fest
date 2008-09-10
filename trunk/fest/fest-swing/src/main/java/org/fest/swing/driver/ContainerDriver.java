@@ -21,11 +21,11 @@ import java.awt.Point;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
-import static org.fest.swing.driver.ComponentMoveTask.moveTask;
+import static org.fest.swing.driver.ComponentMoveTask.moveComponent;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
-import static org.fest.swing.task.ComponentSetSizeTask.setSize;
+import static org.fest.swing.task.ComponentSetSizeTask.setComponentSize;
 import static org.fest.swing.util.AWT.locationOnScreenOf;
 import static org.fest.util.Strings.concat;
 
@@ -67,7 +67,7 @@ public abstract class ContainerDriver extends ComponentDriver {
     simulateResizeStarted(c, horizontally, vertically);
     Dimension size = sizeOf(c);
     Dimension newSize = new Dimension(size.width + horizontally, size.height + vertically);
-    setSize(c, newSize);
+    setComponentSize(c, newSize);
     simulateResizeComplete(c);
     robot.waitForIdle();
   }
@@ -120,7 +120,7 @@ public abstract class ContainerDriver extends ComponentDriver {
     if (onScreen == null) throw componentNotShowingOnScreen(c);
     simulateMoveStarted(c, horizontally, vertically);
     Point location = new Point(onScreen.x + horizontally, onScreen.y + vertically);
-    robot.invokeAndWait(c, moveTask(c, location));
+    moveComponent(c, location);
     simulateMoveComplete(c);
     robot.waitForIdle();
   }

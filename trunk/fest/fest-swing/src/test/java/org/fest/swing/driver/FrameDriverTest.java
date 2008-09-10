@@ -32,7 +32,7 @@ import static java.awt.Frame.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreenOf;
+import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -108,6 +108,6 @@ public class FrameDriverTest {
   }
 
   private FluentPoint frameLocationOnScreen() {
-    return new FluentPoint(locationOnScreenOf(frame));
+    return new FluentPoint(locationOnScreen(frame));
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Created on Aug 29, 2008
+ * Created on Sep 9, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,8 +15,7 @@
  */
 package org.fest.swing.task;
 
-import javax.swing.JComponent;
-import javax.swing.JPopupMenu;
+import java.awt.Window;
 
 import org.fest.swing.core.Condition;
 import org.fest.swing.core.GuiTask;
@@ -24,24 +23,24 @@ import org.fest.swing.core.GuiTask;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands a task that sets the <code>{@link JPopupMenu}</code> for a <code>{@link JComponent}</code>. This task is
- * executed in the event dispatch thread.
+ * Understands a task that destroys a <code>{@link Window}</code>. This task is executed in the event dispatch thread.
  *
- * @author Alex Ruiz 
+ * @author Alex Ruiz
  */
-public final class ComponentSetPopupMenuTask {
-  
-  public static void setPopupMenu(final JComponent component, final JPopupMenu popupMenu) {
+public final class WindowDestroyTask {
+
+  public static void destroy(final Window w) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        component.setComponentPopupMenu(popupMenu);
+        w.setVisible(false);
+        w.dispose();
       }
-    }, new Condition("JComponent's JPopupMenu is set") {
+    }, new Condition("window is closed") {
       public boolean test() {
-        return component.getComponentPopupMenu() == popupMenu;
+        return !w.isShowing();
       }
     });
   }
   
-  private ComponentSetPopupMenuTask() {}
+  private WindowDestroyTask() {}
 }

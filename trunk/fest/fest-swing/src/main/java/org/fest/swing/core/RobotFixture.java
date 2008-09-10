@@ -41,9 +41,8 @@ import static java.lang.System.currentTimeMillis;
 import static javax.swing.SwingUtilities.*;
 
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.ActivateWindowTask.activateWindowTask;
-import static org.fest.swing.core.ComponentAddFocusListenerTask.addFocusListenerTask;
-import static org.fest.swing.core.ComponentRemoveFocusListenerTask.removeFocusListenerTask;
+import static org.fest.swing.core.ActivateWindowTask.activateWindow;
+import static org.fest.swing.core.ComponentRemoveFocusListenerTask.removeFocusListener;
 import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
 import static org.fest.swing.core.GuiActionRunner.rethrowCatchedExceptionIn;
@@ -60,7 +59,7 @@ import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
-import static org.fest.swing.task.ComponentRequestFocusTask.requestFocusTask;
+import static org.fest.swing.task.ComponentRequestFocusTask.giveFocusTo;
 import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.swing.util.Modifiers.*;
 import static org.fest.swing.util.Platform.isOSX;
@@ -235,8 +234,7 @@ public class RobotFixture implements Robot {
   private void focus(final Component c, boolean wait) {
     Component currentOwner = focusOwner();
     if (currentOwner == c) return;
-    FocusMonitor focusMonitor = new FocusMonitor(c);
-    invokeAndWait(addFocusListenerTask(c, focusMonitor));
+    FocusMonitor focusMonitor = FocusMonitor.attachTo(c);
     // for pointer focus
     moveMouse(c);
     waitForIdle();
@@ -247,7 +245,7 @@ public class RobotFixture implements Robot {
       activate(componentAncestor);
       waitForIdle();
     }
-    invokeAndWait(c, requestFocusTask(c));
+    giveFocusTo(c);
     try {
       if (wait) {
         TimeoutWatch watch = startWatchWithTimeoutOf(settings().timeoutToBeVisible());
@@ -257,7 +255,7 @@ public class RobotFixture implements Robot {
         }
       }
     } finally {
-      invokeAndWait(removeFocusListenerTask(c, focusMonitor));
+      removeFocusListener(c, focusMonitor);
     }
   }
 
@@ -266,7 +264,7 @@ public class RobotFixture implements Robot {
    * @param w the window to activate.
    */
   private void activate(Window w) {
-    invokeAndWait(w, activateWindowTask(w));
+    activateWindow(w);
     moveMouse(w); // For pointer-focus systems
   }
 

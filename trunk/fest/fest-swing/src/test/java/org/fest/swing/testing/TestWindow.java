@@ -23,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import org.fest.swing.core.Condition;
+import org.fest.swing.task.WindowDestroyTask;
 
 import static javax.swing.SwingUtilities.invokeLater;
 
@@ -97,16 +98,6 @@ public class TestWindow extends JFrame {
   }
   
   public void destroy() {
-    invokeLater(new Runnable() {
-      public void run() {
-        setVisible(false);
-        dispose();
-      }
-    });
-    pause(new Condition("window is closed") {
-      public boolean test() {
-        return !TestWindow.this.isShowing();
-      }
-    });
+    WindowDestroyTask.destroy(this);
   }
 }

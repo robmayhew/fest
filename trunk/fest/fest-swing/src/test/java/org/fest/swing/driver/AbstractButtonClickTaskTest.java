@@ -15,41 +15,50 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.AbstractButton;
+import javax.swing.JButton;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link AbstractButtonClickTask}</code>.
  *
  * @author Yvonne Wang
  */
+@Test 
 public class AbstractButtonClickTaskTest {
 
-  private AbstractButton button;
-  private AbstractButtonClickTask task;
+  private MyButton button;
 
   @BeforeClass public void setUp() {
-    button = createMock(AbstractButton.class);
-    task = AbstractButtonClickTask.clickTask(button);
+    button = MyButton.createNew("Hello");
   }
 
-  @Test public void shouldClickButton() {
-    new EasyMockTemplate(button) {
-      protected void expectations() {
-        button.doClick();
-        expectLastCall().once();
-      }
+  public void shouldClickButton() {
+    AbstractButtonClickTask.doClick(button);
+    assertThat(button.clicked()).isTrue();
+  }
 
-      protected void codeToTest() {
-        task.executeInEDT();
-      }
-    }.run();
+  private static class MyButton extends JButton {
+    private static final long serialVersionUID = 1L;
+
+    private boolean clicked;
+    
+    static MyButton createNew(String text) {
+      return new MyButton(text);
+    }
+    
+    private MyButton(String text) {
+      super(text);
+    }
+
+    @Override public void doClick() {
+      clicked = true;
+      super.doClick();
+    }
+    
+    boolean clicked() { return clicked; }
   }
 }

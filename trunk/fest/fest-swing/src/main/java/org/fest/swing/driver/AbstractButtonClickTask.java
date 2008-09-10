@@ -17,27 +17,26 @@ package org.fest.swing.driver;
 
 import javax.swing.AbstractButton;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands a task that clicks a <code>{@link AbstractButton}</code>. This task should be executed in the event 
- * dispatch thread.
+ * Understands a task that clicks a <code>{@link AbstractButton}</code>. This task is executed in the event dispatch 
+ * thread.
  *
  * @author Alex Ruiz
  */
-class AbstractButtonClickTask extends GuiTask {
+class AbstractButtonClickTask {
   
-  private final AbstractButton button;
+  static void doClick(final AbstractButton button) {
+    execute(new GuiQuery<Void>() {
+      protected Void executeInEDT() {
+        button.doClick();
+        return null;
+      }
+    });
+  }
 
-  static AbstractButtonClickTask clickTask(AbstractButton button) {
-    return new AbstractButtonClickTask(button);
-  }
-  
-  private AbstractButtonClickTask(AbstractButton button) {
-    this.button = button;
-  }
-
-  protected void executeInEDT() {
-    button.doClick();
-  }
+  private AbstractButtonClickTask() {}
 }

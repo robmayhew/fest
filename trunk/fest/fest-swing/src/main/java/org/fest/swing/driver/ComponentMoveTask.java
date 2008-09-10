@@ -18,29 +18,26 @@ package org.fest.swing.driver;
 import java.awt.Component;
 import java.awt.Point;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.GuiQuery;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands a task that sets the location of a <code>{@link Component}</code>. This task should be executed in the
- * event dispatch thread.
- *
+ * Understands a task that sets the location of a <code>{@link Component}</code>. This task is executed in the event
+ * dispatch thread.
+ * 
  * @author Alex Ruiz
  */
-class ComponentMoveTask extends GuiTask {
+final class ComponentMoveTask {
 
-  private final Component component;
-  private final Point location;
-
-  static ComponentMoveTask moveTask(Component component, Point location) {
-    return new ComponentMoveTask(component, location);
-  }
+  private ComponentMoveTask() {}
   
-  private ComponentMoveTask(Component component, Point location) {
-    this.component = component;
-    this.location = location;
-  }
-
-  protected void executeInEDT() {
-    component.setLocation(location);
+  static void moveComponent(final Component c, final Point location) {
+    execute(new GuiQuery<Void>( ) {
+      protected Void executeInEDT() {
+        c.setLocation(location);
+        return null;
+      }
+    });
   }
 }

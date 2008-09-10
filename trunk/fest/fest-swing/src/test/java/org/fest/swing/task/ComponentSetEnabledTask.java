@@ -24,11 +24,12 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands a task that enables or disables a <code>{@link Component}</code>.
+ * Understands a task that enables or disables a <code>{@link Component}</code>. This task is executed in the event
+ * dispatch thread.
  *
  * @author Alex Ruiz
  */
-public class ComponentSetEnabledTask {
+public final class ComponentSetEnabledTask {
 
   public static void enable(Component component) {
     setEnabled(component, true);
@@ -49,4 +50,6 @@ public class ComponentSetEnabledTask {
       }
     });
   }
+  
+  private ComponentSetEnabledTask() {}
 }

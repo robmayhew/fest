@@ -13,7 +13,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  *
  * @author Alex Ruiz 
  */
-class JTableClearSelectionTask {
+final class JTableClearSelectionTask {
   
   static void clearSelectionOf(final JTable table) {
     execute(new GuiTask() {
@@ -26,4 +26,6 @@ class JTableClearSelectionTask {
       }
     });
   }
+  
+  private JTableClearSelectionTask() {}
 }

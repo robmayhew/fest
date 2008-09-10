@@ -15,8 +15,6 @@
  */
 package org.fest.swing.driver;
 
-
-
 import java.awt.Component;
 
 import javax.swing.DefaultComboBoxModel;

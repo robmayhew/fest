@@ -22,7 +22,7 @@ import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
-import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreenOf;
+import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.util.Files.newFile;
 import static org.fest.util.Strings.*;
@@ -94,7 +94,7 @@ public final class ScreenshotTaker {
    * @throws SecurityException if <code>readDisplayPixels</code> permission is not granted.
    */
   public BufferedImage takeScreenshotOf(Component c) {
-    Point locationOnScreen = locationOnScreenOf(c);
+    Point locationOnScreen = locationOnScreen(c);
     Dimension size = sizeOf(c);
     Rectangle r = new Rectangle(locationOnScreen.x,  locationOnScreen.y, size.width, size.height);
     return robot.createScreenCapture(r);

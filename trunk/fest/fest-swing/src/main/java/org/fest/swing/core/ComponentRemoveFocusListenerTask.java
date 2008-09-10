@@ -18,28 +18,25 @@ package org.fest.swing.core;
 import java.awt.Component;
 import java.awt.event.FocusListener;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 
 /**
  * Understands a task that removes a <code>{@link FocusListener}</code> from a <code>{@link Component}</code>. This task
- * should be called from the event dispatch thread.
+ * is executed from the event dispatch thread.
  *
  * @author Alex Ruiz 
  */
-class ComponentRemoveFocusListenerTask extends GuiTask {
+final class ComponentRemoveFocusListenerTask {
 
-  private final Component c;
-  private final FocusListener l;
+  static void removeFocusListener(final Component c, final FocusListener l) {
+    execute(new GuiQuery<Void>() {
+      protected Void executeInEDT() {
+        c.removeFocusListener(l);
+        return null;
+      }
+    });
+  }
 
-  static ComponentRemoveFocusListenerTask removeFocusListenerTask(Component c, FocusListener l) {
-    return new ComponentRemoveFocusListenerTask(c, l);
-  }
-  
-  ComponentRemoveFocusListenerTask(Component c, FocusListener l) {
-    this.c = c;
-    this.l = l;
-  }
-  
-  protected void executeInEDT() {
-    c.removeFocusListener(l);
-  }
+  private ComponentRemoveFocusListenerTask() {}
 }

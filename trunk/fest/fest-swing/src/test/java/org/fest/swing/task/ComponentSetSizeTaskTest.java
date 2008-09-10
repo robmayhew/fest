@@ -47,7 +47,7 @@ public class ComponentSetSizeTaskTest {
   }
 
   @Test public void shouldSetSize() {
-    ComponentSetSizeTask.setSize(window, size);
+    ComponentSetSizeTask.setComponentSize(window, size);
     assertThat(window.getSize()).isEqualTo(size);
   }
 }

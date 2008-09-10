@@ -21,6 +21,7 @@ import javax.swing.JDialog;
 import javax.swing.UIManager;
 
 import org.fest.swing.core.Condition;
+import org.fest.swing.task.WindowDestroyTask;
 
 import static javax.swing.SwingUtilities.invokeLater;
 
@@ -97,16 +98,6 @@ public class TestDialog extends JDialog {
   }
   
   public void destroy() {
-    invokeLater(new Runnable() {
-      public void run() {
-        setVisible(false);
-        dispose();
-      }
-    });
-    pause(new Condition("dialog is closed") {
-      public boolean test() {
-        return !TestDialog.this.isShowing();
-      }
-    });
+    WindowDestroyTask.destroy(this);
   }
 }

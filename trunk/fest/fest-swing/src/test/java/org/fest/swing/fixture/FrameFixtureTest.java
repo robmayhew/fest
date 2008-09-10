@@ -22,8 +22,6 @@ import java.awt.Point;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.Condition;
-import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.FrameDriver;
@@ -32,8 +30,8 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.factory.JFrames.frame;
+import static org.fest.swing.task.FrameShowTask.packAndSetVisible;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -83,19 +81,6 @@ import static org.fest.swing.testing.TestGroups.GUI;
     } finally {
       fixture.cleanUp();
     }
-  }
-
-  private static void packAndSetVisible(final Frame frame) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        frame.pack();
-        frame.setVisible(true);
-      }
-    }, new Condition("Frame is showing") {
-      public boolean test() {
-        return frame.isShowing();
-      }
-    });
   }
 
   public void shouldRequireSize() {

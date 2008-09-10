@@ -26,11 +26,12 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands a task that sets the value of a <code>{@link JSlider}</code>.
- *
- * @author Alex Ruiz 
+ * Understands a task that sets the value of a <code>{@link JSlider}</code>. This task is executed in the event dispatch
+ * thread.
+ * 
+ * @author Alex Ruiz
  */
-class JSliderSetValueTask {
+final class JSliderSetValueTask {
   
   static void setValue(final JSlider slider, final int newValue) {
     execute(new GuiTask() {
@@ -43,4 +44,6 @@ class JSliderSetValueTask {
       }
     });
   }
+  
+  private JSliderSetValueTask() {}
 }

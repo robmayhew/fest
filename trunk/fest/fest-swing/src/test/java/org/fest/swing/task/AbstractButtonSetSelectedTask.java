@@ -24,11 +24,12 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands a task that selects/deselects a <code>{@link AbstractButton}</code>.
+ * Understands a task that selects/deselects a <code>{@link AbstractButton}</code>. This task is executed in the event
+ * dispatch thread.
  *
  * @author Alex Ruiz 
  */
-public class AbstractButtonSetSelectedTask {
+public final class AbstractButtonSetSelectedTask {
   
   public static void setSelected(final AbstractButton button, final boolean selected) {
     execute(new GuiTask() {
@@ -41,4 +42,6 @@ public class AbstractButtonSetSelectedTask {
       }
     });
   }
+  
+  private AbstractButtonSetSelectedTask() {}
 }

@@ -33,7 +33,7 @@ import static org.fest.swing.factory.JDialogs.dialog;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
-import static org.fest.swing.task.ComponentSetSizeTask.setSize;
+import static org.fest.swing.task.ComponentSetSizeTask.setComponentSize;
 import static org.fest.swing.testing.TestWindow.showNewInTest;
 
 /**
@@ -49,7 +49,7 @@ public class AWTTest {
   public void shouldReturnCenterPosition() {
     Component c = textField().createNew();
     Dimension size = new Dimension(80, 60);
-    setSize(c, size);
+    setComponentSize(c, size);
     assertThat(sizeOf(c)).isEqualTo(size);
     Point center = AWT.centerOf(c);
     assertThat(center.x).isEqualTo(40);

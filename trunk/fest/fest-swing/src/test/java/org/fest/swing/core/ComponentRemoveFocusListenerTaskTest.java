@@ -16,16 +16,14 @@
 package org.fest.swing.core;
 
 import java.awt.Component;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusListener;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
-
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JButtons.button;
 import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
@@ -38,24 +36,15 @@ public class ComponentRemoveFocusListenerTaskTest {
 
   private Component component;
   private FocusListener listener;
-  private ComponentRemoveFocusListenerTask task;
   
   @BeforeMethod public void setUp() {
-    component = createMock(Component.class);
-    listener = createMock(FocusListener.class);
-    task = new ComponentRemoveFocusListenerTask(component, listener);
+    component = button().createNew();
+    listener = new FocusAdapter() {};
+    component.addFocusListener(listener);
   }
   
   public void shouldRemoveFocusListenerFromComponent() {
-    new EasyMockTemplate(component) {
-      protected void expectations() {
-        component.removeFocusListener(listener);
-        expectLastCall().once();
-      }
-
-      protected void codeToTest() {
-        task.executeInEDT();
-      }
-    }.run();
+    ComponentRemoveFocusListenerTask.removeFocusListener(component, listener);
+    assertThat(component.getComponentListeners()).excludes(listener);
   }
 }

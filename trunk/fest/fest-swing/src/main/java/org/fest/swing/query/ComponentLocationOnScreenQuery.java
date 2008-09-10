@@ -38,7 +38,7 @@ public final class ComponentLocationOnScreenQuery extends GuiQuery<Point> {
    * @param component the given <code>Component</code>.
    * @return the location of the given <code>Component</code> on screen.
    */
-  public static Point locationOnScreenOf(Component component) {
+  public static Point locationOnScreen(Component component) {
     return execute(new ComponentLocationOnScreenQuery(component));
   }
 

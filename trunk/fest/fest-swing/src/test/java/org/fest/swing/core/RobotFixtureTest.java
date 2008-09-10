@@ -47,7 +47,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixtureTest.KeyAction.action;
-import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreenOf;
+import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
@@ -76,7 +76,7 @@ public class RobotFixtureTest {
     textFieldWithoutPopup = window.textFieldWithoutPopup;
     robot.showWindow(window); // implicitly test 'showWindow(Window)'
     assertThat(isShowing(window)).isTrue();
-    assertThat(locationOnScreenOf(window)).isEqualTo(new Point(100, 100));
+    assertThat(locationOnScreen(window)).isEqualTo(new Point(100, 100));
   }
 
   @AfterMethod public void tearDown() {
@@ -119,7 +119,7 @@ public class RobotFixtureTest {
     robot.showWindow(w, size, false);
     assertThat(sizeOf(w)).isEqualTo(size);
     assertThat(w.packed()).isFalse();
-    assertThat(locationOnScreenOf(w)).isEqualTo(new Point(0, 0));
+    assertThat(locationOnScreen(w)).isEqualTo(new Point(0, 0));
   }
 
   public void shouldClickComponent() {

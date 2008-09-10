@@ -21,13 +21,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
-import org.fest.swing.query.ComponentLocationOnScreenQuery;
 import org.fest.swing.query.JPopupMenuInvokerQuery;
 
 import static java.awt.event.InputEvent.*;
 import static javax.swing.SwingUtilities.convertPoint;
 
 import static org.fest.reflect.core.Reflection.method;
+import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
@@ -126,7 +126,7 @@ public class AWT {
    *         <code>null</code>, if the <code>Component</code> is not showing on the screen.
    */
   public static Point locationOnScreenOf(Component c) {
-    if (!isAWTTreeLockHeld()) return new Point(ComponentLocationOnScreenQuery.locationOnScreenOf(c));
+    if (!isAWTTreeLockHeld()) return new Point(locationOnScreen(c));
     // TODO access from EDT
     if (!isShowing(c)) return null;
     Point location = new Point(c.getLocation());
