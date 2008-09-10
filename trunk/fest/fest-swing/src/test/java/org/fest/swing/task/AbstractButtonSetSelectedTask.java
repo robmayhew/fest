@@ -20,6 +20,8 @@ import javax.swing.AbstractButton;
 import org.fest.swing.core.Condition;
 import org.fest.swing.core.GuiTask;
 
+import static java.lang.String.valueOf;
+
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.util.Strings.concat;
 
@@ -36,7 +38,7 @@ public final class AbstractButtonSetSelectedTask {
       protected void executeInEDT() {
         button.setSelected(selected);
       }
-    }, new Condition(concat("AbstractButton's 'selected' property is ", selected)) {
+    }, new Condition(concat("AbstractButton's 'selected' property is ", valueOf(selected))) {
       public boolean test() {
         return button.isSelected() == selected;
       }
