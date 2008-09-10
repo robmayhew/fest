@@ -18,7 +18,7 @@ package org.fest.swing.task;
 import java.awt.Component;
 import java.awt.Dimension;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 
@@ -36,13 +36,11 @@ public final class ComponentSetSizeTask {
    * @param size the new size for the given <code>Component</code>.
    */
   public static void setComponentSize(final Component c, final Dimension size) {
-    execute(new GuiQuery<Void>() {
+    execute(new GuiTask() {
       // we cannot use a GuiTask because we cannot depend on the size of the component after being resized will be the
       // same to the given one (e.g. when resizing a frame, we need to count the size of the title bar.
-      // TODO find a way to use a GuiTask
-      protected Void executeInEDT() {
+      protected void executeInEDT() {
         c.setSize(size);
-        return null;
       }
     });
   }

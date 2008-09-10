@@ -20,36 +20,29 @@ import javax.swing.JComboBox;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JComboBoxes.comboBox;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JComboBoxSelectItemAtIndexTask}</code>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = { GUI, EDT_ACTION })
 public class JComboBoxSelectItemAtIndexTaskTest {
 
   private JComboBox comboBox;
   private int index;
 
   @BeforeMethod public void setUp() {
-    comboBox = createMock(JComboBox.class);
-    index = 6;
+    comboBox = comboBox().withItems("One", "Two", "Three").createNew();
+    index = 1;
   }
   
-  @Test public void shouldSetSelectedIndex() {
-    new EasyMockTemplate(comboBox) {
-      protected void expectations() {
-        comboBox.setSelectedIndex(index);
-        expectLastCall().once();
-      }
-
-      protected void codeToTest() {
-        JComboBoxSelectItemAtIndexTask.selectItemTask(comboBox, index).executeInEDT();
-      }
-    }.run();
+  public void shouldSetSelectedIndex() {
+    assertThat(comboBox.getSelectedIndex()).isNotEqualTo(index);
+    JComboBoxSelectItemAtIndexTask.selectItemAtIndex(comboBox, index);
+    assertThat(comboBox.getSelectedIndex()).isEqualTo(index);
   }
 }

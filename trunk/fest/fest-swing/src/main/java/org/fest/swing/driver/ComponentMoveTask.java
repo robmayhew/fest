@@ -18,7 +18,7 @@ package org.fest.swing.driver;
 import java.awt.Component;
 import java.awt.Point;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 
@@ -33,10 +33,9 @@ final class ComponentMoveTask {
   private ComponentMoveTask() {}
   
   static void moveComponent(final Component c, final Point location) {
-    execute(new GuiQuery<Void>( ) {
-      protected Void executeInEDT() {
+    execute(new GuiTask( ) {
+      protected void executeInEDT() {
         c.setLocation(location);
-        return null;
       }
     });
   }

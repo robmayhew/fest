@@ -31,7 +31,8 @@ import static org.fest.swing.exception.UnexpectedException.unexpected;
 public class GuiActionRunner {
 
   /**
-   * Executes the given query in the event dispatch thread. This method waits until the query has finish its execution.
+   * Executes the given query in the event dispatch thread. This method waits until the query has finished its 
+   * execution.
    * @param <T> the generic type of the return value.
    * @param query the query to execute.
    * @return the result of the query executed in the main thread.
@@ -45,19 +46,33 @@ public class GuiActionRunner {
 
   
   /**
-   * Executes the given task in the event dispatch thread. This method waits until the given condition has been 
-   * satisfied.
+   * Executes the given task in the event dispatch thread. This method waits until the task has finished its execution.
+   * @param task the task to execute.
+   * @throws UnexpectedException wrapping any exception thrown when executing the given task in the event dispatch 
+   * thread.
+   */
+  public static void execute(GuiTask task) {
+    run(task, untilExecuted(task));
+    rethrowCatchedExceptionIn(task);
+  }
+
+  /**
+   * Executes the given task in the event dispatch thread. This method waits until:
+   * <ol>
+   * <li>the task has finished its execution <strong>*and*</strong></li>
+   * <li>the given condition has been satisfied</li>
+   * </ol>
    * @param task the task to execute.
    * @param toWaitFor the condition to meet to finish the execution of the given task.
    * @throws UnexpectedException wrapping any exception thrown when executing the given task in the event dispatch 
    * thread.
    */
   public static void execute(GuiTask task, Condition toWaitFor) {
-    run(task, toWaitFor);
+    run(task, untilExecuted(task), toWaitFor);
     rethrowCatchedExceptionIn(task);
   }
   
-  private static void run(GuiAction action, Condition toWaitFor) {
+  private static void run(GuiAction action, Condition... toWaitFor) {
     if (isEventDispatchThread()) {
       action.run();
     } else {
@@ -76,7 +91,7 @@ public class GuiActionRunner {
    * @param action the given action that may have a catched exception during its execution.
    * @throws UnexpectedException wrapping any catched exception during the execution of the given action.
    */
-  public static void rethrowCatchedExceptionIn(GuiAction action) {
+  static void rethrowCatchedExceptionIn(GuiAction action) {
     Throwable catchedException = action.catchedException();
     if (catchedException != null) throw unexpected(catchedException);
   }

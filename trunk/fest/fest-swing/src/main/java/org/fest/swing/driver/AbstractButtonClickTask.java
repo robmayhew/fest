@@ -17,7 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.AbstractButton;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 
@@ -30,10 +30,9 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 class AbstractButtonClickTask {
   
   static void doClick(final AbstractButton button) {
-    execute(new GuiQuery<Void>() {
-      protected Void executeInEDT() {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         button.doClick();
-        return null;
       }
     });
   }

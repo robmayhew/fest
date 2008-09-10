@@ -17,29 +17,33 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
+import org.fest.swing.core.Condition;
 import org.fest.swing.core.GuiTask;
+
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands a task that selects the element in the given index in the given <code>{@link JComboBox}</code>. This task
- * should be executed in the event dispatch thread.
+ * is executed in the event dispatch thread.
  *
  * @author Alex Ruiz 
  */
-class JComboBoxSelectItemAtIndexTask extends GuiTask {
+final class JComboBoxSelectItemAtIndexTask {
   
-  private final JComboBox comboBox;
-  private final int index;
-
-  static JComboBoxSelectItemAtIndexTask selectItemTask(JComboBox comboBox, int index) {
-    return new JComboBoxSelectItemAtIndexTask(comboBox, index);
+  static void selectItemAtIndex(final JComboBox comboBox, final int index) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        comboBox.setSelectedIndex(index);
+      }
+    }, new Condition(concat("JComboBox's 'selectedIndex' is ", valueOf(index))) {
+      public boolean test() {
+        return comboBox.getSelectedIndex() == index;
+      }
+    });
   }
   
-  private JComboBoxSelectItemAtIndexTask(JComboBox comboBox, int index) {
-    this.comboBox = comboBox;
-    this.index = index;
-  }
-
-  protected void executeInEDT() {
-    comboBox.setSelectedIndex(index);
-  }
+  private JComboBoxSelectItemAtIndexTask() {}
 }

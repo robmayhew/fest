@@ -20,7 +20,7 @@ import java.awt.Component;
 import javax.accessibility.AccessibleAction;
 import javax.swing.Action;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
@@ -38,13 +38,12 @@ class ComponentPerformDefaultAccessibleActionTask {
   private static final int DEFAULT_ACTION_INDEX = 0;
 
   static void performDefaultAccessibleAction(final Component c) {
-    execute(new GuiQuery<Void>() {
-      protected Void executeInEDT() {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         AccessibleAction action = c.getAccessibleContext().getAccessibleAction();
         if (action == null || action.getAccessibleActionCount() == 0)
           throw actionFailure(concat("Unable to perform accessible action for ", format(c)));
         action.doAccessibleAction(DEFAULT_ACTION_INDEX);
-        return null;
       }
     });
   }

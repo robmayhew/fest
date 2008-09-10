@@ -17,7 +17,7 @@ package org.fest.swing.task;
 
 import java.awt.Component;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 
@@ -35,10 +35,9 @@ public final class ComponentRequestFocusTask {
    * @param c the given <code>Component</code>.
    */
   public static void giveFocusTo(final Component c) {
-    execute(new GuiQuery<Void>() {
-      protected Void executeInEDT() {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         c.requestFocusInWindow();
-        return null;
       }
     });
   }

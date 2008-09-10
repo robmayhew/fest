@@ -29,11 +29,10 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 class ActivateWindowTask {
 
   static void activateWindow(final Window w) {
-    execute(new GuiQuery<Void>() {
-      protected Void executeInEDT() {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         // FIXME figure out why two are sometimes needed
         w.toFront(); w.toFront();
-        return null;
       }
     });
   }

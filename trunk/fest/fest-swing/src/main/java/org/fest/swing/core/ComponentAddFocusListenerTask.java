@@ -29,10 +29,9 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 final class ComponentAddFocusListenerTask {
 
   static void addFocusListener(final Component c, final FocusListener l) {
-    execute(new GuiQuery<Void>() {
-      protected Void executeInEDT() {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         c.addFocusListener(l);
-        return null;
       }
     });
   }

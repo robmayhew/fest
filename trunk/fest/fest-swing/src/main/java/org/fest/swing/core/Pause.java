@@ -21,6 +21,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
+import static org.fest.util.Arrays.*;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -34,31 +35,37 @@ public final class Pause {
   private static final int SLEEP_INTERVAL = 10;
 
   /**
-   * Waits until the given condition is <code>true</code>.
+   * Waits until the given condition is satisfied.
    * @param condition the condition to verify.
-   * @throws org.fest.swing.exception.WaitTimedOutError if the wait times out (more than 30 seconds).
+   * @throws NullPointerException if the given condition is <code>null</code>.
+   * @throws WaitTimedOutError if the wait times out (more than 30 seconds).
    */
   public static void pause(Condition condition) {
     pause(condition, DEFAULT_DELAY);
   }
 
   /**
-   * Waits until the given condition is <code>true</code>.
+   * Waits until the given condition is satisfied.
    * @param condition the condition to verify.
    * @param timeout the timeout.
-   * @throws org.fest.swing.exception.WaitTimedOutError if the wait times out.
+   * @throws NullPointerException if the given timeout is <code>null</code>.
+   * @throws NullPointerException if the given condition is <code>null</code>.
+   * @throws WaitTimedOutError if the wait times out.
    */
   public static void pause(Condition condition, Timeout timeout) {
+    if (timeout == null) throw new NullPointerException("The given timeout should not be null");
     pause(condition, timeout.duration());
   }
   
   /**
-   * Waits until the given condition is <code>true</code>.
+   * Waits until the given condition is satisfied.
    * @param condition the condition to verify.
    * @param timeout the timeout (in milliseconds.)
-   * @throws org.fest.swing.exception.WaitTimedOutError if the wait times out.
+   * @throws NullPointerException if the given condition is <code>null</code>.
+   * @throws WaitTimedOutError if the wait times out.
    */
   public static void pause(Condition condition, long timeout) {
+    if (condition == null) throw new NullPointerException("The condition to verify should not be null");
     TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
     while (!condition.test()) {
       if (watch.isTimeOut()) throw new WaitTimedOutError((concat("Timed out waiting for ", condition)));
@@ -66,6 +73,65 @@ public final class Pause {
     }
   }
 
+  /**
+   * Waits until the given conditions are satisfied.
+   * @param conditions the conditions to verify.
+   * @throws NullPointerException if the array of conditions is <code>null</code>.
+   * @throws IllegalArgumentException if the array of conditions is empty.
+   * @throws NullPointerException if the array of conditions has one or more <code>null</code> values.
+   * @throws WaitTimedOutError if the wait times out (more than 30 seconds).
+   */
+  public static void pause(Condition[] conditions) {
+    pause(conditions, DEFAULT_DELAY);
+  }
+
+  /**
+   * Waits until the given conditions are satisfied.
+   * @param conditions the conditions to verify.
+   * @param timeout the timeout.
+   * @throws NullPointerException if the given timeout is <code>null</code>.
+   * @throws NullPointerException if the array of conditions is <code>null</code>.
+   * @throws IllegalArgumentException if the array of conditions is empty.
+   * @throws NullPointerException if the array of conditions has one or more <code>null</code> values.
+   * @throws WaitTimedOutError if the wait times out.
+   */
+  public static void pause(Condition[] conditions, Timeout timeout) {
+    pause(conditions, timeout.duration());
+  }
+  
+  /**
+   * Waits until the given conditions are satisfied.
+   * @param conditions the conditions to verify.
+   * @param timeout the timeout (in milliseconds.)
+   * @throws NullPointerException if the array of conditions is <code>null</code>.
+   * @throws IllegalArgumentException if the array of conditions is empty.
+   * @throws NullPointerException if the array of conditions has one or more <code>null</code> values.
+   * @throws WaitTimedOutError if the wait times out.
+   */
+  public static void pause(Condition[] conditions, long timeout) {
+    validate(conditions);
+    TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
+    while (!areSatisfied(conditions)) {
+      if (watch.isTimeOut()) throw new WaitTimedOutError((concat("Timed out waiting for ", conditions)));
+      pause(SLEEP_INTERVAL);
+    }
+  }
+
+  private static void validate(Condition[] conditions) {
+    if (conditions == null) throw new NullPointerException("The array of conditions to verify should not be null");
+    if (isEmpty(conditions)) 
+      throw new IllegalArgumentException("The array of conditions to verify should not be empty");
+    for (Condition condition : conditions) {
+      if (condition != null) continue; 
+      throw new NullPointerException(concat("The array of conditions <", format(conditions), "> contains null value(s)"));
+    }
+  }
+
+  private static boolean areSatisfied(Condition[] conditions) {
+    for (Condition condition : conditions) if (!condition.test()) return false;
+    return true;
+  }
+  
   /**
    * Sleeps for the specified time. 
    * @param timeout the quantity of time units to sleep.

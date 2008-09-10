@@ -31,9 +31,11 @@ import static org.fest.swing.testing.StopWatch.startNewStopWatch;
  *
  * @author Alex Ruiz
  */
-public class PauseTest {
+@Test public class PauseTest {
 
-  @Test public void shouldSleepForTheGivenTime() {
+  private static final int TIMEOUT = 1000;
+
+  public void shouldSleepForTheGivenTime() {
     StopWatch watch = startNewStopWatch();
     long delay = 2000;
     Pause.pause(delay);
@@ -41,7 +43,7 @@ public class PauseTest {
     assertThat(watch.ellapsedTime() >= delay).isTrue();
   }
   
-  @Test public void shouldSleepForTheGivenTimeInUnits() {
+  public void shouldSleepForTheGivenTimeInUnits() {
     StopWatch watch = startNewStopWatch();
     long delay = 2000;
     Pause.pause(2, TimeUnit.SECONDS);
@@ -54,54 +56,172 @@ public class PauseTest {
     Pause.pause(2, null);
   }
 
-  @Test public void shouldWaitTillConditionIsTrue() {
-    class CustomCondition extends Condition {
-      boolean satisfied;
-      
-      public CustomCondition(String description) {
-        super(description);
-      }
-
-      @Override public boolean test() {
-        try {
-          Thread.sleep(1000);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-        satisfied = true;
-        return satisfied;
-      }
-    };
-    CustomCondition condition = new CustomCondition("Some condition");
+  public void shouldWaitTillConditionIsTrue() {
+    int timeToWaitTillSatisfied = TIMEOUT;
+    SatisfiedCondition condition = new SatisfiedCondition(timeToWaitTillSatisfied);
     StopWatch watch = startNewStopWatch();
     Pause.pause(condition);
     watch.stop();
-    assertThat(watch.ellapsedTime() >= 1000).isTrue();
+    assertThat(watch.ellapsedTime() >= timeToWaitTillSatisfied).isTrue();
     assertThat(condition.satisfied).isTrue();
   }
   
   @Test(expectedExceptions = WaitTimedOutError.class) 
   public void shouldTimeoutIfConditionIsNeverTrue() {
-    Pause.pause(neverSatisfied());
+    Pause.pause(new NeverSatisfiedCondition());
   }
-  
+
   @Test(expectedExceptions = WaitTimedOutError.class)
-  public void shouldTimeoutWithGivenTimeIfConditionIsNeverTrue() {
-    Pause.pause(neverSatisfied(), timeout(100));
+  public void shouldTimeoutWithGivenTimeoutObjectIfConditionIsNeverTrue() {
+    Pause.pause(new NeverSatisfiedCondition(), timeout(TIMEOUT));
+  }
+
+  @Test(expectedExceptions = WaitTimedOutError.class)
+  public void shouldTimeoutWithGivenTimeoutIfConditionIsNeverTrue() {
+    Pause.pause(new NeverSatisfiedCondition(), TIMEOUT);
+  }
+
+  @Test(expectedExceptions = NullPointerException.class) 
+  public void shouldThrowExceptionIfConditionIsNull() {
+    Pause.pause(nullCondition());
+  }
+ 
+  @Test(expectedExceptions = NullPointerException.class) 
+  public void shouldThrowExceptionWithGivenTimeoutObjectIfConditionIsNull() {
+    Pause.pause(nullCondition(), timeout(TIMEOUT));
   }
   
-  private NeverSatisfiedCondition neverSatisfied() {
-    return new NeverSatisfiedCondition("Never satisfied");
+  @Test(expectedExceptions = NullPointerException.class) 
+  public void shouldThrowExceptionIfGivenTimeoutObjectIsNullAndConditionIsNot() {
+    Pause.pause(new NeverSatisfiedCondition(), null);
+  }
+
+  @Test(expectedExceptions = NullPointerException.class) 
+  public void shouldThrowExceptionWithGivenTimeoutIfConditionIsNull() {
+    Pause.pause(nullCondition(), TIMEOUT);
+  }
+
+  private Condition nullCondition() {
+    return null;
+  }
+
+  public void shouldWaitTillConditionsAreTrue() {
+    int timeToWaitTillSatisfied = 1000;
+    SatisfiedCondition one = new SatisfiedCondition(timeToWaitTillSatisfied);
+    SatisfiedCondition two = new SatisfiedCondition(timeToWaitTillSatisfied);
+    StopWatch watch = startNewStopWatch();
+    Pause.pause(new Condition[] { one, two });
+    watch.stop();
+    assertThat(watch.ellapsedTime() >= timeToWaitTillSatisfied).isTrue();
+    assertThat(one.satisfied).isTrue();
+    assertThat(two.satisfied).isTrue();
+  }
+
+  @Test(expectedExceptions = WaitTimedOutError.class) 
+  public void shouldTimeoutIfConditionsAreNeverTrue() {
+    Pause.pause(new Condition[] { new NeverSatisfiedCondition(), new NeverSatisfiedCondition() });
+  }
+
+  @Test(expectedExceptions = WaitTimedOutError.class)
+  public void shouldTimeoutWithGivenTimeoutObjectIfConditionsAreNeverTrue() {
+    Pause.pause(new Condition[] { new NeverSatisfiedCondition(), new NeverSatisfiedCondition() }, timeout(TIMEOUT));
+  }
+
+  @Test(expectedExceptions = WaitTimedOutError.class)
+  public void shouldTimeoutWithGivenTimeoutIfConditionsAreNeverTrue() {
+    Pause.pause(new Condition[] { new NeverSatisfiedCondition(), new NeverSatisfiedCondition() }, TIMEOUT);
+  }
+
+  @Test(expectedExceptions = WaitTimedOutError.class)
+  public void shouldTimeoutWithGivenTimeoutIfOneOfConditionsIsNeverTrue() {
+    Pause.pause(new Condition[] { new SatisfiedCondition(10), new NeverSatisfiedCondition() }, TIMEOUT);
+  }
+
+  @Test(expectedExceptions = NullPointerException.class) 
+  public void shouldThrowExceptionIfConditionArrayIsNull() {
+    Pause.pause(nullConditionArray());
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class) 
+  public void shouldThrowExceptionIfConditionArrayIsEmpty() {
+    Pause.pause(emptyConditionArray());
   }
   
-  private static class NeverSatisfiedCondition extends Condition {
-    public NeverSatisfiedCondition(String description) {
-      super(description);
+  @Test(expectedExceptions = NullPointerException.class) 
+  public void shouldThrowExceptionIfAnyConditionInArrayIsNull() {
+    Pause.pause(new Condition[] { new NeverSatisfiedCondition(), null });
+  }
+
+  @Test(expectedExceptions = NullPointerException.class) 
+  public void shouldThrowExceptionWithGivenTimeoutObjectIfConditionArrayIsNull() {
+    Pause.pause(nullConditionArray(), timeout(TIMEOUT));
+  }
+  
+  @Test(expectedExceptions = IllegalArgumentException.class) 
+  public void shouldThrowExceptionWithGivenTimeoutObjectIfConditionArrayIsEmpty() {
+    Pause.pause(emptyConditionArray(), timeout(TIMEOUT));
+  }
+  
+  @Test(expectedExceptions = NullPointerException.class) 
+  public void shouldThrowExceptionWithGivenTimeoutObjectIfAnyConditionInArrayIsNull() {
+    Pause.pause(new Condition[] { new NeverSatisfiedCondition(), null }, timeout(TIMEOUT));
+  }
+
+  @Test(expectedExceptions = NullPointerException.class) 
+  public void shouldThrowExceptionIfGivenTimeoutObjectIsNullAndConditionArrayIsNot() {
+    Pause.pause(new Condition[] { new NeverSatisfiedCondition() }, null);
+  }
+
+  @Test(expectedExceptions = NullPointerException.class) 
+  public void shouldThrowExceptionWithGivenTimeoutIfConditionArrayIsNull() {
+    Pause.pause(nullConditionArray(), TIMEOUT);
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class) 
+  public void shouldThrowExceptionWithGivenTimeoutIfConditionArrayIsEmpty() {
+    Pause.pause(emptyConditionArray(), TIMEOUT);
+  }
+  
+  @Test(expectedExceptions = NullPointerException.class) 
+  public void shouldThrowExceptionWithGivenTimeoutIfAnyConditionInArrayIsNull() {
+    Pause.pause(new Condition[] { new NeverSatisfiedCondition(), null }, TIMEOUT);
+  }
+
+  private Condition[] nullConditionArray() {
+    return null;
+  }
+
+  private Condition[] emptyConditionArray() {
+    return new Condition[0];
+  }
+
+  private static class SatisfiedCondition extends Condition {
+    boolean satisfied;
+    private final int timeToWaitTillSatisfied;
+    
+    public SatisfiedCondition(int timeToWaitTillSatisfied) {
+      super("Satisfied condition");
+      this.timeToWaitTillSatisfied = timeToWaitTillSatisfied;
     }
 
-    @Override public boolean test() {
+    public boolean test() {
+      try {
+        Thread.sleep(timeToWaitTillSatisfied);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      satisfied = true;
+      return satisfied;
+    }
+  };
+  
+  private static class NeverSatisfiedCondition extends Condition {
+    public NeverSatisfiedCondition() {
+      super("Never satisfied");
+    }
+
+    public boolean test() {
       return false;
     }
   };    
-
 }
