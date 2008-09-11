@@ -19,27 +19,23 @@ import javax.swing.JComboBox;
 
 import org.fest.swing.core.GuiTask;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
- * Understands a task that shows/hides the drop-down menu of a <code>{@link JComboBox}</code>. This task should be 
- * executed in the event dispatch thread.
- *
+ * Understands a task that shows/hides the drop-down menu of a <code>{@link JComboBox}</code>. This task is executed in
+ * the event dispatch thread.
+ * 
  * @author Alex Ruiz
  */
-class JComboBoxSetDropDownVisibleTask extends GuiTask {
+final class JComboBoxSetPopupVisibleTask {
   
-  private final JComboBox comboBox;
-  private final boolean visible;
-
-  static JComboBoxSetDropDownVisibleTask setDropDownVisibleTask(JComboBox comboBox, boolean visible) {
-    return new JComboBoxSetDropDownVisibleTask(comboBox, visible);
+  static void setPopupVisible(final JComboBox comboBox, final boolean visible) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        comboBox.getUI().setPopupVisible(comboBox, visible);
+      }
+    });
   }
   
-  private JComboBoxSetDropDownVisibleTask(JComboBox comboBox, boolean visible) {
-    this.comboBox = comboBox;
-    this.visible = visible;
-  }
-
-  protected void executeInEDT() {
-    comboBox.getUI().setPopupVisible(comboBox, visible);
-  }
+  private JComboBoxSetPopupVisibleTask() {}
 }
