@@ -125,5 +125,6 @@ public class JMenuItemDriver extends JComponentDriver {
 
   private void clickMenuInMacOSMenuBar(JMenuItem menuItem) {
     AbstractButtonClickTask.doClick(menuItem);
+    robot.waitForIdle();
   }
 }

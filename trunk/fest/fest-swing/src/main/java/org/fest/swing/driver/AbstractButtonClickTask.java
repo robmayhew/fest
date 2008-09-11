@@ -27,7 +27,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  *
  * @author Alex Ruiz
  */
-class AbstractButtonClickTask {
+final class AbstractButtonClickTask {
   
   static void doClick(final AbstractButton button) {
     execute(new GuiTask() {
