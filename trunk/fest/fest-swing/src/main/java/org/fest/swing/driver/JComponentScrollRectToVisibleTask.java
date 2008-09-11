@@ -21,27 +21,23 @@ import javax.swing.JComponent;
 
 import org.fest.swing.core.GuiTask;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
  * Understands a request to scroll a <code>{@link JComponent}</code>'s parent to a visible
- * <code>{@link Rectangle}</code>. This task should be executed in the event dispatch thread.
- *
+ * <code>{@link Rectangle}</code>. This task is executed in the event dispatch thread.
+ * 
  * @author Alex Ruiz
  */
-class JComponentScrollRectToVisibleTask extends GuiTask {
+final class JComponentScrollRectToVisibleTask {
 
-  private final JComponent component;
-  private final Rectangle visibleRectangle;
-
-  static JComponentScrollRectToVisibleTask scrollRectToVisibleTask(JComponent component, Rectangle visibleRectangle) {
-    return new JComponentScrollRectToVisibleTask(component, visibleRectangle);
+  static void scrollRectToVisible(final JComponent c, final Rectangle visible) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        c.scrollRectToVisible(visible);
+      }
+    });
   }
   
-  private JComponentScrollRectToVisibleTask(JComponent component, Rectangle visibleRectangle) {
-    this.component = component;
-    this.visibleRectangle = visibleRectangle;
-  }
-
-  protected void executeInEDT() {
-    component.scrollRectToVisible(visibleRectangle);
-  }
+  private JComponentScrollRectToVisibleTask() {}
 }
