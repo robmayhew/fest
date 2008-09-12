@@ -31,3 +31,5 @@ locale
 linux
 circa
 hexadecimal
+apr
+apache
