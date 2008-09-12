@@ -13,34 +13,39 @@
  * 
  * Copyright @2007-2008 the original author or authors.
  */
-package org.fest.swing.hierarchy;
+package org.fest.swing.testing;
 
 import java.awt.Dimension;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
+import javax.swing.UIManager;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 
-import org.fest.swing.testing.TestWindow;
 
 /**
  * Understands an MDI frame.
  *
  * @author Alex Ruiz
  */
-public class MDIFrame extends TestWindow {
+public class MDITestWindow extends TestWindow {
 
   private static final long serialVersionUID = 1L;
 
-  public static MDIFrame showInTest(Class<?> testClass) {
-    MDIFrame frame = new MDIFrame(testClass);
-    frame.display();
-    return frame;
+  public static MDITestWindow showInTest(Class<?> testClass) {
+    MDITestWindow window = createNew(testClass);
+    window.display(new Dimension(500, 300));
+    return window;
+  }
+
+  public static MDITestWindow createNew(Class<?> testClass) {
+    return new MDITestWindow(testClass);
   }
   
   private JDesktopPane desktop;
   private JInternalFrame internalFrame;
 
-  public MDIFrame(Class<?> testClass) {
+  private MDITestWindow(Class<?> testClass) {
     super(testClass);
   }
 
@@ -58,7 +63,13 @@ public class MDIFrame extends TestWindow {
     internalFrame.setVisible(true);
   }
 
-  @Override protected void chooseLookAndFeel() {}
+  @Override protected void chooseLookAndFeel() {
+    try {
+      UIManager.setLookAndFeel(new MetalLookAndFeel());
+    } catch (Exception ignored) {
+      ignored.printStackTrace();
+    }
+  }
 
   public JDesktopPane desktop() { return desktop; }
   public JInternalFrame internalFrame() { return internalFrame; }

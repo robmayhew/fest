@@ -17,7 +17,10 @@ package org.fest.swing.driver;
 
 import javax.swing.JInternalFrame;
 
+import org.fest.swing.core.Condition;
 import org.fest.swing.core.GuiTask;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Understands a task that closes a <code>{@link JInternalFrame}</code>. This task should be executed in the event 
@@ -25,19 +28,19 @@ import org.fest.swing.core.GuiTask;
  *
  * @author Yvonne Wang
  */
-class JInternalFrameCloseTask extends GuiTask {
+final class JInternalFrameCloseTask {
 
-  private final JInternalFrame internalFrame;
-
-  static JInternalFrameCloseTask closeTask(JInternalFrame internalFrame) {
-    return new JInternalFrameCloseTask(internalFrame);
+  static void close(final JInternalFrame internalFrame) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        internalFrame.doDefaultCloseAction();
+      }
+    }, new Condition("JInternalFrame is closed") {
+      public boolean test() {
+        return !internalFrame.isVisible();
+      }
+    });
   }
   
-  private JInternalFrameCloseTask(JInternalFrame internalFrame) {
-    this.internalFrame = internalFrame;
-  }
-
-  protected void executeInEDT() {
-    internalFrame.doDefaultCloseAction();
-  }
+  private JInternalFrameCloseTask() {}
 }

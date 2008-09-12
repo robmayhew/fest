@@ -28,6 +28,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.factory.JMenus;
+import org.fest.swing.testing.MDITestWindow;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
@@ -35,7 +36,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.hierarchy.ContainerComponentsQuery.componentsOf;
 import static org.fest.swing.hierarchy.JFrameContentPaneQuery.contentPaneOf;
 import static org.fest.swing.hierarchy.JInternalFrameIconifyTask.iconify;
-import static org.fest.swing.hierarchy.MDIFrame.showInTest;
+import static org.fest.swing.testing.MDITestWindow.showInTest;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -60,13 +61,13 @@ public class ChildrenFinderTest {
   }
 
   @Test(groups = GUI) public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() {
-    MDIFrame frame = showInTest(getClass());
-    iconify(frame.internalFrame());
-    JDesktopPane desktop = frame.desktop();
+    MDITestWindow window = showInTest(getClass());
+    iconify(window.internalFrame());
+    JDesktopPane desktop = window.desktop();
     try {
       assertThat(finder.childrenOf(desktop)).containsOnly(childrenOf(desktop));
     } finally {
-      frame.destroy();
+      window.destroy();
     }
   }
 

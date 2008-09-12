@@ -187,8 +187,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     if (!isClosable(internalFrame))
       throw actionFailure(concat("The JInternalFrame <", format(internalFrame), "> is not closable"));
     // This is LAF-specific, so it must be done programmatically.
-    Point p = closeLocation(internalFrame);
-    robot.moveMouse(internalFrame, p.x, p.y);
-    robot.invokeAndWait(JInternalFrameCloseTask.closeTask(internalFrame));
+    robot.moveMouse(internalFrame, closeLocation(internalFrame));
+    JInternalFrameCloseTask.close(internalFrame);
   }
 }

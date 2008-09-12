@@ -15,39 +15,36 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JInternalFrame;
-
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.testing.MDITestWindow;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JInternalFrameCloseTask}</code>.
  *
  * @author Yvonne Wang
  */
-@Test public class JInternalFrameCloseTaskTest {
+@Test(groups = { GUI, EDT_ACTION }) 
+public class JInternalFrameCloseTaskTest {
 
-  private JInternalFrame internalFrame;
-
+  private MDITestWindow window;
+  
   @BeforeMethod public void setUp() {
-    internalFrame = createMock(JInternalFrame.class);
+    window = MDITestWindow.showInTest(getClass());
+    assertThat(window.internalFrame().isVisible()).isTrue();
+  }
+  
+  @AfterMethod public void tearDown() {
+    window.destroy();
   }
 
   public void shouldCloseJInternalFrame() {
-    new EasyMockTemplate(internalFrame) {
-      protected void expectations() {
-        internalFrame.doDefaultCloseAction();
-        expectLastCall().once();
-      }
-
-      protected void codeToTest() {
-        JInternalFrameCloseTask.closeTask(internalFrame).executeInEDT();
-      }
-    }.run();
+    JInternalFrameCloseTask.close(window.internalFrame());
+    assertThat(window.internalFrame().isVisible()).isFalse();
   }
 }

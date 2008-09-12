@@ -22,10 +22,12 @@ import java.util.Collection;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.testing.MDITestWindow;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.hierarchy.JInternalFrameIconifyTask.iconify;
-import static org.fest.swing.hierarchy.MDIFrame.showInTest;
+import static org.fest.swing.testing.MDITestWindow.showInTest;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -52,13 +54,13 @@ import static org.fest.swing.testing.TestGroups.GUI;
   
   @Test(groups = GUI) 
   public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() {
-    MDIFrame frame = showInTest(getClass());
-    iconify(frame.internalFrame());
-    Collection<Component> children = finder.nonExplicitChildrenOf(frame.desktop());
+    MDITestWindow window = showInTest(getClass());
+    iconify(window.internalFrame());
+    Collection<Component> children = finder.nonExplicitChildrenOf(window.desktop());
     try {
-      assertThat(children).containsOnly(frame.internalFrame());
+      assertThat(children).containsOnly(window.internalFrame());
     } finally {
-      frame.destroy();
+      window.destroy();
     }
   }
 }
