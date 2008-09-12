@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="fest-template" default="all" basedir="." xmlns:artifact="urn:maven-artifact-ant">
+<project name="fest-template" default="test-report" basedir="." xmlns:artifact="urn:maven-artifact-ant">
 
   <property name="src.dir" value="${basedir}/src" />
   <property name="src.main" value="${src.dir}/main" />
@@ -128,7 +128,7 @@
   </target>
 
   <target name="test-report" depends="compile">
-    <testng outputDir="${target.test.results.dir}" haltOnFailure="true" verbose="2" 
+    <testng outputDir="${target.test.results.dir}" haltOnFailure="true" verbose="10" 
       listeners="org.uncommons.reportng.HTMLReporter">
       <classpath location="${target.test.classes.dir}" />
       <classpath location="${target.classes.dir}" />

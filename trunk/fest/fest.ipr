@@ -2,6 +2,62 @@
 <project relativePaths="false" version="4">
   <component name="AntConfiguration">
     <defaultAnt bundledAnt="true" />
+    <buildFile url="file://$PROJECT_DIR$/fest-assert/ant-build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/fest-mocks/ant-build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/fest-reflect/ant-build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/fest-swing/ant-build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/fest-swing-junit/ant-build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/fest-swing-testng/ant-build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/fest-test/ant-build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/fest-util/ant-build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
@@ -314,7 +370,7 @@
       <module fileurl="file://$PROJECT_DIR$/fest-assert/fest-assert.iml" filepath="$PROJECT_DIR$/fest-assert/fest-assert.iml" />
       <module fileurl="file://$PROJECT_DIR$/fest-mocks/fest-mocks.iml" filepath="$PROJECT_DIR$/fest-mocks/fest-mocks.iml" />
       <module fileurl="file://$PROJECT_DIR$/fest-reflect/fest-reflect.iml" filepath="$PROJECT_DIR$/fest-reflect/fest-reflect.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fest-swing/fest-swing.iml" filepath="$PROJECT_DIR$/fest-swing/fest-swing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fest-swing/fest-swing.iml" filepath="$PROJECT_DIR$/fest-swing/fest-swing.iml" group="FEST-Swing" />
       <module fileurl="file://$PROJECT_DIR$/fest-swing-costello/fest-swing-costello.iml" filepath="$PROJECT_DIR$/fest-swing-costello/fest-swing-costello.iml" />
       <module fileurl="file://$PROJECT_DIR$/fest-swing-demo/fest-swing-demo.iml" filepath="$PROJECT_DIR$/fest-swing-demo/fest-swing-demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/fest-swing-groovy/fest-swing-groovy.iml" filepath="$PROJECT_DIR$/fest-swing-groovy/fest-swing-groovy.iml" />
@@ -440,6 +496,9 @@
     <option name="AUTOSCROLL_MODE" value="true" />
     <option name="AUTOSCROLL_FROM_SOURCE" value="false" />
     <option name="ACTIVE_ACTIONS" value="" />
+  </component>
+  <component name="SvnBranchConfigurationManager">
+    <option name="myVersion" value="123" />
   </component>
   <component name="SvnConfiguration">
     <option name="USER" value="" />
