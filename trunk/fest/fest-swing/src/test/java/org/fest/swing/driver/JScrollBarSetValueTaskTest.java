@@ -17,40 +17,59 @@ package org.fest.swing.driver;
 
 import javax.swing.JScrollBar;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.testing.TestWindow;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
+import static java.awt.Adjustable.HORIZONTAL;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JScrollBarSetValueTask}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JScrollBarSetValueTaskTest {
+@Test(groups = { GUI, EDT_ACTION }) 
+public class JScrollBarSetValueTaskTest {
 
-  private JScrollBar scrollBar;
+  private MyWindow window;
   private int value;
 
   @BeforeMethod public void setUp() {
-    scrollBar = createMock(JScrollBar.class);
-    value = 8;
+    window = MyWindow.createNew();
+    window.display();
+    value = 6;
+  }
+  
+  @AfterMethod public void tearDown() {
+    window.destroy();
   }
   
   public void shouldSetValueOfJScrollBar() {
-    new EasyMockTemplate(scrollBar) {
-      protected void expectations() {
-        scrollBar.setValue(value);
-        expectLastCall().once();
-      }
-
-      protected void codeToTest() {
-        JScrollBarSetValueTask.setValueTask(scrollBar, value).executeInEDT();
-      }
-    }.run();
+    JScrollBarSetValueTask.setValue(window.scrollBar, value);
+    assertThat(window.scrollBar.getValue()).isEqualTo(value);
   }
 
+  private static class MyWindow extends TestWindow {
+    
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final JScrollBar scrollBar = new JScrollBar(HORIZONTAL);
+    
+    private MyWindow() {
+      super(JScrollBarSetValueTaskTest.class);
+      scrollBar.setMinimum(2);
+      scrollBar.setMaximum(20);
+      scrollBar.setValue(8);
+      addComponents(scrollBar);
+    }
+  }
 }

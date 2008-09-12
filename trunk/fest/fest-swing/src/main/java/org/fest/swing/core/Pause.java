@@ -112,7 +112,7 @@ public final class Pause {
     validate(conditions);
     TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
     while (!areSatisfied(conditions)) {
-      if (watch.isTimeOut()) throw new WaitTimedOutError((concat("Timed out waiting for ", conditions)));
+      if (watch.isTimeOut()) throw new WaitTimedOutError((concat("Timed out waiting for ", format(conditions))));
       pause(SLEEP_INTERVAL);
     }
   }

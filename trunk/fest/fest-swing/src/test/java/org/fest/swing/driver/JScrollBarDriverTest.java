@@ -32,7 +32,7 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.JScrollBarSetValueTask.setValueTask;
+import static org.fest.swing.driver.JScrollBarSetValueTask.setValue;
 import static org.fest.swing.driver.JScrollBarValueQuery.valueOf;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -45,6 +45,8 @@ import static org.fest.util.Strings.concat;
  */
 @Test(groups = GUI)
 public class JScrollBarDriverTest {
+
+  static final int MINIMUM = 10;
 
   private Robot robot;
   private JScrollBar scrollBar;
@@ -63,12 +65,12 @@ public class JScrollBarDriverTest {
   }
 
   public void shouldPassIfValueIsEqualToExpected() {
-    setValueTask(scrollBar, 30);
+    setValue(scrollBar, 30);
     driver.requireValue(scrollBar, 30);
   }
   
   public void shouldFailIfValueIsNotEqualToExpected() {
-    setValueTask(scrollBar, 30);
+    setValue(scrollBar, 30);
     try {
       driver.requireValue(scrollBar, 20);
       fail();
@@ -297,7 +299,8 @@ public class JScrollBarDriverTest {
   }
 
   private void clearAndDisableScrollBar() {
-    setValueTask(scrollBar, 0);
+    // TODO consolidate in one task
+    setValue(scrollBar, MINIMUM);
     disable(scrollBar);
   }
 
@@ -316,7 +319,7 @@ public class JScrollBarDriverTest {
       scrollBar.setPreferredSize(new Dimension(20, 100));
       scrollBar.setBlockIncrement(10);
       scrollBar.setValue(30);
-      scrollBar.setMinimum(10);
+      scrollBar.setMinimum(MINIMUM);
       scrollBar.setMaximum(80);
       setPreferredSize(new Dimension(60, 200));
     }

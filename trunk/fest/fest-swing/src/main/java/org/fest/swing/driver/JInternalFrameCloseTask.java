@@ -23,9 +23,9 @@ import org.fest.swing.core.GuiTask;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands a task that closes a <code>{@link JInternalFrame}</code>. This task should be executed in the event 
- * dispatch thread.
- *
+ * Understands a task that closes a <code>{@link JInternalFrame}</code>. This task is executed in the event dispatch
+ * thread.
+ * 
  * @author Yvonne Wang
  */
 final class JInternalFrameCloseTask {

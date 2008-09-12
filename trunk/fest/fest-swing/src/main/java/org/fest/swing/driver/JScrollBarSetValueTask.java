@@ -17,29 +17,33 @@ package org.fest.swing.driver;
 
 import javax.swing.JScrollBar;
 
+import org.fest.swing.core.Condition;
 import org.fest.swing.core.GuiTask;
 
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.util.Strings.concat;
+
 /**
- * Understands a task that sets the value of a <code>{@link JScrollBar}</code>.This task should be executed in the event 
+ * Understands a task that sets the value of a <code>{@link JScrollBar}</code>.This task is executed in the event
  * dispatch thread.
- *
- * @author Alex Ruiz 
+ * 
+ * @author Alex Ruiz
  */
-class JScrollBarSetValueTask extends GuiTask {
+final class JScrollBarSetValueTask {
   
-  private final JScrollBar scrollBar;
-  private final int value;
-
-  static JScrollBarSetValueTask setValueTask(JScrollBar scrollBar, int value) {
-    return new JScrollBarSetValueTask(scrollBar, value);
+  static void setValue(final JScrollBar scrollBar, final int value) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        scrollBar.setValue(value);
+      }
+    }, new Condition(concat("JScrollBar value is ", valueOf(value))) {
+      public boolean test() {
+        return !scrollBar.getValueIsAdjusting() && scrollBar.getValue() == value;
+      }
+    });
   }
   
-  private JScrollBarSetValueTask(JScrollBar scrollBar, int value) {
-    this.scrollBar = scrollBar;
-    this.value = value;
-  }
-
-  protected void executeInEDT() {
-    scrollBar.setValue(value);
-  }
+  private JScrollBarSetValueTask() {}
 }

@@ -24,7 +24,7 @@ import org.fest.swing.exception.ActionFailedException;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.JScrollBarBlockIncrementQuery.blockIncrementOf;
 import static org.fest.swing.driver.JScrollBarMinAndMaxQuery.minAndMaxOf;
-import static org.fest.swing.driver.JScrollBarSetValueTask.setValueTask;
+import static org.fest.swing.driver.JScrollBarSetValueTask.setValue;
 import static org.fest.swing.driver.JScrollBarUnitIncrementQuery.unitIncrementOf;
 import static org.fest.swing.driver.JScrollBarValueQuery.valueOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
@@ -154,7 +154,7 @@ public class JScrollBarDriver extends JComponentDriver {
    * @param position the position to scroll to.
    * @throws ActionFailedException if the given position is not within the <code>JScrollBar</code> bounds.
    */
-  public void scrollTo(JScrollBar scrollBar, final int position) {
+  public void scrollTo(JScrollBar scrollBar, int position) {
     validatePosition(scrollBar, position);
     if (!isEnabled(scrollBar)) return;
     Point thumb = location.thumbLocation(scrollBar, valueOf(scrollBar));
@@ -174,7 +174,7 @@ public class JScrollBarDriver extends JComponentDriver {
   }
   
   private void setValueProperty(JScrollBar scrollBar, int value) {
-    robot.invokeLater(scrollBar, setValueTask(scrollBar, value));
+    setValue(scrollBar, value);
     robot.waitForIdle();
   }
 
