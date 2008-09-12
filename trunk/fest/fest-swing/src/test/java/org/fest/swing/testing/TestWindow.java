@@ -18,6 +18,7 @@ package org.fest.swing.testing;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Point;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -28,6 +29,7 @@ import org.fest.swing.task.WindowDestroyTask;
 import static javax.swing.SwingUtilities.invokeLater;
 
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.testing.TestWindow.WindowIsDisplayedCondition.untilIsShowing;
 
 /**
  * Understands the base window for all GUI tests.
@@ -36,7 +38,10 @@ import static org.fest.swing.core.Pause.pause;
  */
 public class TestWindow extends JFrame {
 
+
   private static final long serialVersionUID = 1L;
+
+  static final Point DEFAULT_LOCATION = new Point(100, 100);
 
   public static TestWindow showNewInTest(final Class<?> testClass) {
     TestWindow window = create(testClass);
@@ -61,9 +66,17 @@ public class TestWindow extends JFrame {
   public void addComponents(Component...components) {
     for (Component c : components) add(c);
   }
-  
+    
   public void display() {
-    display(new Dimension(400, 200));
+    invokeLater(new Runnable() {
+      public void run() {
+        beforeDisplayed();
+        pack();
+        setLocation(DEFAULT_LOCATION);
+        setVisible(true);
+      }
+    });
+    pause(untilIsShowing(this));
   }
   
   public void display(final Dimension size) {
@@ -72,15 +85,11 @@ public class TestWindow extends JFrame {
         beforeDisplayed();
         setPreferredSize(size);
         pack();
-        setLocation(100, 100);
+        setLocation(DEFAULT_LOCATION);
         setVisible(true);
       }
     });
-    pause(new Condition("window is displayed") {
-      public boolean test() {
-        return TestWindow.this.isShowing();
-      }
-    });
+    pause(untilIsShowing(this));
   }
   
   protected void beforeDisplayed() {}
@@ -99,5 +108,23 @@ public class TestWindow extends JFrame {
   
   public void destroy() {
     WindowDestroyTask.destroy(this);
+  }
+
+
+  static class WindowIsDisplayedCondition extends Condition {
+    private final TestWindow window;
+
+    static Condition untilIsShowing(TestWindow window) {
+      return new WindowIsDisplayedCondition(window);
+    }
+    
+    private WindowIsDisplayedCondition(TestWindow window) {
+      super("Window is displayed");
+      this.window = window;
+    }
+
+    public boolean test() {
+      return window.isShowing();
+    }
   }
 }

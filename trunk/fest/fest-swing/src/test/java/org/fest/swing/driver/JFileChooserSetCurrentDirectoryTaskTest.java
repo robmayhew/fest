@@ -16,42 +16,72 @@
 package org.fest.swing.driver;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Condition;
+import org.fest.swing.testing.TestWindow;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.exception.UnexpectedException.unexpected;
+import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.util.Files.temporaryFolder;
 
 /**
  * Tests for <code>{@link JFileChooserSetCurrentDirectoryTask}</code>.
  *
  * @author Yvonne Wang
  */
-@Test public class JFileChooserSetCurrentDirectoryTaskTest {
+@Test(groups = { GUI, EDT_ACTION }) 
+public class JFileChooserSetCurrentDirectoryTaskTest {
 
-  private JFileChooser fileChooser;
-  private File dir;
-
+  private MyWindow window;
+  private File directoryToSelect;
+  
   @BeforeMethod public void setUp() {
-    fileChooser = createMock(JFileChooser.class);
-    dir = createMock(File.class);
+    directoryToSelect = temporaryFolder();
+    window = MyWindow.createNew();
+    window.display();
   }
 
-  public void shouldReturnApproveButtonTextFromJFileChooser() {
-    new EasyMockTemplate(fileChooser) {
-      protected void expectations() {
-        fileChooser.setCurrentDirectory(dir);
-        expectLastCall().once();
-      }
+  @AfterMethod public void tearDown() {
+    window.destroy();
+  }
 
-      protected void codeToTest() {
-        JFileChooserSetCurrentDirectoryTask.setCurrentDirectoryTask(fileChooser, dir).executeInEDT();
+  public void shouldSetCurrentDirectory() {
+    JFileChooserSetCurrentDirectoryTask.setCurrentDir(window.fileChooser, directoryToSelect);
+    pause(new Condition("Directory is selected") {
+      public boolean test() {
+        return canonicalPathOf(window.fileChooser.getCurrentDirectory()).equals(canonicalPathOf(directoryToSelect));
       }
-    }.run();
+    });
+  }
+  
+  private static String canonicalPathOf(File file) {
+    try {
+      return file.getCanonicalPath();
+    } catch (IOException e) {
+      throw unexpected(e);
+    }
+  }
+  
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final JFileChooser fileChooser = new JFileChooser();
+    
+    private MyWindow() {
+      super(JFileChooserSelectFileTask.class);
+      add(fileChooser);
+    }
   }
 }

@@ -21,27 +21,23 @@ import javax.swing.JFileChooser;
 
 import org.fest.swing.core.GuiTask;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
- * Understands a task that sets the current directory in a <code>{@link JFileChooser}</code>. This task should be 
- * executed in the event dispatch thread.
- *
+ * Understands a task that sets the current directory in a <code>{@link JFileChooser}</code>. This task is executed in
+ * the event dispatch thread.
+ * 
  * @author Yvonne Wang
  */
-class JFileChooserSetCurrentDirectoryTask extends GuiTask {
+final class JFileChooserSetCurrentDirectoryTask {
 
-  private final JFileChooser fileChooser;
-  private final File dir;
-
-  static JFileChooserSetCurrentDirectoryTask setCurrentDirectoryTask(JFileChooser fileChooser, File dir) {
-    return new JFileChooserSetCurrentDirectoryTask(fileChooser, dir);
+  static void setCurrentDir(final JFileChooser fileChooser, final File dir) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        fileChooser.setCurrentDirectory(dir);
+      }
+    });
   }
   
-  private JFileChooserSetCurrentDirectoryTask(JFileChooser fileChooser, File dir) {
-    this.fileChooser = fileChooser;
-    this.dir = dir;
-  }
-
-  protected void executeInEDT() {
-    fileChooser.setCurrentDirectory(dir);
-  }
+  private JFileChooserSetCurrentDirectoryTask() {}
 }

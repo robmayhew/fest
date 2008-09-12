@@ -21,27 +21,23 @@ import javax.swing.JFileChooser;
 
 import org.fest.swing.core.GuiTask;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
- * Understands a task that selects a file in a <code>{@link JFileChooser}</code>. This task should be executed in the
- * event dispatch thread.
- *
+ * Understands a task that selects a file in a <code>{@link JFileChooser}</code>. This task is executed in the event
+ * dispatch thread.
+ * 
  * @author Alex Ruiz
  */
-class JFileChooserSelectFileTask extends GuiTask {
+final class JFileChooserSelectFileTask {
 
-  private final JFileChooser fileChooser;
-  private final File file;
-
-  static JFileChooserSelectFileTask selectFileTask(JFileChooser fileChooser, File file) {
-    return new JFileChooserSelectFileTask(fileChooser, file);
+  static void setSelectedFile(final JFileChooser fileChooser, final File file) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        fileChooser.setSelectedFile(file);
+      }
+    });
   }
   
-  private JFileChooserSelectFileTask(JFileChooser fileChooser, File file) {
-    this.fileChooser = fileChooser;
-    this.file = file;
-  }
-
-  protected void executeInEDT() {
-    fileChooser.setSelectedFile(file);
-  }
+  private JFileChooserSelectFileTask() {}
 }

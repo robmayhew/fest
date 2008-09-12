@@ -19,39 +19,60 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Condition;
+import org.fest.swing.testing.TestWindow;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.util.Files.*;
 
 /**
  * Tests for <code>{@link JFileChooserSelectFileTask}</code>.
  *
  * @author Yvonne Wang
  */
-@Test public class JFileChooserSelectFileTaskTest {
+@Test(groups = { GUI, EDT_ACTION }) 
+public class JFileChooserSelectFileTaskTest {
 
-  private JFileChooser fileChooser;
-  private File file;
-
+  private MyWindow window;
+  private File fileToSelect;
+  
   @BeforeMethod public void setUp() {
-    fileChooser = createMock(JFileChooser.class);
-    file = createMock(File.class);
+    fileToSelect = newTemporaryFile();
+    window = MyWindow.createNew();
+    window.display();
   }
 
-  public void shouldReturnApproveButtonTextFromJFileChooser() {
-    new EasyMockTemplate(fileChooser) {
-      protected void expectations() {
-        fileChooser.setSelectedFile(file);
-        expectLastCall().once();
+  @AfterMethod public void tearDown() {
+    window.destroy();
+    fileToSelect.delete();
+  }
+  
+  public void shouldSelectFile() {
+    JFileChooserSelectFileTask.setSelectedFile(window.fileChooser, fileToSelect);
+    pause(new Condition("File is selected") {
+      public boolean test() {
+        return window.fileChooser.getSelectedFile() == fileToSelect;
       }
+    });
+  }
+  
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
 
-      protected void codeToTest() {
-        JFileChooserSelectFileTask.selectFileTask(fileChooser, file).executeInEDT();
-      }
-    }.run();
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final JFileChooser fileChooser = new JFileChooser(temporaryFolder());
+    
+    private MyWindow() {
+      super(JFileChooserSelectFileTask.class);
+      add(fileChooser);
+    }
   }
 }

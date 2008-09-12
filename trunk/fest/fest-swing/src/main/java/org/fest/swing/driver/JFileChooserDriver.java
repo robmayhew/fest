@@ -31,8 +31,8 @@ import static org.fest.swing.core.matcher.JButtonByTextMatcher.withTextAndShowin
 import static org.fest.swing.driver.JFileChooserApproveButtonTextQuery.approveButtonTextFrom;
 import static org.fest.swing.driver.JFileChooserCancelButtonTextQuery.cancelButtonText;
 import static org.fest.swing.driver.JFileChooserFileSelectionModeQuery.fileSelectionModeOf;
-import static org.fest.swing.driver.JFileChooserSelectFileTask.selectFileTask;
-import static org.fest.swing.driver.JFileChooserSetCurrentDirectoryTask.setCurrentDirectoryTask;
+import static org.fest.swing.driver.JFileChooserSelectFileTask.setSelectedFile;
+import static org.fest.swing.driver.JFileChooserSetCurrentDirectoryTask.setCurrentDir;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.*;
 
@@ -67,13 +67,17 @@ public class JFileChooserDriver extends JComponentDriver {
    * a directory.
    */
   public void selectFile(JFileChooser fileChooser, File file) {
+    validateFileToChoose(fileChooser, file);
+    setSelectedFile(fileChooser, file);
+  }
+
+  private void validateFileToChoose(JFileChooser fileChooser, File file) {
     int mode = fileSelectionModeOf(fileChooser);
     boolean isFolder = file.isDirectory();
     if (mode == FILES_ONLY && isFolder)
       throw cannotSelectFile(file, "the file chooser cannot open directories");
     if (mode == DIRECTORIES_ONLY && !isFolder)
       throw cannotSelectFile(file, "the file chooser can only open directories");
-    robot.invokeAndWait(selectFileTask(fileChooser, file));
   }
 
   private ActionFailedException cannotSelectFile(File file, String reason) {
@@ -86,7 +90,7 @@ public class JFileChooserDriver extends JComponentDriver {
    * @param dir the directory to set as current.
    */
   public void setCurrentDirectory(JFileChooser fileChooser, File dir) {
-    robot.invokeAndWait(setCurrentDirectoryTask(fileChooser, dir));
+    setCurrentDir(fileChooser, dir);
   }
 
   /**
