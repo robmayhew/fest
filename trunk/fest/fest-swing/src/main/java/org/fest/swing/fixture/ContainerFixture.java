@@ -856,17 +856,61 @@ public abstract class ContainerFixture<T extends Container> extends JPopupMenuIn
     return new JTreeFixture(robot, findByName(name, JTree.class));
   }
 
+  /**
+   * Finds a component by type, contained in this fixture's <code>{@link Container}</code>.
+   * @param <C> the generic type of the component to find.
+   * @param type the type of component to find.
+   * @return the found component.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
+   */
   protected final <C extends Component> C findByType(Class<C> type) {
     return finder().findByType(target, type, requireShowing());
   }
 
+  /**
+   * Finds a component by name and type, contained in this fixture's <code>{@link Container}</code>.
+   * @param <C> the generic type of the component to find.
+   * @param name the name of the component to find.
+   * @param type the type of component to find.
+   * @return the found component.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
+   */
   protected final <C extends Component> C findByName(String name, Class<C> type) {
     return finder().findByName(target, name, type, requireShowing());
   }
 
+  /**
+   * Finds a <code>{@link Component}</code> using the given <code>{@link GenericTypeMatcher}</code>, contained in this 
+   * fixture's <code>{@link Container}</code>.
+   * @param <C> the generic type of component the given matcher can handle.
+   * @param matcher the matcher to use to find the component.
+   * @return the found component.
+   * @throws ComponentLookupException if a matching component could not be found.
+   * @throws ComponentLookupException if more than one matching component is found.
+   */
   protected final <C extends Component> C find(GenericTypeMatcher<? extends C> matcher) {
     return finder().find(target, matcher);
   }
 
+  /**
+   * Returns a <code>{@link ComponentFixture}</code> managing a component inside this fixture's 
+   * <code>{@link Container}</code>. This is an extension method, to allow implementations of 
+   * <code>{@link ContainerFixture}</code> handle custom GUI components.
+   * @param <C> the type of <code>Component</code> the fixture to return can handle.
+   * @param <F> the type of <code>ComponentFixture</code> to return.
+   * @param extension the <code>ComponentFixtureExtension</code> that creates the <code>ComponentFixture</code> to 
+   * return.
+   * @return a <code>ComponentFixture</code> managing a component inside this fixture's <code>Container</code>.
+   */
+  public <C extends Component, F extends ComponentFixture<C>> F with(ComponentFixtureExtension<C, F> extension) {
+    return extension.createFixture(robot, target);
+  }
+  
+  /**
+   * Returns the <code>{@link ComponentFinder}</code> contained in this fixture's <code>{@link Robot}</code>.
+   * @return the <code>ComponentFinder</code> contained in this fixture's <code>Robot</code>.
+   */
   protected final ComponentFinder finder() { return robot.finder(); }
 }
