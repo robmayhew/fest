@@ -7,7 +7,7 @@
   <body>
     <release version="1.0b2" date="TBD" description="Subsequent release">
       <action dev="alruiz" type="add" issue="109">
-        Added class org.fest.swing.core.ComponentFixtureExtension to add extension methods to ContainerFixture.
+        Added class org.fest.swing.fixture.ComponentFixtureExtension to add extension methods to ContainerFixture.
       </action>
       <action dev="wanghy" type="fix" issue="161" due-to="filimono">
         Method 'enterText(String)' in JSpinnerFixture no longer commits the value to the underlying JSpinner.

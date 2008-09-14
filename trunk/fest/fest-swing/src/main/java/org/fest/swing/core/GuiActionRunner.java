@@ -1,16 +1,16 @@
 /*
  * Created on Aug 14, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.core;
@@ -31,12 +31,12 @@ import static org.fest.swing.exception.UnexpectedException.unexpected;
 public class GuiActionRunner {
 
   /**
-   * Executes the given query in the event dispatch thread. This method waits until the query has finished its 
+   * Executes the given query in the event dispatch thread. This method waits until the query has finished its
    * execution.
    * @param <T> the generic type of the return value.
    * @param query the query to execute.
    * @return the result of the query executed in the main thread.
-   * @throws UnexpectedException wrapping any exception thrown when executing the given query in the event dispatch 
+   * @throws UnexpectedException wrapping any exception thrown when executing the given query in the event dispatch
    * thread.
    */
   public static <T> T execute(GuiQuery<T> query) {
@@ -44,11 +44,11 @@ public class GuiActionRunner {
     return resultOf(query);
   }
 
-  
+
   /**
    * Executes the given task in the event dispatch thread. This method waits until the task has finished its execution.
    * @param task the task to execute.
-   * @throws UnexpectedException wrapping any exception thrown when executing the given task in the event dispatch 
+   * @throws UnexpectedException wrapping any exception thrown when executing the given task in the event dispatch
    * thread.
    */
   public static void execute(GuiTask task) {
@@ -64,14 +64,14 @@ public class GuiActionRunner {
    * </ol>
    * @param task the task to execute.
    * @param toWaitFor the condition to meet to finish the execution of the given task.
-   * @throws UnexpectedException wrapping any exception thrown when executing the given task in the event dispatch 
+   * @throws UnexpectedException wrapping any exception thrown when executing the given task in the event dispatch
    * thread.
    */
   public static void execute(GuiTask task, Condition toWaitFor) {
     run(task, untilExecuted(task), toWaitFor);
     rethrowCatchedExceptionIn(task);
   }
-  
+
   private static void run(GuiAction action, Condition... toWaitFor) {
     if (isEventDispatchThread()) {
       action.run();
@@ -80,7 +80,7 @@ public class GuiActionRunner {
     }
     pause(toWaitFor);
   }
-  
+
   private static <T> T resultOf(GuiQuery<T> query) {
     rethrowCatchedExceptionIn(query);
     return query.result();
@@ -93,6 +93,7 @@ public class GuiActionRunner {
    */
   static void rethrowCatchedExceptionIn(GuiAction action) {
     Throwable catchedException = action.catchedException();
+    // TODO clear action
     if (catchedException != null) throw unexpected(catchedException);
   }
 
@@ -102,7 +103,7 @@ public class GuiActionRunner {
     static ActionExecutedCondition untilExecuted(GuiAction action) {
       return new ActionExecutedCondition(action);
     }
-    
+
     private ActionExecutedCondition(GuiAction action) {
       super("action to be executed in the EDT");
       this.action = action;
