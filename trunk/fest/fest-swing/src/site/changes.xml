@@ -31,6 +31,10 @@
       <action dev="wanghy" type="fix" issue="191">
         Methods 'increment' and 'decrement' in JSpinnerDriver now work in AWT event mode.
       </action>
+      <action dev="wanghy" type="fix" issue="201" due-to="Juhos Csaba-Zsolt">
+        Method 'eventDispatched(AWTEvent)' in org.fest.swing.monitor now checks if the source of the event is a 
+        java.awt.Component before performing a cast.
+      </action>
     </release>
     <release version="1.0b1" date="2008-07-22" description="Subsequent release">
       <action dev="alruiz, wanghy" type="add" issue="11">
