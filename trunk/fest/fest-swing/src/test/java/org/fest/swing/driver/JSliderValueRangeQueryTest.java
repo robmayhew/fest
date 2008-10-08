@@ -26,16 +26,17 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
 
 /**
- * Tests for <code>{@link JSliderMaximumQuery}</code>.
+ * Tests for <code>{@link JSliderValueRangeQuery}</code>.
  *
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
-public class JSliderMaximumQueryTest {
+@Test(groups = EDT_ACTION)
+public class JSliderValueRangeQueryTest {
 
+  private static final int MINIMUM = 6;
   private static final int MAXIMUM = 10;
 
   private Robot robot;
@@ -53,14 +54,17 @@ public class JSliderMaximumQueryTest {
   }
 
   public void shouldReturnMaximumValueOfJSlider() {
-    assertThat(JSliderMaximumQuery.maximumOf(slider)).isEqualTo(MAXIMUM);
+    ValueRange valueRange = JSliderValueRangeQuery.valueRangeOf(slider);
+    assertThat(valueRange.minimum).isEqualTo(MINIMUM);
+    assertThat(valueRange.maximum).isEqualTo(MAXIMUM);
+    assertThat(slider.methodGetMinimumWasInvoked()).isTrue();
     assertThat(slider.methodGetMaximumWasInvoked()).isTrue();
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    final MySlider slider = new MySlider(6, MAXIMUM, 8);
+    final MySlider slider = new MySlider(MINIMUM, MAXIMUM, 8);
 
     static MyWindow createNew() {
       return new MyWindow();
@@ -76,6 +80,7 @@ public class JSliderMaximumQueryTest {
     private static final long serialVersionUID = 1L;
 
     private boolean methodGetMaximumInvoked;
+    private boolean methodGetMinimumInvoked;
 
     MySlider(int min, int max, int value) {
       super(min, max, value);
@@ -86,6 +91,12 @@ public class JSliderMaximumQueryTest {
       return super.getMaximum();
     }
 
+    @Override public int getMinimum() {
+      methodGetMinimumInvoked = true;
+      return super.getMinimum();
+    }
+
     boolean methodGetMaximumWasInvoked() { return methodGetMaximumInvoked; }
+    boolean methodGetMinimumWasInvoked() { return methodGetMinimumInvoked; }
   }
 }

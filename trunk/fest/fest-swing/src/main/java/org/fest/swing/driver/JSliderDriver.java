@@ -20,10 +20,10 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.driver.JSliderMaximumQuery.maximumOf;
-import static org.fest.swing.driver.JSliderMinAndMaxQuery.minAndMaxOf;
 import static org.fest.swing.driver.JSliderMinimumQuery.minimumOf;
 import static org.fest.swing.driver.JSliderSetValueTask.setValue;
 import static org.fest.swing.driver.JSliderValueQuery.valueOf;
+import static org.fest.swing.driver.JSliderValueRangeQuery.valueRangeOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.util.Strings.concat;
@@ -82,9 +82,9 @@ public class JSliderDriver extends JComponentDriver {
   }
 
   private void validateValue(JSlider slider, int value) {
-    ValueRange minAndMax = minAndMaxOf(slider);
-    int min = minAndMax.minimum;
-    int max = minAndMax.maximum;
+    ValueRange valueRange = valueRangeOf(slider);
+    int min = valueRange.minimum;
+    int max = valueRange.maximum;
     if (value >= min && value <= max) return;
     throw actionFailure(concat("Value <", value, "> is not within the JSlider bounds of <", min, "> and <", max, ">"));
   }
