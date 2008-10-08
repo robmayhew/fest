@@ -25,8 +25,6 @@ import org.fest.swing.core.GuiQuery;
 import static javax.swing.SwingConstants.VERTICAL;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.driver.JSliderLocation.JSliderHorizontalLocationQueryStrategy.locationForHorizontalOrientation;
-import static org.fest.swing.driver.JSliderLocation.JSliderVerticalLocationQueryStrategy.locationForVerticalOrientation;
 import static org.fest.swing.driver.JSliderOrientationQuery.orientationOf;
 import static org.fest.swing.util.AWT.centerOf;
 
@@ -49,54 +47,39 @@ public final class JSliderLocation {
     return locationForHorizontalOrientation(slider, value);
   }
 
-  static class JSliderVerticalLocationQueryStrategy extends JSliderLocationQueryStrategy {
-    
-    static Point locationForVerticalOrientation(JSlider slider, int value) {
-      return execute(new JSliderVerticalLocationQueryStrategy(slider, value));
-    }
-    
-    private JSliderVerticalLocationQueryStrategy(JSlider slider, int value) {
-      super(slider, value);
-    }
+  private static Point locationForVerticalOrientation(JSlider slider, int value) {
+    return execute(new JSliderLocationQueryStrategy(slider, value) {
+      int max(Insets insets) {
+        return slider().getHeight() - insets.top - insets.bottom - 1;
+      }
 
-    int max(Insets insets) {
-      return slider().getHeight() - insets.top - insets.bottom - 1;
-    }
+      int coordinateOf(Point center) {
+        return center.y;
+      }
 
-    int coordinateOf(Point center) {
-      return center.y;
-    }
-
-    Point update(Point center, int coordinate) {
-      return new Point(center.x, coordinate);
-    }
+      Point update(Point center, int coordinate) {
+        return new Point(center.x, coordinate);
+      }
+    });
   }
 
-  static class JSliderHorizontalLocationQueryStrategy extends JSliderLocationQueryStrategy {
-    
-    static Point locationForHorizontalOrientation(JSlider slider, int value) {
-      return execute(new JSliderHorizontalLocationQueryStrategy(slider, value));
-    }
-    
-    private JSliderHorizontalLocationQueryStrategy(JSlider slider, int value) {
-      super(slider, value);
-    }
+  private static Point locationForHorizontalOrientation(JSlider slider, int value) {
+    return execute(new JSliderLocationQueryStrategy(slider, value) {
+      int max(Insets insets) {
+        return slider().getWidth() - insets.left - insets.right - 1;
+      }
 
-    int max(Insets insets) {
-      return slider().getWidth() - insets.left - insets.right - 1;
-    }
+      int coordinateOf(Point center) {
+        return center.x;
+      }
 
-    int coordinateOf(Point center) {
-      return center.x;
-    }
-
-    Point update(Point center, int coordinate) {
-      return new Point(coordinate, center.y);
-    }
+      Point update(Point center, int coordinate) {
+        return new Point(coordinate, center.y);
+      }
+    });
   }
 
-  static abstract class JSliderLocationQueryStrategy extends GuiQuery<Point> {
-    
+  private static abstract class JSliderLocationQueryStrategy extends GuiQuery<Point> {
     private final JSlider slider;
     private final int value;
 
@@ -104,7 +87,7 @@ public final class JSliderLocation {
       this.slider = slider;
       this.value = value;
     }
-    
+
     protected final Point executeInEDT() {
       Point center = centerOf(slider);
       int max = max(slider.getInsets());
@@ -115,7 +98,7 @@ public final class JSliderLocation {
     }
 
     abstract int max(Insets insets);
-    
+
     abstract int coordinateOf(Point center);
 
     abstract Point update(Point center, int coordinate);
@@ -125,7 +108,7 @@ public final class JSliderLocation {
       int range = slider.getMaximum() - minimum;
       return (float)(value - minimum) / range;
     }
-    
+
     JSlider slider() { return slider; }
   }
 }

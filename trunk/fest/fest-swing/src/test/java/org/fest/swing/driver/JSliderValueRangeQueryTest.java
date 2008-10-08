@@ -26,14 +26,14 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JSliderValueRangeQuery}</code>.
  *
  * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JSliderValueRangeQueryTest {
 
   private static final int MINIMUM = 6;
