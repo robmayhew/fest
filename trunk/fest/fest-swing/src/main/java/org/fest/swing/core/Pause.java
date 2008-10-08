@@ -1,16 +1,16 @@
 /*
  * Created on Dec 19, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.core;
@@ -28,6 +28,7 @@ import static org.fest.util.Strings.concat;
  * Understands waiting for period of time or for a particular condition to be satisfied.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public final class Pause {
 
@@ -56,7 +57,7 @@ public final class Pause {
     if (timeout == null) throw new NullPointerException("The given timeout should not be null");
     pause(condition, timeout.duration());
   }
-  
+
   /**
    * Waits until the given condition is satisfied.
    * @param condition the condition to verify.
@@ -68,9 +69,13 @@ public final class Pause {
     if (condition == null) throw new NullPointerException("The condition to verify should not be null");
     TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
     while (!condition.test()) {
-      if (watch.isTimeOut()) throw new WaitTimedOutError((concat("Timed out waiting for ", condition)));
+      if (watch.isTimeOut()) {
+        condition.done();
+        throw new WaitTimedOutError((concat("Timed out waiting for ", condition)));
+      }
       pause(SLEEP_INTERVAL);
     }
+    condition.done();
   }
 
   /**
@@ -98,7 +103,7 @@ public final class Pause {
   public static void pause(Condition[] conditions, Timeout timeout) {
     pause(conditions, timeout.duration());
   }
-  
+
   /**
    * Waits until the given conditions are satisfied.
    * @param conditions the conditions to verify.
@@ -112,17 +117,21 @@ public final class Pause {
     validate(conditions);
     TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
     while (!areSatisfied(conditions)) {
-      if (watch.isTimeOut()) throw new WaitTimedOutError((concat("Timed out waiting for ", format(conditions))));
+      if (watch.isTimeOut()) {
+        done(conditions);
+        throw new WaitTimedOutError((concat("Timed out waiting for ", format(conditions))));
+      }
       pause(SLEEP_INTERVAL);
     }
+    done(conditions);
   }
 
   private static void validate(Condition[] conditions) {
     if (conditions == null) throw new NullPointerException("The array of conditions to verify should not be null");
-    if (isEmpty(conditions)) 
+    if (isEmpty(conditions))
       throw new IllegalArgumentException("The array of conditions to verify should not be empty");
     for (Condition condition : conditions) {
-      if (condition != null) continue; 
+      if (condition != null) continue;
       throw new NullPointerException(concat("The array of conditions <", format(conditions), "> contains null value(s)"));
     }
   }
@@ -131,9 +140,13 @@ public final class Pause {
     for (Condition condition : conditions) if (!condition.test()) return false;
     return true;
   }
-  
+
+  private static void done(Condition[] conditions) {
+    for (Condition condition : conditions) condition.done();
+  }
+
   /**
-   * Sleeps for the specified time. 
+   * Sleeps for the specified time.
    * @param timeout the quantity of time units to sleep.
    * @param unit the time units.
    * @see #pause(long)
@@ -143,9 +156,9 @@ public final class Pause {
     if (unit == null) throw new NullPointerException("Time unit cannot be null");
     pause(unit.toMillis(timeout));
   }
-  
+
   /**
-   * Sleeps for the specified time. 
+   * Sleeps for the specified time.
    * <p>
    * To catch any <code>InterruptedException</code>s that occur,
    * <code>{@link Thread#sleep(long)}()</code> may be used instead.
@@ -159,11 +172,11 @@ public final class Pause {
       Thread.currentThread().interrupt();
     }
   }
-  
+
   /**
    * Sleeps for 10 milliseconds.
    */
   public static void pause() { pause(SLEEP_INTERVAL); }
-  
+
   private Pause() {}
 }

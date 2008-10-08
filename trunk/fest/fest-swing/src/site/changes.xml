@@ -22,11 +22,19 @@
         BasicJTableCellReader obtains the value of a cell from a JTable, not from a TableModel.
       </action>
       <action dev="alruiz, wanghy" type="fix" issue="187">
+        Introduced GuiActionRunner, GuiQuery and GuiTask in package org.fest.swing.core to execute queries or tasks in 
+        the event dispatch thread. 
+      </action>
+      <action dev="alruiz, wanghy" type="fix" issue="187">
         Removed method 'runInEventThreadAndWait' in org.fest.swing.util.AWT. Replaced with 
         org.fest.swing.core.GuiActionRunner and org.fest.swing.core.GuiTask.
       </action>
       <action dev="alruiz, wanghy" type="fix" issue="187">
         Added methods 'pause(Condition[])' to org.fest.swing.core.Pause.
+      </action>
+      <action dev="alruiz, wanghy" type="fix" issue="187">
+        Added method 'done' to org.fest.swing.core.Condition. This method is invoked by org.fest.swing.core.Pause when a 
+        condition is evaluated (either the condition was satisfied or it timed-out.)
       </action>
       <action dev="wanghy" type="fix" issue="191">
         Methods 'increment' and 'decrement' in JSpinnerDriver now work in AWT event mode.

@@ -98,7 +98,7 @@ public class GuiActionRunner {
   }
 
   static class ActionExecutedCondition extends Condition {
-    private final GuiAction action;
+    private GuiAction action;
 
     static ActionExecutedCondition untilExecuted(GuiAction action) {
       return new ActionExecutedCondition(action);
@@ -111,6 +111,11 @@ public class GuiActionRunner {
 
     public boolean test() {
       return action.wasExecutedInEDT();
+    }
+
+    /** ${@inheritDoc} */
+    @Override protected void done() {
+      action = null;
     }
   }
 }
