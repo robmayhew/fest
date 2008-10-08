@@ -30,7 +30,7 @@ import static org.fest.swing.exception.ActionFailedException.actionFailure;
 public abstract class GuiQuery<T> extends GuiAction {
 
   private T result;
-  
+
   /**
    * Executes the query in the event dispatch thread. This method waits until the action has finish its execution.
    * @throws ActionFailedException if this task is not executed in the event dispatch thread.
@@ -52,7 +52,7 @@ public abstract class GuiQuery<T> extends GuiAction {
       executedInEDT();
     }
   }
-  
+
   /**
    * Specifies the action to execute in the event dispatch thread.
    * @return the result of the execution of the action.

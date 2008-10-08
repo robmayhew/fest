@@ -56,7 +56,6 @@ public class JScrollPaneDriver extends JComponentDriver {
     });
   }
 
-
   /**
    * Returns the vertical <code>{@link JScrollBar}</code> in the given <code>{@link JScrollPane}</code>.
    * @param scrollPane the given <code>JScrollBar</code>.

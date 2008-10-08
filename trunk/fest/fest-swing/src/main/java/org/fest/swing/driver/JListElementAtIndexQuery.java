@@ -16,6 +16,7 @@
 package org.fest.swing.driver;
 
 import javax.swing.JList;
+import javax.swing.ListModel;
 
 import org.fest.swing.core.GuiQuery;
 
@@ -24,25 +25,21 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the element at a given index in a
  * <code>{@link JList}</code>.
+ * @see JList#getModel()
+ * @see ListModel#getElementAt(int)
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class JListElementAtIndexQuery extends GuiQuery<Object> {
+final class JListElementAtIndexQuery {
 
-  private final JList list;
-  private final int index;
-
-  static Object elementAt(JList list, int index) {
-    return execute(new JListElementAtIndexQuery(list, index));
+  static Object elementAt(final JList list, final int index) {
+    return execute(new GuiQuery<Object>() {
+      protected Object executeInEDT() {
+        return list.getModel().getElementAt(index);
+      }
+    });
   }
 
-  JListElementAtIndexQuery(JList list, int index) {
-    this.list = list;
-    this.index = index;
-  }
-
-  protected Object executeInEDT() {
-    return list.getModel().getElementAt(index);
-  }
+  private JListElementAtIndexQuery() {}
 }

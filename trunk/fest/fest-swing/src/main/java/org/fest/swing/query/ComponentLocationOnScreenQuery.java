@@ -22,36 +22,29 @@ import org.fest.swing.core.GuiQuery;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands an action, executed in the event dispatch thread, that returns the location of a 
+ * Understands an action, executed in the event dispatch thread, that returns the location of a
  * <code>{@link Component}</code> on screen.
+ * @see Component#getLocationOnScreen()
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class ComponentLocationOnScreenQuery extends GuiQuery<Point> {
-
-  private final Component component;
+public final class ComponentLocationOnScreenQuery {
 
   /**
    * Returns the location of the given <code>{@link Component}</code> on screen. This action is executed in the event
    * dispatch thread.
    * @param component the given <code>Component</code>.
    * @return the location of the given <code>Component</code> on screen.
+   * @see Component#getLocationOnScreen()
    */
-  public static Point locationOnScreen(Component component) {
-    return execute(new ComponentLocationOnScreenQuery(component));
+  public static Point locationOnScreen(final Component component) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        return component.getLocationOnScreen();
+      }
+    });
   }
 
-  ComponentLocationOnScreenQuery(Component component) {
-    this.component = component;
-  }
-
-  /**
-   * Returns the location in this query's <code>{@link Component}</code> on screen. This action is executed in the event
-   * dispatch thread.
-   * @return the location in this query's <code>Component</code> on screen.
-   */
-  protected Point executeInEDT() {
-    return component.getLocationOnScreen();
-  }
+  private ComponentLocationOnScreenQuery() {}
 }

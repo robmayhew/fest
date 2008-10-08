@@ -127,7 +127,7 @@ public class AWT {
    */
   public static Point locationOnScreenOf(Component c) {
     if (!isAWTTreeLockHeld()) return new Point(locationOnScreen(c));
-    // TODO access from EDT
+    // TODO access from EDT?
     if (!isShowing(c)) return null;
     Point location = new Point(c.getLocation());
     if (c instanceof Window) return location;

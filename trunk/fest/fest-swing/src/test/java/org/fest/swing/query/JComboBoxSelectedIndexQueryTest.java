@@ -17,47 +17,82 @@ package org.fest.swing.query;
 
 import javax.swing.JComboBox;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.JComboBoxSetSelectedIndexTask.setSelectedIndex;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JComboBoxSelectedIndexQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION) public class JComboBoxSelectedIndexQueryTest {
+@Test(groups = { GUI, EDT_ACTION })
+public class JComboBoxSelectedIndexQueryTest {
 
-  private JComboBox comboBox;
-  private JComboBoxSelectedIndexQuery query;
+  private Robot robot;
+  private MyComboBox comboBox;
 
   @BeforeMethod public void setUp() {
-    comboBox = createMock(JComboBox.class);
-    query = new JComboBoxSelectedIndexQuery(comboBox);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    comboBox = window.comboBox;
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   @Test(dataProvider = "selectedIndices", groups = EDT_ACTION)
   public void shouldReturnItemCountOfJComboBox(final int selectedIndex) {
-    new EasyMockTemplate(comboBox) {
-      protected void expectations() {
-        expect(comboBox.getSelectedIndex()).andReturn(selectedIndex);
-      }
-
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(selectedIndex);
-      }
-    }.run();
+    setSelectedIndex(comboBox, selectedIndex);
+    assertThat(JComboBoxSelectedIndexQuery.selectedIndexOf(comboBox)).isEqualTo(selectedIndex);
+    assertThat(comboBox.methodGetSelectedIndexWasInvoked()).isTrue();
   }
 
   @DataProvider(name = "selectedIndices") public Object[][] selectedIndices() {
-    return new Object[][] { { 0 }, { 6 }, { 8 } };
+    return new Object[][] { { 0 }, { 1 }, { 2 }, { -1 } };
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final MyComboBox comboBox = new MyComboBox("one", "two", "three");
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(JComboBoxSelectedIndexQueryTest.class);
+      add(comboBox);
+    }
+  }
+
+  private static class MyComboBox extends JComboBox {
+    private static final long serialVersionUID = 1L;
+
+    private boolean methodGetSelectedIndexInvoked;
+
+    MyComboBox(Object... items) {
+      super(items);
+    }
+
+    @Override public int getSelectedIndex() {
+      methodGetSelectedIndexInvoked = true;
+      return super.getSelectedIndex();
+    }
+
+    boolean methodGetSelectedIndexWasInvoked() { return methodGetSelectedIndexInvoked; }
   }
 }

@@ -16,7 +16,6 @@
 package org.fest.swing.driver;
 
 import java.awt.Dimension;
-import java.util.Arrays;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -26,16 +25,16 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.Condition;
 import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
-import org.fest.util.Strings;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.task.JTreeSelectRowTask.selectRow;
 import static org.fest.swing.testing.TestGroups.*;
-import static org.fest.util.Arrays.*;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JTreeSingleRowSelectedQuery}</code>.
@@ -45,28 +44,31 @@ import static org.fest.util.Arrays.*;
 @Test(groups = { GUI, EDT_ACTION })
 public class JTreeSingleRowSelectedQueryTest {
 
-  private MyWindow window;
+  private Robot robot;
   private JTree tree;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createNew();
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
     tree = window.tree;
-    window.display();
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
+    robot.cleanUp();
   }
 
   public void shouldReturnTrueIfSingleRowSelected() {
     int row = 0;
     selectRow(tree, row);
+    robot.waitForIdle();
     assertThat(JTreeSingleRowSelectedQuery.isSingleRowSelected(tree, row)).isTrue();
   }
 
   public void shouldReturnFalseIfMultipleRowSelected() {
     int row = 0;
     selectRows(tree, row, 1);
+    robot.waitForIdle();
     assertThat(JTreeSingleRowSelectedQuery.isSingleRowSelected(tree, row)).isFalse();
   }
 
@@ -74,10 +76,6 @@ public class JTreeSingleRowSelectedQueryTest {
     execute(new GuiTask() {
       protected void executeInEDT() {
         tree.setSelectionRows(rows);
-      }
-    }, new Condition(Strings.concat("JTree's selection rows are ", format(rows))) {
-      public boolean test() {
-        return Arrays.equals(tree.getSelectionRows(), rows);
       }
     });
   }
@@ -88,6 +86,7 @@ public class JTreeSingleRowSelectedQueryTest {
 
   public void shouldReturnFalseIfOtherRowIsSelected() {
     selectRow(tree, 0);
+    robot.waitForIdle();
     assertThat(JTreeSingleRowSelectedQuery.isSingleRowSelected(tree, 1)).isFalse();
   }
 
@@ -108,5 +107,4 @@ public class JTreeSingleRowSelectedQueryTest {
       addComponents(scrollPane);
     }
   }
-
 }

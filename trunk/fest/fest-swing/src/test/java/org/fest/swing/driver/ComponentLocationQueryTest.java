@@ -15,19 +15,18 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
 import java.awt.Point;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentLocationQuery}</code>.
@@ -35,28 +34,45 @@ import static org.fest.swing.testing.TestGroups.EDT_ACTION;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class ComponentLocationQueryTest {
 
-  private Component component;
-  private Point location;
-  private ComponentLocationQuery query;
+  private Robot robot;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    component = createMock(Component.class);
-    location = new Point(80, 60);
-    query = new ComponentLocationQuery(component);
+    robot = robotWithNewAwtHierarchy();
+    window = MyWindow.createNew();
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnMoveLocationOfContainer() {
-    new EasyMockTemplate(component) {
-      protected void expectations() {
-        expect(component.getLocation()).andReturn(location);
-      }
+    assertThat(ComponentLocationQuery.locationOf(window)).isEqualTo(new Point(100, 100));
+    assertThat(window.methodGetLocationWasInvoked()).isTrue();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(location);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private boolean methodGetLocationInvoked;
+
+    private MyWindow() {
+      super(ComponentLocationQueryTest.class);
+    }
+
+    @Override public Point getLocation() {
+      methodGetLocationInvoked = true;
+      return super.getLocation();
+    }
+
+    boolean methodGetLocationWasInvoked() { return methodGetLocationInvoked; }
   }
 }

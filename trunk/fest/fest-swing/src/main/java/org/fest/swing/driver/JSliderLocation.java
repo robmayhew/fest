@@ -31,7 +31,7 @@ import static org.fest.swing.driver.JSliderOrientationQuery.orientationOf;
 import static org.fest.swing.util.AWT.centerOf;
 
 /**
- * Understands encapsulation of a location in a <code>{@link JSlider}</code>.
+ * Understands a location in a <code>{@link JSlider}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
@@ -105,7 +105,7 @@ public final class JSliderLocation {
       this.value = value;
     }
     
-    protected final Point executeInEDT() throws Throwable {
+    protected final Point executeInEDT() {
       Point center = centerOf(slider);
       int max = max(slider.getInsets());
       int coordinate = coordinateOf(center);

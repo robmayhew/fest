@@ -272,6 +272,7 @@ public class RobotFixtureTest {
     TestWindow w = TestWindow.createNew(getClass());
     w.display();
     setVisible(w, false);
+    robot.waitForIdle();
     robot.close(w);
     assertThat(isShowing(w)).isFalse();
   }

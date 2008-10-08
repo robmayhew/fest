@@ -23,31 +23,25 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the title of a
  * <code>{@link Frame}</code>.
+ * @see Frame#getTitle()
  *
  * @author Yvonne Wang
  */
-public final class FrameTitleQuery extends GuiQuery<String> {
-
-  private final Frame frame;
+public final class FrameTitleQuery {
 
   /**
    * Returns the title of the given <code>{@link Frame}</code>. This action is executed in the event dispatch thread.
    * @param frame the given <code>Frame</code>.
    * @return the title of the given <code>Frame</code>.
+   * @see Frame#getTitle()
    */
-  public static String titleOf(Frame frame) {
-    return execute(new FrameTitleQuery(frame));
+  public static String titleOf(final Frame frame) {
+    return execute(new GuiQuery<String>() {
+      protected String executeInEDT() {
+        return frame.getTitle();
+      }
+    });
   }
 
-  FrameTitleQuery(Frame frame) {
-    this.frame = frame;
-  }
-
-  /**
-   * Returns the title in this query's <code>{@link Frame}</code>. This action is executed in the event dispatch thread.
-   * @return the title in this query's <code>Frame</code>.
-   */
-  protected String executeInEDT() {
-    return frame.getTitle();
-  }
+  private FrameTitleQuery() {}
 }

@@ -15,46 +15,64 @@
  */
 package org.fest.swing.query;
 
-import java.awt.Dialog;
-
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestDialog;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link DialogTitleQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION) 
+@Test(groups = { GUI, EDT_ACTION })
 public class DialogTitleQueryTest {
 
-  private Dialog dialog;
-  private String title;
-  private DialogTitleQuery query;
+  private Robot robot;
+  private MyDialog dialog;
 
   @BeforeMethod public void setUp() {
-    dialog = createMock(Dialog.class);
-    title = "hello";
-    query = new DialogTitleQuery(dialog);
+    robot = robotWithNewAwtHierarchy();
+    dialog = MyDialog.createNew();
+    robot.showWindow(dialog);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnTitleOfDialog() {
-    new EasyMockTemplate(dialog) {
-      protected void expectations() {
-        expect(dialog.getTitle()).andReturn(title);
-      }
+    assertThat(DialogTitleQuery.titleOf(dialog)).isEqualTo("Hello World");
+    assertThat(dialog.methodGetTitleWasInvoked()).isTrue();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(title);
-      }
-    }.run();
+  private static class MyDialog extends TestDialog {
+    private static final long serialVersionUID = 1L;
+
+    private boolean methodGetTitleInvoked;
+
+    static MyDialog createNew() {
+      return new MyDialog();
+    }
+
+    private MyDialog() {
+      super(TestWindow.createNew(DialogTitleQueryTest.class));
+      setTitle("Hello World");
+    }
+
+    @Override public String getTitle() {
+      methodGetTitleInvoked = true;
+      return super.getTitle();
+    }
+
+    boolean methodGetTitleWasInvoked() { return methodGetTitleInvoked; }
   }
 }

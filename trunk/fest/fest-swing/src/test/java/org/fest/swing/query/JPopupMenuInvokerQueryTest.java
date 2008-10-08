@@ -17,45 +17,83 @@ package org.fest.swing.query;
 
 import java.awt.Component;
 
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JPopupMenuInvokerQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION) public class JPopupMenuInvokerQueryTest {
+@Test(groups = { GUI, EDT_ACTION })
+public class JPopupMenuInvokerQueryTest {
 
-  private JPopupMenu popupMenu;
-  private Component invoker;
-  private JPopupMenuInvokerQuery query;
+  // TODO remove circular dependency: RobotFixture uses JPopupMenuInvokerQuery
+  private Robot robot;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    popupMenu = createMock(JPopupMenu.class);
-    invoker = createMock(Component.class);
-    query = new JPopupMenuInvokerQuery(popupMenu);
+    robot = robotWithNewAwtHierarchy();
+    window = MyWindow.createNew();
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnInvokderOfJPopupMenu() {
-    new EasyMockTemplate(popupMenu) {
-      protected void expectations() {
-        expect(popupMenu.getInvoker()).andReturn(invoker);
-      }
+    robot.showPopupMenu(window.textField);
+    assertThat(JPopupMenuInvokerQuery.invokerOf(window.popupMenu)).isSameAs(window.textField);
+    assertThat(window.popupMenu.expectationsMet()).isTrue();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(invoker);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final JTextField textField = new JTextField(20);
+    final MyPopupMenu popupMenu;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(JPopupMenuInvokerQueryTest.class);
+      popupMenu = new MyPopupMenu();
+      populate(popupMenu);
+      textField.setComponentPopupMenu(popupMenu);
+      addComponents(textField);
+    }
+
+    private static void populate(JPopupMenu popupMenu) {
+      popupMenu.add(new JMenuItem("One"));
+    }
+  }
+
+  private static class MyPopupMenu extends JPopupMenu {
+    private static final long serialVersionUID = 1L;
+
+    private boolean getInvokerCalled;
+
+    @Override public Component getInvoker() {
+      getInvokerCalled = true;
+      return super.getInvoker();
+    }
+
+    boolean expectationsMet() { return getInvokerCalled; }
   }
 }

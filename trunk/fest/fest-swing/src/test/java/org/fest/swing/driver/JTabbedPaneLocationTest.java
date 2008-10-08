@@ -15,17 +15,23 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Dimension;
+
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.factory.JTabbedPanes.tabbedPane;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -36,13 +42,20 @@ import static org.fest.swing.testing.TestGroups.GUI;
 @Test(groups = GUI)
 public class JTabbedPaneLocationTest {
 
+  private Robot robot;
   private JTabbedPane tabbedPane;
   private JTabbedPaneLocation location;
 
   @BeforeMethod public void setUp() {
-    tabbedPane = tabbedPane().withTabs("one", "two")
-                             .createNew();
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    tabbedPane = window.tabbedPane;
     location = new JTabbedPaneLocation();
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnIndexOfTabTitle() {
@@ -78,6 +91,24 @@ public class JTabbedPaneLocationTest {
       fail();
     } catch (ActionFailedException e) {
       assertThat(e).message().isEqualTo("Index <2> is not within the JTabbedPane bounds of <0> and <1> (inclusive)");
+    }
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final JTabbedPane tabbedPane = new JTabbedPane();
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(JTabbedPaneLocationTest.class);
+      tabbedPane.addTab("one", new JPanel());
+      tabbedPane.addTab("two", new JPanel());
+      tabbedPane.setPreferredSize(new Dimension(200, 100));
+      addComponents(tabbedPane);
     }
   }
 }

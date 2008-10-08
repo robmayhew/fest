@@ -16,51 +16,92 @@
 package org.fest.swing.driver;
 
 import javax.swing.JList;
-import javax.swing.ListModel;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.testing.TestListModel;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JListElementAtIndexQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JListElementAtIndexQueryTest {
 
-  private JList list;
-  private ListModel model;
-  private int index;
-  private Object cellValue;
-  private JListElementAtIndexQuery query;
+  private Robot robot;
+  private MyList list;
 
   @BeforeMethod public void setUp() {
-    list = createMock(JList.class);
-    model = createMock(ListModel.class);
-    index = 8;
-    cellValue = "Hello";
-    query = new JListElementAtIndexQuery(list, index);
+    robot = RobotFixture.robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    list = window.list;
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnElementAtIndexInJList() {
-    new EasyMockTemplate(list, model) {
-      protected void expectations() {
-        expect(list.getModel()).andReturn(model);
-        expect(model.getElementAt(index)).andReturn(cellValue);
-      }
+    int index = 1;
+    assertThat(JListElementAtIndexQuery.elementAt(list, index)).isEqualTo("Two");
+    assertThat(list.model.methodGetElementAtWasInvokedWithIndex(index)).isTrue();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(cellValue);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    final MyList list = new MyList("One", "Two", "Three");
+
+    private MyWindow() {
+      super(JListElementAtIndexQueryTest.class);
+      addComponents(list);
+    }
+  }
+
+  private static class MyList extends JList {
+    private static final long serialVersionUID = 1L;
+
+    final MyListModel model;
+
+    MyList(Object... elements) {
+      model = new MyListModel(elements);
+      setModel(model);
+    }
+  }
+
+  private static class MyListModel extends TestListModel {
+    private static final long serialVersionUID = 1L;
+
+    private boolean methodGetElementAtInvoked;
+    private int index;
+
+    MyListModel(Object... elements) {
+      super(elements);
+    }
+
+    @Override public Object getElementAt(int index) {
+      this.index = index;
+      methodGetElementAtInvoked = true;
+      return super.getElementAt(index);
+    }
+
+    boolean methodGetElementAtWasInvokedWithIndex(int index) {
+      return methodGetElementAtInvoked && this.index == index;
+    }
   }
 }

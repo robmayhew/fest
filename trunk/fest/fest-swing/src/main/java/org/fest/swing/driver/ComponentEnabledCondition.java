@@ -25,13 +25,18 @@ import static org.fest.util.Strings.concat;
 
 /**
  * Understands a condition that verifies that a component is enabled.
+ * @see Component#isEnabled()
  *
  * @author Yvonne Wang
  */
 class ComponentEnabledCondition extends Condition {
   private final Component c;
 
-  ComponentEnabledCondition(Component c) {
+  static ComponentEnabledCondition untilIsEnabled(Component c) {
+    return new ComponentEnabledCondition(c);
+  }
+
+  private ComponentEnabledCondition(Component c) {
     super(concat(format(c), " to be enabled"));
     this.c = c;
   }

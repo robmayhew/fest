@@ -21,9 +21,11 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -34,21 +36,25 @@ import static org.fest.swing.testing.TestGroups.*;
 @Test(groups = { GUI, EDT_ACTION })
 public class ComponentSetSizeTaskTest {
 
+  private Robot robot;
   private TestWindow window;
   private Dimension size;
 
   @BeforeMethod public void setUp() {
-    window = TestWindow.showNewInTest(getClass());
+    robot = robotWithNewAwtHierarchy();
+    window = TestWindow.createNew(getClass());
+    robot.showWindow(window);
     size = new Dimension(200, 100);
   }
-  
+
   @AfterMethod public void tearDown() {
-    window.destroy();
+    robot.cleanUp();
   }
 
   @Test public void shouldSetSize() {
     assertThat(window.getSize()).isNotEqualTo(size);
     ComponentSetSizeTask.setComponentSize(window, size);
+    robot.waitForIdle();
     assertThat(window.getSize()).isEqualTo(size);
   }
 }

@@ -108,7 +108,7 @@ public class Formatting {
           concat("Replacing formatter ", FORMATTERS.get(key), " with ", formatter, " for the type ", key.getName()));
     FORMATTERS.put(key, formatter);
   }
-  
+
   // Used for testing only.
   static ComponentFormatter formatter(Class<?> type) {
     return FORMATTERS.get(type);
@@ -129,7 +129,11 @@ public class Formatting {
   }
 
   private static String performFormatting(final Component c, final ComponentFormatter formatter) {
-    return execute(new ComponentFormatterExecutor(formatter, c));
+    return execute(new GuiQuery<String>() {
+      protected String executeInEDT() {
+        return formatter.format(c);
+      }
+    });
   }
 
   private static ComponentFormatter formatterFor(Class<?> type) {
@@ -140,18 +144,4 @@ public class Formatting {
   }
 
   private Formatting() {}
-
-  private static final class ComponentFormatterExecutor extends GuiQuery<String> {
-    private final ComponentFormatter formatter;
-    private final Component c;
-
-    ComponentFormatterExecutor(ComponentFormatter formatter, Component c) {
-      this.formatter = formatter;
-      this.c = c;
-    }
-
-    protected String executeInEDT() {
-      return formatter.format(c);
-    }
-  }
 }

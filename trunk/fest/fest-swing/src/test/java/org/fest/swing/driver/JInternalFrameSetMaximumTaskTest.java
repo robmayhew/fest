@@ -15,50 +15,49 @@
  */
 package org.fest.swing.driver;
 
-import java.beans.PropertyVetoException;
-
 import javax.swing.JInternalFrame;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MDITestWindow;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.swing.driver.JInternalFrameAction.MAXIMIZE;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JInternalFrameAction.*;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JInternalFrameSetMaximumTask}</code>.
  *
  * @author Yvonne Wang
  */
-@Test public class JInternalFrameSetMaximumTaskTest {
+@Test(groups = { GUI, EDT_ACTION })
+public class JInternalFrameSetMaximumTaskTest {
 
+  private Robot robot;
   private JInternalFrame internalFrame;
-  private JInternalFrameAction action;
 
   @BeforeMethod public void setUp() {
-    internalFrame = createMock(JInternalFrame.class);
-    action = MAXIMIZE;
+    robot = robotWithNewAwtHierarchy();
+    MDITestWindow window = MDITestWindow.createNew(getClass());
+    internalFrame = window.internalFrame();
+    robot.showWindow(window);
   }
 
-  public void shouldCloseJInternalFrame() {
-    new EasyMockTemplate(internalFrame) {
-      protected void expectations() {
-        try {
-          internalFrame.setMaximum(action.value);
-        } catch (PropertyVetoException e) {}
-        expectLastCall().once();
-      }
-
-      protected void codeToTest() {
-        try {
-          JInternalFrameSetMaximumTask.setMaximumTask(internalFrame, action).execute();
-        } catch (PropertyVetoException e) {}
-      }
-    }.run();
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
+  public void shouldMaximizeAndNormalizeJInternalFrame() {
+    assertThat(internalFrame.isMaximum()).isFalse();
+    JInternalFrameSetMaximumTask.setMaximum(internalFrame, MAXIMIZE);
+    robot.waitForIdle();
+    assertThat(internalFrame.isMaximum()).isTrue();
+    JInternalFrameSetMaximumTask.setMaximum(internalFrame, NORMALIZE);
+    robot.waitForIdle();
+    assertThat(internalFrame.isMaximum()).isFalse();
+  }
 }

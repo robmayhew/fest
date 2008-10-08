@@ -39,7 +39,7 @@ import static org.fest.util.Arrays.array;
  * Tests for <code>{@link JPopupMenuDriver}</code>.
  *
  * @author Alex Ruiz
- * @author Yvonne Price
+ * @author Yvonne Wang
  */
 @Test(groups = GUI)
 public class JPopupMenuDriverTest {

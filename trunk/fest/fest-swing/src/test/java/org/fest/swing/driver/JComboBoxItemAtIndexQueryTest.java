@@ -17,46 +17,65 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JComboBoxItemAtIndexQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JComboBoxItemAtIndexQueryTest {
 
+  private static final Object[] ITEMS = { "first", "second", "third" };
+
+  private Robot robot;
   private JComboBox comboBox;
-  private int index;
-  private String value;
-  private JComboBoxItemAtIndexQuery query;
 
   @BeforeMethod public void setUp() {
-    comboBox = createMock(JComboBox.class);
-    index = 8;
-    value = "Hello";
-    query = new JComboBoxItemAtIndexQuery(comboBox, index);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    comboBox = window.comboBox;
+    robot.showWindow(window);
   }
 
-  public void shouldReturnItemAtIndexInJComboBox() {
-    new EasyMockTemplate(comboBox) {
-      protected void expectations() {
-        expect(comboBox.getItemAt(index)).andReturn(value);
-      }
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(value);
-      }
-    }.run();
+  @Test(dataProvider = "indices", groups = { GUI, EDT_ACTION })
+  public void shouldReturnItemAtIndexInJComboBox(int index) {
+    Object item = JComboBoxItemAtIndexQuery.itemAt(comboBox, index);
+    assertThat(item).isEqualTo(ITEMS[index]);
+  }
+
+  @DataProvider(name = "indices") public Object[][] indices() {
+    return new Object[][] { { 0 }, { 1 }, { 2 } };
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final JComboBox comboBox = new JComboBox(ITEMS);
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(JComboBoxItemAtIndexQueryTest.class);
+      add(comboBox);
+    }
   }
 }

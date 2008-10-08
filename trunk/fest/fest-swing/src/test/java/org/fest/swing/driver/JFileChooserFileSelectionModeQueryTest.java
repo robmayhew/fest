@@ -17,17 +17,21 @@ package org.fest.swing.driver;
 
 import javax.swing.JFileChooser;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
-import static javax.swing.JFileChooser.FILES_ONLY;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import static javax.swing.JFileChooser.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JFileChooserFileSelectionModeQuery}</code>.
@@ -35,29 +39,64 @@ import static org.fest.swing.testing.TestGroups.EDT_ACTION;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JFileChooserFileSelectionModeQueryTest {
 
-  private JFileChooser fileChooser;
-  private int mode;
-  private JFileChooserFileSelectionModeQuery query;
+  private Robot robot;
+  private MyFileChooser fileChooser;
 
   @BeforeMethod public void setUp() {
-    fileChooser = createMock(JFileChooser.class);
-    mode = FILES_ONLY;
-    query = new JFileChooserFileSelectionModeQuery(fileChooser);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    fileChooser = window.fileChooser;
+    robot.showWindow(window);
   }
 
-  public void shouldReturnApproveButtonTextFromJFileChooser() {
-    new EasyMockTemplate(fileChooser) {
-      protected void expectations() {
-        expect(fileChooser.getFileSelectionMode()).andReturn(mode);
-      }
-
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(mode);
-      }
-    }.run();
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
+  @Test(dataProvider = "selectionModes", groups = { GUI, EDT_ACTION })
+  public void shouldReturnApproveButtonTextFromJFileChooser(final int mode) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        fileChooser.setFileSelectionMode(mode);
+      }
+    });
+    int actual = JFileChooserFileSelectionModeQuery.fileSelectionModeOf(fileChooser);
+    assertThat(actual).isEqualTo(mode);
+    assertThat(fileChooser.methodGetFileSelectionModeWasInvoked()).isTrue();
+  }
+
+  @DataProvider(name = "selectionModes") public Object[][] selectionModes() {
+    return new Object[][] { { FILES_ONLY }, { DIRECTORIES_ONLY }, { FILES_AND_DIRECTORIES } };
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final MyFileChooser fileChooser = new MyFileChooser();
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(JFileChooserFileSelectionModeQueryTest.class);
+      addComponents(fileChooser);
+    }
+  }
+
+  private static class MyFileChooser extends JFileChooser {
+    private static final long serialVersionUID = 1L;
+
+    private boolean methodGetFileSelectionModeInvoked;
+
+    @Override public int getFileSelectionMode() {
+      methodGetFileSelectionModeInvoked = true;
+      return super.getFileSelectionMode();
+    }
+
+    boolean methodGetFileSelectionModeWasInvoked() { return methodGetFileSelectionModeInvoked; }
+  }
 }

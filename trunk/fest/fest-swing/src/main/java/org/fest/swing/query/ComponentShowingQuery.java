@@ -23,33 +23,27 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link Component}</code>
  * is showing or not.
- * 
+ * @see Component#isShowing()
+ *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-public final class ComponentShowingQuery extends GuiQuery<Boolean> {
-
-  private final Component component;
+public final class ComponentShowingQuery {
 
   /**
    * Indicates whether the given <code>{@link Component}</code> is showing or not. This action is executed in the event
    * dispatch thread.
    * @param component the given <code>Component</code>.
    * @return <code>true</code> if the given <code>Component</code> is showing, <code>false</code> otherwise.
+   * @see Component#isShowing()
    */
-  public static boolean isShowing(Component component) {
-    return execute(new ComponentShowingQuery(component));
+  public static boolean isShowing(final Component component) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return component.isShowing();
+      }
+    });
   }
 
-  ComponentShowingQuery(Component component) {
-    this.component = component;
-  }
-
-  /**
-   * Indicates whether this query's <code>{@link Component}</code> is showing or not. This action is executed in the
-   * event dispatch thread.
-   * @return <code>true</code> if this query's <code>Component</code> is showing, <code>false</code> otherwise.
-   */
-  protected Boolean executeInEDT() {
-    return component.isShowing();
-  }
+  private ComponentShowingQuery() {}
 }

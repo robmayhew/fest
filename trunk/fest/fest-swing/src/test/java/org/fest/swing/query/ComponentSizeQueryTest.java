@@ -15,46 +15,66 @@
  */
 package org.fest.swing.query;
 
-import java.awt.Component;
 import java.awt.Dimension;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.ScreenLock;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentSizeQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION) public class ComponentSizeQueryTest {
+@Test(groups = { GUI, EDT_ACTION })
+public class ComponentSizeQueryTest {
 
-  private Component component;
-  private Dimension size;
-  private ComponentSizeQuery query;
+  private static final Dimension SIZE = new Dimension(500, 300);
+
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    component = createMock(Component.class);
-    size = new Dimension(800, 600);
-    query = new ComponentSizeQuery(component);
+    ScreenLock.instance().acquire(this);
+    window = MyWindow.createNew();
+    window.display();
+  }
+
+  @AfterMethod public void tearDown() {
+    window.destroy();
+    ScreenLock.instance().release(this);
   }
 
   public void shouldReturnSizeOfComponent() {
-    new EasyMockTemplate(component) {
-      protected void expectations() {
-        expect(component.getSize()).andReturn(size);
-      }
+    assertThat(ComponentSizeQuery.sizeOf(window)).isEqualTo(SIZE);
+    assertThat(window.methodGetSizeWasInvoked()).isTrue();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(size);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private boolean methodGetSizeInvoked;
+
+    private MyWindow() {
+      super(ComponentSizeQueryTest.class);
+      setPreferredSize(new Dimension(SIZE));
+    }
+
+    @Override public Dimension getSize() {
+      methodGetSizeInvoked = true;
+      return super.getSize();
+    }
+
+    boolean methodGetSizeWasInvoked() { return methodGetSizeInvoked; }
   }
 }

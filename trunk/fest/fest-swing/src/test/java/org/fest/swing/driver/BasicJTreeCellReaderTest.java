@@ -16,25 +16,26 @@
 package org.fest.swing.driver;
 
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.JLabel;
+import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.Condition;
-import org.fest.swing.factory.JLabels;
-import org.fest.swing.factory.JTrees;
+import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.CustomCellRenderer;
-
-import static javax.swing.SwingUtilities.invokeLater;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.factory.JToolBars.toolBar;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -46,31 +47,35 @@ import static org.fest.swing.testing.TestGroups.GUI;
 @Test(groups = GUI)
 public class BasicJTreeCellReaderTest {
 
+  private Robot robot;
   private JTree tree;
   private BasicJTreeCellReader reader;
   private DefaultMutableTreeNode root;
 
   @BeforeMethod public void setUp() {
-    root = newRoot();
-    tree = JTrees.tree().withRoot(root).createNew();
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = new MyWindow();
+    root = window.root;
+    tree = window.tree;
     reader = new BasicJTreeCellReader();
+    robot.showWindow(window);
   }
 
-  private static DefaultMutableTreeNode newRoot() {
-    DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("root");
-    rootNode.add(new DefaultMutableTreeNode("Node1"));
-    return rootNode;
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
-    JLabel label = JLabels.label().withText("First").createNew();
+    JLabel label = new JLabel("First");
     setCellRendererComponent(tree, label);
+    robot.waitForIdle();
     Object value = reader.valueAt(tree, root);
     assertThat(value).isEqualTo("First");
   }
 
   public void shouldReturnTextFromTreeIfRendererIsNotJLabel() {
     setCellRendererComponent(tree, unrecognizedRenderer());
+    robot.waitForIdle();
     Object value = reader.valueAt(tree, root);
     assertThat(value).isEqualTo(root.getUserObject());
   }
@@ -80,28 +85,53 @@ public class BasicJTreeCellReaderTest {
     root = new DefaultMutableTreeNode(new Person());
     setRootInTree(tree, root);
     setCellRendererComponent(tree, unrecognizedRenderer());
+    robot.waitForIdle();
     Object value = reader.valueAt(tree, root);
     assertThat(value).isNull();
   }
 
   private static void setRootInTree(final JTree tree, final DefaultMutableTreeNode root) {
-    invokeLater(new Runnable() {
-      public void run() {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
         ((DefaultTreeModel)tree.getModel()).setRoot(root);
-      }
-    });
-    pause(new Condition("JTree's root is set") {
-      public boolean test() {
-        return tree.getModel().getRoot() == root;
       }
     });
   }
 
   private static void setCellRendererComponent(final JTree tree, final Component renderer) {
-    tree.setCellRenderer(new CustomCellRenderer(renderer));
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        tree.setCellRenderer(new CustomCellRenderer(renderer));
+      }
+    });
   }
-  
+
   private static Component unrecognizedRenderer() {
-    return toolBar().createNew();
+    return new JToolBar();
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    final JTree tree;
+    final DefaultMutableTreeNode root;
+
+    private MyWindow() {
+      super(BasicJTreeCellReaderTest.class);
+      root = newRoot();
+      tree = new JTree(root);
+      tree.setPreferredSize(new Dimension(100, 100));
+      addComponents(tree);
+    }
+
+    private static DefaultMutableTreeNode newRoot() {
+      DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("root");
+      rootNode.add(new DefaultMutableTreeNode("Node1"));
+      return rootNode;
+    }
   }
 }

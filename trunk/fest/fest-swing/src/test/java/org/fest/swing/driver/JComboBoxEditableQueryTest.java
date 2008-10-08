@@ -17,44 +17,79 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.BooleanProvider;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JComboBoxSetEditableTask.setEditable;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JComboBoxEditableQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JComboBoxEditableQueryTest {
 
-  private JComboBox comboBox;
-  private JComboBoxEditableQuery query;
+  private Robot robot;
+  private MyComboBox comboBox;
 
   @BeforeMethod public void setUp() {
-    comboBox = createMock(JComboBox.class);
-    query = new JComboBoxEditableQuery(comboBox);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    comboBox = window.comboBox;
+    robot.showWindow(window);
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_ACTION)
-  public void shouldIndicateIfJComboBoxIsEditable(final boolean editable) {
-    new EasyMockTemplate(comboBox) {
-      protected void expectations() {
-        expect(comboBox.isEditable()).andReturn(editable);
-      }
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(editable);
-      }
-    }.run();
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
+  public void shouldIndicateIfJComboBoxIsEditable(final boolean editable) {
+    setEditable(comboBox, editable);
+    robot.waitForIdle();
+    assertThat(JComboBoxEditableQuery.isEditable(comboBox)).isEqualTo(editable);
+    assertThat(comboBox.methodIsEditableWasInvoked()).isTrue();
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    final MyComboBox comboBox = new MyComboBox("one", "two", "three");
+
+    private MyWindow() {
+      super(JComboBoxEditableQueryTest.class);
+      add(comboBox);
+    }
+  }
+
+  private static class MyComboBox extends JComboBox {
+    private static final long serialVersionUID = 1L;
+
+    private boolean methodIsEditableInvoked;
+
+    MyComboBox(Object... items) {
+      super(items);
+    }
+
+    @Override public boolean isEditable() {
+      methodIsEditableInvoked = true;
+      return super.isEditable();
+    }
+
+    boolean methodIsEditableWasInvoked() { return methodIsEditableInvoked; }
   }
 }

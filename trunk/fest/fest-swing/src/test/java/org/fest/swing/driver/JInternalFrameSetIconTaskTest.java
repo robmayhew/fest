@@ -15,50 +15,49 @@
  */
 package org.fest.swing.driver;
 
-import java.beans.PropertyVetoException;
-
 import javax.swing.JInternalFrame;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MDITestWindow;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.swing.driver.JInternalFrameAction.DEICONIFY;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JInternalFrameAction.*;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JInternalFrameSetIconTask}</code>.
  *
  * @author Yvonne Wang
  */
-@Test public class JInternalFrameSetIconTaskTest {
+@Test(groups = { GUI, EDT_ACTION })
+public class JInternalFrameSetIconTaskTest {
 
+  private Robot robot;
   private JInternalFrame internalFrame;
-  private JInternalFrameAction action;
 
   @BeforeMethod public void setUp() {
-    internalFrame = createMock(JInternalFrame.class);
-    action = DEICONIFY;
+    robot = robotWithNewAwtHierarchy();
+    MDITestWindow window = MDITestWindow.createNew(getClass());
+    internalFrame = window.internalFrame();
+    robot.showWindow(window);
   }
 
-  public void shouldCloseJInternalFrame() {
-    new EasyMockTemplate(internalFrame) {
-      protected void expectations() {
-        try {
-          internalFrame.setIcon(action.value);
-        } catch (PropertyVetoException e) {}
-        expectLastCall().once();
-      }
-
-      protected void codeToTest() {
-        try {
-          JInternalFrameSetIconTask.setIconTask(internalFrame, action).execute();
-        } catch (PropertyVetoException e) {}
-      }
-    }.run();
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
+  public void shouldIconifyandDeiconifyJInternalFrame() {
+    assertThat(internalFrame.isIcon()).isFalse();
+    JInternalFrameSetIconTask.setIcon(internalFrame, ICONIFY);
+    robot.waitForIdle();
+    assertThat(internalFrame.isIcon()).isTrue();
+    JInternalFrameSetIconTask.setIcon(internalFrame, DEICONIFY);
+    robot.waitForIdle();
+    assertThat(internalFrame.isIcon()).isFalse();
+  }
 }

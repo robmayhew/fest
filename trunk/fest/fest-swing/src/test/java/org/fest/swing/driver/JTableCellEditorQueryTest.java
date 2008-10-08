@@ -27,33 +27,41 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TableRenderDemo;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTableCellEditorQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 @Test(groups = { GUI, EDT_ACTION })
 public class JTableCellEditorQueryTest {
 
-  private MyWindow window;
+  private Robot robot;
+  private JTable table;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createAndShow();
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    table = window.table;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
+    robot.cleanUp();
   }
 
   @Test(dataProvider = "editorTypes", groups = { GUI, EDT_ACTION })
   public void shouldReturnEditorComponentOfJTableCell(int column, Class<?> editorType) {
-    Component editor = JTableCellEditorQuery.cellEditorIn(window.table, 0, column);
+    int row = 0;
+    Component editor = JTableCellEditorQuery.cellEditorIn(table, row, column);
     assertThat(editor).isInstanceOf(editorType);
   }
 
@@ -70,12 +78,10 @@ public class JTableCellEditorQueryTest {
 
     final JTable table;
 
-    static MyWindow createAndShow() {
-      MyWindow window = new MyWindow();
-      window.display();
-      return window;
+    static MyWindow createNew() {
+      return new MyWindow();
     }
-    
+
     private MyWindow() {
       super(JTableCellEditorQueryTest.class);
       TableRenderDemo newContentPane = new TableRenderDemo();

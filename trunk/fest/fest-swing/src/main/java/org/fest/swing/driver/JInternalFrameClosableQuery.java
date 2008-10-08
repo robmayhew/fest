@@ -24,23 +24,20 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a
  * <code>{@link JInternalFrame}</code> is closable or not.
+ * @see JInternalFrame#isClosable()
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class JInternalFrameClosableQuery extends GuiQuery<Boolean> {
+final class JInternalFrameClosableQuery {
 
-  private final JInternalFrame internalFrame;
-
-  static boolean isClosable(JInternalFrame internalFrame) {
-    return execute(new JInternalFrameClosableQuery(internalFrame));
+  static boolean isClosable(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return internalFrame.isClosable();
+      }
+    });
   }
 
-  JInternalFrameClosableQuery(JInternalFrame internalFrame) {
-    this.internalFrame = internalFrame;
-  }
-
-  protected Boolean executeInEDT() {
-    return internalFrame.isClosable();
-  }
+  private JInternalFrameClosableQuery() {}
 }

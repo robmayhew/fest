@@ -26,7 +26,7 @@ import org.fest.swing.core.Robot;
 import static java.awt.event.KeyEvent.VK_ENTER;
 
 import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.driver.JTableCancelCellEditingTask.cancelCellEditingTask;
+import static org.fest.swing.driver.JTableCancelCellEditingTask.cancelEditing;
 
 /**
  * Understands an implementation of <code>{@link JTableCellWriter}</code> that knows how to use
@@ -71,7 +71,8 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
   /** {@inheritDoc} */
   public void cancelCellEditing(JTable table, int row, int column) {
     editor(table, row, column);
-    robot.invokeAndWait(cancelCellEditingTask(table, row, column));
+    cancelEditing(table, row, column);
+    robot.waitForIdle();
   }
 
   private JTextComponent editor(JTable table, int row, int column) {

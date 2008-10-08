@@ -1,32 +1,39 @@
 /*
- * Created on Aug 12, 2008
- * 
+ * Created on Oct 2, 2008
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.driver;
+package org.fest.swing.testing;
+
+import javax.swing.DefaultListModel;
 
 /**
- * Understands a minimum and maximum value.
+ * Understands a simplified version of <code>{@link DefaultListModel}</code>.
  *
+ * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class MinimumAndMaximum {
+public class TestListModel extends DefaultListModel {
 
-  final int minimum;
-  final int maximum;
+  private static final long serialVersionUID = 1L;
 
-  MinimumAndMaximum(int minimum, int maximum) {
-    this.minimum = minimum;
-    this.maximum = maximum;
+  public TestListModel(Object... elements) {
+    setElements(elements);
+  }
+
+  public void setElements(Object...elements) {
+    clear();
+    if (elements == null) throw new NullPointerException("The array of elements should not be null");
+    for (Object e : elements) addElement(e);
   }
 }

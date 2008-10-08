@@ -23,7 +23,7 @@ import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.JScrollBarBlockIncrementQuery.blockIncrementOf;
-import static org.fest.swing.driver.JScrollBarMinAndMaxQuery.minAndMaxOf;
+import static org.fest.swing.driver.JScrollBarValueRangeQuery.valueRangeOf;
 import static org.fest.swing.driver.JScrollBarSetValueTask.setValue;
 import static org.fest.swing.driver.JScrollBarUnitIncrementQuery.unitIncrementOf;
 import static org.fest.swing.driver.JScrollBarValueQuery.valueOf;
@@ -165,9 +165,9 @@ public class JScrollBarDriver extends JComponentDriver {
   }
 
   private void validatePosition(JScrollBar scrollBar, int position) {
-    MinimumAndMaximum minAndMax = minAndMaxOf(scrollBar);
-    int min = minAndMax.minimum;
-    int max = minAndMax.maximum;
+    ValueRange valueRange = valueRangeOf(scrollBar);
+    int min = valueRange.minimum;
+    int max = valueRange.maximum;
     if (position >= min && position <= max) return;
     throw actionFailure(concat(
         "Position <", position, "> is not within the JScrollBar bounds of <", min, "> and <", max, ">"));

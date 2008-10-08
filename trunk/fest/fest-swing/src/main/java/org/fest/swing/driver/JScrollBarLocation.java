@@ -23,11 +23,11 @@ import javax.swing.JScrollBar;
 
 import static java.awt.Adjustable.*;
 
-import static org.fest.swing.driver.JScrollBarMinAndMaxQuery.minAndMaxOf;
+import static org.fest.swing.driver.JScrollBarValueRangeQuery.valueRangeOf;
 import static org.fest.swing.driver.JScrollBarOrientationQuery.orientationOf;
 
 /**
- * Understands encapsulation of a location in a <code>{@link JScrollBar}</code>.
+ * Understands a location in a <code>{@link JScrollBar}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
@@ -59,8 +59,8 @@ public final class JScrollBarLocation {
   }
 
   private int maximumMinusMinimum(JScrollBar scrollBar) {
-    MinimumAndMaximum minAndMax = minAndMaxOf(scrollBar);
-    return minAndMax.maximum - minAndMax.minimum;
+    ValueRange valueRange = valueRangeOf(scrollBar);
+    return valueRange.maximum - valueRange.minimum;
   }
 
   /**

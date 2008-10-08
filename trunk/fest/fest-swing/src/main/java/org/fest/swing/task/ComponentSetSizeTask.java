@@ -23,7 +23,7 @@ import org.fest.swing.core.GuiTask;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands a task that sets the size of a <code>{@link Component}</code>. This task is executed in the event 
+ * Understands a task that sets the size of a <code>{@link Component}</code>. This task is executed in the event
  * dispatch thread.
  *
  * @author Alex Ruiz
@@ -37,13 +37,11 @@ public final class ComponentSetSizeTask {
    */
   public static void setComponentSize(final Component c, final Dimension size) {
     execute(new GuiTask() {
-      // we cannot use a GuiTask because we cannot depend on the size of the component after being resized will be the
-      // same to the given one (e.g. when resizing a frame, we need to count the size of the title bar.
       protected void executeInEDT() {
         c.setSize(size);
       }
     });
   }
-  
+
   private ComponentSetSizeTask() {}
 }

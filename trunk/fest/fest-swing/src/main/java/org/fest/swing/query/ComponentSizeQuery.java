@@ -24,33 +24,26 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the size of a
  * <code>{@link Component}</code>.
- * 
+ * @see Component#getSize()
+ *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class ComponentSizeQuery extends GuiQuery<Dimension> {
-
-  private final Component component;
+public final class ComponentSizeQuery {
 
   /**
    * Returns the size of the given <code>{@link Component}</code>. This action is executed in the event dispatch thread.
    * @param component the given <code>Component</code>.
    * @return the size of the given <code>Component</code>.
+   * @see Component#getSize()
    */
-  public static Dimension sizeOf(Component component) {
-    return execute(new ComponentSizeQuery(component));
+  public static Dimension sizeOf(final Component component) {
+    return execute(new GuiQuery<Dimension>() {
+      protected Dimension executeInEDT() {
+        return component.getSize();
+      }
+    });
   }
 
-  ComponentSizeQuery(Component component) {
-    this.component = component;
-  }
-
-  /**
-   * Returns the size in this query's <code>{@link Component}</code>. This action is executed in the event dispatch
-   * thread.
-   * @return the size in this query's <code>Component</code>.
-   */
-  protected Dimension executeInEDT() {
-    return component.getSize();
-  }
+  private ComponentSizeQuery() {}
 }

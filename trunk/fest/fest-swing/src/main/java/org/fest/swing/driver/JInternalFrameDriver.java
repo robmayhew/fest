@@ -22,8 +22,8 @@ import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.driver.JInternalFrameSetPropertyTaskTemplate.PropertyVeto;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.UnexpectedException;
 
 import static org.fest.swing.driver.JInternalFrameAction.*;
 import static org.fest.swing.driver.JInternalFrameClosableQuery.isClosable;
@@ -31,10 +31,8 @@ import static org.fest.swing.driver.JInternalFrameDesktopIconQuery.desktopIconOf
 import static org.fest.swing.driver.JInternalFrameIconQuery.isIconified;
 import static org.fest.swing.driver.JInternalFrameIconifiableQuery.isIconifiable;
 import static org.fest.swing.driver.JInternalFrameMaximizableQuery.isMaximizable;
-import static org.fest.swing.driver.JInternalFrameMoveToBackTask.toBackTask;
-import static org.fest.swing.driver.JInternalFrameMoveToFrontTask.toFrontTask;
-import static org.fest.swing.driver.JInternalFrameSetIconTask.setIconTask;
-import static org.fest.swing.driver.JInternalFrameSetMaximumTask.setMaximumTask;
+import static org.fest.swing.driver.JInternalFrameSetIconTask.setIcon;
+import static org.fest.swing.driver.JInternalFrameSetMaximumTask.setMaximum;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
@@ -63,7 +61,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * @param internalFrame the target <code>JInternalFrame</code>.
    */
   public void moveToFront(JInternalFrame internalFrame) {
-    robot.invokeAndWait(toFrontTask(internalFrame));
+    JInternalFrameMoveToFrontTask.moveToFront(internalFrame);
   }
 
   /**
@@ -71,7 +69,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
    * @param internalFrame the target <code>JInternalFrame</code>.
    */
   public void moveToBack(JInternalFrame internalFrame) {
-    robot.invokeAndWait(toBackTask(internalFrame));
+    JInternalFrameMoveToBackTask.moveToBack(internalFrame);
   }
 
   /**
@@ -101,7 +99,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     Point p = maximizeLocation(clickTarget);
     robot.moveMouse(clickTarget, p.x, p.y);
     if (isIconified(internalFrame)) deiconify(internalFrame);
-    setProperty(setMaximumTask(internalFrame, action));
+    setMaximumProperty(internalFrame, action);
   }
 
   /**
@@ -116,7 +114,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
       throw actionFailure(concat("The JInternalFrame <", format(internalFrame), "> is not iconifiable"));
     Point p = iconifyLocation(internalFrame);
     robot.moveMouse(internalFrame, p.x, p.y);
-    setProperty(setIconTask(internalFrame, ICONIFY));
+    setIconProperty(internalFrame, ICONIFY);
   }
 
   /**
@@ -129,15 +127,38 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     Container c = desktopIconOf(internalFrame);
     Point p = iconifyLocation(c);
     robot.moveMouse(c, p.x, p.y);
-    setProperty(setIconTask(internalFrame, DEICONIFY));
+    setIconProperty(internalFrame, DEICONIFY);
   }
 
-  void setProperty(JInternalFrameSetPropertyTaskTemplate task) {
-    robot.invokeAndWait(task);
-    PropertyVeto veto = task.veto();
-    PropertyVetoException vetoError = veto != null ? veto.cause() : null;
+  private void setIconProperty(JInternalFrame internalFrame, JInternalFrameAction action) {
+    try {
+      setIcon(internalFrame, action);
+      robot.waitForIdle();
+    } catch (UnexpectedException unexpected) {
+      failIfVetoed(internalFrame, action, unexpected);
+    }
+  }
+
+  private void setMaximumProperty(JInternalFrame internalFrame, JInternalFrameAction action) {
+    try {
+      setMaximum(internalFrame, action);
+      robot.waitForIdle();
+    } catch (UnexpectedException unexpected) {
+      failIfVetoed(internalFrame, action, unexpected);
+    }
+  }
+
+  // made package-protected for testing purposes only
+  void failIfVetoed(JInternalFrame internalFrame, JInternalFrameAction action, UnexpectedException unexpected) {
+    PropertyVetoException vetoError = vetoFrom(unexpected);
     if (vetoError == null) return;
-    throw actionFailure(concat(task.action.name, " of ", format(task.target), " was vetoed: <", vetoError.getMessage(), ">"));
+    throw actionFailure(concat(action.name, " of ", format(internalFrame), " was vetoed: <", vetoError.getMessage(), ">"));
+  }
+
+  private PropertyVetoException vetoFrom(UnexpectedException unexpected) {
+    Throwable cause = unexpected.getCause();
+    if (!(cause instanceof PropertyVetoException)) return null;
+    return (PropertyVetoException)cause;
   }
 
   /**
@@ -189,5 +210,6 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     // This is LAF-specific, so it must be done programmatically.
     robot.moveMouse(internalFrame, closeLocation(internalFrame));
     JInternalFrameCloseTask.close(internalFrame);
+    robot.waitForIdle();
   }
 }

@@ -17,17 +17,19 @@ package org.fest.swing.driver;
 
 import javax.swing.JInternalFrame;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.BooleanProvider;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.testing.MDITestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JInternalFrameMaximizableQuery}</code>.
@@ -35,27 +37,31 @@ import static org.fest.swing.testing.TestGroups.EDT_ACTION;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JInternalFrameMaximizableQueryTest {
 
+  private Robot robot;
   private JInternalFrame internalFrame;
-  private JInternalFrameMaximizableQuery query;
 
   @BeforeMethod public void setUp() {
-    internalFrame = createMock(JInternalFrame.class);
-    query = new JInternalFrameMaximizableQuery(internalFrame);
+    robot = robotWithNewAwtHierarchy();
+    MDITestWindow window = MDITestWindow.createNew(getClass());
+    internalFrame = window.internalFrame();
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_ACTION)
   public void shouldIndicateIfJInternalFrameIsMaximizable(final boolean maximizable) {
-    new EasyMockTemplate(internalFrame) {
-      protected void expectations() {
-        expect(internalFrame.isMaximizable()).andReturn(maximizable);
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        internalFrame.setMaximizable(maximizable);
       }
-
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(maximizable);
-      }
-    }.run();
+    });
+    robot.waitForIdle();
+    assertThat(JInternalFrameMaximizableQuery.isMaximizable(internalFrame)).isEqualTo(maximizable);
   }
 }

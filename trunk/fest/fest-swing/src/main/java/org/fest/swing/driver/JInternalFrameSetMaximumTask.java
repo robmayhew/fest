@@ -19,22 +19,25 @@ import java.beans.PropertyVetoException;
 
 import javax.swing.JInternalFrame;
 
+import org.fest.swing.core.GuiTask;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
- * Understands a task that maximizes or restores a <code>{@link JInternalFrame}</code>.
+ * Understands a task that maximizes or restores a <code>{@link JInternalFrame}</code>. This task is executed in the
+ * event dispatch thread.
  *
  * @author Yvonne Wang
  */
-class JInternalFrameSetMaximumTask extends JInternalFrameSetPropertyTaskTemplate {
+final class JInternalFrameSetMaximumTask {
 
-  static JInternalFrameSetMaximumTask setMaximumTask(JInternalFrame internalFrame, JInternalFrameAction action) {
-    return new JInternalFrameSetMaximumTask(internalFrame, action);
-  }
-  
-  private JInternalFrameSetMaximumTask(JInternalFrame internalFrame, JInternalFrameAction action) {
-    super(internalFrame, action);
+  static void setMaximum(final JInternalFrame internalFrame, final JInternalFrameAction action) {
+    execute(new GuiTask() {
+      protected void executeInEDT() throws PropertyVetoException {
+        internalFrame.setMaximum(action.value);
+      }
+    });
   }
 
-  public void execute() throws PropertyVetoException {
-    target.setMaximum(action.value);
-  }
+  private JInternalFrameSetMaximumTask() {}
 }

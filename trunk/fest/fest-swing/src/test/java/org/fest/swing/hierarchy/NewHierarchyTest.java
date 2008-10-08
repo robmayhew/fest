@@ -24,6 +24,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.ScreenLock;
 import org.fest.swing.listener.WeakEventListener;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
@@ -39,6 +40,7 @@ import static org.fest.util.Arrays.array;
  * Tests for <code>{@link NewHierarchy}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 @Test(groups = GUI)
 public class NewHierarchyTest {
@@ -50,6 +52,7 @@ public class NewHierarchyTest {
   private MyWindow window;
 
   @BeforeMethod public void setUp() {
+    ScreenLock.instance().acquire(this);
     toolkit = ToolkitStub.createNew();
     window = MyWindow.createNew();
     window.display();
@@ -58,6 +61,7 @@ public class NewHierarchyTest {
 
   @AfterMethod public void tearDown() {
     window.destroy();
+    ScreenLock.instance().release(this);
   }
 
   public void shouldIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit() {
@@ -125,7 +129,7 @@ public class NewHierarchyTest {
     static MyWindow createNew() {
       return new MyWindow();
     }
-    
+
     final JComboBox comboBox = new JComboBox(array("One", "Two"));
     final JTextField textField = new JTextField(20);
 

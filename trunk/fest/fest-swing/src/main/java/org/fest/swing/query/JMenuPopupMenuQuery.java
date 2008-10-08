@@ -8,35 +8,29 @@ import org.fest.swing.core.GuiQuery;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands an action, executed in the event dispatch thread, that returns the pop-up menu associated with a 
+ * Understands an action, executed in the event dispatch thread, that returns the pop-up menu associated with a
  * <code>{@link JMenu}</code>.
+ * @see JMenu#getPopupMenu()
  *
- * @author Alex Ruiz 
+ * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-public final class JMenuPopupMenuQuery extends GuiQuery<JPopupMenu> {
-  
-  private final JMenu menu;
+public final class JMenuPopupMenuQuery {
 
   /**
    * Returns the pop-up menu associated with the given <code>{@link JMenu}</code>. This action is executed in the event
    * dispatch thread.
    * @param menu the given <code>JMenu</code>.
    * @return the pop-up menu associated with the given <code>JMenu</code>.
+   * @see JMenu#getPopupMenu()
    */
-  public static JPopupMenu popupMenuOf(JMenu menu) {
-    return execute(new JMenuPopupMenuQuery(menu));
-  }
-  
-  JMenuPopupMenuQuery(JMenu menu) {
-    this.menu = menu;
+  public static JPopupMenu popupMenuOf(final JMenu menu) {
+    return execute(new GuiQuery<JPopupMenu>() {
+      protected JPopupMenu executeInEDT() {
+        return menu.getPopupMenu();
+      }
+    });
   }
 
-  /**
-   * Returns the pop-up menu associated with this query's <code>{@link JMenu}</code>. This action is executed in the
-   * event dispatch thread.
-   * @return the pop-up menu associated with this query's <code>JMenu</code>.
-   */
-  protected JPopupMenu executeInEDT() {
-    return menu.getPopupMenu();
-  }
+  private JMenuPopupMenuQuery() {}
 }

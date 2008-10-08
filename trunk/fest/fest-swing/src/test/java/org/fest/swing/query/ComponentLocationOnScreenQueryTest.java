@@ -15,47 +15,67 @@
  */
 package org.fest.swing.query;
 
-import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Point;
 
-import org.easymock.classextension.EasyMock;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentLocationOnScreenQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class ComponentLocationOnScreenQueryTest {
 
-  private Component component;
-  private Point location;
-  private ComponentLocationOnScreenQuery query;
-  
+  private Robot robot;
+  private MyWindow window;
+
   @BeforeMethod public void setUp() {
-    component = EasyMock.createMock(Component.class);
-    location = new Point(6, 8);
-    query = new ComponentLocationOnScreenQuery(component);
+    robot = robotWithNewAwtHierarchy();
+    window = MyWindow.createNew();
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnComponentLocationOnScreen() {
-    new EasyMockTemplate(component) {
-      protected void expectations() {
-        expect(component.getLocationOnScreen()).andReturn(location);
-      }
+    Point expected = new Point(100, 100);
+    assertThat(ComponentLocationOnScreenQuery.locationOnScreen(window)).isEqualTo(expected);
+    assertThat(window.methodGetLocationOnScreenWasInvoked()).isTrue();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(location);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private boolean methodGetLocationOnScreenInvoked;
+
+    private MyWindow() {
+      super(ComponentLocationOnScreenQueryTest.class);
+      setPreferredSize(new Dimension(500, 300));
+    }
+
+    @Override public Point getLocationOnScreen() {
+      methodGetLocationOnScreenInvoked = true;
+      return super.getLocationOnScreen();
+    }
+
+    boolean methodGetLocationOnScreenWasInvoked() { return methodGetLocationOnScreenInvoked; }
   }
 }

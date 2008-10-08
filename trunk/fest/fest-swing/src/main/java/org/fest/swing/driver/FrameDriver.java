@@ -23,11 +23,6 @@ import org.fest.swing.exception.ActionFailedException;
 
 import static java.awt.Frame.*;
 
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.driver.FrameDeiconifiedCondition.untilDeiconified;
-import static org.fest.swing.driver.FrameIconifiedCondition.untilIconified;
-import static org.fest.swing.driver.FrameMaximizedCondition.untilMaximized;
-import static org.fest.swing.driver.FrameNormalizedCondition.untilNormalized;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 
 /**
@@ -36,6 +31,7 @@ import static org.fest.swing.exception.ActionFailedException.actionFailure;
  * use only.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class FrameDriver extends WindowDriver {
 
@@ -55,7 +51,7 @@ public class FrameDriver extends WindowDriver {
     Point p = iconifyLocation(frame);
     if (p != null) robot.moveMouse(frame, p.x, p.y);
     updateFrameExtendedState(frame, ICONIFIED);
-    pause(untilIconified(frame));
+    robot.waitForIdle();
   }
 
   /**
@@ -64,7 +60,7 @@ public class FrameDriver extends WindowDriver {
    */
   public void deiconify(Frame frame) {
     updateFrameExtendedState(frame, NORMAL);
-    pause(untilDeiconified(frame));
+    robot.waitForIdle();
   }
 
   /**
@@ -73,7 +69,7 @@ public class FrameDriver extends WindowDriver {
    */
   public void normalize(Frame frame) {
     updateFrameExtendedState(frame, NORMAL);
-    pause(untilNormalized(frame));
+    robot.waitForIdle();
   }
 
   /**
@@ -84,10 +80,10 @@ public class FrameDriver extends WindowDriver {
   public void maximize(Frame frame) {
     Point p = maximizeLocation(frame);
     if (p != null) robot.moveMouse(frame, p.x, p.y);
-    if (!supportsMaximize(Toolkit.getDefaultToolkit())) 
+    if (!supportsMaximize(Toolkit.getDefaultToolkit()))
       throw actionFailure("Platform does not support maximizing frames");
     updateFrameExtendedState(frame, MAXIMIZED_BOTH);
-    pause(untilMaximized(frame));
+    robot.waitForIdle();
   }
 
   private void updateFrameExtendedState(Frame frame, int state) {

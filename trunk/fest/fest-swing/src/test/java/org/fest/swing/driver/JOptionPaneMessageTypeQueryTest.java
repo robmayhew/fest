@@ -17,45 +17,63 @@ package org.fest.swing.driver;
 
 import javax.swing.JOptionPane;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
 
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.JOptionPaneLauncher.launch;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
- * Tests for <code>{@link JOptionPaneMessageQuery}</code>.
+ * Tests for <code>{@link JOptionPaneMessageTypeQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JOptionPaneMessageTypeQueryTest {
 
-  private JOptionPane optionPane;
-  private int messageType;
-  private JOptionPaneMessageTypeQuery query;
+  private Robot robot;
+  private MyOptionPane optionPane;
 
   @BeforeMethod public void setUp() {
-    optionPane = createMock(JOptionPane.class);
-    messageType = INFORMATION_MESSAGE;
-    query = new JOptionPaneMessageTypeQuery(optionPane);
+    robot = robotWithNewAwtHierarchy();
+    optionPane = MyOptionPane.createNew();
+    launch(optionPane);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnMessageTypeOfJOptionPane() {
-    new EasyMockTemplate(optionPane) {
-      protected void expectations() {
-        expect(optionPane.getMessageType()).andReturn(messageType);
-      }
+    assertThat(JOptionPaneMessageTypeQuery.messageTypeOf(optionPane)).isEqualTo(INFORMATION_MESSAGE);
+    assertThat(optionPane.methodGetMessageTypeWasInvoked()).isTrue();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(messageType);
-      }
-    }.run();
+  private static class MyOptionPane extends JOptionPane {
+    private static final long serialVersionUID = 1L;
+    private boolean methodGetMessageTypeInvoked;
+
+    static MyOptionPane createNew() {
+      return new MyOptionPane();
+    }
+
+    private MyOptionPane() {
+      super("Hello World", INFORMATION_MESSAGE);
+    }
+
+    @Override public int getMessageType() {
+      methodGetMessageTypeInvoked = true;
+      return super.getMessageType();
+    }
+
+    boolean methodGetMessageTypeWasInvoked() { return methodGetMessageTypeInvoked; }
   }
 }

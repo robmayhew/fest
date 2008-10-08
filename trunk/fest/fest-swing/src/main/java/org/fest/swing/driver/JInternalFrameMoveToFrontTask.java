@@ -19,25 +19,23 @@ import javax.swing.JInternalFrame;
 
 import org.fest.swing.core.GuiTask;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
- * Understands a task that sends a <code>{@link JInternalFrame}</code> to the front. This task should be executed in the
- * event dispatch thread.
+ * Understands a task that sends a <code>{@link JInternalFrame}</code> to the front. This task is executed in the event
+ * dispatch thread.
  *
  * @author Yvonne Wang
  */
-class JInternalFrameMoveToFrontTask extends GuiTask {
+final class JInternalFrameMoveToFrontTask {
 
-  private final JInternalFrame internalFrame;
-
-  static JInternalFrameMoveToFrontTask toFrontTask(JInternalFrame internalFrame) {
-    return new JInternalFrameMoveToFrontTask(internalFrame);
-  }
-  
-  private JInternalFrameMoveToFrontTask(JInternalFrame internalFrame) {
-    this.internalFrame = internalFrame;
+  static void moveToFront(final JInternalFrame internalFrame) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        internalFrame.toFront();
+      }
+    });
   }
 
-  protected void executeInEDT() {
-    internalFrame.toFront();
-  }
+  private JInternalFrameMoveToFrontTask() {}
 }

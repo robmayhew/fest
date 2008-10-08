@@ -25,23 +25,20 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the location (top-left corner) of a
  * <code>{@link Component}</code>.
+ * @see Component#getLocation()
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class ComponentLocationQuery extends GuiQuery<Point> {
+final class ComponentLocationQuery {
 
-  private final Component component;
-
-  static Point locationOf(Component component) {
-    return execute(new ComponentLocationQuery(component));
+  static Point locationOf(final Component component) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        return component.getLocation();
+      }
+    });
   }
 
-  ComponentLocationQuery(Component component) {
-    this.component = component;
-  }
-
-  protected Point executeInEDT() {
-    return component.getLocation();
-  }
+  private ComponentLocationQuery() {}
 }

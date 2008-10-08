@@ -16,49 +16,69 @@
 package org.fest.swing.hierarchy;
 
 import java.awt.Component;
-import java.awt.Container;
 import java.util.List;
 
+import javax.swing.JButton;
+
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.ScreenLock;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
-import static org.fest.util.Arrays.array;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ContainerComponentsQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class ContainerComponentsQueryTest {
 
-  private Container container;
-  private Component[] components;
-  private ContainerComponentsQuery query;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    container = createMock(Container.class);
-    components = array(createMock(Component.class), createMock(Component.class));
-    query = new ContainerComponentsQuery(container);
+    ScreenLock.instance().acquire(this);
+    window = MyWindow.createNew();
+    window.display();
+  }
+
+  @AfterMethod public void tearDown() {
+    window.destroy();
+    ScreenLock.instance().release(this);
   }
 
   public void shouldReturnComponentsOfContainer() {
-    new EasyMockTemplate(container) {
-      protected void expectations() {
-        expect(container.getComponents()).andReturn(components);
-      }
+    List<Component> components = ContainerComponentsQuery.componentsOf(window.getContentPane());
+    assertThat(components).containsOnly(window.button);
+    assertThat(window.methodGetComponentsWasInvoked()).isTrue();
+  }
 
-      protected void codeToTest() {
-        List<Component> componentList = query.executeInEDT();
-        assertThat(componentList).containsOnly((Object[])components);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private boolean methodGetComponentsInvoked;
+
+    final JButton button = new JButton("A button");
+
+    private MyWindow() {
+      super(ContainerComponentsQueryTest.class);
+      addComponents(button);
+    }
+
+    @Override public Component[] getComponents() {
+      methodGetComponentsInvoked = true;
+      return super.getComponents();
+    }
+
+    boolean methodGetComponentsWasInvoked() { return methodGetComponentsInvoked; }
   }
 }

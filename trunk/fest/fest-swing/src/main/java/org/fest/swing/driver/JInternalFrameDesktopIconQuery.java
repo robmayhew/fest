@@ -25,23 +25,20 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link JDesktopIcon}</code> used
  * when a given <code>{@link JInternalFrame}</code> is iconified.
+ * @see JInternalFrame#getDesktopIcon()
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class JInternalFrameDesktopIconQuery extends GuiQuery<JDesktopIcon> {
+final class JInternalFrameDesktopIconQuery {
 
-  private final JInternalFrame internalFrame;
-
-  static JDesktopIcon desktopIconOf(JInternalFrame internalFrame) {
-    return execute(new JInternalFrameDesktopIconQuery(internalFrame));
+  static JDesktopIcon desktopIconOf(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<JDesktopIcon>() {
+      protected JDesktopIcon executeInEDT() throws Throwable {
+        return internalFrame.getDesktopIcon();
+      }
+    });
   }
 
-  JInternalFrameDesktopIconQuery(JInternalFrame internalFrame) {
-    this.internalFrame = internalFrame;
-  }
-
-  protected JDesktopIcon executeInEDT() {
-    return internalFrame.getDesktopIcon();
-  }
+  private JInternalFrameDesktopIconQuery() {}
 }

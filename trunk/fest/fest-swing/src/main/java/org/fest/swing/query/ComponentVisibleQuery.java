@@ -21,36 +21,29 @@ import org.fest.swing.core.GuiQuery;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link Component}</code> 
+ * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link Component}</code>
  * is visible or not.
+ * @see Component#isVisible()
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class ComponentVisibleQuery extends GuiQuery<Boolean> {
-
-  private final Component component;
+public final class ComponentVisibleQuery {
 
   /**
    * Indicates whether the given <code>{@link Component}</code> is visible or not. This action is executed in the event
    * dispatch thread.
    * @param component the given <code>Component</code>.
    * @return <code>true</code> if the given <code>Component</code> is visible, <code>false</code> otherwise.
+   * @see Component#isVisible()
    */
-  public static boolean isVisible(Component component) {
-    return execute(new ComponentVisibleQuery(component));
+  public static boolean isVisible(final Component component) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return component.isVisible();
+      }
+    });
   }
 
-  ComponentVisibleQuery(Component component) {
-    this.component = component;
-  }
-
-  /**
-   * Indicates whether this query's <code>{@link Component}</code> is visible or not. This action is executed in the
-   * event dispatch thread.
-   * @return <code>true</code> if this query's <code>Component</code> is visible, <code>false</code> otherwise.
-   */
-  protected Boolean executeInEDT() {
-    return component.isVisible();
-  }
+  private ComponentVisibleQuery() {}
 }

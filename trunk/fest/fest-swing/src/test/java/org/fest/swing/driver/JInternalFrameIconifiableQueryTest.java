@@ -17,17 +17,19 @@ package org.fest.swing.driver;
 
 import javax.swing.JInternalFrame;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.BooleanProvider;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.testing.MDITestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JInternalFrameIconifiableQuery}</code>.
@@ -35,27 +37,31 @@ import static org.fest.swing.testing.TestGroups.EDT_ACTION;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JInternalFrameIconifiableQueryTest {
 
+  private Robot robot;
   private JInternalFrame internalFrame;
-  private JInternalFrameIconifiableQuery query;
 
   @BeforeMethod public void setUp() {
-    internalFrame = createMock(JInternalFrame.class);
-    query = new JInternalFrameIconifiableQuery(internalFrame);
+    robot = robotWithNewAwtHierarchy();
+    MDITestWindow window = MDITestWindow.createNew(getClass());
+    internalFrame = window.internalFrame();
+    robot.showWindow(window);
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
-  public void shouldIndicateIfJInternalFrameIsIconifiable(final boolean iconifiable) {
-    new EasyMockTemplate(internalFrame) {
-      protected void expectations() {
-        expect(internalFrame.isIconifiable()).andReturn(iconifiable);
-      }
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(iconifiable);
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
+  public void shouldIndicateIfJInternalFrameIsIconifiable(final boolean iconifiable) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        internalFrame.setIconifiable(iconifiable);
       }
-    }.run();
+    });
+    robot.waitForIdle();
+    assertThat(JInternalFrameIconifiableQuery.isIconifiable(internalFrame)).isEqualTo(iconifiable);
   }
 }

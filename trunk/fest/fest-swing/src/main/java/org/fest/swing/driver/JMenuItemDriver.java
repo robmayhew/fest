@@ -27,7 +27,7 @@ import static java.lang.Boolean.getBoolean;
 
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
-import static org.fest.swing.driver.WindowMoveToFrontTask.toFrontTask;
+import static org.fest.swing.driver.WindowMoveToFrontTask.toFront;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
@@ -58,19 +58,19 @@ public class JMenuItemDriver extends JComponentDriver {
   public JMenuItemDriver(Robot robot) {
     super(robot);
   }
-  
+
   private void show(JMenuItem menuItem) {
     JMenuItemLocation location = new JMenuItemLocation(menuItem);
     activateParentIfIsAMenu(location);
     moveParentWindowToFront(location);
-    if (menuItem instanceof JMenu && !location.inMenuBar()) waitForSubMenuToShow();    
+    if (menuItem instanceof JMenu && !location.inMenuBar()) waitForSubMenuToShow();
   }
 
   private void activateParentIfIsAMenu(JMenuItemLocation location) {
     if (!location.isParentAMenu()) return;
     click((JMenuItem)location.parentOrInvoker());
   }
-  
+
   /**
    * Finds and selects the given <code>{@link JMenuItem}</code>.
    * @param menuItem the <code>JMenuItem</code> to select.
@@ -100,7 +100,8 @@ public class JMenuItemDriver extends JComponentDriver {
   private void moveToFront(Window w) {
     if (w == null) return;
     // Make sure the window is in front, or its menus may be obscured by another window.
-    robot.invokeAndWait(w, toFrontTask(w));
+    toFront(w);
+    robot.waitForIdle();
     robot.moveMouse(w);
   }
 

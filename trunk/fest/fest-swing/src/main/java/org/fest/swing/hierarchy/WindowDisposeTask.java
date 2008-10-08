@@ -4,33 +4,23 @@ import java.awt.Window;
 
 import org.fest.swing.core.GuiTask;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
- * Understands a task that disposes a <code>{@link Window}</code>. This task should be executed in the event dispatch
- * thread.
+ * Understands a task that disposes a <code>{@link Window}</code>. This task is executed in the event dispatch thread.
  *
- * @author Alex Ruiz 
+ * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-public class WindowDisposeTask extends GuiTask {
-  
-  private final Window w;
+final class WindowDisposeTask {
 
-  /**
-   * Creates and returns a <code>{@link WindowDisposeTask}</code>.
-   * @param w the <code>Window</code> to dispose.
-   * @return the created task.
-   */
-  public static WindowDisposeTask disposeTask(Window w) {
-    return new WindowDisposeTask(w);
-  }
-  
-  private WindowDisposeTask(Window w) {
-    this.w = w;
+  static void dispose(final Window w) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        w.dispose();
+      }
+    });
   }
 
-  /**
-   * Disposes this query's <code>{@link Window}</code>. This action is executed in the event dispatch thread.
-   */
-  protected void executeInEDT() {
-    w.dispose();
-  }
+  private WindowDisposeTask() {}
 }

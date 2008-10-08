@@ -17,44 +17,64 @@ package org.fest.swing.driver;
 
 import javax.swing.JOptionPane;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.JOptionPaneLauncher.launch;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JOptionPaneMessageQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JOptionPaneMessageQueryTest {
 
-  private JOptionPane optionPane;
-  private String message;
-  private JOptionPaneMessageQuery query;
+  private static final String MESSAGE = "Hello World";
+
+  private Robot robot;
+  private MyOptionPane optionPane;
 
   @BeforeMethod public void setUp() {
-    optionPane = createMock(JOptionPane.class);
-    message = "Hello";
-    query = new JOptionPaneMessageQuery(optionPane);
+    robot = robotWithNewAwtHierarchy();
+    optionPane = MyOptionPane.createNew(MESSAGE);
+    launch(optionPane);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnMessageOfJOptionPane() {
-    new EasyMockTemplate(optionPane) {
-      protected void expectations() {
-        expect(optionPane.getMessage()).andReturn(message);
-      }
+    assertThat(JOptionPaneMessageQuery.messageOf(optionPane)).isEqualTo(MESSAGE);
+    assertThat(optionPane.methodGetMessageWasInvoked()).isTrue();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(message);
-      }
-    }.run();
+  private static class MyOptionPane extends JOptionPane {
+    private static final long serialVersionUID = 1L;
+
+    private boolean methodGetMessageInvoked;
+
+    static MyOptionPane createNew(String message) {
+      return new MyOptionPane(message);
+    }
+
+    private MyOptionPane(String message) {
+      super(message, INFORMATION_MESSAGE);
+    }
+
+    @Override public Object getMessage() {
+      methodGetMessageInvoked = true;
+      return super.getMessage();
+    }
+
+    boolean methodGetMessageWasInvoked() { return methodGetMessageInvoked; }
   }
 }

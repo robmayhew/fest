@@ -23,23 +23,20 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the smallest selection index in a
  * <code>{@link JList}</code>.
+ * @see JList#getSelectedIndex()
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class JListSelectedIndexQuery extends GuiQuery<Integer> {
+final class JListSelectedIndexQuery {
 
-  private final JList list;
-
-  static int selectedIndexOf(JList list) {
-    return execute(new JListSelectedIndexQuery(list));
+  static int selectedIndexOf(final JList list) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return list.getSelectedIndex();
+      }
+    });
   }
 
-  JListSelectedIndexQuery(JList list) {
-    this.list = list;
-  }
-
-  protected Integer executeInEDT() {
-    return list.getSelectedIndex();
-  }
+  private JListSelectedIndexQuery() {}
 }

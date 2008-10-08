@@ -25,6 +25,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.applet.AppletViewer;
+import org.fest.swing.core.ScreenLock;
 import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.testing.MyApplet;
 
@@ -46,6 +47,8 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @AfterMethod public void tearDown() {
     disposeViewer();
     disposeApplet();
+    ScreenLock screenLock = ScreenLock.instance();
+    if (screenLock.acquiredBy(this)) screenLock.release(this);
   }
 
   private void disposeViewer() {
@@ -61,6 +64,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   @Test(groups = GUI) public void shouldLaunchGivenApplet() {
+    ScreenLock.instance().acquire(this);
     applet = new MyApplet();
     viewer = AppletLauncher.applet(applet).start();
     assertAppletWasLaunched();
@@ -68,11 +72,13 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   @Test(groups = GUI) public void shouldInstantiateAndLaunchApplet() {
+    ScreenLock.instance().acquire(this);
     viewer = AppletLauncher.applet(MyApplet.class).start();
     assertAppletWasLaunched();
   }
 
   @Test(groups = GUI) public void shouldLoadAndLaunchApplet() {
+    ScreenLock.instance().acquire(this);
     viewer = AppletLauncher.applet(MyApplet.class.getName()).start();
     assertAppletWasLaunched();
   }
@@ -144,6 +150,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   @Test(groups = GUI) public void shouldSetParametersInMap() {
+    ScreenLock.instance().acquire(this);
     Map<String, String> parameters = new HashMap<String, String>();
     parameters.put("bgcolor", "blue");
     parameters.put("color", "red");
@@ -169,6 +176,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   @Test(groups = GUI) public void shouldSetParametersInArray() {
+    ScreenLock.instance().acquire(this);
     applet = new MyApplet();
     viewer = AppletLauncher.applet(applet).withParameters(
         AppletParameter.name("bgcolor").value("blue"),

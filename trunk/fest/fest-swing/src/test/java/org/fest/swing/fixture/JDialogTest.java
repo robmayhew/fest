@@ -18,49 +18,63 @@ import java.awt.Container;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import static java.lang.String.valueOf;
+import static java.util.logging.Logger.getAnonymousLogger;
+
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Test for <a href="http://code.google.com/p/fest/issues/detail?id=80">Bug 80</a>.
  *
  * @author Wim Deblauwe
+ * @author Yvonne Wang
  */
 @Test(groups = { GUI, BUG })
 public class JDialogTest {
 
-  private DialogFixture m_window;
+  private static Logger logger = getAnonymousLogger();
 
-  public void shouldFindNestedDialogTwoTimes() throws InterruptedException {
+  private DialogFixture starter;
+
+  @BeforeMethod public void setUp() {
     JDialogStarter optionPaneStarter = new JDialogStarter(null);
-    m_window = new DialogFixture(optionPaneStarter);
-    m_window.show();
-    m_window.requireVisible();
-
-    m_window.button("start").click();
-    
-    DialogFixture dialogFixture = m_window.dialog("NestedDialog");
-    dialogFixture.requireVisible();
-    dialogFixture.requireModal();
-    dialogFixture.button().click();
-    dialogFixture.requireNotVisible();
-
-    m_window.button("start").click();
-
-    Thread.sleep(3000);
-
-    dialogFixture = m_window.dialog("NestedDialog");
-    dialogFixture.requireVisible();
-    dialogFixture.requireModal();
-    dialogFixture.button().click();
-
-    m_window.cleanUp();
+    starter = new DialogFixture(optionPaneStarter);
   }
-  
+
+  @AfterMethod public void tearDown() {
+    starter.cleanUp();
+  }
+
+  public void shouldFindNestedDialogTwoTimes() {
+    starter.show();
+    starter.requireVisible();
+    starter.button("start").click();
+    showAndHideNestedDialog();
+    starter.button("start").click();
+    int timeToPause = 3000;
+    logger.info(concat("Pausing for ", valueOf(timeToPause), " ms"));
+    pause(timeToPause);
+    showAndHideNestedDialog();
+  }
+
+  private void showAndHideNestedDialog() {
+    DialogFixture nested = starter.dialog("NestedDialog");
+    nested.requireVisible();
+    nested.requireModal();
+    nested.button().click();
+    nested.requireNotVisible();
+  }
+
   static class JDialogStarter extends JDialog {
     private static final long serialVersionUID = 1L;
 

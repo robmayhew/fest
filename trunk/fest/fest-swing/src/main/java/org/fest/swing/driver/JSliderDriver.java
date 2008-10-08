@@ -78,10 +78,11 @@ public class JSliderDriver extends JComponentDriver {
     drop(slider, location.pointAt(slider, value));
     // the drag is only approximate, so set the value directly
     setValue(slider, value);
+    robot.waitForIdle();
   }
-  
+
   private void validateValue(JSlider slider, int value) {
-    MinimumAndMaximum minAndMax = minAndMaxOf(slider);
+    ValueRange minAndMax = minAndMaxOf(slider);
     int min = minAndMax.minimum;
     int max = minAndMax.maximum;
     if (value >= min && value <= max) return;

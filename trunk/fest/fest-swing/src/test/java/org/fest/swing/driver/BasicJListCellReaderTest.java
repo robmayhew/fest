@@ -17,23 +17,23 @@ package org.fest.swing.driver;
 
 import java.awt.Component;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JToolBar;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.Condition;
-import org.fest.swing.core.GuiActionRunner;
 import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.CustomCellRenderer;
+import org.fest.swing.testing.TestListModel;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.factory.JLabels.label;
-import static org.fest.swing.factory.JLists.list;
-import static org.fest.swing.factory.JToolBars.toolBar;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -45,66 +45,89 @@ import static org.fest.swing.testing.TestGroups.GUI;
 @Test(groups = GUI)
 public class BasicJListCellReaderTest {
 
-  private JList list;
+  private Robot robot;
+  private MyList list;
   private BasicJListCellReader reader;
 
   @BeforeMethod public void setUp() {
-    list = list().createNew();
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    list = window.list;
     reader = new BasicJListCellReader();
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnModelValueToString() {
-    setModelValue(list, new Jedi("Yoda"));
+    list.setElements(new Jedi("Yoda"));
     Object value = reader.valueAt(list, 0);
     assertThat(value).isEqualTo("Yoda");
   }
 
   public void shouldReturnNullIfRendererNotRecognizedAndModelValueIsNull() {
-    setModelValue(list, null);
-    setRendererComponent(list, toolBar().createNew());
+    list.setElements(new Object[] { null });
+    setRendererComponent(list, new JToolBar());
+    robot.waitForIdle();
     Object value = reader.valueAt(list, 0);
     assertThat(value).isNull();
   }
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabelAndToStringFromModelReturnedNull() {
-    setModelValue(list, new Jedi(null));
-    JLabel renderer = label().withText("First").createNew();
+    list.setElements(new Jedi(null));
+    JLabel renderer = new JLabel("First");
     setRendererComponent(this.list, renderer);
+    robot.waitForIdle();
     Object value = reader.valueAt(this.list, 0);
     assertThat(value).isEqualTo("First");
   }
 
-  private static void setModelValue(final JList list, final Object value) {
-    final MyListModel model = new MyListModel(value);
-    GuiActionRunner.execute(new GuiTask() {
-      protected void executeInEDT() {
-        list.setModel(model);
-      }
-    }, new Condition("JList's model is set") {
-      public boolean test() {
-        return list.getModel() == model;
-      }
-    });
-  }
-  
   private static void setRendererComponent(final JList list, final Component renderer) {
     final CustomCellRenderer cellRenderer = new CustomCellRenderer(renderer);
     execute(new GuiTask() {
       protected void executeInEDT() {
         list.setCellRenderer(cellRenderer);
       }
-    }, new Condition("JList's cell renderer is set") {
-      public boolean test() {
-        return list.getCellRenderer() == cellRenderer;
-      }
     });
   }
-  
-  private static class MyListModel extends DefaultListModel {
+
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    MyListModel(Object... values) {
-      for (Object value : values) addElement(value);
+    final MyList list = new MyList("One", "Two");
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(BasicJListCellReaderTest.class);
+      addComponents(list);
+    }
+  }
+
+  private static class MyList extends JList {
+    private static final long serialVersionUID = 1L;
+
+    private final TestListModel model;
+
+    MyList(Object... elements) {
+      model = new TestListModel(elements);
+      setModel(model);
+    }
+
+    void setElements(final Object...elements) {
+      execute(new GuiTask() {
+        protected void executeInEDT() {
+          model.setElements(elements);
+        }
+      });
+    }
+
+    @Override public TestListModel getModel() {
+      return model;
     }
   }
 }

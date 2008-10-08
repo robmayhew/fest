@@ -178,6 +178,7 @@ public class JComboBoxDriver extends JComponentDriver {
       listDriver.selectItem(dropDownList(), validatedIndex);
     } catch (ComponentLookupException e) {
       selectItemAtIndex(comboBox, validatedIndex);
+      robot.waitForIdle();
     } finally {
       hideDropDownListIfVisible(comboBox);
     }
@@ -293,7 +294,7 @@ public class JComboBoxDriver extends JComponentDriver {
   public void requireNotEditable(JComboBox comboBox) {
     assertEditable(comboBox, false);
   }
-  
+
   private void assertEditable(JComboBox comboBox, boolean expected) {
     assertThat(isEditable(comboBox)).as(editableProperty(comboBox)).isEqualTo(expected);
   }

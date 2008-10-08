@@ -15,48 +15,72 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
 import java.awt.Rectangle;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentBoundsQuery}</code>.
  *
  * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class ComponentBoundsQueryTest {
 
-  private Component component;
-  private Rectangle bounds;
-  private ComponentBoundsQuery query;
+  private static final Rectangle WINDOW_BOUNDS = new Rectangle(10, 20, 500, 300);
+
+  private Robot robot;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    component = createMock(Component.class);
-    bounds = new Rectangle(80, 60);
-    query = new ComponentBoundsQuery(component);
+    robot = robotWithNewAwtHierarchy();
+    window = MyWindow.createNew();
+    robot.showWindow(window);
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        window.setBounds(new Rectangle(WINDOW_BOUNDS));
+      }
+    });
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnBoundsOfComponent() {
-    new EasyMockTemplate(component) {
-      protected void expectations() {
-        expect(component.getBounds()).andReturn(bounds);
-      }
-
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(bounds);
-      }
-    }.run();
+    assertThat(ComponentBoundsQuery.boundsOf(window)).isEqualTo(WINDOW_BOUNDS);
+    assertThat(window.methodGetBoundsWasInvoked()).isTrue();
   }
 
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private boolean methodGetBoundsInvoked;
+
+    private MyWindow() {
+      super(ComponentBoundsQueryTest.class);
+    }
+
+    @Override public Rectangle getBounds() {
+      methodGetBoundsInvoked = true;
+      return super.getBounds();
+    }
+
+    boolean methodGetBoundsWasInvoked() { return methodGetBoundsInvoked; }
+  }
 }

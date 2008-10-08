@@ -5,27 +5,23 @@ import javax.swing.tree.TreePath;
 
 import org.fest.swing.core.GuiTask;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
- * Understands a task that ensures that the node identified by the specified path is expanded and viewable. This task
- * should be executed in the event dispatch thread.
- * 
+ * Understands a task that ensures that the node identified by the specified path is expanded and viewable. This task is
+ * executed in the event dispatch thread.
+ *
  * @author Yvonne Wang
  */
-class JTreeExpandPathTask extends GuiTask {
+final class JTreeExpandPathTask {
 
-  private final JTree tree;
-  private final TreePath path;
-
-  static JTreeExpandPathTask expandPathTask(JTree tree, TreePath path) {
-    return new JTreeExpandPathTask(tree, path);
+  static void expandPath(final JTree tree, final TreePath path) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        tree.expandPath(path);
+      }
+    });
   }
 
-  private JTreeExpandPathTask(JTree tree, TreePath path) {
-    this.tree = tree;
-    this.path = path;
-  }
-
-  protected void executeInEDT() {
-    tree.expandPath(path);
-  }
+  private JTreeExpandPathTask() {}
 }

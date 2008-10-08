@@ -15,45 +15,73 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Dialog;
-
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.BooleanProvider;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.testing.TestDialog;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link DialogModalQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
+@Test(groups = { GUI, EDT_ACTION })
 public class DialogModalQueryTest {
 
-  private Dialog dialog;
-  private DialogModalQuery query;
+  private Robot robot;
+  private MyDialog dialog;
 
   @BeforeMethod public void setUp() {
-    dialog = createMock(Dialog.class);
-    query = new DialogModalQuery(dialog);
+    robot = robotWithNewAwtHierarchy();
+    dialog = MyDialog.createNew();
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_ACTION)
-  public void shouldIndicateWhetherDialogIsModal(final boolean modal) {
-    new EasyMockTemplate(dialog) {
-      protected void expectations() {
-        expect(dialog.isModal()).andReturn(modal);
-      }
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(modal);
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
+  public void shouldIndicateWhetherDialogIsModal(final boolean modal) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        dialog.setModal(modal);
       }
-    }.run();
+    });
+    robot.waitForIdle();
+    robot.showWindow(dialog);
+    assertThat(DialogModalQuery.isModal(dialog)).isEqualTo(modal);
+    assertThat(dialog.methodIsModalWasInvoked()).isTrue();
+  }
+
+  private static class MyDialog extends TestDialog {
+    private static final long serialVersionUID = 1L;
+
+    private boolean methodIsModalInvoked;
+
+    static MyDialog createNew() {
+      return new MyDialog();
+    }
+
+    private MyDialog() {
+      super(TestWindow.createNew(DialogModalQueryTest.class));
+    }
+
+    @Override public boolean isModal() {
+      methodIsModalInvoked = true;
+      return super.isModal();
+    }
+
+    boolean methodIsModalWasInvoked() { return methodIsModalInvoked; }
   }
 }

@@ -10,22 +10,19 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the bounds of a
  * <code>{@link Component}</code>.
+ * @see Component#getBounds()
  *
  * @author Yvonne Wang
  */
-class ComponentBoundsQuery extends GuiQuery<Rectangle> {
+final class ComponentBoundsQuery {
 
-  private final Component c;
-
-  static Rectangle boundsOf(Component c) {
-    return execute(new ComponentBoundsQuery(c));
+  static Rectangle boundsOf(final Component component) {
+    return execute(new GuiQuery<Rectangle>() {
+      protected Rectangle executeInEDT() {
+        return component.getBounds();
+      }
+    });
   }
 
-  ComponentBoundsQuery(Component c) {
-    this.c = c;
-  }
-
-  protected Rectangle executeInEDT() {
-    return c.getBounds();
-  }
+  private ComponentBoundsQuery() {}
 }

@@ -26,10 +26,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TableRenderDemo;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -41,19 +43,23 @@ import static org.fest.swing.testing.TestGroups.*;
 @Test(groups = { GUI, EDT_ACTION })
 public class JTableCellRendererQueryTest {
 
-  private MyWindow window;
+  private Robot robot;
+  private JTable table;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createAndShow();
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    table = window.table;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
+    robot.cleanUp();
   }
 
   @Test(dataProvider = "rendererTypes", groups = { GUI, EDT_ACTION })
   public void shouldReturnRendererComponentOfJTableCell(int column, Class<?> rendererType) {
-    Component renderer = JTableCellRendererQuery.cellRendererIn(window.table, 0, column);
+    Component renderer = JTableCellRendererQuery.cellRendererIn(table, 0, column);
     assertThat(renderer).isInstanceOf(rendererType);
   }
 
@@ -70,14 +76,12 @@ public class JTableCellRendererQueryTest {
 
     final JTable table;
 
-    static MyWindow createAndShow() {
-      MyWindow window = new MyWindow();
-      window.display();
-      return window;
+    static MyWindow createNew() {
+      return new MyWindow();
     }
-    
+
     private MyWindow() {
-      super(JTableCellEditorQueryTest.class);
+      super(JTableCellRendererQueryTest.class);
       TableRenderDemo newContentPane = new TableRenderDemo();
       newContentPane.setOpaque(true); // content panes must be opaque
       setContentPane(newContentPane);

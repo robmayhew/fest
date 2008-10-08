@@ -24,11 +24,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -40,32 +42,34 @@ import static org.fest.swing.testing.TestGroups.*;
 @Test(groups = { GUI, EDT_ACTION })
 public class ComponentAccessibleActionQueryTest {
 
-  private MyWindow window;
+  private Robot robot;
+  private MyButton button;
   private AccessibleAction action;
 
   @BeforeMethod public void setUp() {
+    robot = robotWithNewAwtHierarchy();
     action = createMock(AccessibleAction.class);
-    window = MyWindow.createAndShow(action);
+    MyWindow window = MyWindow.createNew(action);
+    button = window.button;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
+    robot.cleanUp();
   }
 
   public void shouldFindAccessibleAction() {
-    AccessibleAction actualAction = ComponentAccessibleActionQuery.accessibleActionFrom(window.button);
+    AccessibleAction actualAction = ComponentAccessibleActionQuery.accessibleActionFrom(button);
     assertThat(actualAction).isSameAs(action);
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createAndShow(final AccessibleAction action) {
-      MyWindow window = new MyWindow(action); 
-      window.display();
-      return window;
+    static MyWindow createNew(final AccessibleAction action) {
+      return new MyWindow(action);
     }
-    
+
     final MyButton button = new MyButton("Hello");
 
     private MyWindow(AccessibleAction action) {

@@ -23,13 +23,12 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the selected index in a
  * <code>{@link JComboBox}</code>.
- * 
+ * @see JComboBox#getSelectedIndex()
+ *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class JComboBoxSelectedIndexQuery extends GuiQuery<Integer> {
-  
-  private final JComboBox comboBox;
+public final class JComboBoxSelectedIndexQuery {
 
   /**
    * Returns the selected index in the given <code>{@link JComboBox}</code>. This action is executed in the event
@@ -37,20 +36,13 @@ public final class JComboBoxSelectedIndexQuery extends GuiQuery<Integer> {
    * @param comboBox the given <code>JComboBox</code>.
    * @return the selected index in the given <code>JComboBox</code>.
    */
-  public static int selectedIndexOf(JComboBox comboBox) {
-    return execute(new JComboBoxSelectedIndexQuery(comboBox));
+  public static int selectedIndexOf(final JComboBox comboBox) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return comboBox.getSelectedIndex();
+      }
+    });
   }
 
-  JComboBoxSelectedIndexQuery(JComboBox comboBox) {
-    this.comboBox = comboBox;
-  }
-
-  /**
-   * Returns the selected index in this query's <code>{@link JComboBox}</code>. This action is executed in the event
-   * dispatch thread.
-   * @return the selected index in this query's <code>JComboBox</code>.
-   */
-  protected Integer executeInEDT() {
-    return comboBox.getSelectedIndex();
-  }
+  private JComboBoxSelectedIndexQuery() {}
 }

@@ -24,23 +24,20 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the selection indices in a
  * <code>{@link JList}</code>.
+ * @see JList#getSelectedIndices()
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class JListSelectedIndicesQuery extends GuiQuery<int[]> {
+final class JListSelectedIndicesQuery {
 
-  private final JList list;
-
-  static int[] selectedIndicesOf(JList list) {
-    return execute(new JListSelectedIndicesQuery(list));
+  static int[] selectedIndicesOf(final JList list) {
+    return execute(new GuiQuery<int[]>() {
+      protected int[] executeInEDT() {
+        return list.getSelectedIndices();
+      }
+    });
   }
 
-  JListSelectedIndicesQuery(JList list) {
-    this.list = list;
-  }
-
-  protected int[] executeInEDT() {
-    return list.getSelectedIndices();
-  }
+  private JListSelectedIndicesQuery() {}
 }

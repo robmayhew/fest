@@ -15,47 +15,80 @@
  */
 package org.fest.swing.query;
 
-import java.awt.Component;
 import java.awt.Container;
 
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentParentQuery}</code>
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class ComponentParentQueryTest {
 
-  private Component component;
-  private Container parent;
-  private ComponentParentQuery query;
+  private Robot robot;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    component = createMock(Component.class);
-    parent = createMock(Container.class);
-    query = new ComponentParentQuery(component);
+    robot = robotWithNewAwtHierarchy();
+    window = MyWindow.createNew();
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnParentOfComponent() {
-    new EasyMockTemplate(component) {
-      protected void expectations() {
-        expect(component.getParent()).andReturn(parent);
-      }
+    Container parent = ComponentParentQuery.parentOf(window.button);
+    assertThat(parent).isInstanceOf(JPanel.class);
+    assertThat(parent.getName()).isEqualTo("null.contentPane");
+    assertThat(window.button.methodGetParentWasInvoked()).isTrue();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(parent);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    final MyButton button = new MyButton("A button");
+
+    private MyWindow() {
+      super(ComponentParentQueryTest.class);
+      addComponents(button);
+    }
+  }
+
+  private static class MyButton extends JButton {
+    private static final long serialVersionUID = 1L;
+
+    private boolean methodGetParentInvoked;
+
+    public MyButton(String text) {
+      super(text);
+    }
+
+    @Override public Container getParent() {
+      methodGetParentInvoked = true;
+      return super.getParent();
+    }
+
+    boolean methodGetParentWasInvoked() { return methodGetParentInvoked; }
   }
 }

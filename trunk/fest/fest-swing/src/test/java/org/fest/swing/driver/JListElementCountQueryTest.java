@@ -16,53 +16,87 @@
 package org.fest.swing.driver;
 
 import javax.swing.JList;
-import javax.swing.ListModel;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestListModel;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JListElementCountQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JListElementCountQueryTest {
 
-  private JList list;
-  private ListModel model;
-  private JListElementCountQuery query;
+  private Robot robot;
+  private MyList list;
 
   @BeforeMethod public void setUp() {
-    list = createMock(JList.class);
-    model = createMock(ListModel.class);
-    query = new JListElementCountQuery(list);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    list = window.list;
+    robot.showWindow(window);
   }
 
-  @Test(dataProvider = "elementCounts", groups = EDT_ACTION)
-  public void shouldReturnElementCountOfJList(final int elementCount) {
-    new EasyMockTemplate(list, model) {
-      protected void expectations() {
-        expect(list.getModel()).andReturn(model);
-        expect(model.getSize()).andReturn(elementCount);
-      }
-
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(elementCount);
-      }
-    }.run();
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
-  @DataProvider(name = "elementCounts") public Object[][] elementCounts() {
-    return new Object[][] { { 1 }, { 6 }, { 8 } };
+  public void shouldReturnElementCountOfJList() {
+    assertThat(JListElementCountQuery.elementCountOf(list)).isEqualTo(3);
+    assertThat(list.model.methodGetSizeWasInvoked()).isTrue();
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    final MyList list = new MyList("One", "Two", "Three");
+
+    private MyWindow() {
+      super(JListElementCountQueryTest.class);
+      addComponents(list);
+    }
+  }
+
+  private static class MyList extends JList {
+    private static final long serialVersionUID = 1L;
+
+    final MyListModel model;
+
+    MyList(Object... elements) {
+      model = new MyListModel(elements);
+      setModel(model);
+    }
+  }
+
+  private static class MyListModel extends TestListModel {
+    private static final long serialVersionUID = 1L;
+
+    private boolean methodGetSizeInvoked;
+
+    MyListModel(Object... elements) {
+      super(elements);
+    }
+
+    @Override public int getSize() {
+      methodGetSizeInvoked = true;
+      return super.getSize();
+    }
+
+    boolean methodGetSizeWasInvoked() { return methodGetSizeInvoked; }
   }
 }

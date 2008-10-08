@@ -27,7 +27,7 @@ class JToolBarDockingSourceQuery extends GuiQuery<Container> {
     this.toolBar = toolBar;
   }
 
-  protected Container executeInEDT() throws Throwable {
+  protected Container executeInEDT() {
     try {
       return field("dockingSource").ofType(Container.class).in(toolBar.getUI()).get();
     } catch (RuntimeException e) {

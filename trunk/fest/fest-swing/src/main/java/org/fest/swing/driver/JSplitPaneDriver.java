@@ -23,7 +23,7 @@ import org.fest.swing.core.Robot;
 import static javax.swing.JSplitPane.VERTICAL_SPLIT;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.driver.JSplitPaneMoveDividerTask.moveDividerTask;
+import static org.fest.swing.driver.JSplitPaneSetDividerLocationTask.setDividerLocation;
 import static org.fest.swing.driver.JSplitPaneSizeAndDividerLocationQuery.sizeAndDividerLocationOf;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 
@@ -54,7 +54,8 @@ public class JSplitPaneDriver extends JComponentDriver {
     if (!isEnabled(splitPane)) return;
     // Move as close as possible, then set the position
     simulateMovingDivider(splitPane, location);
-    robot.invokeAndWait(splitPane, moveDividerTask(splitPane, location));
+    setDividerLocation(splitPane, location);
+    robot.waitForIdle();
   }
 
   private void simulateMovingDivider(JSplitPane split, int location) {

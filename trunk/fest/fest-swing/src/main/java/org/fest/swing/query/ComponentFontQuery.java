@@ -8,35 +8,29 @@ import org.fest.swing.core.GuiQuery;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands an action, executed in the event dispatch thread, that returns the font of a 
+ * Understands an action, executed in the event dispatch thread, that returns the font of a
  * <code>{@link Component}</code>.
+ * @see Component#getFont()
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-public class ComponentFontQuery extends GuiQuery<Font> {
-  
-  private final Component component;
+final public class ComponentFontQuery {
 
   /**
    * Returns the font of the given <code>{@link Component}</code>. This action is executed in the event dispatch
    * thread.
    * @param component the given <code>Component</code>.
    * @return the font of the given <code>Component</code>.
+   * @see Component#getFont()
    */
-  public static Font fontOf(Component component) {
-    return execute(new ComponentFontQuery(component));
-  }
-  
-  ComponentFontQuery(Component component) {
-    this.component = component;
+  public static Font fontOf(final Component component) {
+    return execute(new GuiQuery<Font>() {
+      protected Font executeInEDT() {
+        return component.getFont();
+      }
+    });
   }
 
-  /**
-   * Returns the font of this query's <code>{@link Component}</code>. This action is executed in the event dispatch
-   * thread.
-   * @return the font of this query's <code>Component</code>.
-   */
-  protected Font executeInEDT() {
-    return component.getFont();
-  }
+  private ComponentFontQuery() {}
 }

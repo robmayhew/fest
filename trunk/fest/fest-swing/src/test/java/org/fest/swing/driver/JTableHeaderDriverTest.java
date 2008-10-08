@@ -109,7 +109,7 @@ public class JTableHeaderDriverTest {
   }
 
   public void shouldShowPopupMenuAtItemWithIndex() {
-    JPopupMenu popupMenu = popupMenuFor(tableHeader);
+    JPopupMenu popupMenu = createAndSetPopupMenuForTableHeader();
     ClickRecorder recorder = attachTo(tableHeader);
     driver.showPopupMenu(tableHeader, 1);
     recorder.clicked(RIGHT_BUTTON).timesClicked(1);
@@ -118,7 +118,7 @@ public class JTableHeaderDriverTest {
   }
 
   public void shouldShowPopupMenuAtItemWithName() {
-    JPopupMenu popupMenu = popupMenuFor(tableHeader);
+    JPopupMenu popupMenu = createAndSetPopupMenuForTableHeader();
     ClickRecorder recorder = attachTo(tableHeader);
     driver.showPopupMenu(tableHeader, "1");
     recorder.clicked(RIGHT_BUTTON).timesClicked(1);
@@ -126,10 +126,11 @@ public class JTableHeaderDriverTest {
     assertThat(isVisible(popupMenu)).isTrue();
   }
 
-  private static JPopupMenu popupMenuFor(JTableHeader tableHeader) {
+  private JPopupMenu createAndSetPopupMenuForTableHeader() {
     JMenuItem menuItem = menuItem().withText("Frodo").createNew();
     JPopupMenu popupMenu = popupMenu().withMenuItems(menuItem).createNew();
     setPopupMenu(tableHeader, popupMenu);
+    robot.waitForIdle();
     return popupMenu;
   }
 
@@ -152,7 +153,7 @@ public class JTableHeaderDriverTest {
     static MyWindow createNew() {
       return new MyWindow();
     }
-    
+
     private MyWindow() {
       super(JTableHeaderDriverTest.class);
       table = new TestTable(6, 2);

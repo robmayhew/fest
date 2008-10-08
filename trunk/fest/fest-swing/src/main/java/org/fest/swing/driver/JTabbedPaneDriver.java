@@ -23,7 +23,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 
-import static org.fest.swing.driver.JTabbedPaneSelectTabTask.selectTabTask;
+import static org.fest.swing.driver.JTabbedPaneSelectTabTask.setSelectedTab;
 import static org.fest.swing.driver.JTabbedPaneTabTitlesQuery.tabTitlesOf;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 
@@ -90,13 +90,12 @@ public class JTabbedPaneDriver extends JComponentDriver {
       Point p = location.pointAt(tabbedPane, index);
       click(tabbedPane, p);
     } catch (LocationUnavailableException e) {
-      // Set the tab directly
       setTabDirectly(tabbedPane, index);
     }
   }
 
   void setTabDirectly(JTabbedPane tabbedPane, int index) {
-    robot.invokeAndWait(selectTabTask(tabbedPane, index));
+    setSelectedTab(tabbedPane, index);
     robot.waitForIdle();
   }
 }

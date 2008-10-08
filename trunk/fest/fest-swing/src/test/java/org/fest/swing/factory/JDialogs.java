@@ -19,7 +19,7 @@ import java.awt.Frame;
 
 import javax.swing.JDialog;
 
-import static org.fest.swing.task.DialogShowTask.packAndSetVisible;
+import static org.fest.swing.task.DialogShowTask.packAndShow;
 
 /**
  * Understands creation of <code>{@link JDialog}</code>s.
@@ -60,7 +60,7 @@ public final class JDialogs {
     
     public JDialog createAndShow() {
       JDialog dialog = create();
-      packAndSetVisible(dialog);
+      packAndShow(dialog);
       return dialog;
     }
 

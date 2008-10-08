@@ -1,5 +1,5 @@
 /*
- * Created on Aug 8, 2008
+ * Created on Aug 12, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,31 +15,18 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Frame;
-
-import org.fest.swing.core.Condition;
-
-import static java.awt.Frame.ICONIFIED;
-
 /**
- * Understands a condition that verifies that a <code>{@link Frame}</code> has been deiconified.
+ * Understands a minimum and maximum value.
  *
- * @author Alex Ruiz 
+ * @author Yvonne Wang
  */
-class FrameDeiconifiedCondition extends Condition {
-  
-  private final Frame frame;
+class ValueRange {
 
-  static FrameDeiconifiedCondition untilDeiconified(Frame frame) {
-    return new FrameDeiconifiedCondition(frame);
-  }
-  
-  private FrameDeiconifiedCondition(Frame target) {
-    super("frame being deiconified");
-    this.frame = target;
-  }
+  final int minimum;
+  final int maximum;
 
-  public boolean test() {
-    return frame.getExtendedState() != ICONIFIED;
+  ValueRange(int minimum, int maximum) {
+    this.minimum = minimum;
+    this.maximum = maximum;
   }
 }

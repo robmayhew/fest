@@ -24,23 +24,20 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a
  * <code>{@link JInternalFrame}</code> is iconifiable or not.
+ * @see JInternalFrame#isIconifiable()
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class JInternalFrameIconifiableQuery extends GuiQuery<Boolean> {
+final class JInternalFrameIconifiableQuery {
 
-  private final JInternalFrame internalFrame;
-
-  static boolean isIconifiable(JInternalFrame internalFrame) {
-    return execute(new JInternalFrameIconifiableQuery(internalFrame));
+  static boolean isIconifiable(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return internalFrame.isIconifiable();
+      }
+    });
   }
 
-  JInternalFrameIconifiableQuery(JInternalFrame internalFrame) {
-    this.internalFrame = internalFrame;
-  }
-
-  protected Boolean executeInEDT() {
-    return internalFrame.isIconifiable();
-  }
+  private JInternalFrameIconifiableQuery() {}
 }

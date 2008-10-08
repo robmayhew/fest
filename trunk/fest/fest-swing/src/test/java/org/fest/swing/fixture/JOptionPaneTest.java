@@ -1,15 +1,15 @@
 /*
  * Created on Dec 21, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.fixture;
@@ -17,6 +17,7 @@ package org.fest.swing.fixture;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 
@@ -25,58 +26,67 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.finder.JOptionPaneFinder;
 
+import static java.lang.String.valueOf;
+import static java.util.logging.Logger.getAnonymousLogger;
+
+import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Test for <a href="http://code.google.com/p/fest/issues/detail?id=76">Bug 76</a>.
- * 
+ *
  * @author Wim Deblauwe
+ * @author Yvonne Wang
  */
 @Test(groups = { GUI, BUG })
 public class JOptionPaneTest {
 
-  private DialogFixture m_window;
+  private static Logger logger = getAnonymousLogger();
 
-  public void shouldFindOptionPane() throws InterruptedException {
+  private DialogFixture starter;
+
+  public void shouldFindOptionPane() {
     JOptionPaneStarter optionPaneStarter = JOptionPaneStarter.createNew(null, "Message 1");
-    m_window = new DialogFixture(optionPaneStarter);
-    m_window.show();
-    m_window.requireVisible();
-    m_window.button().click();
-
-    Thread.sleep(1000);
-
-    JOptionPaneFixture fixture = JOptionPaneFinder.findOptionPane().using(m_window.robot);
+    starter = new DialogFixture(optionPaneStarter);
+    starter.show();
+    starter.requireVisible();
+    starter.button().click();
+    pauseForOneSecond();
+    JOptionPaneFixture fixture = JOptionPaneFinder.findOptionPane().using(starter.robot);
     fixture.requireMessage("Message 1");
     fixture.button().click();
   }
 
-  public void shouldFindOptionPaneAgain() throws InterruptedException {
+  public void shouldFindOptionPaneAgain() {
     JOptionPaneStarter optionPaneStarter = JOptionPaneStarter.createNew(null, "Message 2");
-    m_window = new DialogFixture(optionPaneStarter);
-    m_window.show();
-    m_window.requireVisible();
-    m_window.button().click();
-
-    Thread.sleep(1000);
-
-    JOptionPaneFixture fixture = JOptionPaneFinder.findOptionPane().using(m_window.robot);
+    starter = new DialogFixture(optionPaneStarter);
+    starter.show();
+    starter.requireVisible();
+    starter.button().click();
+    pauseForOneSecond();
+    JOptionPaneFixture fixture = JOptionPaneFinder.findOptionPane().using(starter.robot);
     fixture.requireMessage("Message 2");
     fixture.button().click();
   }
 
-  @AfterMethod public void stopGui() {
-    m_window.cleanUp();
+  private void pauseForOneSecond() {
+    int timeToPause = 1000;
+    logger.info(concat("Pausing for ", valueOf(timeToPause), " ms"));
+    pause(timeToPause);
   }
-  
-  private static class JOptionPaneStarter extends JDialog {
 
+  @AfterMethod public void stopGui() {
+    starter.cleanUp();
+  }
+
+  private static class JOptionPaneStarter extends JDialog {
     private static final long serialVersionUID = 1L;
 
-    static JOptionPaneStarter createNew(final Frame owner, final String message) {
+    static JOptionPaneStarter createNew(Frame owner, String message) {
       return new JOptionPaneStarter(owner, message);
     }
-    
+
     private JOptionPaneStarter(Frame owner, String message) {
       super(owner, "JOptionPane Starter");
       setContentPane(createContentPane(message));
@@ -90,7 +100,7 @@ public class JOptionPaneTest {
 
     private class OpenJOptionPaneAction extends AbstractAction {
       private static final long serialVersionUID = 1L;
-      
+
       private final String m_message;
 
       OpenJOptionPaneAction(String message) {

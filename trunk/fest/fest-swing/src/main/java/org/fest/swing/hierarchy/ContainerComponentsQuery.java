@@ -12,22 +12,20 @@ import static org.fest.util.Collections.list;
 /**
  * Understands an action, executed in the event dispatch thread, that returns all the components in a given
  * <code>{@link Container}</code>.
+ * @see Container#getComponents()
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-class ContainerComponentsQuery extends GuiQuery<List<Component>> {
-  
-  private final Container container;
+final class ContainerComponentsQuery {
 
-  static List<Component> componentsOf(Container container) {
-    return execute(new ContainerComponentsQuery(container));
+  static List<Component> componentsOf(final Container container) {
+    return execute(new GuiQuery<List<Component>>() {
+      protected List<Component> executeInEDT() throws Throwable {
+        return list(container.getComponents());
+      }
+    });
   }
 
-  ContainerComponentsQuery(Container container) {
-    this.container = container;
-  }
-
-  protected List<Component> executeInEDT() {
-    return list(container.getComponents());
-  }
+  private ContainerComponentsQuery() {}
 }

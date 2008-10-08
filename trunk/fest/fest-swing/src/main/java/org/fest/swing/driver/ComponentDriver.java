@@ -31,6 +31,7 @@ import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.driver.ComponentEnabledCondition.untilIsEnabled;
 import static org.fest.swing.driver.ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
@@ -194,7 +195,7 @@ public class ComponentDriver {
    * @throws WaitTimedOutError if the <code>Component</code> is never enabled.
    */
   public void requireEnabled(Component c, Timeout timeout) {
-    pause(new ComponentEnabledCondition(c), timeout);
+    pause(untilIsEnabled(c), timeout);
   }
 
   /**

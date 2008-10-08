@@ -50,7 +50,7 @@ import static org.fest.swing.core.InputModifiers.unify;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
-import static org.fest.swing.core.WindowHideAndDisposeTask.hideAndDisposeTask;
+import static org.fest.swing.core.WindowHideAndDisposeTask.hideAndDispose;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
@@ -315,9 +315,9 @@ public class RobotFixture implements Robot {
   private void disposeWindows() {
     for (Container c : roots()) {
       if (!(c instanceof Window)) continue;
-      Window w = (Window) c;
+      Window w = (Window)c;
       hierarchy.dispose(w);
-      invokeLater(w, hideAndDisposeTask(w));
+      hideAndDispose(w);
     }
   }
 
@@ -496,6 +496,7 @@ public class RobotFixture implements Robot {
   /** {@inheritDoc} */
   public void pressAndReleaseKey(int keyCode, int... modifiers) {
     keyPressAndRelease(keyCode, unify(modifiers));
+    waitForIdle();
   }
 
   /** {@inheritDoc} */

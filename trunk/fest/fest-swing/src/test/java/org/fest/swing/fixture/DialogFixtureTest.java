@@ -1,16 +1,16 @@
 /*
  * Created on Feb 10, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.fixture;
@@ -31,7 +31,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.factory.JDialogs.dialog;
-import static org.fest.swing.task.DialogShowTask.packAndSetVisible;
+import static org.fest.swing.task.DialogShowTask.packAndShow;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -40,16 +40,16 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test public class DialogFixtureTest extends CommonComponentFixtureTestCase<Dialog> {
+@Test
+public class DialogFixtureTest extends CommonComponentFixtureTestCase<Dialog> {
 
   private DialogDriver driver;
   private Dialog target;
   private DialogFixture fixture;
-  
+
   void onSetUp() {
     driver = createMock(DialogDriver.class);
-    target = dialog().withName("dialog")
-                     .createNew();
+    target = dialog().withName("dialog").createNew();
     fixture = new DialogFixture(robot(), target);
     fixture.updateDriver(driver);
   }
@@ -59,8 +59,8 @@ import static org.fest.swing.testing.TestGroups.GUI;
     expectLookupByName(name, Dialog.class);
     verifyLookup(new DialogFixture(robot(), name));
   }
-  
-  @Test(groups = GUI) 
+
+  @Test(groups = GUI)
   public void shouldCreateFixtureWithNewRobotAndGivenTarget() {
     fixture = new DialogFixture(target);
     try {
@@ -70,9 +70,9 @@ import static org.fest.swing.testing.TestGroups.GUI;
     }
   }
 
-  @Test(groups = GUI) 
+  @Test(groups = GUI)
   public void shouldCreateFixtureWithNewRobotAndGivenTargetName() {
-    packAndSetVisible(target);
+    packAndShow(target);
     fixture = new DialogFixture("dialog");
     try {
       assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
@@ -88,13 +88,13 @@ import static org.fest.swing.testing.TestGroups.GUI;
         driver.requireModal(target);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requireModal());
       }
     }.run();
   }
-  
+
   public void shouldRequireSize() {
     final Dimension size = new Dimension(800, 600);
     new EasyMockTemplate(driver) {
@@ -102,7 +102,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
         driver.requireSize(target, size);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requireSize(size));
       }
@@ -116,13 +116,13 @@ import static org.fest.swing.testing.TestGroups.GUI;
         driver.moveTo(target, p);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.moveTo(p));
       }
     }.run();
   }
-  
+
   public void shouldResizeHeight() {
     final int height = 68;
     new EasyMockTemplate(driver) {
@@ -130,13 +130,13 @@ import static org.fest.swing.testing.TestGroups.GUI;
         driver.resizeHeightTo(target, height);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.resizeHeightTo(height));
       }
     }.run();
   }
-  
+
   public void shouldResizeWidth() {
     final int width = 68;
     new EasyMockTemplate(driver) {
@@ -144,7 +144,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
         driver.resizeWidthTo(target, width);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.resizeWidthTo(width));
       }
@@ -158,7 +158,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
         driver.resizeTo(target, size);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.resizeTo(size));
       }
@@ -171,7 +171,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
         driver.show(target);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.show());
       }
@@ -185,7 +185,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
         driver.show(target, size);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.show(size));
       }
@@ -198,7 +198,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
         driver.close(target);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         fixture.close();
       }

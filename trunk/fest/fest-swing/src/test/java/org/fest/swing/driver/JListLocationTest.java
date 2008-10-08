@@ -68,7 +68,7 @@ public class JListLocationTest {
 
   private static int locationToIndex(final JList list, final Point location) {
     return execute(new GuiQuery<Integer>() {
-      protected Integer executeInEDT() throws Throwable {
+      protected Integer executeInEDT() {
         return list.locationToIndex(location);
       }
     });

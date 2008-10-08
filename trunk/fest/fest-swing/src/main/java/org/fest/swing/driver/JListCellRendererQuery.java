@@ -18,6 +18,7 @@ package org.fest.swing.driver;
 import java.awt.Component;
 
 import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 
 import org.fest.swing.core.GuiQuery;
 
@@ -26,25 +27,25 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as
  * list renderer for a particular item in a <code>{@link JList}</code>.
+ * @see JList#getCellRenderer()
+ * @see ListCellRenderer#getListCellRendererComponent(JList, Object, int, boolean, boolean)
  *
  * @author Alex Ruiz
  */
-class JListCellRendererQuery extends GuiQuery<Component> {
+final class JListCellRendererQuery {
 
-  private final JList list;
-  private final int index;
-
-  static Component cellRendererIn(JList list, int index) {
-    return execute(new JListCellRendererQuery(list, index));
+  static Component cellRendererIn(final JList list, final int index) {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        return cellRendererComponent(list, index);
+      }
+    });
   }
 
-  JListCellRendererQuery(JList list, int index) {
-    this.list = list;
-    this.index = index;
-  }
-
-  protected Component executeInEDT() {
+  private static Component cellRendererComponent(JList list, int index) {
     Object element = list.getModel().getElementAt(index);
     return list.getCellRenderer().getListCellRendererComponent(list, element, index, true, true);
   }
+
+  private JListCellRendererQuery() {}
 }

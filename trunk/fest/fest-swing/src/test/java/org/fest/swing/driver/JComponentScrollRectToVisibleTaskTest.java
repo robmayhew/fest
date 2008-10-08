@@ -25,9 +25,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.array;
 
@@ -35,28 +39,46 @@ import static org.fest.util.Arrays.array;
  * Tests for <code>{@link JComponentScrollRectToVisibleTask}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 @Test(groups = { GUI, EDT_ACTION })
 public class JComponentScrollRectToVisibleTaskTest {
 
-  private MyWindow window;
+  private Robot robot;
+  private JList list;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createNew();
-    window.display();
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    list = window.list;
+    robot.showWindow(window);
   }
-  
+
   @AfterMethod public void tearDown() {
-    window.destroy();
+    robot.cleanUp();
   }
 
   public void shouldScrollRectToVisible() {
-    Rectangle visibleRect = window.list.getVisibleRect();
-    assertThat(visibleRect.y).isEqualTo(0);
-    Rectangle boundsOfLastTwoListItems = window.list.getCellBounds(6, 7);
-    JComponentScrollRectToVisibleTask.scrollRectToVisible(window.list, boundsOfLastTwoListItems);
-    visibleRect = window.list.getVisibleRect();
-    assertThat(visibleRect.y).isGreaterThan(0);
+    assertThat(visibleRectOfJList().y).isEqualTo(0);
+    JComponentScrollRectToVisibleTask.scrollRectToVisible(list, boundsOfLastTwoElementsInJList());
+    robot.waitForIdle();
+    assertThat(visibleRectOfJList().y).isGreaterThan(0);
+  }
+
+  private Rectangle visibleRectOfJList() {
+    return execute(new GuiQuery<Rectangle>() {
+      protected Rectangle executeInEDT() {
+        return list.getVisibleRect();
+      }
+    });
+  }
+
+  private Rectangle boundsOfLastTwoElementsInJList() {
+    return execute(new GuiQuery<Rectangle>() {
+      protected Rectangle executeInEDT() {
+        return list.getCellBounds(6, 7);
+      }
+    });
   }
 
   private static class MyWindow extends TestWindow {
@@ -67,7 +89,7 @@ public class JComponentScrollRectToVisibleTaskTest {
     }
 
     final JList list = new JList(array("One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight"));
-    
+
     private MyWindow() {
       super(JComponentScrollRectToVisibleTaskTest.class);
       JScrollPane scrollPane = new JScrollPane(list);

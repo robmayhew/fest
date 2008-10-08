@@ -1,16 +1,16 @@
 /*
  * Created on Jun 11, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.keystroke;
@@ -49,13 +49,13 @@ public abstract class KeyStrokeMappingProviderTestCase {
   static final char DELETE = 127;
   static final char ESCAPE = 27;
   static final char LF = 13;
-  
+
   private Robot robot;
   private JTextComponent textArea;
   private JTextComponentDriver driver;
-  
+
   private Collection<KeyStrokeMapping> keyStrokeMappings;
-  
+
   @BeforeClass public final void setUpOnce() {
     verifyTestCanRun();
     keyStrokeMappings = keyStrokeMappingsToTest();
@@ -64,33 +64,33 @@ public abstract class KeyStrokeMappingProviderTestCase {
   abstract void verifyTestCanRun();
 
   abstract Collection<KeyStrokeMapping> keyStrokeMappingsToTest();
-  
+
   @BeforeMethod public final void setUp() {
     robot = robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
     textArea = window.textArea;
     robot.showWindow(window);
-    driver = new JTextComponentDriver(robot); 
+    driver = new JTextComponentDriver(robot);
   }
-  
+
   @AfterMethod public final void tearDown() {
     robot.cleanUp();
   }
-  
+
   @DataProvider(name = "keyStrokeMappings") public final Iterator<Object[]> keyStrokeMappings() {
     return new KeyStrokeMappingIterator(keyStrokeMappings);
   }
-  
+
   final void focusTextArea() {
     driver.focus(textArea);
   }
-  
+
   final void assertCorrectTextEntered(char character, KeyStroke keyStroke) {
     driver.deleteText(textArea);
     pressInTextArea(keyStroke);
     driver.requireText(textArea, valueOf(character));
   }
-  
+
   final void assertKeyWasPressedWithoutModifiers(KeyStroke keyStroke, int expectedKey) {
     assertThat(keyStroke.getModifiers()).isEqualTo(0);
     KeyRecorder recorder = KeyRecorder.attachTo(textArea);
@@ -101,14 +101,14 @@ public abstract class KeyStrokeMappingProviderTestCase {
   private void pressInTextArea(KeyStroke keyStroke) {
     driver.pressAndReleaseKey(textArea, keyStroke.getKeyCode(), new int[] { keyStroke.getModifiers() });
   }
-  
+
   static class KeyStrokeMappingIterator implements Iterator<Object[]> {
     private final Iterator<KeyStrokeMapping> realIterator;
 
     KeyStrokeMappingIterator(Collection<KeyStrokeMapping> keyStrokeMappings) {
       realIterator = keyStrokeMappings.iterator();
     }
-    
+
     public boolean hasNext() {
       return realIterator.hasNext();
     }
@@ -120,7 +120,7 @@ public abstract class KeyStrokeMappingProviderTestCase {
 
     public void remove() {}
   }
-  
+
   static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
@@ -129,7 +129,7 @@ public abstract class KeyStrokeMappingProviderTestCase {
     }
 
     final JTextArea textArea = new JTextArea(3, 8);
-    
+
     private MyWindow() {
       super(KeyStrokeMappingProvider_enTest.class);
       add(textArea);

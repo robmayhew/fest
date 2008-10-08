@@ -37,7 +37,8 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
-import static org.fest.swing.testing.FocusSetter.setFocusOn;
+import static org.fest.swing.task.ComponentHasFocusCondition.untilFocused;
+import static org.fest.swing.task.ComponentRequestFocusTask.giveFocusTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.AWT.centerOf;
 
@@ -49,40 +50,42 @@ import static org.fest.swing.util.AWT.centerOf;
  */
 public abstract class InputEventGeneratorTestCase {
 
-  private MyWindow frame;
+  private MyWindow window;
   private InputEventGenerator generator;
 
   protected static final String MOVE_MOUSE_TEST = "Move Mouse Test";
 
   @BeforeMethod public void setUp() throws Exception {
-    frame = MyWindow.createNew(getClass());
+    ScreenLock.instance().acquire(this);
+    window = MyWindow.createNew(getClass());
     onSetUp();
     generator = generator();
-    frame.display();
+    window.display();
   }
-  
+
   void onSetUp() throws Exception {}
 
   abstract InputEventGenerator generator();
 
   @AfterMethod public void tearDown() {
-    frame.destroy();
+    window.destroy();
+    ScreenLock.instance().release(this);
   }
 
   @Test(groups = { GUI, MOVE_MOUSE_TEST } )
   public void shouldMoveMouse() {
-    MouseMotionRecorder recorder = MouseMotionRecorder.attachTo(frame);
-    Point center = centerOf(frame);
-    generator.moveMouse(frame, center.x, center.y);
+    MouseMotionRecorder recorder = MouseMotionRecorder.attachTo(window);
+    Point center = centerOf(window);
+    generator.moveMouse(window, center.x, center.y);
     pause(200);
     assertThat(recorder.point()).isEqualTo(center);
   }
 
   @Test(groups = GUI, dataProvider = "mouseButtons", dependsOnGroups = MOVE_MOUSE_TEST)
   public void shouldClickMouseButtonOnComponent(MouseButton button) {
-    ClickRecorder recorder = ClickRecorder.attachTo(frame.textBox);
-    Point center = centerOf(frame.textBox);
-    generator.pressMouse(frame.textBox, center, button.mask);
+    ClickRecorder recorder = ClickRecorder.attachTo(window.textBox);
+    Point center = centerOf(window.textBox);
+    generator.pressMouse(window.textBox, center, button.mask);
     generator.releaseMouse(button.mask);
     pause(200);
     recorder.clicked(button);
@@ -91,9 +94,9 @@ public abstract class InputEventGeneratorTestCase {
 
   @Test(groups = GUI, dataProvider = "mouseButtons", dependsOnGroups = MOVE_MOUSE_TEST)
   public void shouldClickMouseButton(MouseButton button) {
-    Point center = AWT.centerOf(frame);
-    generator.moveMouse(frame, center.x, center.y);
-    ClickRecorder recorder = ClickRecorder.attachTo(frame);
+    Point center = AWT.centerOf(window);
+    generator.moveMouse(window, center.x, center.y);
+    ClickRecorder recorder = ClickRecorder.attachTo(window);
     generator.pressMouse(button.mask);
     generator.releaseMouse(button.mask);
     pause(200);
@@ -104,9 +107,10 @@ public abstract class InputEventGeneratorTestCase {
     return new Object[][] { { LEFT_BUTTON }, { MIDDLE_BUTTON }, { RIGHT_BUTTON } };
   }
 
-  @Test(dataProvider = "keys") 
+  @Test(dataProvider = "keys")
   public void shouldTypeKey(int keyToPress, String expectedText) {
-    setFocusOn(frame.textBox);
+    giveFocusTo(window.textBox);
+    pause(untilFocused(window.textBox));
     generator.pressKey(keyToPress, CHAR_UNDEFINED);
     generator.releaseKey(keyToPress);
     pause(200);
@@ -114,7 +118,7 @@ public abstract class InputEventGeneratorTestCase {
   }
 
   private void assertThatTextBoxTextIsEqualTo(String expectedText) {
-    String text = textOf(frame.textBox);
+    String text = textOf(window.textBox);
     assertThat(text).isEqualTo(expectedText);
   }
 
@@ -146,7 +150,7 @@ public abstract class InputEventGeneratorTestCase {
     static MyWindow createNew(Class<? extends InputEventGeneratorTestCase> testClass) {
       return new MyWindow(testClass);
     }
-    
+
     private MyWindow(Class<? extends InputEventGeneratorTestCase> testClass) {
       super(testClass);
       addComponents(textBox);

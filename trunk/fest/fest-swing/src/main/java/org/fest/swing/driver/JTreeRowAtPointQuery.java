@@ -19,8 +19,9 @@ import java.awt.Point;
 
 import javax.swing.JTree;
 
-import org.fest.swing.core.GuiActionRunner;
 import org.fest.swing.core.GuiQuery;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the row in a <code>{@link JTree}</code>
@@ -34,7 +35,7 @@ class JTreeRowAtPointQuery extends GuiQuery<Integer> {
   private final JTree tree;
 
   static int rowAtPoint(JTree tree, Point location) {
-    return GuiActionRunner.execute(new JTreeRowAtPointQuery(tree, location));
+    return execute(new JTreeRowAtPointQuery(tree, location));
   }
 
   JTreeRowAtPointQuery(JTree tree, Point location) {

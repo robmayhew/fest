@@ -24,10 +24,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.Condition;
+import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.exception.UnexpectedException.unexpected;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Files.temporaryFolder;
@@ -37,31 +40,40 @@ import static org.fest.util.Files.temporaryFolder;
  *
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION }) 
+@Test(groups = { GUI, EDT_ACTION })
 public class JFileChooserSetCurrentDirectoryTaskTest {
 
-  private MyWindow window;
+  private Robot robot;
+  private JFileChooser fileChooser;
   private File directoryToSelect;
-  
+
   @BeforeMethod public void setUp() {
+    robot = robotWithNewAwtHierarchy();
     directoryToSelect = temporaryFolder();
-    window = MyWindow.createNew();
-    window.display();
+    MyWindow window = MyWindow.createNew();
+    fileChooser = window.fileChooser;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
+    robot.cleanUp();
+    directoryToSelect.delete();
   }
 
   public void shouldSetCurrentDirectory() {
-    JFileChooserSetCurrentDirectoryTask.setCurrentDir(window.fileChooser, directoryToSelect);
-    pause(new Condition("Directory is selected") {
-      public boolean test() {
-        return canonicalPathOf(window.fileChooser.getCurrentDirectory()).equals(canonicalPathOf(directoryToSelect));
-      }
-    });
+    JFileChooserSetCurrentDirectoryTask.setCurrentDir(fileChooser, directoryToSelect);
+    robot.waitForIdle();
+    assertThat(currentDirectoryPath()).isEqualTo(canonicalPathOf(directoryToSelect));
   }
-  
+
+  private String currentDirectoryPath() {
+    return canonicalPathOf(execute(new GuiQuery<File>() {
+      protected File executeInEDT() {
+        return fileChooser.getCurrentDirectory();
+      }
+    }));
+  }
+
   private static String canonicalPathOf(File file) {
     try {
       return file.getCanonicalPath();
@@ -69,16 +81,16 @@ public class JFileChooserSetCurrentDirectoryTaskTest {
       throw unexpected(e);
     }
   }
-  
+
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     static MyWindow createNew() {
       return new MyWindow();
     }
-    
+
     final JFileChooser fileChooser = new JFileChooser();
-    
+
     private MyWindow() {
       super(JFileChooserSelectFileTask.class);
       add(fileChooser);

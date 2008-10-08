@@ -31,7 +31,7 @@ import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.*;
 
 /**
- * Understands encapsulation of a location on a <code>{@link JTabbedPane}</code> (notably a tab).
+ * Understands a location on a <code>{@link JTabbedPane}</code> (notably a tab).
  *
  * @author Alex Ruiz
  * @author Yvonne Wang

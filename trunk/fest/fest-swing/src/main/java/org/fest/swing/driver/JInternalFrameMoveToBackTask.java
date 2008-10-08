@@ -19,25 +19,23 @@ import javax.swing.JInternalFrame;
 
 import org.fest.swing.core.GuiTask;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
- * Understands a task that sends a <code>{@link JInternalFrame}</code> to the back. This task should be executed in the
- * event dispatch thread.
+ * Understands a task that sends a <code>{@link JInternalFrame}</code> to the back. This task is executed in the event
+ * dispatch thread.
  *
  * @author Yvonne Wang
  */
-class JInternalFrameMoveToBackTask extends GuiTask {
+final class JInternalFrameMoveToBackTask {
 
-  private final JInternalFrame internalFrame;
-
-  static JInternalFrameMoveToBackTask toBackTask(JInternalFrame internalFrame) {
-    return new JInternalFrameMoveToBackTask(internalFrame);
-  }
-  
-  private JInternalFrameMoveToBackTask(JInternalFrame internalFrame) {
-    this.internalFrame = internalFrame;
+  static void moveToBack(final JInternalFrame internalFrame) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        internalFrame.moveToBack();
+      }
+    });
   }
 
-  protected void executeInEDT() {
-    internalFrame.toBack();
-  }
+  private JInternalFrameMoveToBackTask() {}
 }

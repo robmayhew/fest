@@ -15,46 +15,73 @@
  */
 package org.fest.swing.query;
 
-import javax.swing.AbstractButton;
+import javax.swing.JButton;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link AbstractButtonTextQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class AbstractButtonTextQueryTest {
 
-  private AbstractButton button;
-  private String text;
-  private AbstractButtonTextQuery query;
+  private Robot robot;
+  private MyButton button;
 
   @BeforeMethod public void setUp() {
-    button = createMock(AbstractButton.class);
-    text = "Click me";
-    query = new AbstractButtonTextQuery(button);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    button = window.button;
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnTextOfAbstractButton() {
-    new EasyMockTemplate(button) {
-      protected void expectations() {
-        expect(button.getText()).andReturn(text);
-      }
+    assertThat(AbstractButtonTextQuery.textOf(button)).isEqualTo("A Button");
+    assertThat(button.methodGetTextWasInvoked()).isTrue();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(text);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    final MyButton button = new MyButton("A Button");
+
+    private MyWindow() {
+      super(AbstractButtonTextQueryTest.class);
+      addComponents(button);
+    }
+  }
+
+  private static class MyButton extends JButton {
+    private static final long serialVersionUID = 1L;
+
+    private boolean methodGetTextInvoked;
+
+    public MyButton(String text) { super(text); }
+
+    @Override public String getText() {
+      methodGetTextInvoked = true;
+      return super.getText();
+    }
+
+    boolean methodGetTextWasInvoked() { return methodGetTextInvoked; }
   }
 }

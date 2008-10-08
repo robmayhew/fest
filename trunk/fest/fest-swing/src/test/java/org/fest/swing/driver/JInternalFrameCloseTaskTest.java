@@ -15,13 +15,17 @@
  */
 package org.fest.swing.driver;
 
+import javax.swing.JInternalFrame;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.MDITestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -29,22 +33,27 @@ import static org.fest.swing.testing.TestGroups.*;
  *
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION }) 
+@Test(groups = { GUI, EDT_ACTION })
 public class JInternalFrameCloseTaskTest {
 
-  private MDITestWindow window;
-  
+  private Robot robot;
+  private JInternalFrame internalFrame;
+
   @BeforeMethod public void setUp() {
-    window = MDITestWindow.showInTest(getClass());
+    robot = robotWithNewAwtHierarchy();
+    MDITestWindow window = MDITestWindow.createNew(getClass());
+    internalFrame = window.internalFrame();
+    robot.showWindow(window);
     assertThat(window.internalFrame().isVisible()).isTrue();
   }
-  
+
   @AfterMethod public void tearDown() {
-    window.destroy();
+    robot.cleanUp();
   }
 
   public void shouldCloseJInternalFrame() {
-    JInternalFrameCloseTask.close(window.internalFrame());
-    assertThat(window.internalFrame().isVisible()).isFalse();
+    JInternalFrameCloseTask.close(internalFrame);
+    robot.waitForIdle();
+    assertThat(internalFrame.isVisible()).isFalse();
   }
 }

@@ -29,7 +29,9 @@ import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.FocusSetter.setFocusOn;
+import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.task.ComponentHasFocusCondition.untilFocused;
+import static org.fest.swing.task.ComponentRequestFocusTask.giveFocusTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -45,40 +47,46 @@ public class FocusOwnerFinderTest {
   private JTextField textField;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createAndShow();
+    ScreenLock.instance().acquire(this);
+    window = MyWindow.createNew();
     textField = window.textBox;
+    window.display();
   }
 
   @AfterMethod public void tearDown() {
     window.destroy();
+    ScreenLock.instance().release(this);
   }
 
   public void shouldFindFocusOwner() {
-    setFocusOn(textField);
+    giveFocusTo(textField);
+    pause(untilFocused(textField));
     Component focusOwner = FocusOwnerFinder.focusOwner();
     assertThat(focusOwner).isSameAs(textField);
   }
 
   public void shouldFindFocusOwnerInHierarchy() {
-    setFocusOn(textField);
+    giveFocusTo(textField);
+    pause(untilFocused(textField));
     Component focusOwner = FocusOwnerFinder.focusOwnerInHierarchy();
     assertThat(focusOwner).isSameAs(textField);
   }
 
   public void shouldFindFocusInOwnedWindow() {
     MyDialog dialog = MyDialog.createAndShow(window);
-    setFocusOn(dialog.button);
+    giveFocusTo(dialog.button);
+    pause(untilFocused(dialog.button));
     Component focusOwner = FocusOwnerFinder.focusOwnerInHierarchy();
     assertThat(focusOwner).isSameAs(dialog.button);
     dialog.destroy();
   }
-  
+
   private static class MyDialog extends TestDialog {
     private static final long serialVersionUID = 1L;
-    
+
     final JButton button = new JButton("Click me");
-    
-    static MyDialog createAndShow(final Frame owner) {
+
+    static MyDialog createAndShow(Frame owner) {
       MyDialog window = new MyDialog(owner);
       window.display();
       return window;
@@ -89,16 +97,14 @@ public class FocusOwnerFinderTest {
       add(button);
     }
   }
-  
+
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
-    
-    final JTextField textBox = new JTextField(20); 
-    
-    static MyWindow createAndShow() {
-      MyWindow window = new MyWindow();
-      window.display();
-      return window;
+
+    final JTextField textBox = new JTextField(20);
+
+    static MyWindow createNew() {
+      return new MyWindow();
     }
 
     private MyWindow() {

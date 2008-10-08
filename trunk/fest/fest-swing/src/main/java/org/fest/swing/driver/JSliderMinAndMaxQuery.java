@@ -27,11 +27,11 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * 
  * @author Yvonne Wang
  */
-class JSliderMinAndMaxQuery extends GuiQuery<MinimumAndMaximum> {
+class JSliderMinAndMaxQuery extends GuiQuery<ValueRange> {
   
   private final JSlider slider;
 
-  static MinimumAndMaximum minAndMaxOf(JSlider slider) {
+  static ValueRange minAndMaxOf(JSlider slider) {
     return execute(new JSliderMinAndMaxQuery(slider));
   }
   
@@ -39,7 +39,7 @@ class JSliderMinAndMaxQuery extends GuiQuery<MinimumAndMaximum> {
     this.slider = slider;
   }
   
-  protected MinimumAndMaximum executeInEDT() {
-    return new MinimumAndMaximum(slider.getMinimum(), slider.getMaximum());
+  protected ValueRange executeInEDT() {
+    return new ValueRange(slider.getMinimum(), slider.getMaximum());
   }
 }

@@ -15,39 +15,22 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JInternalFrame;
-
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JInternalFrameMoveToFrontTask}</code>.
  *
  * @author Yvonne Wang
  */
-@Test public class JInternalFrameMoveToFrontTaskTest {
+@Test(groups = { GUI, EDT_ACTION })
+public class JInternalFrameMoveToFrontTaskTest extends JInternalFrameMoveTaskTestCase {
 
-  private JInternalFrame internalFrame;
-
-  @BeforeMethod public void setUp() {
-    internalFrame = createMock(JInternalFrame.class);
-  }
-
-  public void shouldCloseJInternalFrame() {
-    new EasyMockTemplate(internalFrame) {
-      protected void expectations() {
-        internalFrame.toFront();
-        expectLastCall().once();
-      }
-
-      protected void codeToTest() {
-        JInternalFrameMoveToFrontTask.toFrontTask(internalFrame).executeInEDT();
-      }
-    }.run();
+  public void shouldMoveJInternalFrameToFront() {
+    JInternalFrameMoveToFrontTask.moveToFront(frameOnBack());
+    robot().waitForIdle();
+    assertThat(desktop().getComponentZOrder(frameOnBack())).isEqualTo(FRONT_POSITION);
   }
 }

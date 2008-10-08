@@ -19,16 +19,17 @@ import java.awt.Rectangle;
 
 import javax.swing.JList;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestListModel;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JListCellBoundsQuery}</code>.
@@ -36,31 +37,49 @@ import static org.fest.swing.testing.TestGroups.EDT_ACTION;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JListCellBoundsQueryTest {
 
-  private JList list;
-  private int index;
-  private Rectangle rectangle;
-  private JListCellBoundsQuery query;
+  private Robot robot;
+  private MyList list;
 
   @BeforeMethod public void setUp() {
-    list = createMock(JList.class);
-    index = 8;
-    rectangle = new Rectangle(800, 600);
-    query = new JListCellBoundsQuery(list, index);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    list = window.list;
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnCellBoundsOfJList() {
-    new EasyMockTemplate(list) {
-      protected void expectations() {
-        expect(list.getCellBounds(index, index)).andReturn(rectangle);
-      }
-
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(rectangle);
-      }
-    }.run();
+    int index = 1;
+    Rectangle expected = list.getCellBounds(index, index);
+    assertThat(JListCellBoundsQuery.cellBoundsOf(list, index)).isEqualTo(expected);
   }
 
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    final MyList list = new MyList("One", "Two", "Three");
+
+    private MyWindow() {
+      super(JListCellBoundsQueryTest.class);
+      addComponents(list);
+    }
+  }
+
+  private static class MyList extends JList {
+    private static final long serialVersionUID = 1L;
+
+    MyList(Object... elements) {
+      setModel(new TestListModel(elements));
+    }
+  }
 }

@@ -25,16 +25,17 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JScrollBarSetValueTask.setValue;
 import static org.fest.swing.driver.JScrollBarValueQuery.valueOf;
-import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
@@ -66,11 +67,13 @@ public class JScrollBarDriverTest {
 
   public void shouldPassIfValueIsEqualToExpected() {
     setValue(scrollBar, 30);
+    robot.waitForIdle();
     driver.requireValue(scrollBar, 30);
   }
-  
+
   public void shouldFailIfValueIsNotEqualToExpected() {
     setValue(scrollBar, 30);
+    robot.waitForIdle();
     try {
       driver.requireValue(scrollBar, 20);
       fail();
@@ -298,10 +301,15 @@ public class JScrollBarDriverTest {
     }
   }
 
+  // do it in one task, instead of using two separate (and already existing) tasks
   private void clearAndDisableScrollBar() {
-    // TODO consolidate in one task
-    setValue(scrollBar, MINIMUM);
-    disable(scrollBar);
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        scrollBar.setValue(MINIMUM);
+        scrollBar.setEnabled(false);
+      }
+    });
+    robot.waitForIdle();
   }
 
   private static class MyWindow extends TestWindow {

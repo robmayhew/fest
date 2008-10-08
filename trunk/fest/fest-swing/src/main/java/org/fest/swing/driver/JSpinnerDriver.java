@@ -15,7 +15,6 @@
  */
 package org.fest.swing.driver;
 
-
 import javax.swing.JSpinner;
 import javax.swing.text.JTextComponent;
 
@@ -25,9 +24,9 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.UnexpectedException;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.driver.JSpinnerCommitEditTask.commitEditTask;
-import static org.fest.swing.driver.JSpinnerDecrementValueTask.decrementValueTask;
-import static org.fest.swing.driver.JSpinnerIncrementValueTask.incrementValueTask;
+import static org.fest.swing.driver.JSpinnerCommitEditTask.commitEdit;
+import static org.fest.swing.driver.JSpinnerDecrementValueTask.decrementValue;
+import static org.fest.swing.driver.JSpinnerIncrementValueTask.incrementValue;
 import static org.fest.swing.driver.JSpinnerValueQuery.valueOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
@@ -73,7 +72,8 @@ public class JSpinnerDriver extends JComponentDriver {
    */
   public void increment(JSpinner spinner) {
     if (!isEnabled(spinner)) return;
-    robot.invokeAndWait(incrementValueTask(spinner));
+    incrementValue(spinner);
+    robot.waitForIdle();
   }
 
   /**
@@ -99,7 +99,8 @@ public class JSpinnerDriver extends JComponentDriver {
    */
   public void decrement(JSpinner spinner) {
     if (!isEnabled(spinner)) return;
-    robot.invokeAndWait(decrementValueTask(spinner));
+    decrementValue(spinner);
+    robot.waitForIdle();
   }
 
   /**
@@ -114,7 +115,8 @@ public class JSpinnerDriver extends JComponentDriver {
   public void enterTextAndCommit(JSpinner spinner, String text) {
     if (!isEnabled(spinner)) return;
     enterText(spinner, text);
-    robot.invokeAndWait(commitEditTask(spinner));
+    commitEdit(spinner);
+    robot.waitForIdle();
   }
 
   /**

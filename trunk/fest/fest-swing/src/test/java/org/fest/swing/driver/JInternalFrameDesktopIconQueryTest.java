@@ -18,44 +18,41 @@ package org.fest.swing.driver;
 import javax.swing.JInternalFrame;
 import javax.swing.JInternalFrame.JDesktopIcon;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MDITestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JInternalFrameDesktopIconQuery}</code>.
  *
  * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JInternalFrameDesktopIconQueryTest {
 
+  private Robot robot;
   private JInternalFrame internalFrame;
-  private JDesktopIcon desktopIcon;
-  private JInternalFrameDesktopIconQuery query;
 
   @BeforeMethod public void setUp() {
-    internalFrame = createMock(JInternalFrame.class);
-    desktopIcon = createMock(JDesktopIcon.class);
-    query = new JInternalFrameDesktopIconQuery(internalFrame);
+    robot = robotWithNewAwtHierarchy();
+    MDITestWindow window = MDITestWindow.createNew(getClass());
+    internalFrame = window.internalFrame();
+    robot.showWindow(window);
   }
 
-  public void shouldCloseJInternalFrame() {
-    new EasyMockTemplate(internalFrame) {
-      protected void expectations() {
-        expect(internalFrame.getDesktopIcon()).andReturn(desktopIcon);
-      }
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(desktopIcon);
-      }
-    }.run();
+  public void shouldReturnJDesktopIconFromJInternalFrame() {
+    JDesktopIcon expected = internalFrame.getDesktopIcon();
+    assertThat(JInternalFrameDesktopIconQuery.desktopIconOf(internalFrame)).isSameAs(expected);
   }
 }

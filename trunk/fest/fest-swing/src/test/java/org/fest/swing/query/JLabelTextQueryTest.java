@@ -17,44 +17,74 @@ package org.fest.swing.query;
 
 import javax.swing.JLabel;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JLabelTextQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION) 
+@Test(groups = { GUI,  EDT_ACTION })
 public class JLabelTextQueryTest {
 
-  private JLabel label;
-  private String text;
-  private JLabelTextQuery query;
+  private Robot robot;
+  private MyLabel label;
 
   @BeforeMethod public void setUp() {
-    label = createMock(JLabel.class);
-    text = "Hello";
-    query = new JLabelTextQuery(label);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    label = window.label;
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnTextOfJLabel() {
-    new EasyMockTemplate(label) {
-      protected void expectations() {
-        expect(label.getText()).andReturn(text);
-      }
+    assertThat(JLabelTextQuery.textOf(label)).isEqualTo("Hello");
+    assertThat(label.methodGetTextWasInvoked()).isTrue();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(text);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final MyLabel label = new MyLabel("Hello");
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(JLabelTextQueryTest.class);
+      addComponents(label);
+    }
+  }
+
+  private static class MyLabel extends JLabel {
+    private static final long serialVersionUID = 1L;
+
+    private boolean methodGetTextInvoked;
+
+    MyLabel(String text) {
+      super(text);
+    }
+
+    @Override public String getText() {
+      methodGetTextInvoked = true;
+      return super.getText();
+    }
+
+    boolean methodGetTextWasInvoked() { return methodGetTextInvoked; }
   }
 }

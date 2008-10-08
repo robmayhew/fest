@@ -20,7 +20,7 @@ import java.awt.Point;
 import javax.swing.JScrollBar;
 
 /**
- * Understands encapsulation of a location in a horizontal <code>{@link JScrollBar}</code>.
+ * Understands a location in a horizontal <code>{@link JScrollBar}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang

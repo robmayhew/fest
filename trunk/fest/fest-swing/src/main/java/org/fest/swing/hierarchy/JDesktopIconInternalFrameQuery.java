@@ -10,22 +10,20 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link JInternalFrame}</code>
  * associated to the given <code>{@link JDesktopIcon}</code>.
+ * @see JDesktopIcon#getInternalFrame()
  *
- * @author Alex Ruiz 
+ * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-class JDesktopIconInternalFrameQuery extends GuiQuery<JInternalFrame> {
+final class JDesktopIconInternalFrameQuery {
 
-  private final JDesktopIcon desktopIcon;
-
-  static JInternalFrame internalFrameOf(JDesktopIcon desktopIcon) {
-    return execute(new JDesktopIconInternalFrameQuery(desktopIcon));
-  }
-  
-  JDesktopIconInternalFrameQuery(JDesktopIcon desktopIcon) {
-    this.desktopIcon = desktopIcon;
+  static JInternalFrame internalFrameOf(final JDesktopIcon desktopIcon) {
+    return execute(new GuiQuery<JInternalFrame>() {
+      protected JInternalFrame executeInEDT() {
+        return desktopIcon.getInternalFrame();
+      }
+    });
   }
 
-  protected JInternalFrame executeInEDT() {
-    return desktopIcon.getInternalFrame();
-  }
+  private JDesktopIconInternalFrameQuery() {}
 }

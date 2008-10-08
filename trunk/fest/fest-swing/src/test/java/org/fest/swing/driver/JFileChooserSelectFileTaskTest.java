@@ -23,10 +23,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.Condition;
+import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Files.*;
 
@@ -35,41 +38,49 @@ import static org.fest.util.Files.*;
  *
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION }) 
+@Test(groups = { GUI, EDT_ACTION })
 public class JFileChooserSelectFileTaskTest {
 
-  private MyWindow window;
+  private Robot robot;
+  private JFileChooser fileChooser;
   private File fileToSelect;
-  
+
   @BeforeMethod public void setUp() {
+    robot = robotWithNewAwtHierarchy();
     fileToSelect = newTemporaryFile();
-    window = MyWindow.createNew();
-    window.display();
+    MyWindow window = MyWindow.createNew();
+    fileChooser = window.fileChooser;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
+    robot.cleanUp();
     fileToSelect.delete();
   }
-  
+
   public void shouldSelectFile() {
-    JFileChooserSelectFileTask.setSelectedFile(window.fileChooser, fileToSelect);
-    pause(new Condition("File is selected") {
-      public boolean test() {
-        return window.fileChooser.getSelectedFile() == fileToSelect;
+    JFileChooserSelectFileTask.setSelectedFile(fileChooser, fileToSelect);
+    robot.waitForIdle();
+    assertThat(selectedFile()).isEqualTo(fileToSelect);
+  }
+
+  private File selectedFile() {
+    return execute(new GuiQuery<File>() {
+      protected File executeInEDT() {
+        return fileChooser.getSelectedFile();
       }
     });
   }
-  
+
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     static MyWindow createNew() {
       return new MyWindow();
     }
-    
+
     final JFileChooser fileChooser = new JFileChooser(temporaryFolder());
-    
+
     private MyWindow() {
       super(JFileChooserSelectFileTask.class);
       add(fileChooser);

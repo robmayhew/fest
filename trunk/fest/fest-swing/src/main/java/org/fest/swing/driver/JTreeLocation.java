@@ -45,7 +45,7 @@ public final class JTreeLocation {
    * @param row the given row.
    * @return the coordinates of the given row.
    * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
+   * visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
   public Point pointAt(JTree tree, int row) {
@@ -72,7 +72,7 @@ public final class JTreeLocation {
    * @param row the given row.
    * @return the path for the given row.
    * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
+   * visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
   public TreePath pathFor(JTree tree, int row) {

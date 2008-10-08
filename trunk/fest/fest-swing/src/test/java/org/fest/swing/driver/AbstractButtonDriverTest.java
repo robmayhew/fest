@@ -15,7 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -44,6 +43,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * Tests for <code>{@link AbstractButtonDriver}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 @Test(groups = GUI)
 public class AbstractButtonDriverTest {
@@ -69,16 +69,17 @@ public class AbstractButtonDriverTest {
     robot.settings().eventMode(eventMode);
     ActionPerformedRecorder recorder = ActionPerformedRecorder.attachTo(checkBox);
     driver.click(checkBox);
-    assertThat(recorder).actionWasPerformed();
+    assertThat(recorder).wasPerformed();
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotClickButtonIfButtonDisabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     disable(checkBox);
-    ActionPerformedRecorder recorder = ActionPerformedRecorder.attachTo(checkBox);
+    robot.waitForIdle();
+    ActionPerformedRecorder action = ActionPerformedRecorder.attachTo(checkBox);
     driver.click(checkBox);
-    assertThat(recorder).actionWasNotPerformed();
+    assertThat(action).wasNotPerformed();
   }
 
   public void shouldReturnButtonText() {
@@ -162,6 +163,7 @@ public class AbstractButtonDriverTest {
 
   private void unselectCheckBox() {
     setSelected(checkBox, false);
+    robot.waitForIdle();
   }
 
   public void shouldFailIfButtonIsSelectedAndExpectingNotSelected() {
@@ -177,21 +179,21 @@ public class AbstractButtonDriverTest {
 
   private void selectCheckBox() {
     setSelected(checkBox, true);
+    robot.waitForIdle();
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     static MyWindow createNew() {
-      return new MyWindow(); 
+      return new MyWindow();
     }
-    
+
     final JCheckBox checkBox = new JCheckBox("Hello", true);
 
     private MyWindow() {
       super(AbstractButtonDriverTest.class);
       add(checkBox);
-      setPreferredSize(new Dimension(200, 200));
     }
   }
 
@@ -208,12 +210,12 @@ public class AbstractButtonDriverTest {
       actionPerformed = true;
     }
 
-    ActionPerformedRecorder actionWasPerformed() {
+    ActionPerformedRecorder wasPerformed() {
       assertThat(actionPerformed).isTrue();
       return this;
     }
 
-    ActionPerformedRecorder actionWasNotPerformed() {
+    ActionPerformedRecorder wasNotPerformed() {
       assertThat(actionPerformed).isFalse();
       return this;
     }

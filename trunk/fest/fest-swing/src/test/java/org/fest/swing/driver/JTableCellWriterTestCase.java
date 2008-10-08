@@ -45,13 +45,13 @@ import static org.fest.swing.testing.TestGroups.GUI;
 public abstract class JTableCellWriterTestCase {
 
   private Robot robot;
-  private TableDialogEditDemoFrame frame;
+  private TableDialogEditDemoWindow frame;
   private JTableCellWriter writer;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     writer = createWriter(robot);
-    frame = TableDialogEditDemoFrame.createNew(getClass());
+    frame = TableDialogEditDemoWindow.createNew(getClass());
     robot.showWindow(frame, new Dimension(500, 100));
   }
 

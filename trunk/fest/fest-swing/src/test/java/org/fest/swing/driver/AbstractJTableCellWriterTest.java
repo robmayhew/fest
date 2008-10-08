@@ -47,11 +47,11 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = GUI) 
+@Test(groups = GUI)
 public class AbstractJTableCellWriterTest {
 
   private Robot robot;
-  private TableDialogEditDemoFrame frame;
+  private TableDialogEditDemoWindow frame;
   private AbstractJTableCellWriter writer;
 
   @BeforeMethod public void setUp() {
@@ -61,8 +61,8 @@ public class AbstractJTableCellWriterTest {
     robot.showWindow(frame, new Dimension(500, 100));
   }
 
-  private static TableDialogEditDemoFrame newFrame() {
-    return TableDialogEditDemoFrame.createNew(AbstractJTableCellWriterTest.class);
+  private static TableDialogEditDemoWindow newFrame() {
+    return TableDialogEditDemoWindow.createNew(AbstractJTableCellWriterTest.class);
   }
 
   @AfterMethod public void tearDown() {
@@ -96,27 +96,27 @@ public class AbstractJTableCellWriterTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldClickCellOnce(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    ClickRecorder recorder = ClickRecorder.attachTo(frame.table);
+    ClickRecorder click = ClickRecorder.attachTo(frame.table);
     int row = 0;
     int column = 0;
     Point cellCenter = centerOfCell(row, column);
     writer.clickCell(frame.table, row, column);
-    assertThat(recorder).clicked(LEFT_BUTTON)
-                        .timesClicked(1)
-                        .clickedAt(cellCenter);
+    assertThat(click).clicked(LEFT_BUTTON)
+                     .timesClicked(1)
+                     .clickedAt(cellCenter);
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldClickCell(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    ClickRecorder recorder = ClickRecorder.attachTo(frame.table);
+    ClickRecorder click = ClickRecorder.attachTo(frame.table);
     int row = 0;
     int column = 0;
     Point cellCenter = centerOfCell(row, column);
     writer.clickCell(frame.table, row, column, 2);
-    assertThat(recorder).clicked(LEFT_BUTTON)
-                        .timesClicked(2)
-                        .clickedAt(cellCenter);
+    assertThat(click).clicked(LEFT_BUTTON)
+                     .timesClicked(2)
+                     .clickedAt(cellCenter);
   }
 
   private Point centerOfCell(int row, int column) {

@@ -56,7 +56,7 @@ public class JSliderMinAndMaxQueryTest {
       }
 
       protected void codeToTest() {
-        MinimumAndMaximum minAndMax = query.executeInEDT();
+        ValueRange minAndMax = query.executeInEDT();
         assertThat(minAndMax.minimum).isEqualTo(minimum);
         assertThat(minAndMax.maximum).isEqualTo(maximum);
       }

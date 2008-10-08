@@ -21,9 +21,11 @@ import java.util.UUID;
 
 import javax.swing.JButton;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.ScreenLock;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -40,13 +42,18 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class ScreenshotTakerTest {
+@Test public class ScreenshotTakerTest {
 
   private static final BufferedImage NO_IMAGE = null;
   private ScreenshotTaker taker;
 
   @BeforeMethod public void setUp() {
     taker = new ScreenshotTaker();
+  }
+
+  @AfterMethod public void tearDown() {
+    ScreenLock screenLock = ScreenLock.instance();
+    if (screenLock.acquiredBy(this)) screenLock.release(this);
   }
 
   @Test(expectedExceptions = ImageException.class)
@@ -64,13 +71,13 @@ public class ScreenshotTakerTest {
     taker.saveImage(NO_IMAGE, "somePathWithoutPng");
   }
 
-  @Test public void shouldTakeDesktopScreenshotAndSaveItInGivenPath() throws Exception {
+  public void shouldTakeDesktopScreenshotAndSaveItInGivenPath() throws Exception {
     String imagePath = concat(temporaryFolderPath(), imageFileName());
     taker.saveDesktopAsPng(imagePath);
     assertThat(read(imagePath)).hasSize(Toolkit.getDefaultToolkit().getScreenSize());
   }
 
-  @Test public void shouldTakeScreenshotOfWindowAndSaveItInGivenPath() throws Exception {
+  public void shouldTakeScreenshotOfWindowAndSaveItInGivenPath() throws Exception {
     TestWindow frame = showNewInTest(getClass());
     String imagePath = concat(temporaryFolderPath(), imageFileName());
     taker.saveComponentAsPng(frame, imagePath);
@@ -78,13 +85,18 @@ public class ScreenshotTakerTest {
     frame.destroy();
   }
 
-  @Test(groups = GUI) public void shouldTakeScreenshotOfButtonAndSaveItInGivenPath() throws Exception {
+  @Test(groups = GUI)
+  public void shouldTakeScreenshotOfButtonAndSaveItInGivenPath() throws Exception {
+    ScreenLock.instance().acquire(this);
     MyWindow frame = MyWindow.createNew();
-    frame.display();
-    String imagePath = concat(temporaryFolderPath(), imageFileName());
-    taker.saveComponentAsPng(frame.button, imagePath);
-    assertThat(read(imagePath)).hasSize(sizeOf(frame.button));
-    frame.destroy();
+    try {
+      frame.display();
+      String imagePath = concat(temporaryFolderPath(), imageFileName());
+      taker.saveComponentAsPng(frame.button, imagePath);
+      assertThat(read(imagePath)).hasSize(sizeOf(frame.button));
+    } finally {
+      frame.destroy();
+    }
   }
 
   private String imageFileName() {
@@ -98,7 +110,7 @@ public class ScreenshotTakerTest {
     static MyWindow createNew() {
       return new MyWindow();
     }
-    
+
     final JButton button = new JButton("Hello");
 
     private MyWindow() {

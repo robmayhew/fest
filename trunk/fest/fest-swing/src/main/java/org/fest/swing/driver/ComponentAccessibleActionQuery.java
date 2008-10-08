@@ -18,6 +18,7 @@ package org.fest.swing.driver;
 import java.awt.Component;
 
 import javax.accessibility.AccessibleAction;
+import javax.accessibility.AccessibleContext;
 
 import org.fest.swing.core.GuiQuery;
 
@@ -26,22 +27,21 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that finds <code>{@link AccessibleAction}</code>s
  * associated to <code>{@link Component}</code>s.
+ * @see Component#getAccessibleContext()
+ * @see AccessibleContext#getAccessibleAction()
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-class ComponentAccessibleActionQuery extends GuiQuery<AccessibleAction> {
+final class ComponentAccessibleActionQuery {
 
-  private final Component component;
-
-  static AccessibleAction accessibleActionFrom(Component component) {
-    return execute(new ComponentAccessibleActionQuery(component));
+  static AccessibleAction accessibleActionFrom(final Component component) {
+    return execute(new GuiQuery<AccessibleAction>() {
+      protected AccessibleAction executeInEDT() {
+        return component.getAccessibleContext().getAccessibleAction();
+      }
+    });
   }
 
-  ComponentAccessibleActionQuery(Component component) {
-    this.component = component;
-  }
-
-  protected AccessibleAction executeInEDT() throws Throwable {
-    return component.getAccessibleContext().getAccessibleAction();
-  }
+  private ComponentAccessibleActionQuery() {}
 }

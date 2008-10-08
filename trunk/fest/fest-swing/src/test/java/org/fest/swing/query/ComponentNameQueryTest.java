@@ -15,46 +15,63 @@
  */
 package org.fest.swing.query;
 
-import java.awt.Component;
-
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentNameQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class ComponentNameQueryTest {
 
-  private Component component;
-  private String name;
-  private ComponentNameQuery query;
+  private Robot robot;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    component = createMock(Component.class);
-    name = "mine";
-    query = new ComponentNameQuery(component);
+    robot = robotWithNewAwtHierarchy();
+    window = MyWindow.createNew();
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnComponentName() {
-    new EasyMockTemplate(component) {
-      protected void expectations() {
-        expect(component.getName()).andReturn(name);
-      }
+    assertThat(ComponentNameQuery.nameOf(window)).isEqualTo("window");
+    assertThat(window.methodGetNameWasInvoked()).isTrue();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(name);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private boolean methodGetNameInvoked;
+
+    private MyWindow() {
+      super(ComponentNameQueryTest.class);
+      setName("window");
+    }
+
+    @Override public String getName() {
+      methodGetNameInvoked = true;
+      return super.getName();
+    }
+
+    boolean methodGetNameWasInvoked() { return methodGetNameInvoked; }
   }
 }

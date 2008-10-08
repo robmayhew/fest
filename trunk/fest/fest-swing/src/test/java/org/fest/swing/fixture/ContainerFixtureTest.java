@@ -409,7 +409,7 @@ public class ContainerFixtureTest {
 
   private Object messageOf(final JOptionPane optionPane) {
     return execute(new GuiQuery<Object>() {
-      protected Object executeInEDT() throws Throwable {
+      protected Object executeInEDT() {
         return optionPane.getMessage();
       }
     });

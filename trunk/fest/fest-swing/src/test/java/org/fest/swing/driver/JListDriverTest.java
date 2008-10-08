@@ -17,7 +17,6 @@ package org.fest.swing.driver;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.util.Arrays;
 
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -42,6 +41,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
+import static org.fest.swing.driver.JListSetSelectedIndexTask.selectIndex;
 import static org.fest.swing.factory.JMenuItems.menuItem;
 import static org.fest.swing.factory.JPopupMenus.popupMenu;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
@@ -49,8 +49,7 @@ import static org.fest.swing.task.ComponentSetPopupMenuTask.setPopupMenu;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.Range.*;
-import static org.fest.util.Arrays.*;
-import static org.fest.util.Strings.concat;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JListDriver}</code>.
@@ -123,23 +122,10 @@ public class JListDriverTest {
     final TestList list = dragList;
     final int[] indices = new int[] { 0, 2 };
     select(list, indices);
+    robot.waitForIdle();
     String[] selection = driver.selectionOf(dragList);
     assertThat(selection).containsOnly("one", "three");
     assertCellReaderWasCalled();
-  }
-
-  private static void select(final JList list, final int[] indices) {
-    final int selectionMode = MULTIPLE_INTERVAL_SELECTION;
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        list.setSelectionMode(selectionMode);
-        list.setSelectedIndices(indices);
-      }
-    }, new Condition(concat("JList's 'selectedIndices' property is ", format(indices))) {
-      public boolean test() {
-        return list.getSelectionMode() == selectionMode && Arrays.equals(list.getSelectedIndices(), indices);
-      }
-    });
   }
 
   public void shouldReturnListContents() {
@@ -151,7 +137,8 @@ public class JListDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldClickItemWithGivenText(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    selectIndex(dragList, -1);
+    selectIndex(dragList, (-1));
+    robot.waitForIdle();
     ClickRecorder recorder = ClickRecorder.attachTo(dragList);
     driver.clickItem(dragList, "two", RIGHT_BUTTON, 2);
     assertThat(recorder).clicked(RIGHT_BUTTON)
@@ -160,21 +147,9 @@ public class JListDriverTest {
     assertThat(locationToIndex(dragList, pointClicked)).isEqualTo(1);
   }
 
-  private static void selectIndex(final JList list, final int index) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        list.setSelectedIndex(index);
-      }
-    }, new Condition(concat("JList's 'selectedIndex' property is ", index)) {
-      public boolean test() {
-        return list.getSelectedIndex() == index;
-      }
-    });
-  }
-
   private static int locationToIndex(final JList list, final Point p) {
     return execute(new GuiQuery<Integer>() {
-      protected Integer executeInEDT() throws Throwable {
+      protected Integer executeInEDT() {
         return list.locationToIndex(p);
       }
     });
@@ -191,6 +166,7 @@ public class JListDriverTest {
   public void shouldNotSelectItemIfAlreadySelected(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     selectIndex(dragList, 1);
+    robot.waitForIdle();
     driver.selectItem(dragList, 1);
     assertThat(selectedIndexOf(dragList)).isEqualTo(1);
   }
@@ -213,7 +189,7 @@ public class JListDriverTest {
 
   private static Object selectedValueOf(final JList list) {
     return execute(new GuiQuery<Object>() {
-      protected Object executeInEDT() throws Throwable {
+      protected Object executeInEDT() {
         return list.getSelectedValue();
       }
     });
@@ -313,7 +289,7 @@ public class JListDriverTest {
 
   private static Object[] selectedItemsOf(final JList list) {
     return execute(new GuiQuery<Object[]>() {
-      protected Object[] executeInEDT() throws Throwable {
+      protected Object[] executeInEDT() {
         return list.getSelectedValues();
       }
     });
@@ -340,12 +316,14 @@ public class JListDriverTest {
 
   public void shouldPassIfSelectionIsEqualToExpectedOne() {
     selectIndex(dragList, 0);
+    robot.waitForIdle();
     driver.requireSelection(dragList, "one");
     assertCellReaderWasCalled();
   }
 
   public void shouldFailIfExpectingSelectionButThereIsNone() {
-    selectIndex(dragList, -1);
+    selectIndex(dragList, (-1));
+    robot.waitForIdle();
     try {
       driver.requireSelection(dragList, "one");
       fail();
@@ -356,6 +334,7 @@ public class JListDriverTest {
 
   public void shouldFailIfSelectionIsNotEqualToExpectedOne() {
     selectIndex(dragList, 1);
+    robot.waitForIdle();
     try {
       driver.requireSelection(dragList, "one");
       fail();
@@ -366,8 +345,19 @@ public class JListDriverTest {
 
   public void shouldPassIfSelectedItemsIsEqualToExpectedOnes() {
     select(dragList, new int[] { 0, 1 });
+    robot.waitForIdle();
     driver.requireSelectedItems(dragList, "one", "two");
     assertCellReaderWasCalled();
+  }
+
+  private static void select(final JList list, final int[] indices) {
+    final int selectionMode = MULTIPLE_INTERVAL_SELECTION;
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        list.setSelectionMode(selectionMode);
+        list.setSelectedIndices(indices);
+      }
+    });
   }
 
   @Test(expectedExceptions = NullPointerException.class)
@@ -376,7 +366,8 @@ public class JListDriverTest {
   }
 
   public void shouldFailIfExpectingSelectedItemsButThereIsNone() {
-    selectIndex(dragList, -1);
+    selectIndex(dragList, (-1));
+    robot.waitForIdle();
     try {
       driver.requireSelectedItems(dragList, "one", "two");
       fail();
@@ -387,6 +378,7 @@ public class JListDriverTest {
 
   public void shouldFailIfSelectedItemCountIsNotEqualToExpectedOnes() {
     selectIndex(dragList, 2);
+    robot.waitForIdle();
     try {
       driver.requireSelectedItems(dragList, "one", "two");
       fail();
@@ -397,6 +389,7 @@ public class JListDriverTest {
 
   public void shouldFailIfSelectedItemsIsNotEqualToExpectedOnes() {
     selectIndex(dragList, 2);
+    robot.waitForIdle();
     try {
       driver.requireSelectedItems(dragList, "one");
       fail();
@@ -406,12 +399,14 @@ public class JListDriverTest {
   }
 
   public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
-    selectIndex(dragList, -1);
+    selectIndex(dragList, (-1));
+    robot.waitForIdle();
     driver.requireNoSelection(dragList);
   }
 
   public void shouldFailIfHasSelectionAndExpectingNoSelection() {
     selectIndex(dragList, 0);
+    robot.waitForIdle();
     try {
       driver.requireNoSelection(dragList);
       fail();
@@ -446,6 +441,7 @@ public class JListDriverTest {
     JMenuItem menuItem = menuItem().withText("Frodo").createNew();
     JPopupMenu popupMenu = popupMenu().withMenuItems(menuItem).createNew();
     setPopupMenu(list, popupMenu);
+    robot.waitForIdle();
     return popupMenu;
   }
 
@@ -479,6 +475,7 @@ public class JListDriverTest {
 
   private void clearAndDisableDragList() {
     clearAndDisableDragList(dragList);
+    robot.waitForIdle();
   }
 
   private static void clearAndDisableDragList(final JList list) {
@@ -486,10 +483,6 @@ public class JListDriverTest {
       protected void executeInEDT() {
         list.setSelectedIndex(-1);
         list.setEnabled(false);
-      }
-    }, new Condition("JList is cleared and disabled") {
-      public boolean test() {
-        return list.getSelectedIndex() == -1 && !list.isEnabled();
       }
     });
   }

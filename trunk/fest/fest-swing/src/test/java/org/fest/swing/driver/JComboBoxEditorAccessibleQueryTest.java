@@ -36,16 +36,18 @@ import static org.fest.util.Arrays.array;
  * Tests for <code>{@link JComboBoxEditorAccessibleQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 @Test(groups = { GUI, EDT_ACTION })
 public class JComboBoxEditorAccessibleQueryTest {
 
   private Robot robot;
+  private MyWindow window;
   private JComboBox comboBox;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    MyWindow window = MyWindow.createNew();
+    window = MyWindow.createNew();
     comboBox = window.comboBox;
     robot.showWindow(window);
   }
@@ -55,18 +57,20 @@ public class JComboBoxEditorAccessibleQueryTest {
   }
 
   @Test(dataProvider = "accessible", groups = { GUI, EDT_ACTION })
-  public void shouldReturnIndicateIfJComboBoxEditorIsAccessible(boolean editable, boolean enabled, boolean accessible) {
+  public void shouldReturnIndicateIfJComboBoxEditorIsAccessible(boolean editable, boolean enabled) {
     setEditable(comboBox, editable);
     setEnabled(comboBox, enabled);
+    robot.waitForIdle();
+    boolean accessible = editable && enabled;
     assertThat(JComboBoxEditorAccessibleQuery.isEditorAccessible(comboBox)).isEqualTo(accessible);
   }
 
   @DataProvider(name = "accessible") public Object[][] accessible() {
     return new Object[][] {
-        { true , true , true  },
-        { true , false, false },
-        { false, true , false },
-        { false, false, false },
+        { true , true  },
+        { true , false },
+        { false, true  },
+        { false, false },
     };
   }
 
@@ -78,9 +82,9 @@ public class JComboBoxEditorAccessibleQueryTest {
     static MyWindow createNew() {
       return new MyWindow();
     }
-    
+
     private MyWindow() {
-      super(JComboBoxDriverTest.class);
+      super(JComboBoxEditorAccessibleQueryTest.class);
       add(comboBox);
     }
   }

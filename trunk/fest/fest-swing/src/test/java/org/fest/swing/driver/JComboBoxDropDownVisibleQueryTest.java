@@ -16,49 +16,68 @@
 package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
-import javax.swing.plaf.ComboBoxUI;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.BooleanProvider;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JComboBoxDropDownVisibleQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JComboBoxDropDownVisibleQueryTest {
 
+  private Robot robot;
   private JComboBox comboBox;
-  private ComboBoxUI ui;
-  private JComboBoxDropDownVisibleQuery query;
 
   @BeforeMethod public void setUp() {
-    comboBox = createMock(JComboBox.class);
-    ui = createMock(ComboBoxUI.class);
-    query = new JComboBoxDropDownVisibleQuery(comboBox);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    comboBox = window.comboBox;
+    robot.showWindow(window);
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_ACTION)
-  public void shouldSetDropDownVisible(final boolean visible) {
-    new EasyMockTemplate(comboBox, ui) {
-      protected void expectations() {
-        expect(comboBox.getUI()).andReturn(ui);
-        expect(ui.isPopupVisible(comboBox)).andReturn(visible);
-      }
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(visible);
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
+  public void shouldSetDropDownVisible(final boolean visible) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        comboBox.getUI().setPopupVisible(comboBox, visible);
       }
-    }.run();
+    });
+    robot.waitForIdle();
+    boolean dropDownVisible = JComboBoxDropDownVisibleQuery.isDropDownVisible(comboBox);
+    assertThat(dropDownVisible).isEqualTo(visible);
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    final JComboBox comboBox = new JComboBox(new Object[] { "one", "two", "three" });
+
+    private MyWindow() {
+      super(JComboBoxDropDownVisibleQueryTest.class);
+      addComponents(comboBox);
+    }
   }
 }

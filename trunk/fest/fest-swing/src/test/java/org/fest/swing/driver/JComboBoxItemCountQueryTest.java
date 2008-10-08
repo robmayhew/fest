@@ -17,48 +17,80 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JComboBoxItemCountQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JComboBoxItemCountQueryTest {
 
-  private JComboBox comboBox;
-  private JComboBoxItemCountQuery query;
+  private Robot robot;
+  private MyComboBox comboBox;
 
   @BeforeMethod public void setUp() {
-    comboBox = createMock(JComboBox.class);
-    query = new JComboBoxItemCountQuery(comboBox);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    comboBox = window.comboBox;
+    robot.showWindow(window);
   }
 
-  @Test(dataProvider = "itemCounts", groups = EDT_ACTION)
-  public void shouldReturnItemCountOfJComboBox(final int itemCount) {
-    new EasyMockTemplate(comboBox) {
-      protected void expectations() {
-        expect(comboBox.getItemCount()).andReturn(itemCount);
-      }
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(itemCount);
-      }
-    }.run();
+
+  public void shouldReturnItemCountOfJComboBox() {
+    assertThat(JComboBoxItemCountQuery.itemCountOf(comboBox)).isEqualTo(3);
+    assertThat(comboBox.methodGetItemCountWasInvoked()).isTrue();
   }
 
   @DataProvider(name = "itemCounts") public Object[][] itemCounts() {
     return new Object[][] { { 1 }, { 6 }, { 8 }, { 26 } };
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final MyComboBox comboBox = new MyComboBox("first", "second", "third");
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(JComboBoxItemCountQueryTest.class);
+      addComponents(comboBox);
+    }
+  }
+
+  private static class MyComboBox extends JComboBox {
+    private static final long serialVersionUID = 1L;
+
+    private boolean methodGetItemCountInvoked;
+
+    MyComboBox(Object... items) {
+      super(items);
+    }
+
+    @Override public int getItemCount() {
+      methodGetItemCountInvoked = true;
+      return super.getItemCount();
+    }
+
+    boolean methodGetItemCountWasInvoked() { return methodGetItemCountInvoked; }
   }
 }

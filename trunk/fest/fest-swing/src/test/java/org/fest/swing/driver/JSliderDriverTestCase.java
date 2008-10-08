@@ -26,6 +26,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
@@ -33,12 +34,12 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.ROBOT;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JSliderMaximumQuery.maximumOf;
 import static org.fest.swing.driver.JSliderOrientationQuery.orientationOf;
 import static org.fest.swing.driver.JSliderSetValueTask.setValue;
 import static org.fest.swing.driver.JSliderValueQuery.valueOf;
-import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -79,11 +80,11 @@ public abstract class JSliderDriverTestCase {
 
   @DataProvider(name = "valueProvider")
   public Object[][] valueProvider() {
-    return new Object[][] { 
-        /* {  5, AWT }, */ {  5, ROBOT }, 
-        /* { 10, AWT }, */ { 10, ROBOT }, 
-        /* { 28, AWT }, */ { 28, ROBOT }, 
-        /* { 20, AWT }, */ { 20, ROBOT } 
+    return new Object[][] {
+        /* {  5, AWT }, */ {  5, ROBOT },
+        /* { 10, AWT }, */ { 10, ROBOT },
+        /* { 28, AWT }, */ { 28, ROBOT },
+        /* { 20, AWT }, */ { 20, ROBOT }
     };
   }
 
@@ -93,6 +94,7 @@ public abstract class JSliderDriverTestCase {
     clearAndDisableSlider();
     int value = 10;
     setJSliderValue(value);
+    robot.waitForIdle();
     driver.slideToMaximum(slider);
     assertThatSliderValueIsEqualTo(value);
   }
@@ -108,6 +110,7 @@ public abstract class JSliderDriverTestCase {
   public void shouldNotSlideToMaximumIfSliderIsNotEnabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     clearAndDisableSlider();
+    robot.waitForIdle();
     int value = valueOf(slider);
     driver.slideToMaximum(slider);
     assertThatSliderValueIsEqualTo(value);
@@ -124,6 +127,7 @@ public abstract class JSliderDriverTestCase {
   public void shouldNotSlideToMinimumIfSliderIsNotEnabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     clearAndDisableSlider();
+    robot.waitForIdle();
     int value = maximumOf(slider);
     setJSliderValue(value);
     driver.slideToMinimum(slider);
@@ -153,15 +157,18 @@ public abstract class JSliderDriverTestCase {
   }
 
   private void clearAndDisableSlider() {
-    final int value = 0;
-    setJSliderValue(value);
-    disable(slider);
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        slider.setValue(0);
+        slider.setEnabled(false);
+      }
+    });
   }
 
   private void setJSliderValue(int value) {
     setValue(slider, value);
   }
-  
+
   protected int sliderOrientation() {
     return orientationOf(slider);
   }

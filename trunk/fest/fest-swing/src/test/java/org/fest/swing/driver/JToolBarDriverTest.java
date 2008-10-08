@@ -25,7 +25,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
@@ -71,6 +73,7 @@ public class JToolBarDriverTest {
   public void shouldThrowErrorWhenFloatingNotFloatableToolBar(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     setNotFloatable(toolBar);
+    robot.waitForIdle();
     try {
       driver.makeFloat(toolBar);
       fail();
@@ -83,10 +86,6 @@ public class JToolBarDriverTest {
     execute(new GuiTask() {
       protected void executeInEDT() {
         toolBar.setFloatable(false);
-      }
-    }, new Condition("JToolBar is not floatable") {
-      public boolean test() {
-        return !toolBar.isFloatable();
       }
     });
   }

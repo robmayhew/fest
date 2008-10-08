@@ -22,7 +22,7 @@ import javax.swing.JScrollBar;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 
 /**
- * Understands encapsulation of a location in a <code>{@link JScrollBar}</code> in a orientation-specific way.
+ * Understands a location in a <code>{@link JScrollBar}</code> in a orientation-specific way.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang

@@ -17,39 +17,68 @@ package org.fest.swing.driver;
 
 import javax.swing.JButton;
 
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link AbstractButtonClickTask}</code>.
  *
  * @author Yvonne Wang
  */
-@Test 
+@Test(groups = GUI)
 public class AbstractButtonClickTaskTest {
 
+  private Robot robot;
   private MyButton button;
 
   @BeforeClass public void setUp() {
-    button = MyButton.createNew("Hello");
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    button = window.button;
+    robot.showWindow(window);
+  }
+
+  @AfterClass public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldClickButton() {
     AbstractButtonClickTask.doClick(button);
-    assertThat(button.clicked()).isTrue();
+    robot.waitForIdle();
+    assertThat(button.wasClicked()).isTrue();
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final MyButton button = new MyButton("Hello");
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(AbstractButtonClickTaskTest.class);
+    }
   }
 
   private static class MyButton extends JButton {
     private static final long serialVersionUID = 1L;
 
     private boolean clicked;
-    
+
     static MyButton createNew(String text) {
       return new MyButton(text);
     }
-    
+
     private MyButton(String text) {
       super(text);
     }
@@ -58,7 +87,7 @@ public class AbstractButtonClickTaskTest {
       clicked = true;
       super.doClick();
     }
-    
-    boolean clicked() { return clicked; }
+
+    boolean wasClicked() { return clicked; }
   }
 }

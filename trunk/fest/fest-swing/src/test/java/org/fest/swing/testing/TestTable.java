@@ -18,7 +18,6 @@ package org.fest.swing.testing;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import org.fest.swing.core.Condition;
 import org.fest.swing.core.GuiTask;
 
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
@@ -41,7 +40,7 @@ import static org.fest.util.Strings.concat;
  */
 public final class TestTable extends JTable {
   private static final long serialVersionUID = 1L;
-  
+
   private final CustomModel model;
 
   public TestTable(int rowCount, int columnCount) {
@@ -83,7 +82,7 @@ public final class TestTable extends JTable {
     setSelectionMode(SINGLE_SELECTION);
     setTransferHandler(new TableTransferHandler());
   }
-  
+
   public void cellEditable(final int row, final int column, final boolean editable) {
     cellEditable(model, row, column, editable);
   }
@@ -93,38 +92,34 @@ public final class TestTable extends JTable {
       protected void executeInEDT() {
         model.cellEditable(row, column, editable);
       }
-    }, new Condition(concat("Tables cell's (", row, ",", column, ") 'editable property is ", editable)) {
-      public boolean test() {
-        return model.isCellEditable(row, column) == editable;
-      }
     });
   }
 
   private static class CustomModel extends DefaultTableModel {
 
     private final boolean[][] editableCells;
-    
+
     CustomModel(Object[][] data, Object[] columnNames) {
       super(data, columnNames);
       editableCells = new boolean[data.length][data[0].length];
     }
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @Override public boolean isCellEditable(int row, int column) {
       return editableCells[row][column];
     }
-    
+
     void cellEditable(int row, int column, boolean editable) {
       editableCells[row][column] = editable;
     }
   }
-  
+
   private static class TableTransferHandler extends StringTransferHandler<JTable> {
     private static final long serialVersionUID = 1L;
 
     TableTransferHandler() {}
-    
+
     protected String exportString(JTable table) {
       rows = table.getSelectedRows();
       int colCount = table.getColumnCount();

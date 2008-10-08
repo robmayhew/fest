@@ -1,5 +1,5 @@
 /*
- * Created on Sep 2, 2008
+ * Created on Aug 12, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,35 +13,30 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.monitor;
+package org.fest.swing.driver;
 
-import java.awt.Window;
-import java.awt.event.WindowListener;
+import javax.swing.JSplitPane;
 
 import org.fest.swing.core.GuiTask;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 /**
- * Understands a task that adds a <code>{@link WindowListener}</code> to a given <code>{@link Window}</code>.
- * This task should be executed in the event dispatch thread.
+ * Understands a task that sets the location of the divider of a <code>{@link JSplitPane}</code>. This task is executed
+ * in the event dispatch thread.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class WindowAddWindowListenerTask extends GuiTask {
+final class JSplitPaneSetDividerLocationTask {
 
-  private final Window w;
-  private final WindowListener l;
-
-  static WindowAddWindowListenerTask addWindowListenerTask(Window w, WindowListener l) {
-    return new WindowAddWindowListenerTask(w, l);
+  static void setDividerLocation(final JSplitPane splitPane, final int location) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        splitPane.setDividerLocation(location);
+      }
+    });
   }
 
-  WindowAddWindowListenerTask(Window w, WindowListener l) {
-    this.w = w;
-    this.l = l;
-  }
-
-  protected void executeInEDT() {
-    w.addWindowListener(l);
-  }
+  private JSplitPaneSetDividerLocationTask() {}
 }

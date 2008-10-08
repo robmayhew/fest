@@ -29,19 +29,21 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class JFileChooserCancelButtonTextQuery extends GuiQuery<String> {
+final class JFileChooserCancelButtonTextQuery {
 
-  private static final JFileChooserCancelButtonTextQuery QUERY_INSTANCE = new JFileChooserCancelButtonTextQuery();
-  
+  private static final JFileChooserCancelButtonTextGuiQuery QUERY = new JFileChooserCancelButtonTextGuiQuery();
+
   private static final String CANCEL_BUTTON_TEXT_KEY = "FileChooser.cancelButtonText";
 
   static String cancelButtonText() {
-    return execute(QUERY_INSTANCE);
+    return execute(QUERY);
   }
 
-  JFileChooserCancelButtonTextQuery() {}
+  private JFileChooserCancelButtonTextQuery() {}
 
-  protected String executeInEDT() {
-    return UIManager.getString(CANCEL_BUTTON_TEXT_KEY);
+  private static class JFileChooserCancelButtonTextGuiQuery extends GuiQuery<String> {
+    protected String executeInEDT() {
+      return UIManager.getString(CANCEL_BUTTON_TEXT_KEY);
+    }
   }
 }

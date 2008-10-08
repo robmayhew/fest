@@ -23,23 +23,20 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the number of items in a
  * <code>{@link JComboBox}</code>.
+ * @see JComboBox#getItemCount()
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class JComboBoxItemCountQuery extends GuiQuery<Integer> {
+final class JComboBoxItemCountQuery {
 
-  private final JComboBox comboBox;
-
-  static int itemCountOf(JComboBox comboBox) {
-    return execute(new JComboBoxItemCountQuery(comboBox));
+  static int itemCountOf(final JComboBox comboBox) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return comboBox.getItemCount();
+      }
+    });
   }
 
-  JComboBoxItemCountQuery(JComboBox comboBox) {
-    this.comboBox = comboBox;
-  }
-
-  protected Integer executeInEDT() {
-    return comboBox.getItemCount();
-  }
+  private JComboBoxItemCountQuery() {}
 }

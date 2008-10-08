@@ -26,34 +26,41 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.JLabelTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JListCellRendererQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION }) 
+@Test(groups = { GUI, EDT_ACTION })
 public class JListCellRendererQueryTest {
 
-  private MyWindow window;
+  private Robot robot;
+  private JList list;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createNew();
-    window.display();
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    list = window.list;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
+    robot.cleanUp();
   }
 
   @Test(dataProvider = "listContents", groups = { GUI, EDT_ACTION })
   public void shouldReturnCellRendererComponentOfJList(int index, String itemText) {
-    Component renderer = JListCellRendererQuery.cellRendererIn(window.list, index);
+    Component renderer = JListCellRendererQuery.cellRendererIn(list, index);
     assertThat(renderer).isInstanceOf(JLabel.class);
     assertThat(textOf((JLabel)renderer)).isEqualTo(itemText);
   }
@@ -69,7 +76,7 @@ public class JListCellRendererQueryTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    final JList list = new JList(new Object[] { "one", "two", "three" });
+    final JList list = new JList(array("one", "two", "three"));
 
     static MyWindow createNew() {
       return new MyWindow();

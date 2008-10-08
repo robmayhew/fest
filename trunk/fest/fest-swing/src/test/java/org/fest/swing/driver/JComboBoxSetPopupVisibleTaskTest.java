@@ -22,13 +22,14 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.ComponentFinder;
+import org.fest.swing.core.Robot;
+import org.fest.swing.core.RobotFixture;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.query.ComponentShowingQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.BasicComponentFinder.finderWithCurrentAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.array;
 
@@ -36,27 +37,29 @@ import static org.fest.util.Arrays.array;
  * Tests for <code>{@link JComboBoxSetPopupVisibleTask}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION }) 
+@Test(groups = { GUI, EDT_ACTION })
 public class JComboBoxSetPopupVisibleTaskTest {
 
-  private ComponentFinder finder;
+  private Robot robot;
   private MyWindow window;
+  private JComboBox comboBox;
 
   @BeforeMethod public void setUp() {
-    finder = finderWithCurrentAwtHierarchy();
+    robot = RobotFixture.robotWithNewAwtHierarchy();
     window = MyWindow.createNew();
-    window.display();
+    comboBox = window.comboBox;
+    robot.showWindow(window);
   }
-  
+
   @AfterMethod public void tearDown() {
-    window.destroy();
+    robot.cleanUp();
   }
 
   public void shouldSetPopupVisibleAndInvisible() {
     setPopupVisible(true);
-    JComboBoxSetPopupVisibleTask.setPopupVisible(window.comboBox, true);
-    assertThat(comboBoxPopup().isShowing()).isTrue();
+    assertThat(popupIsShowing()).isTrue();
     setPopupVisible(false);
     try {
       comboBoxPopup();
@@ -65,11 +68,16 @@ public class JComboBoxSetPopupVisibleTaskTest {
   }
 
   private void setPopupVisible(final boolean visible) {
-    JComboBoxSetPopupVisibleTask.setPopupVisible(window.comboBox, visible);
+    JComboBoxSetPopupVisibleTask.setPopupVisible(comboBox, visible);
+    robot.waitForIdle();
   }
-  
+
+  private boolean popupIsShowing() {
+    return ComponentShowingQuery.isShowing(comboBoxPopup());
+  }
+
   private JList comboBoxPopup() {
-    return finder.findByType(window, JList.class);
+    return robot.finder().findByType(window, JList.class);
   }
 
   private static class MyWindow extends TestWindow {
@@ -78,9 +86,9 @@ public class JComboBoxSetPopupVisibleTaskTest {
     static MyWindow createNew() {
       return new MyWindow();
     }
-    
+
     final JComboBox comboBox = new JComboBox(array("One", "Two"));
-    
+
     private MyWindow() {
       super(JComboBoxSetPopupVisibleTaskTest.class);
       addComponents(comboBox);

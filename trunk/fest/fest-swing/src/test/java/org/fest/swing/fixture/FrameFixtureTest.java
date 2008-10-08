@@ -31,7 +31,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.factory.JFrames.frame;
-import static org.fest.swing.task.FrameShowTask.packAndSetVisible;
+import static org.fest.swing.task.FrameShowTask.packAndShow;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -73,7 +73,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @Test(groups = GUI) 
   public void shouldCreateFixtureWithNewRobotAndGivenTargetName() {
-    packAndSetVisible(target);
+    packAndShow(target);
     fixture = new FrameFixture("frame");
     try {
       assertThat(fixture.robot).isInstanceOf(RobotFixture.class);

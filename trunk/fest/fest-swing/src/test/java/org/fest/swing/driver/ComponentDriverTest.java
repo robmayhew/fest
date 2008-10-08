@@ -42,6 +42,7 @@ import static org.fest.swing.core.MouseClickInfo.button;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.Timeout.timeout;
 import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.task.ComponentSetEnabledTask.*;
 import static org.fest.swing.task.ComponentSetSizeTask.setComponentSize;
 import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.testing.StopWatch.startNewStopWatch;
@@ -52,6 +53,8 @@ import static org.fest.swing.util.Platform.*;
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
+ *
+ * TODO requires major refactoring
  */
 @Test public class ComponentDriverTest {
 
@@ -248,12 +251,12 @@ import static org.fest.swing.util.Platform.*;
   }
 
   public void shouldPassIfEnabledAsAnticipated() {
-    c.setEnabled(true);
+    enable(c);
     driver.requireEnabled(c);
   }
 
   public void shouldFailIfNotEnabledAndExpectingEnabled() {
-    c.setEnabled(false);
+    disable(c);
     try {
       driver.requireEnabled(c);
       fail();
@@ -264,7 +267,7 @@ import static org.fest.swing.util.Platform.*;
   }
 
   public void shouldPassIfComponentIsEnabledBeforeTimeout() {
-    c.setEnabled(false);
+    disable(c);
     Runnable task = new Runnable() {
       public void run() {
         pause(1000);
@@ -277,7 +280,7 @@ import static org.fest.swing.util.Platform.*;
 
   @Test(expectedExceptions = WaitTimedOutError.class)
   public void shouldFailIfComponentNotEnabledBeforeTimeout() {
-    c.setEnabled(false);
+    disable(c);
     Runnable task = new Runnable() {
       public void run() {
         pause(500);
@@ -289,12 +292,12 @@ import static org.fest.swing.util.Platform.*;
   }
 
   public void shouldPassIfComponentDisabledAsAnticipated() {
-    c.setEnabled(false);
+    disable(c);
     driver.requireDisabled(c);
   }
 
   public void shouldFailIfEnabledAndExpectingDisabled() {
-    c.setEnabled(true);
+    enable(c);
     try {
       driver.requireDisabled(c);
       fail();

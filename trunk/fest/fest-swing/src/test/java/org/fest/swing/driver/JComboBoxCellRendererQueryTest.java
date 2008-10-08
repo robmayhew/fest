@@ -25,11 +25,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.JLabelTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JComboBoxCellRendererQuery}</code>.
@@ -39,15 +42,17 @@ import static org.fest.swing.testing.TestGroups.*;
  */
 public class JComboBoxCellRendererQueryTest {
 
+  private Robot robot;
   private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createAndShow();
-    window.display();
+    robot = robotWithNewAwtHierarchy();
+    window = MyWindow.createNew();
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
+    robot.cleanUp();
   }
 
   @Test(dataProvider = "comboBoxContents", groups = { GUI, EDT_ACTION })
@@ -68,13 +73,11 @@ public class JComboBoxCellRendererQueryTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createAndShow() {
-      MyWindow window = new MyWindow();
-      window.display();
-      return window;
+    static MyWindow createNew() {
+      return new MyWindow();
     }
-    
-    final JComboBox comboBox = new JComboBox(new Object[] { "one", "two", "three" });
+
+    final JComboBox comboBox = new JComboBox(array("one", "two", "three"));
 
     private MyWindow() {
       super(JComboBoxCellRendererQueryTest.class);

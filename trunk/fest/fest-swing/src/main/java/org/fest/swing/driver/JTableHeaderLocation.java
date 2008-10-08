@@ -27,7 +27,7 @@ import static org.fest.swing.util.Strings.match;
 import static org.fest.util.Strings.*;
 
 /**
- * Understands encapsulation of the location of a <code>{@link JTableHeader}</code> (a coordinate, column index or
+ * Understands the location of a <code>{@link JTableHeader}</code> (a coordinate, column index or
  * value.)
  *
  * @author Yvonne Wang

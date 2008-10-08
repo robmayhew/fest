@@ -15,6 +15,7 @@
 package org.fest.swing.driver;
 
 import javax.swing.JList;
+import javax.swing.ListModel;
 
 import org.fest.swing.core.GuiQuery;
 
@@ -23,23 +24,21 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the number of elements in a
  * <code>{@link JList}</code>.
+ * @see JList#getModel()
+ * @see ListModel#getSize()
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class JListElementCountQuery extends GuiQuery<Integer> {
+final class JListElementCountQuery {
 
-  private final JList list;
-
-  static int elementCountOf(JList list) {
-    return execute(new JListElementCountQuery(list));
+  static int elementCountOf(final JList list) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return list.getModel().getSize();
+      }
+    });
   }
 
-  JListElementCountQuery(JList list) {
-    this.list = list;
-  }
-
-  protected Integer executeInEDT() {
-    return list.getModel().getSize();
-  }
+  private JListElementCountQuery() {}
 }

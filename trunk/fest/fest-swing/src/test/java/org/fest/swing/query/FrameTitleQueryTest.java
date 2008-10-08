@@ -15,46 +15,61 @@
  */
 package org.fest.swing.query;
 
-import java.awt.Frame;
-
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link FrameTitleQuery}</code>.
  *
  * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class FrameTitleQueryTest {
 
-  private Frame frame;
-  private String title;
-  private FrameTitleQuery query;
+  private Robot robot;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
-    frame = createMock(Frame.class);
-    title = "hello";
-    query = new FrameTitleQuery(frame);
+    robot = robotWithNewAwtHierarchy();
+    window = MyWindow.createNew();
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnTitleOfFrame() {
-    new EasyMockTemplate(frame) {
-      protected void expectations() {
-        expect(frame.getTitle()).andReturn(title);
-      }
+    assertThat(FrameTitleQuery.titleOf(window)).isEqualTo("FrameTitleQueryTest");
+    assertThat(window.methodGetTitleWasInvoked()).isTrue();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(title);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private boolean methodGetTitleInvoked;
+
+    private MyWindow() {
+      super(FrameTitleQueryTest.class);
+    }
+
+    @Override public String getTitle() {
+      methodGetTitleInvoked = true;
+      return super.getTitle();
+    }
+
+    boolean methodGetTitleWasInvoked() { return methodGetTitleInvoked; }
   }
 }

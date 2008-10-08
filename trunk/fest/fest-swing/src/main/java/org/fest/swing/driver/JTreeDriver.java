@@ -36,7 +36,7 @@ import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.driver.JTreeChildrenShowUpCondition.untilChildrenShowUp;
 import static org.fest.swing.driver.JTreeEditableQuery.isEditable;
-import static org.fest.swing.driver.JTreeExpandPathTask.expandPathTask;
+import static org.fest.swing.driver.JTreeExpandPathTask.expandPath;
 import static org.fest.swing.driver.JTreeExpandedPathQuery.isExpanded;
 import static org.fest.swing.driver.JTreeMatchingPathQuery.matchingPathFor;
 import static org.fest.swing.driver.JTreePathBoundsQuery.pathBoundsOf;
@@ -47,7 +47,7 @@ import static org.fest.swing.driver.JTreeSelectionCountQuery.selectionCountOf;
 import static org.fest.swing.driver.JTreeSelectionPathsQuery.selectionPathsOf;
 import static org.fest.swing.driver.JTreeSingleRowSelectedQuery.isSingleRowSelected;
 import static org.fest.swing.driver.JTreeToggleClickCountQuery.toggleClickCountOf;
-import static org.fest.swing.driver.JTreeToggleExpandStateTask.toggleExpandStateTask;
+import static org.fest.swing.driver.JTreeToggleExpandStateTask.toggleExpandState;
 import static org.fest.swing.driver.JTreeUIQuery.uiOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
@@ -68,7 +68,7 @@ public class JTreeDriver extends JComponentDriver {
 
   private final JTreeLocation location;
   private final JTreePathFinder pathFinder;
-  
+
   /**
    * Creates a new </code>{@link JTreeDriver}</code>.
    * @param robot the robot to use to simulate user input.
@@ -102,13 +102,14 @@ public class JTreeDriver extends JComponentDriver {
       robot.click(tree, p, LEFT_BUTTON, toggleClickCount);
       return;
     }
-    TreeUI treeUI = uiOf(tree);
-    if (!(treeUI instanceof BasicTreeUI)) throw actionFailure(concat("Can't toggle row for ", treeUI));
-    toggleExpandedState(tree, p);
+    toggleRowThroughTreeUI(tree, p);
   }
 
-  private void toggleExpandedState(JTree tree, Point pathLocation) {
-    robot.invokeAndWait(toggleExpandStateTask(tree, pathLocation));
+  private void toggleRowThroughTreeUI(JTree tree, Point p) {
+    TreeUI treeUI = uiOf(tree);
+    if (!(treeUI instanceof BasicTreeUI)) throw actionFailure(concat("Can't toggle row for ", treeUI));
+    toggleExpandState(tree, p);
+    robot.waitForIdle();
   }
 
   /**
@@ -220,7 +221,7 @@ public class JTreeDriver extends JComponentDriver {
   private void expand(JTree tree, TreePath path) {
     if (isExpanded(tree, path)) return;
     // Use this method instead of a toggle action to avoid any component visibility requirements
-    robot.invokeAndWait(expandPathTask(tree, path));
+    expandPath(tree, path);
   }
 
   private void waitForChildrenToShowUp(JTree tree, TreePath path) {
@@ -352,7 +353,7 @@ public class JTreeDriver extends JComponentDriver {
     if (Arrays.isEmpty(selectionPaths)) fail(concat("[", selectionProperty(tree), "] No selection"));
     assertThat(selectionPaths).as(selectionProperty(tree)).isEqualTo(paths);
   }
-  
+
   /**
    * Asserts that the given <code>{@link JTree}</code> does not have any selection.
    * @param tree the given <code>JTree</code>.
@@ -390,7 +391,7 @@ public class JTreeDriver extends JComponentDriver {
   private void assertEditable(JTree tree, boolean editable) {
     assertThat(isEditable(tree)).as(editableProperty(tree)).isEqualTo(editable);
   }
-  
+
   private static String editableProperty(JTree tree) {
     return propertyName(tree, EDITABLE_PROPERTY);
   }

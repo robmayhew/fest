@@ -25,10 +25,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JTreeCellRendererQuery}</code>.
@@ -39,26 +42,29 @@ import static org.fest.swing.testing.TestGroups.*;
 @Test(groups = { GUI, EDT_ACTION })
 public class JTreeCellRendererQueryTest {
 
-  private MyWindow window;
+  private Robot robot;
+  private JTree tree;
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createNew();
-    window.display();
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    tree = window.tree;
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
+    robot.cleanUp();
   }
 
   public void shouldReturnCellRendererComponentOfJTree() {
-    Component renderer = JTreeCellRendererQuery.cellRendererIn(window.tree, "one");
+    Component renderer = JTreeCellRendererQuery.cellRendererIn(tree, "one");
     assertThat(renderer).isInstanceOf(JLabel.class);
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    final JTree tree = new JTree(new Object[] { "one", "two", "three" });
+    final JTree tree = new JTree(array("one", "two", "three"));
 
     static MyWindow createNew() {
       return new MyWindow();

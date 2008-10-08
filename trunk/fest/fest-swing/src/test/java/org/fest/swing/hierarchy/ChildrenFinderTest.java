@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.core.ScreenLock;
 import org.fest.swing.factory.JMenus;
 import org.fest.swing.testing.MDITestWindow;
 import org.fest.swing.testing.TestDialog;
@@ -45,7 +46,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class ChildrenFinderTest {
+@Test public class ChildrenFinderTest {
 
   private ChildrenFinder finder;
 
@@ -60,7 +61,9 @@ public class ChildrenFinderTest {
     windowChildrenFinder = new WindowChildrenFinder();
   }
 
-  @Test(groups = GUI) public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() {
+  @Test(groups = GUI)
+  public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() {
+    ScreenLock.instance().acquire(this);
     MDITestWindow window = showInTest(getClass());
     iconify(window.internalFrame());
     JDesktopPane desktop = window.desktop();
@@ -68,15 +71,18 @@ public class ChildrenFinderTest {
       assertThat(finder.childrenOf(desktop)).containsOnly(childrenOf(desktop));
     } finally {
       window.destroy();
+      ScreenLock.instance().release(this);
     }
   }
 
-  @Test public void shouldReturnPopupMenuIfComponentIsJMenu() {
+  public void shouldReturnPopupMenuIfComponentIsJMenu() {
     JMenu menu = JMenus.menu().createNew();
     assertThat(finder.childrenOf(menu)).containsOnly(childrenOf(menu));
   }
 
-  @Test(groups = GUI) public void shouldReturnOwnedWindowsIfComponentIsWindow() {
+  @Test(groups = GUI)
+  public void shouldReturnOwnedWindowsIfComponentIsWindow() {
+    ScreenLock.instance().acquire(this);
     TestWindow window = TestWindow.showNewInTest(ChildrenFinderTest.class);
     TestDialog dialog = TestDialog.showInTest(window);
     try {
@@ -84,18 +90,22 @@ public class ChildrenFinderTest {
     } finally {
       dialog.destroy();
       window.destroy();
+      ScreenLock.instance().release(this);
     }
   }
 
-  @Test(groups = GUI) public void shouldReturnChildrenOfContainer() {
+  @Test(groups = GUI)
+  public void shouldReturnChildrenOfContainer() {
+    ScreenLock.instance().acquire(this);
     MyWindow frame = MyWindow.createAndShow();
     try {
       assertThat(finder.childrenOf(contentPaneOf(frame))).containsOnly(frame.textField);
     } finally {
       frame.destroy();
+      ScreenLock.instance().release(this);
     }
   }
-  
+
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
@@ -104,9 +114,9 @@ public class ChildrenFinderTest {
       window.display();
       return window;
     }
-    
+
     final JTextField textField = new JTextField(20);
-    
+
     private MyWindow() {
       super(ChildrenFinderTest.class);
       addComponents(textField);

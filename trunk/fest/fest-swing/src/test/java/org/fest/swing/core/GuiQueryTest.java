@@ -17,13 +17,12 @@ package org.fest.swing.core;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiActionRunner;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 
 import static javax.swing.SwingUtilities.isEventDispatchThread;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link GuiQuery}</code>.
@@ -42,13 +41,13 @@ import static org.fest.assertions.Assertions.assertThat;
 
   public void shouldExecuteInEDTWhenCalledInEDT() {
     final GuiQueryInEDT task = new GuiQueryInEDT();
-    boolean executedFromEDT = GuiActionRunner.execute(task);
+    boolean executedFromEDT = execute(task);
     assertThat(executedFromEDT).isTrue();
   }
 
   private static class GuiQueryInEDT extends GuiQuery<Boolean> {
     GuiQueryInEDT() {}
-    
+
     protected Boolean executeInEDT() {
       return isEventDispatchThread();
     }

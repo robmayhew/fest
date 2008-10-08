@@ -27,6 +27,7 @@ import org.fest.swing.testing.PrintStreamStub;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -41,18 +42,22 @@ public class BasicComponentPrinterTest {
 
   private BasicComponentPrinter printer;
 
-  private MyWindow window1;
-  private MyWindow window2;
+  private MyWindow windowOne;
+  private MyWindow windowTwo;
 
   @BeforeMethod public void setUp() {
+    ScreenLock.instance().acquire(this);
     printer = (BasicComponentPrinter)BasicComponentPrinter.printerWithNewAwtHierarchy();
-    window1 = MyWindow.createAndShow("button1");
-    window2 = MyWindow.createAndShow("button2");
+    windowOne = MyWindow.createAndShow();
+    windowOne.buttonName("button1");
+    windowTwo = MyWindow.createAndShow();
+    windowTwo.buttonName("button2");
   }
 
   @AfterMethod public void tearDown() {
-    window1.destroy();
-    window2.destroy();
+    windowOne.destroy();
+    windowTwo.destroy();
+    ScreenLock.instance().release(this);
   }
 
   public void shouldCreatePrinterWithExistingHierarchy() {
@@ -63,17 +68,17 @@ public class BasicComponentPrinterTest {
   public void shouldPrintAllComponents() {
     PrintStreamStub out = new PrintStreamStub();
     printer.printComponents(out);
-    assertThat(out.printed()).contains(format(window1),
-                                       format(window1.button),
-                                       format(window2),
-                                       format(window2.button));
+    assertThat(out.printed()).contains(format(windowOne),
+                                       format(windowOne.button),
+                                       format(windowTwo),
+                                       format(windowTwo.button));
   }
 
   public void shouldPrintAllComponentsOfGivenType() {
     PrintStreamStub out = new PrintStreamStub();
     printer.printComponents(out, JButton.class);
-    assertThat(out.printed()).containsOnly(format(window1.button),
-                                           format(window2.button));
+    assertThat(out.printed()).containsOnly(format(windowOne.button),
+                                           format(windowTwo.button));
   }
 
   public void shouldNotPrintComponentsOfNonMatchingType() {
@@ -84,17 +89,17 @@ public class BasicComponentPrinterTest {
 
   public void shouldPrintComponentsUnderGivenRootOnly() {
     PrintStreamStub out = new PrintStreamStub();
-    printer.printComponents(out, window1);
-    assertThat(out.printed()).contains(format(window1),
-                                       format(window1.button))
-                             .excludes(format(window2),
-                                       format(window2.button));
+    printer.printComponents(out, windowOne);
+    assertThat(out.printed()).contains(format(windowOne),
+                                       format(windowOne.button))
+                             .excludes(format(windowTwo),
+                                       format(windowTwo.button));
   }
 
   public void shouldPrintAllComponentsOfGivenTypeUnderGivenRootOnly() {
     PrintStreamStub out = new PrintStreamStub();
-    printer.printComponents(out, JButton.class, window1);
-    assertThat(out.printed()).containsOnly(format(window1.button));
+    printer.printComponents(out, JButton.class, windowOne);
+    assertThat(out.printed()).containsOnly(format(windowOne.button));
   }
 
   static class MyWindow extends TestWindow {
@@ -102,16 +107,23 @@ public class BasicComponentPrinterTest {
 
     final JButton button = new JButton("A button");
 
-    static MyWindow createAndShow(String buttonName) {
-      MyWindow window = new MyWindow(buttonName); 
+    static MyWindow createAndShow() {
+      MyWindow window = new MyWindow();
       window.display();
       return window;
     }
 
-    private MyWindow(String buttonName) {
+    private MyWindow() {
       super(BasicComponentPrinterTest.class);
       addComponents(button);
-      button.setName(buttonName);
+    }
+
+    void buttonName(final String buttonName) {
+      execute(new GuiTask() {
+        protected void executeInEDT() {
+          button.setName(buttonName);
+        }
+      });
     }
   }
 }

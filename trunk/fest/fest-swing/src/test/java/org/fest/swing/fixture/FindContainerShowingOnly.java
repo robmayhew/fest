@@ -55,17 +55,18 @@ public class FindContainerShowingOnly {
   }
 
   public void shouldFindOnlyVisibleContainer() {
-    setVisible(window.notShowing, false);
+    setVisible(window.hiddenInternalFrame, false);
+    robot.waitForIdle();
     JInternalFrameFixture fixture = new JInternalFrameFixture(robot, "target");
-    assertThat(fixture.target).isSameAs(window.showing);
+    assertThat(fixture.target).isSameAs(window.visibleInternalFrame);
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     private final JDesktopPane desktop = new JDesktopPane();
-    private final MyInternalFrame notShowing = new MyInternalFrame();
-    private final MyInternalFrame showing = new MyInternalFrame();
+    private final MyInternalFrame hiddenInternalFrame = new MyInternalFrame();
+    private final MyInternalFrame visibleInternalFrame = new MyInternalFrame();
 
     static MyWindow createNew() {
       return new MyWindow();
@@ -74,8 +75,8 @@ public class FindContainerShowingOnly {
     private MyWindow() {
       super(FindContainerShowingOnly.class);
       setContentPane(desktop);
-      addToDesktop(notShowing);
-      addToDesktop(showing);
+      addToDesktop(hiddenInternalFrame);
+      addToDesktop(visibleInternalFrame);
     }
 
     private void addToDesktop(MyInternalFrame frame) {

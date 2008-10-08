@@ -15,45 +15,89 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Dimension;
+
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTreeExpandPathTask}</code>.
  *
  * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JTreeExpandPathTaskTest {
 
+  private Robot robot;
   private JTree tree;
   private TreePath treePath;
 
   @BeforeMethod public void setUp() {
-    tree = createMock(JTree.class);
-    treePath = createMock(TreePath.class);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    tree = window.tree;
+    treePath = new TreePath(window.treeRoot);
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void destroy() {
+    robot.cleanUp();
   }
 
   public void shouldExpandPath() {
-    new EasyMockTemplate(tree) {
-      protected void expectations() {
-        tree.expandPath(treePath);
-        expectLastCall().once();
-      }
+    assertThat(isRootExpanded()).isFalse();
+    JTreeExpandPathTask.expandPath(tree, treePath);
+    robot.waitForIdle();
+    assertThat(isRootExpanded()).isTrue();
+  }
 
-      protected void codeToTest() {
-        JTreeExpandPathTask.expandPathTask(tree, treePath).executeInEDT();
+  private boolean isRootExpanded() {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return tree.isExpanded(treePath);
       }
-    }.run();
+    });
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final JTree tree;
+    final TreeNode treeRoot;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(JTreeExpandPathTaskTest.class);
+      treeRoot = createRoot();
+      tree = new JTree(treeRoot);
+      tree.setPreferredSize(new Dimension(300, 200));
+      addComponents(tree);
+      tree.collapsePath(new TreePath(treeRoot));
+    }
+
+    private static TreeNode createRoot() {
+      DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
+      DefaultMutableTreeNode child = new DefaultMutableTreeNode("child");
+      root.add(child);
+      return root;
+    }
   }
 }

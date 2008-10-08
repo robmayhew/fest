@@ -24,23 +24,20 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the file-selection mode of a
  * <code>{@link JFileChooser}</code>.
+ * @see JFileChooser#getFileSelectionMode()
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class JFileChooserFileSelectionModeQuery extends GuiQuery<Integer> {
+final class JFileChooserFileSelectionModeQuery {
 
-  private final JFileChooser fileChooser;
-
-  static int fileSelectionModeOf(JFileChooser fileChooser) {
-    return execute(new JFileChooserFileSelectionModeQuery(fileChooser));
+  static int fileSelectionModeOf(final JFileChooser fileChooser) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return fileChooser.getFileSelectionMode();
+      }
+    });
   }
 
-  JFileChooserFileSelectionModeQuery(JFileChooser fileChooser) {
-    this.fileChooser = fileChooser;
-  }
-
-  protected Integer executeInEDT() {
-    return fileChooser.getFileSelectionMode();
-  }
+  private JFileChooserFileSelectionModeQuery() {}
 }

@@ -21,36 +21,49 @@ import java.util.Locale;
 import javax.accessibility.*;
 import javax.swing.JTextField;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.UnexpectedException;
-import org.fest.swing.testing.TestGroups;
+import org.fest.swing.testing.TestWindow;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentPerformDefaultAccessibleActionTask}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = TestGroups.GUI)
+@Test(groups = { GUI, EDT_ACTION })
 public class ComponentPerformDefaultAccessibleActionTaskTest {
 
+  private Robot robot;
   private AccessibleAction accessibleAction;
   private AccessibleContextStub accessibleContext;
   private Component component;
 
   @BeforeMethod public void setUp() {
+    robot = robotWithNewAwtHierarchy();
     accessibleAction = createMock(AccessibleAction.class);
     accessibleContext = new AccessibleContextStub(accessibleAction);
-    component = MyComponent.newComponent(accessibleContext);
+    MyWindow window = MyWindow.createNew(accessibleContext);
+    component = window.component;
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldExecuteFirstActionInAccessibleAction() {
@@ -62,6 +75,7 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
 
       protected void codeToTest() {
         ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction(component);
+        robot.waitForIdle();
       }
     }.run();
   }
@@ -71,9 +85,10 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
     try {
       new EasyMockTemplate(accessibleAction) {
         protected void expectations() {}
-  
+
         protected void codeToTest() {
           ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction(component);
+          robot.waitForIdle();
         }
       }.run();
       fail();
@@ -88,9 +103,10 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
         protected void expectations() {
           expect(accessibleAction.getAccessibleActionCount()).andReturn(0);
         }
-  
+
         protected void codeToTest() {
           ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction(component);
+          robot.waitForIdle();
         }
       }.run();
       fail();
@@ -103,17 +119,34 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
     assertThat(e.getCause()).isInstanceOf(ActionFailedException.class)
                             .message().contains("Unable to perform accessible action for");
   }
-  
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final MyComponent component;
+
+    static MyWindow createNew(AccessibleContext accessibleContext) {
+      return new MyWindow(accessibleContext);
+    }
+
+    private MyWindow(AccessibleContext accessibleContext) {
+      super(ComponentPerformDefaultAccessibleActionTaskTest.class);
+      component = new MyComponent(accessibleContext);
+      addComponents(component);
+    }
+  }
+
   private static class MyComponent extends JTextField {
     private static final long serialVersionUID = 1L;
-    
+
     private final AccessibleContext accessibleContext;
 
     static MyComponent newComponent(AccessibleContext accessibleContext) {
       return new MyComponent(accessibleContext);
     }
-    
+
     MyComponent(AccessibleContext accessibleContext) {
+      super(20);
       this.accessibleContext = accessibleContext;
     }
 
@@ -121,16 +154,16 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
       return accessibleContext;
     }
   }
-  
+
   private static class AccessibleContextStub extends AccessibleContext {
     private AccessibleAction accessibleAction;
 
     AccessibleContextStub(AccessibleAction newAccessibleAction) {
       accessibleAction(newAccessibleAction);
     }
-    
+
     void accessibleAction(AccessibleAction newAccessibleAction) {
-      this.accessibleAction = newAccessibleAction; 
+      this.accessibleAction = newAccessibleAction;
     }
 
     @Override public AccessibleAction getAccessibleAction() {

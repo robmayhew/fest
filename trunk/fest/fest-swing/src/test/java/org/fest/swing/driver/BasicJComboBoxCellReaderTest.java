@@ -22,16 +22,18 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JToolBar;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.Condition;
 import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.CustomCellRenderer;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.factory.JComboBoxes.comboBox;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -39,20 +41,30 @@ import static org.fest.util.Arrays.array;
  * Tests for <code>{@link BasicJComboBoxCellReader}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 @Test(groups = GUI)
 public class BasicJComboBoxCellReaderTest {
 
+  private Robot robot;
   private JComboBox comboBox;
   private BasicJComboBoxCellReader reader;
 
   @BeforeMethod public void setUp() {
-    comboBox = comboBox().withItems("First").createNew();
+    robot = robotWithNewAwtHierarchy();
     reader = new BasicJComboBoxCellReader();
+    MyWindow window = MyWindow.createNew();
+    comboBox = window.comboBox;
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnModelValueToString() {
     setModelValues(comboBox, array(new Jedi("Yoda")));
+    robot.waitForIdle();
     Object value = reader.valueAt(comboBox, 0);
     assertThat(value).isEqualTo("Yoda");
   }
@@ -60,6 +72,7 @@ public class BasicJComboBoxCellReaderTest {
   public void shouldReturnNullIfRendererNotRecognizedAndModelValueIsNull() {
     setModelValues(comboBox, new Object[] { null });
     setRendererComponent(comboBox, new JToolBar());
+    robot.waitForIdle();
     Object value = reader.valueAt(comboBox, 0);
     assertThat(value).isNull();
   }
@@ -67,33 +80,39 @@ public class BasicJComboBoxCellReaderTest {
   public void shouldReturnTextFromCellRendererIfRendererIsJLabelAndToStringFromModelReturnedNull() {
     setModelValues(comboBox, array(new Jedi(null)));
     setRendererComponent(comboBox, new JLabel("First"));
+    robot.waitForIdle();
     Object value = reader.valueAt(comboBox, 0);
     assertThat(value).isEqualTo("First");
   }
-  
+
   private static void setModelValues(final JComboBox comboBox, final Object[] values) {
-    final DefaultComboBoxModel model = new DefaultComboBoxModel(values);
     execute(new GuiTask() {
       protected void executeInEDT() {
-        comboBox.setModel(model);
-      }
-    }, new Condition("JCombobox's model is set") {
-      public boolean test() {
-        return comboBox.getModel() == model;
+        comboBox.setModel(new DefaultComboBoxModel(values));
       }
     });
   }
-  
+
   private static void setRendererComponent(final JComboBox comboBox, final Component renderer) {
-    final CustomCellRenderer cellRenderer = new CustomCellRenderer(renderer);
     execute(new GuiTask() {
-      protected void executeInEDT() throws Throwable {
-        comboBox.setRenderer(cellRenderer);
-      }
-    }, new Condition("JCombobox's cell renderer is set") {
-      public boolean test() {
-        return comboBox.getRenderer() == cellRenderer;
+      protected void executeInEDT() {
+        comboBox.setRenderer(new CustomCellRenderer(renderer));
       }
     });
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final JComboBox comboBox = new JComboBox(array("First"));
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(BasicJComboBoxCellReaderTest.class);
+      addComponents(comboBox);
+    }
   }
 }

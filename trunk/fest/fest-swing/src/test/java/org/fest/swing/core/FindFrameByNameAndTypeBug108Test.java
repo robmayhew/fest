@@ -31,12 +31,13 @@ import static org.fest.swing.testing.TestGroups.*;
  * Test case for <a href="http://code.google.com/p/fest/issues/detail?id=108">Bug 108</a>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 @Test(groups = { GUI, BUG })
-public class FindFrameByNameAndTypeTest {
+public class FindFrameByNameAndTypeBug108Test {
 
-  private MyWindow window;
   private Robot robot;
+  private MyWindow window;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
@@ -63,7 +64,7 @@ public class FindFrameByNameAndTypeTest {
     }
 
     private MyWindow() {
-      super(FindFrameByNameAndTypeTest.class);
+      super(FindFrameByNameAndTypeBug108Test.class);
       setName("myFrame");
     }
   }

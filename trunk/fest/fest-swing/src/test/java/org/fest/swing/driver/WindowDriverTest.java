@@ -29,7 +29,6 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.testing.FluentDimension;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
@@ -86,19 +85,21 @@ public class WindowDriverTest {
 
   public void shouldCloseWindow() {
     driver.close(frame);
-    pause(200);
+    robot.waitForIdle();
     assertThat(isVisible(frame)).isFalse();
   }
 
   public void shouldShowWindow() {
     setVisible(frame, false);
+    robot.waitForIdle();
     driver.show(frame);
     assertThat(isVisible(frame)).isTrue();
   }
 
   public void shouldShowWindowUsingGivenSize() {
     setVisible(frame, false);
-    final Dimension newSize = new Dimension(600, 300);
+    robot.waitForIdle();
+    Dimension newSize = new Dimension(600, 300);
     driver.show(frame, newSize);
     assertThat(isVisible(frame)).isTrue();
     assertThat(sizeOf(frame)).isEqualTo(newSize);

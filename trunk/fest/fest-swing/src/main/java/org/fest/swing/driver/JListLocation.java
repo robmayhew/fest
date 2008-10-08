@@ -27,7 +27,7 @@ import static org.fest.swing.driver.JListElementCountQuery.elementCountOf;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands encapsulation of the location of a row on a <code>{@link JList}</code> (a coordinate, item index or
+ * Understands the location of a row on a <code>{@link JList}</code> (a coordinate, item index or
  * value.)
  *
  * @author Alex Ruiz
