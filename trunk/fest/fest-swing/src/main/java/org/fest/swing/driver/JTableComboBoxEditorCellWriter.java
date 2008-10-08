@@ -25,6 +25,7 @@ import org.fest.swing.core.Robot;
 
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.JTableCancelCellEditingTask.cancelEditing;
+import static org.fest.swing.driver.WaitForComponentToShowCondition.untilIsShowing;
 
 /**
  * Understands an implementation of <code>{@link JTableCellWriter}</code> that knows how to use
@@ -53,7 +54,7 @@ public class JTableComboBoxEditorCellWriter extends AbstractJTableCellWriter {
   public void startCellEditing(JTable table, int row, int column) {
     JComboBox editor = editor(table, row, column);
     clickCell(table, row, column);
-    pause(new WaitForComponentToShowCondition(editor));
+    pause(untilIsShowing(editor));
   }
 
   /** {@inheritDoc} */

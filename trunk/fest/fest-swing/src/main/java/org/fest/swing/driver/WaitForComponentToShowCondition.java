@@ -30,7 +30,7 @@ import static org.fest.util.Strings.concat;
  */
 public class WaitForComponentToShowCondition extends Condition {
 
-  private final Component c;
+  private Component c;
 
   /**
    * Creates a new </code>{@link WaitForComponentToShowCondition}</code>.
@@ -38,16 +38,11 @@ public class WaitForComponentToShowCondition extends Condition {
    * @return the created condition.
    * @throws NullPointerException if the <code>Component</code> is <code>null</code>.
    */
-  public static WaitForComponentToShowCondition untilShowing(Component c) {
+  public static WaitForComponentToShowCondition untilIsShowing(Component c) {
     return new WaitForComponentToShowCondition(c);
   }
 
-  /**
-   * Creates a new </code>{@link WaitForComponentToShowCondition}</code>.
-   * @param c the <code>Component</code> to verify.
-   * @throws NullPointerException if the <code>Component</code> is <code>null</code>.
-   */
-  public WaitForComponentToShowCondition(Component c) {
+  private WaitForComponentToShowCondition(Component c) {
     super(concat("Component ", format(c), " to show on the screen"));
     if (c == null) throw new NullPointerException("The component to verify should not be null");
     this.c = c;
@@ -62,4 +57,8 @@ public class WaitForComponentToShowCondition extends Condition {
     return isShowing(c);
   }
 
+  /** ${@inheritDoc} */
+  @Override protected void done() {
+    c = null;
+  }
 }

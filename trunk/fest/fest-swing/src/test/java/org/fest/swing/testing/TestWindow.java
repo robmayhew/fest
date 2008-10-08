@@ -1,16 +1,16 @@
 /*
  * Created on Sep 11, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.testing;
@@ -48,7 +48,7 @@ public class TestWindow extends JFrame {
     window.display();
     return window;
   }
-  
+
   public static TestWindow createNew(final Class<?> testClass) {
     return create(testClass);
   }
@@ -56,7 +56,7 @@ public class TestWindow extends JFrame {
   private static TestWindow create(final Class<?> testClass) {
     return new TestWindow(testClass);
   }
-  
+
   protected TestWindow(Class<?> testClass) {
     setTitle(testClass.getSimpleName());
     setLayout(new FlowLayout());
@@ -66,7 +66,7 @@ public class TestWindow extends JFrame {
   public void addComponents(Component...components) {
     for (Component c : components) add(c);
   }
-    
+
   public void display() {
     invokeLater(new Runnable() {
       public void run() {
@@ -78,7 +78,7 @@ public class TestWindow extends JFrame {
     });
     pause(untilIsShowing(this));
   }
-  
+
   public void display(final Dimension size) {
     invokeLater(new Runnable() {
       public void run() {
@@ -91,13 +91,13 @@ public class TestWindow extends JFrame {
     });
     pause(untilIsShowing(this));
   }
-  
+
   protected void beforeDisplayed() {}
 
   protected void chooseLookAndFeel() {
     lookNative();
   }
-  
+
   private void lookNative() {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -105,19 +105,18 @@ public class TestWindow extends JFrame {
       ignored.printStackTrace();
     }
   }
-  
+
   public void destroy() {
     WindowDestroyTask.destroy(this);
   }
 
-
   static class WindowIsDisplayedCondition extends Condition {
-    private final TestWindow window;
+    private TestWindow window;
 
     static Condition untilIsShowing(TestWindow window) {
       return new WindowIsDisplayedCondition(window);
     }
-    
+
     private WindowIsDisplayedCondition(TestWindow window) {
       super("Window is displayed");
       this.window = window;
@@ -125,6 +124,10 @@ public class TestWindow extends JFrame {
 
     public boolean test() {
       return window.isShowing();
+    }
+
+    @Override protected void done() {
+      window = null;
     }
   }
 }

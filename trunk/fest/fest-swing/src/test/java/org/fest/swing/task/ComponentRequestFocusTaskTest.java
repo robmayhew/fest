@@ -21,13 +21,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.Condition;
 import org.fest.swing.core.ScreenLock;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.query.ComponentHasFocusQuery.hasFocus;
+import static org.fest.swing.task.ComponentHasFocusCondition.untilFocused;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -56,11 +56,7 @@ public class ComponentRequestFocusTaskTest {
     final JButton toReceiveFocus = window.buttonTwo;
     assertThat(hasFocus(toReceiveFocus)).isFalse();
     ComponentRequestFocusTask.giveFocusTo(toReceiveFocus);
-    pause(new Condition("Component gets focus") {
-      public boolean test() {
-        return hasFocus(toReceiveFocus);
-      }
-    });
+    pause(untilFocused(toReceiveFocus));
   }
 
   private static class MyWindow extends TestWindow {

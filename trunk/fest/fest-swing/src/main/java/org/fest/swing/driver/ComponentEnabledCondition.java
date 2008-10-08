@@ -30,7 +30,7 @@ import static org.fest.util.Strings.concat;
  * @author Yvonne Wang
  */
 class ComponentEnabledCondition extends Condition {
-  private final Component c;
+  private Component c;
 
   static ComponentEnabledCondition untilIsEnabled(Component c) {
     return new ComponentEnabledCondition(c);
@@ -43,5 +43,10 @@ class ComponentEnabledCondition extends Condition {
 
   public boolean test() {
     return isEnabled(c);
+  }
+
+  /** ${@inheritDoc} */
+  @Override protected void done() {
+    c = null;
   }
 }

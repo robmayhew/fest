@@ -27,6 +27,7 @@ import static java.awt.event.KeyEvent.VK_ENTER;
 
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.JTableCancelCellEditingTask.cancelEditing;
+import static org.fest.swing.driver.WaitForComponentToShowCondition.untilIsShowing;
 
 /**
  * Understands an implementation of <code>{@link JTableCellWriter}</code> that knows how to use
@@ -56,7 +57,7 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
   public void startCellEditing(JTable table, int row, int column) {
     JTextComponent editor = editor(table, row, column);
     clickCell(table, row, column, 2);
-    pause(new WaitForComponentToShowCondition(editor));
+    pause(untilIsShowing(editor));
   }
 
   /** {@inheritDoc} */

@@ -34,7 +34,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
   @BeforeMethod public void setUp() {
     c = new ComponentStub();
-    condition = WaitForComponentToShowCondition.untilShowing(c);
+    condition = WaitForComponentToShowCondition.untilIsShowing(c);
   }
 
   public void shouldReturnTrueIfComponentIsShowing() {
@@ -48,7 +48,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfComponentIsNull() {
-    new WaitForComponentToShowCondition(null);
+    WaitForComponentToShowCondition.untilIsShowing(null);
   }
 
   private static class ComponentStub extends JTextField {

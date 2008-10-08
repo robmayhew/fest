@@ -30,7 +30,7 @@ import static org.fest.util.Strings.concat;
  */
 public class ComponentHasFocusCondition extends Condition {
 
-  private final Component component;
+  private Component component;
 
   public static ComponentHasFocusCondition untilFocused(Component component) {
     return new ComponentHasFocusCondition(component);
@@ -45,4 +45,7 @@ public class ComponentHasFocusCondition extends Condition {
     return hasFocus(component);
   }
 
+  @Override protected void done() {
+    component = null;
+  }
 }

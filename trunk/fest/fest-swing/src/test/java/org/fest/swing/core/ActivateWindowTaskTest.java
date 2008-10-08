@@ -68,7 +68,7 @@ public class ActivateWindowTaskTest {
   }
 
   private static class HasFocusCondition extends Condition {
-    private final Component c;
+    private Component c;
 
     HasFocusCondition(Component c) {
       super("Component has focus");
@@ -77,6 +77,10 @@ public class ActivateWindowTaskTest {
 
     public boolean test() {
       return c.hasFocus();
+    }
+
+    @Override protected void done() {
+      c = null;
     }
   }
 }
