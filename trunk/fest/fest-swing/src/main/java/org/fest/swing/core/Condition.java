@@ -47,9 +47,9 @@ public abstract class Condition {
   }
 
   /**
-   * Notification that this condition has been evaluated This method is invoked by
-   * <code>{@link Pause#pause(Condition)}</code> (and all overloaded methods) when a condition is evaluated (either the
-   * condition was satisfied or it timed-out.) This is a good place to do any necessary resource cleanup.
+   * Notification that this condition has been evaluated. This method is invoked by
+   * <code>{@link Pause#pause(Condition)}</code> (and all overloaded methods) when this condition is evaluated (either
+   * it was satisfied or it timed-out.) This is a good place to do any necessary resource cleanup.
    */
   protected void done() {}
 }
