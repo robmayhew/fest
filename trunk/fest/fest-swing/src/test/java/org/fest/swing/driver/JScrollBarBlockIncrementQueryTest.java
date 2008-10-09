@@ -22,6 +22,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -54,8 +55,9 @@ public class JScrollBarBlockIncrementQueryTest {
   }
 
   public void shouldReturnBlockIncrementOfJScrollBar() {
+    scrollBar.startRecording();
     assertThat(JScrollBarBlockIncrementQuery.blockIncrementOf(scrollBar)).isEqualTo(BLOCK_INCREMENT);
-    assertThat(scrollBar.methodGetBlockIncrementWasInvoked()).isTrue();
+    scrollBar.requireInvoked("getBlockIncrement");
   }
 
   private static class MyWindow extends TestWindow {
@@ -76,17 +78,22 @@ public class JScrollBarBlockIncrementQueryTest {
   private static class MyScrollBar extends JScrollBar {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetBlockIncrementInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     public MyScrollBar(int value, int extent, int min, int max) {
       super(HORIZONTAL, value, extent, min, max);
     }
 
     @Override public int getBlockIncrement() {
-      methodGetBlockIncrementInvoked = true;
+      if (recording) methodInvocations.invoked("getBlockIncrement");
       return super.getBlockIncrement();
     }
 
-    boolean methodGetBlockIncrementWasInvoked() { return methodGetBlockIncrementInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }
