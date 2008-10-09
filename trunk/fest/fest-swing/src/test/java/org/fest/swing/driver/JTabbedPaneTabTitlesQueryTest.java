@@ -1,64 +1,75 @@
 /*
  * Created on Aug 10, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
 
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
-import static org.fest.util.Arrays.array;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTabbedPaneTabTitlesQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JTabbedPaneTabTitlesQueryTest {
 
+  private Robot robot;
   private JTabbedPane tabbedPane;
-  private String[] tabNames;
-  private JTabbedPaneTabTitlesQuery query;
-  
+
   @BeforeMethod public void setUp() {
-    tabbedPane = createMock(JTabbedPane.class);
-    tabNames = array("One", "Two", "Three");
-    query = new JTabbedPaneTabTitlesQuery(tabbedPane);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    tabbedPane = window.tabbedPane;
+    robot.showWindow(window);
   }
-  
-  public void shouldReturnTabNamesOfJTabbedPane() {
-    new EasyMockTemplate(tabbedPane) {
-      protected void expectations() {
-        int tabCount = tabNames.length;
-        expect(tabbedPane.getTabCount()).andReturn(tabCount);
-        for (int i = 0; i < tabCount; i++) 
-          expect(tabbedPane.getTitleAt(i)).andReturn(tabNames[i]);
-      }
-      
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(tabNames);
-      }
-    }.run();
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
+
+  public void shouldReturnTabTitlesOfJTabbedPane() {
+    assertThat(JTabbedPaneTabTitlesQuery.tabTitlesOf(tabbedPane)).containsOnly("One", "Two");
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final JTabbedPane tabbedPane = new JTabbedPane();
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(JTabbedPaneTabTitlesQueryTest.class);
+      tabbedPane.addTab("One", new JPanel());
+      tabbedPane.addTab("Two", new JPanel());
+      addComponents(tabbedPane);
+    }
   }
 }
