@@ -53,6 +53,7 @@ public class TestDialog extends JDialog {
 
   protected TestDialog(Frame owner) {
     super(owner);
+    setTitle(owner.getTitle());
     setLayout(new FlowLayout());
   }
 

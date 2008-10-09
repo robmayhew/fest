@@ -1,16 +1,16 @@
 /*
  * Created on Aug 10, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
@@ -19,48 +19,78 @@ import java.awt.Rectangle;
 
 import javax.swing.JTable;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
+import org.fest.swing.testing.MethodInvocations.Args;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.MethodInvocations.Args.args;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTableCellRectQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JTableCellRectQueryTest {
 
-  private JTable table;
-  private int row;
-  private int column;
-  private Rectangle rectangle;
-  private JTableCellRectQuery query;
+  private Robot robot;
+  private MyTable table;
 
   @BeforeMethod public void setUp() {
-    table = createMock(JTable.class);
-    row = 8;
-    column = 6;
-    rectangle = new Rectangle(80, 60);
-    query = new JTableCellRectQuery(table, row, column);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    table = window.table;
+    robot.showWindow(window);
   }
-  
-  public void shouldReturnCellRectInJTable() {
-    new EasyMockTemplate(table) {
-      protected void expectations() {
-        expect(table.getCellRect(row, column, false)).andReturn(rectangle);
-      }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(rectangle);
-      }
-    }.run();
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
+
+  public void shouldReturnCellRectInJTable() {
+    JTableCellRectQuery.cellRectOf(table, 0, 2);
+    table.requireInvoked("getCellRect", args(0, 2, false));
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final MyTable table = new MyTable();
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(JTableCellRectQueryTest.class);
+      addComponents(table);
+    }
+  }
+
+  private static class MyTable extends JTable {
+    private static final long serialVersionUID = 1L;
+
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
+    MyTable() {
+      super(2, 6);
+    }
+
+    @Override public Rectangle getCellRect(int row, int column, boolean includeSpacing) {
+      methodInvocations.invoked("getCellRect", args(row, column, includeSpacing));
+      return super.getCellRect(row, column, includeSpacing);
+    }
+
+    MethodInvocations requireInvoked(String methodName, Args args) {
+      return methodInvocations.requireInvoked(methodName, args);
+    }
   }
 }

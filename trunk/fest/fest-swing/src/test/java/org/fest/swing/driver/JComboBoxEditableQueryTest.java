@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.BooleanProvider;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -57,8 +58,9 @@ public class JComboBoxEditableQueryTest {
   public void shouldIndicateIfJComboBoxIsEditable(final boolean editable) {
     setEditable(comboBox, editable);
     robot.waitForIdle();
+    comboBox.startRecording();
     assertThat(JComboBoxEditableQuery.isEditable(comboBox)).isEqualTo(editable);
-    assertThat(comboBox.methodIsEditableWasInvoked()).isTrue();
+    comboBox.requireInvoked("isEditable");
   }
 
   private static class MyWindow extends TestWindow {
@@ -79,17 +81,22 @@ public class JComboBoxEditableQueryTest {
   private static class MyComboBox extends JComboBox {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodIsEditableInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     MyComboBox(Object... items) {
       super(items);
     }
 
+    void startRecording() { recording = true; }
+
     @Override public boolean isEditable() {
-      methodIsEditableInvoked = true;
+      if (recording) methodInvocations.invoked("isEditable");
       return super.isEditable();
     }
 
-    boolean methodIsEditableWasInvoked() { return methodIsEditableInvoked; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations .requireInvoked(methodName);
+    }
   }
 }

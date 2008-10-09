@@ -27,28 +27,22 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> of a
  * <code>{@link JTable}</code> cell editor.
+ * @see JTable#getCellEditor()
+ * @see TableCellEditor#getTableCellEditorComponent(JTable, Object, boolean, int, int)
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class JTableCellEditorQuery extends GuiQuery<Component> {
-  
-  private final JTable table;
-  private final int row;
-  private final int column;
+final class JTableCellEditorQuery {
 
-  static Component cellEditorIn(JTable table, int row, int column) {
-    return execute(new JTableCellEditorQuery(table, row, column));
+  static Component cellEditorIn(final JTable table, final int row, final int column) {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        TableCellEditor cellEditor = table.getCellEditor(row, column);
+        return cellEditor.getTableCellEditorComponent(table, table.getValueAt(row, column), false, row, column);
+      }
+    });
   }
 
-  JTableCellEditorQuery(JTable table, int row, int column) {
-    this.table = table;
-    this.row = row;
-    this.column = column;
-  }
-
-  protected Component executeInEDT() {
-    TableCellEditor cellEditor = table.getCellEditor(row, column);
-    return cellEditor.getTableCellEditorComponent(table, table.getValueAt(row, column), false, row, column);
-  }
+  private JTableCellEditorQuery() {}
 }

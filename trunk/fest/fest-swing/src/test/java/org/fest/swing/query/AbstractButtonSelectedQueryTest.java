@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.BooleanProvider;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -56,9 +57,10 @@ public class AbstractButtonSelectedQueryTest {
   public void shouldIndicateIfAbstractButtonIsSelected(final boolean selected) {
     setSelected(checkBox, selected);
     robot.waitForIdle();
+    checkBox.startRecording();
     boolean isSelected = AbstractButtonSelectedQuery.isSelected(checkBox);
     assertThat(isSelected).isEqualTo(selected);
-    assertThat(checkBox.methodIsSelectedWasInvoked()).isTrue();
+    checkBox.requireInvoked("isSelected");
   }
 
   private static class MyWindow extends TestWindow {
@@ -79,15 +81,20 @@ public class AbstractButtonSelectedQueryTest {
   private static class MyCheckBox extends JCheckBox {
     private static final long serialVersionUID = 1L;
 
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
     MyCheckBox(String text) { super(text); }
 
-    private boolean methodIsSelectedInvoked;
+    void startRecording() { recording = true; }
 
     @Override public boolean isSelected() {
-      methodIsSelectedInvoked = true;
+      if (recording) methodInvocations.invoked("isSelected");
       return super.isSelected();
     }
 
-    boolean methodIsSelectedWasInvoked() { return methodIsSelectedInvoked; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

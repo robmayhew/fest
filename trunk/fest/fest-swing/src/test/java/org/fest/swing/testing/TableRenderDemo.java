@@ -30,6 +30,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import static javax.swing.SwingUtilities.invokeLater;
+
 
 /**
  * Adapted from the <a href="http://java.sun.com/docs/books/tutorial/uiswing/" target="_blank">Swing Tutorial</a>.
@@ -102,12 +105,12 @@ public class TableRenderDemo extends JPanel {
   class MyTableModel extends AbstractTableModel {
     private static final long serialVersionUID = 1L;
     private final String[] columnNames = { "First Name", "Last Name", "Sport", "# of Years", "Vegetarian" };
-    private final Object[][] data = { 
+    private final Object[][] data = {
         { "Mary",   "Campione", "Snowboarding",   5, false },
         { "Alison", "Huml",     "Rowing",         3, true  },
         { "Kathy",  "Walrath",  "Knitting",       2, false },
         { "Sharon", "Zakhour",  "Speed reading", 20, true  },
-        { "Philip", "Milne",    "Pool",          10, false } 
+        { "Philip", "Milne",    "Pool",          10, false }
     };
 
     public final Object[] longValues = { "Sharon", "Campione", "None of the above", 20, true };
@@ -161,7 +164,7 @@ public class TableRenderDemo extends JPanel {
   static void createAndShowGUI() {
     // Create and set up the window.
     TestWindow frame = new TestWindow(TableRenderDemo.class);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
     // Create and set up the content pane.
     TableRenderDemo newContentPane = new TableRenderDemo();
@@ -176,7 +179,7 @@ public class TableRenderDemo extends JPanel {
   public static void main(String[] args) {
     // Schedule a job for the event-dispatching thread:
     // creating and showing this application's GUI.
-    javax.swing.SwingUtilities.invokeLater(new Runnable() {
+    invokeLater(new Runnable() {
       public void run() {
         createAndShowGUI();
       }

@@ -23,6 +23,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -54,8 +55,9 @@ public class JComboBoxItemCountQueryTest {
 
 
   public void shouldReturnItemCountOfJComboBox() {
+    comboBox.startRecording();
     assertThat(JComboBoxItemCountQuery.itemCountOf(comboBox)).isEqualTo(3);
-    assertThat(comboBox.methodGetItemCountWasInvoked()).isTrue();
+    comboBox.requireInvoked("getItemCount");
   }
 
   @DataProvider(name = "itemCounts") public Object[][] itemCounts() {
@@ -80,17 +82,22 @@ public class JComboBoxItemCountQueryTest {
   private static class MyComboBox extends JComboBox {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetItemCountInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     MyComboBox(Object... items) {
       super(items);
     }
 
+    void startRecording() { recording = true; }
+
     @Override public int getItemCount() {
-      methodGetItemCountInvoked = true;
+      if (recording) methodInvocations.invoked("getItemCount");
       return super.getItemCount();
     }
 
-    boolean methodGetItemCountWasInvoked() { return methodGetItemCountInvoked; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations .requireInvoked(methodName);
+    }
   }
 }

@@ -22,6 +22,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -51,8 +52,9 @@ public class AbstractButtonTextQueryTest {
   }
 
   public void shouldReturnTextOfAbstractButton() {
+    button.startRecording();
     assertThat(AbstractButtonTextQuery.textOf(button)).isEqualTo("A Button");
-    assertThat(button.methodGetTextWasInvoked()).isTrue();
+    button.requireInvoked("getText");
   }
 
   private static class MyWindow extends TestWindow {
@@ -73,15 +75,20 @@ public class AbstractButtonTextQueryTest {
   private static class MyButton extends JButton {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetTextInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     public MyButton(String text) { super(text); }
 
+    void startRecording() { recording = true; }
+
     @Override public String getText() {
-      methodGetTextInvoked = true;
+      if (recording) methodInvocations.invoked("getText");
       return super.getText();
     }
 
-    boolean methodGetTextWasInvoked() { return methodGetTextInvoked; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

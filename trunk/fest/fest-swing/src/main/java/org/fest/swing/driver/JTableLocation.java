@@ -19,7 +19,7 @@ import java.awt.Rectangle;
 
 import javax.swing.JTable;
 
-import static org.fest.swing.driver.JTableCellRectQuery.cellBoundsOf;
+import static org.fest.swing.driver.JTableCellRectQuery.cellRectOf;
 
 /**
  * Understands a visible location on a <code>{@link JTable}</code>.
@@ -60,7 +60,7 @@ public final class JTableLocation {
    * @return the bounds of the given row and column.
    */
   public Rectangle cellBounds(JTable table, int row, int column) {
-    return cellBoundsOf(table, row, column);
+    return cellRectOf(table, row, column);
   }
 
 }

@@ -22,6 +22,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -51,8 +52,9 @@ public class ComponentLocationQueryTest {
   }
 
   public void shouldReturnMoveLocationOfContainer() {
+    window.startRecording();
     assertThat(ComponentLocationQuery.locationOf(window)).isEqualTo(new Point(100, 100));
-    assertThat(window.methodGetLocationWasInvoked()).isTrue();
+    window.requireInvoked("getLocation");
   }
 
   private static class MyWindow extends TestWindow {
@@ -62,17 +64,22 @@ public class ComponentLocationQueryTest {
       return new MyWindow();
     }
 
-    private boolean methodGetLocationInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     private MyWindow() {
       super(ComponentLocationQueryTest.class);
     }
 
+    void startRecording() { recording = true; }
+
     @Override public Point getLocation() {
-      methodGetLocationInvoked = true;
+      if (recording) methodInvocations.invoked("getLocation");
       return super.getLocation();
     }
 
-    boolean methodGetLocationWasInvoked() { return methodGetLocationInvoked; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

@@ -15,6 +15,8 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Dimension;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -22,6 +24,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.BooleanProvider;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
@@ -60,14 +63,16 @@ public class DialogModalQueryTest {
     });
     robot.waitForIdle();
     robot.showWindow(dialog);
+    dialog.startRecording();
     assertThat(DialogModalQuery.isModal(dialog)).isEqualTo(modal);
-    assertThat(dialog.methodIsModalWasInvoked()).isTrue();
+    dialog.requireInvoked("isModal");
   }
 
   private static class MyDialog extends TestDialog {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodIsModalInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     static MyDialog createNew() {
       return new MyDialog();
@@ -75,13 +80,18 @@ public class DialogModalQueryTest {
 
     private MyDialog() {
       super(TestWindow.createNew(DialogModalQueryTest.class));
+      setPreferredSize(new Dimension(200, 100));
     }
 
+    void startRecording() { recording = true; }
+
     @Override public boolean isModal() {
-      methodIsModalInvoked = true;
+      if (recording) methodInvocations.invoked("isModal");
       return super.isModal();
     }
 
-    boolean methodIsModalWasInvoked() { return methodIsModalInvoked; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

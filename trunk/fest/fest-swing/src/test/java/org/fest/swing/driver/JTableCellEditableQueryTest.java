@@ -17,47 +17,64 @@ package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.testing.BooleanProvider;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TableRenderDemo;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTableCell.cell;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTableCellEditableQuery}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JTableCellEditableQueryTest {
 
+  private Robot robot;
   private JTable table;
-  private JTableCell cell;
-  private JTableCellEditableQuery query;
 
   @BeforeMethod public void setUp() {
-    table = createMock(JTable.class);
-    cell = cell(6, 8);
-    query = new JTableCellEditableQuery(table, cell);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    table = window.table;
+    robot.showWindow(window);
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_ACTION)
-  public void shouldIndicateWhetherCellIsEditableOrNot(final boolean editable) {
-    new EasyMockTemplate(table) {
-      protected void expectations() {
-        expect(table.isCellEditable(6, 8)).andReturn(editable);
-      }
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(editable);
-      }
-    }.run();
+  public void shouldIndicateWhetherCellIsEditableOrNot() {
+    assertThat(JTableCellEditableQuery.isCellEditable(table, cell(0,0))).isFalse();
+    assertThat(JTableCellEditableQuery.isCellEditable(table, cell(0,1))).isFalse();
+    assertThat(JTableCellEditableQuery.isCellEditable(table, cell(0,2))).isTrue();
+    assertThat(JTableCellEditableQuery.isCellEditable(table, cell(0,3))).isTrue();
+    assertThat(JTableCellEditableQuery.isCellEditable(table, cell(0,4))).isTrue();
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final JTable table;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(JTableCellEditableQueryTest.class);
+      TableRenderDemo content = new TableRenderDemo();
+      table = content.table;
+      setContentPane(content);
+    }
   }
 }

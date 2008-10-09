@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -52,6 +53,7 @@ public class ComponentBoundsQueryTest {
         window.setBounds(new Rectangle(WINDOW_BOUNDS));
       }
     });
+    robot.waitForIdle();
   }
 
   @AfterMethod public void tearDown() {
@@ -59,8 +61,9 @@ public class ComponentBoundsQueryTest {
   }
 
   public void shouldReturnBoundsOfComponent() {
+    window.startRecording();
     assertThat(ComponentBoundsQuery.boundsOf(window)).isEqualTo(WINDOW_BOUNDS);
-    assertThat(window.methodGetBoundsWasInvoked()).isTrue();
+    window.requireInvoked("getBounds");
   }
 
   private static class MyWindow extends TestWindow {
@@ -70,17 +73,22 @@ public class ComponentBoundsQueryTest {
       return new MyWindow();
     }
 
-    private boolean methodGetBoundsInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     private MyWindow() {
       super(ComponentBoundsQueryTest.class);
     }
 
     @Override public Rectangle getBounds() {
-      methodGetBoundsInvoked = true;
+      if (recording) methodInvocations.invoked("getBounds");
       return super.getBounds();
     }
 
-    boolean methodGetBoundsWasInvoked() { return methodGetBoundsInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }
