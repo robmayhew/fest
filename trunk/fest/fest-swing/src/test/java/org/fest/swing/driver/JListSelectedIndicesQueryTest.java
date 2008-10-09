@@ -22,6 +22,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestListModel;
 import org.fest.swing.testing.TestWindow;
 
@@ -53,8 +54,9 @@ public class JListSelectedIndicesQueryTest {
   }
 
   public void shouldReturnSelectedIndicesOfJList() {
+    list.startRecording();
     assertThat(JListSelectedIndicesQuery.selectedIndicesOf(list)).containsOnly(0, 2);
-    assertThat(list.methodGetSelectedIndicesWasInvoked()).isTrue();
+    list.requireInvoked("getSelectedIndices");
   }
 
   private static class MyWindow extends TestWindow {
@@ -76,17 +78,22 @@ public class JListSelectedIndicesQueryTest {
   private static class MyList extends JList {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetSelectedIndicesInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     MyList(Object... elements) {
       setModel(new TestListModel(elements));
     }
 
     @Override public int[] getSelectedIndices() {
-      methodGetSelectedIndicesInvoked = true;
+      if (recording) methodInvocations.invoked("getSelectedIndices");
       return super.getSelectedIndices();
     }
 
-    boolean methodGetSelectedIndicesWasInvoked() { return methodGetSelectedIndicesInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

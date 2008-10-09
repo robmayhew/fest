@@ -25,6 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -58,9 +59,10 @@ public class JComponentVisibleRectQueryTest {
   public void shouldReturnVisibleRectOfJComponent() {
     Dimension size = sizeOf(button);
     Rectangle expected = new Rectangle(0, 0, size.width, size.height);
+    button.startRecording();
     Rectangle visibleRect = JComponentVisibleRectQuery.visibleRectOf(button);
     assertThat(visibleRect).isEqualTo(expected);
-    assertThat(button.methodGetVisibleRectWasInvoked()).isTrue();
+    button.requireInvoked("getVisibleRect");
   }
 
   private static class MyWindow extends TestWindow {
@@ -81,17 +83,22 @@ public class JComponentVisibleRectQueryTest {
   static class MyButton extends JButton {
     private static final long serialVersionUID = 1L;
 
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
     MyButton(String text) {
       super(text);
     }
 
-    private boolean methodGetVisibleRectInvoked;
+    void startRecording() { recording = true; }
 
     @Override public Rectangle getVisibleRect() {
-      methodGetVisibleRectInvoked = true;
+      if (recording) methodInvocations.invoked("getVisibleRect");
       return super.getVisibleRect();
     }
 
-    boolean methodGetVisibleRectWasInvoked() { return methodGetVisibleRectInvoked; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

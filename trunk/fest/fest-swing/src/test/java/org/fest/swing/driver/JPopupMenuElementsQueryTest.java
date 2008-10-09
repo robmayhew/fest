@@ -25,6 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -42,10 +43,12 @@ public class JPopupMenuElementsQueryTest {
 
   private Robot robot;
   private MyWindow window;
+  private MyPopupMenu popupMenu;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = MyWindow.createNew();
+    popupMenu = window.popupMenu;
     robot.showWindow(window);
   }
 
@@ -55,11 +58,12 @@ public class JPopupMenuElementsQueryTest {
 
   public void shouldReturnMenuElementsFromJPopupMenu() {
     robot.showPopupMenu(window.textField);
-    MenuElement[] elements = JPopupMenuElementsQuery.elementsOf(window.popupMenu);
+    popupMenu.startRecording();
+    MenuElement[] elements = JPopupMenuElementsQuery.elementsOf(popupMenu);
     assertThat(elements).hasSize(2);
     assertThatMenuElementHasText(elements[0], "One");
     assertThatMenuElementHasText(elements[1], "Two");
-    assertThat(window.popupMenu.methodGetSubElementsWasInvoked()).isTrue();
+    popupMenu.requireInvoked("getSubElements");
   }
 
   private void assertThatMenuElementHasText(MenuElement element, String text) {
@@ -94,13 +98,18 @@ public class JPopupMenuElementsQueryTest {
   private static class MyPopupMenu extends JPopupMenu {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetSubElementsInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     @Override public MenuElement[] getSubElements() {
-      methodGetSubElementsInvoked = true;
+      if (recording) methodInvocations.invoked("getSubElements");
       return super.getSubElements();
     }
 
-    boolean methodGetSubElementsWasInvoked() { return methodGetSubElementsInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

@@ -23,6 +23,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -53,14 +54,16 @@ public class JOptionPaneOptionsQueryTest {
   }
 
   public void shouldReturnMessageOfJOptionPane() {
+    optionPane.startRecording();
     assertThat(JOptionPaneOptionsQuery.optionsOf(optionPane)).containsOnly(optionPane.option);
-    assertThat(optionPane.methodGetOptionsWasInvoked()).isTrue();
+    optionPane.requireInvoked("getOptions");
   }
 
   private static class MyOptionPane extends JOptionPane {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetOptionsInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     final JButton option = new JButton("Hello");
 
@@ -74,10 +77,14 @@ public class JOptionPaneOptionsQueryTest {
     }
 
     @Override public Object[] getOptions() {
-      methodGetOptionsInvoked = true;
+      if (recording) methodInvocations.invoked("getOptions");
       return super.getOptions();
     }
 
-    boolean methodGetOptionsWasInvoked() { return methodGetOptionsInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

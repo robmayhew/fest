@@ -22,6 +22,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -53,14 +54,16 @@ public class JOptionPaneMessageQueryTest {
   }
 
   public void shouldReturnMessageOfJOptionPane() {
+    optionPane.startRecording();
     assertThat(JOptionPaneMessageQuery.messageOf(optionPane)).isEqualTo(MESSAGE);
-    assertThat(optionPane.methodGetMessageWasInvoked()).isTrue();
+    optionPane.requireInvoked("getMessage");
   }
 
   private static class MyOptionPane extends JOptionPane {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetMessageInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     static MyOptionPane createNew(String message) {
       return new MyOptionPane(message);
@@ -71,10 +74,14 @@ public class JOptionPaneMessageQueryTest {
     }
 
     @Override public Object getMessage() {
-      methodGetMessageInvoked = true;
+      if (recording) methodInvocations.invoked("getMessage");
       return super.getMessage();
     }
 
-    boolean methodGetMessageWasInvoked() { return methodGetMessageInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

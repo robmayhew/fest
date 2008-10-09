@@ -24,6 +24,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static javax.swing.JFileChooser.*;
@@ -63,9 +64,11 @@ public class JFileChooserFileSelectionModeQueryTest {
         fileChooser.setFileSelectionMode(mode);
       }
     });
+    robot.waitForIdle();
+    fileChooser.startRecording();
     int actual = JFileChooserFileSelectionModeQuery.fileSelectionModeOf(fileChooser);
     assertThat(actual).isEqualTo(mode);
-    assertThat(fileChooser.methodGetFileSelectionModeWasInvoked()).isTrue();
+    fileChooser.requireInvoked("getFileSelectionMode");
   }
 
   @DataProvider(name = "selectionModes") public Object[][] selectionModes() {
@@ -90,13 +93,18 @@ public class JFileChooserFileSelectionModeQueryTest {
   private static class MyFileChooser extends JFileChooser {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetFileSelectionModeInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
+    void startRecording() { recording = true; }
 
     @Override public int getFileSelectionMode() {
-      methodGetFileSelectionModeInvoked = true;
+      if (recording) methodInvocations.invoked("getFileSelectionMode");
       return super.getFileSelectionMode();
     }
 
-    boolean methodGetFileSelectionModeWasInvoked() { return methodGetFileSelectionModeInvoked; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

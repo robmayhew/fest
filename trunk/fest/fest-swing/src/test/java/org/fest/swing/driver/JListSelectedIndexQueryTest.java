@@ -23,6 +23,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestListModel;
 import org.fest.swing.testing.TestWindow;
 
@@ -58,8 +59,9 @@ public class JListSelectedIndexQueryTest {
   public void shouldReturnItemCountOfJList(final int selectedIndex) {
     selectIndex(list, selectedIndex);
     robot.waitForIdle();
+    list.startRecording();
     assertThat(JListSelectedIndexQuery.selectedIndexOf(list)).isEqualTo(selectedIndex);
-    assertThat(list.methodGetSelectedIndexWasInvoked()).isTrue();
+    list.requireInvoked("getSelectedIndex");
   }
 
   @DataProvider(name = "selectedIndices") public Object[][] selectedIndices() {
@@ -84,17 +86,22 @@ public class JListSelectedIndexQueryTest {
   private static class MyList extends JList {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetSelectedIndexInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     MyList(Object... elements) {
       setModel(new TestListModel(elements));
     }
 
+    void startRecording() { recording = true; }
+
     @Override public int getSelectedIndex() {
-      methodGetSelectedIndexInvoked = true;
+      if (recording) methodInvocations.invoked("getSelectedIndex");
       return super.getSelectedIndex();
     }
 
-    boolean methodGetSelectedIndexWasInvoked() { return methodGetSelectedIndexInvoked; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

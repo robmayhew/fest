@@ -80,12 +80,12 @@ public class AbstractButtonTextQueryTest {
 
     public MyButton(String text) { super(text); }
 
-    void startRecording() { recording = true; }
-
     @Override public String getText() {
       if (recording) methodInvocations.invoked("getText");
       return super.getText();
     }
+
+    void startRecording() { recording = true; }
 
     MethodInvocations requireInvoked(String methodName) {
       return methodInvocations.requireInvoked(methodName);

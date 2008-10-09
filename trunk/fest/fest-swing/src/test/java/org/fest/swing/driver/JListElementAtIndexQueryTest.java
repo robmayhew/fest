@@ -23,10 +23,13 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestListModel;
 import org.fest.swing.testing.TestWindow;
+import org.fest.swing.testing.MethodInvocations.Args;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.MethodInvocations.Args.args;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -40,11 +43,13 @@ public class JListElementAtIndexQueryTest {
 
   private Robot robot;
   private MyList list;
+  private MyListModel listModel;
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
     list = window.list;
+    listModel = list.model;
     robot.showWindow(window);
   }
 
@@ -54,8 +59,9 @@ public class JListElementAtIndexQueryTest {
 
   public void shouldReturnElementAtIndexInJList() {
     int index = 1;
+    listModel.startRecording();
     assertThat(JListElementAtIndexQuery.elementAt(list, index)).isEqualTo("Two");
-    assertThat(list.model.methodGetElementAtWasInvokedWithIndex(index)).isTrue();
+    listModel.requireInvoked("getElementAt", args(index));
   }
 
   private static class MyWindow extends TestWindow {
@@ -87,21 +93,22 @@ public class JListElementAtIndexQueryTest {
   private static class MyListModel extends TestListModel {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetElementAtInvoked;
-    private int index;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     MyListModel(Object... elements) {
       super(elements);
     }
 
+    void startRecording() { recording = true; }
+
     @Override public Object getElementAt(int index) {
-      this.index = index;
-      methodGetElementAtInvoked = true;
+      if (recording) methodInvocations.invoked("getElementAt", args(index));
       return super.getElementAt(index);
     }
 
-    boolean methodGetElementAtWasInvokedWithIndex(int index) {
-      return methodGetElementAtInvoked && this.index == index;
+    MethodInvocations requireInvoked(String methodName, Args args) {
+      return methodInvocations.requireInvoked(methodName, args);
     }
   }
 }

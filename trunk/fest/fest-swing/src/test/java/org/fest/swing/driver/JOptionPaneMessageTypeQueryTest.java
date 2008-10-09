@@ -22,6 +22,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 
@@ -53,13 +54,16 @@ public class JOptionPaneMessageTypeQueryTest {
   }
 
   public void shouldReturnMessageTypeOfJOptionPane() {
+    optionPane.startRecording();
     assertThat(JOptionPaneMessageTypeQuery.messageTypeOf(optionPane)).isEqualTo(INFORMATION_MESSAGE);
-    assertThat(optionPane.methodGetMessageTypeWasInvoked()).isTrue();
+    optionPane.requireInvoked("getMessageType");
   }
 
   private static class MyOptionPane extends JOptionPane {
     private static final long serialVersionUID = 1L;
-    private boolean methodGetMessageTypeInvoked;
+
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     static MyOptionPane createNew() {
       return new MyOptionPane();
@@ -70,10 +74,14 @@ public class JOptionPaneMessageTypeQueryTest {
     }
 
     @Override public int getMessageType() {
-      methodGetMessageTypeInvoked = true;
+      if (recording) methodInvocations.invoked("getMessageType");
       return super.getMessageType();
     }
 
-    boolean methodGetMessageTypeWasInvoked() { return methodGetMessageTypeInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

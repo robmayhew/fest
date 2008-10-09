@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.BooleanProvider;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -55,9 +56,10 @@ public class JFileChooserApproveButtonTextQueryTest {
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
   public void shouldReturnApproveButtonText(boolean nullApproveButtonText) {
     fileChooser.shouldReturnNullApproveButtonText(nullApproveButtonText);
+    fileChooser.startRecording();
     String approveButtonText = JFileChooserApproveButtonTextQuery.approveButtonTextFrom(fileChooser);
     assertThat(approveButtonText).isNotEmpty();
-    assertThat(fileChooser.methodGetApproveButtonTextWasInvoked()).isTrue();
+    fileChooser.requireInvoked("getApproveButtonText");
   }
 
   private static class MyWindow extends TestWindow {
@@ -78,19 +80,25 @@ public class JFileChooserApproveButtonTextQueryTest {
   private static class MyFileChooser extends JFileChooser {
     private static final long serialVersionUID = 1L;
 
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
     private boolean shouldReturnNullApproveButtonText;
-    private boolean methodGetApproveButtonTextInvoked;
 
     void shouldReturnNullApproveButtonText(boolean value) {
       shouldReturnNullApproveButtonText = value;
     }
 
+    void startRecording() { recording = true; }
+
     @Override public String getApproveButtonText() {
-      methodGetApproveButtonTextInvoked = true;
+      if (recording) methodInvocations.invoked("getApproveButtonText");
       if (shouldReturnNullApproveButtonText) return null;
       return super.getApproveButtonText();
     }
 
-    boolean methodGetApproveButtonTextWasInvoked() { return methodGetApproveButtonTextInvoked; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

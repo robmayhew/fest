@@ -22,6 +22,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestListModel;
 import org.fest.swing.testing.TestWindow;
 
@@ -40,11 +41,13 @@ public class JListElementCountQueryTest {
 
   private Robot robot;
   private MyList list;
+  private MyListModel listModel;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
     list = window.list;
+    listModel = list.model;
     robot.showWindow(window);
   }
 
@@ -53,8 +56,9 @@ public class JListElementCountQueryTest {
   }
 
   public void shouldReturnElementCountOfJList() {
+    listModel.startRecording();
     assertThat(JListElementCountQuery.elementCountOf(list)).isEqualTo(3);
-    assertThat(list.model.methodGetSizeWasInvoked()).isTrue();
+    listModel.requireInvoked("getSize");
   }
 
   private static class MyWindow extends TestWindow {
@@ -86,17 +90,22 @@ public class JListElementCountQueryTest {
   private static class MyListModel extends TestListModel {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetSizeInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     MyListModel(Object... elements) {
       super(elements);
     }
 
+    void startRecording() { recording = true; }
+
     @Override public int getSize() {
-      methodGetSizeInvoked = true;
+      if (recording) methodInvocations.invoked("getSize");
       return super.getSize();
     }
 
-    boolean methodGetSizeWasInvoked() { return methodGetSizeInvoked; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

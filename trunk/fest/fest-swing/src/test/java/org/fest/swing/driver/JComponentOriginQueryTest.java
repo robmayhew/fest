@@ -26,6 +26,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -64,10 +65,11 @@ public class JComponentOriginQueryTest {
         return new Point(bounds.x, bounds.y);
       }
     });
+    button.startRecording();
     Point origin = JComponentOriginQuery.originOf(button);
     assertThat(origin).isEqualTo(expected);
-    assertThat(button.methodGetXWasInvoked()).isTrue();
-    assertThat(button.methodGetYWasInvoked()).isTrue();
+    button.requireInvoked("getX")
+          .requireInvoked("getY");
   }
 
   private static class MyWindow extends TestWindow {
@@ -92,20 +94,23 @@ public class JComponentOriginQueryTest {
       super(text);
     }
 
-    private boolean methodGetXInvoked;
-    private boolean methodGetYInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
+    void startRecording() { recording = true; }
 
     @Override public int getX() {
-      methodGetXInvoked = true;
+      if (recording) methodInvocations.invoked("getX");
       return super.getX();
     }
 
     @Override public int getY() {
-      methodGetYInvoked = true;
+      if (recording) methodInvocations.invoked("getY");
       return super.getY();
     }
 
-    boolean methodGetXWasInvoked() { return methodGetXInvoked; }
-    boolean methodGetYWasInvoked() { return methodGetYInvoked; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }
