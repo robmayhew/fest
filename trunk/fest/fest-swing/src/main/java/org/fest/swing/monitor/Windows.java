@@ -1,19 +1,21 @@
 /*
  * Created on Oct 8, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.monitor;
+
+import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 
 import java.awt.Component;
 import java.awt.Window;
@@ -21,8 +23,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.WeakHashMap;
-
-import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 
 /**
  * Understands the information collected by the monitors in this package.
@@ -34,21 +34,21 @@ class Windows {
   static int WINDOW_READY_DELAY = 10000;
 
   /** <code>{@link Window#isShowing() isShowing}</code> is true but are not yet ready for input. */
-  private final Map<Window, TimerTask> pending = new WeakHashMap<Window, TimerTask>();
+  final Map<Window, TimerTask> pending = new WeakHashMap<Window, TimerTask>();
 
   /** Considered to be ready to use. */
-  private final Map<Window, Boolean> open = new WeakHashMap<Window, Boolean>();
-  
+  final Map<Window, Boolean> open = new WeakHashMap<Window, Boolean>();
+
   /** Have sent a <code>{@link java.awt.event.WindowEvent#WINDOW_CLOSED WINDOW_CLOSED}</code> event. */
-  private final Map<Window, Boolean> closed = new WeakHashMap<Window, Boolean>();
-  
+  final Map<Window, Boolean> closed = new WeakHashMap<Window, Boolean>();
+
   /** Not visible. */
-  private final Map<Window, Boolean> hidden = new WeakHashMap<Window, Boolean>();
+  final Map<Window, Boolean> hidden = new WeakHashMap<Window, Boolean>();
 
   private final Timer windowReadyTimer;
 
   private final Object lock = new Object();
-  
+
   Windows() {
     windowReadyTimer = new Timer("Window Ready Timer", true);
   }
@@ -65,7 +65,7 @@ class Windows {
 //    execute(addWindowListenerTask(target, monitor));
 //    execute(addComponentListenerTask(target, monitor));
   }
-  
+
   /**
    * Marks the given window as "ready to use" and if not showing, as "hidden."
    * @param w the given window.
@@ -76,7 +76,7 @@ class Windows {
       if (!isShowing(w)) addWindowTo(w, hidden);
     }
   }
-  
+
   /**
    * Marks the given window as "hidden."
    * @param w the given window.
@@ -85,9 +85,9 @@ class Windows {
     synchronized(lock) {
       addWindowTo(w, hidden);
       removeWindowFrom(w, pending);
-    }    
+    }
   }
-  
+
   /**
    * Marks the given window as "showing."
    * @param w the given window.
@@ -101,22 +101,22 @@ class Windows {
       pending.put(w, task);
     }
   }
-  
+
   /**
    * Marks the given window as "ready to receive OS-level event input."
-   * @param w the given window. 
+   * @param w the given window.
    */
   void markAsReady(Window w) {
     synchronized(lock) {
-      if (!pending.containsKey(w)) return; 
+      if (!pending.containsKey(w)) return;
       removeWindowFrom(w, closed, hidden, pending);
       addWindowTo(w, open);
     }
   }
-  
+
   /**
    * Marks the given window as "closed."
-   * @param w the given window. 
+   * @param w the given window.
    */
   void markAsClosed(Window w) {
     synchronized(lock) {
@@ -128,11 +128,11 @@ class Windows {
   private void addWindowTo(Window w, Map<Window, Boolean> map) {
     map.put(w, true);
   }
-  
+
   private void removeWindowFrom(Window w, Map<?, ?>... maps) {
     for (Map<?, ?> map : maps) map.remove(w);
   }
-  
+
   /**
    * Returns <code>true</code> if the given component is a closed window.
    * @param c the given component.
@@ -143,7 +143,7 @@ class Windows {
       return closed.containsKey(c);
     }
   }
-  
+
   /**
    * Returns <code>true</code> if the given window is ready to receive OS-level event input.
    * @param w the given window.
@@ -155,7 +155,7 @@ class Windows {
       return open.containsKey(w) && !hidden.containsKey(w);
     }
   }
-  
+
   /**
    * Returns <code>true</code> if the given window is hidden.
    * @param w the given window.
@@ -166,7 +166,7 @@ class Windows {
       return hidden.containsKey(w);
     }
   }
-  
+
   /**
    * Returns <code>true</code> if the given window is showing but not ready to receive OS-level event input.
    * @param w the given window.
