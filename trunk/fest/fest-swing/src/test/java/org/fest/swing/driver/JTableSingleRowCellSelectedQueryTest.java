@@ -17,87 +17,87 @@ package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestTable;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JTableCell.cell;
+import static org.fest.swing.driver.JTableSelectCellsTask.selectCells;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTableSingleRowCellSelectedQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JTableSingleRowCellSelectedQueryTest {
 
+  private Robot robot;
   private JTable table;
-  private int row;
-  private int column;
-  private JTableSingleRowCellSelectedQuery query;
 
   @BeforeMethod public void setUp() {
-    table = createMock(JTable.class);
-    row = 8;
-    column = 6;
-    query = new JTableSingleRowCellSelectedQuery(table, row, column);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    table = window.table;
+    robot.showWindow(window);
+  }
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
   
-  public void shouldReturnCellIsSelectedIfRowAndColumnAreSelected() {
-    new EasyMockTemplate(table) {
-      protected void expectations() {
-        expect(table.isRowSelected(row)).andReturn(true);
-        expect(table.isColumnSelected(column)).andReturn(true);
-        expect(table.getSelectedRowCount()).andReturn(1);
-      }
-
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(true);
-      }
-    }.run();
+  public void shouldReturnCellIsSelectedIfOneRowAndOneColumnAreSelectedOnly() {
+    JTableCell cell = cell(0, 2);
+    selectCells(table, cell, cell);
+    robot.waitForIdle();
+    assertThat(JTableSingleRowCellSelectedQuery.isCellSelected(table, 0, 2)).isTrue();
   }
   
-  public void shouldReturnCellIsNotSelectedIfRowIsNotSelected() {
-    new EasyMockTemplate(table) {
-      protected void expectations() {
-        expect(table.isRowSelected(row)).andReturn(false);
-      }
-
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(false);
-      }
-    }.run();
+  public void shouldReturnCellIsNotSelectedIfCellIsNotSelected() {
+    assertThat(JTableSingleRowCellSelectedQuery.isCellSelected(table, 0, 2)).isFalse();
   }
 
   public void shouldReturnCellIsNotSelectedIfRowIsSelectedAndColumnIsNot() {
-    new EasyMockTemplate(table) {
-      protected void expectations() {
-        expect(table.isRowSelected(row)).andReturn(true);
-        expect(table.isColumnSelected(column)).andReturn(false);
+    selectRow(table, 0);
+    robot.waitForIdle();
+    assertThat(JTableSingleRowCellSelectedQuery.isCellSelected(table, 0, 2)).isFalse();
+  }
+  
+  private static void selectRow(final JTable table, final int row) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        table.setRowSelectionInterval(row, row);
       }
-
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(false);
-      }
-    }.run();
+    });
   }
 
   public void shouldReturnCellIsNotSelectedIfRowAndColumnAreSelectedAndMultipleRowsAreSelected() {
-    new EasyMockTemplate(table) {
-      protected void expectations() {
-        expect(table.isRowSelected(row)).andReturn(true);
-        expect(table.isColumnSelected(column)).andReturn(true);
-        expect(table.getSelectedRowCount()).andReturn(3);
-      }
+    selectCells(table, cell(0, 2), cell(0, 4));
+    robot.waitForIdle();
+    assertThat(JTableSingleRowCellSelectedQuery.isCellSelected(table, 0, 2)).isFalse();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(false);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final JTable table = new TestTable(3, 6);
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+
+    private MyWindow() {
+      super(JTableSingleRowCellSelectedQueryTest.class);
+      addComponents(table);
+    }
   }
 }

@@ -27,23 +27,15 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * 
  * @author Alex Ruiz
  */
-class JTableSingleRowCellSelectedQuery extends GuiQuery<Boolean> {
+final class JTableSingleRowCellSelectedQuery  {
 
-  private final JTable table;
-  private final int row;
-  private final int column;
-
-  static boolean isCellSelected(JTable table, int row, int column) {
-    return execute(new JTableSingleRowCellSelectedQuery(table, row, column));
+  static boolean isCellSelected(final JTable table, final int row, final int column) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return table.isRowSelected(row) && table.isColumnSelected(column) && table.getSelectedRowCount() == 1;
+      }
+    });
   }
   
-  JTableSingleRowCellSelectedQuery(JTable table, int row, int column) {
-    this.table = table;
-    this.row = row;
-    this.column = column;
-  }
-  
-  protected Boolean executeInEDT() {
-    return table.isRowSelected(row) && table.isColumnSelected(column) && table.getSelectedRowCount() == 1;
-  }
+  private JTableSingleRowCellSelectedQuery() {}
 }
