@@ -27,24 +27,19 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that converts the location in the model of a
  * <code>{@link JTextComponent}</code> to a place in the view coordinate system.
+ * @see JTextComponent#modelToView(int)
  * 
  * @author Alex Ruiz
  */
-class JTextComponentModelToViewQuery extends GuiQuery<Rectangle> {
+final class JTextComponentModelToViewQuery {
 
-  private final JTextComponent textBox;
-  private final int position;
-
-  static Rectangle modelToView(JTextComponent textBox, int position) {
-    return execute(new JTextComponentModelToViewQuery(textBox, position));
+  static Rectangle modelToView(final JTextComponent textBox, final int position) {
+    return execute(new GuiQuery<Rectangle>() {
+      protected Rectangle executeInEDT() throws BadLocationException {
+        return textBox.modelToView(position);
+      }
+    });
   }
   
-  JTextComponentModelToViewQuery(JTextComponent textBox, int position) {
-    this.textBox = textBox;
-    this.position = position;
-  }
-  
-  protected Rectangle executeInEDT() throws BadLocationException {
-    return textBox.modelToView(position);
-  }
+  private JTextComponentModelToViewQuery() {}
 }

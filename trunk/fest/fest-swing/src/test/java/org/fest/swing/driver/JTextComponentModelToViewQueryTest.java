@@ -17,58 +17,86 @@ package org.fest.swing.driver;
 
 import java.awt.Rectangle;
 
+import javax.swing.JTextField;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.JTextComponent;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.exception.UnexpectedException.unexpected;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTextComponentModelToViewQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JTextComponentModelToViewQueryTest {
 
-  private JTextComponent textBox;
-  private int position;
-  private Rectangle rectangle;
-  private JTextComponentModelToViewQuery query;
+  private Robot robot;
+  private MyTextField textField;
 
   @BeforeMethod public void setUp() {
-    textBox = createMock(JTextComponent.class);
-    position = 8;
-    rectangle = new Rectangle(80, 60);
-    query = new JTextComponentModelToViewQuery(textBox, position);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    textField = window.textField;
+    robot.showWindow(window);
   }
   
-  public void shouldReturnModelToViewInJTextComponent() {
-    new EasyMockTemplate(textBox) {
-      protected void expectations() {
-        try {
-          expect(textBox.modelToView(position)).andReturn(rectangle);
-        } catch (BadLocationException e) {
-          throw unexpected(e);
-        }
-      }
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
+  
+  public void shouldReturnModelToViewInJTextComponent() throws Exception {
+    Rectangle expected = textField.modelToView(2);
+    textField.startRecording();
+    assertThat(JTextComponentModelToViewQuery.modelToView(textField, 2)).isEqualTo(expected);
+    textField.requireInvoked("modelToView");
+  }
 
-      protected void codeToTest() {
-        try {
-          assertThat(query.executeInEDT()).isSameAs(rectangle);
-        } catch (BadLocationException e) {
-          throw unexpected(e);
-        }
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final MyTextField textField = new MyTextField();
+    
+    private MyWindow() {
+      super(JTextComponentModelToViewQueryTest.class);
+      addComponents(textField);
+    }
+  }
+  
+  private static class MyTextField extends JTextField {
+    private static final long serialVersionUID = 1L;
+
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
+    MyTextField() {
+      super(20);
+      setText("Hello World");
+    }
+
+    @Override
+    public Rectangle modelToView(int pos) throws BadLocationException {
+      if (recording) methodInvocations.invoked("modelToView");
+      return super.modelToView(pos);
+    }
+
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }
