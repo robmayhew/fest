@@ -33,6 +33,7 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTextComponentSelectedTextQuery.selectedTextOf;
+import static org.fest.swing.driver.JTextComponentSetEditableTask.setTextFieldEditable;
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -254,15 +255,7 @@ public class JTextComponentDriverTest {
     setTextAndDisableTextField(textField, "");
   }
 
-  private static void setTextFieldEditable(final JTextField textField, final boolean editable) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        textField.setEditable(editable);
-      }
-    });
-  }
-
-  private void setTextAndDisableTextField(final JTextField textField, final String text) {
+  private static void setTextAndDisableTextField(final JTextField textField, final String text) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         textField.setText(text);

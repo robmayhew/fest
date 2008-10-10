@@ -15,19 +15,21 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.text.JTextComponent;
+import javax.swing.JTextField;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.BooleanProvider;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JTextComponentSetEditableTask.setTextFieldEditable;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTextComponentEditableQuery}</code>.
@@ -36,24 +38,62 @@ import static org.fest.swing.testing.TestGroups.EDT_ACTION;
  */
 public class JTextComponentEditableQueryTest {
 
-  private JTextComponent textBox;
-  private JTextComponentEditableQuery query;
+  private Robot robot;
+  private MyTextField textField;
 
   @BeforeMethod public void setUp() {
-    textBox = createMock(JTextComponent.class);
-    query = new JTextComponentEditableQuery(textBox);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    textField = window.textField;
+    robot.showWindow(window);
   }
   
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_ACTION)
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
+  
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
   public void shouldIndicateIfJTextComponentIsEditable(final boolean editable) {
-    new EasyMockTemplate(textBox) {
-      protected void expectations() {
-        expect(textBox.isEditable()).andReturn(editable);
-      }
+    setTextFieldEditable(textField, editable);
+    robot.waitForIdle();
+    textField.startRecording();
+    assertThat(JTextComponentEditableQuery.isEditable(textField)).isEqualTo(editable);
+    textField.requireInvoked("isEditable");
+  }
+  
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(editable);
-      }
-    }.run();
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final MyTextField textField = new MyTextField();
+    
+    private MyWindow() {
+      super(JTextComponentEditableQueryTest.class);
+      addComponents(textField);
+    }
+  }
+  
+  private static class MyTextField extends JTextField {
+    private static final long serialVersionUID = 1L;
+
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
+    MyTextField() {
+      super(20);
+    }
+
+    @Override public boolean isEditable() {
+      if (recording) methodInvocations.invoked("isEditable");
+      return super.isEditable();
+    }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

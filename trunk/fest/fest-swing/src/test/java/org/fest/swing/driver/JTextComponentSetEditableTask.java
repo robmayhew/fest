@@ -1,5 +1,5 @@
 /*
- * Created on Aug 11, 2008
+ * Created on Oct 10, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,28 +15,28 @@
  */
 package org.fest.swing.driver;
 
+import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands an action, executed in the event dispatch thread, that indicates whether a 
- * <code>{@link JTextComponent}</code> is editable or not.
- * @see JTextComponent#isEditable()
- * 
- * @author Alex Ruiz
+ * Understands a task that makes a <code>{@link JTextComponent}</code> editable. This task is executed in the event
+ * dispatch thread.
+ *
+ * @author Alex Ruiz 
  */
-final class JTextComponentEditableQuery {
+final class JTextComponentSetEditableTask {
 
-  static boolean isEditable(final JTextComponent textBox) {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return textBox.isEditable();
+  static void setTextFieldEditable(final JTextField textField, final boolean editable) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        textField.setEditable(editable);
       }
     });
   }
   
-  private JTextComponentEditableQuery() {}
+  private JTextComponentSetEditableTask() {}
 }
