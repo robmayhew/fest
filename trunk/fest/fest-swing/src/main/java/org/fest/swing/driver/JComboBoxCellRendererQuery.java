@@ -41,15 +41,11 @@ final class JComboBoxCellRendererQuery {
   static Component cellRendererIn(final JComboBox comboBox, final int index) {
     return execute(new GuiQuery<Component>() {
       protected Component executeInEDT() {
-        return cellRenderer(comboBox, index);
+        Object item = comboBox.getItemAt(index);
+        ListCellRenderer renderer = comboBox.getRenderer();
+        return renderer.getListCellRendererComponent(REFERENCE_JLIST, item, index, true, true);
       }
     });
-  }
-
-  private static Component cellRenderer(JComboBox comboBox, int index) {
-    Object item = comboBox.getItemAt(index);
-    ListCellRenderer renderer = comboBox.getRenderer();
-    return renderer.getListCellRendererComponent(REFERENCE_JLIST, item, index, true, true);
   }
 
   private JComboBoxCellRendererQuery() {}

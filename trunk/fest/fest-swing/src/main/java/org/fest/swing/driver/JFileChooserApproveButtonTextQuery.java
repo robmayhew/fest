@@ -37,15 +37,11 @@ final class JFileChooserApproveButtonTextQuery {
   static String approveButtonTextFrom(final JFileChooser fileChooser) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
-        return approveButtonText(fileChooser);
+        String text = fileChooser.getApproveButtonText();
+        if (!isEmpty(text)) return text;
+        return fileChooser.getUI().getApproveButtonText(fileChooser);
       }
     });
-  }
-
-  private static String approveButtonText(JFileChooser fileChooser) {
-    String text = fileChooser.getApproveButtonText();
-    if (!isEmpty(text)) return text;
-    return fileChooser.getUI().getApproveButtonText(fileChooser);
   }
 
   private JFileChooserApproveButtonTextQuery() {}

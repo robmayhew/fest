@@ -35,13 +35,9 @@ final class JOptionPaneTitleQuery {
   static String titleOf(final JOptionPane optionPane) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
-        return title(optionPane);
+        return ((Dialog)optionPane.getRootPane().getParent()).getTitle();
       }
     });
-  }
-
-  private static String title(JOptionPane optionPane) {
-    return ((Dialog)optionPane.getRootPane().getParent()).getTitle();
   }
 
   private JOptionPaneTitleQuery() {}

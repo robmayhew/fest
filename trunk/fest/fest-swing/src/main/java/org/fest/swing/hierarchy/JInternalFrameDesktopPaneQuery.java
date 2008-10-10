@@ -22,15 +22,11 @@ final class JInternalFrameDesktopPaneQuery {
   static JDesktopPane desktopPaneOf(final JInternalFrame internalFrame) {
     return execute(new GuiQuery<JDesktopPane>() {
       protected JDesktopPane executeInEDT() {
-        return desktopPane(internalFrame);
+        JDesktopIcon icon = internalFrame.getDesktopIcon();
+        if (icon != null) return icon.getDesktopPane();
+        return null;
       }
     });
-  }
-
-  private static JDesktopPane desktopPane(JInternalFrame internalFrame) {
-    JDesktopIcon icon = internalFrame.getDesktopIcon();
-    if (icon != null) return icon.getDesktopPane();
-    return null;
   }
 
   private JInternalFrameDesktopPaneQuery() {}

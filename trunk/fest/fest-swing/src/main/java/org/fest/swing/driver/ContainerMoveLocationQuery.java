@@ -37,11 +37,11 @@ final class ContainerMoveLocationQuery {
       protected Point executeInEDT() {
         return moveLocation(container.getSize(), container.getInsets());
       }
+      
+      private Point moveLocation(Dimension size, Insets insets) {
+        return new Point(size.width / 2, insets.top / 2);
+      }
     });
-  }
-
-  private static Point moveLocation(Dimension size, Insets insets) {
-    return new Point(size.width / 2, insets.top / 2);
   }
 
   private ContainerMoveLocationQuery() {}

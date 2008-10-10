@@ -37,14 +37,10 @@ final class JListCellRendererQuery {
   static Component cellRendererIn(final JList list, final int index) {
     return execute(new GuiQuery<Component>() {
       protected Component executeInEDT() {
-        return cellRendererComponent(list, index);
+        Object element = list.getModel().getElementAt(index);
+        return list.getCellRenderer().getListCellRendererComponent(list, element, index, true, true);
       }
     });
-  }
-
-  private static Component cellRendererComponent(JList list, int index) {
-    Object element = list.getModel().getElementAt(index);
-    return list.getCellRenderer().getListCellRendererComponent(list, element, index, true, true);
   }
 
   private JListCellRendererQuery() {}

@@ -37,11 +37,11 @@ final class ContainerResizeLocationQuery {
       protected Point executeInEDT() {
         return resizeLocation(container.getSize(), container.getInsets());
       }
+      
+      private Point resizeLocation(Dimension size, Insets insets) {
+        return new Point(size.width - insets.right / 2, size.height - insets.bottom / 2);
+      }
     });
-  }
-
-  private static Point resizeLocation(Dimension size, Insets insets) {
-    return new Point(size.width - insets.right / 2, size.height - insets.bottom / 2);
   }
 
   private ContainerResizeLocationQuery() {}
