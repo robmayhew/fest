@@ -26,13 +26,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JTreeExpandedPathQuery.isExpanded;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -45,13 +44,13 @@ public class JTreeExpandPathTaskTest {
 
   private Robot robot;
   private JTree tree;
-  private TreePath treePath;
+  private TreePath rootPath;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
     tree = window.tree;
-    treePath = new TreePath(window.treeRoot);
+    rootPath = new TreePath(window.treeRoot);
     robot.showWindow(window);
   }
 
@@ -61,17 +60,13 @@ public class JTreeExpandPathTaskTest {
 
   public void shouldExpandPath() {
     assertThat(isRootExpanded()).isFalse();
-    JTreeExpandPathTask.expandPath(tree, treePath);
+    JTreeExpandPathTask.expandPath(tree, rootPath);
     robot.waitForIdle();
     assertThat(isRootExpanded()).isTrue();
   }
 
   private boolean isRootExpanded() {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return tree.isExpanded(treePath);
-      }
-    });
+    return isExpanded(tree, rootPath);
   }
 
   private static class MyWindow extends TestWindow {

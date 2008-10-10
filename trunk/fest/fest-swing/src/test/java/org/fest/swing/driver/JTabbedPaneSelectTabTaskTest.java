@@ -66,6 +66,10 @@ public class JTabbedPaneSelectTabTaskTest {
   }
 
   private int selectedTabIndex() {
+    return selectedIndexOf(tabbedPane);
+  }
+
+  private static int selectedIndexOf(final JTabbedPane tabbedPane) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {
         return tabbedPane.getSelectedIndex();

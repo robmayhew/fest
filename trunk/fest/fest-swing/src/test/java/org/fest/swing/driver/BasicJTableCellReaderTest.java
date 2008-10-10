@@ -156,13 +156,13 @@ public class BasicJTableCellReaderTest {
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
   public void shouldReturnIsSelectedIfRendererIsJCheckBox(boolean selected) {
-    setJComboBoxAsCellRenderer("Hello", selected);
+    setJComboBoxAsCellRenderer(table, "Hello", selected);
     robot.waitForIdle();
     Object value = reader.valueAt(table, 0, 0);
     assertThat(value).isEqualTo(String.valueOf(selected));
   }
 
-  private void setJComboBoxAsCellRenderer(final String text, final boolean selected) {
+  private static void setJComboBoxAsCellRenderer(final JTable table, final String text, final boolean selected) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         JCheckBox checkBox = new JCheckBox(text, selected);
@@ -172,7 +172,7 @@ public class BasicJTableCellReaderTest {
   }
 
   // invoked in the EDT
-  private static void setCellRendererComponent(JTable table, Component renderer) {
+  static void setCellRendererComponent(JTable table, Component renderer) {
     CustomCellRenderer cellRenderer = new CustomCellRenderer(renderer);
     table.getColumnModel().getColumn(0).setCellRenderer(cellRenderer);
   }

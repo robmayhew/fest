@@ -60,14 +60,13 @@ public class JTreeChildOfPathCountQueryTest {
   public void shouldReturnChildCountOfTreePath() {
     TreePath path = new TreePath(treeRoot);
     int childOfPathCount = JTreeChildOfPathCountQuery.childCount(tree, path);
-    assertThat(childOfPathCount).isEqualTo(childCountInRoot())
-                                .isEqualTo(childOfPathCount);
+    assertThat(childOfPathCount).isEqualTo(childCountIn(treeRoot));
   }
 
-  private int childCountInRoot() {
+  private static int childCountIn(final TreeNode node) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {
-        return treeRoot.getChildCount();
+        return node.getChildCount();
       }
     });
   }

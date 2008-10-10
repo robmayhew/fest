@@ -28,13 +28,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JTreeExpandedPathQuery.isExpanded;
 import static org.fest.swing.driver.JTreePathBoundsQuery.pathBoundsOf;
 import static org.fest.swing.testing.TestGroups.*;
 
@@ -48,13 +47,13 @@ public class JTreeToggleExpandStateTaskTest {
 
   private Robot robot;
   private JTree tree;
-  private TreeNode treeRoot;
+  private TreePath rootPath;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
     tree = window.tree;
-    treeRoot = window.treeRoot;
+    rootPath = new TreePath(window.treeRoot);
     robot.showWindow(window);
   }
 
@@ -70,20 +69,12 @@ public class JTreeToggleExpandStateTaskTest {
   }
 
   private boolean isRootExpanded() {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return tree.isExpanded(rootPath());
-      }
-    });
+    return isExpanded(tree, rootPath);
   }
 
   private Point centerOfTreeRoot() {
-    Rectangle pathBounds = pathBoundsOf(tree, rootPath());
+    Rectangle pathBounds = pathBoundsOf(tree, rootPath);
     return new Point(pathBounds.x + pathBounds.width / 2, pathBounds.y + pathBounds.height / 2);
-  }
-
-  private TreePath rootPath() {
-    return new TreePath(treeRoot);
   }
 
   private static class MyWindow extends TestWindow {

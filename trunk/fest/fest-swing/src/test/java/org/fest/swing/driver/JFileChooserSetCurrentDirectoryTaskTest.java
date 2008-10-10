@@ -67,11 +67,15 @@ public class JFileChooserSetCurrentDirectoryTaskTest {
   }
 
   private String currentDirectoryPath() {
-    return canonicalPathOf(execute(new GuiQuery<File>() {
+    return canonicalPathOf(currentDirectoryOf(fileChooser));
+  }
+
+  private static File currentDirectoryOf(final JFileChooser fileChooser) {
+    return execute(new GuiQuery<File>() {
       protected File executeInEDT() {
         return fileChooser.getCurrentDirectory();
       }
-    }));
+    });
   }
 
   private static String canonicalPathOf(File file) {

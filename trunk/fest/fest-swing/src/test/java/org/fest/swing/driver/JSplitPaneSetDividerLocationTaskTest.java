@@ -68,6 +68,10 @@ public class JSplitPaneSetDividerLocationTaskTest {
   }
 
   private int dividerLocation() {
+    return dividerLocationOf(splitPane);
+  }
+
+  private static int dividerLocationOf(final JSplitPane splitPane) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {
         return splitPane.getDividerLocation();

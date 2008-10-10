@@ -15,6 +15,8 @@
  */
 package org.fest.swing.driver;
 
+import javax.swing.JTable;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -38,10 +40,12 @@ public class JTableCancelCellEditingTaskTest {
 
   private Robot robot;
   private TableDialogEditDemoWindow window;
+  private JTable table;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = TableDialogEditDemoWindow.createNew(getClass());
+    table = window.table;
     robot.showWindow(window);
   }
 
@@ -52,35 +56,35 @@ public class JTableCancelCellEditingTaskTest {
   public void shouldCancelCellEditingIfTableCellHasEditor() {
     int row = 0;
     int column = 3;
-    assertThat(startEditingTable(row, column)).isTrue();
-    assertThat(editingRow()).isEqualTo(row);
-    assertThat(editingColumn()).isEqualTo(column);
-    JTableCancelCellEditingTask.cancelEditing(window.table, row, column);
+    assertThat(startEditingTable(table, row, column)).isTrue();
+    assertThat(editingRowOf(table)).isEqualTo(row);
+    assertThat(editingColumnOf(table)).isEqualTo(column);
+    JTableCancelCellEditingTask.cancelEditing(table, row, column);
     robot.waitForIdle();
-    assertThat(editingRow()).isEqualTo(-1);
-    assertThat(editingColumn()).isEqualTo(-1);
+    assertThat(editingRowOf(table)).isEqualTo(-1);
+    assertThat(editingColumnOf(table)).isEqualTo(-1);
   }
 
-  private boolean startEditingTable(final int row, final int column) {
+  private static boolean startEditingTable(final JTable table, final int row, final int column) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
-        return window.table.editCellAt(row, column);
+        return table.editCellAt(row, column);
       }
     });
   }
 
-  private int editingRow() {
+  private static int editingRowOf(final JTable table) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {
-        return window.table.getEditingRow();
+        return table.getEditingRow();
       }
     });
   }
 
-  private int editingColumn() {
+  private static int editingColumnOf(final JTable table) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {
-        return window.table.getEditingColumn();
+        return table.getEditingColumn();
       }
     });
   }
