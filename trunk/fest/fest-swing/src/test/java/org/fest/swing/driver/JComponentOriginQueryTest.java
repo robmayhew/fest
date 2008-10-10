@@ -24,14 +24,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.ComponentBoundsQuery.boundsOf;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -59,12 +58,8 @@ public class JComponentOriginQueryTest {
   }
 
   public void shouldReturnOriginOfJComponent() {
-    Point expected = execute(new GuiQuery<Point>() {
-      protected Point executeInEDT()  {
-        Rectangle bounds = button.getBounds();
-        return new Point(bounds.x, bounds.y);
-      }
-    });
+    Rectangle bounds = boundsOf(button);
+    Point expected = new Point(bounds.x, bounds.y);
     button.startRecording();
     Point origin = JComponentOriginQuery.originOf(button);
     assertThat(origin).isEqualTo(expected);

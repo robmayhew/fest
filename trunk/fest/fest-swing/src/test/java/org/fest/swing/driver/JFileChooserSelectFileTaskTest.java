@@ -65,6 +65,10 @@ public class JFileChooserSelectFileTaskTest {
   }
 
   private File selectedFile() {
+    return selectedFileOf(fileChooser);
+  }
+
+  private static File selectedFileOf(final JFileChooser fileChooser) {
     return execute(new GuiQuery<File>() {
       protected File executeInEDT() {
         return fileChooser.getSelectedFile();

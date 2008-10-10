@@ -32,6 +32,7 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JComponentVisibleRectQuery.visibleRectOf;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.array;
 
@@ -66,17 +67,17 @@ public class JComponentScrollRectToVisibleTaskTest {
   }
 
   private Rectangle visibleRectOfJList() {
-    return execute(new GuiQuery<Rectangle>() {
-      protected Rectangle executeInEDT() {
-        return list.getVisibleRect();
-      }
-    });
+    return visibleRectOf(list);
   }
 
   private Rectangle boundsOfLastTwoElementsInJList() {
+    return cellBoundsOf(list, 6, 7);
+  }
+
+  private static Rectangle cellBoundsOf(final JList list, final int index0, final int index1) {
     return execute(new GuiQuery<Rectangle>() {
       protected Rectangle executeInEDT() {
-        return list.getCellBounds(6, 7);
+        return list.getCellBounds(index0, index1);
       }
     });
   }

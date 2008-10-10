@@ -23,13 +23,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -59,12 +58,8 @@ public class ContainerResizeLocationQueryTest {
 
   public void shouldReturnResizeLocationOfContainer() {
     // TODO find a better way to test this without duplicating what the class under test is doing
-    Point expected = execute(new GuiQuery<Point>() {
-      protected Point executeInEDT() {
-        Insets insets = window.getInsets();
-        return new Point(WIDTH - insets.right / 2, HEIGHT - insets.bottom / 2);
-      }
-    });
+    Insets insets = insetsOf(window);
+    Point expected = new Point(WIDTH - insets.right / 2, HEIGHT - insets.bottom / 2);
     assertThat(ContainerResizeLocationQuery.resizeLocationOf(window)).isEqualTo(expected);
   }
 
