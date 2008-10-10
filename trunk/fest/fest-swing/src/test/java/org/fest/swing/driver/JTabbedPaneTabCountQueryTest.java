@@ -15,19 +15,20 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTabbedPaneTabCountQuery}</code>.
@@ -53,8 +54,9 @@ public class JTabbedPaneTabCountQueryTest {
   }
 
   public void shouldReturnTabCountOfJTabbedPane() {
+    tabbedPane.startRecording();
     assertThat(JTabbedPaneTabCountQuery.tabCountOf(tabbedPane)).isEqualTo(2);
-    assertThat(tabbedPane.methodGetTabCountWasInvoked()).isTrue();
+    tabbedPane.requireInvoked("getTabCount");
   }
 
   private static class MyWindow extends TestWindow {
@@ -75,7 +77,8 @@ public class JTabbedPaneTabCountQueryTest {
   private static class MyTabbedPane extends JTabbedPane {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetTabCountInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     MyTabbedPane() {
       addTab("One", new JPanel());
@@ -83,10 +86,14 @@ public class JTabbedPaneTabCountQueryTest {
     }
 
     @Override public int getTabCount() {
-      methodGetTabCountInvoked = true;
+      if (recording) methodInvocations.invoked("getTabCount");
       return super.getTabCount();
     }
 
-    boolean methodGetTabCountWasInvoked() { return methodGetTabCountInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

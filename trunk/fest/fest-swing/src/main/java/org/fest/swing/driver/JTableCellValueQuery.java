@@ -15,36 +15,29 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 import javax.swing.JTable;
 
 import org.fest.swing.core.GuiQuery;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
- * Understands an action, executed in the event dispatch thread, that returns the value in a <code>{@link JTable}</code> 
+ * Understands an action, executed in the event dispatch thread, that returns the value in a <code>{@link JTable}</code>
  * cell.
+ * @see JTable#getValueAt(int, int)
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class JTableCellValueQuery extends GuiQuery<Object> {
+final class JTableCellValueQuery {
 
-  private final JTable table;
-  private final int row;
-  private final int column;
-
-  static Object cellValueOf(JTable table, int row, int column) {
-    return execute(new JTableCellValueQuery(table, row, column));
+  static Object cellValueOf(final JTable table, final int row, final int column) {
+    return execute(new GuiQuery<Object>() {
+      protected Object executeInEDT() {
+        return table.getValueAt(row, column);
+      }
+    });
   }
 
-  JTableCellValueQuery(JTable table, int row, int column) {
-    this.table = table;
-    this.row = row;
-    this.column = column;
-  }
-
-  protected Object executeInEDT() {
-    return table.getValueAt(row, column);
-  }
+  private JTableCellValueQuery() {}
 }

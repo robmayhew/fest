@@ -15,17 +15,18 @@
  */
 package org.fest.swing.query;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestDialog;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestDialog;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link DialogTitleQuery}</code>.
@@ -50,14 +51,16 @@ public class DialogTitleQueryTest {
   }
 
   public void shouldReturnTitleOfDialog() {
+    dialog.startRecording();
     assertThat(DialogTitleQuery.titleOf(dialog)).isEqualTo("Hello World");
-    assertThat(dialog.methodGetTitleWasInvoked()).isTrue();
+    dialog.requireInvoked("getTitle");
   }
 
   private static class MyDialog extends TestDialog {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetTitleInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     static MyDialog createNew() {
       return new MyDialog();
@@ -69,10 +72,14 @@ public class DialogTitleQueryTest {
     }
 
     @Override public String getTitle() {
-      methodGetTitleInvoked = true;
+      if (recording) methodInvocations.invoked("getTitle");
       return super.getTitle();
     }
 
-    boolean methodGetTitleWasInvoked() { return methodGetTitleInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

@@ -15,20 +15,20 @@
  */
 package org.fest.swing.driver;
 
+import static java.awt.Adjustable.HORIZONTAL;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import javax.swing.JScrollBar;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static java.awt.Adjustable.HORIZONTAL;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JScrollBarOrientationQuery}</code>.
@@ -55,8 +55,9 @@ public class JScrollBarOrientationQueryTest {
 
 
   public void shouldReturnMinimumAndMaximumValuesOfJScrollBar() {
+    scrollBar.startRecording();
     assertThat(JScrollBarOrientationQuery.orientationOf(scrollBar)).isEqualTo(HORIZONTAL);
-    assertThat(scrollBar.methodGetOrientationWasInvoked()).isTrue();
+    scrollBar.requireInvoked("getOrientation");
   }
 
   private static class MyWindow extends TestWindow {
@@ -77,17 +78,22 @@ public class JScrollBarOrientationQueryTest {
   private static class MyScrollBar extends JScrollBar {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetOrientationInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     public MyScrollBar(int value, int extent, int min, int max) {
       super(HORIZONTAL, value, extent, min, max);
     }
 
     @Override public int getOrientation() {
-      methodGetOrientationInvoked = true;
+      if (recording) methodInvocations.invoked("getOrientation");
       return super.getOrientation();
     }
 
-    boolean methodGetOrientationWasInvoked() { return methodGetOrientationInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

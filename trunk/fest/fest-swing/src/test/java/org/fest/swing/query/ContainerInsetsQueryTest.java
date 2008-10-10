@@ -15,21 +15,21 @@
  */
 package org.fest.swing.query;
 
+import static javax.swing.BorderFactory.createEmptyBorder;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import java.awt.Insets;
 
 import javax.swing.JButton;
 
+import org.fest.swing.core.ScreenLock;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.ScreenLock;
-import org.fest.swing.testing.TestWindow;
-
-import static javax.swing.BorderFactory.createEmptyBorder;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ContainerInsetsQuery}</code>.
@@ -41,10 +41,12 @@ import static org.fest.swing.testing.TestGroups.*;
 public class ContainerInsetsQueryTest {
 
   private MyWindow window;
+  private MyButton button;
 
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
     window = MyWindow.createNew();
+    button = window.button;
     window.display();
   }
 
@@ -54,9 +56,10 @@ public class ContainerInsetsQueryTest {
   }
 
   public void shouldReturnInsetsOfJComponent() {
-    Insets insets = ContainerInsetsQuery.insetsOf(window.button);
+    button.startRecording();
+    Insets insets = ContainerInsetsQuery.insetsOf(button);
     assertThat(insets).isEqualTo(new Insets(6, 7, 8, 9));
-    assertThat(window.button.methodGetInsetsWasInvoked()).isTrue();
+    button.requireInvoked("getInsets");
   }
 
   private static class MyWindow extends TestWindow {
@@ -78,17 +81,22 @@ public class ContainerInsetsQueryTest {
   private static class MyButton extends JButton {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetInsetsInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     public MyButton(String text) {
       super(text);
     }
 
     @Override public Insets getInsets() {
-      methodGetInsetsInvoked = true;
+      if (recording) methodInvocations.invoked("getInsets");
       return super.getInsets();
     }
 
-    boolean methodGetInsetsWasInvoked() { return methodGetInsetsInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

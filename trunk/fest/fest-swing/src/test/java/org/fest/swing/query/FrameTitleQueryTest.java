@@ -15,16 +15,17 @@
  */
 package org.fest.swing.query;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link FrameTitleQuery}</code>.
@@ -48,28 +49,34 @@ public class FrameTitleQueryTest {
   }
 
   public void shouldReturnTitleOfFrame() {
+    window.startRecording();
     assertThat(FrameTitleQuery.titleOf(window)).isEqualTo("FrameTitleQueryTest");
-    assertThat(window.methodGetTitleWasInvoked()).isTrue();
+    window.requireInvoked("getTitle");
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
     static MyWindow createNew() {
       return new MyWindow();
     }
-
-    private boolean methodGetTitleInvoked;
 
     private MyWindow() {
       super(FrameTitleQueryTest.class);
     }
 
     @Override public String getTitle() {
-      methodGetTitleInvoked = true;
+      if (recording) methodInvocations.invoked("getTitle");
       return super.getTitle();
     }
 
-    boolean methodGetTitleWasInvoked() { return methodGetTitleInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

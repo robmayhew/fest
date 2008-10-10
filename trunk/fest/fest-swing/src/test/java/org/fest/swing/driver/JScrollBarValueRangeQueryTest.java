@@ -15,18 +15,19 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import javax.swing.JScrollBar;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JScrollBarValueRangeQuery}</code>.
@@ -52,11 +53,12 @@ public class JScrollBarValueRangeQueryTest {
   }
 
   public void shouldReturnMinimumAndMaximumValuesOfJScrollBar() {
+    scrollBar.startRecording();
     ValueRange valueRange = JScrollBarValueRangeQuery.valueRangeOf(scrollBar);
     assertThat(valueRange.minimum).isEqualTo(6);
     assertThat(valueRange.maximum).isEqualTo(10);
-    assertThat(scrollBar.methodGetMaximumWasInvoked()).isTrue();
-    assertThat(scrollBar.methodGetMinimumWasInvoked()).isTrue();
+    scrollBar.requireInvoked("getMaximum")
+             .requireInvoked("getMinimum");
   }
 
   private static class MyWindow extends TestWindow {
@@ -77,24 +79,27 @@ public class JScrollBarValueRangeQueryTest {
   private static class MyScrollBar extends JScrollBar {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetMaximumInvoked;
-    private boolean methodGetMinimumInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     public MyScrollBar(int value, int extent, int min, int max) {
       super(HORIZONTAL, value, extent, min, max);
     }
 
     @Override public int getMaximum() {
-      methodGetMaximumInvoked = true;
+      if (recording) methodInvocations.invoked("getMaximum");
       return super.getMaximum();
     }
 
     @Override public int getMinimum() {
-      methodGetMinimumInvoked = true;
+      if (recording) methodInvocations.invoked("getMinimum");
       return super.getMinimum();
     }
 
-    boolean methodGetMaximumWasInvoked() { return methodGetMaximumInvoked; }
-    boolean methodGetMinimumWasInvoked() { return methodGetMinimumInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

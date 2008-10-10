@@ -15,16 +15,17 @@
  */
 package org.fest.swing.query;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentVisibleQuery}</code>.
@@ -48,34 +49,41 @@ public class ComponentVisibleQueryTest {
   }
 
   public void shouldIndicateIfComponentIsNotVisible() {
+    window.startRecording();
     assertThat(ComponentVisibleQuery.isVisible(window)).isFalse();
-    assertThat(window.methodIsVisibleWasInvoked()).isTrue();
+    window.requireInvoked("isVisible");
   }
 
   public void shouldIndicateIfComponentIsVisible() {
     robot.showWindow(window);
+    window.startRecording();
     assertThat(ComponentVisibleQuery.isVisible(window)).isTrue();
-    assertThat(window.methodIsVisibleWasInvoked()).isTrue();
+    window.requireInvoked("isVisible");
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
     static MyWindow createNew() {
       return new MyWindow();
     }
-
-    private boolean methodIsVisibleInvoked;
 
     private MyWindow() {
       super(ComponentVisibleQueryTest.class);
     }
 
     @Override public boolean isVisible() {
-      methodIsVisibleInvoked = true;
+      if (recording) methodInvocations.invoked("isVisible");
       return super.isVisible();
     }
 
-    boolean methodIsVisibleWasInvoked() { return methodIsVisibleInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

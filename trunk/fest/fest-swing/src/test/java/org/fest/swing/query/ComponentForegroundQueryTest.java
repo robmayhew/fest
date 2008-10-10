@@ -15,21 +15,21 @@
  */
 package org.fest.swing.query;
 
+import static java.awt.Color.BLUE;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import java.awt.Color;
 import java.awt.Dimension;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static java.awt.Color.BLUE;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentForegroundQuery}</code>.
@@ -56,18 +56,20 @@ public class ComponentForegroundQueryTest {
   }
 
   public void shouldReturnComponentForeground() {
+    window.startRecording();
     assertThat(ComponentForegroundQuery.foregroundOf(window)).isEqualTo(FOREGROUND);
-    assertThat(window.methodGetForegroundWasInvoked()).isTrue();
+    window.requireInvoked("getForeground");
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
     static MyWindow createNew() {
       return new MyWindow();
     }
-
-    private boolean methodGetForegroundInvoked;
 
     private MyWindow() {
       super(ComponentForegroundQueryTest.class);
@@ -76,10 +78,14 @@ public class ComponentForegroundQueryTest {
     }
 
     @Override public Color getForeground() {
-      methodGetForegroundInvoked = true;
+      if (recording) methodInvocations.invoked("getForeground");
       return super.getForeground();
     }
 
-    boolean methodGetForegroundWasInvoked() { return methodGetForegroundInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

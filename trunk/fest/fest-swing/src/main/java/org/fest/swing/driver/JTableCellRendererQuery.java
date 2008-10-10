@@ -15,6 +15,8 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.swing.core.GuiActionRunner.execute;
+
 import java.awt.Component;
 
 import javax.swing.JTable;
@@ -22,35 +24,27 @@ import javax.swing.table.TableCellRenderer;
 
 import org.fest.swing.core.GuiQuery;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
-
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as
  * list renderer for a particular cell in a <code>{@link JTable}</code>.
+ * @see JTable#getCellRenderer(int, int)
+ * @see TableCellRenderer#getTableCellRendererComponent(JTable, Object, boolean, boolean, int, int)
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class JTableCellRendererQuery extends GuiQuery<Component> {
+final class JTableCellRendererQuery {
 
-  private final JTable table;
-  private final int row;
-  private final int column;
-
-  static Component cellRendererIn(JTable table, int row, int column) {
-    return execute(new JTableCellRendererQuery(table, row, column));
+  static Component cellRendererIn(final JTable table, final int row, final int column) {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        Object value = table.getValueAt(row, column);
+        TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+        boolean cellSelected = table.isCellSelected(row, column);
+        return cellRenderer.getTableCellRendererComponent(table, value, cellSelected, false, row, column);
+      }
+    });
   }
 
-  JTableCellRendererQuery(JTable table, int row, int column) {
-    this.table = table;
-    this.row = row;
-    this.column = column;
-  }
-
-  protected Component executeInEDT() {
-    Object value = table.getValueAt(row, column);
-    TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
-    boolean cellSelected = table.isCellSelected(row, column);
-    return cellRenderer.getTableCellRendererComponent(table, value, cellSelected, false, row, column);
-  }
+  private JTableCellRendererQuery() {}
 }

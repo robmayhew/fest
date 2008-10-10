@@ -15,20 +15,21 @@
  */
 package org.fest.swing.hierarchy;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import java.awt.Component;
 import java.util.List;
 
 import javax.swing.JButton;
 
+import org.fest.swing.core.ScreenLock;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.ScreenLock;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ContainerComponentsQuery}</code>.
@@ -53,21 +54,23 @@ public class ContainerComponentsQueryTest {
   }
 
   public void shouldReturnComponentsOfContainer() {
+    window.startRecording();
     List<Component> components = ContainerComponentsQuery.componentsOf(window.getContentPane());
     assertThat(components).containsOnly(window.button);
-    assertThat(window.methodGetComponentsWasInvoked()).isTrue();
+    window.requireInvoked("getComponents");
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    final JButton button = new JButton("A button");
+
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
     static MyWindow createNew() {
       return new MyWindow();
     }
-
-    private boolean methodGetComponentsInvoked;
-
-    final JButton button = new JButton("A button");
 
     private MyWindow() {
       super(ContainerComponentsQueryTest.class);
@@ -75,10 +78,14 @@ public class ContainerComponentsQueryTest {
     }
 
     @Override public Component[] getComponents() {
-      methodGetComponentsInvoked = true;
+      if (recording) methodInvocations.invoked("getComponents");
       return super.getComponents();
     }
 
-    boolean methodGetComponentsWasInvoked() { return methodGetComponentsInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

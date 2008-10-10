@@ -15,16 +15,17 @@
  */
 package org.fest.swing.query;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentNameQuery}</code>.
@@ -35,6 +36,7 @@ import static org.fest.swing.testing.TestGroups.*;
 @Test(groups = { GUI, EDT_ACTION })
 public class ComponentNameQueryTest {
 
+  private static final String NAME = "window";
   private Robot robot;
   private MyWindow window;
 
@@ -49,29 +51,35 @@ public class ComponentNameQueryTest {
   }
 
   public void shouldReturnComponentName() {
-    assertThat(ComponentNameQuery.nameOf(window)).isEqualTo("window");
-    assertThat(window.methodGetNameWasInvoked()).isTrue();
+    window.startRecording();
+    assertThat(ComponentNameQuery.nameOf(window)).isEqualTo(NAME);
+    window.requireInvoked("getName");
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
     static MyWindow createNew() {
       return new MyWindow();
     }
 
-    private boolean methodGetNameInvoked;
-
     private MyWindow() {
       super(ComponentNameQueryTest.class);
-      setName("window");
+      setName(NAME);
     }
 
     @Override public String getName() {
-      methodGetNameInvoked = true;
+      if (recording) methodInvocations.invoked("getName");
       return super.getName();
     }
 
-    boolean methodGetNameWasInvoked() { return methodGetNameInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

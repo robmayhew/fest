@@ -15,20 +15,20 @@
  */
 package org.fest.swing.query;
 
+import static java.awt.Font.PLAIN;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import java.awt.Font;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static java.awt.Font.PLAIN;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentFontQuery}</code>.
@@ -55,8 +55,9 @@ public class ComponentFontQueryTest {
   }
 
   public void shouldReturnComponentFont() {
+    window.startRecording();
     assertThat(ComponentFontQuery.fontOf(window)).isEqualTo(FONT);
-    assertThat(window.methodGetFontWasInvoked()).isTrue();
+    window.requireInvoked("getFont");
   }
 
   private static class MyWindow extends TestWindow {
@@ -66,7 +67,8 @@ public class ComponentFontQueryTest {
       return new MyWindow();
     }
 
-    private boolean methodGetFontInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     private MyWindow() {
       super(ComponentFontQueryTest.class);
@@ -74,10 +76,14 @@ public class ComponentFontQueryTest {
     }
 
     @Override public Font getFont() {
-      methodGetFontInvoked = true;
+      if (recording) methodInvocations.invoked("getFont");
       return super.getFont();
     }
 
-    boolean methodGetFontWasInvoked() { return methodGetFontInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

@@ -15,11 +15,10 @@
  */
 package org.fest.swing.core;
 
-import org.fest.swing.exception.ActionFailedException;
-
 import static javax.swing.SwingUtilities.isEventDispatchThread;
-
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
+
+import org.fest.swing.exception.ActionFailedException;
 
 /**
  * Understands executing an action, in the event dispatch thread, that returns a value.
@@ -61,4 +60,8 @@ public abstract class GuiQuery<T> extends GuiAction {
   protected abstract T executeInEDT() throws Throwable;
 
   final T result() { return result; }
+
+  final void clearResult() {
+    result = null;
+  }
 }

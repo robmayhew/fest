@@ -15,21 +15,22 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JSplitPaneSizeAndDividerLocationQuery}</code>.
@@ -58,12 +59,13 @@ public class JSplitPaneSizeAndDividerLocationQueryTest {
   }
 
   public void shouldReturnSizeAndDividerLocationOfJSplitPane() {
+    splitPane.startRecording();
     JSplitPaneSizeAndDividerLocation sizeAndDividerLocation =
       JSplitPaneSizeAndDividerLocationQuery.sizeAndDividerLocationOf(splitPane);
     assertThat(sizeAndDividerLocation.size()).isEqualTo(SIZE);
     assertThat(sizeAndDividerLocation.dividerLocation()).isEqualTo(DIVIDER_LOCATION);
-    assertThat(splitPane.methodGetDividerLocationWasInvoked()).isTrue();
-    assertThat(splitPane.methodGetSizeWasInvoked()).isTrue();
+    splitPane.requireInvoked("getDividerLocation")
+             .requireInvoked("getSize");
   }
 
   private static class MyWindow extends TestWindow {
@@ -86,24 +88,27 @@ public class JSplitPaneSizeAndDividerLocationQueryTest {
   private static class MySplitPane extends JSplitPane {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetDividerLocationInvoked;
-    private boolean methodGetSizeInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     MySplitPane() {
       super(HORIZONTAL_SPLIT, new JPanel(), new JPanel());
     }
 
     @Override public int getDividerLocation() {
-      methodGetDividerLocationInvoked = true;
+      if (recording) methodInvocations.invoked("getDividerLocation");
       return super.getDividerLocation();
     }
 
     @Override public Dimension getSize() {
-      methodGetSizeInvoked = true;
+      if (recording) methodInvocations.invoked("getSize");
       return super.getSize();
     }
 
-    boolean methodGetDividerLocationWasInvoked() { return methodGetDividerLocationInvoked; }
-    boolean methodGetSizeWasInvoked() { return methodGetSizeInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

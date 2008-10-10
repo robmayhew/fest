@@ -15,18 +15,19 @@
  */
 package org.fest.swing.query;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import javax.swing.JLabel;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JLabelTextQuery}</code>.
@@ -36,6 +37,8 @@ import static org.fest.swing.testing.TestGroups.*;
  */
 @Test(groups = { GUI,  EDT_ACTION })
 public class JLabelTextQueryTest {
+
+  private static final String TEXT = "Hello";
 
   private Robot robot;
   private MyLabel label;
@@ -52,14 +55,15 @@ public class JLabelTextQueryTest {
   }
 
   public void shouldReturnTextOfJLabel() {
-    assertThat(JLabelTextQuery.textOf(label)).isEqualTo("Hello");
-    assertThat(label.methodGetTextWasInvoked()).isTrue();
+    label.startRecording();
+    assertThat(JLabelTextQuery.textOf(label)).isEqualTo(TEXT);
+    label.requireInvoked("getText");
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    final MyLabel label = new MyLabel("Hello");
+    final MyLabel label = new MyLabel(TEXT);
 
     static MyWindow createNew() {
       return new MyWindow();
@@ -74,17 +78,22 @@ public class JLabelTextQueryTest {
   private static class MyLabel extends JLabel {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetTextInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     MyLabel(String text) {
       super(text);
     }
 
     @Override public String getText() {
-      methodGetTextInvoked = true;
+      if (recording) methodInvocations.invoked("getText");
       return super.getText();
     }
 
-    boolean methodGetTextWasInvoked() { return methodGetTextInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

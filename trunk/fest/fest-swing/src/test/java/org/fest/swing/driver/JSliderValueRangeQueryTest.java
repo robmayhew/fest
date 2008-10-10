@@ -15,18 +15,19 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import javax.swing.JSlider;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JSliderValueRangeQuery}</code>.
@@ -54,11 +55,12 @@ public class JSliderValueRangeQueryTest {
   }
 
   public void shouldReturnMaximumValueOfJSlider() {
+    slider.startRecording();
     ValueRange valueRange = JSliderValueRangeQuery.valueRangeOf(slider);
     assertThat(valueRange.minimum).isEqualTo(MINIMUM);
     assertThat(valueRange.maximum).isEqualTo(MAXIMUM);
-    assertThat(slider.methodGetMinimumWasInvoked()).isTrue();
-    assertThat(slider.methodGetMaximumWasInvoked()).isTrue();
+    slider.requireInvoked("getMaximum")
+          .requireInvoked("getMinimum");
   }
 
   private static class MyWindow extends TestWindow {
@@ -79,24 +81,27 @@ public class JSliderValueRangeQueryTest {
   private static class MySlider extends JSlider {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetMaximumInvoked;
-    private boolean methodGetMinimumInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     MySlider(int min, int max, int value) {
       super(min, max, value);
     }
 
     @Override public int getMaximum() {
-      methodGetMaximumInvoked = true;
+      if (recording) methodInvocations.invoked("getMaximum");
       return super.getMaximum();
     }
 
     @Override public int getMinimum() {
-      methodGetMinimumInvoked = true;
+      if (recording) methodInvocations.invoked("getMinimum");
       return super.getMinimum();
     }
 
-    boolean methodGetMaximumWasInvoked() { return methodGetMaximumInvoked; }
-    boolean methodGetMinimumWasInvoked() { return methodGetMinimumInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

@@ -15,18 +15,19 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import javax.swing.JScrollBar;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JScrollBarValueQuery}</code>.
@@ -54,8 +55,9 @@ public class JScrollBarValueQueryTest {
   }
 
   public void shouldReturnValueOfJScrollBar() {
+    scrollBar.startRecording();
     assertThat(JScrollBarValueQuery.valueOf(scrollBar)).isEqualTo(VALUE);
-    assertThat(scrollBar.methodGetValueWasInvoked()).isTrue();
+    scrollBar.requireInvoked("getValue");
   }
 
   private static class MyWindow extends TestWindow {
@@ -76,17 +78,22 @@ public class JScrollBarValueQueryTest {
   private static class MyScrollBar extends JScrollBar {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetValueInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     public MyScrollBar(int value, int extent, int min, int max) {
       super(HORIZONTAL, value, extent, min, max);
     }
 
     @Override public int getValue() {
-      methodGetValueInvoked = true;
+      if (recording) methodInvocations.invoked("getValue");
       return super.getValue();
     }
 
-    boolean methodGetValueWasInvoked() { return methodGetValueInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

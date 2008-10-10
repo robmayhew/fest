@@ -15,15 +15,16 @@
  */
 package org.fest.swing.query;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
+import org.fest.swing.core.ScreenLock;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.ScreenLock;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentShowingQuery}</code>.
@@ -47,34 +48,41 @@ public class ComponentShowingQueryTest {
   }
 
   public void shouldIndicateIfComponentIsNotShowing() {
+    window.startRecording();
     assertThat(ComponentShowingQuery.isShowing(window)).isFalse();
-    assertThat(window.methodIsShowingWasInvoked()).isTrue();
+    window.requireInvoked("isShowing");
   }
 
   public void shouldIndicateIfComponentIsShowing() {
     window.display();
+    window.startRecording();
     assertThat(ComponentShowingQuery.isShowing(window)).isTrue();
-    assertThat(window.methodIsShowingWasInvoked()).isTrue();
+    window.requireInvoked("isShowing");
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
     static MyWindow createNew() {
       return new MyWindow();
     }
-
-    private boolean methodIsShowingInvoked;
 
     private MyWindow() {
       super(ComponentShowingQueryTest.class);
     }
 
     @Override public boolean isShowing() {
-      methodIsShowingInvoked = true;
+      if (recording) methodInvocations.invoked("isShowing");
       return super.isShowing();
     }
 
-    boolean methodIsShowingWasInvoked() { return methodIsShowingInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

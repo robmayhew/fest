@@ -15,13 +15,14 @@
  */
 package org.fest.swing.core;
 
-import org.fest.swing.exception.UnexpectedException;
-
-import static javax.swing.SwingUtilities.*;
-
+import static javax.swing.SwingUtilities.invokeLater;
+import static javax.swing.SwingUtilities.isEventDispatchThread;
 import static org.fest.swing.core.GuiActionRunner.ActionExecutedCondition.untilExecuted;
 import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.exception.UnexpectedException.unexpected;
+import static org.fest.util.Strings.concat;
+
+import org.fest.swing.exception.UnexpectedException;
 
 /**
  * Understands running instances of <code>{@link GuiQuery}</code> and <code>{@link GuiTask}</code>.
@@ -43,7 +44,6 @@ public class GuiActionRunner {
     run(query, untilExecuted(query));
     return resultOf(query);
   }
-
 
   /**
    * Executes the given task in the event dispatch thread. This method waits until the task has finished its execution.
@@ -82,8 +82,10 @@ public class GuiActionRunner {
   }
 
   private static <T> T resultOf(GuiQuery<T> query) {
+    T result = query.result();
+    query.clearResult();
     rethrowCatchedExceptionIn(query);
-    return query.result();
+    return result;
   }
 
   /**
@@ -93,7 +95,7 @@ public class GuiActionRunner {
    */
   static void rethrowCatchedExceptionIn(GuiAction action) {
     Throwable catchedException = action.catchedException();
-    // TODO clear action
+    action.clearCatchedException();
     if (catchedException != null) throw unexpected(catchedException);
   }
 
@@ -105,8 +107,12 @@ public class GuiActionRunner {
     }
 
     private ActionExecutedCondition(GuiAction action) {
-      super("action to be executed in the EDT");
+      super(concat("action ", actionTypeName(action), " to be executed in Swing's event dispatch thread"));
       this.action = action;
+    }
+
+    private static String actionTypeName(GuiAction action) {
+      return action.getClass().getName();
     }
 
     public boolean test() {

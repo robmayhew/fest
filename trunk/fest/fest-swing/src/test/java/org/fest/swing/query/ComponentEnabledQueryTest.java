@@ -15,18 +15,19 @@
  */
 package org.fest.swing.query;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.BooleanProvider;
-import org.fest.swing.testing.TestWindow;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.task.ComponentSetEnabledTask.setEnabled;
-import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.BooleanProvider;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link ComponentEnabledQuery}</code>.
@@ -53,8 +54,10 @@ public class ComponentEnabledQueryTest {
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
   public void shouldIndicateIfComponentIsEnabled(final boolean enabled) {
     setEnabled(window, enabled);
+    robot.waitForIdle();
+    window.startRecording();
     assertThat(ComponentEnabledQuery.isEnabled(window)).isEqualTo(enabled);
-    assertThat(window.methodIsEnabledWasInvoked()).isTrue();
+    window.requireInvoked("isEnabled");
   }
 
   private static class MyWindow extends TestWindow {
@@ -64,17 +67,22 @@ public class ComponentEnabledQueryTest {
       return new MyWindow();
     }
 
-    private boolean methodIsEnabledInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     private MyWindow() {
       super(ComponentEnabledQueryTest.class);
     }
 
     @Override public boolean isEnabled() {
-      methodIsEnabledInvoked = true;
+      if (recording) methodInvocations.invoked("isEnabled");
       return super.isEnabled();
     }
 
-    boolean methodIsEnabledWasInvoked() { return methodIsEnabledInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

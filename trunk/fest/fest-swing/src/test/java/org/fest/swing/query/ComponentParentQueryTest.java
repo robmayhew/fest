@@ -15,21 +15,22 @@
  */
 package org.fest.swing.query;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import java.awt.Container;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentParentQuery}</code>
@@ -41,11 +42,12 @@ import static org.fest.swing.testing.TestGroups.*;
 public class ComponentParentQueryTest {
 
   private Robot robot;
-  private MyWindow window;
+  private MyButton button;
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = MyWindow.createNew();
+    MyWindow window = MyWindow.createNew();
+    button = window.button;
     robot.showWindow(window);
   }
 
@@ -54,10 +56,11 @@ public class ComponentParentQueryTest {
   }
 
   public void shouldReturnParentOfComponent() {
-    Container parent = ComponentParentQuery.parentOf(window.button);
+    button.startRecording();
+    Container parent = ComponentParentQuery.parentOf(button);
     assertThat(parent).isInstanceOf(JPanel.class);
     assertThat(parent.getName()).isEqualTo("null.contentPane");
-    assertThat(window.button.methodGetParentWasInvoked()).isTrue();
+    button.requireInvoked("getParent");
   }
 
   private static class MyWindow extends TestWindow {
@@ -78,17 +81,22 @@ public class ComponentParentQueryTest {
   private static class MyButton extends JButton {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetParentInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     public MyButton(String text) {
       super(text);
     }
 
     @Override public Container getParent() {
-      methodGetParentInvoked = true;
+      if (recording) methodInvocations.invoked("getParent");
       return super.getParent();
     }
 
-    boolean methodGetParentWasInvoked() { return methodGetParentInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

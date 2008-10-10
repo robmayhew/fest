@@ -15,23 +15,25 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import javax.swing.JSlider;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JSliderMaximumQuery}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 @Test(groups = { GUI, EDT_ACTION })
 public class JSliderMaximumQueryTest {
@@ -53,8 +55,9 @@ public class JSliderMaximumQueryTest {
   }
 
   public void shouldReturnMaximumValueOfJSlider() {
+    slider.startRecording();
     assertThat(JSliderMaximumQuery.maximumOf(slider)).isEqualTo(MAXIMUM);
-    assertThat(slider.methodGetMaximumWasInvoked()).isTrue();
+    slider.requireInvoked("getMaximum");
   }
 
   private static class MyWindow extends TestWindow {
@@ -75,17 +78,22 @@ public class JSliderMaximumQueryTest {
   private static class MySlider extends JSlider {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetMaximumInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     MySlider(int min, int max, int value) {
       super(min, max, value);
     }
 
     @Override public int getMaximum() {
-      methodGetMaximumInvoked = true;
+      if (recording) methodInvocations.invoked("getMaximum");
       return super.getMaximum();
     }
 
-    boolean methodGetMaximumWasInvoked() { return methodGetMaximumInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

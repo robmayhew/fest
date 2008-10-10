@@ -15,20 +15,21 @@
  */
 package org.fest.swing.query;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPopupMenu;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JMenuPopupMenuQuery}</code>.
@@ -54,10 +55,12 @@ public class JMenuPopupMenuQueryTest {
   }
 
   public void shouldReturnJPopupMenuInJMenu() {
+    JPopupMenu expected = menu.getPopupMenu();
+    menu.startRecording();
     JPopupMenu actual = JMenuPopupMenuQuery.popupMenuOf(menu);
-    assertThat(menu.methodGetPopupMenuWasInvoked()).isTrue();
     assertThat(actual).isNotNull()
-                      .isSameAs(menu.getPopupMenu());
+                      .isSameAs(expected);
+    menu.requireInvoked("getPopupMenu");
   }
 
   private static class MyWindow extends TestWindow {
@@ -80,17 +83,22 @@ public class JMenuPopupMenuQueryTest {
   private static class MyMenu extends JMenu {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetPopupMenuInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     MyMenu(String text) {
       super(text);
     }
 
     @Override public JPopupMenu getPopupMenu() {
-      methodGetPopupMenuInvoked = true;
+      if (recording) methodInvocations.invoked("getPopupMenu");
       return super.getPopupMenu();
     }
 
-    boolean methodGetPopupMenuWasInvoked() { return methodGetPopupMenuInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

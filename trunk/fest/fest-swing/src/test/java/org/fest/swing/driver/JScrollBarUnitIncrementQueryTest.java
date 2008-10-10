@@ -15,18 +15,19 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import javax.swing.JScrollBar;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JScrollBarUnitIncrementQuery}</code>.
@@ -54,8 +55,9 @@ public class JScrollBarUnitIncrementQueryTest {
   }
 
   public void shouldReturnMinimumAndMaximumValuesOfJScrollBar() {
+    scrollBar.startRecording();
     assertThat(JScrollBarUnitIncrementQuery.unitIncrementOf(scrollBar)).isEqualTo(UNIT_INCREMENT);
-    assertThat(scrollBar.methodGetUnitIncrementWasInvoked()).isTrue();
+    scrollBar.requireInvoked("getUnitIncrement");
   }
 
   private static class MyWindow extends TestWindow {
@@ -76,7 +78,8 @@ public class JScrollBarUnitIncrementQueryTest {
   private static class MyScrollBar extends JScrollBar {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetUnitIncrementInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     public MyScrollBar(int value, int extent, int min, int max) {
       super(HORIZONTAL, value, extent, min, max);
@@ -84,10 +87,14 @@ public class JScrollBarUnitIncrementQueryTest {
     }
 
     @Override public int getUnitIncrement() {
-      methodGetUnitIncrementInvoked = true;
+      if (recording) methodInvocations.invoked("getUnitIncrement");
       return super.getUnitIncrement();
     }
 
-    boolean methodGetUnitIncrementWasInvoked() { return methodGetUnitIncrementInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

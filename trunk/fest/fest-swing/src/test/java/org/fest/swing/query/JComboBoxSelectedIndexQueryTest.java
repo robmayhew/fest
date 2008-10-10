@@ -15,20 +15,21 @@
  */
 package org.fest.swing.query;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.task.JComboBoxSetSelectedIndexTask.setSelectedIndex;
+import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.GUI;
+
 import javax.swing.JComboBox;
 
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.task.JComboBoxSetSelectedIndexTask.setSelectedIndex;
-import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JComboBoxSelectedIndexQuery}</code>.
@@ -55,9 +56,10 @@ public class JComboBoxSelectedIndexQueryTest {
 
   @Test(dataProvider = "selectedIndices", groups = EDT_ACTION)
   public void shouldReturnItemCountOfJComboBox(final int selectedIndex) {
+    comboBox.startRecording();
     setSelectedIndex(comboBox, selectedIndex);
     assertThat(JComboBoxSelectedIndexQuery.selectedIndexOf(comboBox)).isEqualTo(selectedIndex);
-    assertThat(comboBox.methodGetSelectedIndexWasInvoked()).isTrue();
+    comboBox.requireInvoked("getSelectedIndex");
   }
 
   @DataProvider(name = "selectedIndices") public Object[][] selectedIndices() {
@@ -82,17 +84,22 @@ public class JComboBoxSelectedIndexQueryTest {
   private static class MyComboBox extends JComboBox {
     private static final long serialVersionUID = 1L;
 
-    private boolean methodGetSelectedIndexInvoked;
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     MyComboBox(Object... items) {
       super(items);
     }
 
     @Override public int getSelectedIndex() {
-      methodGetSelectedIndexInvoked = true;
+      if (recording) methodInvocations.invoked("getSelectedIndex");
       return super.getSelectedIndex();
     }
 
-    boolean methodGetSelectedIndexWasInvoked() { return methodGetSelectedIndexInvoked; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

@@ -15,15 +15,14 @@
  */
 package org.fest.swing.testing;
 
+import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.util.Strings.concat;
+
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import org.fest.swing.core.GuiTask;
-
-import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
-
-import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.util.Strings.concat;
 
 
 /**
@@ -38,7 +37,7 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class TestTable extends JTable {
+public class TestTable extends JTable {
   private static final long serialVersionUID = 1L;
 
   private final CustomModel model;
