@@ -23,33 +23,27 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the text of a 
  * <code>{@link JTextComponent}</code>.
+ * @see JTextComponent#getText()
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class JTextComponentTextQuery extends GuiQuery<String> {
-  private final JTextComponent textComponent;
+public final class JTextComponentTextQuery {
 
   /**
    * Returns the text of the given <code>{@link JTextComponent}</code>. This action is executed in the event dispatch
    * thread.
    * @param textComponent the given <code>JTextComponent</code>.
    * @return the text of the given <code>JTextComponent</code>.
+   * @see JTextComponent#getText()
    */
-  public static String textOf(JTextComponent textComponent) {
-    return execute(new JTextComponentTextQuery(textComponent));
+  public static String textOf(final JTextComponent textComponent) {
+    return execute(new GuiQuery<String>() {
+      protected String executeInEDT() {
+        return textComponent.getText();
+      }
+    });
   }
 
-  JTextComponentTextQuery(JTextComponent textComponent) {
-    this.textComponent = textComponent;
-  }
-
-  /**
-   * Returns the text in this query's <code>{@link JTextComponent}</code>. This action is executed in the event dispatch
-   * thread.
-   * @return the text in this query's <code>JTextComponent</code>.
-   */
-  protected String executeInEDT() {
-    return textComponent.getText();
-  }
+  private JTextComponentTextQuery() {}
 }

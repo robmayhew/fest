@@ -15,23 +15,19 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * 
  * @author Alex Ruiz
  */
-class JToolBarDockingSourceQuery extends GuiQuery<Container> {
+final class JToolBarDockingSourceQuery {
   
-  private final JToolBar toolBar;
-
-  static Container dockingSourceOf(JToolBar toolBar) {
-    return execute(new JToolBarDockingSourceQuery(toolBar));
+  static Container dockingSourceOf(final JToolBar toolBar) {
+    return execute(new GuiQuery<Container>() {
+      protected Container executeInEDT() {
+        try {
+          return field("dockingSource").ofType(Container.class).in(toolBar.getUI()).get();
+        } catch (RuntimeException e) {
+          return null;
+        }
+      }
+    });
   }
 
-  JToolBarDockingSourceQuery(JToolBar toolBar) {
-    this.toolBar = toolBar;
-  }
-
-  protected Container executeInEDT() {
-    try {
-      return field("dockingSource").ofType(Container.class).in(toolBar.getUI()).get();
-    } catch (RuntimeException e) {
-      return null;
-    }
-  }
+  private JToolBarDockingSourceQuery() {}
 }

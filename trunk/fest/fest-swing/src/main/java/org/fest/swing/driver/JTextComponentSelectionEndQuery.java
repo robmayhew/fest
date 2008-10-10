@@ -24,22 +24,19 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the end position of the selected text in 
  * a <code>{@link JTextComponent}</code>.
+ * @see JTextComponent#getSelectionEnd()
  * 
  * @author Alex Ruiz
  */
-class JTextComponentSelectionEndQuery extends GuiQuery<Integer> {
+final class JTextComponentSelectionEndQuery {
 
-  private final JTextComponent textBox;
-
-  static int selectionEndOf(JTextComponent textBox) {
-    return execute(new JTextComponentSelectionEndQuery(textBox));
+  static int selectionEndOf(final JTextComponent textBox) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return textBox.getSelectionEnd();
+      }
+    });
   }
   
-  JTextComponentSelectionEndQuery(JTextComponent textBox) {
-    this.textBox = textBox;
-  }
-  
-  protected Integer executeInEDT() {
-    return textBox.getSelectionEnd();
-  }
+  private JTextComponentSelectionEndQuery() {}
 }

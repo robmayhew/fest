@@ -27,19 +27,15 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * 
  * @author Alex Ruiz
  */
-class JTextComponentSelectionStartQuery extends GuiQuery<Integer> {
+final class JTextComponentSelectionStartQuery {
 
-  private final JTextComponent textBox;
-
-  static int selectionStartOf(JTextComponent textBox) {
-    return execute(new JTextComponentSelectionStartQuery(textBox));
+  static int selectionStartOf(final JTextComponent textBox) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return textBox.getSelectionStart();
+      }
+    });
   }
   
-  JTextComponentSelectionStartQuery(JTextComponent textBox) {
-    this.textBox = textBox;
-  }
-  
-  protected Integer executeInEDT() {
-    return textBox.getSelectionStart();
-  }
+  private JTextComponentSelectionStartQuery() {}
 }

@@ -89,6 +89,8 @@ public class JPopupMenuInvokerQueryTest {
 
     private boolean getInvokerCalled;
 
+    MyPopupMenu() {}
+    
     @Override public Component getInvoker() {
       getInvokerCalled = true;
       return super.getInvoker();

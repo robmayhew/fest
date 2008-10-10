@@ -15,46 +15,86 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.text.JTextComponent;
+import javax.swing.JTextField;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JTextComponentSelectTextTask.selectTextInRange;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTextComponentSelectionStartQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JTextComponentSelectionStartQueryTest {
 
-  private JTextComponent textBox;
-  private int selectionStart;
-  private JTextComponentSelectionStartQuery query;
-  
+  private Robot robot;
+  private MyTextField textField;
+
   @BeforeMethod public void setUp() {
-    textBox = createMock(JTextComponent.class);
-    selectionStart = 8;
-    query = new JTextComponentSelectionStartQuery(textBox);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    textField = window.textField;
+    robot.showWindow(window);
+  }
+  
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
   
   public void shouldReturnSelectionStartOfJTextComponent() {
-    new EasyMockTemplate(textBox) {
-      protected void expectations() {
-        expect(textBox.getSelectionStart()).andReturn(selectionStart);
-      }
+    selectTextInRange(textField, 2, 5);
+    robot.waitForIdle();
+    textField.startRecording();
+    assertThat(JTextComponentSelectionStartQuery.selectionStartOf(textField)).isEqualTo(2);
+    textField.requireInvoked("getSelectionStart");
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(selectionStart);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final MyTextField textField = new MyTextField();
+    
+    private MyWindow() {
+      super(JTextComponentSelectionStartQueryTest.class);
+      addComponents(textField);
+    }
+  }
+  
+  private static class MyTextField extends JTextField {
+    private static final long serialVersionUID = 1L;
+
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
+    MyTextField() {
+      super(20);
+      setText("Hello World");
+    }
+
+    @Override public int getSelectionStart() {
+      if (recording) methodInvocations.invoked("getSelectionStart");
+      return super.getSelectionStart();
+    }
+
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

@@ -1,9 +1,15 @@
 package org.fest.swing.driver;
 
+import java.awt.Frame;
+import java.awt.Window;
+
 import javax.swing.JToolBar;
+import javax.swing.plaf.ToolBarUI;
 import javax.swing.plaf.basic.BasicToolBarUI;
 
 import org.fest.swing.core.GuiQuery;
+
+import static javax.swing.SwingUtilities.getWindowAncestor;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 
@@ -14,19 +20,19 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class JToolBarIsFloatingQuery extends GuiQuery<Boolean> {
+final class JToolBarIsFloatingQuery {
   
-  private final BasicToolBarUI ui;
-
-  static boolean isJToolBarFloating(BasicToolBarUI ui) {
-    return execute(new JToolBarIsFloatingQuery(ui));
+  static boolean isJToolBarFloating(final JToolBar toolBar) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        ToolBarUI ui = toolBar.getUI();
+        if (ui instanceof BasicToolBarUI) return ((BasicToolBarUI)ui).isFloating();
+        // Have to guess; probably ought to check for sibling components
+        Window w = getWindowAncestor(toolBar);
+        return !(w instanceof Frame) && toolBar.getParent().getComponentCount() == 1;
+      }
+    });
   }
   
-  JToolBarIsFloatingQuery(BasicToolBarUI ui) {
-    this.ui = ui;
-  }
-
-  protected Boolean executeInEDT() {
-    return ui.isFloating();
-  }
+  private JToolBarIsFloatingQuery() {}
 }

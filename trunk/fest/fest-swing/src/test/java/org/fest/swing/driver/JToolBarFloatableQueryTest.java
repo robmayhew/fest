@@ -15,46 +15,103 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.BorderLayout;
+
+import javax.swing.JButton;
 import javax.swing.JToolBar;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.BooleanProvider;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import static java.awt.BorderLayout.NORTH;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JToolBarFloatableQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JToolBarFloatableQueryTest {
 
-  private JToolBar toolBar;
-  private JToolBarFloatableQuery query;
+  private Robot robot;
+  private MyToolBar toolBar;
   
   @BeforeMethod public void setUp() {
-    toolBar = createMock(JToolBar.class);
-    query = new JToolBarFloatableQuery(toolBar);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    toolBar = window.toolBar;
+    robot.showWindow(window);
+  }
+  
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_ACTION)
   public void shouldIndicateWhetherJToolBarIsFloatable(final boolean floatable) {
-    new EasyMockTemplate(toolBar) {
-      protected void expectations() {
-        expect(toolBar.isFloatable()).andReturn(floatable);
-      }
+    setFloatable(toolBar, floatable);
+    robot.waitForIdle();
+    toolBar.startRecording();
+    assertThat(JToolBarFloatableQuery.isFloatable(toolBar)).isEqualTo(floatable);
+    toolBar.requireInvoked("isFloatable");
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(floatable);
+  private static void setFloatable(final JToolBar toolBar, final boolean floatable) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        toolBar.setFloatable(floatable);
       }
-    }.run();
+    });
+  }
+  
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final MyToolBar toolBar = new MyToolBar();
+    
+    private MyWindow() {
+      super(JToolBarFloatableQueryTest.class);
+      setLayout(new BorderLayout());
+      add(toolBar, NORTH);
+    }
+  }
+  
+  private static class MyToolBar extends JToolBar {
+    private static final long serialVersionUID = 1L;
+
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
+    MyToolBar() {
+      super(HORIZONTAL);
+      add(new JButton("Click me"));
+    }
+
+    @Override public boolean isFloatable() {
+      if (recording) methodInvocations.invoked("isFloatable");
+      return super.isFloatable();
+    }
+
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

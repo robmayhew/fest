@@ -12,19 +12,15 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * 
  * @author Alex Ruiz
  */
-class JTextComponentSelectedTextQuery extends GuiQuery<String> {
+final class JTextComponentSelectedTextQuery {
   
-  private final JTextComponent textBox;
-
-  static String selectedTextOf(JTextComponent textBox) {
-    return execute(new JTextComponentSelectedTextQuery(textBox));
+  static String selectedTextOf(final JTextComponent textBox) {
+    return execute(new GuiQuery<String>() {
+      protected String executeInEDT() {
+        return textBox.getSelectedText();
+      }
+    });
   }
   
-  private JTextComponentSelectedTextQuery(JTextComponent textBox) {
-    this.textBox = textBox;
-  }
-  
-  protected String executeInEDT() {
-    return textBox.getSelectedText();
-  }
+  private JTextComponentSelectedTextQuery() {}
 }

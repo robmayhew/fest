@@ -13,19 +13,15 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class JToolBarFloatableQuery extends GuiQuery<Boolean> {
+final class JToolBarFloatableQuery {
   
-  private final JToolBar toolBar;
-
-  static boolean isFloatable(JToolBar toolBar) {
-    return execute(new JToolBarFloatableQuery(toolBar));
+  static boolean isFloatable(final JToolBar toolBar) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return toolBar.isFloatable();
+      }
+    });
   }
   
-  JToolBarFloatableQuery(JToolBar toolBar) {
-    this.toolBar = toolBar;
-  }
-
-  protected Boolean executeInEDT() {
-    return toolBar.isFloatable();
-  }
+  private JToolBarFloatableQuery() {}
 }

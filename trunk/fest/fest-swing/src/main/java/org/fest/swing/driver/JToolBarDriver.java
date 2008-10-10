@@ -14,11 +14,12 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Point;
+import java.awt.Window;
 
 import javax.swing.JToolBar;
-import javax.swing.plaf.ToolBarUI;
-import javax.swing.plaf.basic.BasicToolBarUI;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
@@ -29,10 +30,8 @@ import static org.fest.swing.driver.ComponentLocationQuery.locationOf;
 import static org.fest.swing.driver.JToolBarDockingSourceQuery.dockingSourceOf;
 import static org.fest.swing.driver.JToolBarFloatableQuery.isFloatable;
 import static org.fest.swing.driver.JToolBarIsFloatingQuery.isJToolBarFloating;
-import static org.fest.swing.driver.JToolBarUIQuery.uiOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -61,11 +60,7 @@ public class JToolBarDriver extends JComponentDriver {
    * @return <code>true</code> if the <code>JToolBar</code> is floating, <code>false</code> otherwise.
    */
   public boolean isFloating(JToolBar toolBar) {
-    ToolBarUI ui = uiOf(toolBar);
-    if (ui instanceof BasicToolBarUI) return isJToolBarFloating((BasicToolBarUI)ui);
-    // Have to guess; probably ought to check for sibling components
-    Window w = getWindowAncestor(toolBar);
-    return !(w instanceof Frame) && parentOf(toolBar).getComponentCount() == 1;
+    return isJToolBarFloating(toolBar);
   }
 
   /**
