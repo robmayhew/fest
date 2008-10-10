@@ -43,7 +43,7 @@ import static org.fest.swing.driver.JTableRowCountQuery.rowCountOf;
 import static org.fest.swing.driver.JTableSelectedCellQuery.selectedCellOf;
 import static org.fest.swing.driver.JTableSelectedRowCountQuery.selectedRowCountOf;
 import static org.fest.swing.driver.JTableSelectedRowsQuery.selectedRowsIn;
-import static org.fest.swing.driver.JTableSelectionQuery.hasSelection;
+import static org.fest.swing.driver.JTableHasSelectionQuery.hasSelection;
 import static org.fest.swing.driver.JTableSingleRowCellSelectedQuery.isCellSelected;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.util.Arrays.assertEquals;

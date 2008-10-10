@@ -15,19 +15,20 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JTableCell.cell;
+import static org.fest.swing.driver.JTableSelectCellsTask.selectCells;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTableSelectedCellQuery}</code>.
@@ -53,24 +54,17 @@ public class JTableSelectedCellQueryTest {
   }
 
   public void shouldReturnSelectedCellOfJTable() {
-    final int row = 0;
-    final int column = 2;
-    selectInTable(row, column);
+    selectInTable(cell(0, 2));
     table.startRecording();
     JTableCell selectedCell = JTableSelectedCellQuery.selectedCellOf(table);
-    assertThat(selectedCell.row).isEqualTo(row);
-    assertThat(selectedCell.column).isEqualTo(column);
+    assertThat(selectedCell.row).isEqualTo(0);
+    assertThat(selectedCell.column).isEqualTo(2);
     table.requireInvoked("getSelectedColumn")
          .requireInvoked("getSelectedRow");
   }
 
-  private void selectInTable(final int row, final int column) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        table.setColumnSelectionInterval(column, column);
-        table.setRowSelectionInterval(row, row);
-      }
-    });
+  private void selectInTable(final JTableCell cell) {
+    selectCells(table, cell, cell);
     robot.waitForIdle();
   }
 
