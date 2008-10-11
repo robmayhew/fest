@@ -47,7 +47,9 @@ import static org.fest.util.Strings.concat;
 @Test(groups = GUI)
 public class JScrollBarDriverTest {
 
-  static final int MINIMUM = 10;
+  private static final int MINIMUM = 10;
+  private static final int MAXIMUM = 80;
+  private static final int EXTENT = 10;
 
   private Robot robot;
   private JScrollBar scrollBar;
@@ -267,6 +269,20 @@ public class JScrollBarDriverTest {
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldScrollToMaximum(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    driver.scrollToMaximum(scrollBar);
+    assertThatScrollBarValueIsEqualTo(MAXIMUM - EXTENT); // JScrollBar value cannot go to maximum
+  }
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldScrollToMinimum(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    driver.scrollToMinimum(scrollBar);
+    assertThatScrollBarValueIsEqualTo(MINIMUM);
+  }
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotScrollToGivenPositionIfScrollBarIsNotEnabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     clearAndDisableScrollBar();
@@ -325,10 +341,10 @@ public class JScrollBarDriverTest {
       super(JScrollBarDriverTest.class);
       add(scrollBar);
       scrollBar.setPreferredSize(new Dimension(20, 100));
-      scrollBar.setBlockIncrement(10);
+      scrollBar.setBlockIncrement(EXTENT);
       scrollBar.setValue(30);
       scrollBar.setMinimum(MINIMUM);
-      scrollBar.setMaximum(80);
+      scrollBar.setMaximum(MAXIMUM);
       setPreferredSize(new Dimension(60, 200));
     }
   }

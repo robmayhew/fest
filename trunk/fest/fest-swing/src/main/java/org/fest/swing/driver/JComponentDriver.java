@@ -22,6 +22,7 @@ import javax.swing.KeyStroke;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.query.JComponentVisibleRectQuery;
 
 import static java.awt.event.KeyEvent.VK_UNDEFINED;
 

@@ -21,10 +21,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.util.Collection;
 
-import javax.swing.JMenu;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -60,7 +57,7 @@ import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.swing.task.ComponentRequestFocusTask.giveFocusTo;
-import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.swing.util.AWT.*;
 import static org.fest.swing.util.Modifiers.*;
 import static org.fest.swing.util.Platform.isOSX;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
@@ -350,7 +347,8 @@ public class RobotFixture implements Robot {
 
   /** {@inheritDoc} */
   public void click(Component c, MouseButton button, int times) {
-    click(c, centerOf(c), button, times);
+    Point where = (c instanceof JComponent) ? centerOfVisibleRect((JComponent)c) : centerOf(c);
+    click(c, where, button, times);
   }
 
   /** {@inheritDoc} */

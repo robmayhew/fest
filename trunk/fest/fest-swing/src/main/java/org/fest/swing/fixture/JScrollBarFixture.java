@@ -289,6 +289,24 @@ public class JScrollBarFixture extends JPopupMenuInvokerFixture<JScrollBar> impl
   }
 
   /**
+   * Simulates a user scrolling to the maximum position of this fixture's <code>{@link JScrollBar}</code>.
+   * @return this fixture.
+   */
+  public JScrollBarFixture scrollToMaximum() {
+    driver.scrollToMaximum(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user scrolling to the minimum position of this fixture's <code>{@link JScrollBar}</code>.
+   * @return this fixture.
+   */
+  public JScrollBarFixture scrollToMinimum() {
+    driver.scrollToMinimum(target);
+    return this;
+  }
+  
+  /**
    * Simulates a user scrolling down one unit (usually a line.)
    * @return this fixture.
    */

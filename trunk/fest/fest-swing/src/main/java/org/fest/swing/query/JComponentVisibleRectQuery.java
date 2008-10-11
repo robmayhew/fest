@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.driver;
+package org.fest.swing.query;
 
 import java.awt.Rectangle;
 
@@ -31,9 +31,15 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-final class JComponentVisibleRectQuery {
+public final class JComponentVisibleRectQuery {
 
-  static Rectangle visibleRectOf(final JComponent component) {
+  /**
+   * Returns the "visible rectangle" of a <code>{@link JComponent}</code>.
+   * @param component the given <code>JComponent</code>.
+   * @return the "visible rectangle" of a <code>JComponent</code>.
+   * @see JComponent#getVisibleRect()
+   */
+  public static Rectangle visibleRectOf(final JComponent component) {
     return execute(new GuiQuery<Rectangle>() {
       protected Rectangle executeInEDT() {
         return component.getVisibleRect();

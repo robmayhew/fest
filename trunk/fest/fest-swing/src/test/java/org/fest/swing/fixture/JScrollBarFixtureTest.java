@@ -117,6 +117,32 @@ public class JScrollBarFixtureTest extends CommonComponentFixtureTestCase<JScrol
     }.run();
   }
 
+  @Test public void shouldScrollToMaximum() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.scrollToMaximum(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.scrollToMaximum());
+      }
+    }.run();
+  }
+  
+  @Test public void shouldScrollToMinimum() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.scrollToMinimum(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.scrollToMinimum());
+      }
+    }.run();
+  }
+
   @Test public void shouldScrollToPosition() {
     new EasyMockTemplate(driver) {
       protected void expectations() {

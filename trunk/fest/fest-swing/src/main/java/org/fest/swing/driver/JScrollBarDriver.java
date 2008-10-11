@@ -23,10 +23,10 @@ import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.JScrollBarBlockIncrementQuery.blockIncrementOf;
-import static org.fest.swing.driver.JScrollBarValueRangeQuery.valueRangeOf;
 import static org.fest.swing.driver.JScrollBarSetValueTask.setValue;
 import static org.fest.swing.driver.JScrollBarUnitIncrementQuery.unitIncrementOf;
 import static org.fest.swing.driver.JScrollBarValueQuery.valueOf;
+import static org.fest.swing.driver.JScrollBarValueRangeQuery.valueRangeOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.util.Strings.concat;
@@ -146,6 +146,24 @@ public class JScrollBarDriver extends JComponentDriver {
     robot.moveMouse(scrollBar, where.x, where.y);
     int value = valueOf(scrollBar) + count;
     setValueProperty(scrollBar, value);
+  }
+
+  /**
+   * Scrolls to the maximum position of the given <code>{@link JScrollBar}</code>.
+   * @param scrollBar the target <code>JScrollBar</code>.
+   */
+  public void scrollToMaximum(JScrollBar scrollBar) {
+    if (!isEnabled(scrollBar)) return;
+    scrollTo(scrollBar, valueRangeOf(scrollBar).maximum);
+  }
+
+  /**
+   * Scrolls to the minimum position of the given <code>{@link JScrollBar}</code>.
+   * @param scrollBar the target <code>JScrollBar</code>.
+   */
+  public void scrollToMinimum(JScrollBar scrollBar) {
+    if (!isEnabled(scrollBar)) return;
+    scrollTo(scrollBar, valueRangeOf(scrollBar).minimum);
   }
 
   /**

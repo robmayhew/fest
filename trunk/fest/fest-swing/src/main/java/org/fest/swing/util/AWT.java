@@ -17,6 +17,7 @@ package org.fest.swing.util;
 import java.awt.*;
 import java.awt.event.InputEvent;
 
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
@@ -33,6 +34,7 @@ import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
+import static org.fest.swing.query.JComponentVisibleRectQuery.visibleRectOf;
 import static org.fest.swing.util.Platform.isWindows;
 import static org.fest.util.Strings.*;
 
@@ -57,6 +59,16 @@ public class AWT {
   public static Point centerOf(Component c) {
     Dimension size = sizeOf(c);
     return new Point(size.width / 2, size.height / 2);
+  }
+  
+  /**
+   * Returns a point at the center of the visible rectangle of the given <code>{@link JComponent}</code>.
+   * @param c the given <code>JComponent</code>.
+   * @return a point at the center of the visible rectangle of the given <code>JComponent</code>.
+   */
+  public static Point centerOfVisibleRect(JComponent c) {
+    Rectangle visibleRect = visibleRectOf(c);
+    return new Point((visibleRect.x + (visibleRect.width / 2)), (visibleRect.y + (visibleRect.height / 2)));
   }
 
   /**

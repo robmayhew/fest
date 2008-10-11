@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.driver;
+package org.fest.swing.query;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -25,6 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.query.JComponentVisibleRectQuery;
 import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
