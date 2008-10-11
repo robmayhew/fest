@@ -168,6 +168,21 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   }
 
   /**
+   * Sets the text in this fixture's <code>{@link JTextComponent}</code>. Unlike 
+   * <code>{@link #enterText(String)}</code>, this method bypasses the event system and allows immediate updating on the 
+   * underlying document model.
+   * <p>
+   * Primarily desired for speeding up tests when precise user event fidelity isn't necessary.
+   * </p>
+   * @param text the text to set.
+   * @return this fixture.
+   */
+  public JTextComponentFixture setText(String text) {
+    driver.setText(target, text);
+    return this;
+  }
+
+  /**
    * Gives input focus to this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
    */

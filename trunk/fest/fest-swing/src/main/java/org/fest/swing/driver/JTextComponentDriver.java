@@ -38,6 +38,7 @@ import static org.fest.swing.driver.JTextComponentEditableQuery.isEditable;
 import static org.fest.swing.driver.JTextComponentSelectTextTask.selectTextInRange;
 import static org.fest.swing.driver.JTextComponentSelectionEndQuery.selectionEndOf;
 import static org.fest.swing.driver.JTextComponentSelectionStartQuery.selectionStartOf;
+import static org.fest.swing.driver.JTextComponentSetTextTask.setTextIn;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
@@ -109,6 +110,23 @@ public class JTextComponentDriver extends JComponentDriver {
     if (!isEnabled(textBox)) return;
     focus(textBox);
     robot.enterText(text);
+  }
+
+  /**
+   * Sets the given text into the <code>{@link JTextComponent}</code>. Unlike 
+   * <code>{@link #enterText(JTextComponent, String)}</code>, this method bypasses the event system and allows immediate 
+   * updating on the underlying document model.
+   * <p>
+   * Primarily desired for speeding up tests when precise user event fidelity isn't necessary.
+   * </p>
+   * @param textBox the target <code>JTextComponent</code>.
+   * @param text the text to enter.
+   */
+  public void setText(JTextComponent textBox, String text) {
+    if (!isEnabled(textBox)) return;
+    focus(textBox);
+    setTextIn(textBox, text);
+    robot.waitForIdle();
   }
 
   /**

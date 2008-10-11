@@ -53,6 +53,9 @@
         Method 'eventDispatched(AWTEvent)' in org.fest.swing.monitor now checks if the source of the event is a 
         java.awt.Component before performing a cast.
       </action>
+      <action dev="alruiz" type="fix" issue="211" due-to="Simeon Fitch">
+        Added method 'setText(String)' in org.fest.swing.fixture.JTextComponentFixture.
+      </action>
     </release>
     <release version="1.0b1" date="2008-07-22" description="Subsequent release">
       <action dev="alruiz, wanghy" type="add" issue="11">

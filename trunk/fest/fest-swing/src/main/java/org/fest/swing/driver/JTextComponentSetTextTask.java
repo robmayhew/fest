@@ -1,5 +1,5 @@
 /*
- * Created on Aug 11, 2008
+ * Created on Oct 11, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -22,21 +22,20 @@ import org.fest.swing.core.GuiTask;
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands a task that selects text in a given <code>{@link JTextComponent}</code>. This task is executed in the 
- * event dispatch thread.
- *
+ * Understands a task that sets text in a given <code>{@link JTextComponent}</code>. This task is executed in the event
+ * dispatch thread.
+ * 
  * @author Alex Ruiz
  */
-final class JTextComponentSelectTextTask {
-  
-  static void selectTextInRange(final JTextComponent textBox, final int start, final int end) {
+final class JTextComponentSetTextTask {
+
+  static void setTextIn(final JTextComponent textBox, final String text) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        textBox.setCaretPosition(start);
-        textBox.moveCaretPosition(end);
+        textBox.setText(text);
       }
     });
   }
   
-  private JTextComponentSelectTextTask() {}
+  private JTextComponentSetTextTask() {}
 }

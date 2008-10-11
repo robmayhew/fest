@@ -83,6 +83,19 @@ public class JTextComponentFixtureTest extends CommonComponentFixtureTestCase<JT
       }
     }.run();
   }
+  
+  @Test public void shouldSetText() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.setText(target, "Some Text");
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.setText("Some Text"));
+      }
+    }.run();
+  }
 
   @Test public void shouldSelectText() {
     new EasyMockTemplate(driver) {

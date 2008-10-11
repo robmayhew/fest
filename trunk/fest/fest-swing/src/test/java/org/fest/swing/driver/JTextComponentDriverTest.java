@@ -135,6 +135,26 @@ public class JTextComponentDriverTest {
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldSetText(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    setTextFieldText(textField, "");
+    robot.waitForIdle();
+    String textToEnter = "Entering text";
+    driver.setText(textField, textToEnter);
+    assertThat(textOf(textField)).isEqualTo(textToEnter);
+  }
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotSetTextIfTextComponentIsNotEnabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    clearAndDisableTextField();
+    robot.waitForIdle();
+    String textToEnter = "Entering text";
+    driver.setText(textField, textToEnter);
+    assertThat(textOf(textField)).isNullOrEmpty();
+  }
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldSelectTextRange(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     driver.selectText(textField, 8, 14);
