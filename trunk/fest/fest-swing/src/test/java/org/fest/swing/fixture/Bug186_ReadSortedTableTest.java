@@ -37,12 +37,12 @@ import static org.fest.swing.fixture.TableCell.row;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
- * Tests for <a href="http://code.google.com/p/fest/issues/detail?id=186" target="_blank">issue 186</a>.
+ * Tests for <a href="http://code.google.com/p/fest/issues/detail?id=186" target="_blank">Bug 186</a>.
  *
  * @author Alex Ruiz
  */
 @Test(groups = { GUI, BUG })
-public class ReadSortedTableTest {
+public class Bug186_ReadSortedTableTest {
 
   private FrameFixture frame;
   
@@ -70,7 +70,7 @@ public class ReadSortedTableTest {
     }
 
     private MyWindow() {
-      super(ReadSortedTableTest.class);
+      super(Bug186_ReadSortedTableTest.class);
       add(textBox());
       add(table());
       setPreferredSize(new Dimension(200, 200));

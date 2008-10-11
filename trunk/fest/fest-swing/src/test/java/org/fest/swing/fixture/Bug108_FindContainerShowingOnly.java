@@ -39,7 +39,7 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  */
 @Test(groups = { GUI, BUG })
-public class FindContainerShowingOnly {
+public class Bug108_FindContainerShowingOnly {
 
   private MyWindow window;
   private Robot robot;
@@ -73,7 +73,7 @@ public class FindContainerShowingOnly {
     }
 
     private MyWindow() {
-      super(FindContainerShowingOnly.class);
+      super(Bug108_FindContainerShowingOnly.class);
       setContentPane(desktop);
       addToDesktop(hiddenInternalFrame);
       addToDesktop(visibleInternalFrame);

@@ -34,7 +34,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Yvonne Wang
  */
 @Test(groups = { GUI, BUG })
-public class FindFrameByNameAndTypeBug108Test {
+public class Bug108_FindFrameByNameAndTypeTest {
 
   private Robot robot;
   private MyWindow window;
@@ -64,7 +64,7 @@ public class FindFrameByNameAndTypeBug108Test {
     }
 
     private MyWindow() {
-      super(FindFrameByNameAndTypeBug108Test.class);
+      super(Bug108_FindFrameByNameAndTypeTest.class);
       setName("myFrame");
     }
   }

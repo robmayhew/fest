@@ -43,7 +43,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Alex Ruiz
  */
 @Test(groups = { GUI, BUG })
-public class ScrollJTreeElementTest {
+public class Bug133_ScrollJTreeElementTest {
 
   private FrameFixture fixture;
   private MyWindow window;
@@ -114,7 +114,7 @@ public class ScrollJTreeElementTest {
     }
 
     private MyWindow() {
-      super(ScrollJTreeElementTest.class);
+      super(Bug133_ScrollJTreeElementTest.class);
       dragTree.setModel(model());
       add(scrollPaneFor(dragTree));
       dropTree.setModel(model());

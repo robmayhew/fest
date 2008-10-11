@@ -39,8 +39,8 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { BUG })
-public class WindowDisposalTest {
+@Test(groups = { BUG, GUI })
+public class Bug138_WindowDisposalTest {
 
   private ComponentHierarchy hierarchy;
   private RobotFixture robot;

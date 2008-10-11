@@ -37,11 +37,11 @@ import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
- * Tests for bug <a href="http://code.google.com/p/fest/issues/detail?id=159" target="_blank">159</a>.
+ * Tests for <a href="http://code.google.com/p/fest/issues/detail?id=159" target="_blank">Bug 159</a>.
  *
  * @author Alex Ruiz
  */
-public class MoveParentToFrontWhenClickingMenuTest {
+public class Bug159_MoveParentToFrontWhenClickingMenuTest {
 
   private static final int DELAY_BEFORE_SHOWING_MENU = 2000;
 
@@ -101,7 +101,7 @@ public class MoveParentToFrontWhenClickingMenuTest {
     final JTextField textField;
 
     private MyWindow() {
-      super(MoveParentToFrontWhenClickingMenuTest.class);
+      super(Bug159_MoveParentToFrontWhenClickingMenuTest.class);
       setJMenuBar(new JMenuBar());
       JMenu menuFile = new JMenu("File");
       menuFile.add(menuItemFromMenuBar);

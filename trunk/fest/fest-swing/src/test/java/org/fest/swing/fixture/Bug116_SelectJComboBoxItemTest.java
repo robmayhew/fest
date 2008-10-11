@@ -36,7 +36,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Yvonne Wang
  */
 @Test(groups = { GUI, BUG })
-public class SelectJComboBoxItemTest {
+public class Bug116_SelectJComboBoxItemTest {
 
   private Robot robot;
   private JComboBox target;
@@ -70,7 +70,7 @@ public class SelectJComboBoxItemTest {
     final JComboBox comboBox = new JComboBox();
 
     private MyWindow() {
-      super(SelectJComboBoxItemTest.class);
+      super(Bug116_SelectJComboBoxItemTest.class);
       add(comboBox);
       int itemCount = 100;
       Object[] content = new Object[itemCount];

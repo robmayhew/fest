@@ -40,7 +40,7 @@ import static org.fest.util.Strings.concat;
  * @author Yvonne Wang
  */
 @Test(groups = { GUI, BUG })
-public class JOptionPaneTest {
+public class Bug76_JOptionPaneTest {
 
   private static Logger logger = getAnonymousLogger();
 

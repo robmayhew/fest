@@ -40,7 +40,7 @@ import static org.fest.util.Strings.concat;
  * @author Yvonne Wang
  */
 @Test(groups = { GUI, BUG })
-public class JDialogTest {
+public class Bug80_JDialogTest {
 
   private static Logger logger = getAnonymousLogger();
 
@@ -80,7 +80,7 @@ public class JDialogTest {
 
     public JDialogStarter(Frame owner) {
       super(owner);
-      setTitle(JDialogTest.class.getSimpleName());
+      setTitle(Bug80_JDialogTest.class.getSimpleName());
       setContentPane(createContentPane());
     }
 
