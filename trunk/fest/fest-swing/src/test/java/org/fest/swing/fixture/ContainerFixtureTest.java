@@ -76,7 +76,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
  *
  * @author Alex Ruiz
  */
-@Test(groups = GUI /*, enabled = false*/)
+@Test(groups = GUI , enabled = false)
 public class ContainerFixtureTest {
 
   // TODO This class needs some serious refactoring

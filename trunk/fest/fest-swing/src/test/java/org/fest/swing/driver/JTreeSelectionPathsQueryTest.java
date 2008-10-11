@@ -20,6 +20,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -50,7 +51,11 @@ public class JTreeSelectionPathsQueryTest {
     tree = window.tree;
     robot.showWindow(window);
   }
-  
+
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
+
   public void shouldIndicateIfPathExpanded() {
     selectRows(tree, new int[] { 0, 1 });
     robot.waitForIdle();
@@ -68,9 +73,9 @@ public class JTreeSelectionPathsQueryTest {
     static MyWindow createNew() {
       return new MyWindow();
     }
-    
+
     final MyTree tree = new MyTree();
-    
+
     private MyWindow() {
       super(JTreeSelectionPathsQueryTest.class);
       addComponents(tree);
@@ -79,13 +84,13 @@ public class JTreeSelectionPathsQueryTest {
 
   private static class MyTree extends JTree {
     private static final long serialVersionUID = 1L;
-    
+
     private boolean recording;
     private final MethodInvocations methodInvocations = new MethodInvocations();
 
     final DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
     final DefaultMutableTreeNode node = new DefaultMutableTreeNode("node");
-    
+
     MyTree() {
       root.add(node);
       setModel(new DefaultTreeModel(root));

@@ -28,7 +28,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  *
  * @author Yvonne Wang
  */
-public class ComponentHasFocusQuery {
+public final class ComponentHasFocusQuery {
 
   public static boolean hasFocus(final Component component) {
     return execute(new GuiQuery<Boolean>() {

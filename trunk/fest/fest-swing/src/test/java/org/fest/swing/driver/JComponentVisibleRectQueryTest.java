@@ -53,7 +53,7 @@ public class JComponentVisibleRectQueryTest {
   }
 
   @AfterMethod public void tearDown() {
-    robot.cleanUpWithoutDisposingWindows();
+    robot.cleanUp();
   }
 
   public void shouldReturnVisibleRectOfJComponent() {
