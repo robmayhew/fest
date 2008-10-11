@@ -1,16 +1,16 @@
 /*
  * Created on Nov 15, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.finder;
@@ -24,11 +24,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.ComponentMatcher;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.BasicComponentFinder.finderWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestWindow.showNewInTest;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestWindow.createNew;
 
 /**
  * Tests for <code>{@link ComponentFoundCondition}</code>.
@@ -38,19 +40,22 @@ import static org.fest.swing.testing.TestWindow.showNewInTest;
  */
 public class ComponentFoundConditionTest {
 
+  private Robot robot;
   private TypeMatcher matcher;
   private TestWindow toFind;
 
   private ComponentFoundCondition condition;
 
   @BeforeMethod public void setUp() {
+    robot = robotWithNewAwtHierarchy();
     matcher = new TypeMatcher();
     condition = new ComponentFoundCondition("",  finderWithNewAwtHierarchy(), matcher);
-    toFind = showNewInTest(getClass());
+    toFind = createNew(getClass());
+    robot.showWindow(toFind);
   }
 
   @AfterMethod public void tearDown() {
-    toFind.destroy();
+    robot.cleanUp();
   }
 
   @Test public void shouldReturnTrueInTestAndReferenceFoundComponent() {
@@ -69,7 +74,7 @@ public class ComponentFoundConditionTest {
     private Class<? extends Component> type;
 
     TypeMatcher() {}
-    
+
     void typeToMatch(Class<? extends Component> newType) { this.type = newType; }
 
     public boolean matches(Component c) {
