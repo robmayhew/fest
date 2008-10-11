@@ -16,45 +16,85 @@
 package org.fest.swing.driver;
 
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JTreeSelectRowsTask.selectRows;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTreeSelectionCountQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JTreeSelectionCountQueryTest {
 
-  private JTree tree;
-  private int selectionCount;
-  private JTreeSelectionCountQuery query;
-  
+  private Robot robot;
+  private MyTree tree;
+
   @BeforeMethod public void setUp() {
-    tree = createMock(JTree.class);
-    selectionCount = 8;
-    query = new JTreeSelectionCountQuery(tree);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    tree = window.tree;
+    robot.showWindow(window);
   }
   
   public void shouldReturnSelectionCountOfJTree() {
-    new EasyMockTemplate(tree) {
-      protected void expectations() {
-        expect(tree.getSelectionCount()).andReturn(selectionCount);
-      }
+    selectRows(tree, new int[] { 0, 1 });
+    robot.waitForIdle();
+    tree.startRecording();
+    assertThat(JTreeSelectionCountQuery.selectionCountOf(tree)).isEqualTo(2);
+    tree.requireInvoked("getSelectionCount");
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(selectionCount);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final MyTree tree = new MyTree();
+    
+    private MyWindow() {
+      super(JTreeSelectionCountQueryTest.class);
+      addComponents(tree);
+    }
+  }
+
+  private static class MyTree extends JTree {
+    private static final long serialVersionUID = 1L;
+    
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
+    MyTree() {
+      DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
+      root.add(new DefaultMutableTreeNode("node"));
+      setModel(new DefaultTreeModel(root));
+      expandPath(new TreePath(root));
+    }
+
+    @Override public int getSelectionCount() {
+      if (recording) methodInvocations.invoked("getSelectionCount");
+      return super.getSelectionCount();
+    }
+
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

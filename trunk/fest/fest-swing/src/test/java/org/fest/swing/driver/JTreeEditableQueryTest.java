@@ -16,45 +16,87 @@
 package org.fest.swing.driver;
 
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.BooleanProvider;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JTreeSetEditableTask.setEditable;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTreeEditableQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JTreeEditableQueryTest {
 
-  private JTree tree;
-  private JTreeEditableQuery query;
-  
+  private Robot robot;
+  private MyTree tree;
+
   @BeforeMethod public void setUp() {
-    tree = createMock(JTree.class);
-    query = new JTreeEditableQuery(tree);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    tree = window.tree;
+    robot.showWindow(window);
+  }
+  
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
   
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
   public void shouldIndicateIfJTreeIsEditable(final boolean editable) {
-    new EasyMockTemplate(tree) {
-      protected void expectations() {
-        expect(tree.isEditable()).andReturn(editable);
-      }
+    setEditable(tree, editable);
+    robot.waitForIdle();
+    tree.startRecording();
+    assertThat(JTreeEditableQuery.isEditable(tree)).isEqualTo(editable);
+    tree.requireInvoked("isEditable");
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(editable);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final MyTree tree = new MyTree();
+    
+    private MyWindow() {
+      super(JTreeEditableQueryTest.class);
+      addComponents(tree);
+    }
+  }
+  
+  private static class MyTree extends JTree {
+    private static final long serialVersionUID = 1L;
+    
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
+    MyTree() {
+      super(new DefaultMutableTreeNode("root"));
+    }
+
+    @Override public boolean isEditable() {
+      if (recording) methodInvocations.invoked("isEditable");
+      return super.isEditable();
+    }
+
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

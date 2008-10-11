@@ -26,10 +26,10 @@ import org.fest.swing.exception.ActionFailedException;
 
 import static javax.swing.SwingUtilities.getWindowAncestor;
 
-import static org.fest.swing.driver.ComponentLocationQuery.locationOf;
 import static org.fest.swing.driver.JToolBarDockingSourceQuery.dockingSourceOf;
 import static org.fest.swing.driver.JToolBarFloatableQuery.isFloatable;
 import static org.fest.swing.driver.JToolBarIsFloatingQuery.isJToolBarFloating;
+import static org.fest.swing.driver.JToolBarWindowAncestorLocationQuery.locationOfWindowAncestorOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.util.Strings.*;
@@ -70,8 +70,7 @@ public class JToolBarDriver extends JComponentDriver {
    * @throws ActionFailedException if the <code>JToolBar</code> cannot be dragged.
    */
   public void makeFloat(JToolBar toolBar) {
-    Window w = getWindowAncestor(toolBar);
-    Point where = locationOf(w);
+    Point where = locationOfWindowAncestorOf(toolBar).location;
     floatTo(toolBar, where.x, where.y);
   }
 
@@ -85,9 +84,11 @@ public class JToolBarDriver extends JComponentDriver {
    */
   public void floatTo(JToolBar toolBar, int x, int y) {
     if (!isFloatable(toolBar)) throw actionFailure(concat("JToolbar <", format(toolBar), "> is not floatable"));
-    Window w = getWindowAncestor(toolBar);
+    WindowAndLocation windowAndLocation = locationOfWindowAncestorOf(toolBar);
     drag(toolBar, location.pointToGrab(toolBar));
-    drop(w, new Point(x - w.getX(), y - w.getY()));
+    Window window = windowAndLocation.window;
+    Point windowLocation = windowAndLocation.location;
+    drop(window, new Point(x - windowLocation.x, y - windowLocation.y));
     if (!isFloating(toolBar)) throw actionFailure(concat("Unable to float JToolbar <", format(toolBar), ">"));
   }
 

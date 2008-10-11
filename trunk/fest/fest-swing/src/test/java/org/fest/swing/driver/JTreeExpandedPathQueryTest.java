@@ -16,49 +16,108 @@
 package org.fest.swing.driver;
 
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.GuiTask;
+import org.fest.swing.core.Robot;
 import org.fest.swing.testing.BooleanProvider;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
+import org.fest.swing.testing.MethodInvocations.Args;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.MethodInvocations.Args.args;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTreeExpandedPathQuery}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JTreeExpandedPathQueryTest {
 
-  private JTree tree;
-  private TreePath path;
-  private JTreeExpandedPathQuery query;
+  private Robot robot;
+  private MyTree tree;
+  private TreePath rootPath;
 
   @BeforeMethod public void setUp() {
-    tree = createMock(JTree.class);
-    path = createMock(TreePath.class);
-    query = new JTreeExpandedPathQuery(tree, path);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    tree = window.tree;
+    rootPath = new TreePath(tree.root);
+    robot.showWindow(window);
+  }
+  
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
-  @Test(groups = EDT_ACTION, dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
+  @Test(groups = { GUI, EDT_ACTION }, dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
   public void shouldIndicateIfPathExpanded(final boolean expanded) {
-    new EasyMockTemplate(tree) {
+    setPathExpanded(tree, rootPath, expanded);
+    robot.waitForIdle();
+    tree.startRecording();
+    assertThat(JTreeExpandedPathQuery.isExpanded(tree, rootPath)).isEqualTo(expanded);
+    tree.requireInvoked("isExpanded", args(rootPath));
+  }
 
-      protected void expectations() {
-        expect(tree.isExpanded(path)).andReturn(expanded);
+  private static void setPathExpanded(final JTree tree, final TreePath path, final boolean expanded) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        if (expanded) tree.expandPath(path);
+        else tree.collapsePath(path);
       }
+    });
+  }
+  
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(expanded);
-      }
-    }.run();
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final MyTree tree = new MyTree();
+    
+    private MyWindow() {
+      super(JTreeExpandedPathQueryTest.class);
+      addComponents(tree);
+    }
+  }
+  
+  private static class MyTree extends JTree {
+    private static final long serialVersionUID = 1L;
+    
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
+    final DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
+    
+    MyTree() {
+      super();
+      root.add(new DefaultMutableTreeNode("node"));
+      setModel(new DefaultTreeModel(root, false));
+    }
+
+    @Override public boolean isExpanded(TreePath path) {
+      if (recording) methodInvocations.invoked("isExpanded", args(path));
+      return super.isExpanded(path);
+    }
+
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName, Args args) {
+      return methodInvocations.requireInvoked(methodName, args);
+    }
   }
 }

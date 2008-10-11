@@ -11,22 +11,17 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * <code>{@link JTree}</code> is the only one selected.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-class JTreeSingleRowSelectedQuery extends GuiQuery<Boolean> {
+final class JTreeSingleRowSelectedQuery {
 
-  private final JTree tree;
-  private final int row;
-
-  static boolean isSingleRowSelected(JTree tree, int row) {
-    return execute(new JTreeSingleRowSelectedQuery(tree, row));
+  static boolean isSingleRowSelected(final JTree tree, final int row) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return tree.getLeadSelectionRow() == row && tree.getSelectionCount() == 1;
+      }
+    });
   }
 
-  JTreeSingleRowSelectedQuery(JTree tree, int row) {
-    this.tree = tree;
-    this.row = row;
-  }
-
-  protected Boolean executeInEDT() {
-    return tree.getLeadSelectionRow() == row && tree.getSelectionCount() == 1;
-  }
+  private JTreeSingleRowSelectedQuery() {}
 }

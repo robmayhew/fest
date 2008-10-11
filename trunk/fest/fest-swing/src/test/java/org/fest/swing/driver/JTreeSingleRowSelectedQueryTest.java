@@ -25,13 +25,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JTreeSelectRowsTask.selectRows;
 import static org.fest.swing.task.JTreeSelectRowTask.selectRow;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.array;
@@ -67,17 +66,10 @@ public class JTreeSingleRowSelectedQueryTest {
 
   public void shouldReturnFalseIfMultipleRowSelected() {
     int row = 0;
-    selectRows(tree, row, 1);
+    int[] rows = { row, 1 };
+    selectRows(tree, rows);
     robot.waitForIdle();
     assertThat(JTreeSingleRowSelectedQuery.isSingleRowSelected(tree, row)).isFalse();
-  }
-
-  private static void selectRows(final JTree tree, final int... rows) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        tree.setSelectionRows(rows);
-      }
-    });
   }
 
   public void shouldReturnFalseIfThereIsNoSelection() {

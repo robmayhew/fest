@@ -26,24 +26,20 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the row in a <code>{@link JTree}</code>
  * for the specified location.
+ * @see JTree#getRowForLocation(int, int)
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-class JTreeRowAtPointQuery extends GuiQuery<Integer> {
+final class JTreeRowAtPointQuery {
 
-  private final Point location;
-  private final JTree tree;
-
-  static int rowAtPoint(JTree tree, Point location) {
-    return execute(new JTreeRowAtPointQuery(tree, location));
+  static int rowAtPoint(final JTree tree, final Point location) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return tree.getRowForLocation(location.x, location.y);
+      }
+    });
   }
 
-  JTreeRowAtPointQuery(JTree tree, Point location) {
-    this.location = location;
-    this.tree = tree;
-  }
-
-  protected Integer executeInEDT() {
-    return tree.getRowForLocation(location.x, location.y);
-  }
+  private JTreeRowAtPointQuery() {}
 }

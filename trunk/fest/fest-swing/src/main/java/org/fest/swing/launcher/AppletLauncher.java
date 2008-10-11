@@ -189,6 +189,7 @@ public class AppletLauncher {
    * Launches the applet in a <code>{@link AppletViewer}</code> (using implementations of
    * <code>{@link BasicAppletStub}</code> and <code>{@link BasicAppletContext}</code>. To provide your own
    * <code>{@link AppletStub}</code> create a new <code>{@link AppletViewer}</code> directly.
+   * The <code>AppletViewer</code> is created and launched in the event dispatch thread.
    * @return the created <code>AppletViewer</code>.
    */
   public AppletViewer start() {

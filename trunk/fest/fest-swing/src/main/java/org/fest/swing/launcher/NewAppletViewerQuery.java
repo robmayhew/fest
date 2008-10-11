@@ -16,39 +16,41 @@
 package org.fest.swing.launcher;
 
 import java.applet.Applet;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.fest.swing.applet.AppletViewer;
+import org.fest.swing.core.Condition;
 import org.fest.swing.core.GuiQuery;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.core.Pause.pause;
 
 /**
  * Understands an action, executed in the event dispatch thread, that creates and shows a new
  * <code>{@link AppletViewer}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-class NewAppletViewerQuery extends GuiQuery<AppletViewer> {
+final class NewAppletViewerQuery {
 
-  private final Applet applet;
-  private final Map<String, String> parameters = new HashMap<String, String>();
-
-  static AppletViewer showAppletViewerWith(Applet applet, Map<String, String> parameters) {
-    return execute(new NewAppletViewerQuery(applet, parameters));
-  }
-
-  NewAppletViewerQuery(Applet applet, Map<String, String> parameters) {
-    this.applet = applet;
-    if (parameters != null) this.parameters.putAll(parameters);
-  }
-
-  protected AppletViewer executeInEDT() {
-    AppletViewer viewer = new AppletViewer(applet, parameters);
-    viewer.pack();
-    viewer.setVisible(true);
+  // TODO test
+  static AppletViewer showAppletViewerWith(final Applet applet, final Map<String, String> parameters) {
+    final AppletViewer viewer = execute(new GuiQuery<AppletViewer>() {
+      protected AppletViewer executeInEDT() {
+        AppletViewer newViewer = new AppletViewer(applet, parameters);
+        newViewer.pack();
+        newViewer.setVisible(true);
+        return newViewer;
+      }
+    });
+    pause(new Condition("new AppletViewer is showing") {
+      public boolean test() {
+        return viewer.isShowing();
+      }
+    });
     return viewer;
   }
 
+  private NewAppletViewerQuery() {}
 }

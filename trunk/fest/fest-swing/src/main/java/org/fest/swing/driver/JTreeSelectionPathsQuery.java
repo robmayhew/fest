@@ -10,22 +10,20 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the paths of all selected values in a
  * <code>{@link JTree}</code>.
+ * @see JTree#getSelectionPaths
  * 
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-class JTreeSelectionPathsQuery extends GuiQuery<TreePath[]> {
+final class JTreeSelectionPathsQuery {
   
-  private final JTree tree;
-
-  static TreePath[] selectionPathsOf(JTree tree) {
-    return execute(new JTreeSelectionPathsQuery(tree));
+  static TreePath[] selectionPathsOf(final JTree tree) {
+    return execute(new GuiQuery<TreePath[]>() {
+      protected TreePath[] executeInEDT() {
+        return tree.getSelectionPaths();
+      }
+    });
   }
   
-  JTreeSelectionPathsQuery(JTree tree) {
-    this.tree = tree;
-  }
-
-  protected TreePath[] executeInEDT() {
-    return tree.getSelectionPaths();
-  }
+  private JTreeSelectionPathsQuery() {}
 }

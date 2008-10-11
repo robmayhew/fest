@@ -16,48 +16,91 @@
 package org.fest.swing.driver;
 
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
-import static org.fest.util.Arrays.array;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JTreeSelectRowsTask.selectRows;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTreeSelectionPathsQuery}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JTreeSelectionPathsQueryTest {
 
-  private JTree tree;
-  private TreePath[] paths;
-  private JTreeSelectionPathsQuery query;
+  private Robot robot;
+  private MyTree tree;
 
   @BeforeMethod public void setUp() {
-    tree = createMock(JTree.class);
-    paths = array(createMock(TreePath.class));
-    query = new JTreeSelectionPathsQuery(tree);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    tree = window.tree;
+    robot.showWindow(window);
+  }
+  
+  public void shouldIndicateIfPathExpanded() {
+    selectRows(tree, new int[] { 0, 1 });
+    robot.waitForIdle();
+    tree.startRecording();
+    TreePath[] paths = JTreeSelectionPathsQuery.selectionPathsOf(tree);
+    assertThat(paths).size().isEqualTo(2);
+    assertThat(paths[0].getPath()).containsOnly(tree.root);
+    assertThat(paths[1].getPath()).containsOnly(tree.root, tree.node);
+    tree.requireInvoked("getSelectionPaths");
   }
 
-  public void shouldIndicateIfPathExpanded() {
-    new EasyMockTemplate(tree) {
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
 
-      protected void expectations() {
-        expect(tree.getSelectionPaths()).andReturn(paths);
-      }
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final MyTree tree = new MyTree();
+    
+    private MyWindow() {
+      super(JTreeSelectionPathsQueryTest.class);
+      addComponents(tree);
+    }
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(paths);
-      }
-    }.run();
+  private static class MyTree extends JTree {
+    private static final long serialVersionUID = 1L;
+    
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
+    final DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
+    final DefaultMutableTreeNode node = new DefaultMutableTreeNode("node");
+    
+    MyTree() {
+      root.add(node);
+      setModel(new DefaultTreeModel(root));
+      expandPath(new TreePath(root));
+    }
+
+    @Override public TreePath[] getSelectionPaths() {
+      if (recording) methodInvocations.invoked("getSelectionPaths");
+      return super.getSelectionPaths();
+    }
+
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

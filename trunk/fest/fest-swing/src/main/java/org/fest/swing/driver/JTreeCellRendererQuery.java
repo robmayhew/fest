@@ -27,26 +27,22 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as
  * list renderer for a particular cell in a <code>{@link JTree}</code>.
+ * @see JTree#getCellRenderer()
+ * @see TreeCellRenderer#getTreeCellRendererComponent(JTree, Object, boolean, boolean, boolean, int, boolean)
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-class JTreeCellRendererQuery extends GuiQuery<Component> {
+final class JTreeCellRendererQuery {
 
-  private final Object modelValue;
-  private final JTree tree;
-
-  static Component cellRendererIn(JTree tree, Object modelValue) {
-    return execute(new JTreeCellRendererQuery(tree, modelValue));
+  static Component cellRendererIn(final JTree tree, final Object modelValue) {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        TreeCellRenderer r = tree.getCellRenderer();
+        return r.getTreeCellRendererComponent(tree, modelValue, false, false, false, 0, false);
+      }
+    });
   }
 
-  JTreeCellRendererQuery(JTree tree, Object modelValue) {
-    this.modelValue = modelValue;
-    this.tree = tree;
-  }
-
-  protected Component executeInEDT() {
-    TreeCellRenderer r = tree.getCellRenderer();
-    return r.getTreeCellRendererComponent(tree, modelValue, false, false, false, 0, false);
-  }
+  private JTreeCellRendererQuery() {}
 }

@@ -16,19 +16,22 @@
 package org.fest.swing.driver;
 
 import java.awt.Component;
+import java.awt.Dimension;
 
-import javax.swing.MenuElement;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestGroups;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 
 /**
  * Tests for <code>{@link MenuElementComponentQuery}</code>.
@@ -39,25 +42,62 @@ import static org.fest.assertions.Assertions.assertThat;
 @Test(groups = TestGroups.EDT_ACTION)
 public class MenuElementComponentQueryTest {
 
-  private MenuElement element;
-  private Component component;
-  private MenuElementComponentQuery query;
-  
+  private Robot robot;
+  private MyMenu menu;
+
   @BeforeMethod public void setUp() {
-    element = createMock(MenuElement.class);
-    component = createMock(Component.class);
-    query = new MenuElementComponentQuery(element);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    menu = window.menu;
+    robot.showWindow(window);
+  }
+  
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
   
   public void shouldReturnComponentOfMenuElement() {
-    new EasyMockTemplate(element) {
-      protected void expectations() {
-        expect(element.getComponent()).andReturn(component);
-      }
+    menu.startRecording();
+    assertThat(MenuElementComponentQuery.componentIn(menu)).isSameAs(menu);
+    menu.requireInvoked("getComponent");
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isSameAs(component);
-      }
-    }.run();
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    final MyMenu menu = new MyMenu();
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }    
+    
+    private MyWindow() {
+      super(MenuElementComponentQueryTest.class);
+      setJMenuBar(new JMenuBar());
+      getJMenuBar().add(menu);
+      setPreferredSize(new Dimension(80, 60));
+    }
+  }
+  
+  private static class MyMenu extends JMenu {
+    private static final long serialVersionUID = 1L;
+    
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+    
+    MyMenu() {
+      super("Menu");
+    }
+
+    @Override public Component getComponent() {
+      if (recording) methodInvocations.invoked("getComponent");
+      return super.getComponent();
+    }
+
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

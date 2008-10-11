@@ -42,6 +42,7 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JTreeSetEditableTask.setEditable;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.task.JTreeSelectRowTask.selectRow;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -549,14 +550,6 @@ public class JTreeDriverTest {
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'editable'").contains("expected:<false> but was:<true>");
     }
-  }
-
-  private static void setEditable(final JTree tree, final boolean editable) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        tree.setEditable(editable);
-      }
-    });
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)

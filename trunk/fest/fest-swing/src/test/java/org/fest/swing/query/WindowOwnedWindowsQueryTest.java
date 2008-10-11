@@ -16,46 +16,44 @@
 package org.fest.swing.query;
 
 import java.awt.Window;
+import java.util.List;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestDialog;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
-import static org.fest.util.Arrays.array;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link WindowOwnedWindowsQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class WindowOwnedWindowsQueryTest {
 
-  private Window window;
-  private Window[] ownedWindows;
-  private WindowOwnedWindowsQuery query;
+  private Robot robot;
+  private TestWindow window;
+  private TestDialog dialog;
 
   @BeforeMethod public void setUp() {
-    window = createMock(Window.class);
-    ownedWindows = array(createMock(Window.class), createMock(Window.class));
-    query = new WindowOwnedWindowsQuery(window);
+    robot = robotWithNewAwtHierarchy();
+    window = TestWindow.createNew(getClass());
+    dialog = TestDialog.createNew(window);
+  }
+  
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnOwnedWindowsFromWindow() {
-    new EasyMockTemplate(window) {
-      protected void expectations() {
-        expect(window.getOwnedWindows()).andReturn(ownedWindows);
-      }
-
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).containsOnly((Object[])ownedWindows);
-      }
-    }.run();
+    List<Window> ownedWindows = WindowOwnedWindowsQuery.ownedWindowsOf(window);
+    assertThat(ownedWindows).containsOnly(dialog);
   }
 }

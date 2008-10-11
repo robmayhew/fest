@@ -9,22 +9,19 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link JTree}</code> 
  * is editable or not.
+ * @see JTree#isEditable()
  *
  * @author Alex Ruiz 
  */
-class JTreeEditableQuery extends GuiQuery<Boolean> {
+final class JTreeEditableQuery {
   
-  private final JTree tree;
-
   static boolean isEditable(final JTree tree) {
-    return execute(new JTreeEditableQuery(tree));
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return tree.isEditable();
+      }
+    });
   }
   
-  JTreeEditableQuery(JTree tree) {
-    this.tree = tree;
-  }
-
-  protected Boolean executeInEDT() {
-    return tree.isEditable();
-  }
+  private JTreeEditableQuery() {}
 }

@@ -1,5 +1,5 @@
 /*
- * Created on Jul 28, 2008
+ * Created on Oct 10, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -14,29 +14,27 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JToolBar;
+import javax.swing.JTree;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.core.GuiTask;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands an action, executed in the event dispatch thread, that returns whether a <code>{@link JToolBar}</code> is
- * horizontal or vertical.
- * @see JToolBar#getOrientation()
+ * Understands a task that selects rows in a <code>{@link JTree}</code>. This task is executed in the event dispatch
+ * thread.
  * 
  * @author Alex Ruiz
- * @author Yvonne Wang
  */
-final class JToolBarOrientationQuery {
+final class JTreeSelectRowsTask {
 
-  static int orientationOf(final JToolBar toolBar) {
-    return execute(new GuiQuery<Integer>() {
-      protected Integer executeInEDT() {
-        return toolBar.getOrientation();
+  static void selectRows(final JTree tree, final int... rows) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        tree.setSelectionRows(rows);
       }
     });
   }
 
-  private JToolBarOrientationQuery() {}
+  private JTreeSelectRowsTask() {}
 }

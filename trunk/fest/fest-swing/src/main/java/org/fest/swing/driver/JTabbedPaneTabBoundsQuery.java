@@ -29,21 +29,16 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  *
  * @author Alex Ruiz
  */
-class JTabbedPaneTabBoundsQuery extends GuiQuery<Rectangle> {
+final class JTabbedPaneTabBoundsQuery {
 
-  private final int index;
-  private final JTabbedPane tabbedPane;
-
-  static Rectangle boundsOf(JTabbedPane tabbedPane, int index) {
-    return execute(new JTabbedPaneTabBoundsQuery(tabbedPane, index));
+  // TODO test
+  static Rectangle boundsOf(final JTabbedPane tabbedPane, final int index) {
+    return execute(new GuiQuery<Rectangle>() {
+      protected Rectangle executeInEDT() {
+        return tabbedPane.getUI().getTabBounds(tabbedPane, index);
+      }
+    });
   }
 
-  JTabbedPaneTabBoundsQuery(JTabbedPane tabbedPane, int index) {
-    this.index = index;
-    this.tabbedPane = tabbedPane;
-  }
-
-  protected Rectangle executeInEDT() {
-    return tabbedPane.getUI().getTabBounds(tabbedPane, index);
-  }
+  private JTabbedPaneTabBoundsQuery() {}
 }

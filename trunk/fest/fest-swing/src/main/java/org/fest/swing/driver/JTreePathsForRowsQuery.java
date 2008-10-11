@@ -29,27 +29,21 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * the node at the specified row (in a <code>{@link JTree}</code>) is drawn.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-class JTreePathsForRowsQuery extends GuiQuery<TreePath[]> {
+final class JTreePathsForRowsQuery {
 
-  private final JTree tree;
-  private final int[] rows;
-
-  static TreePath[] pathsForRows(JTree tree, int[] rows) {
-    return execute(new JTreePathsForRowsQuery(tree, rows));
+  static TreePath[] pathsForRows(final JTree tree, final int[] rows) {
+    return execute(new GuiQuery<TreePath[]>() {
+      protected TreePath[] executeInEDT() {
+        int rowCount = rows.length;
+        TreePath[] paths = new TreePath[rowCount];
+        for (int i = 0; i < rowCount; i++)
+          paths[i] = tree.getPathForRow(rows[i]);
+        return paths;
+      }
+    });
   }
 
-  JTreePathsForRowsQuery(JTree tree, int... rows) {
-    this.tree = tree;
-    this.rows = rows;
-  }
-
-  protected TreePath[] executeInEDT() {
-    int rowCount = rows.length;
-    TreePath[] paths = new TreePath[rowCount];
-    for (int i = 0; i < rowCount; i++)
-      paths[i] = tree.getPathForRow(rows[i]);
-    return paths;
-  }
-
+  private JTreePathsForRowsQuery() {}
 }

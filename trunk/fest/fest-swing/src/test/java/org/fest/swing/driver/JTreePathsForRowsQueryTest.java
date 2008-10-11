@@ -16,50 +16,77 @@
 package org.fest.swing.driver;
 
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
-import static org.fest.util.Arrays.array;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTreePathsForRowsQuery}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JTreePathsForRowsQueryTest {
 
-  private JTree tree;
-  private int[] rows;
-  private TreePath[] paths;
-  private JTreePathsForRowsQuery query;
+  private Robot robot;
+  private MyTree tree;
 
   @BeforeMethod public void setUp() {
-    tree = createMock(JTree.class);
-    rows = new int[] { 6, 8 };
-    paths = array(createMock(TreePath.class), createMock(TreePath.class));
-    query = new JTreePathsForRowsQuery(tree, rows);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    tree = window.tree;
+    robot.showWindow(window);
   }
 
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
+  
   public void shouldReturnPathsForRows() {
-    new EasyMockTemplate(tree) {
-      protected void expectations() {
-        for (int i = 0; i < paths.length; i++)
-          expect(tree.getPathForRow(rows[i])).andReturn(paths[i]);
-      }
+    int[] rows = { 0, 1 };
+    TreePath[] paths = JTreePathsForRowsQuery.pathsForRows(tree, rows);
+    assertThat(paths).size().isEqualTo(2);
+    assertThat(paths[0].getPath()).containsOnly(tree.root);
+    assertThat(paths[1].getPath()).containsOnly(tree.root, tree.node);
+  }
+  
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(paths);
-      }
-    }.run();
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final MyTree tree = new MyTree();
+    
+    private MyWindow() {
+      super(JTreePathsForRowsQueryTest.class);
+      addComponents(tree);
+    }
+  }
+
+  private static class MyTree extends JTree {
+    private static final long serialVersionUID = 1L;
+    
+    final DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
+    final DefaultMutableTreeNode node = new DefaultMutableTreeNode("node");
+    
+    MyTree() {
+      root.add(node);
+      setModel(new DefaultTreeModel(root));
+      expandPath(new TreePath(root));
+    }
   }
 }

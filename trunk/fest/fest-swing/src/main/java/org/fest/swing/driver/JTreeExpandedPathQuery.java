@@ -12,22 +12,17 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * <code>{@link JTree}</code>) identified by the given path is expanded or not.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-class JTreeExpandedPathQuery extends GuiQuery<Boolean> {
+final class JTreeExpandedPathQuery {
 
-  private final JTree tree;
-  private final TreePath path;
-
-  static boolean isExpanded(JTree tree, TreePath path) {
-    return execute(new JTreeExpandedPathQuery(tree, path));
+  static boolean isExpanded(final JTree tree, final TreePath path) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return tree.isExpanded(path);
+      }
+    });
   }
 
-  JTreeExpandedPathQuery(JTree tree, TreePath path) {
-    this.tree = tree;
-    this.path = path;
-  }
-
-  protected Boolean executeInEDT() {
-    return tree.isExpanded(path);
-  }
+  private JTreeExpandedPathQuery() {}
 }

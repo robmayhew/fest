@@ -18,48 +18,86 @@ package org.fest.swing.driver;
 import java.awt.Point;
 
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
+import org.fest.swing.testing.MethodInvocations.Args;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.MethodInvocations.Args.args;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTreeRowAtPointQuery}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JTreeRowAtPointQueryTest {
 
-  private JTree tree;
-  private Point location;
-  private int row;
-  private JTreeRowAtPointQuery query;
+  private Robot robot;
+  private MyTree tree;
 
   @BeforeMethod public void setUp() {
-    tree = createMock(JTree.class);
-    location = new Point(8, 6);
-    row = 8;
-    query = new JTreeRowAtPointQuery(tree, location);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    tree = window.tree;
+    robot.showWindow(window);
+  }
+  
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
 
   public void shouldReturnRowAtPoint() {
-    new EasyMockTemplate(tree) {
+    Point location = new Point(0, 1);
+    tree.startRecording();
+    assertThat(JTreeRowAtPointQuery.rowAtPoint(tree, location)).isEqualTo(0);
+    tree.requireInvoked("getRowForLocation", args(0, 1));
+  }
 
-      protected void expectations() {
-        expect(tree.getRowForLocation(location.x, location.y)).andReturn(row);
-      }
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(row);
-      }
-    }.run();
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final MyTree tree = new MyTree();
+    
+    private MyWindow() {
+      super(JTreeRowAtPointQueryTest.class);
+      addComponents(tree);
+    }
+  }
+  
+  private static class MyTree extends JTree {
+    private static final long serialVersionUID = 1L;
+    
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
+    MyTree() {
+      super(new DefaultMutableTreeNode("root"));
+    }
+
+    @Override public int getRowForLocation(int x, int y) {
+      if (recording) methodInvocations.invoked("getRowForLocation", args(x, y));
+      return super.getRowForLocation(x, y);
+    }
+
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName, Args args) {
+      return methodInvocations.requireInvoked(methodName, args);
+    }
   }
 }

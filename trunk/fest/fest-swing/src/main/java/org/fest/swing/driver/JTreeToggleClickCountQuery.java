@@ -8,23 +8,21 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns number of mouse clicks needed to expand or
- * close a node in a <code>{@link JTree}</code>
+ * close a node in a <code>{@link JTree}</code>.
+ * @see JTree#getToggleClickCount()
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-class JTreeToggleClickCountQuery extends GuiQuery<Integer> {
+final class JTreeToggleClickCountQuery {
 
-  private final JTree tree;
-
-  static int toggleClickCountOf(JTree tree) {
-    return execute(new JTreeToggleClickCountQuery(tree));
+  static int toggleClickCountOf(final JTree tree) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return tree.getToggleClickCount();
+      }
+    });
   }
 
-  JTreeToggleClickCountQuery(JTree tree) {
-    this.tree = tree;
-  }
-
-  protected Integer executeInEDT() {
-    return tree.getToggleClickCount();
-  }
+  private JTreeToggleClickCountQuery() {}
 }

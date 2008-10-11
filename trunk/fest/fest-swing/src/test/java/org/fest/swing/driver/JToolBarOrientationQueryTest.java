@@ -15,51 +15,93 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.BorderLayout;
+
+import javax.swing.JButton;
 import javax.swing.JToolBar;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 
-import static javax.swing.SwingConstants.*;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import static java.awt.BorderLayout.NORTH;
+import static javax.swing.SwingConstants.HORIZONTAL;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JToolBarOrientationQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JToolBarOrientationQueryTest {
 
-  private JToolBar toolBar;
-  private JToolBarOrientationQuery query;
+  private static final int ORIENTATION = HORIZONTAL;
 
+  private Robot robot;
+  private MyToolBar toolBar;
+  
   @BeforeMethod public void setUp() {
-    toolBar = createMock(JToolBar.class);
-    query = new JToolBarOrientationQuery(toolBar);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    toolBar = window.toolBar;
+    robot.showWindow(window);
   }
   
-  @Test(dataProvider = "orientations")
-  public void shouldReturnOrientationOfJToolBar(final int orientation) {
-    new EasyMockTemplate(toolBar) {
-      protected void expectations() {
-        expect(toolBar.getOrientation()).andReturn(orientation);
-      }
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(orientation);
-      }
-    }.run();
+  public void shouldReturnOrientationOfJToolBar() {
+    toolBar.startRecording();
+    assertThat(JToolBarOrientationQuery.orientationOf(toolBar)).isEqualTo(ORIENTATION);
+    toolBar.requireInvoked("getOrientation");
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final MyToolBar toolBar = new MyToolBar();
+    
+    private MyWindow() {
+      super(JToolBarOrientationQueryTest.class);
+      setLayout(new BorderLayout());
+      add(toolBar, NORTH);
+    }
   }
   
-  @DataProvider(name = "orientations") public Object[][] orientations() {
-    return new Object[][] { { HORIZONTAL }, { VERTICAL } };
+  private static class MyToolBar extends JToolBar {
+    private static final long serialVersionUID = 1L;
+
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
+    MyToolBar() {
+      super(ORIENTATION);
+      add(new JButton("Click me"));
+    }
+
+    @Override public int getOrientation() {
+      if (recording) methodInvocations.invoked("getOrientation");
+      return super.getOrientation();
+    }
+
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
+
 }

@@ -24,25 +24,20 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that converts a value to text for a particular cell in
  * a <code>{@link JTree}</code>.
+ * @see JTree#convertValueToText(Object, boolean, boolean, boolean, int, boolean)
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class JTreeConvertValueToTextQuery extends GuiQuery<String> {
+final class JTreeConvertValueToTextQuery {
   
-  private final JTree tree;
-  private final Object modelValue;
-
-  static String convertValueToText(JTree tree, Object modelValue) {
-    return execute(new JTreeConvertValueToTextQuery(tree, modelValue));
+  static String convertValueToText(final JTree tree, final Object modelValue) {
+    return execute(new GuiQuery<String>() {
+      protected String executeInEDT() {
+        return tree.convertValueToText(modelValue, false, false, false, 0, false);
+      }
+    });
   }
   
-  JTreeConvertValueToTextQuery(JTree tree, Object modelValue) {
-    this.tree = tree;
-    this.modelValue = modelValue;
-  }
-
-  protected String executeInEDT() {
-    return tree.convertValueToText(modelValue, false, false, false, 0, false);
-  }
+  private JTreeConvertValueToTextQuery() {}
 }

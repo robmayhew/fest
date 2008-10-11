@@ -1,5 +1,5 @@
 /*
- * Created on Aug 22, 2008
+ * Created on Oct 10, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,30 +15,33 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
+import java.awt.Window;
 
-import javax.swing.MenuElement;
+import javax.swing.JToolBar;
 
 import org.fest.swing.core.GuiQuery;
+
+import static javax.swing.SwingUtilities.getWindowAncestor;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 
 /**
- * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used to 
- * paint a <code>{@link MenuElement}</code>.
- *
+ * Understands an action, executed in the event dispatch thread, that returns location of the first <code>Window</code>
+ * ancestor of a <code>{@link JToolBar}</code>.
+ * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-final class MenuElementComponentQuery {
+final class JToolBarWindowAncestorLocationQuery {
 
-  static Component componentIn(final MenuElement menuElement) {
-    return execute(new GuiQuery<Component>() {
-      protected Component executeInEDT() {
-        return menuElement.getComponent();
+  static WindowAndLocation locationOfWindowAncestorOf(final JToolBar toolBar) {
+    return execute(new GuiQuery<WindowAndLocation>() {
+      protected WindowAndLocation executeInEDT() {
+        Window window = getWindowAncestor(toolBar);
+        return new WindowAndLocation(window, window.getLocation()) ;
       }
     });
   }
   
-  private MenuElementComponentQuery() {}
+  private JToolBarWindowAncestorLocationQuery() {}
 }

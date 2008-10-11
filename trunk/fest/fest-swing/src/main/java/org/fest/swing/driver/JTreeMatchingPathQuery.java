@@ -15,23 +15,15 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  * 
  * @see JTreePathFinder
  */
-class JTreeMatchingPathQuery extends GuiQuery<TreePath> {
+final class JTreeMatchingPathQuery {
   
-  private final String path;
-  private final JTree tree;
-  private final JTreePathFinder pathFinder;
-
-  static TreePath matchingPathFor(JTree tree, String path, JTreePathFinder pathFinder) {
-    return execute(new JTreeMatchingPathQuery(tree, path, pathFinder));
+  static TreePath matchingPathFor(final JTree tree, final String path, final JTreePathFinder pathFinder) {
+    return execute(new GuiQuery<TreePath>() {
+      protected TreePath executeInEDT() {
+        return pathFinder.findMatchingPath(tree, path);
+      }
+    });
   }
   
-  JTreeMatchingPathQuery(JTree tree, String path, JTreePathFinder pathFinder) {
-    this.path = path;
-    this.tree = tree;
-    this.pathFinder = pathFinder;
-  }
-
-  protected TreePath executeInEDT() {
-    return pathFinder.findMatchingPath(tree, path);
-  }
+  private JTreeMatchingPathQuery() {}
 }

@@ -12,19 +12,15 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  *
  * @author Alex Ruiz 
  */
-class JTreeSelectionCountQuery extends GuiQuery<Integer> {
+final class JTreeSelectionCountQuery {
   
-  private final JTree tree;
-
   static int selectionCountOf(final JTree tree) {
-    return execute(new JTreeSelectionCountQuery(tree));
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return tree.getSelectionCount();
+      }
+    });
   }
   
-  JTreeSelectionCountQuery(JTree tree) {
-    this.tree = tree;
-  }
-
-  protected Integer executeInEDT() {
-    return tree.getSelectionCount();
-  }
+  private JTreeSelectionCountQuery() {}
 }

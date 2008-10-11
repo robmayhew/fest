@@ -90,8 +90,8 @@ public class JTreeExpandPathTaskTest {
 
     private static TreeNode createRoot() {
       DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
-      DefaultMutableTreeNode child = new DefaultMutableTreeNode("child");
-      root.add(child);
+      DefaultMutableTreeNode node = new DefaultMutableTreeNode("node");
+      root.add(node);
       return root;
     }
   }

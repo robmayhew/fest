@@ -12,24 +12,20 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Rectangle}</code> that
  * the node at the specified row (in a <code>{@link JTree}</code>) is drawn.
+ * @see JTree#getPathBounds(TreePath)
  * 
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-class JTreePathBoundsQuery extends GuiQuery<Rectangle> {
+final class JTreePathBoundsQuery {
 
-  private final TreePath path;
-  private final JTree tree;
-
-  static Rectangle pathBoundsOf(JTree tree, TreePath path) {
-    return execute(new JTreePathBoundsQuery(tree, path));
+  static Rectangle pathBoundsOf(final JTree tree, final TreePath path) {
+    return execute(new GuiQuery<Rectangle>() {
+      protected Rectangle executeInEDT() {
+        return tree.getPathBounds(path);
+      }
+    });
   }
 
-  JTreePathBoundsQuery(JTree tree, TreePath path) {
-    this.path = path;
-    this.tree = tree;
-  }
-
-  protected Rectangle executeInEDT() {
-    return tree.getPathBounds(path);
-  }
+  private JTreePathBoundsQuery() {}
 }

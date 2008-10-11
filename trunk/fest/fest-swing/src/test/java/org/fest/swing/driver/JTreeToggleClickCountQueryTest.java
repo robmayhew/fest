@@ -16,46 +16,86 @@
 package org.fest.swing.driver;
 
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
-
-import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
+import org.fest.swing.core.Robot;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link JTreeToggleClickCountQuery}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-@Test(groups = EDT_ACTION)
+@Test(groups = { GUI, EDT_ACTION })
 public class JTreeToggleClickCountQueryTest {
 
-  private JTree tree;
-  private int toggleClickCount;
-  private JTreeToggleClickCountQuery query;
+  private static final int TOGGLE_CLICK_COUNT = 2;
+  
+  private Robot robot;
+  private MyTree tree;
 
   @BeforeMethod public void setUp() {
-    tree = createMock(JTree.class);
-    toggleClickCount = 2;
-    query = new JTreeToggleClickCountQuery(tree);
+    robot = robotWithNewAwtHierarchy();
+    MyWindow window = MyWindow.createNew();
+    tree = window.tree;
+    robot.showWindow(window);
+  }
+  
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
+  }
+  
+  public void shouldReturnToggleClickCountOfJTree() {
+    tree.startRecording();
+    assertThat(JTreeToggleClickCountQuery.toggleClickCountOf(tree)).isEqualTo(TOGGLE_CLICK_COUNT);
+    tree.requireInvoked("getToggleClickCount");
   }
 
-  public void shouldReturnToggleClickCountOfJTree() {
-    new EasyMockTemplate(tree) {
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
 
-      protected void expectations() {
-        expect(tree.getToggleClickCount()).andReturn(toggleClickCount);
-      }
+    static MyWindow createNew() {
+      return new MyWindow();
+    }
+    
+    final MyTree tree = new MyTree();
+    
+    private MyWindow() {
+      super(JTreeToggleClickCountQueryTest.class);
+      addComponents(tree);
+    }
+  }
+  
+  private static class MyTree extends JTree {
+    private static final long serialVersionUID = 1L;
+    
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
-      protected void codeToTest() {
-        assertThat(query.executeInEDT()).isEqualTo(toggleClickCount);
-      }
-    }.run();
+    MyTree() {
+      super(new DefaultMutableTreeNode("root"));
+      setToggleClickCount(TOGGLE_CLICK_COUNT);
+    }
+
+    @Override public int getToggleClickCount() {
+      if (recording) methodInvocations.invoked("getToggleClickCount");
+      return super.getToggleClickCount();
+    }
+
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }
