@@ -54,8 +54,7 @@ public class WindowMoveToFrontTaskTest {
   }
 
   @AfterMethod public void tearDown() {
-    windowOne.destroy();
-    windowTwo.destroy();
+    robot.cleanUp();
   }
 
   public void shouldMoveWindowToFront() {
