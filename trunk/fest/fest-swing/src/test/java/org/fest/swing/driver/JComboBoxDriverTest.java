@@ -41,6 +41,7 @@ import static org.fest.swing.driver.JComboBoxSetEditableTask.setEditable;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.task.JComboBoxSetSelectedIndexTask.setSelectedIndex;
+import static org.fest.swing.task.JComboBoxSetSelectedItemTask.setSelectedItem;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -165,14 +166,14 @@ public class JComboBoxDriverTest {
       assertThat(model.getElementAt(i)).isEqualTo(expected[i]);
   }
 
-  public void shouldPassIfHasExpectedSelection() {
+  public void shouldPassIfItHasExpectedSelection() {
     selectFirstItemInComboBox();
     robot.waitForIdle();
     driver.requireSelection(comboBox, "first");
     assertCellReaderWasCalled();
   }
 
-  public void shouldFailIfDoesNotHaveExpectedSelection() {
+  public void shouldFailIfItDoesNotHaveExpectedSelection() {
     selectFirstItemInComboBox();
     robot.waitForIdle();
     try {
@@ -184,8 +185,41 @@ public class JComboBoxDriverTest {
     }
   }
 
-  public void shouldFailIfDoesNotHaveAnySelectionAndExpectingSelection() {
+  public void shouldFailIfItDoesNotHaveAnySelectionAndExpectingSelection() {
     clearSelectionInComboBox();
+    robot.waitForIdle();
+    try {
+      driver.requireSelection(comboBox, "second");
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'selectedIndex'")
+                             .contains("No selection");
+    }
+  }
+
+  public void shouldPassIfItIsEditableAndHasExpectedSelection() {
+    setEditable(comboBox, true);
+    setSelectedItem(comboBox, "Hello World");
+    robot.waitForIdle();
+    driver.requireSelection(comboBox, "Hello World");
+  }
+
+  public void shouldFailIfItIsEditableAndDoesNotHaveExpectedSelection() {
+    setEditable(comboBox, true);
+    setSelectedItem(comboBox, "Hello World");
+    robot.waitForIdle();
+    try {
+      driver.requireSelection(comboBox, "second");
+      fail();
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'selectedIndex'")
+                             .contains("expected:<'second'> but was:<'Hello World'>");
+    }
+  }
+
+  public void shouldFailIfItEditableAndDoesNotHaveAnySelectionAndExpectingSelection() {
+    clearSelectionInComboBox();
+    setEditable(comboBox, true);
     robot.waitForIdle();
     try {
       driver.requireSelection(comboBox, "second");

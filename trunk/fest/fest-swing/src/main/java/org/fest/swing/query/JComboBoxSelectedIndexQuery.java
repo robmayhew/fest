@@ -35,6 +35,7 @@ public final class JComboBoxSelectedIndexQuery {
    * dispatch thread.
    * @param comboBox the given <code>JComboBox</code>.
    * @return the selected index in the given <code>JComboBox</code>.
+   * @see JComboBox#getSelectedIndex()
    */
   public static int selectedIndexOf(final JComboBox comboBox) {
     return execute(new GuiQuery<Integer>() {

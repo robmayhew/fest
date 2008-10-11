@@ -47,6 +47,7 @@ import static org.fest.swing.driver.JComboBoxSelectItemAtIndexTask.selectItemAtI
 import static org.fest.swing.driver.JComboBoxSetPopupVisibleTask.setPopupVisible;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
+import static org.fest.swing.query.JComboBoxSelectedItemQuery.selectedItemOf;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Objects.areEqual;
@@ -130,9 +131,25 @@ public class JComboBoxDriver extends JComponentDriver {
    */
   public void requireSelection(JComboBox comboBox, String value) {
     int selectedIndex = selectedIndexOf(comboBox);
-    if (selectedIndex == -1)
-      fail(concat("[", selectedIndexProperty(comboBox), "] No selection"));
+    if (isEditable(comboBox)) {
+      requireSelectionInEditableComboBox(comboBox, value);
+      return;
+    }
+    if (selectedIndex == -1) failNoSelection(comboBox);
     assertThat(value(comboBox, selectedIndex)).as(selectedIndexProperty(comboBox)).isEqualTo(value);
+  }
+
+  private void requireSelectionInEditableComboBox(JComboBox comboBox, String value) {
+    Object selectedItem = selectedItemOf(comboBox);
+    if (selectedItem == null) {
+      failNoSelection(comboBox);
+      return; // added to remove "null reference" warning in Eclipse
+    }
+    assertThat(selectedItem.toString()).as(selectedIndexProperty(comboBox)).isEqualTo(value);
+  }
+
+  private void failNoSelection(JComboBox comboBox) {
+    fail(concat("[", selectedIndexProperty(comboBox), "] No selection"));
   }
 
   /**
