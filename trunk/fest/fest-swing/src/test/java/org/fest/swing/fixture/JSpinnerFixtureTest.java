@@ -32,8 +32,9 @@ import static org.fest.swing.factory.JSpinners.spinner;
  * Tests for <code>{@link JSpinnerFixture}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner> {
+@Test public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner> {
 
   private JSpinnerDriver driver;
   private JSpinner target;
@@ -46,13 +47,13 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
     fixture.updateDriver(driver);
   }
 
-  @Test public void shouldCreateFixtureWithGivenComponentName() {
+  public void shouldCreateFixtureWithGivenComponentName() {
     String name = "spinner";
     expectLookupByName(name, JSpinner.class);
     verifyLookup(new JSpinnerFixture(robot(), name));
   }
 
-  @Test public void shouldRequireValue() {
+  public void shouldRequireValue() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireValue(target, "A Value");
@@ -65,7 +66,7 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
     }.run();
   }
 
-  @Test public void shouldIncrementTheGivenTimes() {
+  public void shouldIncrementTheGivenTimes() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.increment(target, 8);
@@ -78,7 +79,7 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
     }.run();
   }
 
-  @Test public void shouldIncrement() {
+  public void shouldIncrement() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.increment(target);
@@ -91,7 +92,7 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
     }.run();
   }
 
-  @Test public void shouldDecrementTheGivenTimes() {
+  public void shouldDecrementTheGivenTimes() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.decrement(target, 8);
@@ -104,7 +105,7 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
     }.run();
   }
 
-  @Test public void shouldDecrement() {
+  public void shouldDecrement() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.decrement(target);
@@ -117,7 +118,7 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
     }.run();
   }
 
-  @Test public void shouldEnterText() {
+  public void shouldEnterText() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.enterText(target, "Some Text");
@@ -130,7 +131,20 @@ public class JSpinnerFixtureTest extends CommonComponentFixtureTestCase<JSpinner
     }.run();
   }
 
-  @Test public void shouldEnterTextAndCommit() {
+  public void shouldSelectValue() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectValue(target, "Some Text");
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.select("Some Text"));
+      }
+    }.run();
+  }
+  
+  public void shouldEnterTextAndCommit() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.enterTextAndCommit(target, "Some Text");

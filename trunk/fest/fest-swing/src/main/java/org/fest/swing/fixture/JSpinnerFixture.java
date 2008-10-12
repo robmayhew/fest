@@ -132,7 +132,7 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
     driver.enterText(target, text);
     return this;
   }
-
+  
   /**
    * Simulates a user entering and committing the given text in this fixture's <code>{@link JSpinner}</code> (assuming
    * its editor has a <code>{@link JTextComponent}</code> under it.)
@@ -144,6 +144,17 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
    */
   public JSpinnerFixture enterTextAndCommit(String text) {
     driver.enterTextAndCommit(target, text);
+    return this;
+  }
+
+  /**
+   * Selects the given value in this fixture's <code>{@link JSpinner}</code>.
+   * @param value the value to select.
+   * @return this fixture.
+   * @throws IllegalArgumentException if the <code>JSpinner</code> does not support the specified <code>value</code>.
+   */
+  public Object select(Object value) {
+    driver.selectValue(target, value);
     return this;
   }
 

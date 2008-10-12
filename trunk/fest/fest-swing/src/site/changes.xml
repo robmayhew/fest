@@ -39,6 +39,9 @@
       <action dev="wanghy" type="fix" issue="191">
         Methods 'increment' and 'decrement' in JSpinnerDriver now work in AWT event mode.
       </action>
+      <action dev="wanghy" type="add" issue="196" due-to="Juhos Csaba-Zsolt">
+        Added method 'select(Object)' in org.fest.swing.fixture.JSpinnerFixture.
+      </action>
       <action dev="alruiz" type="fix" issue="197" due-to="filimono">
         Methods 'click(Component)' in org.fest.swing.core.RobotFixture now click on the center of the visible area of 
         the component, only if the component is an instance of javax.swing.JComponent.

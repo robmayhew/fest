@@ -31,7 +31,7 @@ import static org.fest.swing.driver.JSpinnerValueQuery.valueOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
-import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JSpinner}</code>. Unlike <code>JSpinnerFixture</code>, this
@@ -136,6 +136,23 @@ public class JSpinnerDriver extends JComponentDriver {
     } catch (ComponentLookupException e) {
       throw actionFailure(concat("Unable to find editor for ", format(spinner)));
     }
+  }
+
+  /**
+   * Selects the given value in the given <code>{@link JSpinner}</code>. 
+   * @param spinner the target <code>JSpinner</code>.
+   * @param value the value to select.
+   * @throws IllegalArgumentException if the given <code>JSpinner</code> does not support the given value.
+   */
+  public void selectValue(JSpinner spinner, Object value) {
+    if (!isEnabled(spinner)) return;
+    try {
+      JSpinnerSetValueTask.setValue(spinner, value);
+    } catch (UnexpectedException unexpected) {
+      if (!(unexpected.getCause() instanceof IllegalArgumentException)) throw unexpected;
+      throw new IllegalArgumentException(concat("Value ", quote(value), " is not valid"));
+    }
+    robot.waitForIdle();
   }
 
   /**

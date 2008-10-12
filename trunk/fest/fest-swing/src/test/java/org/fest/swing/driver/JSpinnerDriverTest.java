@@ -26,6 +26,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.assertions.Fail;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.GuiTask;
@@ -220,9 +221,35 @@ public class JSpinnerDriverTest {
   public void shouldNotEnterTextIfSpinnerIsNotEnabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     clearAndDisable(spinner);
-    robot.waitForIdle();
     driver.enterText(spinner, "Gandalf");
+    robot.waitForIdle();
     assertFirstValueIsSelected();
+  }
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldSelectValue(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    driver.selectValue(spinner, "Gandalf");
+    assertLastValueIsSelected();
+  }
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldNotSetValueIfSpinnerIsNotEnabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    clearAndDisable(spinner);
+    driver.selectValue(spinner, "Gandalf");
+    robot.waitForIdle();
+    assertFirstValueIsSelected();
+  }
+
+  @Test(groups = GUI)
+  public void shouldThrowErrorIfValueToSelectNotValid() {
+    try {
+      driver.selectValue(spinner, "Yoda");
+      Fail.fail("expecting test to fail");
+    } catch (IllegalArgumentException e) {
+      assertThat(e).message().contains("Value 'Yoda' is not valid");
+    }
   }
 
   private void assertLastValueIsSelected() {
