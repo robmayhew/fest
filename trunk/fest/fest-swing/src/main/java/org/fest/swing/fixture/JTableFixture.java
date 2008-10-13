@@ -588,4 +588,13 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
     driver.cellWriter(cellWriter);
     return this;
   }
+
+  /**
+   * Returns the index of the column in this fixture's <code>{@link JTable}</code> whose name matches the given one.
+   * @param columnName the name of the column to look for.
+   * @return the index of the column whose name matches the given one.
+   */
+  public int columnIndexFor(Object columnName) {
+    return driver.columnIndex(target, columnName);
+  }
 }

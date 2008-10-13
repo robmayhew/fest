@@ -37,6 +37,7 @@ import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.*;
 import static org.fest.swing.driver.JTableCell.*;
 import static org.fest.swing.driver.JTableCellEditableQuery.isCellEditable;
+import static org.fest.swing.driver.JTableColumnByIdentifierQuery.columnIndexByIdentifier;
 import static org.fest.swing.driver.JTableColumnCountQuery.columnCountOf;
 import static org.fest.swing.driver.JTableHasSelectionQuery.hasSelection;
 import static org.fest.swing.driver.JTableHeaderQuery.tableHeader;
@@ -519,5 +520,17 @@ public class JTableDriver extends JComponentDriver {
    */
   public int rowCountOf(JTable table) {
     return JTableRowCountQuery.rowCountOf(table);
+  }
+
+  /**
+   * Returns the index of the column in the given <code>{@link JTable}</code> whose name matches the given one.
+   * @param table the target <code>JTable</code>.
+   * @param columnName the name of the column to look for.
+   * @return the index of the column whose name matches the given one.
+   */
+  public int columnIndex(JTable table, Object columnName) {
+    int index = columnIndexByIdentifier(table, columnName);
+    // TODO throw exception if index == -1
+    return index;
   }
 }

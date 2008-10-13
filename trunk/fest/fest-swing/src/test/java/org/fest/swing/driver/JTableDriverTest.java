@@ -40,6 +40,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Font.PLAIN;
+import static java.lang.Integer.parseInt;
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -242,6 +243,15 @@ public class JTableDriverTest {
   
   @DataProvider(name = "cells") public Object[][] cells() {
     return new Object[][] { { 6, 5 }, { 0, 0 }, { 8, 3 }, { 5, 2 } };
+  }
+
+  @Test(groups = GUI, dataProvider = "columnNames")
+  public void shouldReturnColumnIndexGivenName(String columnName) {
+    assertThat(driver.columnIndex(dragTable, columnName)).isEqualTo(parseInt(columnName));
+  }
+
+  @DataProvider(name = "columnNames") public Object[][] columnNameArray() {
+    return new Object[][] { { "0" }, { "1" }, { "2" }, { "3" } };
   }
 
   public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {

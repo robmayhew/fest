@@ -75,6 +75,20 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
     verifyLookup(new JTableFixture(robot(), name));
   }
 
+  public void shouldReturnColumnIndexGivenName() {
+    final String columnName = "column0";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.columnIndex(target, columnName)).andReturn(6);
+      }
+
+      protected void codeToTest() {
+        int result = fixture.columnIndexFor(columnName);
+        assertThat(result).isEqualTo(6);
+      }
+    }.run();
+  }
+  
   public void shouldReturnRowCount() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
