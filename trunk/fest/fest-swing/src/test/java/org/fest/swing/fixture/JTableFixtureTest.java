@@ -30,7 +30,9 @@ import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.driver.JTableCell;
 import org.fest.swing.driver.JTableDriver;
+import org.fest.swing.exception.ActionFailedException;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Font.PLAIN;
@@ -38,8 +40,10 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseClickInfo.leftButton;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.factory.JTables.table;
 import static org.fest.swing.fixture.TableCell.row;
 
@@ -392,6 +396,41 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
         JTableCellFixture cellFixture = fixture.cell(cell);
         assertThat(cellFixture.table()).isSameAs(fixture);
         assertThat(cellFixture.cell()).isSameAs(cell);
+      }
+    }.run();
+  }
+
+  public void shouldFindCellByValue() {
+    final JTableCell cell = row(6).column(8);
+    final String value = "Hello";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.cell(target, value)).andReturn(cell);
+      }
+
+      protected void codeToTest() {
+        TableCell result = fixture.cell(value);
+        assertThat(result).isEqualTo(cell)
+                          .isNotSameAs(cell);
+      }
+    }.run();
+  }
+  
+  public void shouldThrowErrorIfCellCannotBeFoundWithGivenValue() {
+    final ActionFailedException expected = actionFailure("Thrown on purpose");
+    final String value = "Hello";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.cell(target, value)).andThrow(expected);
+      }
+
+      protected void codeToTest() {
+        try {
+          fixture.cell(value);
+          fail("Expecting an exception");
+        } catch (ActionFailedException e) {
+          assertThat(e).isSameAs(expected);
+        }
       }
     }.run();
   }

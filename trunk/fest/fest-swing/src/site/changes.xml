@@ -36,6 +36,10 @@
         Added method 'done' to org.fest.swing.core.Condition. This method is invoked by org.fest.swing.core.Pause when a 
         condition is evaluated (either the condition was satisfied or it timed-out.)
       </action>
+      <action dev="alruiz" type="add" issue="188" due-to="Jason Goodwin">
+        Added method 'cell(String)' to org.fest.swing.fixture.JTableFixture. This method returns a table cell which
+        value matches the given one.
+      </action>
       <action dev="wanghy" type="fix" issue="191">
         Methods 'increment' and 'decrement' in JSpinnerDriver now work in AWT event mode.
       </action>

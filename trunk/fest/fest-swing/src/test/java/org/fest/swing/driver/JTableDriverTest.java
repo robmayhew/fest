@@ -33,6 +33,7 @@ import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.*;
 import org.fest.swing.core.Robot;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
@@ -221,6 +222,24 @@ public class JTableDriverTest {
     assertCellReaderWasCalled();
   }
 
+  @Test(groups = GUI, dataProvider = "cells")
+  public void shouldFindCellByValue(int row, int column) {
+    String value = createCellTextUsing(row, column);
+    JTableCell cell = driver.cell(dragTable, value);
+    assertThat(cell.row).isEqualTo(row);
+    assertThat(cell.column).isEqualTo(column);
+    assertCellReaderWasCalled();
+  }
+
+  public void shouldThrowErrorIfCellCannotBeFoundWithGivenValue() {
+    try {
+      driver.cell(dragTable, "Hello World");
+      fail("Expecting an exception");
+    } catch (ActionFailedException expected) {
+      assertThat(expected).message().contains("Unable to find cell with value 'Hello World'");
+    }
+  }
+  
   @DataProvider(name = "cells") public Object[][] cells() {
     return new Object[][] { { 6, 5 }, { 0, 0 }, { 8, 3 }, { 5, 2 } };
   }

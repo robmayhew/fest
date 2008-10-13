@@ -44,10 +44,12 @@ import static org.fest.swing.driver.JTableSelectedCellQuery.selectedCellOf;
 import static org.fest.swing.driver.JTableSelectedRowCountQuery.selectedRowCountOf;
 import static org.fest.swing.driver.JTableSelectedRowsQuery.selectedRowsIn;
 import static org.fest.swing.driver.JTableSingleRowCellSelectedQuery.isCellSelected;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.util.Arrays.assertEquals;
 import static org.fest.util.Arrays.format;
-import static org.fest.util.Strings.concat;
+import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JTable}</code>. Unlike <code>JTableFixture</code>, this
@@ -97,6 +99,26 @@ public class JTableDriver extends JComponentDriver {
   public String selectionValue(JTable table) {
     if (selectedRowCountOf(table) == 0) return null;
     return value(table, selectedCellOf(table));
+  }
+
+  /**
+   * Returns a cell from the given <code>{@link JTable}</code> whose value matches the given one. 
+   * @param table the target <code>JTable</code>.
+   * @param value the value of the cell to look for.
+   * @return a cell from the given <code>JTable</code> whose value matches the given one.
+   * @throws ActionFailedException if a cell with a matching value cannot be found.
+   */
+  public JTableCell cell(JTable table, String value) {
+    int rowCount = rowCountOf(table);
+    int columnCount = columnCountOf(table);
+    for (int row = 0; row < rowCount; row++)
+      for (int column = 0; column < columnCount; column++)
+        if (cellContainsValue(table, row, column, value)) return JTableCell.cell(row, column);
+    throw actionFailure(concat("Unable to find cell with value ", quote(value)));
+  }
+  
+  private boolean cellContainsValue(JTable table, int row, int column, String value) {
+    return areEqual(value, value(table, row, column));
   }
 
   /**

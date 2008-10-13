@@ -66,6 +66,10 @@ public class TableCell extends JTableCell {
     public TableCell column(int column) { return new TableCell(row, column); }
   }
   
+  TableCell(JTableCell cell) {
+    this(cell.row, cell.column);
+  }
+  
   TableCell(int row, int column) {
     super(row, column);
   }

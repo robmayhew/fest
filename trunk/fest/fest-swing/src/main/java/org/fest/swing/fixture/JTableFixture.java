@@ -26,6 +26,7 @@ import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.*;
 import org.fest.swing.driver.BasicJTableCellReader;
 import org.fest.swing.driver.BasicJTableCellWriter;
+import org.fest.swing.driver.JTableCell;
 import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -143,6 +144,17 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
   public JTableFixture requireCellValue(TableCell cell, String value) {
     driver.requireCellValue(target, cell, value);
     return this;
+  }
+
+  /**
+   * Returns a fixture that manages the table cell whose value matches the given one.
+   * @param value the value of the cell to look for.
+   * @return a fixture that manages the table cell whose value matches the given one.
+   * @throws ActionFailedException if a cell with a matching value cannot be found.
+   */
+  public TableCell cell(String value) {
+    JTableCell cell = driver.cell(target, value);
+    return new TableCell(cell);
   }
 
   /**
@@ -268,8 +280,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
   }
 
   /**
-   * Returns the <code>String</code> representation of the value of a cell in this fixture's <code>{@link JTable}</code>
-   * , using this fixture's <code>{@link JTableCellReader}</code>.
+   * Returns the <code>String</code> representation of the value of a cell in this fixture's 
+   * <code>{@link JTable}</code>, using this fixture's <code>{@link JTableCellReader}</code>.
    * @param cell the given cell.
    * @return the <code>String</code> representation of the value of a cell in this fixture's <code>JTable</code>.
    * @throws NullPointerException if the cell is <code>null</code>.
