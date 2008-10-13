@@ -1,16 +1,15 @@
 /*
  * Created on Jul 12, 2007
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
- *
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ * 
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.fixture;
@@ -42,7 +41,7 @@ import static org.fest.assertions.Assertions.assertThat;
  * renderer is performed by a <code>{@link JTableCellReader}</code>. This fixture uses a
  * <code>{@link BasicJTableCellReader}</code> by default.
  * </p>
- *
+ * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  * @author Fabien Barbero
@@ -186,8 +185,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
 
   /**
    * Returns the <code>String</code> representation of the selected cell in this fixture's <code>{@link JTable}</code>,
-   * using this fixture's <code>{@link JTableCellReader}</code>. Returns <code>null</code> if one can not be
-   * obtained or if the <code>{@link JTable}</code> does not have any selected cell.
+   * using this fixture's <code>{@link JTableCellReader}</code>. Returns <code>null</code> if one can not be obtained or
+   * if the <code>{@link JTable}</code> does not have any selected cell.
    * @return the <code>String</code> representation of the selected cell.
    * @see #cellReader(JTableCellReader)
    */
@@ -249,7 +248,6 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
     return driver.pointAt(target, cell);
   }
 
-
   /**
    * Returns the <code>String</code> representation of the cells in the in this fixture's <code>{@link JTable}</code>,
    * using this fixture's <code>{@link JTableCellReader}</code>.
@@ -261,8 +259,17 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
   }
 
   /**
-   * Returns the <code>String</code> representation of the value of a cell in this fixture's
-   * <code>{@link JTable}</code>, using this fixture's <code>{@link JTableCellReader}</code>.
+   * Returns the number of rows that can be shown in this fixture's <code>{@link JTable}</code>, given unlimited space.
+   * @return the number of rows shown in this fixture's <code>JTable</code>.
+   * @see JTable#getRowCount()
+   */
+  public int rowCount() {
+    return driver.rowCountOf(target);
+  }
+
+  /**
+   * Returns the <code>String</code> representation of the value of a cell in this fixture's <code>{@link JTable}</code>
+   * , using this fixture's <code>{@link JTableCellReader}</code>.
    * @param cell the given cell.
    * @return the <code>String</code> representation of the value of a cell in this fixture's <code>JTable</code>.
    * @throws NullPointerException if the cell is <code>null</code>.
@@ -467,7 +474,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * <code>{@link JTable}</code> is equal to the given <code>String</code> array. This method uses this fixture's
    * <code>{@link JTableCellReader}</code> to read the values of the table cells as <code>String</code>s.
    * @param contents the expected <code>String</code> representation of the cell values in this fixture's
-   * <code>JTable</code>.
+   *          <code>JTable</code>.
    * @see #cellReader(JTableCellReader)
    */
   public void requireContents(String[][] contents) {
@@ -485,10 +492,10 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
   }
 
   /**
-   * Returns a <code>{@link JTableHeaderFixture}</code> wrapping the <code>{@link JTableHeader}</code> in this
-   * fixture's <code>{@link JTable}</code>.
+   * Returns a <code>{@link JTableHeaderFixture}</code> wrapping the <code>{@link JTableHeader}</code> in this fixture's
+   * <code>{@link JTable}</code>.
    * @return a <code>JTableHeaderFixture</code> wrapping the <code>JTableHeader</code> in this fixture's
-   * <code>JTable</code>.
+   *         <code>JTable</code>.
    * @throws AssertionError if the <code>JTableHeader</code> in this fixture's <code>JTable</code> is <code>null</code>.
    */
   public JTableHeaderFixture tableHeader() {
@@ -525,7 +532,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
 
   /**
    * Enters the given value in the given cell of this fixture's <code>{@link JTable}</code>, using this fixture's
-   * <code>{@link JTableCellWriter}</code>. If you need more flexibility for editing cell, please see 
+   * <code>{@link JTableCellWriter}</code>. If you need more flexibility for editing cell, please see
    * <code>{@link JTableCellFixture#editor()}</code>.
    * @param cell the given cell.
    * @param value the given value.
@@ -534,8 +541,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * @throws AssertionError if the given table cell is not editable.
    * @throws NullPointerException if the cell is <code>null</code>.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
-   * @throws ActionFailedException if this fixture's <code>JTableCellValueReader</code> is unable to enter the given 
-   * value.
+   * @throws ActionFailedException if this fixture's <code>JTableCellValueReader</code> is unable to enter the given
+   *           value.
    * @see #cellWriter(JTableCellWriter)
    * @see JTableCellFixture#editor()
    */
@@ -545,9 +552,9 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
   }
 
   /**
-   * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of
-   * this fixture's <code>{@link JTable}</code> and the values expected in a test. The default implementation to use
-   * is <code>{@link BasicJTableCellReader}</code>.
+   * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of this
+   * fixture's <code>{@link JTable}</code> and the values expected in a test. The default implementation to use is
+   * <code>{@link BasicJTableCellReader}</code>.
    * @param cellReader the new <code>JTableCellValueReader</code> to use.
    * @throws NullPointerException if <code>cellReader</code> is <code>null</code>.
    * @return this fixture.
@@ -558,9 +565,9 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
   }
 
   /**
-   * Updates the implementation of <code>{@link JTableCellWriter}</code> to use when comparing internal values of
-   * this fixture's <code>{@link JTable}</code> and the values expected in a test. The default implementation to use
-   * is <code>{@link BasicJTableCellWriter}</code>.
+   * Updates the implementation of <code>{@link JTableCellWriter}</code> to use when comparing internal values of this
+   * fixture's <code>{@link JTable}</code> and the values expected in a test. The default implementation to use is
+   * <code>{@link BasicJTableCellWriter}</code>.
    * @param cellWriter the new <code>JTableCellValueWriter</code> to use.
    * @throws NullPointerException if <code>cellWriter</code> is <code>null</code>.
    * @return this fixture.

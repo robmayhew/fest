@@ -38,12 +38,11 @@ import static org.fest.swing.driver.CommonValidations.*;
 import static org.fest.swing.driver.JTableCell.*;
 import static org.fest.swing.driver.JTableCellEditableQuery.isCellEditable;
 import static org.fest.swing.driver.JTableColumnCountQuery.columnCountOf;
+import static org.fest.swing.driver.JTableHasSelectionQuery.hasSelection;
 import static org.fest.swing.driver.JTableHeaderQuery.tableHeader;
-import static org.fest.swing.driver.JTableRowCountQuery.rowCountOf;
 import static org.fest.swing.driver.JTableSelectedCellQuery.selectedCellOf;
 import static org.fest.swing.driver.JTableSelectedRowCountQuery.selectedRowCountOf;
 import static org.fest.swing.driver.JTableSelectedRowsQuery.selectedRowsIn;
-import static org.fest.swing.driver.JTableHasSelectionQuery.hasSelection;
 import static org.fest.swing.driver.JTableSingleRowCellSelectedQuery.isCellSelected;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.util.Arrays.assertEquals;
@@ -488,5 +487,15 @@ public class JTableDriver extends JComponentDriver {
   public void cellWriter(JTableCellWriter newCellWriter) {
     validateCellWriter(newCellWriter);
     cellWriter = newCellWriter;
+  }
+
+  /**
+   * Returns the number of rows that can be shown in the given <code>{@link JTable}</code>, given unlimited space.
+   * @param table the target <code>JTable</code>.
+   * @return the number of rows shown in the given <code>JTable</code>.
+   * @see JTable#getRowCount()
+   */
+  public int rowCountOf(JTable table) {
+    return JTableRowCountQuery.rowCountOf(table);
   }
 }

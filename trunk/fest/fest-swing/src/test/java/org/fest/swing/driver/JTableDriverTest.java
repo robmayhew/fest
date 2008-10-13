@@ -71,6 +71,9 @@ import static org.fest.swing.testing.TestTable.*;
 @Test(groups = GUI)
 public class JTableDriverTest {
 
+  private static final int COLUMN_COUNT = 6;
+  private static final int ROW_COUNT = 10;
+
   private Robot robot;
   private JTableCellReaderStub cellReader;
   private TestTable dragTable;
@@ -118,6 +121,10 @@ public class JTableDriverTest {
     };
   }
 
+  public void shouldReturnRowCount() {
+    assertThat(driver.rowCountOf(dragTable)).isEqualTo(ROW_COUNT);
+  }
+  
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotSelectCellIfTableIsNotEnabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
@@ -514,9 +521,6 @@ public class JTableDriverTest {
     private static final long serialVersionUID = 1L;
 
     private static final Dimension TABLE_SIZE = new Dimension(400, 100);
-
-    private static final int COLUMN_COUNT = 6;
-    private static final int ROW_COUNT = 10;
 
     final TestTable dragTable = new TestTable(ROW_COUNT, COLUMN_COUNT);
     final TestTable dropTable = new TestTable(dropTableData(2, COLUMN_COUNT), columnNames(COLUMN_COUNT));
