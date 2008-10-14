@@ -67,9 +67,13 @@
       <action dev="alruiz" type="fix" issue="197" due-to="filimono">
         Added methods 'scrollToMaximum' and 'scrollToMinimum' to org.fest.swing.fixture.JScrollBarDriver.
       </action>
+      <action dev="alruiz" type="fix" issue="200" due-to="Juhos Csaba-Zsolt">
+        Method 'showPopupMenuAt(String)' in org.fest.swing.fixture.JTreeFixture now makes the last node in the given 
+        path visible before showing a JPopupMenu.
+      </action>
       <action dev="wanghy" type="fix" issue="201" due-to="Juhos Csaba-Zsolt">
-        Method 'eventDispatched(AWTEvent)' in org.fest.swing.monitor now checks if the source of the event is a 
-        java.awt.Component before performing a cast.
+        Method 'eventDispatched(AWTEvent)' in org.fest.swing.monitor.WindowAvailabilityMonitor now checks if the source 
+        of the event is a java.awt.Component before performing a cast.
       </action>
       <action dev="alruiz, wanghy" type="add" issue="204" due-to="Juhos Csaba-Zsolt">
         Added method 'rowCount' to org.fest.swing.fixture.JTableFixture.

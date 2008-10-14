@@ -248,7 +248,8 @@ public class JTreeDriver extends JComponentDriver {
   }
 
   /**
-   * Shows a pop-up menu at the position of the last node in the given path.
+   * Shows a pop-up menu at the position of the last node in the given path. The last node in the given path will be
+   * made visible (by expanding the parent node(s)) if it is not visible.
    * @param tree the target <code>JTree</code>.
    * @param path the given path.
    * @return a driver that manages the displayed pop-up menu.
@@ -257,7 +258,9 @@ public class JTreeDriver extends JComponentDriver {
    * @see #separator(String)
    */
   public JPopupMenu showPopupMenu(JTree tree, String path) {
-    return robot.showPopupMenu(tree, location.pointAt(tree, findMatchingPath(tree, path)));
+    TreePath matchingPath = findMatchingPath(tree, path);
+    makeVisible(tree, matchingPath, false);
+    return robot.showPopupMenu(tree, location.pointAt(tree, matchingPath));
   }
 
   /**

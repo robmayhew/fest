@@ -276,7 +276,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
   }
   
   /**
-   * Shows a pop-up menu at the position of the last node in the given path.
+   * Shows a pop-up menu at the position of the last node in the given path. The last node in the given path will be
+   * made visible (by expanding the parent node(s)) if it is not visible.
    * @param path the path of the node invoking the pop-up menu.
    * @return a fixture that manages the displayed pop-up menu.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
