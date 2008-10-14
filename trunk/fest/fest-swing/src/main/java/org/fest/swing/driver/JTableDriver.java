@@ -28,6 +28,7 @@ import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
+import org.fest.swing.data.TableCellByColumnName;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.util.Arrays;
@@ -102,6 +103,25 @@ public class JTableDriver extends JComponentDriver {
   public String selectionValue(JTable table) {
     if (selectedRowCountOf(table) == 0) return null;
     return value(table, selectedCellOf(table));
+  }
+
+  /**
+   * Returns a cell from the given <code>{@link JTable}</code> whose row index matches the given one and column name 
+   * matches the given one.
+   * @param table the target <code>JTable</code>.
+   * @param cellByColumnName contains the given row index and column name to match.
+   * @return a cell from the given <code>JTable</code> whose row index matches the given one and column name 
+   * matches the given one.
+   * @throws NullPointerException if <code>cellByColumnName</code> is <code>null</code>.
+   * @throws IndexOutOfBoundsException if the row index in the given cell is out of bounds.
+   * @throws ActionFailedException if a column with a matching name could not be found.
+   */
+  public TableCell cell(JTable table, TableCellByColumnName cellByColumnName) {
+    if (cellByColumnName == null) 
+      throw new NullPointerException("The instance of TableCellByColumnName should not be null");
+    int row = cellByColumnName.row;
+    validateRow(table, row);
+    return row(row).column(columnIndex(table, cellByColumnName.columnName));
   }
 
   /**
@@ -480,16 +500,6 @@ public class JTableDriver extends JComponentDriver {
     cellWriter.cancelCellEditing(table, cell.row, cell.column);
   }
   
-  /**
-   * Validates that the row index is not out of bounds.
-   * @param table the target <code>JTable</code>.
-   * @param row the row index to validate.
-   * @throws IndexOutOfBoundsException if any the given row index is out of bounds.
-   */
-  public void validate(JTable table, int row) {
-    validateRow(table, row);
-  }
-
   /**
    * Validates that the given table cell is non <code>null</code> and its indices are not out of bounds.
    * @param table the target <code>JTable</code>.

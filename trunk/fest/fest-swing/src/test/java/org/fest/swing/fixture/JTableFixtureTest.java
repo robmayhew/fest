@@ -112,17 +112,14 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
   public void shouldReturnCellHavingGivenColumnName() {
     final int row = 6;
     final int column = 8;
-    final String columnName = "column0";
-    final TableCell cell = row(row).column(column);
+    final TableCellByColumnName cellByColumnName = TableCellByColumnName.row(row).columnName("column0");
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.validate(target, row);
-        expectLastCall().once();
-        expect(driver.columnIndex(target, columnName)).andReturn(column);
+        expect(driver.cell(target, cellByColumnName)).andReturn(row(row).column(column));
       }
 
       protected void codeToTest() {
-        JTableCellFixture cellFixture = fixture.cell(TableCellByColumnName.row(row).columnName(columnName));
+        JTableCellFixture cellFixture = fixture.cell(cellByColumnName);
         assertThat(cellFixture.row()).isEqualTo(row);
         assertThat(cellFixture.column()).isEqualTo(column);
       }

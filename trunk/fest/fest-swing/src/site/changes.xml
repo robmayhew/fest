@@ -21,6 +21,14 @@
       <action dev="alruiz" type="add" issue="170" due-to="Juhos Csaba-Zsolt">
         Added method 'columnIndexFor(Object)' in org.fest.swing.fixture.JTableFixture.
       </action>
+      <action dev="alruiz" type="add" issue="170" due-to="Juhos Csaba-Zsolt">
+        Added method 'cell(TableCellByColumnName cell)' to org.fest.swing.fixture.JTableFixture that returns a 
+        JTableCellFixture from a row index and column name.
+      </action>
+      <action dev="alruiz" type="add" issue="170" due-to="Juhos Csaba-Zsolt">
+        Replaced org.fest.swing.driver.JTableCell and org.fest.swing.fixture.TableCell with 
+        org.fest.swing.data.TableCell.      
+      </action>
       <action dev="alruiz" type="fix" issue="186" due-to="Michael Hüttermann">
         BasicJTableCellReader obtains the value of a cell from a JTable, not from a TableModel.
       </action>

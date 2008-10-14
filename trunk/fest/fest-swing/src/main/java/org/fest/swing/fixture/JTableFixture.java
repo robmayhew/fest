@@ -34,7 +34,6 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.data.TableCell.row;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -167,10 +166,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * @throws ActionFailedException if a column with a matching name could not be found.
    */
   public JTableCellFixture cell(TableCellByColumnName cell) {
-    int row = cell.row;
-    driver.validate(target, row);
-    int column = driver.columnIndex(target, cell.columnName);
-    return new JTableCellFixture(this, row(row).column(column));
+    return new JTableCellFixture(this, driver.cell(target, cell));
   }
 
   /**

@@ -34,6 +34,7 @@ import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.*;
 import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
+import org.fest.swing.data.TableCellByColumnName;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestTable;
@@ -98,7 +99,7 @@ public class JTableDriverTest {
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
-
+  
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfCellToValidateIsNull() {
     driver.validate(dragTable, null);
@@ -232,6 +233,10 @@ public class JTableDriverTest {
     assertThat(cell.column).isEqualTo(column);
     assertCellReaderWasCalled();
   }
+  
+  @DataProvider(name = "cells") public Object[][] cells() {
+    return new Object[][] { { 6, 5 }, { 0, 0 }, { 8, 3 }, { 5, 2 } };
+  }
 
   public void shouldThrowErrorIfCellCannotBeFoundWithGivenValue() {
     try {
@@ -241,9 +246,31 @@ public class JTableDriverTest {
       assertThat(expected).message().contains("Unable to find cell with value 'Hello World'");
     }
   }
+
+  @Test(groups = GUI, dataProvider = "columnNames")
+  public void shouldReturnCellHavingGivenColumnName(String columnName) {
+    TableCell cell = driver.cell(dragTable, TableCellByColumnName.row(0).columnName(columnName));
+    assertThat(cell.row).isEqualTo(0);
+    assertThat(cell.column).isEqualTo(parseInt(columnName));
+  }
   
-  @DataProvider(name = "cells") public Object[][] cells() {
-    return new Object[][] { { 6, 5 }, { 0, 0 }, { 8, 3 }, { 5, 2 } };
+  public void shouldThrowErrorWhenCreatingCellWithColumnNameIfGivenCellIsNull() {
+    try {
+      driver.cell(dragTable, (TableCellByColumnName)null);
+      fail("Expecting exception");
+    } catch (NullPointerException e) {
+      assertThat(e).message().contains("The instance of TableCellByColumnName should not be null");
+    }
+  }
+  
+  @Test(groups = GUI, expectedExceptions = IndexOutOfBoundsException.class)
+  public void shouldThrowErrorWhenCreatingCellWithColumnNameIfRowIndexIsOutOfBounds() {
+    driver.cell(dragTable, TableCellByColumnName.row(-1).columnName("Hello"));
+  }
+  
+  @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
+  public void shouldThrowErrorWhenCreatingCellWithColumnNameIfColumnWithMatchingNameNotFound() {
+    driver.cell(dragTable, TableCellByColumnName.row(0).columnName("Hello"));
   }
 
   @Test(groups = GUI, dataProvider = "columnNames")
