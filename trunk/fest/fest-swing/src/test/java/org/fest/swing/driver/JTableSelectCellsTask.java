@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 import javax.swing.JTable;
 
 import org.fest.swing.core.GuiTask;
+import org.fest.swing.data.TableCell;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 
@@ -29,7 +30,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  */
 final class JTableSelectCellsTask {
 
-  static void selectCells(final JTable table, final JTableCell from, final JTableCell to) {
+  static void selectCells(final JTable table, final TableCell from, final TableCell to) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         table.setColumnSelectionInterval(from.column, to.column);

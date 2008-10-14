@@ -1,5 +1,5 @@
 /*
- * Created on Sep 22, 2007
+ * Created on Oct 13, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -11,58 +11,50 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  * 
- * Copyright @2007-2008 the original author or authors.
+ * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.fixture;
+package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
 import org.testng.annotations.Test;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.fest.swing.data.TableCell;
 
 /**
- * Tests for <code>{@link TableCell}</code>.
+ * Tests for <code>{@link JTableCellValidator}</code>.
  *
  * @author Alex Ruiz
  */
-public class TableCellTest {
+public class JTableCellValidatorTest {
 
-  @Test public void shouldCreateTableCellWithGivenRowAndColumn() {
-    int row = 6;
-    int column = 8;
-    TableCell cell = TableCell.row(row).column(column);
-    assertThat(cell.row).isEqualTo(row);
-    assertThat(cell.column).isEqualTo(column);
-  }
-  
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfTableIsEmpty() {
     TableCell cell = TableCell.row(2).column(3);
-    cell.validateBoundsIn(new JTable());
+    JTableCellValidator.validateCell(new JTable(), cell);
   }
 
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfRowIndexIsNegative() {
     TableCell cell = TableCell.row(-2).column(3);
-    cell.validateBoundsIn(new JTable(4, 3));
+    JTableCellValidator.validateCell(new JTable(4, 3), cell);
   }
 
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfColumnIndexIsNegative() {
     TableCell cell = TableCell.row(2).column(-3);
-    cell.validateBoundsIn(new JTable(4, 3));
+    JTableCellValidator.validateCell(new JTable(4, 3), cell);
   }
   
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfRowIsOutOfBounds() {
     TableCell cell = TableCell.row(4).column(2);
-    cell.validateBoundsIn(new JTable(4, 3));
+    JTableCellValidator.validateCell(new JTable(4, 3), cell);
   }  
   
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfColumnIsOutOfBounds() {
     TableCell cell = TableCell.row(0).column(3);
-    cell.validateBoundsIn(new JTable(4, 3));
+    JTableCellValidator.validateCell(new JTable(4, 3), cell);
   }  
 }

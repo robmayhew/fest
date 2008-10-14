@@ -20,6 +20,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.data.TableCell;
 import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
@@ -28,7 +29,7 @@ import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.JTableCell.cell;
+import static org.fest.swing.data.TableCell.row;
 import static org.fest.swing.driver.JTableSelectCellsTask.selectCells;
 import static org.fest.swing.testing.TestGroups.*;
 
@@ -56,14 +57,14 @@ public class JTableSelectedColumnsQueryTest {
   }
 
   public void shouldReturnSelectedColumnCountOfJTable() {
-    selectInTable(cell(0, 2), cell(0, 4));
+    selectInTable(row(0).column(2), row(0).column(4));
     table.startRecording();
     int[] selectedColumns = JTableSelectedColumnsQuery.selectedColumnsIn(table);
     assertThat(selectedColumns).containsOnly(2, 3, 4);
     table.requireInvoked("getSelectedColumns");
   }
 
-  private void selectInTable(final JTableCell from, final JTableCell to) {
+  private void selectInTable(final TableCell from, final TableCell to) {
     selectCells(table, from, to);
     robot.waitForIdle();
   }

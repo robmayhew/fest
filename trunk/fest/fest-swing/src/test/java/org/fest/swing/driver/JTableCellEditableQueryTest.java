@@ -27,7 +27,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.JTableCell.cell;
+import static org.fest.swing.data.TableCell.row;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -54,11 +54,11 @@ public class JTableCellEditableQueryTest {
   }
 
   public void shouldIndicateWhetherCellIsEditableOrNot() {
-    assertThat(JTableCellEditableQuery.isCellEditable(table, cell(0,0))).isFalse();
-    assertThat(JTableCellEditableQuery.isCellEditable(table, cell(0,1))).isFalse();
-    assertThat(JTableCellEditableQuery.isCellEditable(table, cell(0,2))).isTrue();
-    assertThat(JTableCellEditableQuery.isCellEditable(table, cell(0,3))).isTrue();
-    assertThat(JTableCellEditableQuery.isCellEditable(table, cell(0,4))).isTrue();
+    assertThat(JTableCellEditableQuery.isCellEditable(table, row(0).column(0))).isFalse();
+    assertThat(JTableCellEditableQuery.isCellEditable(table, row(0).column(1))).isFalse();
+    assertThat(JTableCellEditableQuery.isCellEditable(table, row(0).column(2))).isTrue();
+    assertThat(JTableCellEditableQuery.isCellEditable(table, row(0).column(3))).isTrue();
+    assertThat(JTableCellEditableQuery.isCellEditable(table, row(0).column(4))).isTrue();
   }
 
   private static class MyWindow extends TestWindow {

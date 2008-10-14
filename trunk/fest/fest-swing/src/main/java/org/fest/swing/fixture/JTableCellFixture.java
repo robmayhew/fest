@@ -23,6 +23,7 @@ import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.data.TableCell;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 

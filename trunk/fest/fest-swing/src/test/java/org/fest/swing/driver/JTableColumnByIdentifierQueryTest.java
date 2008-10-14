@@ -1,47 +1,48 @@
 /*
- * Created on Aug 10, 2008
- *
+ * Created on Oct 13, 2008
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- *
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- *
+ * 
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
 
+import javax.swing.table.TableColumn;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.data.TableCell;
 import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
+import org.fest.swing.testing.MethodInvocations.Args;
 
-import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+import static java.lang.Integer.parseInt;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.data.TableCell.row;
-import static org.fest.swing.driver.JTableSelectCellsTask.selectCells;
+import static org.fest.swing.testing.MethodInvocations.Args.args;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
- * Tests for <code>{@link JTableSelectedRowCountQuery}</code>.
+ * Tests for <code>{@link JTableColumnByIdentifierQuery}</code>.
  *
  * @author Alex Ruiz
- * @author Yvonne Wang
  */
 @Test(groups = { GUI, EDT_ACTION })
-public class JTableSelectedRowCountQueryTest {
-
+public class JTableColumnByIdentifierQueryTest {
+  
   private Robot robot;
   private MyTable table;
 
@@ -55,17 +56,24 @@ public class JTableSelectedRowCountQueryTest {
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
-
-  public void shouldReturnSelectedRowCountOfJTable() {
-    selectInTable(row(0).column(2), row(1).column(2));
+  
+  @Test(dataProvider = "columnNames", groups = { GUI, EDT_ACTION })
+  public void shouldReturnColumnIndexGivenIdentifier(String identifier) {
     table.startRecording();
-    assertThat(JTableSelectedRowCountQuery.selectedRowCountOf(table)).isEqualTo(2);
-    table.requireInvoked("getSelectedRowCount");
+    int index = parseInt(identifier);
+    assertThat(JTableColumnByIdentifierQuery.columnIndexByIdentifier(table, identifier)).isEqualTo(index);
+    table.requireInvoked("getColumn", args(identifier));
   }
 
-  private void selectInTable(final TableCell from, final TableCell to) {
-    selectCells(table, from, to);
-    robot.waitForIdle();
+  @DataProvider(name = "columnNames") public Object[][] columnNames() {
+    return new Object[][] { { "0" }, { "1" }, { "2" }, { "3" } };
+  }
+  
+  public void shouldReturnNegativeOneIfColumnIndexNotFound() {
+    String identifier = "Hello World";
+    table.startRecording();
+    assertThat(JTableColumnByIdentifierQuery.columnIndexByIdentifier(table, identifier)).isEqualTo(-1);
+    table.requireInvoked("getColumn", args(identifier));    
   }
 
   private static class MyWindow extends TestWindow {
@@ -78,7 +86,7 @@ public class JTableSelectedRowCountQueryTest {
     }
 
     private MyWindow() {
-      super(JTableSelectedRowCountQueryTest.class);
+      super(JTableColumnByIdentifierQueryTest.class);
       addComponents(table);
     }
   }
@@ -91,18 +99,18 @@ public class JTableSelectedRowCountQueryTest {
 
     MyTable() {
       super(2, 6);
-      setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
     }
 
-    @Override public int getSelectedRowCount() {
-      if (recording) methodInvocations.invoked("getSelectedRowCount");
-      return super.getSelectedRowCount();
+    @Override public TableColumn getColumn(Object identifier) {
+      if (recording) methodInvocations.invoked("getColumn", args(identifier));
+      return super.getColumn(identifier);
     }
 
     void startRecording() { recording = true; }
 
-    MethodInvocations requireInvoked(String methodName) {
-      return methodInvocations.requireInvoked(methodName);
+    MethodInvocations requireInvoked(String methodName, Args args) {
+      return methodInvocations.requireInvoked(methodName, args);
     }
   }
+
 }

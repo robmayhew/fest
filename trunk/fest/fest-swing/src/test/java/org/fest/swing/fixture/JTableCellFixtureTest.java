@@ -27,6 +27,7 @@ import org.testng.annotations.Test;
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.core.Robot;
+import org.fest.swing.data.TableCell;
 import org.fest.swing.driver.JTableDriver;
 
 import static java.awt.Color.BLUE;
@@ -37,7 +38,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.MouseClickInfo.leftButton;
-import static org.fest.swing.fixture.TableCell.row;
+import static org.fest.swing.data.TableCell.row;
 
 /**
  * Tests for <code>{@link JTableCellFixture}</code>.

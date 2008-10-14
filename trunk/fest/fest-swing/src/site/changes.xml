@@ -18,6 +18,9 @@
       <action dev="alruiz" type="fix" issue="165" due-to="filimono">
         RobotFixture now specifies the coordinates to click on when using AWT event mode.
       </action>
+      <action dev="alruiz" type="add" issue="170" due-to="Juhos Csaba-Zsolt">
+        Added method 'columnIndexFor(Object)' in org.fest.swing.fixture.JTableFixture.
+      </action>
       <action dev="alruiz" type="fix" issue="186" due-to="Michael Hüttermann">
         BasicJTableCellReader obtains the value of a cell from a JTable, not from a TableModel.
       </action>

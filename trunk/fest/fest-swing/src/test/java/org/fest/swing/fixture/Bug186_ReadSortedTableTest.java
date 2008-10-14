@@ -33,7 +33,7 @@ import org.fest.swing.testing.TestWindow;
 import static javax.swing.RowFilter.regexFilter;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.fixture.TableCell.row;
+import static org.fest.swing.data.TableCell.row;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**

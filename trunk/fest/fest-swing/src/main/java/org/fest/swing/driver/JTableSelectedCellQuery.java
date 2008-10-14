@@ -15,12 +15,13 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.driver.JTableCell.cell;
-
 import javax.swing.JTable;
 
 import org.fest.swing.core.GuiQuery;
+import org.fest.swing.data.TableCell;
+
+import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.data.TableCell.row;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the indices of the selected row and column
@@ -33,10 +34,10 @@ import org.fest.swing.core.GuiQuery;
  */
 final class JTableSelectedCellQuery {
 
-  static JTableCell selectedCellOf(final JTable table) {
-    return execute(new GuiQuery<JTableCell>() {
-      protected JTableCell executeInEDT() {
-        return cell(table.getSelectedRow(), table.getSelectedColumn());
+  static TableCell selectedCellOf(final JTable table) {
+    return execute(new GuiQuery<TableCell>() {
+      protected TableCell executeInEDT() {
+        return row(table.getSelectedRow()).column(table.getSelectedColumn());
       }
     });
   }

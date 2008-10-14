@@ -29,8 +29,9 @@ import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.data.TableCell;
+import org.fest.swing.data.TableCellByColumnName;
 import org.fest.swing.driver.ComponentDriver;
-import org.fest.swing.driver.JTableCell;
 import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
 
@@ -43,9 +44,9 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseClickInfo.leftButton;
+import static org.fest.swing.data.TableCell.row;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.factory.JTables.table;
-import static org.fest.swing.fixture.TableCell.row;
 
 /**
  * Tests for <code>{@link JTableFixture}</code>.
@@ -85,6 +86,45 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
       protected void codeToTest() {
         int result = fixture.columnIndexFor(columnName);
         assertThat(result).isEqualTo(6);
+      }
+    }.run();
+  }
+
+  public void shouldThrowErrorIfColumnWithGivenNameNotFound() {
+    final ActionFailedException expected = actionFailure("Thrown on purpose");
+    final String columnName = "column0";
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.columnIndex(target, columnName)).andThrow(expected);
+      }
+
+      protected void codeToTest() {
+        try {
+          fixture.columnIndexFor(columnName);
+          fail("Expeting exception");
+        } catch (ActionFailedException e) {
+          assertThat(e).isSameAs(expected);
+        }
+      }
+    }.run();
+  }
+
+  public void shouldReturnCellHavingGivenColumnName() {
+    final int row = 6;
+    final int column = 8;
+    final String columnName = "column0";
+    final TableCell cell = row(row).column(column);
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.validate(target, row);
+        expectLastCall().once();
+        expect(driver.columnIndex(target, columnName)).andReturn(column);
+      }
+
+      protected void codeToTest() {
+        JTableCellFixture cellFixture = fixture.cell(TableCellByColumnName.row(row).columnName(columnName));
+        assertThat(cellFixture.row()).isEqualTo(row);
+        assertThat(cellFixture.column()).isEqualTo(column);
       }
     }.run();
   }
@@ -415,7 +455,7 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
   }
 
   public void shouldFindCellByValue() {
-    final JTableCell cell = row(6).column(8);
+    final TableCell cell = row(6).column(8);
     final String value = "Hello";
     new EasyMockTemplate(driver) {
       protected void expectations() {

@@ -24,18 +24,21 @@ import org.fest.swing.core.GuiQuery;
  * Understands an action, executed in the event dispatch thread, that returns the index of a column in a
  * <code>{@link JTable}</code> whose identifier matches the given one.
  * @see JTable#getColumn(Object)
+ * @see TableColumn#getModelIndex()
  * 
  * @author Alex Ruiz
  */
 final class JTableColumnByIdentifierQuery {
 
-  // TODO write test case
   static int columnIndexByIdentifier(final JTable table, final Object identifier) {
     return GuiActionRunner.execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {
-        TableColumn column = table.getColumn(identifier);
-        if (column != null) return column.getModelIndex();
-        return -1;
+        try {
+          TableColumn column = table.getColumn(identifier);
+          return column.getModelIndex();
+        } catch (IllegalArgumentException e) {
+          return -1;
+        }
       }
     });
   }

@@ -33,6 +33,7 @@ import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.*;
 import org.fest.swing.core.Robot;
+import org.fest.swing.data.TableCell;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestTable;
@@ -51,7 +52,7 @@ import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.JTableCell.cell;
+import static org.fest.swing.data.TableCell.row;
 import static org.fest.swing.driver.JTableCellEditableQuery.isCellEditable;
 import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
 import static org.fest.swing.driver.JTableClearSelectionTask.clearSelectionOf;
@@ -106,7 +107,7 @@ public class JTableDriverTest {
   @Test(groups = GUI, dataProvider = "cellsAndEventModes")
   public void shouldSelectCell(int row, int column, EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    driver.selectCell(dragTable, cell(row, column));
+    driver.selectCell(dragTable, row(row).column(column));
     assertThat(isCellSelected(dragTable, row, column)).isTrue();
   }
 
@@ -132,19 +133,19 @@ public class JTableDriverTest {
     robot.settings().eventMode(eventMode);
     clearAndDisableDragTable();
     robot.waitForIdle();
-    driver.selectCell(dragTable, cell(0, 0));
+    driver.selectCell(dragTable, row(0).column(0));
     assertDragTableHasNoSelection();
   }
 
   @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfArrayOfCellsToSelectIsNull() {
-    JTableCell[] cells = null;
+    TableCell[] cells = null;
     driver.selectCells(dragTable, cells);
   }
 
   @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfArrayOfCellsToSelectIsEmpty() {
-    JTableCell[] cells = new JTableCell[0];
+    TableCell[] cells = new TableCell[0];
     driver.selectCells(dragTable, cells);
   }
 
@@ -153,7 +154,7 @@ public class JTableDriverTest {
     robot.settings().eventMode(eventMode);
     setMultipleIntervalSelectionTo(dragTable);
     robot.waitForIdle();
-    driver.selectCells(dragTable, new JTableCell[] { cell(0, 0), cell(2, 0) });
+    driver.selectCells(dragTable, new TableCell[] { row(0).column(0), row(2).column(0) });
     assertThat(isCellSelected(dragTable, 0, 0)).isTrue();
     assertThat(isCellSelected(dragTable, 2, 0)).isTrue();
   }
@@ -163,7 +164,7 @@ public class JTableDriverTest {
     robot.settings().eventMode(eventMode);
     setMultipleIntervalSelectionTo(dragTable);
     robot.waitForIdle();
-    driver.selectCells(dragTable, new JTableCell[] { cell(0, 0) });
+    driver.selectCells(dragTable, new TableCell[] { row(0).column(0) });
     assertThat(isCellSelected(dragTable, 0, 0)).isTrue();
   }
 
@@ -180,16 +181,16 @@ public class JTableDriverTest {
     robot.settings().eventMode(eventMode);
     clearAndDisableDragTable();
     robot.waitForIdle();
-    driver.selectCells(dragTable, new JTableCell[] { cell(0, 0), cell(2, 0) });
+    driver.selectCells(dragTable, new TableCell[] { row(0).column(0), row(2).column(0) });
     assertDragTableHasNoSelection();
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotSelectCellIfAlreadySelected(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    driver.selectCell(dragTable, cell(0, 0));
+    driver.selectCell(dragTable, row(0).column(0));
     assertThat(isCellSelected(dragTable, 0, 0)).isTrue();
-    driver.selectCell(dragTable, cell(0, 0));
+    driver.selectCell(dragTable, row(0).column(0));
     assertThat(isCellSelected(dragTable, 0, 0)).isTrue();
   }
 
@@ -210,14 +211,14 @@ public class JTableDriverTest {
 
   @Test(groups = GUI, dataProvider = "cells")
   public void shouldReturnValueOfGivenCell(int row, int column) {
-    String value = driver.value(dragTable, cell(row, column));
+    String value = driver.value(dragTable, row(row).column(column));
     assertThat(value).isEqualTo(createCellTextUsing(row, column));
     assertCellReaderWasCalled();
   }
 
   @Test(groups = GUI, dataProvider = "cells")
   public void shouldReturnValueOfSelectedCell(int row, int column) {
-    driver.selectCell(dragTable, cell(row, column));
+    driver.selectCell(dragTable, row(row).column(column));
     String value = driver.selectionValue(dragTable);
     assertThat(value).isEqualTo(createCellTextUsing(row, column));
     assertCellReaderWasCalled();
@@ -226,7 +227,7 @@ public class JTableDriverTest {
   @Test(groups = GUI, dataProvider = "cells")
   public void shouldFindCellByValue(int row, int column) {
     String value = createCellTextUsing(row, column);
-    JTableCell cell = driver.cell(dragTable, value);
+    TableCell cell = driver.cell(dragTable, value);
     assertThat(cell.row).isEqualTo(row);
     assertThat(cell.column).isEqualTo(column);
     assertCellReaderWasCalled();
@@ -252,6 +253,15 @@ public class JTableDriverTest {
 
   @DataProvider(name = "columnNames") public Object[][] columnNameArray() {
     return new Object[][] { { "0" }, { "1" }, { "2" }, { "3" } };
+  }
+  
+  public void shouldThrowErrorIfColumnWithGivenNameNotFound() {
+    try {
+      driver.columnIndex(dragTable, "Hello World");
+      fail("Expecting exception");
+    } catch (ActionFailedException e) {
+      assertThat(e).message().contains("Unable to find a column with name 'Hello World");
+    }
   }
 
   public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
@@ -290,8 +300,8 @@ public class JTableDriverTest {
     robot.settings().eventMode(eventMode);
     int dragRowCount = rowCountOf(dragTable);
     int dropRowCount = rowCountOf(dropTable);
-    driver.drag(dragTable, cell(3, 0));
-    driver.drop(dropTable, cell(1, 0));
+    driver.drag(dragTable, row(3).column(0));
+    driver.drop(dropTable, row(1).column(0));
     assertThat(rowCountOf(dragTable)).isEqualTo(dragRowCount - 1);
     assertThat(cellValueOf(dragTable, 3, 0)).isEqualTo(createCellTextUsing(4, 0));
     assertThat(rowCountOf(dropTable)).isEqualTo(dropRowCount + 1);
@@ -299,12 +309,12 @@ public class JTableDriverTest {
   }
 
   public void shouldPassIfCellValueIsEqualToExpected() {
-    driver.requireCellValue(dragTable, cell(0, 0), "0-0");
+    driver.requireCellValue(dragTable, row(0).column(0), "0-0");
   }
 
   public void shouldFailIfCellValueIsNotEqualToExpected() {
     try {
-      driver.requireCellValue(dragTable, cell(0, 0), "0-1");
+      driver.requireCellValue(dragTable, row(0).column(0), "0-1");
       fail();
     } catch (AssertionError e) {
       assertThat(e).message().contains("[row=0, column=0]")
@@ -321,7 +331,7 @@ public class JTableDriverTest {
     setPopupMenu(dragTable, popupMenu);
     robot.waitForIdle();
     ClickRecorder recorder = attachTo(dragTable);
-    driver.showPopupMenuAt(dragTable, cell(0, 1));
+    driver.showPopupMenuAt(dragTable, row(0).column(1));
     recorder.clicked(RIGHT_BUTTON).timesClicked(1);
     Point pointClicked = recorder.pointClicked();
     Point pointAtCell = new JTableLocation().pointAt(dragTable, 0, 1);
@@ -338,7 +348,7 @@ public class JTableDriverTest {
       }
 
       protected void codeToTest() {
-        Font result = driver.font(dragTable, cell(0, 0));
+        Font result = driver.font(dragTable, row(0).column(0));
         assertThat(result).isSameAs(font);
       }
     }.run();
@@ -354,7 +364,7 @@ public class JTableDriverTest {
       }
 
       protected void codeToTest() {
-        Color result = driver.background(dragTable, cell(0, 0));
+        Color result = driver.background(dragTable, row(0).column(0));
         assertThat(result).isSameAs(background);
       }
     }.run();
@@ -370,7 +380,7 @@ public class JTableDriverTest {
       }
 
       protected void codeToTest() {
-        Color result = driver.foreground(dragTable, cell(0, 0));
+        Color result = driver.foreground(dragTable, row(0).column(0));
         assertThat(result).isSameAs(foreground);
       }
     }.run();
@@ -393,7 +403,7 @@ public class JTableDriverTest {
       }
 
       protected void codeToTest() {
-        driver.enterValueInCell(dragTable, cell(0, 0), value);
+        driver.enterValueInCell(dragTable, row(0).column(0), value);
       }
     }.run();
   }
@@ -402,12 +412,12 @@ public class JTableDriverTest {
   public void shouldThrowErrorIfTableIsNotEnabledWhenEditingCell() {
     disable(dragTable);
     robot.waitForIdle();
-    driver.enterValueInCell(dragTable, cell(0, 0), "Hello");
+    driver.enterValueInCell(dragTable, row(0).column(0), "Hello");
   }
 
   @Test(groups = GUI, expectedExceptions = AssertionError.class)
   public void shouldThrowErrorIfCellToEditIsNotEditable() {
-    JTableCell cell = cell(0, 0);
+    TableCell cell = row(0).column(0);
     assertThat(isCellEditable(dragTable, cell)).isFalse();
     driver.enterValueInCell(dragTable, cell, "Hello");
   }
@@ -422,7 +432,7 @@ public class JTableDriverTest {
       }
 
       protected void codeToTest() {
-        Component result = driver.cellEditor(dragTable, cell(0, 0));
+        Component result = driver.cellEditor(dragTable, row(0).column(0));
         assertThat(result).isSameAs(editor);
       }
     }.run();
@@ -438,7 +448,7 @@ public class JTableDriverTest {
       }
 
       protected void codeToTest() {
-        driver.startCellEditing(dragTable, cell(0,0));
+        driver.startCellEditing(dragTable, row(0).column(0));
       }
     }.run();
   }
@@ -453,7 +463,7 @@ public class JTableDriverTest {
       }
 
       protected void codeToTest() {
-        driver.stopCellEditing(dragTable, cell(0,0));
+        driver.stopCellEditing(dragTable, row(0).column(0));
       }
     }.run();
   }
@@ -468,7 +478,7 @@ public class JTableDriverTest {
       }
 
       protected void codeToTest() {
-        driver.cancelCellEditing(dragTable, cell(0,0));
+        driver.cancelCellEditing(dragTable, row(0).column(0));
       }
     }.run();
   }
@@ -480,14 +490,14 @@ public class JTableDriverTest {
   public void shouldPassIfCellIsEditableAsAnticipated() {
     dragTable.cellEditable(0, 0, true);
     robot.waitForIdle();
-    driver.requireEditable(dragTable, cell(0, 0));
+    driver.requireEditable(dragTable, row(0).column(0));
   }
 
   public void shouldFailIfCellIsNotEditableAndExpectingEditable() {
     dragTable.cellEditable(0, 0, false);
     robot.waitForIdle();
     try {
-      driver.requireEditable(dragTable, cell(0, 0));
+      driver.requireEditable(dragTable, row(0).column(0));
       fail();
     } catch (AssertionError e) {
       assertThat(e).message().contains("[row=0, column=0]")
@@ -499,14 +509,14 @@ public class JTableDriverTest {
   public void shouldPassIfCellIsNotEditableAsAnticipated() {
     dragTable.cellEditable(0, 0, false);
     robot.waitForIdle();
-    driver.requireNotEditable(dragTable, cell(0, 0));
+    driver.requireNotEditable(dragTable, row(0).column(0));
   }
 
   public void shouldFailIfCellIsEditableAndExpectingNotEditable() {
     dragTable.cellEditable(0, 0, true);
     robot.waitForIdle();
     try {
-      driver.requireNotEditable(dragTable, cell(0, 0));
+      driver.requireNotEditable(dragTable, row(0).column(0));
       fail();
     } catch (AssertionError e) {
       assertThat(e).message().contains("[row=0, column=0]")

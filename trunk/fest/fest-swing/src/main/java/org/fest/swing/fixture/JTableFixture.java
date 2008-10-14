@@ -24,15 +24,17 @@ import javax.swing.table.JTableHeader;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.*;
+import org.fest.swing.data.TableCell;
+import org.fest.swing.data.TableCellByColumnName;
 import org.fest.swing.driver.BasicJTableCellReader;
 import org.fest.swing.driver.BasicJTableCellWriter;
-import org.fest.swing.driver.JTableCell;
 import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.data.TableCell.row;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -153,8 +155,22 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * @throws ActionFailedException if a cell with a matching value cannot be found.
    */
   public TableCell cell(String value) {
-    JTableCell cell = driver.cell(target, value);
-    return new TableCell(cell);
+    return driver.cell(target, value);
+  }
+
+  /**
+   * Returns a fixture that manages the table cell specified by the given row index and column name.
+   * @param cell the cell of interest.
+   * @return a fixture that manages the table cell specified by the given row index and column name.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IndexOutOfBoundsException if the row index in the given cell is out of bounds.
+   * @throws ActionFailedException if a column with a matching name could not be found.
+   */
+  public JTableCellFixture cell(TableCellByColumnName cell) {
+    int row = cell.row;
+    driver.validate(target, row);
+    int column = driver.columnIndex(target, cell.columnName);
+    return new JTableCellFixture(this, row(row).column(column));
   }
 
   /**
@@ -593,8 +609,10 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * Returns the index of the column in this fixture's <code>{@link JTable}</code> whose name matches the given one.
    * @param columnName the name of the column to look for.
    * @return the index of the column whose name matches the given one.
+   * @throws ActionFailedException if a column with a matching name could not be found.
    */
   public int columnIndexFor(Object columnName) {
     return driver.columnIndex(target, columnName);
   }
+
 }

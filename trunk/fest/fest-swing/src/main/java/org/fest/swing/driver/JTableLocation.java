@@ -19,6 +19,8 @@ import java.awt.Rectangle;
 
 import javax.swing.JTable;
 
+import org.fest.swing.data.TableCell;
+
 import static org.fest.swing.driver.JTableCellRectQuery.cellRectOf;
 
 /**
@@ -48,7 +50,7 @@ public final class JTableLocation {
    * @param cell the given cell.
    * @return the bounds of the given cell.
    */
-  public Rectangle cellBounds(JTable table, JTableCell cell) {
+  public Rectangle cellBounds(JTable table, TableCell cell) {
     return cellBounds(table, cell.row, cell.column);
   }
 

@@ -23,13 +23,14 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.GuiTask;
 import org.fest.swing.core.Robot;
+import org.fest.swing.data.TableCell;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.JTableCell.cell;
+import static org.fest.swing.data.TableCell.row;
 import static org.fest.swing.driver.JTableSelectCellsTask.selectCells;
 import static org.fest.swing.testing.TestGroups.*;
 
@@ -56,7 +57,7 @@ public class JTableSingleRowCellSelectedQueryTest {
   }
   
   public void shouldReturnCellIsSelectedIfOneRowAndOneColumnAreSelectedOnly() {
-    JTableCell cell = cell(0, 2);
+    TableCell cell = row(0).column(2);
     selectCells(table, cell, cell);
     robot.waitForIdle();
     assertThat(JTableSingleRowCellSelectedQuery.isCellSelected(table, 0, 2)).isTrue();
@@ -81,7 +82,7 @@ public class JTableSingleRowCellSelectedQueryTest {
   }
 
   public void shouldReturnCellIsNotSelectedIfRowAndColumnAreSelectedAndMultipleRowsAreSelected() {
-    selectCells(table, cell(0, 2), cell(0, 4));
+    selectCells(table, row(0).column(2), row(0).column(4));
     robot.waitForIdle();
     assertThat(JTableSingleRowCellSelectedQuery.isCellSelected(table, 0, 2)).isFalse();
   }

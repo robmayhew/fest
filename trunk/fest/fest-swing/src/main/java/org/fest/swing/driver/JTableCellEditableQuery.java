@@ -18,6 +18,7 @@ package org.fest.swing.driver;
 import javax.swing.JTable;
 
 import org.fest.swing.core.GuiQuery;
+import org.fest.swing.data.TableCell;
 
 import static org.fest.swing.core.GuiActionRunner.execute;
 
@@ -31,7 +32,7 @@ import static org.fest.swing.core.GuiActionRunner.execute;
  */
 final class JTableCellEditableQuery {
 
-  static boolean isCellEditable(final JTable table, final JTableCell cell) {
+  static boolean isCellEditable(final JTable table, final TableCell cell) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return table.isCellEditable(cell.row, cell.column);

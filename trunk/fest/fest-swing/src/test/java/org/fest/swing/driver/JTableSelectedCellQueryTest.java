@@ -20,13 +20,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.data.TableCell;
 import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.JTableCell.cell;
+import static org.fest.swing.data.TableCell.row;
 import static org.fest.swing.driver.JTableSelectCellsTask.selectCells;
 import static org.fest.swing.testing.TestGroups.*;
 
@@ -54,16 +55,16 @@ public class JTableSelectedCellQueryTest {
   }
 
   public void shouldReturnSelectedCellOfJTable() {
-    selectInTable(cell(0, 2));
+    selectInTable(row(0).column(2));
     table.startRecording();
-    JTableCell selectedCell = JTableSelectedCellQuery.selectedCellOf(table);
+    TableCell selectedCell = JTableSelectedCellQuery.selectedCellOf(table);
     assertThat(selectedCell.row).isEqualTo(0);
     assertThat(selectedCell.column).isEqualTo(2);
     table.requireInvoked("getSelectedColumn")
          .requireInvoked("getSelectedRow");
   }
 
-  private void selectInTable(final JTableCell cell) {
+  private void selectInTable(final TableCell cell) {
     selectCells(table, cell, cell);
     robot.waitForIdle();
   }
