@@ -1,16 +1,16 @@
 /*
  * Created on Feb 13, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.fixture;
@@ -22,6 +22,8 @@ import javax.swing.JTextField;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.ComponentFinder;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JOptionPaneDriver;
 
@@ -41,7 +43,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
   private JOptionPaneDriver driver;
   private JOptionPane target;
   private JOptionPaneFixture fixture;
-  
+
   void onSetUp() {
     driver = createMock(JOptionPaneDriver.class);
     target = optionPane().createNew();
@@ -50,8 +52,12 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
   }
 
   @Test public void shouldCreateFixtureByType() {
-    expectLookupByType(JOptionPane.class, true);
-    verifyLookup(new JOptionPaneFixture(robot()));
+    Robot robot = robot();
+    ComponentFinder finder = finder();
+    expect(robot.finder()).andReturn(finder);
+    expect(finder.findByType(JOptionPane.class, true)).andReturn(target());
+    replay(robot, finder);
+    verifyLookup(new JOptionPaneFixture(robot));
   }
 
   @Test public void shouldRequireTitle() {
@@ -60,7 +66,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
         driver.requireTitle(target, "A Title");
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requireTitle("A Title"));
       }
@@ -73,7 +79,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
         driver.requireMessage(target, "A Message");
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requireMessage("A Message"));
       }
@@ -87,34 +93,34 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
         driver.requireOptions(target, options);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requireOptions(options));
       }
     }.run();
   }
-  
+
   @Test public void shouldReturnOkButton() {
     final JButton button = new JButton();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.okButton(target)).andReturn(button);
       }
-      
+
       protected void codeToTest() {
         JButtonFixture result = fixture.okButton();
         assertThat(result.target).isSameAs(button);
       }
     }.run();
   }
-  
+
   @Test public void shouldReturnCancelButton() {
     final JButton button = new JButton();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.cancelButton(target)).andReturn(button);
       }
-      
+
       protected void codeToTest() {
         JButtonFixture result = fixture.cancelButton();
         assertThat(result.target).isSameAs(button);
@@ -128,7 +134,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
       protected void expectations() {
         expect(driver.yesButton(target)).andReturn(button);
       }
-      
+
       protected void codeToTest() {
         JButtonFixture result = fixture.yesButton();
         assertThat(result.target).isSameAs(button);
@@ -142,35 +148,35 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
       protected void expectations() {
         expect(driver.noButton(target)).andReturn(button);
       }
-      
+
       protected void codeToTest() {
         JButtonFixture result = fixture.noButton();
         assertThat(result.target).isSameAs(button);
       }
     }.run();
   }
-  
+
   @Test public void shouldReturnButtonWithText() {
     final JButton button = new JButton();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.buttonWithText(target, "A Button")).andReturn(button);
       }
-      
+
       protected void codeToTest() {
         JButtonFixture result = fixture.buttonWithText("A Button");
         assertThat(result.target).isSameAs(button);
       }
     }.run();
   }
-  
+
   @Test public void shouldReturnButton() {
     final JButton button = new JButton();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.button(target)).andReturn(button);
       }
-      
+
       protected void codeToTest() {
         JButtonFixture result = fixture.button();
         assertThat(result.target).isSameAs(button);
@@ -184,7 +190,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
       protected void expectations() {
         expect(driver.textBox(target)).andReturn(textBox);
       }
-      
+
       protected void codeToTest() {
         JTextComponentFixture result = fixture.textBox();
         assertThat(result.target).isSameAs(textBox);
@@ -198,7 +204,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
         driver.requireErrorMessage(target);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requireErrorMessage());
       }
@@ -211,7 +217,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
         driver.requireInformationMessage(target);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requireInformationMessage());
       }
@@ -224,7 +230,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
         driver.requireWarningMessage(target);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requireWarningMessage());
       }
@@ -237,7 +243,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
         driver.requireQuestionMessage(target);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requireQuestionMessage());
       }
@@ -250,7 +256,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
         driver.requirePlainMessage(target);
         expectLastCall().once();
       }
-      
+
       protected void codeToTest() {
         assertThatReturnsThis(fixture.requirePlainMessage());
       }

@@ -55,7 +55,7 @@ import static org.fest.util.Arrays.array;
   public void shouldCreateFixtureWithGivenComponentName() {
     String name = "comboBox";
     expectLookupByName(name, JComboBox.class);
-    verifyLookup(new JCheckBoxFixture(robot(), name));
+    verifyLookup(new JComboBoxFixture(robot(), name));
   }
 
   public void shouldReturnContents() {

@@ -21,6 +21,7 @@ import java.awt.Point;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.table.JTableHeader;
 
 import org.testng.annotations.Test;
 
@@ -288,13 +289,21 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
   }
 
   public void shouldReturnJTableHeaderFixture() {
-    JTableHeaderFixture tableHeader = fixture.tableHeader();
-    assertThat(tableHeader.target).isSameAs(target.getTableHeader());
+    final JTableHeader header = new JTableHeader();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.tableHeaderOf(target)).andReturn(header);
+      }
+
+      protected void codeToTest() {
+        JTableHeaderFixture tableHeader = fixture.tableHeader();
+        assertThat(tableHeader.target).isSameAs(header);
+      }
+    }.run();
   }
 
   @Test(expectedExceptions = AssertionError.class)
   public void shouldThrowErrorIfJTableHeaderIsNull() {
-    target.setTableHeader(null);
     fixture.tableHeader();
   }
 

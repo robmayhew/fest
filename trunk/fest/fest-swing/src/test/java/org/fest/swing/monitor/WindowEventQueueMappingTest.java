@@ -111,7 +111,7 @@ public class WindowEventQueueMappingTest {
   public void shouldReturnEventQueues() {
     EventQueue anotherEventQueue = new EventQueue();
     ToolkitStub anotherToolkit = ToolkitStub.createNew(anotherEventQueue);
-    TestWindow anotherWindow = MyWindow.createNew(anotherToolkit);
+    MyWindow anotherWindow = MyWindow.createNew(anotherToolkit);
     mapping.addQueueFor(window);
     mapping.addQueueFor(anotherWindow);
     Collection<EventQueue> eventQueues = mapping.eventQueues();
@@ -124,16 +124,20 @@ public class WindowEventQueueMappingTest {
     static MyWindow createNew(final Toolkit toolkit) {
       return new MyWindow(toolkit);
     }
-    
+
     private final Toolkit toolkit;
+
+    private final boolean setUpComplete;
 
     private MyWindow(Toolkit toolkit) {
       super(WindowEventQueueMappingTest.class);
       this.toolkit = toolkit;
+      setUpComplete = true;
     }
-    
+
     @Override public Toolkit getToolkit() {
-      return toolkit;
+      if (setUpComplete) return toolkit;
+      return super.getToolkit();
     }
   }
 }

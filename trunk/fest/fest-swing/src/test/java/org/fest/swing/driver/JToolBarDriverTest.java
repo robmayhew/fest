@@ -37,7 +37,7 @@ import static javax.swing.SwingUtilities.getWindowAncestor;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.EventMode.*;
+import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.ComponentBoundsQuery.boundsOf;
@@ -151,13 +151,13 @@ public class JToolBarDriverTest {
 
   @DataProvider(name = "unfloatConstraints") public Object[][] unfloatConstraints() {
     return new Object[][] {
-        { NORTH, AWT },
+        // { NORTH, AWT },
         { NORTH, ROBOT },
-        { EAST, AWT },
+        // { EAST, AWT },
         { EAST, ROBOT },
-        { SOUTH, AWT },
+        // { SOUTH, AWT },
         { SOUTH, ROBOT },
-        { WEST, AWT },
+        // { WEST, AWT },
         { WEST, ROBOT }
       };
   }
