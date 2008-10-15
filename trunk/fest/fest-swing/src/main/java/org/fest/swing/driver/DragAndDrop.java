@@ -37,7 +37,7 @@ import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
  *
  * @author Alex Ruiz
  */
-class DragAndDrop {
+public class DragAndDrop {
 
   private final Robot robot;
 
@@ -45,7 +45,7 @@ class DragAndDrop {
    * Creates a new </code>{@link DragAndDrop}</code>.
    * @param robot the robot to use to simulate user input.
    */
-  DragAndDrop(Robot robot) {
+  public DragAndDrop(Robot robot) {
     this.robot = robot;
   }
 
@@ -57,7 +57,7 @@ class DragAndDrop {
    * @param target the target component.
    * @param where the point where to start the drag action.
    */
-  void drag(Component target, Point where) {
+  public void drag(Component target, Point where) {
     robot.pressMouse(target, where, LEFT_BUTTON);
     int dragDelay = settings().dragDelay();
     if (dragDelay > delayBetweenEvents()) pause(dragDelay);
@@ -107,7 +107,7 @@ class DragAndDrop {
    * @param where the point where the drag operation ends.
    * @throws ActionFailedException if there is no drag action in effect.
    */
-  void drop(Component target, Point where) {
+  public void drop(Component target, Point where) {
     dragOver(target, where);
     TimeoutWatch watch = startWatchWithTimeoutOf(settings().eventPostingDelay() * 4);
     while (!robot.isDragging()) {
@@ -135,7 +135,7 @@ class DragAndDrop {
    * @param target the target component.
    * @param where the point to drag over.
    */
-  void dragOver(Component target, Point where) {
+  public void dragOver(Component target, Point where) {
     dragOver(target, where.x, where.y);
   }
 
