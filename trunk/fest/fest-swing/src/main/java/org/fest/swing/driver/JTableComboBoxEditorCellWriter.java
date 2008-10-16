@@ -23,9 +23,9 @@ import javax.swing.JTable;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
 
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.JTableCancelCellEditingTask.cancelEditing;
 import static org.fest.swing.driver.WaitForComponentToShowCondition.untilIsShowing;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Understands an implementation of <code>{@link JTableCellWriter}</code> that knows how to use

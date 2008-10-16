@@ -20,12 +20,12 @@ import java.awt.*;
 import javax.swing.JDialog;
 import javax.swing.UIManager;
 
-import org.fest.swing.core.Condition;
 import org.fest.swing.task.WindowDestroyTask;
+import org.fest.swing.timing.Condition;
 
 import static javax.swing.SwingUtilities.invokeLater;
 
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Understands the base window for all GUI tests.

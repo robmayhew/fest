@@ -18,9 +18,9 @@ package org.fest.swing.driver;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the text used in the "cancel button" of a

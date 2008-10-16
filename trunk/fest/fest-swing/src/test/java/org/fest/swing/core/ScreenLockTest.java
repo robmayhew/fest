@@ -17,7 +17,7 @@ package org.fest.swing.core;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.timing.Pause.pause;
 
 import org.fest.swing.exception.ScreenLockException;
 import org.testng.annotations.BeforeMethod;

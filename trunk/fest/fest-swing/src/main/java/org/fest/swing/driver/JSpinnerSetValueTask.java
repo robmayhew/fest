@@ -17,9 +17,9 @@ package org.fest.swing.driver;
 
 import javax.swing.JSpinner;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that sets a value in a <code>{@link JSpinner}</code>. This task is executed in the event dispatch

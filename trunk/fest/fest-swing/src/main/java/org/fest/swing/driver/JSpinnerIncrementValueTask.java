@@ -16,7 +16,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JSpinner;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that increments the value of a <code>{@link JSpinner}</code>. This task is executed in the event

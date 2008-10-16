@@ -20,9 +20,9 @@ import java.awt.Component;
 import javax.accessibility.AccessibleAction;
 import javax.accessibility.AccessibleContext;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands an action, executed in the event dispatch thread, that finds <code>{@link AccessibleAction}</code>s

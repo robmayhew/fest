@@ -15,11 +15,11 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 import javax.swing.JTable;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the number of columns in a

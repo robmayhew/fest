@@ -20,13 +20,13 @@ import java.awt.Point;
 
 import javax.swing.JSlider;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 
 import static javax.swing.SwingConstants.VERTICAL;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.driver.JSliderOrientationQuery.orientationOf;
-import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a location in a <code>{@link JSlider}</code>.

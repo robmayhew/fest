@@ -35,6 +35,7 @@ import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.driver.JListIsSelectedIndexQuery.isSelectedIndex;
@@ -43,7 +44,6 @@ import static org.fest.swing.driver.JListElementCountQuery.elementCountOf;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.driver.JListSelectedIndicesQuery.selectedIndicesOf;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
-import static org.fest.swing.util.AWT.centerOf;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 

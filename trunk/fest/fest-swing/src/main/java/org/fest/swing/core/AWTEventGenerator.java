@@ -32,9 +32,9 @@ import static java.awt.event.MouseEvent.*;
 import static java.lang.System.currentTimeMillis;
 import static javax.swing.SwingUtilities.convertPoint;
 
+import static org.fest.swing.awt.AWT.*;
 import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
 import static org.fest.swing.keystroke.KeyStrokeMap.charFor;
-import static org.fest.swing.util.AWT.*;
 import static org.fest.swing.util.Modifiers.*;
 
 /**

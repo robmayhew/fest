@@ -39,13 +39,13 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseClickInfo.button;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.core.Timeout.timeout;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.task.ComponentSetEnabledTask.*;
 import static org.fest.swing.task.ComponentSetSizeTask.setComponentSize;
 import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.testing.StopWatch.startNewStopWatch;
+import static org.fest.swing.timing.Pause.pause;
+import static org.fest.swing.timing.Timeout.timeout;
 import static org.fest.swing.util.Platform.*;
 
 /**

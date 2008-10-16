@@ -12,7 +12,8 @@
  *
  * Copyright @2007-2008 the original author or authors.
  */
-package org.fest.swing.core;
+package org.fest.swing.timing;
+
 
 /**
  * Understands a condition to verify, usually used in the method <code>{@link Pause#pause(Condition)}</code>.

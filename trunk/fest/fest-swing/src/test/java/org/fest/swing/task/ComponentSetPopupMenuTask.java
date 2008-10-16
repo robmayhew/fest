@@ -18,9 +18,9 @@ package org.fest.swing.task;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that sets the <code>{@link JPopupMenu}</code> for a <code>{@link JComponent}</code>. This task is

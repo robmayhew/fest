@@ -5,7 +5,7 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="1.0b2" date="TBD" description="Subsequent release">
+    <release version="1.0b2" date="2008-10-16" description="Subsequent release">
       <action dev="alruiz" type="add" issue="109">
         Added class org.fest.swing.fixture.ComponentFixtureExtension to add extension methods to ContainerFixture.
       </action>
@@ -14,9 +14,6 @@
       </action>
       <action dev="wanghy" type="fix" issue="161" due-to="filimono">
         Added the method 'enterTextAndCommit(String)' in JSpinnerFixture to enter and commit a value in a JSpinner. 
-      </action>
-      <action dev="alruiz" type="fix" issue="165" due-to="filimono">
-        RobotFixture now specifies the coordinates to click on when using AWT event mode.
       </action>
       <action dev="alruiz" type="add" issue="170" due-to="Juhos Csaba-Zsolt">
         Added method 'columnIndexFor(Object)' in org.fest.swing.fixture.JTableFixture.
@@ -33,19 +30,25 @@
         BasicJTableCellReader obtains the value of a cell from a JTable, not from a TableModel.
       </action>
       <action dev="alruiz, wanghy" type="fix" issue="187">
-        Introduced GuiActionRunner, GuiQuery and GuiTask in package org.fest.swing.core to execute queries or tasks in 
+        Introduced GuiActionRunner, GuiQuery and GuiTask in package org.fest.swing.edt to execute queries or tasks in 
         the event dispatch thread. 
       </action>
-      <action dev="alruiz, wanghy" type="fix" issue="187">
-        Removed method 'runInEventThreadAndWait' in org.fest.swing.util.AWT. Replaced with 
-        org.fest.swing.core.GuiActionRunner and org.fest.swing.core.GuiTask.
+      <action dev="alruiz" type="fix" issue="187">
+        Moved class AWT from package org.fest.swing.util to org.fest.swing.awt.
       </action>
       <action dev="alruiz, wanghy" type="fix" issue="187">
-        Added methods 'pause(Condition[])' to org.fest.swing.core.Pause.
+        Removed method 'runInEventThreadAndWait' in org.fest.swing.awt.AWT. Replaced with 
+        org.fest.swing.edt.GuiActionRunner and org.fest.swing.edt.GuiTask.
+      </action>
+      <action dev="alruiz" type="fix" issue="187">
+        Moved classes Condition, Pause and Timeout from package org.fest.swing.core to org.fest.swing.timing.
       </action>
       <action dev="alruiz, wanghy" type="fix" issue="187">
-        Added method 'done' to org.fest.swing.core.Condition. This method is invoked by org.fest.swing.core.Pause when a 
-        condition is evaluated (either the condition was satisfied or it timed-out.)
+        Added methods 'pause(Condition[])' to org.fest.swing.timing.Pause.
+      </action>
+      <action dev="alruiz, wanghy" type="fix" issue="187">
+        Added method 'done' to org.fest.swing.timing.Condition. This method is invoked by org.fest.swing.timing.Pause 
+        when a condition is evaluated (either the condition was satisfied or it timed-out.)
       </action>
       <action dev="alruiz" type="add" issue="188" due-to="Jason Goodwin">
         Added method 'cell(String)' to org.fest.swing.fixture.JTableFixture. This method returns a table cell which
@@ -62,7 +65,7 @@
         the component, only if the component is an instance of javax.swing.JComponent.
       </action>
       <action dev="alruiz" type="fix" issue="197" due-to="filimono">
-        Added method 'centerOfVisibleRect(JComponent)' to org.fest.swing.util.AWT.
+        Added method 'centerOfVisibleRect(JComponent)' to org.fest.swing.awt.AWT.
       </action>
       <action dev="alruiz" type="fix" issue="197" due-to="filimono">
         Added methods 'scrollToMaximum' and 'scrollToMinimum' to org.fest.swing.fixture.JScrollBarDriver.

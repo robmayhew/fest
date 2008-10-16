@@ -22,8 +22,8 @@ import java.util.Collection;
 
 import org.fest.swing.monitor.WindowMonitor;
 
+import static org.fest.swing.awt.AWT.*;
 import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
-import static org.fest.swing.util.AWT.*;
 
 
 /**

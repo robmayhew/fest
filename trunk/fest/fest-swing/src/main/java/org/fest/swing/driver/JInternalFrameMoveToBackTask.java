@@ -17,9 +17,9 @@ package org.fest.swing.driver;
 
 import javax.swing.JInternalFrame;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that sends a <code>{@link JInternalFrame}</code> to the back. This task is executed in the event

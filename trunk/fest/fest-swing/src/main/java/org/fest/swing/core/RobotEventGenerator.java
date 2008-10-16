@@ -20,9 +20,9 @@ import java.awt.Robot;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.awt.AWT.locationOnScreenOf;
 import static org.fest.swing.exception.UnexpectedException.unexpected;
-import static org.fest.swing.util.AWT.locationOnScreenOf;
+import static org.fest.swing.timing.Pause.pause;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.util.Strings.concat;
 

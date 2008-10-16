@@ -32,6 +32,7 @@ import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.timing.Timeout;
 
 import static org.fest.assertions.Assertions.assertThat;
 

@@ -15,7 +15,7 @@
  */
 package org.fest.swing.core;
 
-import static org.fest.swing.util.AWT.invokerOf;
+import static org.fest.swing.awt.AWT.invokerOf;
 
 import java.awt.Component;
 import java.awt.Window;

@@ -3,9 +3,9 @@ package org.fest.swing.driver;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that ensures that the node identified by the specified path is expanded and viewable. This task is

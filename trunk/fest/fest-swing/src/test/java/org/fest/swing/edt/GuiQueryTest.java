@@ -1,5 +1,5 @@
 /*
- * Created on Aug 11, 2008
+ * Created on Jul 29, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,47 +13,44 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core;
+package org.fest.swing.edt;
 
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 
+import static javax.swing.SwingUtilities.isEventDispatchThread;
+
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Tests for <code>{@link GuiTask}</code>.
+ * Tests for <code>{@link GuiQuery}</code>.
  *
+ * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test public class GuiTaskTest {
+@Test public class GuiQueryTest {
 
   @Test(expectedExceptions = ActionFailedException.class)
   public void shouldExecuteInEDTWhenNotCalledInEDT() {
-    new GuiTaskInEDT().run();
+    GuiQueryInEDT task = new GuiQueryInEDT();
+    assertThat(isEventDispatchThread()).isFalse();
+    task.run();
   }
 
   public void shouldExecuteInEDTWhenCalledInEDT() {
-    final GuiTaskInEDT task = new GuiTaskInEDT();
-    execute(task, new Condition("Task is executed") {
-      public boolean test() {
-        return task.wasExecutedInEDT();
-      }
-    });
-    assertThat(task.executed()).isEqualTo(true);
+    final GuiQueryInEDT task = new GuiQueryInEDT();
+    boolean executedFromEDT = execute(task);
+    assertThat(executedFromEDT).isTrue();
   }
 
-  private static class GuiTaskInEDT extends GuiTask {
-    private boolean executed;
+  private static class GuiQueryInEDT extends GuiQuery<Boolean> {
+    GuiQueryInEDT() {}
 
-    GuiTaskInEDT() {}
-
-    protected void executeInEDT() {
-      executed = true;
+    protected Boolean executeInEDT() {
+      return isEventDispatchThread();
     }
-
-    boolean executed() { return executed; }
   }
-
 }

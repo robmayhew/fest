@@ -19,11 +19,11 @@ import java.applet.Applet;
 import java.util.Map;
 
 import org.fest.swing.applet.AppletViewer;
-import org.fest.swing.core.Condition;
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.timing.Condition;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Understands an action, executed in the event dispatch thread, that creates and shows a new

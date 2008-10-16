@@ -17,8 +17,8 @@ package org.fest.swing.driver;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 
-import org.fest.swing.core.GuiActionRunner;
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiActionRunner;
+import org.fest.swing.edt.GuiQuery;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the index of a column in a

@@ -18,9 +18,9 @@ package org.fest.swing.task;
 import javax.swing.JTree;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that sets a <code>{@link TreeSelectionModel}</code> in a <code>{@link JTree}</code>. This task is

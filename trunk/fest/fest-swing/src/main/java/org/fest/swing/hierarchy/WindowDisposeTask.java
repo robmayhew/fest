@@ -2,9 +2,9 @@ package org.fest.swing.hierarchy;
 
 import java.awt.Window;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that disposes a <code>{@link Window}</code>. This task is executed in the event dispatch thread.

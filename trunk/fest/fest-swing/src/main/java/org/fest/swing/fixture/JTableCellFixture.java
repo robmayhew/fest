@@ -36,7 +36,7 @@ import static org.fest.swing.core.MouseButton.*;
  * Example:
  * <pre>
  * // import static org.fest.swing.fixture.TableCellBuilder.row;
- * {@link JTableCellFixture} cell = dialog.{@link JTableFixture table}("records").cell({@link TableCell.TableCellBuilder#row(int) row}(3).column(0));
+ * {@link JTableCellFixture} cell = dialog.{@link JTableFixture table}("records").cell({@link TableCell#row(int) row}(3).column(0));
  * cell.select().showPopupMenu();
  * </pre>
  * </p>

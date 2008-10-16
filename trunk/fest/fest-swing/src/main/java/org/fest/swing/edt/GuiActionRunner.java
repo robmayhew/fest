@@ -13,16 +13,16 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core;
-
-import static javax.swing.SwingUtilities.invokeLater;
-import static javax.swing.SwingUtilities.isEventDispatchThread;
-import static org.fest.swing.core.GuiActionRunner.ActionExecutedCondition.untilExecuted;
-import static org.fest.swing.core.Pause.pause;
-import static org.fest.swing.exception.UnexpectedException.unexpected;
-import static org.fest.util.Strings.concat;
+package org.fest.swing.edt;
 
 import org.fest.swing.exception.UnexpectedException;
+import org.fest.swing.timing.Condition;
+
+import static javax.swing.SwingUtilities.*;
+
+import static org.fest.swing.exception.UnexpectedException.unexpected;
+import static org.fest.swing.timing.Pause.pause;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands running instances of <code>{@link GuiQuery}</code> and <code>{@link GuiTask}</code>.
@@ -93,20 +93,20 @@ public class GuiActionRunner {
    * @param action the given action that may have a catched exception during its execution.
    * @throws UnexpectedException wrapping any catched exception during the execution of the given action.
    */
-  static void rethrowCatchedExceptionIn(GuiAction action) {
+  private static void rethrowCatchedExceptionIn(GuiAction action) {
     Throwable catchedException = action.catchedException();
     action.clearCatchedException();
     if (catchedException != null) throw unexpected(catchedException);
   }
 
-  static class ActionExecutedCondition extends Condition {
+  private static ActionExecutedCondition untilExecuted(GuiAction action) {
+    return new ActionExecutedCondition(action);
+  }
+
+  private static class ActionExecutedCondition extends Condition {
     private GuiAction action;
 
-    static ActionExecutedCondition untilExecuted(GuiAction action) {
-      return new ActionExecutedCondition(action);
-    }
-
-    private ActionExecutedCondition(GuiAction action) {
+    ActionExecutedCondition(GuiAction action) {
       super(concat("action ", actionTypeName(action), " to be executed in Swing's event dispatch thread"));
       this.action = action;
     }
@@ -120,7 +120,7 @@ public class GuiActionRunner {
     }
 
     /** ${@inheritDoc} */
-    @Override protected void done() {
+    @Override public void done() {
       action = null;
     }
   }

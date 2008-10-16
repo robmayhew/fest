@@ -13,7 +13,7 @@
  *
  * Copyright @2007-2008 the original author or authors.
  */
-package org.fest.swing.util;
+package org.fest.swing.awt;
 
 import java.awt.*;
 
@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 
 import org.testng.annotations.Test;
 
+import org.fest.swing.awt.AWT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.testing.TestWindow;
 

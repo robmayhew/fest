@@ -32,7 +32,6 @@ import org.fest.util.Arrays;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.driver.JTreeChildrenShowUpCondition.untilChildrenShowUp;
 import static org.fest.swing.driver.JTreeEditableQuery.isEditable;
@@ -51,6 +50,7 @@ import static org.fest.swing.driver.JTreeToggleExpandStateTask.toggleExpandState
 import static org.fest.swing.driver.JTreeUIQuery.uiOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
+import static org.fest.swing.timing.Pause.pause;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.concat;
 

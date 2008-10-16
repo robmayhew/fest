@@ -3,9 +3,9 @@ package org.fest.swing.input;
 import java.awt.Component;
 import java.awt.event.ComponentListener;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns all the

@@ -8,11 +8,11 @@ import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreePath;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.core.Reflection.method;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that uses reflection to toggle the "expand state" of a node in a given

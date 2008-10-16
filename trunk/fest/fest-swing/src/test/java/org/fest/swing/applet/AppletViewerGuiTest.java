@@ -22,19 +22,19 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.Condition;
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.testing.MyApplet;
+import org.fest.swing.timing.Condition;
 
 import static javax.swing.SwingUtilities.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.query.FrameTitleQuery.titleOf;
 import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.timing.Pause.pause;
 import static org.fest.util.Strings.concat;
 
 /**

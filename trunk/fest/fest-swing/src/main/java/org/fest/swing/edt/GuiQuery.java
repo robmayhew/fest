@@ -1,5 +1,5 @@
 /*
- * Created on Aug 11, 2008
+ * Created on Jul 22, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,36 +13,40 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core;
+package org.fest.swing.edt;
+
+import static javax.swing.SwingUtilities.isEventDispatchThread;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
 
 import org.fest.swing.exception.ActionFailedException;
 
-import static javax.swing.SwingUtilities.isEventDispatchThread;
-
 /**
- * Understands a task that should be executed in the event dispatch thread.
+ * Understands executing an action, in the event dispatch thread, that returns a value.
+ * @param <T> the return type of the action to execute.
  *
  * @author Alex Ruiz
  */
-public abstract class GuiTask extends GuiAction {
+public abstract class GuiQuery<T> extends GuiAction {
+
+  private T result;
 
   /**
-   * Runs this task action and verifies that it is executed in the event dispatch thread.
+   * Executes the query in the event dispatch thread. This method waits until the action has finish its execution.
    * @throws ActionFailedException if this task is not executed in the event dispatch thread.
    */
   public final void run() {
     if (!isEventDispatchThread())
-      throw ActionFailedException.actionFailure("Task should be executed in the event dispatch thread");
+      throw actionFailure("Query should be executed in the event dispatch thread");
     try {
-      doExecuteInEDT();
+      result = doExecuteInEDT();
     } catch (Throwable t) {
       catchedException(t);
     }
   }
 
-  final void doExecuteInEDT() throws Throwable {
+  final T doExecuteInEDT() throws Throwable {
     try {
-      executeInEDT();
+      return executeInEDT();
     } finally {
       executedInEDT();
     }
@@ -50,7 +54,14 @@ public abstract class GuiTask extends GuiAction {
 
   /**
    * Specifies the action to execute in the event dispatch thread.
+   * @return the result of the execution of the action.
    * @throws Throwable any error thrown when executing an action in the event dispatch thread.
    */
-  protected abstract void executeInEDT() throws Throwable;
+  protected abstract T executeInEDT() throws Throwable;
+
+  final T result() { return result; }
+
+  final void clearResult() {
+    result = null;
+  }
 }

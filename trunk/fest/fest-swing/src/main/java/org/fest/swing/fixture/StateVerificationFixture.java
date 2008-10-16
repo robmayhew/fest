@@ -15,8 +15,8 @@
  */
 package org.fest.swing.fixture;
 
-import org.fest.swing.core.Timeout;
 import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.timing.Timeout;
 
 /**
  * Understands verification of the state of a GUI component.

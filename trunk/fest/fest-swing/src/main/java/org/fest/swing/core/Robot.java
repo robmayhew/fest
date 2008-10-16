@@ -9,7 +9,6 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
-import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 
 /**
@@ -108,25 +107,6 @@ public interface Robot {
    */
   void invokeAndWait(Component c, Runnable action);
 
-  /**
-   * Runs the given <code>{@link GuiTask}</code> on the event dispatch thread, but don't return until it's been run. The
-   * difference between this method and <code>{@link #invokeAndWait(Runnable)}</code> is that this method re-throws any
-   * exception thrown by the task, wrapped in a <code>{@link UnexpectedException}</code>. We recommend to use this 
-   * method instead.
-   * @param task the <code>GuiTask</code> to run.
-   */
-  void invokeAndWait(GuiTask task);
-
-  /**
-   * Posts a <code>{@link GuiTask}</code> on the given component's event queue and wait for it to finish. The difference
-   * between this method and <code>{@link #invokeAndWait(Component, Runnable)}</code> is that this method re-throws any
-   * exception thrown by the task, wrapped in a <code>{@link UnexpectedException}</code>. We recommend to use this 
-   * method instead.
-   * @param c the component which event queue will be used.
-   * @param task the <code>GuiTask</code> to post in the event queue.
-   */
-  void invokeAndWait(Component c, GuiTask task);
-  
   /**
    * Cleans up any used resources (keyboard, mouse, open windows and <code>{@link ScreenLock}</code>) used by this
    * robot.

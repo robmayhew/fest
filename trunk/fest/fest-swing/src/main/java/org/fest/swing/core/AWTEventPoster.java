@@ -27,10 +27,10 @@ import org.fest.swing.monitor.WindowMonitor;
 import static java.awt.event.MouseEvent.*;
 import static java.lang.System.currentTimeMillis;
 
+import static org.fest.swing.awt.AWT.isAWTPopupMenuBlocking;
 import static org.fest.swing.core.EventMode.AWT;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.util.AWT.isAWTPopupMenuBlocking;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Understands posting <code>{@link AWTEvent}</code>s in a <code>{@link EventQueue}</code>.

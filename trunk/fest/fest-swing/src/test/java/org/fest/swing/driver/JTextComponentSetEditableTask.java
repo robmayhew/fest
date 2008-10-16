@@ -18,9 +18,9 @@ package org.fest.swing.driver;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that makes a <code>{@link JTextComponent}</code> editable. This task is executed in the event

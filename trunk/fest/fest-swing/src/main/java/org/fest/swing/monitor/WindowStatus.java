@@ -19,8 +19,8 @@ import java.awt.*;
 
 import static java.lang.Math.max;
 
+import static org.fest.swing.awt.AWT.insetsFrom;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
-import static org.fest.swing.util.AWT.insetsFrom;
 
 /**
  * Understands verification of the state of a window.

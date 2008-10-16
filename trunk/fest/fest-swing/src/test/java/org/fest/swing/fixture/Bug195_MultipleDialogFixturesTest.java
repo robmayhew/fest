@@ -28,14 +28,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.GuiQuery;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.finder.WindowFinder;
 
 import static java.awt.BorderLayout.*;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.DialogTitleQuery.titleOf;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Strings.*;

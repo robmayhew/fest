@@ -12,7 +12,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.util;
+package org.fest.swing.awt;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
@@ -23,6 +23,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.fest.swing.query.JPopupMenuInvokerQuery;
+import org.fest.swing.util.MouseEventTarget;
 
 import static java.awt.event.InputEvent.*;
 import static javax.swing.SwingUtilities.convertPoint;

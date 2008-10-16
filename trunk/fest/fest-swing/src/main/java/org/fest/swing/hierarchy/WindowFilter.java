@@ -20,9 +20,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import static org.fest.swing.awt.AWT.isSharedInvisibleFrame;
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
-import static org.fest.swing.util.AWT.isSharedInvisibleFrame;
 
 /**
  * Understands a filter of windows to ignore in a component hierarchy.

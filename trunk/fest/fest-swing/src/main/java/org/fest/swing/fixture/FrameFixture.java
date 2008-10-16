@@ -24,6 +24,7 @@ import org.fest.swing.driver.FrameDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.timing.Timeout;
 
 /**
  * Understands simulation of user events on a <code>{@link Frame}</code> and verification of the state of such

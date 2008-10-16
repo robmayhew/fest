@@ -1,5 +1,5 @@
 /*
- * Created on Jul 29, 2008
+ * Created on Aug 11, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,43 +13,49 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core;
+package org.fest.swing.edt;
 
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
-
-import static javax.swing.SwingUtilities.isEventDispatchThread;
+import org.fest.swing.timing.Condition;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Tests for <code>{@link GuiQuery}</code>.
+ * Tests for <code>{@link GuiTask}</code>.
  *
- * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test public class GuiQueryTest {
+@Test public class GuiTaskTest {
 
   @Test(expectedExceptions = ActionFailedException.class)
   public void shouldExecuteInEDTWhenNotCalledInEDT() {
-    GuiQueryInEDT task = new GuiQueryInEDT();
-    assertThat(isEventDispatchThread()).isFalse();
-    task.run();
+    new GuiTaskInEDT().run();
   }
 
   public void shouldExecuteInEDTWhenCalledInEDT() {
-    final GuiQueryInEDT task = new GuiQueryInEDT();
-    boolean executedFromEDT = execute(task);
-    assertThat(executedFromEDT).isTrue();
+    final GuiTaskInEDT task = new GuiTaskInEDT();
+    execute(task, new Condition("Task is executed") {
+      public boolean test() {
+        return task.wasExecutedInEDT();
+      }
+    });
+    assertThat(task.executed()).isEqualTo(true);
   }
 
-  private static class GuiQueryInEDT extends GuiQuery<Boolean> {
-    GuiQueryInEDT() {}
+  private static class GuiTaskInEDT extends GuiTask {
+    private boolean executed;
 
-    protected Boolean executeInEDT() {
-      return isEventDispatchThread();
+    GuiTaskInEDT() {}
+
+    protected void executeInEDT() {
+      executed = true;
     }
+
+    boolean executed() { return executed; }
   }
+
 }

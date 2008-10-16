@@ -32,7 +32,7 @@ import static java.awt.event.WindowEvent.*;
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Tests for <code>{@link TransientWindowListener}</code>.

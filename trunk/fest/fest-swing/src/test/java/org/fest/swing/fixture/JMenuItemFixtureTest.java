@@ -27,9 +27,9 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.ComponentFinder;
 import org.fest.swing.core.KeyPressInfo;
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JMenuItemDriver;
+import org.fest.swing.timing.Timeout;
 
 import static java.awt.event.InputEvent.SHIFT_MASK;
 import static java.awt.event.KeyEvent.*;
@@ -38,8 +38,8 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.KeyPressInfo.keyCode;
-import static org.fest.swing.core.Timeout.timeout;
 import static org.fest.swing.factory.JMenuItems.menuItem;
+import static org.fest.swing.timing.Timeout.timeout;
 
 /**
  * Tests for <code>{@link JMenuItemFixture}</code>.

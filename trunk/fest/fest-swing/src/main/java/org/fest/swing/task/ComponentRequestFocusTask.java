@@ -17,9 +17,9 @@ package org.fest.swing.task;
 
 import java.awt.Component;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that request input focus for a <code>{@link Component}</code>. This task is executed in the event

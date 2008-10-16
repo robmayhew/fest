@@ -22,6 +22,7 @@ import org.fest.swing.core.*;
 import org.fest.swing.driver.JPopupMenuDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.timing.Timeout;
 
 /**
  * Understands lookup of <code>{@link JPopupMenu}</code>.

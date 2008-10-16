@@ -17,9 +17,9 @@ package org.fest.swing.driver;
 
 import javax.swing.JInternalFrame;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that closes a <code>{@link JInternalFrame}</code>. This task is executed in the event dispatch

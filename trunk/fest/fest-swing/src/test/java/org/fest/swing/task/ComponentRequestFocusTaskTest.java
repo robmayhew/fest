@@ -25,10 +25,10 @@ import org.fest.swing.core.ScreenLock;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.query.ComponentHasFocusQuery.hasFocus;
 import static org.fest.swing.task.ComponentHasFocusCondition.untilFocused;
 import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Tests for <code>{@link ComponentRequestFocusTask}</code>.

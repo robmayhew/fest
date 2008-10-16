@@ -33,13 +33,13 @@ import org.fest.swing.testing.TestWindow;
 import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.MouseButton.*;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
 import static org.fest.swing.task.ComponentHasFocusCondition.untilFocused;
 import static org.fest.swing.task.ComponentRequestFocusTask.giveFocusTo;
 import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Test case for implementations of <code>{@link InputEventGenerator}</code>.

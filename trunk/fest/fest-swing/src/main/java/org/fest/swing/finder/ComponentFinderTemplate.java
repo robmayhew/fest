@@ -22,7 +22,7 @@ import org.fest.swing.core.*;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.ComponentFixture;
 
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.timing.Pause.pause;
 import static org.fest.util.Strings.concat;
 
 /**

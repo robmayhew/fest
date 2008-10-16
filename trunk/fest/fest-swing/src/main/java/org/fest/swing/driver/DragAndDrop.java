@@ -26,9 +26,9 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
+import static org.fest.swing.timing.Pause.pause;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 

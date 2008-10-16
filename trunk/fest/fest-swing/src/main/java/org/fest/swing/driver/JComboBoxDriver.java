@@ -36,7 +36,6 @@ import static javax.swing.text.DefaultEditorKit.selectAllAction;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.driver.JComboBoxDropDownVisibleQuery.isDropDownVisible;
 import static org.fest.swing.driver.JComboBoxEditableQuery.isEditable;
@@ -48,6 +47,7 @@ import static org.fest.swing.driver.JComboBoxSetPopupVisibleTask.setPopupVisible
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.query.JComboBoxSelectedItemQuery.selectedItemOf;
+import static org.fest.swing.timing.Pause.pause;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Objects.areEqual;

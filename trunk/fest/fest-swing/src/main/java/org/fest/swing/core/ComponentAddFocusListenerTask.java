@@ -18,7 +18,9 @@ package org.fest.swing.core;
 import java.awt.Component;
 import java.awt.event.FocusListener;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import org.fest.swing.edt.GuiTask;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that adds a <code>{@link FocusListener}</code> to a <code>{@link Component}</code>. This task is

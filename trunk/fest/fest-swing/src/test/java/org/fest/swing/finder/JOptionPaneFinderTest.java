@@ -35,11 +35,11 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.swing.JOptionPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Tests for <code>{@link JOptionPaneFinder}</code>.

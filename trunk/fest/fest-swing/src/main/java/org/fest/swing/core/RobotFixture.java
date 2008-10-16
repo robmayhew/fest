@@ -38,14 +38,13 @@ import static java.lang.System.currentTimeMillis;
 import static javax.swing.SwingUtilities.*;
 
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.awt.AWT.*;
 import static org.fest.swing.core.ActivateWindowTask.activateWindow;
 import static org.fest.swing.core.ComponentRemoveFocusListenerTask.removeFocusListener;
 import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
-import static org.fest.swing.core.GuiActionRunner.rethrowCatchedExceptionIn;
 import static org.fest.swing.core.InputModifiers.unify;
 import static org.fest.swing.core.MouseButton.*;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
 import static org.fest.swing.core.WindowHideAndDisposeTask.hideAndDispose;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
@@ -57,7 +56,7 @@ import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.swing.task.ComponentRequestFocusTask.giveFocusTo;
-import static org.fest.swing.util.AWT.*;
+import static org.fest.swing.timing.Pause.pause;
 import static org.fest.swing.util.Modifiers.*;
 import static org.fest.swing.util.Platform.isOSX;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
@@ -263,17 +262,6 @@ public class RobotFixture implements Robot {
   private void activate(Window w) {
     activateWindow(w);
     moveMouse(w); // For pointer-focus systems
-  }
-
-  /** {@inheritDoc} */
-  public void invokeAndWait(GuiTask task) {
-    invokeAndWait(null, task);
-  }
-
-  /** {@inheritDoc} */
-  public void invokeAndWait(Component c, GuiTask task) {
-    invokeAndWait(c, (Runnable)task);
-    rethrowCatchedExceptionIn(task);
   }
 
   /** {@inheritDoc} */

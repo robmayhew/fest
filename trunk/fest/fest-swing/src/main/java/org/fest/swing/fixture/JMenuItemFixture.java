@@ -20,10 +20,10 @@ import javax.swing.JMenuItem;
 
 import org.fest.swing.core.KeyPressInfo;
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.Timeout;
 import org.fest.swing.driver.JMenuItemDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.timing.Timeout;
 
 /**
  * Understands simulation of user events on a <code>{@link JMenuItem}</code> and verification of the state of such

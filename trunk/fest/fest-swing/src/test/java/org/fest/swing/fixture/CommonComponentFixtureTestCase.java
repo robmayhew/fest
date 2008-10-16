@@ -23,7 +23,7 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.KeyPressInfo;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.MouseClickInfo;
-import org.fest.swing.core.Timeout;
+import org.fest.swing.timing.Timeout;
 
 import static java.awt.event.InputEvent.SHIFT_MASK;
 import static java.awt.event.KeyEvent.*;
@@ -33,7 +33,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.KeyPressInfo.keyCode;
 import static org.fest.swing.core.MouseButton.MIDDLE_BUTTON;
 import static org.fest.swing.core.MouseClickInfo.middleButton;
-import static org.fest.swing.core.Timeout.timeout;
+import static org.fest.swing.timing.Timeout.timeout;
 
 
 /**

@@ -31,7 +31,7 @@ public class MouseEventTarget {
   /** The x,y position of the event relative to the source component. */
   public final Point position;
 
-  MouseEventTarget(Component source, Point position) {
+  public MouseEventTarget(Component source, Point position) {
     this.source = source;
     this.position = position;
   }

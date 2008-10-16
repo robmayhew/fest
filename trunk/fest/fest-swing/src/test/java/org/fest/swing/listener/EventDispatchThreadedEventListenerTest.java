@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Tests for <code>{@link EventDispatchThreadedEventListener}</code>.

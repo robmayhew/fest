@@ -3,9 +3,9 @@ package org.fest.swing.query;
 import java.awt.Window;
 import java.util.List;
 
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Collections.list;
 
 /**

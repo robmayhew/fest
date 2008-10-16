@@ -19,8 +19,8 @@ import java.awt.Component;
 
 import org.fest.swing.core.ComponentFinder;
 import org.fest.swing.core.ComponentMatcher;
-import org.fest.swing.core.Condition;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.timing.Condition;
 
 /**
  * Understands a condition that is satisfied if a GUI component that matches certain search criteria can be found.

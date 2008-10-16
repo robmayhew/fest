@@ -20,10 +20,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.testing.TestWindow;
+import org.fest.swing.timing.Condition;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Tests for <code>{@link WindowHideAndDisposeTask}</code>.

@@ -20,6 +20,7 @@ import javax.swing.JCheckBox;
 import org.fest.swing.core.*;
 import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.timing.Timeout;
 
 /**
  * Understands simulation of user events on a <code>{@link JCheckBox}</code> and verification of the state of such 

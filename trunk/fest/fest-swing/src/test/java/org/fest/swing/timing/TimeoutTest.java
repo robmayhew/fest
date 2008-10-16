@@ -13,11 +13,13 @@
  * 
  * Copyright @2007-2008 the original author or authors.
  */
-package org.fest.swing.core;
+package org.fest.swing.timing;
 
 import java.util.concurrent.TimeUnit;
 
 import org.testng.annotations.Test;
+
+import org.fest.swing.timing.Timeout;
 
 import static org.fest.assertions.Assertions.assertThat;
 

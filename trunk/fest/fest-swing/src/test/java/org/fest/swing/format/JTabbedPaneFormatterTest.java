@@ -21,12 +21,12 @@ import javax.swing.JTabbedPane;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.Condition;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
+import org.fest.swing.timing.Condition;
 import org.fest.util.Strings;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTabbedPanes.tabbedPane;
 import static org.fest.swing.factory.JTextFields.textField;
 

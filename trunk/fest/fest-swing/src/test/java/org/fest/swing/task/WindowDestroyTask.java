@@ -17,10 +17,10 @@ package org.fest.swing.task;
 
 import java.awt.Window;
 
-import org.fest.swing.core.Condition;
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
+import org.fest.swing.timing.Condition;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that hides and disposes a <code>{@link Window}</code>. This task is executed in the event dispatch

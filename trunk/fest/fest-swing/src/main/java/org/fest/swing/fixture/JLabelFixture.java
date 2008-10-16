@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import org.fest.swing.core.*;
 import org.fest.swing.driver.JLabelDriver;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.timing.Timeout;
 
 /**
  * Understands simulation of user events on a <code>{@link JLabel}</code> and verification of the state of such

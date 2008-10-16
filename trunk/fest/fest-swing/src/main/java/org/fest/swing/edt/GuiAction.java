@@ -12,7 +12,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core;
+package org.fest.swing.edt;
 
 /**
  * Understands the base class for actions that are executed in the event dispatch thread.

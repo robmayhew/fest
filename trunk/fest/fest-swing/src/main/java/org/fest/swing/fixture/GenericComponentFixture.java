@@ -18,6 +18,7 @@ import java.awt.Component;
 
 import org.fest.swing.core.*;
 import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.timing.Timeout;
 
 /**
  * A generic component fixture providing basic keyboard and mouse input operations. Useful as a base class for

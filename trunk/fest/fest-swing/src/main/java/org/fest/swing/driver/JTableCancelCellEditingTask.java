@@ -17,9 +17,9 @@ package org.fest.swing.driver;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
-import org.fest.swing.core.GuiTask;
+import org.fest.swing.edt.GuiTask;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that cancels editing of a cell in a <code>{@link JTable}</code>. This task is executed in the

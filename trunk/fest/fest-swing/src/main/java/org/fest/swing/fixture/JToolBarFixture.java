@@ -25,6 +25,7 @@ import org.fest.swing.driver.JToolBarDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.timing.Timeout;
 
 /**
  * Understands simulation of user events on a <code>{@link JToolBar}</code> and verification of the state of such

@@ -36,10 +36,10 @@ import static javax.swing.JOptionPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.timing.Pause.pause;
 import static org.fest.util.Arrays.array;
 
 /**

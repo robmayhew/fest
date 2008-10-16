@@ -35,11 +35,11 @@ import org.fest.swing.testing.TestWindow;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Tests for <code>{@link JFileChooserFinder}</code>.

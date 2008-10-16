@@ -17,7 +17,9 @@ package org.fest.swing.core;
 
 import java.awt.Window;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
+import org.fest.swing.edt.GuiTask;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 
 /**

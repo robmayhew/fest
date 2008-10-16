@@ -26,8 +26,8 @@ import org.fest.swing.listener.EventDispatchThreadedEventListener;
 import static java.awt.AWTEvent.*;
 import static javax.swing.SwingUtilities.getDeepestComponentAt;
 
+import static org.fest.swing.awt.AWT.locationOnScreenOf;
 import static org.fest.swing.input.MouseInfo.BUTTON_MASK;
-import static org.fest.swing.util.AWT.locationOnScreenOf;
 
 /**
  * Class to keep track of a given input state. Includes mouse/pointer position and keyboard modifier key state.

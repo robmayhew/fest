@@ -32,21 +32,23 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.KeyRecorder;
 import org.fest.swing.testing.TestWindow;
+import org.fest.swing.timing.Condition;
 
 import static java.awt.event.InputEvent.*;
 import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.core.GuiActionRunner.execute;
+import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.MouseButton.*;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.core.RobotFixtureTest.KeyAction.action;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
@@ -54,7 +56,7 @@ import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
 import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.swing.util.AWT.centerOf;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Tests for <code>{@link org.fest.swing.core.RobotFixture}</code>.

@@ -18,13 +18,13 @@ package org.fest.swing.testing;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import org.fest.swing.core.Condition;
-import org.fest.swing.core.GuiQuery;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.timing.Condition;
 
 import static javax.swing.SwingUtilities.invokeLater;
 
-import static org.fest.swing.core.GuiActionRunner.execute;
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Understands launching a <code>{@link JOptionPane}</code>.

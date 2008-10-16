@@ -25,6 +25,7 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.timing.Timeout;
 import org.fest.swing.util.Range;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;

@@ -22,6 +22,7 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.core.*;
 import org.fest.swing.driver.JOptionPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.timing.Timeout;
 
 import static org.fest.swing.fixture.ComponentFixtureValidator.notNullRobot;
 
