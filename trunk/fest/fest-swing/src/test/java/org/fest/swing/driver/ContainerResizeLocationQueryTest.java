@@ -28,6 +28,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.testing.TestGroups.*;
 
@@ -58,8 +59,9 @@ public class ContainerResizeLocationQueryTest {
 
   public void shouldReturnResizeLocationOfContainer() {
     // TODO find a better way to test this without duplicating what the class under test is doing
+    Dimension size = sizeOf(window);
     Insets insets = insetsOf(window);
-    Point expected = new Point(WIDTH - insets.right / 2, HEIGHT - insets.bottom / 2);
+    Point expected = new Point(size.width - insets.right / 2, size.height - insets.bottom / 2);
     assertThat(ContainerResizeLocationQuery.resizeLocationOf(window)).isEqualTo(expected);
   }
 

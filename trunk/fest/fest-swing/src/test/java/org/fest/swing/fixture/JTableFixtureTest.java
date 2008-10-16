@@ -126,7 +126,7 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
       }
     }.run();
   }
-  
+
   public void shouldReturnRowCount() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -139,7 +139,7 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
       }
     }.run();
   }
-  
+
   public void shouldSelectCell() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -470,12 +470,11 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
 
       protected void codeToTest() {
         TableCell result = fixture.cell(value);
-        assertThat(result).isEqualTo(cell)
-                          .isNotSameAs(cell);
+        assertThat(result).isEqualTo(cell);
       }
     }.run();
   }
-  
+
   public void shouldThrowErrorIfCellCannotBeFoundWithGivenValue() {
     final ActionFailedException expected = actionFailure("Thrown on purpose");
     final String value = "Hello";

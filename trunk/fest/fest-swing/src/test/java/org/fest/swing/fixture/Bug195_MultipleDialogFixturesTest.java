@@ -1,15 +1,15 @@
 /*
  * Created on Oct 13, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.fixture;
@@ -38,10 +38,11 @@ import static org.fest.swing.core.GuiActionRunner.execute;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.query.DialogTitleQuery.titleOf;
 import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.util.Strings.*;
 
 /**
  * Tests for <a href="http://code.google.com/p/fest/issues/detail?id=195" target="_blank">Bug 195</a>.
- * 
+ *
  * @author Bryan Shannon
  * @author Alex Ruiz
  */
@@ -53,11 +54,11 @@ public class Bug195_MultipleDialogFixturesTest {
   @BeforeMethod public void setUp() {
     robot = robotWithCurrentAwtHierarchy();
   }
-  
+
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
-  
+
   // Runs the test (that fails for me. :( )
   public void shouldFindDialogMultipleTimes() {
     JDialog dialog = new TestDialog("title 1");
@@ -77,11 +78,12 @@ public class Bug195_MultipleDialogFixturesTest {
 
     public DialogTitleStartsWithMatcher(String s) {
       super(false);
-      this.matchString = s.toUpperCase();
+      this.matchString = s != null ? s.toUpperCase() : null;
     }
 
     protected boolean isMatching(Dialog dialog) {
-      return titleOf(dialog).toUpperCase().startsWith(matchString) && isShowing(dialog);
+      String title = titleOf(dialog);
+      return title != null && title.toUpperCase().startsWith(matchString) && isShowing(dialog);
     }
 
     private static boolean isShowing(final Dialog dialog) {
@@ -91,16 +93,16 @@ public class Bug195_MultipleDialogFixturesTest {
         }
       });
     }
-    
+
     public String toString() {
-      return "DialogTitleStartsWithMatcher(" + matchString + ")";
+      return concat(DialogTitleStartsWithMatcher.class.getSimpleName(), "(", quote(matchString), ")");
     }
   }
 
   // A subclass of dialog that has a label and a simple button.
   private static class TestDialog extends JDialog {
     private static final long serialVersionUID = 1L;
-    
+
     JButton okayButton = new JButton();
 
     public TestDialog(String title) {
@@ -118,7 +120,7 @@ public class Bug195_MultipleDialogFixturesTest {
   // Simple action for the dialog that closes the dialog.
   private static class OKAction extends AbstractAction {
     private static final long serialVersionUID = 1L;
-    
+
     private final JDialog dialog;
 
     public OKAction(JDialog dialog) {
