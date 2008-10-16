@@ -8,11 +8,11 @@ import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JTableCellFixture;
 
-import static org.fest.swing.core.Pause.pause;
+import static org.fest.swing.data.TableCell.row;
 import static org.fest.swing.demo.main.Main.updateLookAndFeel;
 import static org.fest.swing.demo.service.ServiceStubs.setUpServices;
 import static org.fest.swing.finder.WindowFinder.findDialog;
-import static org.fest.swing.fixture.TableCell.row;
+import static org.fest.swing.timing.Pause.pause;
 
 public class AddWebFeedAndFolderTest {
 

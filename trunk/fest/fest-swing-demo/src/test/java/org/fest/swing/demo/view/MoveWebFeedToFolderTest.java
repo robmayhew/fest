@@ -12,10 +12,10 @@ import org.fest.swing.fixture.JPopupMenuFixture;
 import org.fest.swing.fixture.JTreeFixture;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.Pause.pause;
 import static org.fest.swing.demo.main.Main.updateLookAndFeel;
 import static org.fest.swing.demo.service.ServiceStubs.setUpServices;
 import static org.fest.swing.finder.WindowFinder.findDialog;
+import static org.fest.swing.timing.Pause.pause;
 
 public class MoveWebFeedToFolderTest {
 
@@ -35,7 +35,7 @@ public class MoveWebFeedToFolderTest {
   @Test public void shouldUpdateDatabaseWhenMovingWebFeedToDifferentFolder() {
     JTreeFixture feedsTree = mainFrame.tree("feeds");
     JPopupMenuFixture rootPopupMenu = feedsTree.showPopupMenuAt("Web Feeds");
-    rootPopupMenu.menuItem("add").select();
+    rootPopupMenu.menuItem("add").click();
     addDiscoBlogWebFeed();
     mainFrame.button("add").click();
     addGroovyFolder();
