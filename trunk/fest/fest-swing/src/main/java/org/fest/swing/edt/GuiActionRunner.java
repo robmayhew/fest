@@ -31,6 +31,27 @@ import static org.fest.util.Strings.concat;
  */
 public class GuiActionRunner {
 
+  private static boolean executeInEDT = true;
+  
+  /**
+   * Indicates <code>{@link GuiActionRunner}</code> if instances of <code>{@link GuiQuery}</code> and
+   * <code>{@link GuiTask}</code> should be executed in the event dispatch thread or not.
+   * @param b if <code>true</code>, GUI actions are executed in the event dispatch thread. If <code>false</code>,
+   * GUI actions are executed in the current thread.
+   */
+  public static synchronized void executeInEDT(boolean b) {
+    executeInEDT = b;
+  }
+  
+  /**
+   * Returns whether instances of <code>{@link GuiQuery}</code> and <code>{@link GuiTask}</code> should be executed in 
+   * the event dispatch thread or not.
+   * @return <code>true</code> if GUI actions are executed in the event dispatch thread, <code>false</code> otherwise.
+   */
+  public static synchronized boolean executeInEDT() {
+    return executeInEDT;
+  }
+  
   /**
    * Executes the given query in the event dispatch thread. This method waits until the query has finished its
    * execution.
@@ -39,10 +60,20 @@ public class GuiActionRunner {
    * @return the result of the query executed in the main thread.
    * @throws UnexpectedException wrapping any exception thrown when executing the given query in the event dispatch
    * thread.
+   * @see #executeInEDT()
    */
   public static <T> T execute(GuiQuery<T> query) {
+    if (!executeInEDT) return executeInCurrentThread(query);
     run(query, untilExecuted(query));
     return resultOf(query);
+  }
+
+  private static <T> T executeInCurrentThread(GuiQuery<T> query) {
+    try {
+      return query.executeInEDT();
+    } catch (Throwable e) {
+      throw unexpected(e);
+    }
   }
 
   /**
@@ -50,10 +81,23 @@ public class GuiActionRunner {
    * @param task the task to execute.
    * @throws UnexpectedException wrapping any exception thrown when executing the given task in the event dispatch
    * thread.
+   * @see #executeInEDT()
    */
   public static void execute(GuiTask task) {
+    if (!executeInEDT) {
+      executeInCurrentThread(task);
+      return;
+    }
     run(task, untilExecuted(task));
     rethrowCatchedExceptionIn(task);
+  }
+
+  private static void executeInCurrentThread(GuiTask task) {
+    try {
+      task.executeInEDT();
+    } catch (Throwable e) {
+      throw unexpected(e);
+    }
   }
 
   /**
