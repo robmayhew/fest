@@ -28,7 +28,8 @@ import java.awt.Component;
 public final class ComponentNameQuery {
 
   /**
-   * Returns the name of the given <code>{@link Component}</code>. This action is executed in the event dispatch thread.
+   * Returns the name of the given <code>{@link Component}</code>. This action is <strong>not</strong> executed in the
+   * event dispatch thread.
    * @param component the given <code>Component</code>.
    * @return the name of the given <code>Component</code>.
    * @see Component#getName()
