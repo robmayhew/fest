@@ -21,7 +21,6 @@ import javax.swing.JTable;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -42,7 +41,7 @@ public class JTableFormatter extends ComponentFormatterTemplate {
     JTable table = (JTable)c;
     return concat(
         table.getClass().getName(), "[",
-        "name=", quote(nameOf(table)), ", ",
+        "name=", quote(table.getName()), ", ",
         "rowCount=", valueOf(table.getRowCount()), ", ",
         "columnCount=", valueOf(table.getColumnCount()), ", ",
         "enabled=", valueOf(table.isEnabled()), ", ",

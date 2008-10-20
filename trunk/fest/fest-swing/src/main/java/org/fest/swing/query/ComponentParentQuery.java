@@ -18,33 +18,25 @@ package org.fest.swing.query;
 import java.awt.Component;
 import java.awt.Container;
 
-import org.fest.swing.edt.GuiQuery;
-
-import static org.fest.swing.edt.GuiActionRunner.execute;
-
 /**
- * Understands an action, executed in the event dispatch thread, that returns the parent of a
- * <code>{@link Component}</code>.
+ * Understands an action that returns the parent of a <code>{@link Component}</code>. This query is <strong>not</strong>
+ * executed in the event dispatch thread.
  * @see Component#getParent()
- *
+ * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
 public final class ComponentParentQuery {
 
   /**
-   * Returns the parent of the given <code>{@link Component}</code>. This action is executed in the event dispatch
-   * thread.
+   * Returns the parent of the given <code>{@link Component}</code>. This action is <strong>not</strong> executed in the
+   * event dispatch thread.
    * @param component the given <code>Component</code>.
    * @return the parent of the given <code>Component</code>.
    * @see Component#getParent()
    */
-  public static Container parentOf(final Component component) {
-    return execute(new GuiQuery<Container>() {
-      protected Container executeInEDT() {
-        return component.getParent();
-      }
-    });
+  public static Container parentOf(Component component) {
+    return component.getParent();
   }
 
   private ComponentParentQuery() {}

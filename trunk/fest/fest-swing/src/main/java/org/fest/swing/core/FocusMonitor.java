@@ -18,7 +18,6 @@ import java.awt.Component;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-import static org.fest.swing.core.ComponentAddFocusListenerTask.addFocusListener;
 import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
 
 /**
@@ -32,7 +31,7 @@ final class FocusMonitor extends FocusAdapter {
 
   static FocusMonitor attachTo(Component c) {
     FocusMonitor monitor = new FocusMonitor(c);
-    addFocusListener(c, monitor);
+    c.addFocusListener(monitor);
     return monitor;
   }
   

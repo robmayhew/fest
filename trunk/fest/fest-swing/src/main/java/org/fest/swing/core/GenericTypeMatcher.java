@@ -17,8 +17,6 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 
-import static org.fest.swing.query.ComponentShowingQuery.isShowing;
-
 /**
  * Understands a <code>{@link ComponentMatcher}</code> that matches a <code>{@link Component}</code> by type and some 
  * custom search criteria.
@@ -26,13 +24,11 @@ import static org.fest.swing.query.ComponentShowingQuery.isShowing;
  *
  * @author Yvonne Wang
  */
-public abstract class GenericTypeMatcher<T extends Component> implements ComponentMatcher {
-
-  private final boolean requireShowing;
+public abstract class GenericTypeMatcher<T extends Component> extends AbstractComponentMatcher {
 
   /** Creates a new </code>{@link GenericTypeMatcher}</code>. The component to match does not have to be showing. */
   public GenericTypeMatcher() {
-    this(false);
+    
   }
 
   /**
@@ -40,7 +36,7 @@ public abstract class GenericTypeMatcher<T extends Component> implements Compone
    * @param requireShowing indicates if the component to match should be showing or not.
    */
   public GenericTypeMatcher(boolean requireShowing) {
-    this.requireShowing = requireShowing;
+    super(requireShowing);
   }
   
   /**
@@ -57,7 +53,7 @@ public abstract class GenericTypeMatcher<T extends Component> implements Compone
   public final boolean matches(Component c) {
     if (c == null) return false;
     try {
-      return (!requireShowing() || isShowing(c)) && isMatching((T)c);
+      return (isShowingMatches(c)) && isMatching((T)c);
     } catch(ClassCastException ignored) {
       return false;
     }
@@ -69,10 +65,4 @@ public abstract class GenericTypeMatcher<T extends Component> implements Compone
    * @return <code>true</code> if the given component matches the defined search criteria; otherwise, <code>false</code>.
    */
   protected abstract boolean isMatching(T component);
-
-  /**
-   * Indicates whether the component to match has to be showing.
-   * @return <code>true</code> if the component to find has to be showing, <code>false</code> otherwise.
-   */
-  public final boolean requireShowing() { return requireShowing; }
 }

@@ -19,7 +19,9 @@ import java.awt.*;
 import java.awt.event.InvocationEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -40,7 +42,6 @@ import static javax.swing.SwingUtilities.*;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.awt.AWT.*;
 import static org.fest.swing.core.ActivateWindowTask.activateWindow;
-import static org.fest.swing.core.ComponentRemoveFocusListenerTask.removeFocusListener;
 import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
 import static org.fest.swing.core.InputModifiers.unify;
@@ -199,11 +200,9 @@ public class RobotFixture implements Robot {
    *         is found.
    */
   private Applet findAppletDescendent(Container c) {
-    try {
-      return finder.findByType(c, Applet.class);
-    } catch (ComponentLookupException e) {
-      return null;
-    }
+    List<Component> found = new ArrayList<Component>(finder.findAll(c,  new TypeMatcher(Applet.class)));
+    if (found.size() == 1) return (Applet)found.get(0);
+    return null;
   }
 
   private Point closeLocation(Container c) {
@@ -251,7 +250,7 @@ public class RobotFixture implements Robot {
         }
       }
     } finally {
-      removeFocusListener(c, focusMonitor);
+      c.removeFocusListener(focusMonitor);
     }
   }
 
@@ -653,21 +652,30 @@ public class RobotFixture implements Robot {
   }
 
   private JPopupMenu activePopupMenu() {
-    try {
-      return (JPopupMenu) finder().find(POPUP_MATCHER);
-    } catch (ComponentLookupException e) {
-      return null;
-    }
+    List<Component> found = new ArrayList<Component>(finder().findAll(POPUP_MATCHER));
+    if (found.size() == 1) return (JPopupMenu)found.get(0);
+    return null;
   }
 
   /** {@inheritDoc} */
   public void requireNoJOptionPaneIsShowing() {
-    try {
-      JOptionPane found = finder().findByType(JOptionPane.class, true);
-      if (found == null) return;
-      fail(concat("Expecting no JOptionPane to be showing, but found:<", format(found), ">"));
-    } catch (ComponentLookupException e) {}
+    List<Component> found = new ArrayList<Component>(finder().findAll(new TypeMatcher(JOptionPane.class, true)));
+    if (found.isEmpty()) return;
+    unexpectedJOptionPanesFound(found);
   }
+
+  private void unexpectedJOptionPanesFound(List<Component> found) {
+    StringBuilder message = new StringBuilder();
+    message.append("Expecting no JOptionPane to be showing, but found:<[");
+    int size = found.size();
+    for (int i = 0; i < size; i++) {
+      message.append(format(found.get(i)));
+      if (i != size - 1) message.append(", ");
+    }
+    message.append("]>");
+    fail(message.toString());
+  }
+
 
   /** {@inheritDoc} */
   public Settings settings() {

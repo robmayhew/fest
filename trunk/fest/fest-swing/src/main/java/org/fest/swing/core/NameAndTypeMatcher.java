@@ -20,7 +20,6 @@ import java.awt.Component;
 import static java.lang.String.valueOf;
 
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
-import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
@@ -29,10 +28,9 @@ import static org.fest.util.Strings.*;
  *
  * @author Alex Ruiz
  */
-public final class NameAndTypeMatcher implements ComponentMatcher {
+public final class NameAndTypeMatcher extends AbstractComponentMatcher {
 
   private final String name;
-  private final boolean requireShowing;
   private final Class<? extends Component> type;
 
   /**
@@ -57,6 +55,7 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
    * @throws NullPointerException if the given type is <code>null</code>.
    */
   public NameAndTypeMatcher(String name, Class<? extends Component> type, boolean requireShowing) {
+    super(requireShowing);
     if (name == null) 
       throw new NullPointerException("The name of the component to find should not be null");
     if (isEmpty(name))
@@ -65,7 +64,6 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
       throw new NullPointerException("The type of component to find should not be null");
     this.name = name;
     this.type = type;
-    this.requireShowing = requireShowing;
   }
   
   /** 
@@ -75,7 +73,7 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
    *         specified in this matcher, <code>false</code> otherwise.
    */
   public boolean matches(Component c) {
-    return areEqual(name, nameOf(c)) && type.isAssignableFrom(c.getClass()) && (!requireShowing || isShowing(c));
+    return areEqual(name, nameOf(c)) && type.isAssignableFrom(c.getClass()) && isShowingMatches(c);
   }
 
   @Override public String toString() {
@@ -83,7 +81,7 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
         getClass().getName(), "[",
         "name=", quote(name), ", ",
         "type=", type.getName(), ", ",
-        "requireShowing=", valueOf(requireShowing), 
+        "requireShowing=", valueOf(requireShowing()), 
         "]"
     );
   }

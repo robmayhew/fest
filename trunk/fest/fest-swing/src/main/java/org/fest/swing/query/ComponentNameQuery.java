@@ -17,13 +17,9 @@ package org.fest.swing.query;
 
 import java.awt.Component;
 
-import org.fest.swing.edt.GuiQuery;
-
-import static org.fest.swing.edt.GuiActionRunner.execute;
-
 /**
- * Understands an action, executed in the event dispatch thread, that returns the name of a
- * <code>{@link Component}</code>.
+ * Understands an action that returns the name of a <code>{@link Component}</code>. This query is <strong>not</strong>
+ * executed in the event dispatch thread.
  * @see Component#getName()
  *
  * @author Alex Ruiz
@@ -37,12 +33,8 @@ public final class ComponentNameQuery {
    * @return the name of the given <code>Component</code>.
    * @see Component#getName()
    */
-  public static String nameOf(final Component component) {
-    return execute(new GuiQuery<String>() {
-      protected String executeInEDT() {
-        return component.getName();
-      }
-    });
+  public static String nameOf(Component component) {
+    return component.getName();
   }
 
   private ComponentNameQuery() {}

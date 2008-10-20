@@ -25,9 +25,6 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.edt.GuiQuery;
-
-import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.util.Strings.*;
 
@@ -115,25 +112,18 @@ public class Formatting {
   }
 
   /**
-   * Returns a <code>String</code> representation of the given <code>{@link Component}</code>.
+   * Returns a <code>String</code> representation of the given <code>{@link Component}</code>. This method is
+   * <strong>code</strong> invoked in the event dispatch thread. 
    * @param c the given <code>Component</code>.
    * @return a <code>String</code> representation of the given <code>Component</code>.
    */
   public static String format(Component c) {
     if (c == null) return NULL_COMPONENT_MESSAGE;
     ComponentFormatter formatter = formatterFor(c.getClass());
-    if (formatter != null) return performFormatting(c, formatter);
+    if (formatter != null) return formatter.format(c);
     String name = nameOf(c);
     if (isEmpty(name)) return c.toString();
     return concat(c.getClass().getName(), "[name=", quote(name), "]");
-  }
-
-  private static String performFormatting(final Component c, final ComponentFormatter formatter) {
-    return execute(new GuiQuery<String>() {
-      protected String executeInEDT() {
-        return formatter.format(c);
-      }
-    });
   }
 
   private static ComponentFormatter formatterFor(Class<?> type) {

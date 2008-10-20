@@ -27,7 +27,6 @@ import org.fest.util.Arrays;
 import static java.lang.String.valueOf;
 
 import static org.fest.swing.format.SwingIntEnums.SELECTION_MODES;
-import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -47,7 +46,7 @@ public class JListFormatter extends ComponentFormatterTemplate {
     JList list = (JList)c;
     return concat(
         list.getClass().getName(), "[",
-        "name=", quote(nameOf(list)), ", ",
+        "name=", quote(list.getName()), ", ",
         "selectedValues=", Arrays.format(list.getSelectedValues()), ", ",
         "contents=", Arrays.format(contentsOf(list)),  ", ",
         "selectionMode=", SELECTION_MODES.get(list.getSelectionMode()), ", ",

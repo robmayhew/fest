@@ -19,7 +19,6 @@ import java.awt.Component;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -27,10 +26,9 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz 
  */
-public final class TypeMatcher implements ComponentMatcher {
+public final class TypeMatcher extends AbstractComponentMatcher {
 
   private final Class<? extends Component> type;
-  private final boolean requireShowing;
 
   /**
    * Creates a new <code>{@link TypeMatcher}</code>. The component to match does not have to be showing. 
@@ -48,10 +46,10 @@ public final class TypeMatcher implements ComponentMatcher {
    * @throws NullPointerException if the given type is <code>null</code>.
    */
   public TypeMatcher(Class<? extends Component> type, boolean requireShowing) {
+    super(requireShowing);
     if (type == null)
       throw new NullPointerException("The type of component to find should not be null");
     this.type = type;
-    this.requireShowing = requireShowing;
   }
 
   /**
@@ -61,14 +59,14 @@ public final class TypeMatcher implements ComponentMatcher {
    *         specified in this matcher, <code>false</code> otherwise.
    */
   public boolean matches(Component c) {
-    return type.isAssignableFrom(c.getClass()) && (!requireShowing || isShowing(c));
+    return type.isAssignableFrom(c.getClass()) && isShowingMatches(c);
   }
 
   @Override public String toString() {
     return concat(
         getClass().getName(), "[",
         "type=", type.getName(), ", ",
-        "requireShowing=", valueOf(requireShowing), 
+        "requireShowing=", valueOf(requireShowing()), 
         "]"
     );
   }

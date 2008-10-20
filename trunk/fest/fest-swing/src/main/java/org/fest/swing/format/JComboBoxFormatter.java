@@ -25,7 +25,6 @@ import org.fest.util.Arrays;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -45,7 +44,7 @@ public class JComboBoxFormatter extends ComponentFormatterTemplate {
     JComboBox comboBox = (JComboBox)c;
     return concat(
         comboBox.getClass().getName(), "[",
-        "name=", quote(nameOf(comboBox)), ", ",
+        "name=", quote(comboBox.getName()), ", ",
         "selectedItem=", quote(comboBox.getSelectedItem()), ", ",
         "contents=", Arrays.format(contentsOf(comboBox)),  ", ",
         "editable=", valueOf(comboBox.isEditable()), ", ",
