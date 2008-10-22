@@ -19,10 +19,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import org.testng.annotations.AfterMethod;
@@ -39,7 +36,6 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.factory.JToolBars.toolBar;
 import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
 import static org.fest.swing.query.ComponentFontQuery.fontOf;
 import static org.fest.swing.query.ComponentForegroundQuery.foregroundOf;
@@ -73,7 +69,7 @@ public class BasicJTableCellReaderTest {
 
   public void shouldReturnModelValueToStringIfRendererNotRecognized() {
     setModelData(table, new Object[][] { array(new Jedi("Yoda")) }, array("Names"));
-    setCellRendererComponent(table, unrecognizedRenderer());
+    setJToolBarAsCellRenderer(table);
     robot.waitForIdle();
     Object value = reader.valueAt(table, 0, 0);
     assertThat(value).isEqualTo("Yoda");
@@ -88,8 +84,12 @@ public class BasicJTableCellReaderTest {
     });
   }
 
-  private static Component unrecognizedRenderer() {
-    return toolBar().createNew();
+  private static void setJToolBarAsCellRenderer(final JTable table) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        setCellRendererComponent(table, new JToolBar());
+      }
+    });
   }
 
   public void shouldReturnFontFromRenderer() {
@@ -156,13 +156,13 @@ public class BasicJTableCellReaderTest {
 
   @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
   public void shouldReturnIsSelectedIfRendererIsJCheckBox(boolean selected) {
-    setJComboBoxAsCellRenderer(table, "Hello", selected);
+    setJCheckBoxAsCellRenderer(table, "Hello", selected);
     robot.waitForIdle();
     Object value = reader.valueAt(table, 0, 0);
     assertThat(value).isEqualTo(String.valueOf(selected));
   }
 
-  private static void setJComboBoxAsCellRenderer(final JTable table, final String text, final boolean selected) {
+  private static void setJCheckBoxAsCellRenderer(final JTable table, final String text, final boolean selected) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         JCheckBox checkBox = new JCheckBox(text, selected);

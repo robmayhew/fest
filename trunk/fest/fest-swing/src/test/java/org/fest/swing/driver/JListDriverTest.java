@@ -27,11 +27,14 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestList;
 import org.fest.swing.testing.TestWindow;
 
@@ -494,7 +497,7 @@ public class JListDriverTest {
   }
 
   private void assertCellReaderWasCalled() {
-    assertThat(cellReader.called()).isTrue();
+    cellReader.requireInvoked("valueAt");
   }
 
   @Test(groups = GUI, expectedExceptions = NullPointerException.class)
@@ -530,15 +533,17 @@ public class JListDriverTest {
   }
 
   private static class JListCellReaderStub extends BasicJListCellReader {
-    private boolean called;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     JListCellReaderStub() {}
 
     @Override public String valueAt(JList list, int index) {
-      called = true;
+      methodInvocations.invoked("valueAt");
       return super.valueAt(list, index);
     }
 
-    boolean called() { return called; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

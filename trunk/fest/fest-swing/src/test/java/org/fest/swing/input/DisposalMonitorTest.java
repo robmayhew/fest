@@ -28,7 +28,6 @@ import org.testng.annotations.Test;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.input.ComponentListenersQuery.componentListenersIn;
 
 /**
  * Tests for <code>{@link DisposalMonitor}</code>.
@@ -52,6 +51,6 @@ public class DisposalMonitorTest {
     disposedWindows.put(frame, true);
     monitor.componentShown(new ComponentEvent(frame, 0));
     assertThat(disposedWindows).isEmpty();
-    assertThat(componentListenersIn(frame)).isEmpty();
+    assertThat(frame.getComponentListeners()).isEmpty();
   }
 }

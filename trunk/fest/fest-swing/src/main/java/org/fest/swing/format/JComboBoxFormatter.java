@@ -44,13 +44,13 @@ public class JComboBoxFormatter extends ComponentFormatterTemplate {
     JComboBox comboBox = (JComboBox)c;
     return concat(
         comboBox.getClass().getName(), "[",
-        "name=", quote(comboBox.getName()), ", ",
-        "selectedItem=", quote(comboBox.getSelectedItem()), ", ",
-        "contents=", Arrays.format(contentsOf(comboBox)),  ", ",
-        "editable=", valueOf(comboBox.isEditable()), ", ",
-        "enabled=", valueOf(comboBox.isEnabled()), ", ",
-        "visible=", valueOf(comboBox.isVisible()), ", ",
-        "showing=", valueOf(comboBox.isShowing()),
+        "name=",         quote(comboBox.getName()),            ", ",
+        "selectedItem=", quote(comboBox.getSelectedItem()),    ", ",
+        "contents=",     Arrays.format(contentsOf(comboBox)),  ", ",
+        "editable=",     valueOf(comboBox.isEditable()),       ", ",
+        "enabled=",      valueOf(comboBox.isEnabled()),        ", ",
+        "visible=",      valueOf(comboBox.isVisible()),        ", ",
+        "showing=",      valueOf(comboBox.isShowing()),
         "]"
     );
   }

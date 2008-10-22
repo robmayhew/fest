@@ -17,6 +17,8 @@ package org.fest.swing.driver;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -42,7 +44,6 @@ import static org.fest.swing.driver.JComboBoxEditableQuery.isEditable;
 import static org.fest.swing.driver.JComboBoxEditorAccessibleQuery.isEditorAccessible;
 import static org.fest.swing.driver.JComboBoxEditorQuery.editorOf;
 import static org.fest.swing.driver.JComboBoxItemCountQuery.itemCountOf;
-import static org.fest.swing.driver.JComboBoxSelectItemAtIndexTask.selectItemAtIndex;
 import static org.fest.swing.driver.JComboBoxSetPopupVisibleTask.setPopupVisible;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
@@ -191,14 +192,8 @@ public class JComboBoxDriver extends JComponentDriver {
     final int validatedIndex = validateIndex(comboBox, index);
     if (!isEnabled(comboBox)) return;
     showDropDownList(comboBox);
-    try {
-      listDriver.selectItem(dropDownList(), validatedIndex);
-    } catch (ComponentLookupException e) {
-      selectItemAtIndex(comboBox, validatedIndex);
-      robot.waitForIdle();
-    } finally {
-      hideDropDownListIfVisible(comboBox);
-    }
+    selectItemAtIndex(comboBox, validatedIndex);
+    hideDropDownListIfVisible(comboBox);
   }
 
   int validateIndex(JComboBox comboBox, int index) {
@@ -215,6 +210,16 @@ public class JComboBoxDriver extends JComponentDriver {
     dropDownVisibleThroughUIDelegate(comboBox, true);
   }
 
+  private void selectItemAtIndex(final JComboBox comboBox, final int index) {
+    JList dropDownList = findDropDownList();
+    if (dropDownList != null) {
+      listDriver.selectItem(dropDownList, index);
+      return;
+    }
+    selectItemAtIndex(comboBox, index);
+    robot.waitForIdle();
+  }
+  
   private void hideDropDownListIfVisible(JComboBox comboBox) {
     if (!isDropDownVisible(comboBox)) return;
     dropDownVisibleThroughUIDelegate(comboBox, false);
@@ -269,6 +274,12 @@ public class JComboBoxDriver extends JComponentDriver {
    * @throws ComponentLookupException if the <code>JList</code> in the pop-up could not be found.
    */
   public JList dropDownList() {
+    JList list = findDropDownList();
+    if (list == null) throw listNotFound();
+    return list;
+  }
+
+  private JList findDropDownList() {
     JPopupMenu popup = robot.findActivePopupMenu();
     if (popup == null) {
       TimeoutWatch watch = startWatchWithTimeoutOf(robot.settings().timeoutToFindPopup());
@@ -277,9 +288,7 @@ public class JComboBoxDriver extends JComponentDriver {
         pause();
       }
     }
-    JList list = findListIn(popup);
-    if (list == null) throw listNotFound();
-    return list;
+    return findListIn(popup);
   }
 
   private ComponentLookupException listNotFound() {
@@ -287,11 +296,11 @@ public class JComboBoxDriver extends JComponentDriver {
   }
 
   private JList findListIn(Container parent) {
-    try {
-      return (JList)robot.finder().find(LIST_MATCHER);
-    } catch (ComponentLookupException ignored) {
-      return null;
-    }
+    List<Component> found = new ArrayList<Component>(robot.finder().findAll(LIST_MATCHER));
+    if (found.size() != 1) return null;
+    final Component c = found.get(0);
+    if (c instanceof JList) return (JList)c;
+    return null;
   }
 
   /**

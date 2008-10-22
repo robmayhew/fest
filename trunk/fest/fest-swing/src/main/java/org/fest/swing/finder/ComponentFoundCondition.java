@@ -16,10 +16,11 @@
 package org.fest.swing.finder;
 
 import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.fest.swing.core.ComponentFinder;
 import org.fest.swing.core.ComponentMatcher;
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.timing.Condition;
 
 /**
@@ -53,12 +54,10 @@ final class ComponentFoundCondition extends Condition {
    * @return <code>true</code> if a matching component can be found, <code>false</code> otherwise.
    */
   public boolean test() {
-    try {
-      found = finder.find(matcher);
-    } catch (ComponentLookupException e) {
-      found = null;
-    }
-    return found != null;
+    List<Component> allFound = new ArrayList<Component>(finder.findAll(matcher));
+    if (allFound.size() != 1) return false;
+    found = allFound.get(0);
+    return true;
   }
 
   Component found() { return found; }

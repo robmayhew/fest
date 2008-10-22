@@ -1,21 +1,20 @@
 /*
- * Created on Aug 7, 2008
- *
+ * Created on Oct 22, 2008
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- *
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- *
+ * 
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
@@ -34,13 +33,12 @@ import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.array;
 
 /**
- * Tests for <code>{@link JTreeCellRendererQuery}</code>.
+ * Tests for <code>{@link JTreeCellValueAsTextQuery}</code>.
  *
- * @author Yvonne Wang
  * @author Alex Ruiz
  */
 @Test(groups = { GUI, EDT_ACTION })
-public class JTreeCellRendererQueryTest {
+public class JTreeCellValueAsTextQueryTest {
 
   private Robot robot;
   private JTree tree;
@@ -57,8 +55,10 @@ public class JTreeCellRendererQueryTest {
   }
 
   public void shouldReturnCellRendererComponentOfJTree() {
-    Component renderer = JTreeCellRendererQuery.cellRendererIn(tree, "one");
-    assertThat(renderer).isInstanceOf(JLabel.class);
+    CellRendererComponentReaderStub reader = new CellRendererComponentReaderStub("one");
+    String value = JTreeCellValueAsTextQuery.nodeValue(tree, "one", reader);
+    assertThat(reader.cellRendererComponent()).isInstanceOf(JLabel.class);
+    assertThat(value).isEqualTo("one");
   }
 
   private static class MyWindow extends TestWindow {
@@ -71,7 +71,7 @@ public class JTreeCellRendererQueryTest {
     }
 
     private MyWindow() {
-      super(JTreeCellRendererQueryTest.class);
+      super(JTreeCellValueAsTextQueryTest.class);
       tree.setPreferredSize(new Dimension(80, 60));
       add(tree);
     }

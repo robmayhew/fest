@@ -24,7 +24,6 @@ import org.fest.swing.edt.GuiQuery;
 
 import static javax.swing.SwingConstants.VERTICAL;
 
-import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.driver.JSliderOrientationQuery.orientationOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
@@ -89,7 +88,7 @@ public final class JSliderLocation {
     }
 
     protected final Point executeInEDT() {
-      Point center = centerOf(slider);
+      Point center = new Point(slider.getWidth() / 2, slider.getHeight() / 2);
       int max = max(slider.getInsets());
       int coordinate = coordinateOf(center);
       coordinate = (int)(percent() * max);

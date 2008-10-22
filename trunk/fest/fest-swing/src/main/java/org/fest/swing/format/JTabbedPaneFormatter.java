@@ -44,14 +44,14 @@ public class JTabbedPaneFormatter extends ComponentFormatterTemplate {
     JTabbedPane tabbedPane = (JTabbedPane)c;
     return concat(
         tabbedPane.getClass().getName(), "[",
-        "name=", quote(tabbedPane.getName()), ", ",
+        "name=",             quote(tabbedPane.getName()),            ", ",
         "selectedTabIndex=", valueOf(tabbedPane.getSelectedIndex()), ", ",
-        "selectedTabTitle=", selectedTab(tabbedPane), ", ",
-        "tabCount=", valueOf(tabbedPane.getTabCount()), ", ",
-        "tabTitles=", Arrays.format(tabTitles(tabbedPane)),  ", ",
-        "enabled=", valueOf(tabbedPane.isEnabled()), ", ",
-        "visible=", valueOf(tabbedPane.isVisible()), ", ",
-        "showing=", valueOf(tabbedPane.isShowing()),
+        "selectedTabTitle=", selectedTab(tabbedPane),                ", ",
+        "tabCount=",         valueOf(tabbedPane.getTabCount()),      ", ",
+        "tabTitles=",        Arrays.format(tabTitles(tabbedPane)),   ", ",
+        "enabled=",          valueOf(tabbedPane.isEnabled()),        ", ",
+        "visible=",          valueOf(tabbedPane.isVisible()),        ", ",
+        "showing=",          valueOf(tabbedPane.isShowing()),
         "]"
     );
   }

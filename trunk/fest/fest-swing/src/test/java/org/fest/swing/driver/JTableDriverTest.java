@@ -31,7 +31,8 @@ import org.testng.annotations.Test;
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
-import org.fest.swing.core.*;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
 import org.fest.swing.data.TableCellByColumnName;
@@ -39,6 +40,7 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.ClickRecorder;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
 
@@ -555,14 +557,18 @@ public class JTableDriverTest {
   }
 
   private void assertCellReaderWasCalled() {
-    assertThat(cellReader.called()).isTrue();
+    cellReader.requireInvoked("valueAt");
   }
 
   private void clearAndDisableDragTable() {
+    clearAndDisable(dragTable);
+  }
+
+  private static void clearAndDisable(final JTable table) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        dragTable.clearSelection();
-        dragTable.setEnabled(false);
+        table.clearSelection();
+        table.setEnabled(false);
       }
     });
   }
@@ -623,15 +629,17 @@ public class JTableDriverTest {
   }
 
   private static class JTableCellReaderStub extends BasicJTableCellReader {
-    private boolean called;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     JTableCellReaderStub() {}
 
     @Override public String valueAt(JTable table, int row, int column) {
-      called = true;
+      methodInvocations.invoked("valueAt");
       return super.valueAt(table, row, column);
     }
 
-    boolean called() { return called; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

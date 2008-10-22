@@ -16,26 +16,19 @@
 package org.fest.swing.driver;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
 
-import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.cell.JTableCellReader;
 
-import static org.fest.swing.driver.JTableCellRendererQuery.cellRendererIn;
-import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
-import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
-import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
-import static org.fest.swing.query.ComponentFontQuery.fontOf;
-import static org.fest.swing.query.ComponentForegroundQuery.foregroundOf;
-import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
-import static org.fest.swing.query.JLabelTextQuery.textOf;
+import static org.fest.swing.driver.JTableCellBackgroundQuery.cellBackground;
+import static org.fest.swing.driver.JTableCellFontQuery.cellFont;
+import static org.fest.swing.driver.JTableCellForegroundQuery.cellForeground;
+import static org.fest.swing.driver.JTableCellValueAsTextQuery.cellValue;
 
 /**
  * Understands the default implementation of <code>{@link JTableCellReader}</code>.
@@ -45,14 +38,29 @@ import static org.fest.swing.query.JLabelTextQuery.textOf;
  */
 public class BasicJTableCellReader extends BaseValueReader implements JTableCellReader {
 
-  private final JComboBoxCellReader comboBoxCellValueReader = new BasicJComboBoxCellReader();
+  /**
+   * Creates a new </code>{@link BasicJTableCellReader}</code> that uses a 
+   * <code>{@link BasicCellRendererComponentReader}</code> to read the value from the cell renderer component in a 
+   * <code>JTable</code>.
+   */
+  public BasicJTableCellReader() {}
+
+  /**
+   * Creates a new </code>{@link BasicJTableCellReader}</code>.
+   * @param cellRendererComponentReader knows how to read values from the cell renderer component in a 
+   * <code>JTable</code>.
+   */
+  public BasicJTableCellReader(CellRendererComponentReader cellRendererComponentReader) {
+    super(cellRendererComponentReader);
+  }
 
   /**
    * Returns the internal value of a cell in a <code>{@link JTable}</code> as expected in a test. This method first
    * tries to return the value displayed in the <code>JTable</code>'s cell renderer.
    * <ul>
    * <li>if the renderer is a <code>{@link JLabel}</code>, this method returns its text</li>
-   * <li>if the renderer is a <code>{@link JComboBox}</code>, this method returns the value of its selection</li>
+   * <li>if the renderer is a <code>{@link JComboBox}</code>, this method returns the value of its selection as a 
+   * <code>String</code></li>
    * <li>if the renderer is a <code>{@link JCheckBox}</code>, this method returns whether it is selected or not</li>
    * </ul>
    * If it fails reading the cell renderer, this method will get the value from the <code>toString</code> implementation
@@ -61,47 +69,23 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
    * @param row the row index of the cell.
    * @param column the column index of the cell.
    * @return the internal value of a cell in a <code>JTable</code> as expected in a test.
-   * @see BaseValueReader#valueFrom(Object)
-   * @see BasicJComboBoxCellReader#valueAt(JComboBox, int)
    */
   public String valueAt(JTable table, int row, int column) {
-    Component c = cellRendererComponent(table, row, column);
-    if (c instanceof JLabel) return textOf((JLabel)c);
-    if (c instanceof JCheckBox) return String.valueOf(isSelected(((JCheckBox)c)));
-    if (c instanceof JComboBox) return valueOf((JComboBox)c);
-    return valueFrom(cellValueOf(table, row, column));
-  }
-
-  private String valueOf(JComboBox comboBox) {
-    int selectedIndex = selectedIndexOf(comboBox);
-    if (selectedIndex == -1) return null;
-    return comboBoxCellValueReader.valueAt(comboBox, selectedIndex);
+    return cellValue(table, row, column, cellRendererComponentReader());
   }
 
   /** {@inheritDoc} */
   public Font fontAt(JTable table, int row, int column) {
-    return fontOf(cellRendererComponent(table, row, column));
+    return cellFont(table, row, column);
   }
 
   /** {@inheritDoc} */
   public Color backgroundAt(JTable table, int row, int column) {
-    return backgroundOf(cellRendererComponent(table, row, column));
+    return cellBackground(table, row, column);
   }
 
   /** {@inheritDoc} */
   public Color foregroundAt(JTable table, int row, int column) {
-    return foregroundOf(cellRendererComponent(table, row, column));
-  }
-
-  /**
-   * Returns the <code>{@link Component}</code> used by the <code>{@link TableCellRenderer}</code> in the given
-   * <code>{@link JTable}</code>.
-   * @param table the given <code>JTable</code>.
-   * @param row the row index of the cell.
-   * @param column the column index of the cell.
-   * @return the <code>Component</code> used by the <code>TableCellRenderer</code> in the given <code>JTable</code>.
-   */
-  protected final Component cellRendererComponent(JTable table, int row, int column) {
-    return cellRendererIn(table, row, column);
+    return cellForeground(table, row, column);
   }
 }

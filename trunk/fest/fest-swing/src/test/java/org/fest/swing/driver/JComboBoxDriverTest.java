@@ -27,11 +27,15 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.Robot;
+import org.fest.swing.core.RobotFixture;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.query.JLabelTextQuery;
 import org.fest.swing.query.JTextComponentTextQuery;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -481,7 +485,7 @@ public class JComboBoxDriverTest {
   }
 
   private void assertCellReaderWasCalled() {
-    assertThat(cellReader.called()).isTrue();
+    cellReader.requireInvoked("valueAt");
   }
 
   @Test(groups = GUI, expectedExceptions = NullPointerException.class)
@@ -505,15 +509,17 @@ public class JComboBoxDriverTest {
   }
 
   private static class JComboBoxCellReaderStub extends BasicJComboBoxCellReader {
-    private boolean called;
-
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+    
     JComboBoxCellReaderStub() {}
 
     @Override public String valueAt(JComboBox comboBox, int index) {
-      called = true;
+      methodInvocations.invoked("valueAt");
       return super.valueAt(comboBox, index);
     }
 
-    boolean called() { return called; }
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   }
 }

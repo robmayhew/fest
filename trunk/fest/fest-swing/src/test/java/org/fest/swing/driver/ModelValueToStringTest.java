@@ -1,5 +1,5 @@
 /*
- * Created on Jul 22, 2008
+ * Created on Oct 22, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -15,48 +15,29 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 /**
- * Tests for <code>{@link BaseValueReader}</code>.
+ * Tests for <code>{@link ModelValueToString}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class BaseValueReaderTest {
+@Test public class ModelValueToStringTest {
 
-  private BaseValueReader reader;
-  
-  @BeforeClass public void setUp() {
-    reader = new BaseValueReader() {};
-  }
-  
-  public void shouldReturnValueFromComponentIfItIsJLabel() {
-    JLabel label = new JLabel("Hello");
-    assertThat(reader.valueFrom(label)).isEqualTo("Hello");
-  }
-
-  public void shouldReturnNullValueFromComponentIfItIsNotJLabel() {
-    JButton button = new JButton("Hello");
-    assertThat(reader.valueFrom(button)).isNull();
-  }
-  
   public void shouldReturnNullIfValueFromModelIsNull() {
     Object fromModel = null;
-    assertThat(reader.valueFrom(fromModel)).isNull();
+    assertThat(ModelValueToString.asText(fromModel)).isNull();
   }
 
   public void shouldReturnTextFromValueFromModel() {
-    assertThat(reader.valueFrom("Hello")).isEqualTo("Hello");
+    assertThat(ModelValueToString.asText("Hello")).isEqualTo("Hello");
   }
   
   public void shouldReturnNullifTextFromValueFromModelIsDefaultToString() {
     class Person {}
-    assertThat(reader.valueFrom(new Person())).isNull();
+    assertThat(ModelValueToString.asText(new Person())).isNull();
   }
+
 }

@@ -15,35 +15,28 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
-
 import java.awt.Component;
 
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import org.fest.swing.edt.GuiQuery;
-
 /**
- * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> used as
- * list renderer for a particular cell in a <code>{@link JTable}</code>.
+ * Understands an action that returns the <code>{@link Component}</code> used as list renderer for a particular cell in
+ * a <code>{@link JTable}</code>. <b>Note:</b> this action is <b>not</b> executed in the event dispatch thread. Callers
+ * are responsible for calling this query in the event dispatch thread.
  * @see JTable#getCellRenderer(int, int)
  * @see TableCellRenderer#getTableCellRendererComponent(JTable, Object, boolean, boolean, int, int)
- *
+ * 
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
 final class JTableCellRendererQuery {
 
   static Component cellRendererIn(final JTable table, final int row, final int column) {
-    return execute(new GuiQuery<Component>() {
-      protected Component executeInEDT() {
-        Object value = table.getValueAt(row, column);
-        TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
-        boolean cellSelected = table.isCellSelected(row, column);
-        return cellRenderer.getTableCellRendererComponent(table, value, cellSelected, false, row, column);
-      }
-    });
+    Object value = table.getValueAt(row, column);
+    TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+    boolean cellSelected = table.isCellSelected(row, column);
+    return cellRenderer.getTableCellRendererComponent(table, value, cellSelected, false, row, column);
   }
 
   private JTableCellRendererQuery() {}

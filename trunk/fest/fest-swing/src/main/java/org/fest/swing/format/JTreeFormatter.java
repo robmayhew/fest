@@ -39,8 +39,8 @@ public class JTreeFormatter extends ComponentFormatterTemplate {
   
   private static final IntEnum SELECTION_MODES = new IntEnum();
   static {
-    SELECTION_MODES.put(SINGLE_TREE_SELECTION, "SINGLE_TREE_SELECTION")
-                   .put(CONTIGUOUS_TREE_SELECTION, "CONTIGUOUS_TREE_SELECTION")
+    SELECTION_MODES.put(SINGLE_TREE_SELECTION,        "SINGLE_TREE_SELECTION")
+                   .put(CONTIGUOUS_TREE_SELECTION,    "CONTIGUOUS_TREE_SELECTION")
                    .put(DISCONTIGUOUS_TREE_SELECTION, "DISCONTIGUOUS_TREE_SELECTION");
   }
 
@@ -54,13 +54,14 @@ public class JTreeFormatter extends ComponentFormatterTemplate {
     JTree tree = (JTree)c;
     return concat(
         tree.getClass().getName(), "[",
-        "name=", quote(tree.getName()), ", ",
-        "selectionCount=", valueOf(tree.getSelectionCount()), ", ",
+        "name=",           quote(tree.getName()),               ", ",
+        "selectionCount=", valueOf(tree.getSelectionCount()),   ", ",
         "selectionPaths=", Arrays.format(selectionPaths(tree)), ", ",
-        "selectionMode=", selectionMode(tree), ", ",
-        "enabled=", valueOf(tree.isEnabled()), ", ",
-        "visible=", valueOf(tree.isVisible()), ", ",
-        "showing=", valueOf(tree.isShowing()), "]"
+        "selectionMode=",  selectionMode(tree),                 ", ",
+        "enabled=",        valueOf(tree.isEnabled()),           ", ",
+        "visible=",        valueOf(tree.isVisible()),           ", ",
+        "showing=",        valueOf(tree.isShowing()), 
+        "]"
     );
   }
 

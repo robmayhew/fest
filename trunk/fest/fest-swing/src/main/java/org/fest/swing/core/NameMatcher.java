@@ -17,9 +17,11 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 
+import org.fest.swing.edt.GuiActionRunner;
+import org.fest.swing.edt.GuiQuery;
+
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
@@ -28,9 +30,10 @@ import static org.fest.util.Strings.*;
  *
  * @author Alex Ruiz
  */
-public final class NameMatcher extends AbstractComponentMatcher {
+public final class NameMatcher implements ComponentMatcher {
 
   private final String name;
+  private final boolean requireShowing;
 
   /**
    * Creates a new <code>{@link NameMatcher}</code>. The component to match does not have to be showing.
@@ -50,12 +53,12 @@ public final class NameMatcher extends AbstractComponentMatcher {
    * @throws IllegalArgumentException if the given name is empty.
    */
   public NameMatcher(String name, boolean requireShowing) {
-    super(requireShowing);
     if (name == null)
       throw new NullPointerException("The name of the component to find should not be null");
     if (isEmpty(name))
       throw new IllegalArgumentException("The name of the component to find should not be empty");
     this.name = name;
+    this.requireShowing = requireShowing;
   }
   
   /** 
@@ -65,14 +68,28 @@ public final class NameMatcher extends AbstractComponentMatcher {
    *         specified in this matcher, <code>false</code> otherwise.
    */
   public boolean matches(Component c) {
-    return areEqual(name, nameOf(c)) && isShowingMatches(c);
+    return matches(c, name, requireShowing);
+  }
+  
+  private static boolean matches(final Component c, final String name, final boolean requireShowing) {
+    return GuiActionRunner.execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return areEqual(name, c.getName()) && (!requireShowing || c.isShowing());
+      }
+    });
   }
 
+  /**
+   * Indicates whether the component to match has to be showing.
+   * @return <code>true</code> if the component to find has to be showing, <code>false</code> otherwise.
+   */
+  public final boolean requireShowing() { return requireShowing; }
+  
   @Override public String toString() {
     return concat(
         getClass().getName(), "[",
         "name=", quote(name), ", ",
-        "requireShowing=", valueOf(requireShowing()), 
+        "requireShowing=", valueOf(requireShowing), 
         "]"
     );
   }

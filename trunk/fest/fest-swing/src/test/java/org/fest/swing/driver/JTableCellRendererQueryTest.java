@@ -27,12 +27,14 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TableRenderDemo;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JTableCellRendererQuery}</code>.
@@ -40,7 +42,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = GUI)
 public class JTableCellRendererQueryTest {
 
   private Robot robot;
@@ -57,10 +59,18 @@ public class JTableCellRendererQueryTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "rendererTypes", groups = { GUI, EDT_ACTION })
-  public void shouldReturnRendererComponentOfJTableCell(int column, Class<?> rendererType) {
-    Component renderer = JTableCellRendererQuery.cellRendererIn(table, 0, column);
+  @Test(dataProvider = "rendererTypes", groups = GUI)
+  public void shouldReturnRendererComponentOfJTableCell(final int column, Class<?> rendererType) {
+    Component renderer = cellRendererInFirstRow(table, column);
     assertThat(renderer).isInstanceOf(rendererType);
+  }
+
+  private static Component cellRendererInFirstRow(final JTable table, final int column) {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        return JTableCellRendererQuery.cellRendererIn(table, 0, column);
+      }
+    });
   }
 
   @DataProvider(name = "rendererTypes") public Object[][] rendererTypes() {

@@ -41,12 +41,12 @@ public class JTableFormatter extends ComponentFormatterTemplate {
     JTable table = (JTable)c;
     return concat(
         table.getClass().getName(), "[",
-        "name=", quote(table.getName()), ", ",
-        "rowCount=", valueOf(table.getRowCount()), ", ",
+        "name=",        quote(table.getName()),          ", ",
+        "rowCount=",    valueOf(table.getRowCount()),    ", ",
         "columnCount=", valueOf(table.getColumnCount()), ", ",
-        "enabled=", valueOf(table.isEnabled()), ", ",
-        "visible=", valueOf(table.isVisible()), ", ",
-        "showing=", valueOf(table.isShowing()),
+        "enabled=",     valueOf(table.isEnabled()),      ", ",
+        "visible=",     valueOf(table.isVisible()),      ", ",
+        "showing=",     valueOf(table.isShowing()),
         "]"
     );
   }

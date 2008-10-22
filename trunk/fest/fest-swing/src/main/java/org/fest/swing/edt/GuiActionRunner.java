@@ -15,13 +15,14 @@
  */
 package org.fest.swing.edt;
 
+import java.util.concurrent.CountDownLatch;
+
 import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.timing.Condition;
 
 import static javax.swing.SwingUtilities.*;
 
 import static org.fest.swing.exception.UnexpectedException.unexpected;
-import static org.fest.swing.timing.Pause.pause;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -64,6 +65,7 @@ public class GuiActionRunner {
    */
   public static <T> T execute(GuiQuery<T> query) {
     if (!executeInEDT) return executeInCurrentThread(query);
+    log("query");
     run(query, untilExecuted(query));
     return resultOf(query);
   }
@@ -88,8 +90,15 @@ public class GuiActionRunner {
       executeInCurrentThread(task);
       return;
     }
+    log("task");
     run(task, untilExecuted(task));
     rethrowCatchedExceptionIn(task);
+  }
+
+  private static void log(String action) {
+//    System.out.println(Strings.concat("running ", action, " in EDT"));
+//    Thread.dumpStack();
+//    System.out.println();
   }
 
   private static void executeInCurrentThread(GuiTask task) {
@@ -116,13 +125,20 @@ public class GuiActionRunner {
     rethrowCatchedExceptionIn(task);
   }
 
-  private static void run(GuiAction action, Condition... toWaitFor) {
+  private static void run(final GuiAction action, Condition... toWaitFor) {
     if (isEventDispatchThread()) {
       action.run();
-    } else {
-      invokeLater(action);
+      return;
+    } 
+//    invokeLater(action);
+    final CountDownLatch latch = new CountDownLatch(1);
+    invokeLater(new Runnable() { public void run() { action.run(); latch.countDown(); }});
+    try {
+      latch.await();
+    } catch (final InterruptedException e) {
+      Thread.currentThread().interrupt();
     }
-    pause(toWaitFor);
+//    Pause.pause(toWaitFor);
   }
 
   private static <T> T resultOf(GuiQuery<T> query) {

@@ -15,8 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -71,7 +69,7 @@ public class BasicJComboBoxCellReaderTest {
 
   public void shouldReturnNullIfRendererNotRecognizedAndModelValueIsNull() {
     setModelValues(comboBox, new Object[] { null });
-    setRendererComponent(comboBox, new JToolBar());
+    setJToolBarAsRendererComponent(comboBox);
     robot.waitForIdle();
     Object value = reader.valueAt(comboBox, 0);
     assertThat(value).isNull();
@@ -79,7 +77,7 @@ public class BasicJComboBoxCellReaderTest {
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabelAndToStringFromModelReturnedNull() {
     setModelValues(comboBox, array(new Jedi(null)));
-    setRendererComponent(comboBox, new JLabel("First"));
+    setJLabelAsRendererComponent(comboBox, "First");
     robot.waitForIdle();
     Object value = reader.valueAt(comboBox, 0);
     assertThat(value).isEqualTo("First");
@@ -93,10 +91,18 @@ public class BasicJComboBoxCellReaderTest {
     });
   }
 
-  private static void setRendererComponent(final JComboBox comboBox, final Component renderer) {
+  private static void setJLabelAsRendererComponent(final JComboBox comboBox, final String labelText) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        comboBox.setRenderer(new CustomCellRenderer(renderer));
+        comboBox.setRenderer(new CustomCellRenderer(new JLabel(labelText)));
+      }
+    });
+  }
+
+  private static void setJToolBarAsRendererComponent(final JComboBox comboBox) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        comboBox.setRenderer(new CustomCellRenderer(new JToolBar()));
       }
     });
   }

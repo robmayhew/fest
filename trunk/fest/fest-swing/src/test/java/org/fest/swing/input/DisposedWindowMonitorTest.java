@@ -29,7 +29,6 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.MapAssert.entry;
 import static org.fest.swing.factory.JFrames.frame;
-import static org.fest.swing.input.ComponentListenersQuery.componentListenersIn;
 
 /**
  * Tests for <code>{@link DisposedWindowMonitor}</code>.
@@ -78,7 +77,7 @@ public class DisposedWindowMonitorTest {
     assertThat(monitor.isDuplicateDispose(e)).isFalse();
     assertThat(monitor.disposedWindows).hasSize(1)
                                        .contains(entry(window, true));    
-    ComponentListener[] componentListeners = componentListenersIn(window);
+    ComponentListener[] componentListeners = window.getComponentListeners();
     assertThat(componentListeners).hasSize(1);
     assertThat(componentListeners[0]).isInstanceOf(DisposalMonitor.class);
     DisposalMonitor disposalMonitor = (DisposalMonitor)componentListeners[0];

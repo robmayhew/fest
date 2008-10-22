@@ -39,7 +39,7 @@ public class TableCell {
    * <p>
    * Example:
    * <pre>
-   * // import static org.fest.swing.table.TableCell.row;
+   * // import static org.fest.swing.data.TableCell.row;
    * TableCell cell = row(5).column(3);
    * </pre>
    * </p>

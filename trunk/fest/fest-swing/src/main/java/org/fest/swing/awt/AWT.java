@@ -139,8 +139,8 @@ public class AWT {
    *         <code>null</code>, if the <code>Component</code> is not showing on the screen.
    */
   public static Point locationOnScreenOf(Component c) {
+    // TODO one query only!
     if (!isAWTTreeLockHeld()) return new Point(locationOnScreen(c));
-    // TODO access from EDT?
     if (!isShowing(c)) return null;
     Point location = new Point(c.getLocation());
     if (c instanceof Window) return location;

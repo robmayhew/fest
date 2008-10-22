@@ -33,8 +33,8 @@ public class JFileChooserFormatter extends ComponentFormatterTemplate {
 
   private static final IntEnum DIALOG_TYPES = new IntEnum();
   static {
-    DIALOG_TYPES.put(OPEN_DIALOG, "OPEN_DIALOG")
-                .put(SAVE_DIALOG, "SAVE_DIALOG")
+    DIALOG_TYPES.put(OPEN_DIALOG,   "OPEN_DIALOG")
+                .put(SAVE_DIALOG,   "SAVE_DIALOG")
                 .put(CUSTOM_DIALOG, "CUSTOM_DIALOG");
   }
 
@@ -48,13 +48,13 @@ public class JFileChooserFormatter extends ComponentFormatterTemplate {
     JFileChooser fileChooser = (JFileChooser)c;
     return concat(
         fileChooser.getClass().getName(), "[",
-        "name=", quote(fileChooser.getName()), ", ",
-        "dialogTitle=", quote(fileChooser.getDialogTitle()), ", ",
-        "dialogType=", DIALOG_TYPES.get(fileChooser.getDialogType()), ", ",
-        "currentDirectory=", fileChooser.getCurrentDirectory(), ", ",
-        "enabled=", valueOf(fileChooser.isEnabled()), ", ",
-        "visible=", valueOf(fileChooser.isVisible()), ", ",
-        "showing=", valueOf(fileChooser.isShowing()),
+        "name=",             quote(fileChooser.getName()),                  ", ",
+        "dialogTitle=",      quote(fileChooser.getDialogTitle()),           ", ",
+        "dialogType=",       DIALOG_TYPES.get(fileChooser.getDialogType()), ", ",
+        "currentDirectory=", fileChooser.getCurrentDirectory(),             ", ",
+        "enabled=",          valueOf(fileChooser.isEnabled()),              ", ",
+        "visible=",          valueOf(fileChooser.isVisible()),              ", ",
+        "showing=",          valueOf(fileChooser.isShowing()),
         "]"
     );
   }

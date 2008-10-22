@@ -33,20 +33,20 @@ public class JOptionPaneFormatter extends ComponentFormatterTemplate {
 
   private static final IntEnum MESSAGE_TYPES = new IntEnum();
   static {
-    MESSAGE_TYPES.put(ERROR_MESSAGE, "ERROR_MESSAGE")
+    MESSAGE_TYPES.put(ERROR_MESSAGE,       "ERROR_MESSAGE")
                  .put(INFORMATION_MESSAGE, "INFORMATION_MESSAGE")
-                 .put(WARNING_MESSAGE, "WARNING_MESSAGE")
-                 .put(QUESTION_MESSAGE, "QUESTION_MESSAGE")
-                 .put(PLAIN_MESSAGE, "PLAIN_MESSAGE");
+                 .put(WARNING_MESSAGE,     "WARNING_MESSAGE")
+                 .put(QUESTION_MESSAGE,    "QUESTION_MESSAGE")
+                 .put(PLAIN_MESSAGE,       "PLAIN_MESSAGE");
   }
 
   private static final IntEnum OPTION_TYPES = new IntEnum();
   static {
-    OPTION_TYPES.put(DEFAULT_OPTION, "DEFAULT_OPTION")
-                .put(YES_NO_OPTION, "YES_NO_OPTION")
+    OPTION_TYPES.put(DEFAULT_OPTION,       "DEFAULT_OPTION")
+                .put(YES_NO_OPTION,        "YES_NO_OPTION")
                 .put(YES_NO_CANCEL_OPTION, "YES_NO_CANCEL_OPTION")
-                .put(QUESTION_MESSAGE, "QUESTION_MESSAGE")
-                .put(OK_CANCEL_OPTION, "OK_CANCEL_OPTION");
+                .put(QUESTION_MESSAGE,     "QUESTION_MESSAGE")
+                .put(OK_CANCEL_OPTION,     "OK_CANCEL_OPTION");
   }
 
   /**
@@ -59,12 +59,12 @@ public class JOptionPaneFormatter extends ComponentFormatterTemplate {
     JOptionPane optionPane = (JOptionPane)c;
     return concat(
         optionPane.getClass().getName(), "[",
-        "message=", quote(optionPane.getMessage()), ", ",
+        "message=",     quote(optionPane.getMessage()),                 ", ",
         "messageType=", MESSAGE_TYPES.get(optionPane.getMessageType()), ", ",
-        "optionType=", OPTION_TYPES.get(optionPane.getOptionType()), ", ",
-        "enabled=", valueOf(optionPane.isEnabled()), ", ",
-        "visible=", valueOf(optionPane.isVisible()), ", ",
-        "showing=", valueOf(optionPane.isShowing()),
+        "optionType=",  OPTION_TYPES.get(optionPane.getOptionType()),   ", ",
+        "enabled=",     valueOf(optionPane.isEnabled()),                ", ",
+        "visible=",     valueOf(optionPane.isVisible()),                ", ",
+        "showing=",     valueOf(optionPane.isShowing()),
         "]"
     );
   }

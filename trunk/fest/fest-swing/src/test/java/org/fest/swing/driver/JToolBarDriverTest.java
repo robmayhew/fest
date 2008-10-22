@@ -40,6 +40,7 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.ComponentBoundsQuery.boundsOf;
+import static org.fest.swing.driver.ComponentLocationQuery.locationOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -111,8 +112,8 @@ public class JToolBarDriverTest {
   private void assertToolBarIsFloating(Window oldAncestor) {
     Window newAncestor = ancestorOf(toolBar);
     assertThat(newAncestor).isNotSameAs(oldAncestor);
-    Point newAncestorLocation = newAncestor.getLocation();
-    Point oldAncestorLocation = oldAncestor.getLocation();
+    Point newAncestorLocation = locationOf(newAncestor);
+    Point oldAncestorLocation = locationOf(oldAncestor);
     assertThat(newAncestorLocation.x).isGreaterThan(oldAncestorLocation.x);
     assertThat(newAncestorLocation.y).isGreaterThan(oldAncestorLocation.y);
   }

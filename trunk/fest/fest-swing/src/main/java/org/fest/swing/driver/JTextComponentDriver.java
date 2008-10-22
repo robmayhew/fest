@@ -26,23 +26,22 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.UnexpectedException;
+import org.fest.swing.util.Pair;
 
 import static java.lang.Math.*;
 import static java.lang.String.valueOf;
 import static javax.swing.text.DefaultEditorKit.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.driver.ComponentBoundsQuery.boundsOf;
-import static org.fest.swing.driver.JComponentOriginQuery.originOf;
 import static org.fest.swing.driver.JTextComponentEditableQuery.isEditable;
 import static org.fest.swing.driver.JTextComponentSelectTextTask.selectTextInRange;
 import static org.fest.swing.driver.JTextComponentSelectionEndQuery.selectionEndOf;
 import static org.fest.swing.driver.JTextComponentSelectionStartQuery.selectionStartOf;
 import static org.fest.swing.driver.JTextComponentSetTextTask.setTextIn;
+import static org.fest.swing.driver.PointAndParentForScrollingJTextFieldQuery.pointAndParentForScrolling;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
-import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.swing.query.JComponentVisibleRectQuery.visibleRectOf;
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
 import static org.fest.util.Strings.*;
@@ -205,19 +204,10 @@ public class JTextComponentDriver extends JComponentDriver {
 
   private void scrollToVisibleIfIsTextField(JTextComponent textBox, Rectangle r) {
     if (!(textBox instanceof JTextField)) return;
-    Point origin = originOf(textBox);
-    Container parent = parentOf(textBox);
-    while (parent != null && !(parent instanceof JComponent) && !(parent instanceof CellRendererPane)) {
-      addRectangleCoordinatesToPoint(boundsOf(parent), origin);
-      parent = parentOf(parent);
-    }
-    if (parent == null || parent instanceof CellRendererPane) return;
-    super.scrollToVisible((JComponent)parent, rectangleWithPointAddedToCoordinates(origin, r));
-  }
-
-  private void addRectangleCoordinatesToPoint(Rectangle r, Point p) {
-    p.x += r.x;
-    p.y += r.y;
+    Pair<Point, Container> pointAndParent = pointAndParentForScrolling((JTextField)textBox);
+    Container parent = pointAndParent.two;
+    if (parent == null || parent instanceof CellRendererPane || !(parent instanceof JComponent)) return;
+    super.scrollToVisible((JComponent)parent, rectangleWithPointAddedToCoordinates(pointAndParent.one, r));
   }
 
   private Rectangle rectangleWithPointAddedToCoordinates(Point p, Rectangle r) {

@@ -17,9 +17,11 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 
+import org.fest.swing.edt.GuiQuery;
+
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.query.ComponentNameQuery.nameOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
@@ -28,10 +30,11 @@ import static org.fest.util.Strings.*;
  *
  * @author Alex Ruiz
  */
-public final class NameAndTypeMatcher extends AbstractComponentMatcher {
+public final class NameAndTypeMatcher implements ComponentMatcher {
 
   private final String name;
   private final Class<? extends Component> type;
+  private final boolean requireShowing;
 
   /**
    * Creates a new <code>{@link NameAndTypeMatcher}</code>. The component to match does not have to be showing.
@@ -55,7 +58,6 @@ public final class NameAndTypeMatcher extends AbstractComponentMatcher {
    * @throws NullPointerException if the given type is <code>null</code>.
    */
   public NameAndTypeMatcher(String name, Class<? extends Component> type, boolean requireShowing) {
-    super(requireShowing);
     if (name == null) 
       throw new NullPointerException("The name of the component to find should not be null");
     if (isEmpty(name))
@@ -64,6 +66,7 @@ public final class NameAndTypeMatcher extends AbstractComponentMatcher {
       throw new NullPointerException("The type of component to find should not be null");
     this.name = name;
     this.type = type;
+    this.requireShowing = requireShowing;
   }
   
   /** 
@@ -73,15 +76,24 @@ public final class NameAndTypeMatcher extends AbstractComponentMatcher {
    *         specified in this matcher, <code>false</code> otherwise.
    */
   public boolean matches(Component c) {
-    return areEqual(name, nameOf(c)) && type.isAssignableFrom(c.getClass()) && isShowingMatches(c);
+    return matches(c, name, type, requireShowing);
   }
 
+  private static boolean matches(final Component c, final String name, final Class<? extends Component> type,
+      final boolean requireShowing) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return areEqual(name, c.getName()) && type.isAssignableFrom(c.getClass()) && (!requireShowing || c.isShowing());
+      }
+    });
+  }
+  
   @Override public String toString() {
     return concat(
         getClass().getName(), "[",
         "name=", quote(name), ", ",
         "type=", type.getName(), ", ",
-        "requireShowing=", valueOf(requireShowing()), 
+        "requireShowing=", valueOf(requireShowing), 
         "]"
     );
   }

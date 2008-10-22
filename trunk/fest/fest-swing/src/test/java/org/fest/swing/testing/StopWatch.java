@@ -15,7 +15,7 @@
  */
 package org.fest.swing.testing;
 
-import static java.lang.System.currentTimeMillis;
+import static java.lang.System.nanoTime;
 
 /**
  * Understands watch that can be instantly started and stopped by pushing a button and used to measure an exact duration
@@ -39,13 +39,13 @@ public final class StopWatch {
   public void start() {
     started = true;
     stopped = false;
-    startTime = currentTimeMillis();
+    startTime = nanoTime();
     endTime = 0;
   }
   
   public void stop() {
     stopped = true;
-    endTime = currentTimeMillis();
+    endTime = nanoTime();
   }
   
   public long ellapsedTime() {

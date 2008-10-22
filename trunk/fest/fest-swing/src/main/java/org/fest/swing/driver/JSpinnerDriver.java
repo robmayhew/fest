@@ -15,10 +15,15 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JSpinner;
 import javax.swing.text.JTextComponent;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.UnexpectedException;
@@ -43,7 +48,9 @@ import static org.fest.util.Strings.*;
  */
 public class JSpinnerDriver extends JComponentDriver {
 
+  private static final TypeMatcher EDITOR_MATCHER = new TypeMatcher(JTextComponent.class, true);
   private static final String VALUE_PROPERTY = "value";
+  
   private final JTextComponentDriver textComponentDriver;
 
   /**
@@ -131,13 +138,19 @@ public class JSpinnerDriver extends JComponentDriver {
    */
   public void enterText(JSpinner spinner, String text) {
     if (!isEnabled(spinner)) return;
-    try {
-      textComponentDriver.replaceText(editor(spinner), text);
-    } catch (ComponentLookupException e) {
-      throw actionFailure(concat("Unable to find editor for ", format(spinner)));
-    }
+    JTextComponent editor = findEditor(spinner);
+    if (editor == null) throw actionFailure(concat("Unable to find editor for ", format(spinner)));
+    textComponentDriver.replaceText(editor, text);
   }
 
+  private JTextComponent findEditor(JSpinner spinner) {
+    List<Component> found = new ArrayList<Component>(robot.finder().findAll(spinner, EDITOR_MATCHER));
+    if (found.size() != 1) return null;
+    Component c = found.get(0);
+    if (c instanceof JTextComponent) return (JTextComponent)c;
+    return null;
+  }
+  
   /**
    * Selects the given value in the given <code>{@link JSpinner}</code>. 
    * @param spinner the target <code>JSpinner</code>.
@@ -163,7 +176,7 @@ public class JSpinnerDriver extends JComponentDriver {
    * editor.
    */
   public JTextComponent editor(JSpinner spinner) {
-    return robot.finder().findByType(spinner, JTextComponent.class);
+    return (JTextComponent)robot.finder().find(spinner, EDITOR_MATCHER);
   }
 
   /**

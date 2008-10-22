@@ -15,8 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
-
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JToolBar;
@@ -69,7 +67,7 @@ public class BasicJListCellReaderTest {
 
   public void shouldReturnNullIfRendererNotRecognizedAndModelValueIsNull() {
     list.setElements(new Object[] { null });
-    setRendererComponent(list, new JToolBar());
+    setJToolBarAsRendererComponent(list);
     robot.waitForIdle();
     Object value = reader.valueAt(list, 0);
     assertThat(value).isNull();
@@ -77,18 +75,24 @@ public class BasicJListCellReaderTest {
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabelAndToStringFromModelReturnedNull() {
     list.setElements(new Jedi(null));
-    JLabel renderer = new JLabel("First");
-    setRendererComponent(this.list, renderer);
+    setJLabelAsRendererComponent(list, "First");
     robot.waitForIdle();
     Object value = reader.valueAt(this.list, 0);
     assertThat(value).isEqualTo("First");
   }
 
-  private static void setRendererComponent(final JList list, final Component renderer) {
-    final CustomCellRenderer cellRenderer = new CustomCellRenderer(renderer);
+  private static void setJLabelAsRendererComponent(final JList list, final String labelText) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        list.setCellRenderer(cellRenderer);
+        list.setCellRenderer(new CustomCellRenderer(new JLabel(labelText)));
+      }
+    });
+  }
+
+  private static void setJToolBarAsRendererComponent(final JList list) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        list.setCellRenderer(new CustomCellRenderer(new JToolBar()));
       }
     });
   }
@@ -111,7 +115,7 @@ public class BasicJListCellReaderTest {
   private static class MyList extends JList {
     private static final long serialVersionUID = 1L;
 
-    private final TestListModel model;
+    final TestListModel model;
 
     MyList(Object... elements) {
       model = new TestListModel(elements);

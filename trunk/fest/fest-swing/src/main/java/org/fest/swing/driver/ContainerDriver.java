@@ -54,19 +54,12 @@ public abstract class ContainerDriver extends ComponentDriver {
    */
   public void resize(Container c, int width, int height) {
     Dimension size = sizeOf(c);
-    resizeBy(c, width - size.width, height - size.height);
+    resizeBy(c, size, width - size.width, height - size.height);
   }
 
-  /**
-   * Resizes the <code>{@link Container}</code> by the given amounts.
-   * @param c the target <code>Container</code>.
-   * @param horizontally the horizontal amount to resize the <code>Container</code> by.
-   * @param vertically the vertical amount to resize the <code>Container</code> by.
-   */
-  protected void resizeBy(Container c, int horizontally, int vertically) {
+  private void resizeBy(Container c, Dimension currentSize, int horizontally, int vertically) {
     simulateResizeStarted(c, horizontally, vertically);
-    Dimension size = sizeOf(c);
-    Dimension newSize = new Dimension(size.width + horizontally, size.height + vertically);
+    Dimension newSize = new Dimension(currentSize.width + horizontally, currentSize.height + vertically);
     setComponentSize(c, newSize);
     simulateResizeComplete(c);
     robot.waitForIdle();
@@ -105,28 +98,19 @@ public abstract class ContainerDriver extends ComponentDriver {
   public void move(Container c, int x, int y) {
     Point onScreen = locationOnScreenOf(c);
     if (onScreen == null) throw componentNotShowingOnScreen(c);
-    moveBy(c, x - onScreen.x, y - onScreen.y);
+    moveBy(c, onScreen, x - onScreen.x, y - onScreen.y);
+  }
+  
+  private ActionFailedException componentNotShowingOnScreen(Container c) {
+    throw actionFailure(concat("The component ", format(c), " is not showing on the screen"));
   }
 
-  /**
-   * Move the given <code>{@link Container}</code> by the given amount.
-   * @param c the target <code>Container</code>.
-   * @param horizontally
-   * @param vertically
-   * @throws ActionFailedException if the given container is not showing on the screen.
-   */
-  protected void moveBy(Container c, int horizontally, int vertically) {
-    Point onScreen = locationOnScreenOf(c);
-    if (onScreen == null) throw componentNotShowingOnScreen(c);
+  private void moveBy(Container c, Point locationOnScreen, int horizontally, int vertically) {
     simulateMoveStarted(c, horizontally, vertically);
-    Point location = new Point(onScreen.x + horizontally, onScreen.y + vertically);
+    Point location = new Point(locationOnScreen.x + horizontally, locationOnScreen.y + vertically);
     moveComponent(c, location);
     simulateMoveComplete(c);
     robot.waitForIdle();
-  }
-
-  private ActionFailedException componentNotShowingOnScreen(Container c) {
-    throw actionFailure(concat("The component ", format(c), " is not showing on the screen"));
   }
 
   private void simulateMoveStarted(Container c, int horizontally, int vertically) {

@@ -18,19 +18,32 @@ package org.fest.swing.driver;
 import java.awt.Component;
 
 import javax.swing.JList;
-import javax.swing.ListCellRenderer;
 
 import org.fest.swing.cell.JListCellReader;
-
-import static org.fest.swing.driver.JListCellRendererQuery.cellRendererIn;
-import static org.fest.swing.driver.JListElementAtIndexQuery.elementAt;
 
 /**
  * Understands the default implementation of <code>{@link JListCellReader}</code>.
  *
  * @author Alex Ruiz
+ * @author Yvonne Wang
  */
 public class BasicJListCellReader extends BaseValueReader implements JListCellReader {
+
+  /**
+   * Creates a new </code>{@link BasicJListCellReader}</code> that uses a 
+   * <code>{@link BasicCellRendererComponentReader}</code> to read the value from the cell renderer component in a 
+   * <code>JList</code>.
+   */
+  public BasicJListCellReader() {}
+
+  /**
+   * Creates a new </code>{@link BasicJListCellReader}</code>.
+   * @param cellRendererComponentReader knows how to read values from the cell renderer component in a 
+   * <code>JList</code>.
+   */
+  public BasicJListCellReader(CellRendererComponentReader cellRendererComponentReader) {
+    super(cellRendererComponentReader);
+  }
 
   /**
    * Returns the internal value of a cell in a <code>{@link JList}</code> as expected in a test. This method first
@@ -40,23 +53,9 @@ public class BasicJListCellReader extends BaseValueReader implements JListCellRe
    * @param list the given <code>JList</code>.
    * @param index the index of the cell.
    * @return the internal value of a cell in a <code>JList</code> as expected in a test.
-   * @see BaseValueReader#valueFrom(Object)
-   * @see BaseValueReader#valueFrom(Component)
+   * @see CellRendererComponentReader#valueFrom(Component)
    */
   public String valueAt(JList list, int index) {
-    String value = valueFrom(cellRendererComponent(list, index));
-    if (value != null) return value;
-    return valueFrom(elementAt(list, index));
-  }
-
-  /**
-   * Returns the <code>{@link Component}</code> used by the <code>{@link ListCellRenderer}</code> in the given
-   * <code>{@link JList}</code>.
-   * @param list the given <code>JList</code>.
-   * @param index the index of the cell.
-   * @return the <code>Component</code> used by the <code>ListCellRenderer</code> in the given <code>JList</code>.
-   */
-  protected final Component cellRendererComponent(final JList list, final int index) {
-    return cellRendererIn(list, index);
+    return JListCellValueAsTextQuery.valueAtIndex(list, index, cellRendererComponentReader());
   }
 }

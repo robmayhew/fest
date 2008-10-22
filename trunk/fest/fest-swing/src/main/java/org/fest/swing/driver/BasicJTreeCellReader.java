@@ -19,9 +19,7 @@ import javax.swing.JTree;
 
 import org.fest.swing.cell.JTreeCellReader;
 
-import static org.fest.swing.driver.JTreeCellRendererQuery.cellRendererIn;
-import static org.fest.swing.driver.JTreeConvertValueToTextQuery.convertValueToText;
-import static org.fest.swing.util.Strings.isDefaultToString;
+import static org.fest.swing.driver.JTreeCellValueAsTextQuery.nodeValue;
 
 /**
  * Understands the default implementation of <code>{@link JTreeCellReader}</code>.
@@ -32,21 +30,28 @@ import static org.fest.swing.util.Strings.isDefaultToString;
 public class BasicJTreeCellReader extends BaseValueReader implements JTreeCellReader {
 
   /**
+   * Creates a new </code>{@link BasicJTreeCellReader}</code> that uses a 
+   * <code>{@link BasicCellRendererComponentReader}</code> to read the value from the cell renderer component in a 
+   * <code>JTree</code>.
+   */
+  public BasicJTreeCellReader() {}
+
+  /**
+   * Creates a new </code>{@link BasicJTreeCellReader}</code>.
+   * @param cellRendererComponentReader knows how to read values from the cell renderer component in a 
+   * <code>JTree</code>.
+   */
+  public BasicJTreeCellReader(CellRendererComponentReader cellRendererComponentReader) {
+    super(cellRendererComponentReader);
+  }
+
+  /**
    * Returns the internal value of a cell in a <code>{@link JTree}</code> as expected in a test.
    * @param tree the given <code>JTree</code>.
    * @param modelValue the value of a cell, retrieved from the model.
-   * @return the internal value of a cell in a <code>JTable</code> as expected in a test.
-   * @see BaseValueReader#valueFrom(java.awt.Component)
+   * @return the internal value of a cell in a <code>JTree</code> as expected in a test.
    */
   public String valueAt(JTree tree, Object modelValue) {
-    String value = valueFrom(cellRendererIn(tree, modelValue));
-    if (value != null) return value;
-    return valueToText(tree, modelValue);
-  }
-
-  private String valueToText(JTree tree, Object modelValue) {
-    String text = convertValueToText(tree, modelValue);
-    if (isDefaultToString(text)) return null;
-    return text;
+    return nodeValue(tree, modelValue, cellRendererComponentReader());
   }
 }

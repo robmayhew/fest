@@ -46,13 +46,13 @@ public class JListFormatter extends ComponentFormatterTemplate {
     JList list = (JList)c;
     return concat(
         list.getClass().getName(), "[",
-        "name=", quote(list.getName()), ", ",
-        "selectedValues=", Arrays.format(list.getSelectedValues()), ", ",
-        "contents=", Arrays.format(contentsOf(list)),  ", ",
-        "selectionMode=", SELECTION_MODES.get(list.getSelectionMode()), ", ",
-        "enabled=", valueOf(list.isEnabled()), ", ",
-        "visible=", valueOf(list.isVisible()), ", ",
-        "showing=", valueOf(list.isShowing()),
+        "name=",           quote(list.getName()),                        ", ",
+        "selectedValues=", Arrays.format(list.getSelectedValues()),      ", ",
+        "contents=",       Arrays.format(contentsOf(list)),              ", ",
+        "selectionMode=",  SELECTION_MODES.get(list.getSelectionMode()), ", ",
+        "enabled=",        valueOf(list.isEnabled()),                    ", ",
+        "visible=",        valueOf(list.isVisible()),                    ", ",
+        "showing=",        valueOf(list.isShowing()),
         "]"
     );
   }

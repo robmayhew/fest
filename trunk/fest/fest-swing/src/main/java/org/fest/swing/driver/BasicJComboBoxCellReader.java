@@ -18,12 +18,12 @@ package org.fest.swing.driver;
 import java.awt.Component;
 
 import javax.swing.JComboBox;
-import javax.swing.ListCellRenderer;
 
 import org.fest.swing.cell.JComboBoxCellReader;
+import org.fest.swing.edt.GuiQuery;
 
-import static org.fest.swing.driver.JComboBoxItemAtIndexQuery.itemAt;
-import static org.fest.swing.driver.JComboBoxCellRendererQuery.cellRendererIn;
+import static org.fest.swing.driver.JComboBoxCellValueAsTextQuery.valueAtIndex;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands the default implementation of <code>{@link JComboBoxCellReader}</code>.
@@ -34,30 +34,37 @@ import static org.fest.swing.driver.JComboBoxCellRendererQuery.cellRendererIn;
 public class BasicJComboBoxCellReader extends BaseValueReader implements JComboBoxCellReader {
 
   /**
-   * Returns the internal value of a cell in a <code>{@link JComboBox}</code> as expected in a test. This method first
-   * tries to get the value from the <code>toString</code> implementation of the object stored in the
-   * <code>JComboBox</code>'s model at the specified index. If it fails, it returns the value displayed in the
-   * <code>JComboBox</code>'s cell renderer.
+   * Creates a new </code>{@link BasicJComboBoxCellReader}</code> that uses a 
+   * <code>{@link BasicCellRendererComponentReader}</code> to read the value from the cell renderer component in a 
+   * <code>JComboBox</code>.
+   */
+  public BasicJComboBoxCellReader() {}
+
+  /**
+   * Creates a new </code>{@link BasicJComboBoxCellReader}</code>.
+   * @param cellRendererComponentReader knows how to read values from the cell renderer component in a
+   * <code>JComboBox</code>.
+   */
+  public BasicJComboBoxCellReader(CellRendererComponentReader cellRendererComponentReader) {
+    super(cellRendererComponentReader);
+  }
+  
+  /**
+   * Returns the internal value of a cell in a <code>{@link JComboBox}</code> as expected in a test.
    * @param comboBox the given <code>JComboBox</code>.
    * @param index the index of the cell.
    * @return the internal value of a cell in a <code>JComboBox</code> as expected in a test.
-   * @see BaseValueReader#valueFrom(Component)
-   * @see BaseValueReader#valueFrom(Object)
+   * @see CellRendererComponentReader#valueFrom(Component)
    */
   public String valueAt(JComboBox comboBox, int index) {
-    String value = valueFrom(cellRendererComponent(comboBox, index));
-    if (value != null) return value;
-    return valueFrom(itemAt(comboBox, index));
+    return doGetValueAt(comboBox, index, cellRendererComponentReader());
   }
 
-  /**
-   * Returns the <code>{@link Component}</code> used by the <code>{@link ListCellRenderer}</code> in the given
-   * <code>{@link JComboBox}</code>.
-   * @param comboBox the given <code>JComboBox</code>.
-   * @param index the index of the cell.
-   * @return the <code>Component</code> used by the <code>ListCellRenderer</code> in the given <code>JComboBox</code>.
-   */
-  protected final Component cellRendererComponent(JComboBox comboBox, int index) {
-    return cellRendererIn(comboBox, index);
-  }
+  private static String doGetValueAt(final JComboBox comboBox, final int index, final CellRendererComponentReader reader) {
+    return execute(new GuiQuery<String>() {
+      protected String executeInEDT() {
+        return valueAtIndex(comboBox, index, reader);
+      }
+    });
+  }  
 }
