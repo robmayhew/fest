@@ -15,7 +15,7 @@
  */
 package org.fest.swing.util;
 
-import static java.lang.System.currentTimeMillis;
+import static java.lang.System.nanoTime;
 
 /**
  * Understands a time counter with a timeout.
@@ -43,11 +43,11 @@ public final class TimeoutWatch {
   }
   
   void start() {
-    startTime = currentTimeMillis();
+    startTime = nanoTime();
   }
 
   public boolean isTimeOut() {
-    long timePassed = currentTimeMillis() - startTime;
+    long timePassed = nanoTime() - startTime;
     return timePassed >= timeout;
   }
 }

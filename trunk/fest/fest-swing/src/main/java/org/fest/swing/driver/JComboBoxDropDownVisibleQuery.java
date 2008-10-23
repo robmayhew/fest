@@ -22,11 +22,12 @@ import org.fest.swing.edt.GuiQuery;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands an action, executed in the event dispatch thread, that indicates whether the drop-down list of a
- * <code>{@link JComboBox}</code> is visible or not.
+ * Understands an action that indicates whether the drop-down list of a <code>{@link JComboBox}</code> is visible or
+ * not. <b>Note:</b> this action is <b>not</b> executed in the event dispatch thread. Callers are responsible for
+ * calling this query in the event dispatch thread.
  * @see JComboBox#getUI()
  * @see ComboBoxUI#isPopupVisible(JComboBox)
- *
+ * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */

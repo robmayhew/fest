@@ -36,6 +36,7 @@ import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.query.JLabelTextQuery;
 import org.fest.swing.query.JTextComponentTextQuery;
 import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.StopWatch;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -87,7 +88,10 @@ public class JComboBoxDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldSelectItemAtGivenIndex(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
+    StopWatch stopWatch = StopWatch.startNewStopWatch();
     driver.selectItem(comboBox, 2);
+    stopWatch.stop();
+    System.out.println(stopWatch.ellapsedTime());
     assertThatSelectedItemIsEqualTo("third");
   }
 

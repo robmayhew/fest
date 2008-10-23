@@ -1,15 +1,14 @@
 /*
  * Created on Apr 14, 2008
  * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
  * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  * 
  * Copyright @2008 the original author or authors.
  */
@@ -22,13 +21,15 @@ import javax.swing.JTable;
 
 /**
  * Understands reading the internal value of a cell in a <code>{@link JTable}</code> as expected in a test.
- *
+ * 
  * @author Alex Ruiz
  */
 public interface JTableCellReader {
 
   /**
-   * Returns the internal value of a cell in a <code>{@link JTable}</code> as expected in a test.
+   * Returns the internal value of a cell in a <code>{@link JTable}</code> as expected in a test. Implementations of
+   * this method should <b>not</b> use the event dispatch thread. Callers are responsible for calling this method in the
+   * event dispatch thread.
    * @param table the given <code>JTable</code>.
    * @param row the row index of the cell.
    * @param column the column index of the cell.
@@ -37,7 +38,8 @@ public interface JTableCellReader {
   String valueAt(JTable table, int row, int column);
 
   /**
-   * Returns the font of the cell renderer for the given table cell.
+   * Returns the font of the cell renderer for the given table cell. Implementations of this method should <b>not</b>
+   * use the event dispatch thread. Callers are responsible for calling this method in the event dispatch thread.
    * @param table the given <code>JTable</code>.
    * @param row the row index of the cell.
    * @param column the column index of the cell.
@@ -46,16 +48,20 @@ public interface JTableCellReader {
   Font fontAt(JTable table, int row, int column);
 
   /**
-   * Returns the background color of the cell renderer for the given table cell.
+   * Returns the background color of the cell renderer for the given table cell. Implementations of this method should
+   * <b>not</b> use the event dispatch thread. Callers are responsible for calling this method in the event dispatch
+   * thread.
    * @param table the given <code>JTable</code>.
    * @param row the row index of the cell.
    * @param column the column index of the cell.
    * @return the background color of the cell renderer for the given table cell.
    */
   Color backgroundAt(JTable table, int row, int column);
-  
+
   /**
-   * Returns the foreground color of the cell renderer for the given table cell.
+   * Returns the foreground color of the cell renderer for the given table cell. Implementations of this method should
+   * <b>not</b> use the event dispatch thread. Callers are responsible for calling this method in the event dispatch
+   * thread.
    * @param table the given <code>JTable</code>.
    * @param row the row index of the cell.
    * @param column the column index of the cell.

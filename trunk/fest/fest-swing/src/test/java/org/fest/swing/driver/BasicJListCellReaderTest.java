@@ -24,6 +24,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.CustomCellRenderer;
 import org.fest.swing.testing.TestListModel;
@@ -61,15 +62,15 @@ public class BasicJListCellReaderTest {
 
   public void shouldReturnModelValueToString() {
     list.setElements(new Jedi("Yoda"));
-    Object value = reader.valueAt(list, 0);
+    Object value = firstItemValue(list, reader);
     assertThat(value).isEqualTo("Yoda");
   }
 
   public void shouldReturnNullIfRendererNotRecognizedAndModelValueIsNull() {
     list.setElements(new Object[] { null });
-    setJToolBarAsRendererComponent(list);
+    setNotRecognizedRendererComponent(list);
     robot.waitForIdle();
-    Object value = reader.valueAt(list, 0);
+    Object value = firstItemValue(list, reader);
     assertThat(value).isNull();
   }
 
@@ -77,7 +78,7 @@ public class BasicJListCellReaderTest {
     list.setElements(new Jedi(null));
     setJLabelAsRendererComponent(list, "First");
     robot.waitForIdle();
-    Object value = reader.valueAt(this.list, 0);
+    Object value = firstItemValue(list, reader);
     assertThat(value).isEqualTo("First");
   }
 
@@ -89,10 +90,18 @@ public class BasicJListCellReaderTest {
     });
   }
 
-  private static void setJToolBarAsRendererComponent(final JList list) {
+  private static void setNotRecognizedRendererComponent(final JList list) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         list.setCellRenderer(new CustomCellRenderer(new JToolBar()));
+      }
+    });
+  }
+
+  private static String firstItemValue(final JList list, final BasicJListCellReader reader) {
+    return execute(new GuiQuery<String>() {
+      protected String executeInEDT() {
+        return reader.valueAt(list, 0);
       }
     });
   }

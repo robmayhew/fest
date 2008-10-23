@@ -16,19 +16,20 @@
 package org.fest.swing.driver;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
 
 import org.fest.swing.cell.JTableCellReader;
 
-import static org.fest.swing.driver.JTableCellBackgroundQuery.cellBackground;
-import static org.fest.swing.driver.JTableCellFontQuery.cellFont;
-import static org.fest.swing.driver.JTableCellForegroundQuery.cellForeground;
-import static org.fest.swing.driver.JTableCellValueAsTextQuery.cellValue;
+import static java.lang.String.valueOf;
+
+import static org.fest.swing.driver.ModelValueToString.asText;
 
 /**
  * Understands the default implementation of <code>{@link JTableCellReader}</code>.
@@ -36,22 +37,30 @@ import static org.fest.swing.driver.JTableCellValueAsTextQuery.cellValue;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class BasicJTableCellReader extends BaseValueReader implements JTableCellReader {
+public class BasicJTableCellReader implements JTableCellReader {
+
+  private final CellRendererComponentReader cellRendererComponentReader;
+  private final BasicJComboBoxCellReader comboBoxCellReader = new BasicJComboBoxCellReader();
 
   /**
    * Creates a new </code>{@link BasicJTableCellReader}</code> that uses a 
    * <code>{@link BasicCellRendererComponentReader}</code> to read the value from the cell renderer component in a 
    * <code>JTable</code>.
    */
-  public BasicJTableCellReader() {}
+  public BasicJTableCellReader() {
+    this(new BasicCellRendererComponentReader());
+  }
 
   /**
    * Creates a new </code>{@link BasicJTableCellReader}</code>.
-   * @param cellRendererComponentReader knows how to read values from the cell renderer component in a 
+   * @param cellRendererComponentReader knows how to read values from the cell renderer component in a
    * <code>JTable</code>.
+   * @throws NullPointerException if <code>cellRendererComponentReader</code> is <code>null</code>.
    */
   public BasicJTableCellReader(CellRendererComponentReader cellRendererComponentReader) {
-    super(cellRendererComponentReader);
+    if (cellRendererComponentReader == null)
+      throw new NullPointerException("CellRendererComponentReader should not be null");
+    this.cellRendererComponentReader = cellRendererComponentReader;
   }
 
   /**
@@ -59,33 +68,80 @@ public class BasicJTableCellReader extends BaseValueReader implements JTableCell
    * tries to return the value displayed in the <code>JTable</code>'s cell renderer.
    * <ul>
    * <li>if the renderer is a <code>{@link JLabel}</code>, this method returns its text</li>
-   * <li>if the renderer is a <code>{@link JComboBox}</code>, this method returns the value of its selection as a 
+   * <li>if the renderer is a <code>{@link JComboBox}</code>, this method returns the value of its selection as a
    * <code>String</code></li>
    * <li>if the renderer is a <code>{@link JCheckBox}</code>, this method returns whether it is selected or not</li>
    * </ul>
    * If it fails reading the cell renderer, this method will get the value from the <code>toString</code> implementation
-   * of the object stored in the <code>JTable</code>'s model at the specified indices.
+   * of the object stored in the <code>JTable</code>'s model at the specified indices. <b>Note:</b> this method is
+   * <b>not</b> executed in the event dispatch thread. Callers are responsible for calling this method in the event
+   * dispatch thread.
    * @param table the given <code>JTable</code>.
    * @param row the row index of the cell.
    * @param column the column index of the cell.
    * @return the internal value of a cell in a <code>JTable</code> as expected in a test.
    */
   public String valueAt(JTable table, int row, int column) {
-    return cellValue(table, row, column, cellRendererComponentReader());
+    Component c = cellRendererIn(table, row, column);
+    String value = (c != null) ? cellRendererComponentReader.valueFrom(c) : null;
+    if (value != null) return value;
+    if (c instanceof JLabel) return ((JLabel)c).getText();
+    if (c instanceof JCheckBox) return valueOf(((JCheckBox)c).isSelected());
+    if (c instanceof JComboBox) return valueAsText((JComboBox)c);
+    return asText(table.getValueAt(row, column));
   }
 
-  /** {@inheritDoc} */
+  private String valueAsText(JComboBox comboBox) {
+    int selectedIndex = comboBox.getSelectedIndex();
+    if (selectedIndex == -1) return null;
+    return comboBoxCellReader.valueAt(comboBox, selectedIndex);
+  }
+
+  /**
+   * Returns the font of the cell renderer for the given table cell. <b>Note:</b> this method is <b>not</b> executed in
+   * the event dispatch thread. Callers are responsible for calling this method in the event dispatch thread.
+   * @param table the given <code>JTable</code>.
+   * @param row the row index of the cell.
+   * @param column the column index of the cell.
+   * @return the font of the cell renderer for the given table cell.
+   */
   public Font fontAt(JTable table, int row, int column) {
-    return cellFont(table, row, column);
+    Component c = cellRendererIn(table, row, column);
+    return c != null ? c.getFont() : null;
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Returns the background color of the cell renderer for the given table cell. <b>Note:</b> this method is <b>not</b>
+   * executed in the event dispatch thread. Callers are responsible for calling this method in the event dispatch
+   * thread.
+   * @param table the given <code>JTable</code>.
+   * @param row the row index of the cell.
+   * @param column the column index of the cell.
+   * @return the background color of the cell renderer for the given table cell.
+   */
   public Color backgroundAt(JTable table, int row, int column) {
-    return cellBackground(table, row, column);
+    Component c = cellRendererIn(table, row, column);
+    return c != null ? c.getBackground() : null;
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Returns the foreground color of the cell renderer for the given table cell. <b>Note:</b> this method is <b>not</b>
+   * executed in the event dispatch thread. Callers are responsible for calling this method in the event dispatch
+   * thread.
+   * @param table the given <code>JTable</code>.
+   * @param row the row index of the cell.
+   * @param column the column index of the cell.
+   * @return the foreground color of the cell renderer for the given table cell.
+   */
   public Color foregroundAt(JTable table, int row, int column) {
-    return cellForeground(table, row, column);
+    Component c = cellRendererIn(table, row, column);
+    return c != null ? c.getForeground() : null;
+  }
+
+  private Component cellRendererIn(final JTable table, final int row, final int column) {
+    Object value = table.getValueAt(row, column);
+    TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+    boolean cellSelected = table.isCellSelected(row, column);
+    return cellRenderer.getTableCellRendererComponent(table, value, cellSelected, false, row, column);
   }
 }

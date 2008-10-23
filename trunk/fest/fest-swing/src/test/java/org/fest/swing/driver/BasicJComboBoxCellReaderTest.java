@@ -25,6 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.CustomCellRenderer;
 import org.fest.swing.testing.TestWindow;
@@ -63,15 +64,15 @@ public class BasicJComboBoxCellReaderTest {
   public void shouldReturnModelValueToString() {
     setModelValues(comboBox, array(new Jedi("Yoda")));
     robot.waitForIdle();
-    Object value = reader.valueAt(comboBox, 0);
+    Object value = firstItemValue(comboBox, reader);
     assertThat(value).isEqualTo("Yoda");
   }
 
   public void shouldReturnNullIfRendererNotRecognizedAndModelValueIsNull() {
     setModelValues(comboBox, new Object[] { null });
-    setJToolBarAsRendererComponent(comboBox);
+    setNotRecognizedRendererComponent(comboBox);
     robot.waitForIdle();
-    Object value = reader.valueAt(comboBox, 0);
+    Object value = firstItemValue(comboBox, reader);
     assertThat(value).isNull();
   }
 
@@ -79,7 +80,7 @@ public class BasicJComboBoxCellReaderTest {
     setModelValues(comboBox, array(new Jedi(null)));
     setJLabelAsRendererComponent(comboBox, "First");
     robot.waitForIdle();
-    Object value = reader.valueAt(comboBox, 0);
+    Object value = firstItemValue(comboBox, reader);
     assertThat(value).isEqualTo("First");
   }
 
@@ -99,7 +100,7 @@ public class BasicJComboBoxCellReaderTest {
     });
   }
 
-  private static void setJToolBarAsRendererComponent(final JComboBox comboBox) {
+  private static void setNotRecognizedRendererComponent(final JComboBox comboBox) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         comboBox.setRenderer(new CustomCellRenderer(new JToolBar()));
@@ -107,6 +108,14 @@ public class BasicJComboBoxCellReaderTest {
     });
   }
 
+  private static String firstItemValue(final JComboBox comboBox, final BasicJComboBoxCellReader reader) {
+    return execute(new GuiQuery<String>() {
+      protected String executeInEDT() {
+        return reader.valueAt(comboBox, 0);
+      }
+    });
+  }
+  
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
