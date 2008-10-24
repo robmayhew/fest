@@ -50,4 +50,16 @@ public class UnexpectedException extends RuntimeException {
   public UnexpectedException(String message, Throwable cause) {
     super(message, cause);
   }
+
+  /**
+   * Re-throws the exception being the cause of an error only if such cause is a <code>{@link RuntimeException}</code>.
+   * Otherwise throws this </code>{@link UnexpectedException}</code>. 
+   * @return the re-thrown exception.
+   */
+  public RuntimeException bomb() {
+    // TODO test
+    Throwable errorCause = getCause();
+    if (errorCause instanceof RuntimeException) throw ((RuntimeException)errorCause);
+    throw this;
+  }
 }

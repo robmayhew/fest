@@ -29,7 +29,7 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.JListSetSelectedIndexTask.selectIndex;
+import static org.fest.swing.driver.JListSetSelectedIndexTask.setSelectedIndex;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -57,7 +57,7 @@ public class JListSelectedIndexQueryTest {
 
   @Test(dataProvider = "selectedIndices", groups = { GUI, EDT_ACTION })
   public void shouldReturnItemCountOfJList(final int selectedIndex) {
-    selectIndex(list, selectedIndex);
+    setSelectedIndex(list, selectedIndex);
     robot.waitForIdle();
     list.startRecording();
     assertThat(JListSelectedIndexQuery.selectedIndexOf(list)).isEqualTo(selectedIndex);

@@ -23,6 +23,14 @@ package org.fest.swing.exception;
 public class LocationUnavailableException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
+  
+  /**
+   * Creates a new </code>{@link LocationUnavailableException}</code>.
+   * @param message the detail message.
+   */
+  public LocationUnavailableException(String message) {
+    super(message);
+  }
 
   /**
    * Creates a new </code>{@link LocationUnavailableException}</code>.
@@ -31,13 +39,5 @@ public class LocationUnavailableException extends RuntimeException {
    */
   public LocationUnavailableException(String message, Throwable cause) {
     super(message, cause);
-  }
-
-  /**
-   * Creates a new </code>{@link LocationUnavailableException}</code>.
-   * @param message the detail message.
-   */
-  public LocationUnavailableException(String message) {
-    super(message);
   }
 }

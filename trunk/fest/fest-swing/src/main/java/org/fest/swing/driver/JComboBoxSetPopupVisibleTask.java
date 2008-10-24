@@ -32,7 +32,7 @@ final class JComboBoxSetPopupVisibleTask {
   static void setPopupVisible(final JComboBox comboBox, final boolean visible) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        comboBox.getUI().setPopupVisible(comboBox, visible);
+        comboBox.setPopupVisible(visible);
       }
     });
   }

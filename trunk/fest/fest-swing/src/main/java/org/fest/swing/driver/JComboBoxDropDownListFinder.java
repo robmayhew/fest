@@ -38,7 +38,7 @@ import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
  * 
  * @author Alex Ruiz
  */
-class JComboBoxDropDownListFinder {
+final class JComboBoxDropDownListFinder {
 
   private static final ComponentMatcher LIST_MATCHER = new TypeMatcher(JList.class);
 

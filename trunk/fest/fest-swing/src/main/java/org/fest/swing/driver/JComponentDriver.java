@@ -27,7 +27,6 @@ import org.fest.swing.query.JComponentVisibleRectQuery;
 import static java.awt.event.KeyEvent.VK_UNDEFINED;
 
 import static org.fest.swing.driver.JComponentKeyStrokesForActionQuery.keyStrokesForAction;
-import static org.fest.swing.driver.JComponentScrollRectToVisibleTask.scrollRectToVisible;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.*;
 
@@ -49,8 +48,9 @@ public class JComponentDriver extends ContainerDriver {
   }
 
   /**
-   * Invoke <code>{@link JComponent#scrollRectToVisible(Rectangle)}</code> on the given
-   * <code>{@link JComponent}</code> on the event dispatch thread.
+   * Invoke <code>{@link JComponent#scrollRectToVisible(Rectangle)}</code> on the given <code>{@link JComponent}</code>.
+   * <b>Note:</b> this method is <b>not</b> executed in the event dispatch thread. Callers are responsible for calling
+   * this method in the event dispatch thread.
    * @param c the given <code>JComponent</code>.
    * @param r the visible <code>Rectangle</code>.
    */
@@ -60,7 +60,7 @@ public class JComponentDriver extends ContainerDriver {
     // in function. Fortunately, Swing's Scrollable makes for a simple solution.
     // NOTE: absolutely MUST wait for idle in order for the scroll to finish, and the UI to update so that the next
     // action goes to the proper location within the scrolled component.
-    scrollRectToVisible(c, r);
+    c.scrollRectToVisible(r);
   }
 
   /**

@@ -29,7 +29,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JListSetSelectedIndexTask {
 
-  static void selectIndex(final JList list, final int index) {
+  static void setSelectedIndex(final JList list, final int index) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         list.setSelectedIndex(index);

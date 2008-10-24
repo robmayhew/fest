@@ -40,4 +40,13 @@ public class Pair<O, T> {
     this.one = one;
     this.two = two;
   }
+
+  /** ${@inheritDoc} */
+  @Override public String toString() {
+    StringBuilder b = new StringBuilder();
+    b.append(getClass().getName()).append("[");
+    b.append("one=").append(one).append(",");
+    b.append("two=").append(two).append("]");
+    return b.toString();
+  }
 }
