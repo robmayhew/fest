@@ -14,6 +14,8 @@
  */
 package org.fest.swing.edt;
 
+import java.util.concurrent.CountDownLatch;
+
 /**
  * Understands the base class for actions that are executed in the event dispatch thread.
  *
@@ -23,22 +25,34 @@ abstract class GuiAction implements Runnable {
 
   private boolean executedInEDT;
   private Throwable catchedException;
-
+  private CountDownLatch executionNotification;
+  
   final Throwable catchedException() { return catchedException; }
 
   final void catchedException(Throwable catched) {
     catchedException = catched;
   }
 
-  final synchronized void executedInEDT() {
-    executedInEDT = true;
-  }
-
-  final synchronized boolean wasExecutedInEDT() {
+  final boolean wasExecutedInEDT() {
     return executedInEDT;
   }
 
   final void clearCatchedException() {
     catchedException = null;
+  }
+  
+  final void executionNotification(CountDownLatch c) {
+    executionNotification = c;
+  }
+  
+  final void notifyExecutionCompleted() {
+    executedInEDT();
+    if (executionNotification == null) return;
+    executionNotification.countDown();
+    executionNotification = null;
+  }
+
+  private void executedInEDT() {
+    executedInEDT = true;
   }
 }

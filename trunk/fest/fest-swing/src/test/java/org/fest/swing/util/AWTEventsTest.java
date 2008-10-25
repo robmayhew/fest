@@ -42,7 +42,7 @@ public class AWTEventsTest {
   private TestWindow source;
 
   @BeforeMethod public void setUp() {
-    source = TestWindow.createNew(getClass());
+    source = TestWindow.createInEDT(getClass());
   }
 
   @AfterMethod public void tearDown() {

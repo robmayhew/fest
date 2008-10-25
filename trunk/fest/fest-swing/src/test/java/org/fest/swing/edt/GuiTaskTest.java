@@ -17,9 +17,9 @@ package org.fest.swing.edt;
 
 import org.testng.annotations.Test;
 
-import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.timing.Condition;
+import org.fest.swing.timing.Pause;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -38,7 +38,8 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
 
   public void shouldExecuteInEDTWhenCalledInEDT() {
     final GuiTaskInEDT task = new GuiTaskInEDT();
-    execute(task, new Condition("Task is executed") {
+    execute(task);
+    Pause.pause(new Condition("Task is executed") {
       public boolean test() {
         return task.wasExecutedInEDT();
       }

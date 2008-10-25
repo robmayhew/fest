@@ -43,6 +43,7 @@ public class JTableCheckBoxEditorCellWriter extends AbstractJTableCellWriter  {
   public void enterValue(JTable table, int row, int column, String value) {
     JCheckBox editor = editor(table, row, column);
     boolean realValue = Boolean.parseBoolean(value);
+    // TODO consolidate into coarser GUI action
     if (isSelected(editor) == realValue) return;
     clickCell(table, row, column);
   }

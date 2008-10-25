@@ -19,18 +19,21 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Point;
 
+import javax.swing.JDialog;
+
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.DialogDriver;
+import org.fest.swing.edt.GuiQuery;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JDialogs.dialog;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.task.DialogShowTask.packAndShow;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -49,9 +52,25 @@ public class DialogFixtureTest extends CommonComponentFixtureTestCase<Dialog> {
 
   void onSetUp() {
     driver = createMock(DialogDriver.class);
-    target = dialog().withName("dialog").createNew();
+    target = createAndShowDialogInEDT();
     fixture = new DialogFixture(robot(), target);
     fixture.updateDriver(driver);
+  }
+
+  private static Dialog createAndShowDialogInEDT() {
+    return execute(new GuiQuery<Dialog>() {
+      protected Dialog executeInEDT() throws Throwable {
+        return createAndShowDialog();
+      }
+    });
+  }
+
+  private static Dialog createAndShowDialog() {
+    JDialog dialog = new JDialog();
+    dialog.setName("dialog");
+    dialog.setTitle(DialogFixtureTest.class.getSimpleName());
+    packAndShow(dialog, new Dimension(200, 100));
+    return dialog;
   }
 
   public void shouldCreateFixtureWithGivenComponentName() {

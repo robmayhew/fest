@@ -18,92 +18,155 @@ package org.fest.swing.testing;
 import java.awt.*;
 
 import javax.swing.JDialog;
-import javax.swing.UIManager;
 
-import org.fest.swing.task.WindowDestroyTask;
-import org.fest.swing.timing.Condition;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
+import org.fest.swing.task.FrameShowTask;
 
-import static javax.swing.SwingUtilities.invokeLater;
-
-import static org.fest.swing.timing.Pause.pause;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.task.DialogShowTask.packAndShow;
+import static org.fest.swing.task.WindowDestroyTask.hideAndDispose;
+import static org.fest.swing.testing.LookAndFeel.applySubstanceBusinessLookAndFeel;
+import static org.fest.swing.testing.TestWindow.DEFAULT_WINDOW_LOCATION;
 
 /**
- * Understands the base window for all GUI tests.
+ * Understands the base dialog for all GUI tests.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
 public class TestDialog extends JDialog {
 
+  private static final Dimension DEFAULT_PREFERRED_SIZE = new Dimension(200, 100);
+
   private static final long serialVersionUID = 1L;
 
-  public static TestDialog showInTest(Frame owner) {
-    TestDialog dialog = create(owner);
-    dialog.display();
-    return dialog;
+  static final Point DEFAULT_DIALOG_LOCATION = new Point(200, 200);
+
+  /**
+   * Creates a new <code>{@link TestDialog}</code> and displays it on the screen with the given frame as its owner. This
+   * constructor will set the title of the dialog to be the same as its owner. This method is executed in the event
+   * dispatch thread.
+   * @param owner the owner of the dialog to create.
+   * @return the created window.
+   */
+  public static TestDialog createAndDisplayInEDT(final Frame owner) {
+    return execute(new GuiQuery<TestDialog>() {
+      protected TestDialog executeInEDT() {
+        TestDialog dialog = createInCurrentThread(owner);
+        TestDialog.displayInCurrentThread(dialog, new Dimension(DEFAULT_PREFERRED_SIZE));
+        return dialog;
+      }
+    });
   }
 
-  public static TestDialog createNew(Frame owner) {
-    return create(owner);
+  /**
+   * Creates a new <code>{@link TestDialog}</code> with the given frame as its owner. This constructor will set the title
+   * of the dialog to be the same as its owner. This method is executed in the event dispatch thread.
+   * @param owner the owner of the dialog to create.
+   * @return the created window.
+   */
+  public static TestDialog createInEDT(final Frame owner) {
+    return execute(new GuiQuery<TestDialog>() {
+      protected TestDialog executeInEDT() {
+        return createInCurrentThread(owner);
+      }
+    });
   }
 
-  private static TestDialog create(Frame owner) {
+  private static TestDialog createInCurrentThread(Frame owner) {
     return new TestDialog(owner);
   }
 
+  /**
+   * Creates a new </code>{@link TestDialog}</code> with the given frame as its owner. This constructor will set the 
+   * title of the dialog to be the same as its owner.
+   * @param owner the owner of the dialog to create.
+   */
   protected TestDialog(Frame owner) {
     super(owner);
     setTitle(owner.getTitle());
     setLayout(new FlowLayout());
   }
 
+  /**
+   * Adds the given GUI components to this dialog. This method is <b>not</b> executed in the event dispatch thread.
+   * @param components the components to add.
+   */
   public void addComponents(Component...components) {
     for (Component c : components) add(c);
   }
 
+  /**
+   * Displays this dialog on the screen. This method is executed in the event dispatch thread.
+   */
   public void display() {
-    display(new Dimension(400, 200));
+    display(DEFAULT_PREFERRED_SIZE);
   }
 
-  public void display(final Dimension size) {
-    Window owner = getOwner();
-    showOwnerIfPossible(owner);
-    invokeLater(new Runnable() {
-      public void run() {
-        beforeDisplayed();
-        setPreferredSize(size);
-        pack();
-        setLocation(100, 100);
-        setVisible(true);
+  /**
+   * Displays this dialog on the screen using the given dimension as its preferred size. This method is executed in the 
+   * event dispatch thread.
+   * @param preferredSize the preferred size to set to this dialog before displaying it on the screen.
+   */
+  public void display(final Dimension preferredSize) {
+    displayInEDT(this, preferredSize);
+  }
+  
+  private static void displayInEDT(final TestDialog dialog, final Dimension preferredSize) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        displayInCurrentThread(dialog, preferredSize);
       }
     });
-    pause(new Condition("dialog is displayed") {
-      public boolean test() {
-        return TestDialog.this.isShowing();
-      }
-    });
+  }
+  
+  /**
+   * Displays the given dialog on the screen using the given dimension as its preferred size. This method is executed in 
+   * the current thread where it is called.
+   * @param dialog the dialog to display on the screen.
+   * @param preferredSize the preferred size to set to the given dialog before displaying it on the screen.
+   */
+  protected static void displayInCurrentThread(TestDialog dialog, Dimension preferredSize) {
+    showOwnerIfPossible(dialog.getOwner());
+    dialog.setLocation(DEFAULT_DIALOG_LOCATION);
+    packAndShow(dialog, preferredSize);
   }
 
-  private void showOwnerIfPossible(Window owner) {
-    if (!(owner instanceof TestWindow) || owner.isShowing()) return;
-    ((TestWindow)owner).display();
+  private static void showOwnerIfPossible(Window owner) {
+    if (!(owner instanceof Frame)) return;
+    Frame dialogOwner = (Frame)owner;
+    dialogOwner.setLocation(DEFAULT_WINDOW_LOCATION);
+    FrameShowTask.packAndShow(dialogOwner);
   }
 
-  protected void beforeDisplayed() {}
-
+  /**
+   * Chooses the look and feel.
+   */
   protected void chooseLookAndFeel() {
-    lookNative();
+    applySubstanceBusinessLookAndFeel();
   }
 
-  private void lookNative() {
-    try {
-      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (Exception ignored) {
-      ignored.printStackTrace();
-    }
-  }
-
+  /**
+   * Hides and disposes this dialog. This method is executed in the event dispatch thread.
+   */
   public void destroy() {
-    WindowDestroyTask.destroy(this);
+    destroyInEDT(this);
+  }
+
+  private static void destroyInEDT(final TestDialog dialog) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        destroyInCurrentThread(dialog);
+      }
+    });
+  }
+  
+  /**
+   * Hides and disposes the given dialog. This method is executed in the current thread where it is called.
+   * @param dialog the dialog to destroy.
+   */
+  protected static void destroyInCurrentThread(TestDialog dialog) {
+    hideAndDispose(dialog);
   }
 }

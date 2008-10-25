@@ -17,30 +17,27 @@ package org.fest.swing.task;
 
 import java.awt.Window;
 
-import org.fest.swing.edt.GuiTask;
 import org.fest.swing.timing.Condition;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
- * Understands a task that hides and disposes a <code>{@link Window}</code>. This task is executed in the event dispatch
- * thread.
- *
+ * Understands a task that hides and disposes a <code>{@link Window}</code>. This task is <b>not</b> executed in the
+ * event dispatch thread.
+ * 
  * @author Alex Ruiz
  */
 public final class WindowDestroyTask {
 
   /**
-   * Hides and disposes the given <code>{@link Window}</code>. This action is executed in the event dispatch thread.
+   * Hides and disposes the given <code>{@link Window}</code>. This action is <b>not</b> executed in the event dispatch
+   * thread.
    * @param w the <code>Window</code> to hide and dispose.
    */
-  public static void destroy(final Window w) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        w.setVisible(false);
-        w.dispose();
-      }
-    }, new Condition("window is closed") {
+  public static void hideAndDispose(final Window w) {
+    w.setVisible(false);
+    w.dispose();
+    pause(new Condition("window is closed") {
       public boolean test() {
         return !w.isShowing();
       }

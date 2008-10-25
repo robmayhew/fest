@@ -8,6 +8,7 @@ import org.fest.swing.edt.GuiTask;
 import org.fest.swing.timing.Condition;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Understands a task that iconifies a given <code>{@link JInternalFrame}</code>. This task is executed in the event
@@ -21,10 +22,11 @@ final class JInternalFrameIconifyTask {
     execute(new GuiTask() {
       protected void executeInEDT() throws PropertyVetoException {
         internalFrame.setIcon(true);
-      }
-    }, new Condition("JInternalFrame is icondified") {
-      public boolean test() {
-        return internalFrame.isIcon();
+        pause(new Condition("JInternalFrame is icondified") {
+          public boolean test() {
+            return internalFrame.isIcon();
+          }
+        });
       }
     });
   }

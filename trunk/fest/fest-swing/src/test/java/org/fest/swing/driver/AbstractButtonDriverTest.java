@@ -29,11 +29,15 @@ import org.fest.assertions.AssertExtension;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
 import static org.fest.swing.task.AbstractButtonSetSelectedTask.setSelected;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
@@ -74,6 +78,7 @@ public class AbstractButtonDriverTest {
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotClickButtonIfButtonDisabled(EventMode eventMode) {
+    // TODO should throw error if disabled
     robot.settings().eventMode(eventMode);
     disable(checkBox);
     robot.waitForIdle();
@@ -116,6 +121,28 @@ public class AbstractButtonDriverTest {
     assertThatCheckBoxIsSelected();
   }
 
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldThrowErrorWhenSelectingAndAbstractButtonIsDisabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    unselectAndDisable(checkBox);
+    robot.waitForIdle();
+    try {
+      driver.select(checkBox);
+      fail();
+    } catch (ActionFailedException e) {}
+    assertThatCheckBoxIsNotSelected();
+  }
+
+  
+  private static void unselectAndDisable(final JCheckBox checkBox) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        checkBox.setEnabled(false);
+        checkBox.setSelected(false);
+      }
+    });
+  }
+
   private void assertThatCheckBoxIsSelected() {
     assertThat(isSelected(checkBox)).isTrue();
   }
@@ -134,6 +161,27 @@ public class AbstractButtonDriverTest {
     selectCheckBox();
     driver.unselect(checkBox);
     assertThatCheckBoxIsNotSelected();
+  }
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldThrowErrorWhenUnselectingAndAbstractButtonIsDisabled(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    selectAndDisable(checkBox);
+    robot.waitForIdle();
+    try {
+      driver.unselect(checkBox);
+      fail();
+    } catch (ActionFailedException e) {}
+    assertThatCheckBoxIsSelected();
+  }
+
+  private static void selectAndDisable(final JCheckBox checkBox) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        checkBox.setEnabled(false);
+        checkBox.setSelected(true);
+      }
+    });
   }
 
   private void assertThatCheckBoxIsNotSelected() {
@@ -186,7 +234,11 @@ public class AbstractButtonDriverTest {
     private static final long serialVersionUID = 1L;
 
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     final JCheckBox checkBox = new JCheckBox("Hello", true);

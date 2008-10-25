@@ -18,43 +18,28 @@ package org.fest.swing.task;
 import java.awt.Dimension;
 import java.awt.Frame;
 
-import org.fest.swing.edt.GuiTask;
 import org.fest.swing.timing.Condition;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
- * Understands a task that makes a <code>{@link Frame}</code> visible. This task is executed in the event dispatch
- * thread.
- *
+ * Understands a task that makes a <code>{@link Frame}</code> visible. This task is <b>not</b> executed in the event
+ * dispatch thread.
+ * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
 public final class FrameShowTask {
 
-  private static final String FRAME_IS_SHOWING = "Frame is showing";
-
-  public static void packAndShow(final Frame frame) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        frame.pack();
-        frame.setVisible(true);
-      }
-    }, new Condition(FRAME_IS_SHOWING) {
-      public boolean test() {
-        return frame.isShowing();
-      }
-    });
+  public static void packAndShow(Frame frame, Dimension preferredSize) {
+    frame.setPreferredSize(preferredSize);
+    packAndShow(frame);
   }
 
-  public static void packAndShow(final Frame frame, final Dimension preferredSize) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        frame.setPreferredSize(preferredSize);
-        frame.pack();
-        frame.setVisible(true);
-      }
-    }, new Condition(FRAME_IS_SHOWING) {
+  public static void packAndShow(final Frame frame) {
+    frame.pack();
+    frame.setVisible(true);
+    pause(new Condition("Frame is showing") {
       public boolean test() {
         return frame.isShowing();
       }

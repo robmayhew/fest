@@ -60,7 +60,7 @@ public class ContextMonitorTest {
   private TestWindow window;
 
   @BeforeMethod public void setUp() throws Exception {
-    window = TestWindow.createNew(getClass());
+    window = TestWindow.createInEDT(getClass());
     windows = createMock(Windows.class);
     context = createMock(Context.class);
     monitor = new ContextMonitor(context, windows);

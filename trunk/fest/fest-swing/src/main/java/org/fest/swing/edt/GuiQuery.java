@@ -15,10 +15,11 @@
  */
 package org.fest.swing.edt;
 
-import static javax.swing.SwingUtilities.isEventDispatchThread;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-
 import org.fest.swing.exception.ActionFailedException;
+
+import static javax.swing.SwingUtilities.isEventDispatchThread;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
 
 /**
  * Understands executing an action, in the event dispatch thread, that returns a value.
@@ -38,17 +39,11 @@ public abstract class GuiQuery<T> extends GuiAction {
     if (!isEventDispatchThread())
       throw actionFailure("Query should be executed in the event dispatch thread");
     try {
-      result = doExecuteInEDT();
+      result = executeInEDT();
     } catch (Throwable t) {
       catchedException(t);
-    }
-  }
-
-  final T doExecuteInEDT() throws Throwable {
-    try {
-      return executeInEDT();
     } finally {
-      executedInEDT();
+      notifyExecutionCompleted();
     }
   }
 

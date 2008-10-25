@@ -548,7 +548,11 @@ public class JListDriverTest {
     final TestList dropList = new TestList("four", "five", "six");
 
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

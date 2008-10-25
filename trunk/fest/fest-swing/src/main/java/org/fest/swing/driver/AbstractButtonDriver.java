@@ -18,10 +18,14 @@ package org.fest.swing.driver;
 import javax.swing.AbstractButton;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.query.AbstractButtonTextQuery;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands simulation of user input on an <code>{@link AbstractButton}</code>. This class is intended for internal
@@ -66,19 +70,42 @@ public class AbstractButtonDriver extends JComponentDriver {
   /**
    * Selects the given button only it is not already selected.
    * @param button the target button.
+   * @throws ActionFailedException if the button is disabled.
    */
   public void select(AbstractButton button) {
-    if (isSelected(button)) return;
+    boolean ready = false;
+    try {
+      ready = !isSelectedAndEnabledInEDT(button);
+    } catch (UnexpectedException unexpected) {
+      throw unexpected.bomb();
+    }
+    if (!ready) return;
     click(button);
   }
 
   /**
    * Unselects the given button only if it is selected.
    * @param button the target button.
+   * @throws ActionFailedException if the button is disabled.
    */
   public void unselect(AbstractButton button) {
-    if (!isSelected(button)) return;
+    boolean ready = false;
+    try {
+      ready = isSelectedAndEnabledInEDT(button);
+    } catch (UnexpectedException unexpected) {
+      throw unexpected.bomb();
+    }
+    if (!ready) return;
     click(button);
+  }
+
+  static boolean isSelectedAndEnabledInEDT(final AbstractButton button) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        validateIsEnabled(button);
+        return button.isSelected();
+      }
+    });
   }
 
   /**
@@ -100,7 +127,15 @@ public class AbstractButtonDriver extends JComponentDriver {
   }
 
   private void assertButtonIsSelected(AbstractButton button, boolean selected) {
-    assertThat(isSelected(button)).as(selectedProperty(button)).isEqualTo(selected);
+    assertThat(isSelectedInEDT(button)).as(selectedProperty(button)).isEqualTo(selected);
+  }
+
+  static boolean isSelectedInEDT(final AbstractButton button) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return button.isSelected();
+      }
+    });
   }
 
   private static String selectedProperty(AbstractButton button) {

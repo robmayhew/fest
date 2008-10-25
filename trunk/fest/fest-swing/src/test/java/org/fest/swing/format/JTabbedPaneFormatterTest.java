@@ -23,12 +23,13 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.timing.Condition;
-import org.fest.util.Strings;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTabbedPanes.tabbedPane;
 import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.timing.Pause.pause;
+import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link JTabbedPaneFormatter}</code>.
@@ -86,10 +87,11 @@ import static org.fest.swing.factory.JTextFields.textField;
       protected void executeInEDT() {
         tabbedPane.addTab("One", new JPanel());
         tabbedPane.addTab("Two", new JPanel());
-      }
-    }, new Condition("JTabbedPane has two tabs") {
-      public boolean test() {
-        return tabbedPane.getTabCount() == 2;
+        pause(new Condition("JTabbedPane has two tabs") {
+          public boolean test() {
+            return tabbedPane.getTabCount() == 2;
+          }
+        });
       }
     });
   }
@@ -98,10 +100,11 @@ import static org.fest.swing.factory.JTextFields.textField;
     execute(new GuiTask() {
       protected void executeInEDT() {
         tabbedPane.setSelectedIndex(index);
-      }
-    }, new Condition(Strings.concat("JTabbedPane's 'selectedIndex' property is ", index)) {
-      public boolean test() {
-        return tabbedPane.getSelectedIndex() == index;
+        pause(new Condition(concat("JTabbedPane's 'selectedIndex' property is ", index)) {
+          public boolean test() {
+            return tabbedPane.getSelectedIndex() == index;
+          }
+        });
       }
     });
   }

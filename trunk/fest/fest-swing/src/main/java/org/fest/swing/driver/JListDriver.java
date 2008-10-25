@@ -45,7 +45,6 @@ import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
@@ -144,12 +143,12 @@ public class JListDriver extends JComponentDriver {
    * @param values the values to match.
    * @throws NullPointerException if the given array is <code>null</code>.
    * @throws IllegalArgumentException if the given array is empty.
+   * @throws ActionFailedException if the <code>JList</code> is disabled.
    * @throws LocationUnavailableException if an element matching the any of the given values cannot be found.
    */
   public void selectItems(final JList list, final String[] values) {
     if (values == null) throw new NullPointerException("Array of values should not be null");
     if (Arrays.isEmpty(values)) throw new IllegalArgumentException("Array of values should not be empty");
-    if (!isEnabled(list)) return;
     new MultipleSelectionTemplate(robot) {
       int elementCount() {
         return values.length;

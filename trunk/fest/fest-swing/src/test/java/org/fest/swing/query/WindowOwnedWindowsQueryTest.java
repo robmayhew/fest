@@ -44,8 +44,8 @@ public class WindowOwnedWindowsQueryTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = TestWindow.createNew(getClass());
-    dialog = TestDialog.createNew(window);
+    window = TestWindow.createInEDT(getClass());
+    dialog = TestDialog.createInEDT(window);
   }
   
   @AfterMethod public void tearDown() {

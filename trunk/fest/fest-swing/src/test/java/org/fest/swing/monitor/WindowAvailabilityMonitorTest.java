@@ -53,7 +53,7 @@ public class WindowAvailabilityMonitorTest {
 
   @BeforeMethod public void setUp() throws Exception {
     toolkit = ToolkitStub.createNew();
-    window = TestWindow.createNew(getClass());
+    window = TestWindow.createInEDT(getClass());
     windows = createMock(Windows.class);
     monitor = new WindowAvailabilityMonitor(windows);
   }

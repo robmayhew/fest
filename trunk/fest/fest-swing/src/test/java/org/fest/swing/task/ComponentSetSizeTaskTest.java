@@ -42,7 +42,7 @@ public class ComponentSetSizeTaskTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = TestWindow.createNew(getClass());
+    window = TestWindow.createInEDT(getClass());
     robot.showWindow(window);
     size = new Dimension(200, 100);
   }

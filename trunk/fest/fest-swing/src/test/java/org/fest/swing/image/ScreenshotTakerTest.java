@@ -32,7 +32,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.ImageAssert.read;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.testing.TestGroups.GUI;
-import static org.fest.swing.testing.TestWindow.showNewInTest;
+import static org.fest.swing.testing.TestWindow.createAndDisplayInEDT;
 import static org.fest.util.Files.temporaryFolderPath;
 import static org.fest.util.Strings.concat;
 
@@ -78,7 +78,7 @@ import static org.fest.util.Strings.concat;
   }
 
   public void shouldTakeScreenshotOfWindowAndSaveItInGivenPath() throws Exception {
-    TestWindow frame = showNewInTest(getClass());
+    TestWindow frame = createAndDisplayInEDT(getClass());
     String imagePath = concat(temporaryFolderPath(), imageFileName());
     taker.saveComponentAsPng(frame, imagePath);
     assertThat(read(imagePath)).hasSize(sizeOf(frame));

@@ -64,8 +64,8 @@ public class WindowChildrenFinderTest {
   @Test(groups = GUI)
   public void shouldReturnOwnedWindowsIfComponentIsWindow() {
     ScreenLock.instance().acquire(this);
-    TestWindow window = TestWindow.showNewInTest(getClass());
-    TestDialog dialog = TestDialog.showInTest(window);
+    TestWindow window = TestWindow.createAndDisplayInEDT(getClass());
+    TestDialog dialog = TestDialog.createAndDisplayInEDT(window);
     try {
       Collection<Component> children = finder.nonExplicitChildrenOf(window);
       assertThat(children).containsOnly(dialog);

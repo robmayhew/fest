@@ -29,7 +29,7 @@ import org.fest.util.Strings;
 
 import static org.fest.swing.factory.JFrames.frame;
 import static org.fest.swing.task.FrameShowTask.packAndShow;
-import static org.fest.swing.task.WindowDestroyTask.destroy;
+import static org.fest.swing.task.WindowDestroyTask.hideAndDispose;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.swing.timing.Pause.pause;
 
@@ -56,8 +56,8 @@ public class ActivateWindowTaskTest {
   }
 
   @AfterMethod public void tearDown() {
-    destroy(frameOne);
-    destroy(frameTwo);
+    hideAndDispose(frameOne);
+    hideAndDispose(frameTwo);
     ScreenLock.instance().release(this);
   }
 

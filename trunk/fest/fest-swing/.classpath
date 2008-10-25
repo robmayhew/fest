@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="lib/fest-util-0.4.jar" sourcepath="lib/fest-util-0.4-sources.jar"/>
 	<classpathentry kind="lib" path="lib/fest-test-0.1.jar" sourcepath="lib/fest-test-0.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/testng-5.7-jdk15.jar"/>
+	<classpathentry kind="lib" path="lib/substance-5.0_01.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

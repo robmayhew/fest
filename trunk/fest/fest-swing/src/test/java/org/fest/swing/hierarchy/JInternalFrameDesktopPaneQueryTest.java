@@ -43,7 +43,7 @@ public class JInternalFrameDesktopPaneQueryTest {
 
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
-    window = MDITestWindow.showInTest(getClass());
+    window = MDITestWindow.createAndDisplayInEDT(getClass());
     internalFrame = window.internalFrame();
   }
 

@@ -41,7 +41,7 @@ public class DisposalMonitorTest {
   private DisposalMonitor monitor;
   
   @BeforeMethod public void setUp() {
-    frame = TestWindow.createNew(DisposalMonitorTest.class);
+    frame = TestWindow.createInEDT(DisposalMonitorTest.class);
     disposedWindows = new HashMap<Window, Boolean>();
     monitor = new DisposalMonitor(disposedWindows);
     frame.addComponentListener(monitor);

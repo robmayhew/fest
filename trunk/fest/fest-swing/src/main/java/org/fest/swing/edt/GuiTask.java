@@ -34,17 +34,11 @@ public abstract class GuiTask extends GuiAction {
     if (!isEventDispatchThread())
       throw ActionFailedException.actionFailure("Task should be executed in the event dispatch thread");
     try {
-      doExecuteInEDT();
+      executeInEDT();
     } catch (Throwable t) {
       catchedException(t);
-    }
-  }
-
-  final void doExecuteInEDT() throws Throwable {
-    try {
-      executeInEDT();
     } finally {
-      executedInEDT();
+      notifyExecutionCompleted();
     }
   }
 

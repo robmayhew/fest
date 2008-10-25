@@ -31,7 +31,7 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.hierarchy.JFrameContentPaneQuery.contentPaneOf;
-import static org.fest.swing.testing.MDITestWindow.showInTest;
+import static org.fest.swing.testing.MDITestWindow.createAndDisplayInEDT;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -80,7 +80,7 @@ public class ParentFinderTest {
   }
 
   public void shouldReturnParentOfInternalFrame() {
-    MDITestWindow window = showInTest(getClass());
+    MDITestWindow window = createAndDisplayInEDT(getClass());
     JInternalFrame internalFrame = window.internalFrame();
     try {
       assertThat(finder.parentOf(internalFrame)).isNotNull()

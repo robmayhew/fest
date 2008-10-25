@@ -28,7 +28,7 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
-import static org.fest.swing.testing.TestWindow.showNewInTest;
+import static org.fest.swing.testing.TestWindow.createAndDisplayInEDT;
 
 /**
  * Tests for <code>{@link WindowMetrics}</code>.
@@ -41,7 +41,7 @@ public class WindowMetricsTest {
   private TestWindow window;
 
   @BeforeMethod public void setUp() {
-    window = showNewInTest(getClass());
+    window = createAndDisplayInEDT(getClass());
     metrics = new WindowMetrics(window);
   }
 

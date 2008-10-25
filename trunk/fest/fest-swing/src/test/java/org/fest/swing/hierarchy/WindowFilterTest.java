@@ -59,8 +59,8 @@ public class WindowFilterTest {
   }
   
   @Test public void shouldFilterOwnedWindows() {
-    TestWindow window = TestWindow.createNew(getClass());
-    TestDialog dialog = TestDialog.createNew(window);
+    TestWindow window = TestWindow.createInEDT(getClass());
+    TestDialog dialog = TestDialog.createInEDT(window);
     implictlyIgnored.put(window, true);
     implictlyIgnored.put(dialog, true);
     filter.ignore(window);
@@ -103,7 +103,7 @@ public class WindowFilterTest {
   
   @Test public void shouldReturnTrueIfWindowParentIsFiltered() {
     Component c = button().createNew();
-    TestWindow window = TestWindow.createNew(getClass());
+    TestWindow window = TestWindow.createInEDT(getClass());
     // TODO call in EDT
     window.add(c);
     ignored.put(window, true);
@@ -111,8 +111,8 @@ public class WindowFilterTest {
   }
   
   @Test public void shouldReturnTrueIfParentOfWindowIsFiltered() {
-    TestWindow window = TestWindow.createNew(getClass());
-    TestDialog dialog = TestDialog.createNew(window);
+    TestWindow window = TestWindow.createInEDT(getClass());
+    TestDialog dialog = TestDialog.createInEDT(window);
     ignored.put(window, true);
     assertThat(filter.isIgnored(dialog)).isTrue();
   }

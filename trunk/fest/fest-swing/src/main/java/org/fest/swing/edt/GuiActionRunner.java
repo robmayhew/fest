@@ -18,12 +18,10 @@ package org.fest.swing.edt;
 import java.util.concurrent.CountDownLatch;
 
 import org.fest.swing.exception.UnexpectedException;
-import org.fest.swing.timing.Condition;
 
 import static javax.swing.SwingUtilities.*;
 
 import static org.fest.swing.exception.UnexpectedException.unexpected;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands running instances of <code>{@link GuiQuery}</code> and <code>{@link GuiTask}</code>.
@@ -65,8 +63,7 @@ public class GuiActionRunner {
    */
   public static <T> T execute(GuiQuery<T> query) {
     if (!executeInEDT) return executeInCurrentThread(query);
-    log("query");
-    run(query, untilExecuted(query));
+    run(query);
     return resultOf(query);
   }
 
@@ -90,15 +87,8 @@ public class GuiActionRunner {
       executeInCurrentThread(task);
       return;
     }
-    log("task");
-    run(task, untilExecuted(task));
+    run(task);
     rethrowCatchedExceptionIn(task);
-  }
-
-  private static void log(String action) {
-//    System.out.println(Strings.concat("running ", action, " in EDT"));
-//    Thread.dumpStack();
-//    System.out.println();
   }
 
   private static void executeInCurrentThread(GuiTask task) {
@@ -109,36 +99,19 @@ public class GuiActionRunner {
     }
   }
 
-  /**
-   * Executes the given task in the event dispatch thread. This method waits until:
-   * <ol>
-   * <li>the task has finished its execution <strong>*and*</strong></li>
-   * <li>the given condition has been satisfied</li>
-   * </ol>
-   * @param task the task to execute.
-   * @param toWaitFor the condition to meet to finish the execution of the given task.
-   * @throws UnexpectedException wrapping any exception thrown when executing the given task in the event dispatch
-   * thread.
-   */
-  public static void execute(GuiTask task, Condition toWaitFor) {
-    run(task, untilExecuted(task), toWaitFor);
-    rethrowCatchedExceptionIn(task);
-  }
-
-  private static void run(final GuiAction action, Condition... toWaitFor) {
+  private static void run(final GuiAction action) {
     if (isEventDispatchThread()) {
       action.run();
       return;
     } 
-//    invokeLater(action);
     final CountDownLatch latch = new CountDownLatch(1);
-    invokeLater(new Runnable() { public void run() { action.run(); latch.countDown(); }});
+    action.executionNotification(latch);
+    invokeLater(action);
     try {
       latch.await();
     } catch (final InterruptedException e) {
       Thread.currentThread().interrupt();
     }
-//    Pause.pause(toWaitFor);
   }
 
   private static <T> T resultOf(GuiQuery<T> query) {
@@ -157,31 +130,5 @@ public class GuiActionRunner {
     Throwable catchedException = action.catchedException();
     action.clearCatchedException();
     if (catchedException != null) throw unexpected(catchedException);
-  }
-
-  private static ActionExecutedCondition untilExecuted(GuiAction action) {
-    return new ActionExecutedCondition(action);
-  }
-
-  private static class ActionExecutedCondition extends Condition {
-    private GuiAction action;
-
-    ActionExecutedCondition(GuiAction action) {
-      super(concat("action ", actionTypeName(action), " to be executed in Swing's event dispatch thread"));
-      this.action = action;
-    }
-
-    private static String actionTypeName(GuiAction action) {
-      return action.getClass().getName();
-    }
-
-    public boolean test() {
-      return action.wasExecutedInEDT();
-    }
-
-    /** ${@inheritDoc} */
-    @Override public void done() {
-      action = null;
-    }
   }
 }

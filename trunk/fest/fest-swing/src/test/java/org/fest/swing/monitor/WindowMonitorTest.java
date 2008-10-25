@@ -61,7 +61,7 @@ public class WindowMonitorTest {
     windows = createMock(Windows.class);
     context = createMock(Context.class);
     windowStatus = createMock(WindowStatus.class);
-    frame = TestWindow.createNew(getClass());
+    frame = TestWindow.createInEDT(getClass());
     createWindowMonitor();
   }
 

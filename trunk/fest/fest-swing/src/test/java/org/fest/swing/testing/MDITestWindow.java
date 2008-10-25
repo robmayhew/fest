@@ -20,6 +20,9 @@ import java.awt.Dimension;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -33,19 +36,49 @@ public class MDITestWindow extends TestWindow {
 
   private static int internalFrameCounter;
 
-  public static MDITestWindow showInTest(Class<?> testClass) {
-    MDITestWindow window = createNew(testClass);
-    window.display(new Dimension(500, 300));
-    return window;
+  /**
+   * Creates a new <code>{@link MDITestWindow}</code> and displays it on the screen. The default size of the created 
+   * window is 500 x 300. This method is executed in the event dispatch thread.
+   * @param testClass the class of the test where the window to create will be used. The simple name of the given class 
+   * will be used as the title of the created window.
+   * @return the created window.
+   */
+  public static MDITestWindow createAndDisplayInEDT(final Class<?> testClass) {
+    return execute(new GuiQuery<MDITestWindow>() {
+      protected MDITestWindow executeInEDT() {
+        MDITestWindow window = createInCurrentThread(testClass);
+        TestWindow.displayInCurrentThread(window, new Dimension(500, 300));
+        return window;
+      }
+    });
   }
 
-  public static MDITestWindow createNew(Class<?> testClass) {
-    return new MDITestWindow(testClass);
+  /**
+   * Creates a new <code>{@link MDITestWindow}</code>. This method is executed in the event dispatch thread.
+   * @param testClass the class of the test where the window to create will be used. The simple name of the given class
+   * will be used as the title of the created window.
+   * @return the created window.
+   */
+  public static MDITestWindow createInEDT(final Class<?> testClass) {
+    return execute(new GuiQuery<MDITestWindow>() {
+      protected MDITestWindow executeInEDT() {
+        return createInCurrentThread(testClass);
+      }
+    });
   }
 
   private final JDesktopPane desktop;
   private final JInternalFrame internalFrame;
 
+  private static MDITestWindow createInCurrentThread(Class<?> testClass) {
+    return new MDITestWindow(testClass);
+  }
+
+  /**
+   * Creates a new </code>{@link MDITestWindow}</code>.
+   * @param testClass the class of the test where the window to create will be used. The simple name of the given class
+   * will be used as the title of the created window.
+   */
   protected MDITestWindow(Class<?> testClass) {
     super(testClass);
     desktop = new JDesktopPane();
@@ -55,7 +88,14 @@ public class MDITestWindow extends TestWindow {
     setPreferredSize(new Dimension(500, 300));
   }
 
+  /**
+   * Creates a new <code>{@link JInternalFrame}</code> with a size of 200 x 100. The title of the created internal frame
+   * includes the value of a counter that is automatically increased every time a new internal frame is created. This
+   * method is <code>not</code> executed in the event dispatch thread.
+   * @return the created frame.
+   */
   protected static JInternalFrame createInternalFrame() {
+    // TODO: should be create and add
     JInternalFrame internalFrame = new JInternalFrame(concat("Internal Frame ", ++internalFrameCounter));
     internalFrame.setIconifiable(true);
     internalFrame.setSize(new Dimension(200, 100));
@@ -63,7 +103,15 @@ public class MDITestWindow extends TestWindow {
     return internalFrame;
   }
 
+  /**
+   * Returns the container containing multiple documents (internal frames.)
+   * @return the container containing multiple documents (internal frames.)
+   */
   public JDesktopPane desktop() { return desktop; }
+  
+  /**
+   * Returns the internal frame created by default.
+   * @return the internal frame created by default.
+   */
   public JInternalFrame internalFrame() { return internalFrame; }
-
 }
