@@ -68,7 +68,7 @@ public class JListDriverTest {
   private TestList dragList;
   private TestList dropList;
   private JListDriver driver;
-  
+
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     cellReader = new JListCellReaderStub();
@@ -179,15 +179,8 @@ public class JListDriverTest {
     try {
       driver.selectItem(dragList, 2);
       fail("Expecting exception");
-    } catch (ActionFailedException e) {
-      assertEnabledComponentWasExpected(e);
-    }
+    } catch (ActionFailedException e) {}
     assertDragListHasNoSelection();
-  }
-
-  private void assertEnabledComponentWasExpected(ActionFailedException e) {
-    assertThat(e).message().contains("Expecting component")
-                           .contains("to be enabled");
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -213,9 +206,7 @@ public class JListDriverTest {
     try {
       driver.selectItem(dragList, "two");
       fail("Expecting exception");
-    } catch (ActionFailedException e) {
-      assertEnabledComponentWasExpected(e);
-    }
+    } catch (ActionFailedException e) {}
     assertDragListHasNoSelection();
   }
 
@@ -243,7 +234,10 @@ public class JListDriverTest {
   public void shouldNotSelectItemsWithGivenTextIsJListIsDisabled(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     clearAndDisableDragList();
-    driver.selectItems(dragList, array("two", "three"));
+    try {
+      driver.selectItems(dragList, array("two", "three"));
+      fail("Expecting exception");
+    } catch (ActionFailedException e) {}
     assertDragListHasNoSelection();
   }
 
@@ -280,9 +274,7 @@ public class JListDriverTest {
     try {
       driver.selectItems(dragList, new int[] { 1, 2 });
       fail("Expecting exception");
-    } catch (ActionFailedException e) {
-      assertEnabledComponentWasExpected(e);
-    }
+    } catch (ActionFailedException e) {}
     assertDragListHasNoSelection();
   }
 
@@ -300,9 +292,7 @@ public class JListDriverTest {
     try {
       driver.selectItems(dragList, from(0), to(1));
       fail("Expecting exception");
-    } catch (ActionFailedException e) {
-      assertEnabledComponentWasExpected(e);
-    }
+    } catch (ActionFailedException e) {}
     assertDragListHasNoSelection();
   }
 
@@ -328,9 +318,7 @@ public class JListDriverTest {
     try {
       driver.selectItems(dragList, 0, 1);
       fail("Expecting exception");
-    } catch (ActionFailedException e) {
-      assertEnabledComponentWasExpected(e);
-    }
+    } catch (ActionFailedException e) {}
     assertDragListHasNoSelection();
   }
 
