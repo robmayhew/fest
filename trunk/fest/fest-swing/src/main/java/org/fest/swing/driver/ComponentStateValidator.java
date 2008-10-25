@@ -39,7 +39,6 @@ public final class ComponentStateValidator {
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
   public static void validateIsEnabled(Component c) {
-    // TODO test
     if (!c.isEnabled()) throw actionFailure(concat("Expecting component ", format(c), " to be enabled"));
   }
 

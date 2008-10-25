@@ -75,7 +75,7 @@ public class AbstractButtonDriver extends JComponentDriver {
   public void select(AbstractButton button) {
     boolean ready = false;
     try {
-      ready = !isSelectedAndEnabledInEDT(button);
+      ready = !isSelectedAndEnabled(button);
     } catch (UnexpectedException unexpected) {
       throw unexpected.bomb();
     }
@@ -91,7 +91,7 @@ public class AbstractButtonDriver extends JComponentDriver {
   public void unselect(AbstractButton button) {
     boolean ready = false;
     try {
-      ready = isSelectedAndEnabledInEDT(button);
+      ready = isSelectedAndEnabled(button);
     } catch (UnexpectedException unexpected) {
       throw unexpected.bomb();
     }
@@ -99,7 +99,7 @@ public class AbstractButtonDriver extends JComponentDriver {
     click(button);
   }
 
-  static boolean isSelectedAndEnabledInEDT(final AbstractButton button) {
+  private static boolean isSelectedAndEnabled(final AbstractButton button) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         validateIsEnabled(button);
@@ -127,10 +127,10 @@ public class AbstractButtonDriver extends JComponentDriver {
   }
 
   private void assertButtonIsSelected(AbstractButton button, boolean selected) {
-    assertThat(isSelectedInEDT(button)).as(selectedProperty(button)).isEqualTo(selected);
+    assertThat(isSelected(button)).as(selectedProperty(button)).isEqualTo(selected);
   }
 
-  static boolean isSelectedInEDT(final AbstractButton button) {
+  private static boolean isSelected(final AbstractButton button) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return button.isSelected();

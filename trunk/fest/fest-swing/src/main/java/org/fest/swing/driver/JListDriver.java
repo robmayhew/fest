@@ -84,27 +84,23 @@ public class JListDriver extends JComponentDriver {
    */
   public String[] contentsOf(JList list) {
     try {
-      return listContentsInEDT(list, cellReader);
+      return contents(list, cellReader);
     } catch (UnexpectedException unexpected) {
       throw unexpected.bomb();
     }
   }
   
-  private static String[] listContentsInEDT(final JList list, final JListCellReader cellReader) {
+  private static String[] contents(final JList list, final JListCellReader cellReader) {
     return execute(new GuiQuery<String[]>() {
       protected String[] executeInEDT() {
-        return listContents(list, cellReader);
+        String[] values = new String[listSize(list)];
+        for (int i = 0; i < values.length; i++)
+          values[i] = cellValue(list, i, cellReader);
+        return values;
       }
     });
   }
   
-  private static String[] listContents(JList list, JListCellReader cellReader) {
-    String[] values = new String[listSize(list)];
-    for (int i = 0; i < values.length; i++)
-      values[i] = cellValue(list, i, cellReader);
-    return values;
-  }
-
   /**
    * Returns an array of <code>String</code>s that represents the selection in the given <code>{@link JList}</code>,
    * using this driver's <code>{@link JListCellReader}</code>.
@@ -114,29 +110,25 @@ public class JListDriver extends JComponentDriver {
    */
   public String[] selectionOf(JList list) {
     try {
-      return selectionValuesInEDT(list, cellReader);
+      return selectionValues(list, cellReader);
     } catch (UnexpectedException unexpected) {
       throw unexpected.bomb();
     }
   }
 
-  private static String[] selectionValuesInEDT(final JList list, final JListCellReader cellReader) {
+  private static String[] selectionValues(final JList list, final JListCellReader cellReader) {
     return execute(new GuiQuery<String[]>() {
       protected String[] executeInEDT() {
-        return selectionValues(list, cellReader);
+        int[] selectedIndices = list.getSelectedIndices();
+        int selectionCount = selectedIndices.length;
+        String[] values = new String[selectionCount];
+        for (int i = 0; i < selectionCount; i++)
+          values[i] = cellValue(list, selectedIndices[i], cellReader);
+        return values;
       }
     });
   }
   
-  private static String[] selectionValues(JList list, JListCellReader cellReader) {
-    int[] selectedIndices = list.getSelectedIndices();
-    int selectionCount = selectedIndices.length;
-    String[] values = new String[selectionCount];
-    for (int i = 0; i < selectionCount; i++)
-      values[i] = cellValue(list, selectedIndices[i], cellReader);
-    return values;
-  }
-
   /**
    * Selects the items matching the given values.
    * @param list the target <code>JList</code>.
@@ -171,7 +163,7 @@ public class JListDriver extends JComponentDriver {
   public void selectItem(JList list, String value) {
     Pair<Boolean, Point> result = null;
     try {
-      result = scrollToItemIfNotSelectedInEDT(list, value, cellReader);
+      result = scrollToItemIfNotSelected(list, value, cellReader);
     } catch (UnexpectedException unexpected) {
       throw unexpected.bomb();
     }
@@ -181,20 +173,14 @@ public class JListDriver extends JComponentDriver {
 
   // indicates if there is already a selection with the given value
   // returns the center of the cell for the given value
-  private static Pair<Boolean, Point> scrollToItemIfNotSelectedInEDT(final JList list, final String value, 
+  private static Pair<Boolean, Point> scrollToItemIfNotSelected(final JList list, final String value, 
       final JListCellReader cellReader) {
     return execute(new GuiQuery<Pair<Boolean, Point>>() {
       protected Pair<Boolean, Point> executeInEDT() {
-        return scrollToItemIfNotSelected(list, value, cellReader);
+        int index = itemIndex(list, value, cellReader);
+        return scrollToItemIfNotSelected(list, index);
       }
     });
-  }
-
-  // indicates if there is already a selection with the given value
-  // returns the center of the cell for the given value
-  private static Pair<Boolean, Point> scrollToItemIfNotSelected(JList list, String value, JListCellReader cellReader) {
-    int index = itemIndex(list, value, cellReader);
-    return scrollToItemIfNotSelected(list, index);
   }
 
   /**
