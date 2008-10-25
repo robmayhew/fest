@@ -23,7 +23,9 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.core.*;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.format.ComponentFormatter;
 import org.fest.swing.format.Formatting;
@@ -31,8 +33,12 @@ import org.fest.swing.timing.Timeout;
 import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.driver.ComponentEnabledCondition.untilIsEnabled;
 import static org.fest.swing.driver.ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
+import static org.fest.swing.edt.GuiActionExecutionType.RUN_IN_CURRENT_THREAD;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
@@ -75,9 +81,21 @@ public class ComponentDriver {
   /**
    * Simulates a user clicking once the given <code>{@link Component}</code> using the left mouse button.
    * @param c the <code>Component</code> to click on.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
-  public void click(Component c) {
-    robot.click(c);
+  public void click(final Component c) {
+    Point where = null;
+    try {
+      where = execute(new GuiQuery<Point>() {
+        protected Point executeInEDT() {
+          validateIsEnabled(c);
+          return centerOf(c, RUN_IN_CURRENT_THREAD);
+        }
+      });
+    } catch (UnexpectedException unexpected) {
+      throw unexpected.bomb();
+    }
+    robot.click(c, where);
   }
 
   /**

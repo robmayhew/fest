@@ -21,12 +21,18 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.query.JComponentVisibleRectQuery;
 
 import static java.awt.event.KeyEvent.VK_UNDEFINED;
 
+import static org.fest.swing.awt.AWT.centerOfVisibleRect;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
 import static org.fest.swing.driver.JComponentKeyStrokesForActionQuery.keyStrokesForAction;
+import static org.fest.swing.edt.GuiActionExecutionType.RUN_IN_CURRENT_THREAD;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.*;
 
@@ -45,6 +51,26 @@ public class JComponentDriver extends ContainerDriver {
    */
   public JComponentDriver(Robot robot) {
     super(robot);
+  }
+
+  /**
+   * Simulates a user clicking once the given <code>{@link JComponent}</code> using the left mouse button.
+   * @param c the <code>JComponent</code> to click on.
+   * @throws ActionFailedException if the <code>JComponent</code> is disabled.
+   */
+  public void click(final JComponent c) {
+    Point where = null;
+    try {
+      where = execute(new GuiQuery<Point>() {
+        protected Point executeInEDT() {
+          validateIsEnabled(c);
+          return centerOfVisibleRect(c, RUN_IN_CURRENT_THREAD);
+        }
+      });
+    } catch (UnexpectedException unexpected) {
+      throw unexpected.bomb();
+    }
+    super.click(c, where);
   }
 
   /**

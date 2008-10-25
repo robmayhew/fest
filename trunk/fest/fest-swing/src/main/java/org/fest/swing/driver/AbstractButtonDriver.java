@@ -15,8 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Point;
-
 import javax.swing.AbstractButton;
 
 import org.fest.swing.core.Robot;
@@ -26,9 +24,7 @@ import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.query.AbstractButtonTextQuery;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.awt.AWT.centerOfVisibleRect;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
-import static org.fest.swing.edt.GuiActionExecutionType.RUN_IN_CURRENT_THREAD;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
@@ -49,26 +45,6 @@ public class AbstractButtonDriver extends JComponentDriver {
    */
   public AbstractButtonDriver(Robot robot) {
     super(robot);
-  }
-
-  /**
-   * Simulates a user clicking once the given button using the left mouse button.
-   * @param button the button to click on.
-   * @throws ActionFailedException if the button is disabled.
-   */
-  public void click(final AbstractButton button) {
-    Point where = null;
-    try {
-      where = execute(new GuiQuery<Point>() {
-        protected Point executeInEDT() {
-          validateIsEnabled(button);
-          return centerOfVisibleRect(button, RUN_IN_CURRENT_THREAD);
-        }
-      });
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
-    super.click(button, where);
   }
 
   /**
