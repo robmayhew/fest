@@ -78,12 +78,14 @@ public class AbstractButtonDriverTest {
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldNotClickButtonIfButtonDisabled(EventMode eventMode) {
-    // TODO should throw error if disabled
     robot.settings().eventMode(eventMode);
     disable(checkBox);
     robot.waitForIdle();
     ActionPerformedRecorder action = ActionPerformedRecorder.attachTo(checkBox);
-    driver.click(checkBox);
+    try {
+      driver.click(checkBox);
+      fail();
+    } catch (ActionFailedException e) {}
     assertThat(action).wasNotPerformed();
   }
 

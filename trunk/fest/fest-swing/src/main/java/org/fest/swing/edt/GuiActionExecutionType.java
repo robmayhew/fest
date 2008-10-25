@@ -22,5 +22,13 @@ package org.fest.swing.edt;
  */
 public enum GuiActionExecutionType {
 
-  RUN_IN_EDT, RUN_IN_CURRENT_THREAD
+  /**
+   * Execute an action in the event dispatch thread.
+   */
+  RUN_IN_EDT, 
+  
+  /**
+   * Execute an action in the current thread.
+   */
+  RUN_IN_CURRENT_THREAD
 }

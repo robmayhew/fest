@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
+import org.fest.swing.edt.GuiActionExecutionType;
 import org.fest.swing.query.JPopupMenuInvokerQuery;
 import org.fest.swing.util.MouseEventTarget;
 
@@ -29,6 +30,7 @@ import static java.awt.event.InputEvent.*;
 import static javax.swing.SwingUtilities.convertPoint;
 
 import static org.fest.reflect.core.Reflection.method;
+import static org.fest.swing.edt.GuiActionExecutionType.RUN_IN_EDT;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
@@ -52,24 +54,57 @@ public class AWT {
   // Abbot: Macintosh *used* to map button2 to the pop-up trigger (1.3). Not clear when this changed.
   private static final boolean POPUP_ON_BUTTON2 = false;
 
+  
   /**
    * Returns a point at the center of the given <code>{@link Component}</code>.
+   * @param c the given <code>Component</code>.
+   * @param executionType specifies in which thread this method should be executed.
+   * @return a point at the center of the given <code>Component</code>.
+   */
+  public static Point centerOf(Component c, GuiActionExecutionType executionType) {
+    if (shouldRunInEDT(executionType)) return centerOf(c);
+    return centerOf(c.getSize());
+  }
+
+  /**
+   * Returns a point at the center of the given <code>{@link Component}</code>. This method is executed in the event 
+   * dispatch thread.
    * @param c the given <code>Component</code>.
    * @return a point at the center of the given <code>Component</code>.
    */
   public static Point centerOf(Component c) {
-    Dimension size = sizeOf(c);
-    return new Point(size.width / 2, size.height / 2);
+    return centerOf(sizeOf(c));
+  }
+
+  private static Point centerOf(Dimension d) {
+    return new Point(d.width / 2, d.height / 2);
   }
   
+
   /**
-   * Returns a point at the center of the visible rectangle of the given <code>{@link JComponent}</code>.
+   * Returns a point at the center of the visible rectangle of the given <code>{@link JComponent}</code>. This method is
+   * executed in the event dispatch thread.
+   * @param c the given <code>JComponent</code>.
+   * @param executionType specifies in which thread this method should be executed.
+   * @return a point at the center of the visible rectangle of the given <code>JComponent</code>.
+   */
+  public static Point centerOfVisibleRect(JComponent c, GuiActionExecutionType executionType) {
+    if (shouldRunInEDT(executionType)) return centerOf(visibleRectOf(c));
+    return centerOf(c.getVisibleRect());
+  }
+
+  /**
+   * Returns a point at the center of the visible rectangle of the given <code>{@link JComponent}</code>. This method is
+   * executed in the event dispatch thread.
    * @param c the given <code>JComponent</code>.
    * @return a point at the center of the visible rectangle of the given <code>JComponent</code>.
    */
   public static Point centerOfVisibleRect(JComponent c) {
-    Rectangle visibleRect = visibleRectOf(c);
-    return new Point((visibleRect.x + (visibleRect.width / 2)), (visibleRect.y + (visibleRect.height / 2)));
+    return centerOf(visibleRectOf(c));
+  }
+
+  private static Point centerOf(Rectangle r) {
+    return new Point((r.x + (r.width / 2)), (r.y + (r.height / 2)));
   }
 
   /**
@@ -212,6 +247,10 @@ public class AWT {
     return new AWTEvent(c, eventId) {
       private static final long serialVersionUID = 1L;
     };
+  }
+
+  private static boolean shouldRunInEDT(GuiActionExecutionType executionType) {
+    return RUN_IN_EDT.equals(executionType);
   }
 
   /**
