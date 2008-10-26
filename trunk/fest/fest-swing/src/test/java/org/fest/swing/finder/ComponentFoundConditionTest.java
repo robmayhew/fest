@@ -30,7 +30,7 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.BasicComponentFinder.finderWithNewAwtHierarchy;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestWindow.createInEDT;
+import static org.fest.swing.testing.TestWindow.createNewWindow;
 
 /**
  * Tests for <code>{@link ComponentFoundCondition}</code>.
@@ -50,7 +50,7 @@ public class ComponentFoundConditionTest {
     robot = robotWithNewAwtHierarchy();
     matcher = new TypeMatcher();
     condition = new ComponentFoundCondition("",  finderWithNewAwtHierarchy(), matcher);
-    toFind = createInEDT(getClass());
+    toFind = createNewWindow(getClass());
     robot.showWindow(toFind);
   }
 

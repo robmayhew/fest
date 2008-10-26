@@ -84,6 +84,10 @@ public class ComponentDriver {
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
   public void click(final Component c) {
+    robot.click(c, whereToClick(c));
+  }
+
+  private Point whereToClick(final Component c) {
     Point where = null;
     try {
       where = execute(new GuiQuery<Point>() {
@@ -95,16 +99,19 @@ public class ComponentDriver {
     } catch (UnexpectedException unexpected) {
       throw unexpected.bomb();
     }
-    robot.click(c, where);
+    return where;
   }
 
   /**
    * Simulates a user clicking once the given <code>{@link Component}</code> using the given mouse button.
    * @param c the <code>Component</code> to click on.
    * @param button the mouse button to use.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
   public void click(Component c, MouseButton button) {
-    robot.click(c, button);
+    if (button == null) throw new NullPointerException("The given MouseButton should not be null");
+    robot.click(c, whereToClick(c), button, 1);
   }
 
   /**

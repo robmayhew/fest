@@ -57,7 +57,7 @@ public class AWTTest {
   @Test(groups = GUI)
   public void shouldReturnInsetsFromContainer() {
     Robot robot = robotWithNewAwtHierarchy();
-    TestWindow window = TestWindow.createInEDT(getClass());
+    TestWindow window = TestWindow.createNewWindow(getClass());
     try {
       robot.showWindow(window, new Dimension(500, 300));
       Insets insets = AWT.insetsFrom(window);

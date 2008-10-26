@@ -51,7 +51,7 @@ public class ContextTest {
   @BeforeMethod public void setUp() {
     eventQueue = new EventQueue();
     toolkit = ToolkitStub.createNew(eventQueue);
-    window = TestWindow.createInEDT(getClass());
+    window = TestWindow.createNewWindow(getClass());
     windowEventQueueMapping = createMock(WindowEventQueueMapping.class);
     eventQueueMapping = createMock(EventQueueMapping.class);
     createContext();
@@ -75,7 +75,7 @@ public class ContextTest {
   }
 
   @Test public void shouldReturnRootWindows() {
-    final TestWindow anotherFrame = TestWindow.createInEDT(getClass());
+    final TestWindow anotherFrame = TestWindow.createNewWindow(getClass());
     new EasyMockTemplate(windowEventQueueMapping) {
       protected void expectations() {
         expect(windowEventQueueMapping.windows()).andReturn(frameInList());

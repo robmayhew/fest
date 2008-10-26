@@ -43,7 +43,7 @@ public class ComponentStateValidatorTest {
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = TestWindow.createInEDT(getClass());
+    window = TestWindow.createNewWindow(getClass());
   }
   
   @AfterMethod public void tearDown() {

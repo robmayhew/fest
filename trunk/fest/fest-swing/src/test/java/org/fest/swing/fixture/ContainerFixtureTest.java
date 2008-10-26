@@ -89,7 +89,7 @@ public class ContainerFixtureTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = TestWindow.createInEDT(getClass());
+    window = TestWindow.createNewWindow(getClass());
     fixture = new ContainerFixture<TestWindow>(robot, window) {};
   }
 

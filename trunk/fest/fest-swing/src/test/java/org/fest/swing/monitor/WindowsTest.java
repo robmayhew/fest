@@ -53,7 +53,7 @@ import org.testng.annotations.Test;
   private Map<Window, Boolean> hidden;
 
   @BeforeMethod public void setUp() {
-    window = TestWindow.createInEDT(getClass());
+    window = TestWindow.createNewWindow(getClass());
     windows = new Windows();
     pending = windows.pending;
     open = windows.open;

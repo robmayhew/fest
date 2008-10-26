@@ -37,7 +37,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.hierarchy.ContainerComponentsQuery.componentsOf;
 import static org.fest.swing.hierarchy.JFrameContentPaneQuery.contentPaneOf;
 import static org.fest.swing.hierarchy.JInternalFrameIconifyTask.iconify;
-import static org.fest.swing.testing.MDITestWindow.createAndDisplayInEDT;
+import static org.fest.swing.testing.MDITestWindow.createAndShowNewWindow;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -64,7 +64,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @Test(groups = GUI)
   public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() {
     ScreenLock.instance().acquire(this);
-    MDITestWindow window = createAndDisplayInEDT(getClass());
+    MDITestWindow window = createAndShowNewWindow(getClass());
     iconify(window.internalFrame());
     JDesktopPane desktop = window.desktop();
     try {
@@ -83,8 +83,8 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @Test(groups = GUI)
   public void shouldReturnOwnedWindowsIfComponentIsWindow() {
     ScreenLock.instance().acquire(this);
-    TestWindow window = TestWindow.createAndDisplayInEDT(ChildrenFinderTest.class);
-    TestDialog dialog = TestDialog.createAndDisplayInEDT(window);
+    TestWindow window = TestWindow.createAndShowNewWindow(ChildrenFinderTest.class);
+    TestDialog dialog = TestDialog.createAndShowNewDialog(window);
     try {
       assertThat(finder.childrenOf(window)).containsOnly(childrenOf(window));
     } finally {

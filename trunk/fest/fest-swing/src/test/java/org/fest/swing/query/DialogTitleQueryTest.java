@@ -67,7 +67,7 @@ public class DialogTitleQueryTest {
     }
 
     private MyDialog() {
-      super(TestWindow.createInEDT(DialogTitleQueryTest.class));
+      super(TestWindow.createNewWindow(DialogTitleQueryTest.class));
       setTitle("Hello World");
     }
 

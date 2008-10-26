@@ -50,7 +50,7 @@ public class FrameDriverTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    frame = TestWindow.createAndDisplayInEDT(getClass());
+    frame = TestWindow.createAndShowNewWindow(getClass());
     driver = new FrameDriver(robot);
   }
 

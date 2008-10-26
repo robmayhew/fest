@@ -46,7 +46,7 @@ public class WindowStatusTest {
   private Windows windows;
 
   @BeforeMethod public void setUp() throws Exception {
-    window = TestWindow.createInEDT(getClass());
+    window = TestWindow.createNewWindow(getClass());
     windows = createMock(Windows.class);
     status = new WindowStatus(windows);
   }

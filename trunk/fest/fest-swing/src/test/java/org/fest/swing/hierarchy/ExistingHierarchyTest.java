@@ -61,7 +61,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   public void shouldReturnParentOfComponent() {
-    final TestWindow frame = TestWindow.createInEDT(ExistingHierarchyTest.class);
+    final TestWindow frame = TestWindow.createNewWindow(ExistingHierarchyTest.class);
     final JTextField textField = textField().createNew();
     final ParentFinder parentFinder = MockParentFinder.mock();
     hierarchy = new ExistingHierarchy(parentFinder, new ChildrenFinder());

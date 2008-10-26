@@ -43,7 +43,7 @@ public class MDITestWindow extends TestWindow {
    * will be used as the title of the created window.
    * @return the created window.
    */
-  public static MDITestWindow createAndDisplayInEDT(final Class<?> testClass) {
+  public static MDITestWindow createAndShowNewWindow(final Class<?> testClass) {
     return execute(new GuiQuery<MDITestWindow>() {
       protected MDITestWindow executeInEDT() {
         MDITestWindow window = createInCurrentThread(testClass);
@@ -59,7 +59,7 @@ public class MDITestWindow extends TestWindow {
    * will be used as the title of the created window.
    * @return the created window.
    */
-  public static MDITestWindow createInEDT(final Class<?> testClass) {
+  public static MDITestWindow createNewWindow(final Class<?> testClass) {
     return execute(new GuiQuery<MDITestWindow>() {
       protected MDITestWindow executeInEDT() {
         return createInCurrentThread(testClass);

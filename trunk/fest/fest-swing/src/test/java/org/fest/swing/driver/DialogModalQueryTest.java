@@ -79,7 +79,7 @@ public class DialogModalQueryTest {
     }
 
     private MyDialog() {
-      super(TestWindow.createInEDT(DialogModalQueryTest.class));
+      super(TestWindow.createNewWindow(DialogModalQueryTest.class));
       setPreferredSize(new Dimension(200, 100));
     }
 

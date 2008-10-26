@@ -43,7 +43,7 @@ public class ComponentMoveTaskTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = TestWindow.createInEDT(getClass());
+    window = TestWindow.createNewWindow(getClass());
     robot.showWindow(window);
     location = new Point(80, 60);
     assertThat(location).isNotEqualTo(window.getLocationOnScreen());

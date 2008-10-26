@@ -28,7 +28,7 @@ import org.fest.swing.testing.MDITestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.hierarchy.JInternalFrameIconifyTask.iconify;
-import static org.fest.swing.testing.MDITestWindow.createAndDisplayInEDT;
+import static org.fest.swing.testing.MDITestWindow.createAndShowNewWindow;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -56,7 +56,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @Test(groups = GUI)
   public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() {
     ScreenLock.instance().acquire(this);
-    MDITestWindow window = createAndDisplayInEDT(getClass());
+    MDITestWindow window = createAndShowNewWindow(getClass());
     iconify(window.internalFrame());
     Collection<Component> children = finder.nonExplicitChildrenOf(window.desktop());
     try {

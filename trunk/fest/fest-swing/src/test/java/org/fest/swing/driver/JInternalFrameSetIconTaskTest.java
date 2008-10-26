@@ -42,7 +42,7 @@ public class JInternalFrameSetIconTaskTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    MDITestWindow window = MDITestWindow.createInEDT(getClass());
+    MDITestWindow window = MDITestWindow.createNewWindow(getClass());
     internalFrame = window.internalFrame();
     robot.showWindow(window);
   }

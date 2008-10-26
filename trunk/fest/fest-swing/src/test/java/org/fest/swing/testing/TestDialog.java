@@ -50,7 +50,7 @@ public class TestDialog extends JDialog {
    * @param owner the owner of the dialog to create.
    * @return the created window.
    */
-  public static TestDialog createAndDisplayInEDT(final Frame owner) {
+  public static TestDialog createAndShowNewDialog(final Frame owner) {
     return execute(new GuiQuery<TestDialog>() {
       protected TestDialog executeInEDT() {
         TestDialog dialog = createInCurrentThread(owner);
@@ -66,7 +66,7 @@ public class TestDialog extends JDialog {
    * @param owner the owner of the dialog to create.
    * @return the created window.
    */
-  public static TestDialog createInEDT(final Frame owner) {
+  public static TestDialog createNewDialog(final Frame owner) {
     return execute(new GuiQuery<TestDialog>() {
       protected TestDialog executeInEDT() {
         return createInCurrentThread(owner);

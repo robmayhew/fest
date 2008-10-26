@@ -40,7 +40,7 @@ public class ExtensionTest {
   private FrameFixture fixture;
 
   @BeforeMethod public void setUp() {
-    fixture = new FrameFixture(TestWindow.createInEDT(ExtensionTest.class));
+    fixture = new FrameFixture(TestWindow.createNewWindow(ExtensionTest.class));
   }
 
   @AfterMethod public void tearDown() {

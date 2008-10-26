@@ -48,7 +48,7 @@ public class TestWindow extends JFrame {
    * will be used as the title of the created window.
    * @return the created window.
    */
-  public static TestWindow createAndDisplayInEDT(final Class<?> testClass) {
+  public static TestWindow createAndShowNewWindow(final Class<?> testClass) {
     return execute(new GuiQuery<TestWindow>() {
       protected TestWindow executeInEDT() {
         TestWindow window = createInCurrentThread(testClass);
@@ -64,7 +64,7 @@ public class TestWindow extends JFrame {
    * will be used as the title of the created window.
    * @return the created window.
    */
-  public static TestWindow createInEDT(final Class<?> testClass) {
+  public static TestWindow createNewWindow(final Class<?> testClass) {
     return execute(new GuiQuery<TestWindow>() {
       protected TestWindow executeInEDT() {
         return createInCurrentThread(testClass);

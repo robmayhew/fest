@@ -69,7 +69,7 @@ public class ModalDialogLookupTest {
     }
     
     final JButton button = new JButton("Launch");
-    final TestDialog dialog = TestDialog.createInEDT(this);
+    final TestDialog dialog = TestDialog.createNewDialog(this);
     
     private MyWindow() {
       super(ModalDialogLookupTest.class);

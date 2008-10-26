@@ -49,8 +49,8 @@ public class TransientWindowListenerTest {
   @BeforeMethod public void setUp() {
     mockWindowFilter = createMock(MockWindowFilter.class);
     listener = new TransientWindowListener(mockWindowFilter);
-    parent = TestWindow.createInEDT(getClass());
-    eventSource = TestDialog.createInEDT(parent);
+    parent = TestWindow.createNewWindow(getClass());
+    eventSource = TestDialog.createNewDialog(parent);
   }
 
   @AfterMethod public void tearDown() {

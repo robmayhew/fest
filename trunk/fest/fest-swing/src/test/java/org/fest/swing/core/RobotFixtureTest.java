@@ -259,7 +259,7 @@ public class RobotFixtureTest {
   }
 
   public void shouldCloseWindow() {
-    final TestWindow w = TestWindow.createInEDT(getClass());
+    final TestWindow w = TestWindow.createNewWindow(getClass());
     w.display();
     robot.close(w);
     pause(new Condition("Window closed") {
@@ -271,7 +271,7 @@ public class RobotFixtureTest {
   }
 
   public void shouldNotCloseWindowIfWindowNotShowing() {
-    TestWindow w = TestWindow.createInEDT(getClass());
+    TestWindow w = TestWindow.createNewWindow(getClass());
     w.display();
     setVisible(w, false);
     robot.waitForIdle();

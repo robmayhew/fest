@@ -51,8 +51,8 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @Test(groups = GUI)
   public void shouldReturnTrueIfDialogIsShowingAndTitleIsEqualToExpected() {
     ScreenLock.instance().acquire(this);
-    TestWindow window = TestWindow.createAndDisplayInEDT(DialogByTitleMatcher.class);
-    TestDialog dialog = TestDialog.createAndDisplayInEDT(window);
+    TestWindow window = TestWindow.createAndShowNewWindow(DialogByTitleMatcher.class);
+    TestDialog dialog = TestDialog.createAndShowNewDialog(window);
     String title = "Hello";
     dialog.setTitle(title);
     try {
@@ -75,8 +75,8 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @Test(groups = GUI)
   public void shouldReturnFalseIfDialogIsShowingAndTitleIsNotEqualToExpected() {
     ScreenLock.instance().acquire(this);
-    TestWindow window = TestWindow.createAndDisplayInEDT(DialogByTitleMatcher.class);
-    TestDialog dialog = TestDialog.createAndDisplayInEDT(window);
+    TestWindow window = TestWindow.createAndShowNewWindow(DialogByTitleMatcher.class);
+    TestDialog dialog = TestDialog.createAndShowNewDialog(window);
     try {
       DialogByTitleMatcher matcher = DialogByTitleMatcher.withTitleAndShowing("Hello");
       assertThat(matcher.matches(dialog)).isFalse();

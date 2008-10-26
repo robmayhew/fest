@@ -43,7 +43,7 @@ public class JDesktopIconInternalFrameQueryTest {
 
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
-    window = MDITestWindow.createAndDisplayInEDT(getClass());
+    window = MDITestWindow.createAndShowNewWindow(getClass());
     internalFrame = window.internalFrame();
   }
 
