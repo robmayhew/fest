@@ -38,6 +38,8 @@ import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.StopWatch;
 import org.fest.swing.testing.TestWindow;
 
+import static java.awt.event.KeyEvent.*;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.awt.AWT.centerOf;
@@ -46,6 +48,7 @@ import static org.fest.swing.core.MouseClickInfo.*;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
+import static org.fest.swing.query.JTextComponentTextQuery.textOf;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.testing.StopWatch.startNewStopWatch;
@@ -68,11 +71,14 @@ public class ComponentDriverTest {
   private ComponentDriver driver;
   private MyWindow window;
   private MyButton button;
+  private JTextField textField;
+
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = MyWindow.createNew();
     button = window.button;
+    textField = window.textField;
     driver = new ComponentDriver(robot);
     robot.showWindow(window);
   }
@@ -344,10 +350,46 @@ public class ComponentDriverTest {
     long ellapsedTimeInMs = stopWatch.ellapsedTime() / 1000;
     assertThat(ellapsedTimeInMs).isGreaterThanOrEqualTo(minimumWaitedTime);
   }
+  
+  public void shouldPassIfComponentIsNotEnabledAsExpected() {
+    disableButton();
+    driver.requireDisabled(button);
+  }
+  
+  public void shouldFailIfComponentIsEnabledAndExpectedToBeNotEnabled() {
+    try {
+      driver.requireDisabled(button);
+      fail("Expecting exception");
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'enabled'")
+                             .contains("expected:<false> but was:<true>");
+    }
+  }
 
   private void disableButton() {
     disable(button);
     robot.waitForIdle();
+  }
+  
+  @Test(expectedExceptions = NullPointerException.class, groups = GUI)
+  public void shouldThrowErrorIfArrayOfKeysToPressAndReleaseIsNull() {
+    int[] keyCodes = null;
+    driver.pressAndReleaseKeys(button, keyCodes);
+  }
+  
+  public void shouldPressAndReleaseKeys() {
+    int[] keyCodes = { VK_A, VK_C, VK_E };
+    driver.pressAndReleaseKeys(textField, keyCodes);
+    assertThat(textOf(textField)).isEqualTo("ace");
+  }
+
+  public void shouldThrowErrorWhenPressingAndReleasingKeysInDisabledComponent() {
+    disable(textField);
+    try {
+      driver.pressAndReleaseKeys(textField, VK_A);
+      fail("Expecting exception");
+    } catch (ActionFailedException e) {}
+    assertThat(textOf(textField)).isEmpty();
   }
   
   private static class MyWindow extends TestWindow {

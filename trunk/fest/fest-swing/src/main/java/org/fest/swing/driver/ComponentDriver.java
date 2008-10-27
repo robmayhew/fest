@@ -105,6 +105,7 @@ public class ComponentDriver {
    * @param c the <code>Component</code> to click on.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
   public void click(Component c, MouseClickInfo mouseClickInfo) {
     if (mouseClickInfo == null) throw new NullPointerException("The given MouseClickInfo should not be null");
@@ -174,16 +175,6 @@ public class ComponentDriver {
   public void click(Component c, Point where) {
     validateIsEnabled(c, RUN_IN_EDT);
     robot.click(c, where);
-  }
-
-  /**
-   * Gives input focus to the given <code>{@link Component}</code> and waits until the <code>{@link Component}</code>
-   * has focus.
-   * @param c the component to give focus to.
-   */
-  public void focusAndWaitForFocusGain(Component c) {
-    validateIsEnabled(c, RUN_IN_EDT);
-    robot.focusAndWaitForFocusGain(c);
   }
 
   protected Settings settings() {
@@ -260,11 +251,12 @@ public class ComponentDriver {
    * @param keyCodes one or more codes of the keys to press.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
    * @see java.awt.event.KeyEvent
    */
   public void pressAndReleaseKeys(Component c, int... keyCodes) {
     if (keyCodes == null) throw new NullPointerException("The array of key codes should not be null");
-    focus(c);
+    focusAndWaitForFocusGain(c);
     robot.pressAndReleaseKeys(keyCodes);
   }
 
@@ -320,6 +312,17 @@ public class ComponentDriver {
   public void releaseKey(Component c, int keyCode) {
     focus(c);
     robot.releaseKey(keyCode);
+  }
+
+  /**
+   * Gives input focus to the given <code>{@link Component}</code> and waits until the <code>{@link Component}</code>
+   * has focus.
+   * @param c the component to give focus to.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   */
+  public void focusAndWaitForFocusGain(Component c) {
+    validateIsEnabled(c, RUN_IN_EDT);
+    robot.focusAndWaitForFocusGain(c);
   }
 
   /**
