@@ -18,6 +18,7 @@ package org.fest.swing.driver;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -32,6 +33,7 @@ import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.StopWatch;
 import org.fest.swing.testing.TestWindow;
@@ -49,6 +51,7 @@ import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.testing.StopWatch.startNewStopWatch;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.timing.Pause.pause;
+import static org.fest.swing.timing.Timeout.timeout;
 
 /**
  * Tests for <code>{@link ComponentDriver}</code>.
@@ -58,6 +61,8 @@ import static org.fest.swing.timing.Pause.pause;
  */
 @Test(groups = GUI)
 public class ComponentDriverTest {
+
+  private static final int PAUSE_TIME = 2000;
 
   private Robot robot;
   private ComponentDriver driver;
@@ -86,8 +91,7 @@ public class ComponentDriverTest {
 
   public void shouldThrowErrorWhenClickingDisabledComponent() {
     ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
-    disable(button);
-    robot.waitForIdle();
+    disableButton();
     try {
       driver.click(button);
       fail("Expecting exception");
@@ -115,8 +119,7 @@ public class ComponentDriverTest {
 
   public void shouldThrowErrorWhenClickingDisabledComponentWithGivenMouseButton() {
     ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
-    disable(button);
-    robot.waitForIdle();
+    disableButton();
     try {
       driver.click(button, RIGHT_BUTTON);
       fail("Expecting exception");
@@ -144,8 +147,7 @@ public class ComponentDriverTest {
 
   public void shouldThrowErrorWhenClickingDisabledComponentWithGivenMouseClickInfo() {
     ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
-    disable(button);
-    robot.waitForIdle();
+    disableButton();
     try {
       driver.click(button, leftButton());
       fail("Expecting exception");
@@ -162,8 +164,7 @@ public class ComponentDriverTest {
 
   public void shouldThrowErrorWhenDoubleClickingDisabledComponent() {
     ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
-    disable(button);
-    robot.waitForIdle();
+    disableButton();
     try {
       driver.doubleClick(button);
       fail("Expecting exception");
@@ -181,8 +182,7 @@ public class ComponentDriverTest {
 
   public void shouldThrowErrorWhenRightClickingDisabledComponent() {
     ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
-    disable(button);
-    robot.waitForIdle();
+    disableButton();
     try {
       driver.rightClick(button);
       fail("Expecting exception");
@@ -203,8 +203,7 @@ public class ComponentDriverTest {
 
   public void shouldThrowErrorWhenClickingDisabledComponentAtGivenPoint() {
     ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
-    disable(button);
-    robot.waitForIdle();
+    disableButton();
     try {
       driver.click(button, new Point(10, 10));
       fail("Expecting exception");
@@ -215,12 +214,22 @@ public class ComponentDriverTest {
   public void shouldGiveFocusToComponentAndWaitTillComponentIsFocused() {
     assertThat(hasFocus(button)).isFalse();
     button.waitToRequestFocus();
+    final CountDownLatch done = new CountDownLatch(1);
     StopWatch stopWatch = startNewStopWatch();
-    driver.focusAndWaitForFocusGain(button);
+    new Thread() {
+      @Override public void run() {
+        driver.focusAndWaitForFocusGain(button);
+        done.countDown();
+      }
+    }.start();
+    try {
+      done.await();
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    }
     stopWatch.stop();
     assertThat(hasFocus(button)).isTrue();
-    long ellapsedTimeInMs = stopWatch.ellapsedTime() / 1000;
-    assertThat(ellapsedTimeInMs).isGreaterThanOrEqualTo(2000);
+    assertThatWaited(stopWatch, PAUSE_TIME);
   }
 
   private static boolean hasFocus(final Component c) {
@@ -233,8 +242,7 @@ public class ComponentDriverTest {
 
   public void shouldThrowErrorWhenGivingFocusToDisabledComponentAndWaiting() {
     ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
-    disable(button);
-    robot.waitForIdle();
+    disableButton();
     try {
       driver.focusAndWaitForFocusGain(button);
       fail("Expecting exception");
@@ -267,8 +275,7 @@ public class ComponentDriverTest {
   }
 
   public void shouldFailIfComponentIsNotVisibleAndExpectedToBeVisible() {
-    setVisible(window, false);
-    robot.waitForIdle();
+    hideWindow();
     try {
       driver.requireVisible(window);
       fail("Expecting exception");
@@ -276,9 +283,73 @@ public class ComponentDriverTest {
       assertThat(e).message().contains("property:'visible'")
                              .contains("expected:<true> but was:<false>");
     }
-
   }
 
+  public void shouldPassIfComponentIsNotVisibleAsExpected() {
+    hideWindow();
+    driver.requireNotVisible(window);
+  }
+  
+  private void hideWindow() {
+    setVisible(window, false);
+    robot.waitForIdle();
+  }
+  
+  public void shouldFailIfComponentIsVisibleAndExpectedToBeNotVisible() {
+    try {
+      driver.requireNotVisible(button);
+      fail("Expecting exception");
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'visible'")
+                             .contains("expected:<false> but was:<true>");
+    }
+  }
+  
+  public void shouldPassIfComponentIsEnabledAsExpected() {
+    driver.requireEnabled(button);
+  }
+  
+  public void shouldFailIfComponentIsNotEnabledAndExpectedToBeEnabled() {
+    disableButton();
+    try {
+      driver.requireEnabled(button);
+      fail("Expecting exception");
+    } catch (AssertionError e) {
+      assertThat(e).message().contains("property:'enabled'")
+                             .contains("expected:<true> but was:<false>");
+    }
+  }
+
+  public void shouldPassIfComponentIsEnabledAsExpectedBeforeTimeout() {
+    driver.requireEnabled(button, timeout(100));
+  }
+  
+  public void shouldFailIfComponentIsNotEnabledAsExpectedBeforeTimeout() {
+    disableButton();
+    int timeout = 1000;
+    StopWatch stopWatch = startNewStopWatch();
+    try {
+      driver.requireEnabled(button, timeout(timeout));
+      fail("Expecting exception");
+    } catch (WaitTimedOutError e) {
+      assertThat(e).message().contains("Timed out waiting for")
+                             .contains(button.getClass().getName())
+                             .contains("to be enabled");
+    }
+    stopWatch.stop();
+    assertThatWaited(stopWatch, timeout);
+  }
+
+  private void assertThatWaited(StopWatch stopWatch, long minimumWaitedTime) {
+    long ellapsedTimeInMs = stopWatch.ellapsedTime() / 1000;
+    assertThat(ellapsedTimeInMs).isGreaterThanOrEqualTo(minimumWaitedTime);
+  }
+
+  private void disableButton() {
+    disable(button);
+    robot.waitForIdle();
+  }
+  
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
@@ -311,7 +382,7 @@ public class ComponentDriverTest {
     void waitToRequestFocus() { waitToRequestFocus = true; }
 
     @Override public boolean requestFocusInWindow() {
-      if (waitToRequestFocus) pause(2000);
+      if (waitToRequestFocus) pause(PAUSE_TIME);
       return super.requestFocusInWindow();
     }
   }

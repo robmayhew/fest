@@ -5,6 +5,22 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
+    <release version="1.0b3" date="TBD" description="Subsequent release">
+      <action dev="alruiz, wanghy" type="fix" issue="216" 
+          due-to="Simeon Fitch, Michael Hüttermann, Jean-Francois Poilpret, Tarjei Skorgenes">
+        Replaced condition to verify a GuiAction is executed in the event dispatch thread with a 
+        java.util.concurrent.CountDownLatch in org.fest.swing.edt.GuiActionRunner
+      </action>
+      <action dev="alruiz, wanghy" type="remove" issue="216" 
+          due-to="Simeon Fitch, Michael Hüttermann, Jean-Francois Poilpret, Tarjei Skorgenes">
+        Removed org.fest.swing.driver.JListLocation.
+      </action>
+      <action dev="alruiz, wanghy" type="add" issue="216" 
+          due-to="Simeon Fitch, Michael Hüttermann, Jean-Francois Poilpret, Tarjei Skorgenes">
+        Added org.fest.swing.timing.LazyLoadingDescription and org.fest.swing.edt.GuiLazyLoadingDescription to
+        lazy-load the description of a org.fest.swing.timing.Condition.
+      </action>
+    </release>
     <release version="1.0b2" date="2008-10-16" description="Subsequent release">
       <action dev="alruiz" type="add" issue="109">
         Added class org.fest.swing.fixture.ComponentFixtureExtension to add extension methods to ContainerFixture.

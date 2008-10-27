@@ -14,15 +14,16 @@
  */
 package org.fest.swing.timing;
 
-
 /**
  * Understands a condition to verify, usually used in the method <code>{@link Pause#pause(Condition)}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public abstract class Condition {
 
   private final String description;
+  private final LazyLoadingDescription lazyLoadingDescription;
 
   /**
    * Creates a new <code>{@link Condition}</code>.
@@ -30,8 +31,18 @@ public abstract class Condition {
    */
   public Condition(String description) {
     this.description = description;
+    lazyLoadingDescription = null;
   }
 
+  /**
+   * Creates a new </code>{@link Condition}</code>.
+   * @param lazyLoadingDescription lazy-loaded description of this condition.
+   */
+  public Condition(LazyLoadingDescription lazyLoadingDescription) {
+    this.lazyLoadingDescription = lazyLoadingDescription;
+    description = null;
+  }
+  
   /**
    * Checks if the condition has been satisfied.
    * @return <code>true</code> if the condition has been satisfied, otherwise <code>false</code>.
@@ -42,8 +53,9 @@ public abstract class Condition {
    * Returns the <code>String</code> representation of this condition, which is its description.
    * @return the description of this condition.
    */
-  @Override
-  public final String toString() {
+  @Override public final String toString() {
+    // try lazy-loading description first
+    if (lazyLoadingDescription != null) return lazyLoadingDescription.description();
     return description;
   }
 
