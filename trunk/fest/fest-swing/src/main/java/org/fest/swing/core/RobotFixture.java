@@ -232,7 +232,6 @@ public class RobotFixture implements Robot {
     FocusMonitor focusMonitor = FocusMonitor.attachTo(c);
     // for pointer focus
     moveMouse(c);
-    waitForIdle();
     // Make sure the correct window is in front
     Window currentOwnerAncestor = currentOwner != null ? ancestorOf(currentOwner) : null;
     Window componentAncestor = ancestorOf(c);

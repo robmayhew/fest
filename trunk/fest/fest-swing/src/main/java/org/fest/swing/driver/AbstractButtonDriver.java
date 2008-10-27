@@ -25,6 +25,7 @@ import org.fest.swing.query.AbstractButtonTextQuery;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
+import static org.fest.swing.edt.GuiActionExecutionType.RUN_IN_CURRENT_THREAD;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
@@ -101,7 +102,7 @@ public class AbstractButtonDriver extends JComponentDriver {
   private static boolean isSelectedAndEnabled(final AbstractButton button) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
-        validateIsEnabled(button);
+        validateIsEnabled(button, RUN_IN_CURRENT_THREAD);
         return button.isSelected();
       }
     });

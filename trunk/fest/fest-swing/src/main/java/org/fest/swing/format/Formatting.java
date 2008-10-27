@@ -113,7 +113,7 @@ public class Formatting {
 
   /**
    * Returns a <code>String</code> representation of the given <code>{@link Component}</code>. This method is
-   * <strong>code</strong> invoked in the event dispatch thread. 
+   * <strong>not</strong> invoked in the event dispatch thread.
    * @param c the given <code>Component</code>.
    * @return a <code>String</code> representation of the given <code>Component</code>.
    */

@@ -173,7 +173,7 @@ public class JListDriverTest {
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemAtGivenIndexAndJListIsDisabled(EventMode eventMode) {
+  public void shouldThrowErrorWhenSelectingItemAtGivenIndexInDisabledJList(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     clearAndDisableDragList();
     try {
@@ -200,7 +200,7 @@ public class JListDriverTest {
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemWithGivenTextAndJListIsDisabled(EventMode eventMode) {
+  public void shouldThrowErrorWhenSelectingItemWithGivenTextInDisabledJList(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     clearAndDisableDragList();
     try {
@@ -268,7 +268,7 @@ public class JListDriverTest {
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemsWithGivenIndicesAndJListIsDisabled(EventMode eventMode) {
+  public void shouldThrowErrorWhenSelectingItemsWithGivenIndicesInDisabledJList(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     clearAndDisableDragList();
     try {
@@ -286,7 +286,7 @@ public class JListDriverTest {
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemsInFluentRangeAndJListIsDisabled(EventMode eventMode) {
+  public void shouldThrowErrorWhenSelectingItemsInFluentRangeInDisabledJList(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     clearAndDisableDragList();
     try {
@@ -312,7 +312,7 @@ public class JListDriverTest {
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemsInGivenRangeAndJListIsDisabled(EventMode eventMode) {
+  public void shouldThrowErrorWhenSelectingItemsInGivenRangeInDisabledJList(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     clearAndDisableDragList();
     try {
@@ -549,7 +549,6 @@ public class JListDriverTest {
       dropList.setName("dropList");
       add(decorate(dragList));
       add(decorate(dropList));
-      setPreferredSize(new Dimension(300, 100));
     }
 
     private JScrollPane decorate(JList list) {

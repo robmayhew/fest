@@ -23,6 +23,7 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.core.*;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiActionExecutionType;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.UnexpectedException;
@@ -34,10 +35,11 @@ import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.awt.AWT.centerOf;
+import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.driver.ComponentEnabledCondition.untilIsEnabled;
 import static org.fest.swing.driver.ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
-import static org.fest.swing.edt.GuiActionExecutionType.RUN_IN_CURRENT_THREAD;
+import static org.fest.swing.edt.GuiActionExecutionType.*;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
@@ -87,21 +89,6 @@ public class ComponentDriver {
     robot.click(c, whereToClick(c));
   }
 
-  private Point whereToClick(final Component c) {
-    Point where = null;
-    try {
-      where = execute(new GuiQuery<Point>() {
-        protected Point executeInEDT() {
-          validateIsEnabled(c);
-          return centerOf(c, RUN_IN_CURRENT_THREAD);
-        }
-      });
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
-    return where;
-  }
-
   /**
    * Simulates a user clicking once the given <code>{@link Component}</code> using the given mouse button.
    * @param c the <code>Component</code> to click on.
@@ -110,8 +97,7 @@ public class ComponentDriver {
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
   public void click(Component c, MouseButton button) {
-    if (button == null) throw new NullPointerException("The given MouseButton should not be null");
-    robot.click(c, whereToClick(c), button, 1);
+    click(c, button, 1);
   }
 
   /**
@@ -128,17 +114,19 @@ public class ComponentDriver {
   /**
    * Simulates a user double-clicking the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
   public void doubleClick(Component c) {
-    robot.doubleClick(c);
+    click(c, LEFT_BUTTON, 2);
   }
 
   /**
    * Simulates a user right-clicking the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
   public void rightClick(Component c) {
-    robot.rightClick(c);
+    click(c, RIGHT_BUTTON);
   }
 
   /**
@@ -146,18 +134,46 @@ public class ComponentDriver {
    * @param c the <code>Component</code> to click on.
    * @param button the mouse button to click.
    * @param times the number of times to click the given mouse button.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
   public void click(Component c, MouseButton button, int times) {
-    robot.click(c, button, times);
+    if (button == null) throw new NullPointerException("The given MouseButton should not be null");
+    robot.click(c, whereToClick(c), button, times);
+  }
+
+  /**
+   * Returns the point where this driver should click a <code>{@link Component}</code>. This implementation returns the
+   * center of such <code>Component</code>.
+   * @param c the <code>Component</code> to click on.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @return the point where the center of the given <code>Component</code> is.
+   */
+  protected Point whereToClick(final Component c) {
+    Point where = null;
+    try {
+      where = execute(new GuiQuery<Point>() {
+        protected Point executeInEDT() {
+          GuiActionExecutionType executionType = RUN_IN_CURRENT_THREAD;
+          validateIsEnabled(c, executionType);
+          return centerOf(c, executionType);
+        }
+      });
+    } catch (UnexpectedException unexpected) {
+      throw unexpected.bomb();
+    }
+    return where;
   }
 
   /**
    * Simulates a user clicking at the given position on the given <code>{@link Component}</code>.
-   * @param target the <code>Component</code> to click on.
+   * @param c the <code>Component</code> to click on.
    * @param where the position where to click.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
-  public void click(Component target, Point where) {
-    robot.click(target, where);
+  public void click(Component c, Point where) {
+    validateIsEnabled(c, RUN_IN_EDT);
+    robot.click(c, where);
   }
 
   /**
@@ -166,6 +182,7 @@ public class ComponentDriver {
    * @param c the component to give focus to.
    */
   public void focusAndWaitForFocusGain(Component c) {
+    validateIsEnabled(c, RUN_IN_EDT);
     robot.focusAndWaitForFocusGain(c);
   }
 

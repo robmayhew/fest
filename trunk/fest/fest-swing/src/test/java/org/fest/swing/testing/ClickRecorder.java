@@ -15,9 +15,6 @@
  */
 package org.fest.swing.testing;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.MouseButton.*;
-
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Point;
@@ -28,6 +25,9 @@ import java.util.Map;
 
 import org.fest.assertions.AssertExtension;
 import org.fest.swing.core.MouseButton;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.MouseButton.*;
 
 /**
  * Understands a mouse listener that records mouse events.
@@ -74,11 +74,6 @@ public class ClickRecorder extends MouseAdapter implements AssertExtension {
     return this;
   }
 
-  public ClickRecorder clicked(MouseButton button) {
-    assertThat(clickedButton).isEqualTo(button);
-    return this;
-  }
-
   public ClickRecorder timesClicked(int times) {
     assertThat(clickCount).isEqualTo(times);
     return this;
@@ -94,6 +89,15 @@ public class ClickRecorder extends MouseAdapter implements AssertExtension {
 
   public ClickRecorder wasRightClicked() {
     return clicked(RIGHT_BUTTON).timesClicked(1);
+  }
+
+  public ClickRecorder clicked(MouseButton button) {
+    return wasClickedWith(button);
+  }
+
+  public ClickRecorder wasClickedWith(MouseButton button) {
+    assertThat(clickedButton).isEqualTo(button);
+    return this;
   }
 
   public ClickRecorder clickedAt(Point p) {
