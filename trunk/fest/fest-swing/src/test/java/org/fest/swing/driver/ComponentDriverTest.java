@@ -38,11 +38,13 @@ import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.StopWatch;
 import org.fest.swing.testing.TestWindow;
 
+import static java.awt.Event.SHIFT_MASK;
 import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.awt.AWT.centerOf;
+import static org.fest.swing.core.KeyPressInfo.keyCode;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.MouseClickInfo.*;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -392,6 +394,25 @@ public class ComponentDriverTest {
     assertThat(textOf(textField)).isEmpty();
   }
   
+  @Test(expectedExceptions = NullPointerException.class, groups = GUI)
+  public void shouldThrowErrorIfKeyPressInfoIsNull() {
+    driver.pressAndReleaseKey(button, null);
+  }
+  
+  public void shouldPressAndReleaseKeyInSpecifiedKeyPressInfo() {
+    driver.pressAndReleaseKey(textField, keyCode(VK_A).modifiers(SHIFT_MASK));
+    assertThat(textOf(textField)).isEqualTo("A");
+  }
+  
+  public void shouldThrowErrorWhenPressingAndReleasingKeyInDisabledComponent() {
+    disable(textField);
+    try {
+      driver.pressAndReleaseKey(textField, keyCode(VK_A).modifiers(SHIFT_MASK));
+      fail("Expecting exception");
+    } catch (ActionFailedException e) {}
+    assertThat(textOf(textField)).isEmpty();
+  }
+
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 

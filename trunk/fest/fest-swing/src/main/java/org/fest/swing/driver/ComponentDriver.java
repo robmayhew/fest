@@ -286,7 +286,7 @@ public class ComponentDriver {
    * @see java.awt.event.InputEvent
    */
   public void pressAndReleaseKey(Component c, int keyCode, int[] modifiers) {
-    focus(c);
+    focusAndWaitForFocusGain(c);
     robot.pressAndReleaseKey(keyCode, modifiers);
   }
 
