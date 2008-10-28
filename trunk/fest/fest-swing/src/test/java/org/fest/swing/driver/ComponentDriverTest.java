@@ -380,18 +380,20 @@ public class ComponentDriverTest {
   }
   
   public void shouldPressAndReleaseKeys() {
+    assertThatTextFieldIsEmpty();
     int[] keyCodes = { VK_A, VK_C, VK_E };
     driver.pressAndReleaseKeys(textField, keyCodes);
     assertThat(textOf(textField)).isEqualTo("ace");
   }
 
   public void shouldThrowErrorWhenPressingAndReleasingKeysInDisabledComponent() {
-    disable(textField);
+    assertThatTextFieldIsEmpty();
+    disableTextField();
     try {
       driver.pressAndReleaseKeys(textField, VK_A);
       fail("Expecting exception");
     } catch (ActionFailedException e) {}
-    assertThat(textOf(textField)).isEmpty();
+    assertThatTextFieldIsEmpty();
   }
   
   @Test(expectedExceptions = NullPointerException.class, groups = GUI)
@@ -400,16 +402,54 @@ public class ComponentDriverTest {
   }
   
   public void shouldPressAndReleaseKeyInSpecifiedKeyPressInfo() {
+    assertThatTextFieldIsEmpty();
     driver.pressAndReleaseKey(textField, keyCode(VK_A).modifiers(SHIFT_MASK));
     assertThat(textOf(textField)).isEqualTo("A");
   }
   
   public void shouldThrowErrorWhenPressingAndReleasingKeyInDisabledComponent() {
-    disable(textField);
+    assertThatTextFieldIsEmpty();
+    disableTextField();
     try {
       driver.pressAndReleaseKey(textField, keyCode(VK_A).modifiers(SHIFT_MASK));
       fail("Expecting exception");
     } catch (ActionFailedException e) {}
+    assertThatTextFieldIsEmpty();
+  }
+
+  public void shouldPressKeyAndReleaseKey() {
+    assertThatTextFieldIsEmpty();
+    int key = VK_A;
+    driver.pressKey(textField, key);
+    // test both pressKey and releaseKey
+    driver.releaseKey(textField, key);
+    assertThat(textOf(textField)).isEqualTo("a");
+  }
+
+  public void shouldThrowErrorWhenPressingKeyInDisabledComponent() {
+    disableTextField();
+    try {
+      driver.pressKey(textField, VK_A);
+      fail("Expecting exception");
+    } catch (ActionFailedException e) {}
+    assertThatTextFieldIsEmpty();
+  }
+  
+  public void shouldThrowErrorWhenReleasingKeyInDisabledComponent() {
+    assertThatTextFieldIsEmpty();
+    disableTextField();
+    try {
+      driver.releaseKey(textField, VK_A);
+      fail("Expecting exception");
+    } catch (ActionFailedException e) {}
+    assertThatTextFieldIsEmpty();
+  }
+
+  private void disableTextField() {
+    disable(textField);
+  }
+
+  private void assertThatTextFieldIsEmpty() {
     assertThat(textOf(textField)).isEmpty();
   }
 

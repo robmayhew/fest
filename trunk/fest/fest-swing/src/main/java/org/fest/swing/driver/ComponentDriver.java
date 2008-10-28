@@ -23,7 +23,6 @@ import javax.swing.JPopupMenu;
 
 import org.fest.swing.core.*;
 import org.fest.swing.core.Robot;
-import org.fest.swing.edt.GuiActionExecutionType;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.UnexpectedException;
@@ -155,9 +154,8 @@ public class ComponentDriver {
     try {
       where = execute(new GuiQuery<Point>() {
         protected Point executeInEDT() {
-          GuiActionExecutionType executionType = RUN_IN_CURRENT_THREAD;
-          validateIsEnabled(c, executionType);
-          return centerOf(c, executionType);
+          validateIsEnabled(c, RUN_IN_CURRENT_THREAD);
+          return centerOf(c, RUN_IN_CURRENT_THREAD);
         }
       });
     } catch (UnexpectedException unexpected) {
@@ -298,7 +296,7 @@ public class ComponentDriver {
    * @see java.awt.event.KeyEvent
    */
   public void pressKey(Component c, int keyCode) {
-    focus(c);
+    focusAndWaitForFocusGain(c);
     robot.pressKey(keyCode);
   }
 
@@ -310,7 +308,7 @@ public class ComponentDriver {
    * @see java.awt.event.KeyEvent
    */
   public void releaseKey(Component c, int keyCode) {
-    focus(c);
+    focusAndWaitForFocusGain(c);
     robot.releaseKey(keyCode);
   }
 
