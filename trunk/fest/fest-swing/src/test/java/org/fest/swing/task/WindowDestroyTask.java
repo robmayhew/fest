@@ -17,6 +17,7 @@ package org.fest.swing.task;
 
 import java.awt.Window;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.timing.Condition;
 
 import static org.fest.swing.timing.Pause.pause;
@@ -24,9 +25,10 @@ import static org.fest.swing.timing.Pause.pause;
 /**
  * Understands a task that hides and disposes a <code>{@link Window}</code>. This task is <b>not</b> executed in the
  * event dispatch thread.
- * 
+ *
  * @author Alex Ruiz
  */
+@RunsInCurrentThread
 public final class WindowDestroyTask {
 
   /**

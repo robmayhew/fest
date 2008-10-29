@@ -17,6 +17,7 @@ package org.fest.swing.hierarchy;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Window;
 import java.util.Collection;
 
 import javax.swing.JFrame;
@@ -25,10 +26,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JFrames.frame;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -57,8 +60,9 @@ public class WindowChildrenFinderTest {
   }
 
   @Test public void shouldReturnEmptyCollectionIfWindowNotHavingOwnedWindows() {
-    JFrame frame = frame().createNew();
-    assertThat(finder.nonExplicitChildrenOf(frame)).isEmpty();
+    final JFrame frame = frame().createNew();
+    Collection<Component> children = findChildren(finder, frame);
+    assertThat(children).isEmpty();
   }
 
   @Test(groups = GUI)
@@ -67,12 +71,23 @@ public class WindowChildrenFinderTest {
     TestWindow window = TestWindow.createAndShowNewWindow(getClass());
     TestDialog dialog = TestDialog.createAndShowNewDialog(window);
     try {
-      Collection<Component> children = finder.nonExplicitChildrenOf(window);
+      Collection<Component> children = findChildren(finder, window);
       assertThat(children).containsOnly(dialog);
     } finally {
-      dialog.destroy();
-      window.destroy();
-      ScreenLock.instance().release(this);
+      try {
+        dialog.destroy();
+        window.destroy();
+      } finally {
+        ScreenLock.instance().release(this);
+      }
     }
+  }
+
+  private static Collection<Component> findChildren(final WindowChildrenFinder finder, final Window w) {
+    return execute(new GuiQuery<Collection<Component>>() {
+      protected Collection<Component> executeInEDT() {
+        return finder.nonExplicitChildrenOf(w);
+      }
+    });
   }
 }

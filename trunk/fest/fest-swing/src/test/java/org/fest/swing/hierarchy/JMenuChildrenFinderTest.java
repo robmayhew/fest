@@ -26,6 +26,7 @@ import javax.swing.JPopupMenu;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
@@ -61,13 +62,20 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @Test(groups = GUI)
   public void shouldReturnPopupMenuIfComponentIsJMenu() {
     ScreenLock.instance().acquire(this);
-    MyWindow window = MyWindow.createNew();
-    Collection<Component> children = finder.nonExplicitChildrenOf(window.menu);
+    final MyWindow window = MyWindow.createAndShow();
+    Collection<Component> children = execute(new GuiQuery<Collection<Component>>() {
+      protected Collection<Component> executeInEDT() {
+        return finder.nonExplicitChildrenOf(window.menu);
+      }
+    });
     try {
       assertThat(children).containsOnly(popupMenuOf(window.menu));
     } finally {
-      window.destroy();
-      ScreenLock.instance().release(this);
+      try {
+        window.destroy();
+      } finally {
+        ScreenLock.instance().release(this);
+      }
     }
   }
 
@@ -82,10 +90,19 @@ import static org.fest.swing.testing.TestGroups.GUI;
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createNew() {
-      MyWindow window = new MyWindow();
-      window.display();
-      return window;
+    @RunsInEDT
+    static MyWindow createAndShow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          MyWindow window = new MyWindow();
+          window.displayInCurrentThread();
+          return window;
+        }
+      });
+    }
+
+    private void displayInCurrentThread() {
+      TestWindow.displayInCurrentThread(this);
     }
 
     final JMenu menu = new JMenu("Menu");

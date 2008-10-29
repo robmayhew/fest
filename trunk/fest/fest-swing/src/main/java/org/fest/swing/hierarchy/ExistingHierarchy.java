@@ -20,11 +20,10 @@ import java.awt.Container;
 import java.awt.Window;
 import java.util.Collection;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.monitor.WindowMonitor;
 
 import static org.fest.swing.awt.AWT.*;
-import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
-
 
 /**
  * Understands access to the current AWT hierarchy.
@@ -32,6 +31,7 @@ import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
+@RunsInCurrentThread
 public class ExistingHierarchy implements ComponentHierarchy {
 
   private static WindowMonitor windowMonitor = WindowMonitor.instance();
@@ -84,9 +84,9 @@ public class ExistingHierarchy implements ComponentHierarchy {
    */
   public void dispose(Window w) {
     if (isAppletViewer(w)) return;
-    for (Window owned : ownedWindowsOf(w)) dispose(owned);
+    for (Window owned : w.getOwnedWindows()) dispose(owned);
     if (isSharedInvisibleFrame(w)) return;
-    WindowDisposeTask.dispose(w);
+    w.dispose();
   }
 
   ParentFinder parentFinder() { return parentFinder; }

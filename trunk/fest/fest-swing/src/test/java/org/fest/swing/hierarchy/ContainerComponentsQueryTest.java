@@ -15,21 +15,24 @@
  */
 package org.fest.swing.hierarchy;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import java.awt.Component;
 import java.util.List;
 
 import javax.swing.JButton;
 
-import org.fest.swing.core.ScreenLock;
-import org.fest.swing.testing.MethodInvocations;
-import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ContainerComponentsQuery}</code>.
@@ -44,20 +47,29 @@ public class ContainerComponentsQueryTest {
 
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
-    window = MyWindow.createNew();
-    window.display();
+    window = MyWindow.createAndShow();
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
-    ScreenLock.instance().release(this);
+    try {
+      window.destroy();
+    } finally {
+      ScreenLock.instance().release(this);
+    }
   }
 
   public void shouldReturnComponentsOfContainer() {
     window.startRecording();
-    List<Component> components = ContainerComponentsQuery.componentsOf(window.getContentPane());
-    assertThat(components).containsOnly(window.button);
+    assertThat(componentsOf(window)).containsOnly(window.button);
     window.requireInvoked("getComponents");
+  }
+
+  private static List<Component> componentsOf(final MyWindow window) {
+    return execute(new GuiQuery<List<Component>>() {
+      protected List<Component> executeInEDT() {
+        return ContainerComponentsQuery.componentsOf(window.getContentPane());
+      }
+    });
   }
 
   private static class MyWindow extends TestWindow {
@@ -68,8 +80,19 @@ public class ContainerComponentsQueryTest {
     private boolean recording;
     private final MethodInvocations methodInvocations = new MethodInvocations();
 
-    static MyWindow createNew() {
-      return new MyWindow();
+    @RunsInEDT
+    static MyWindow createAndShow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          MyWindow window = new MyWindow();
+          window.displayInCurrentThread();
+          return window;
+        }
+      });
+    }
+
+    private void displayInCurrentThread() {
+      TestWindow.displayInCurrentThread(this);
     }
 
     private MyWindow() {

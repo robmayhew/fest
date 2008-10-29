@@ -24,7 +24,9 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.listener.WeakEventListener;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
@@ -32,6 +34,7 @@ import org.fest.swing.testing.ToolkitStub;
 import static java.awt.AWTEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.hierarchy.JFrameContentPaneQuery.contentPaneOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
@@ -54,14 +57,16 @@ public class NewHierarchyTest {
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
     toolkit = ToolkitStub.createNew();
-    window = MyWindow.createNew();
-    window.display();
+    window = MyWindow.createAndShow();
     filter = new WindowFilter();
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
-    ScreenLock.instance().release(this);
+    try {
+     window.destroy();
+    } finally {
+      ScreenLock.instance().release(this);
+    }
   }
 
   public void shouldIgnoreExistingComponentsAndAddTransientWindowListenerToToolkit() {
@@ -126,8 +131,19 @@ public class NewHierarchyTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createNew() {
-      return new MyWindow();
+    @RunsInEDT
+    static MyWindow createAndShow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          MyWindow window = new MyWindow();
+          window.displayInCurrentThread();
+          return window;
+        }
+      });
+    }
+
+    private void displayInCurrentThread() {
+      TestWindow.displayInCurrentThread(this);
     }
 
     final JComboBox comboBox = new JComboBox(array("One", "Two"));

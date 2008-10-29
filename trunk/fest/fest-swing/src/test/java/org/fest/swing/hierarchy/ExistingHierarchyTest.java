@@ -25,14 +25,18 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.monitor.WindowMonitor;
+import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static java.util.Collections.emptyList;
 import static org.easymock.EasyMock.expect;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -61,20 +65,20 @@ import static org.fest.swing.testing.TestGroups.GUI;
   }
 
   public void shouldReturnParentOfComponent() {
-    final TestWindow frame = TestWindow.createNewWindow(ExistingHierarchyTest.class);
+    final TestWindow window = TestWindow.createNewWindow(getClass());
     final JTextField textField = textField().createNew();
     final ParentFinder parentFinder = MockParentFinder.mock();
     hierarchy = new ExistingHierarchy(parentFinder, new ChildrenFinder());
     new EasyMockTemplate(parentFinder) {
       @Override protected void expectations() {
-        expect(parentFinder.parentOf(textField)).andReturn(frame);
+        expect(parentFinder.parentOf(textField)).andReturn(window);
       }
 
       @Override protected void codeToTest() {
-        assertThat(hierarchy.parentOf(textField)).isSameAs(frame);
+        assertThat(hierarchy.parentOf(textField)).isSameAs(window);
       }
     }.run();
-    frame.destroy();
+    window.destroy();
   }
 
   public void shouldReturnSubcomponents() {
@@ -95,11 +99,11 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @Test(groups = GUI) public void shouldDisposeWindow() {
     ScreenLock.instance().acquire(this);
-    final MyWindow window = MyWindow.createNew();
+    final MyWindow window = MyWindow.createAndShow();
+    window.startRecording();
     try {
-      window.display();
       hierarchy.dispose(window);
-      assertThat(window.wasDisposed()).isTrue();
+      window.requireInvoked("dispose");
     } finally {
       ScreenLock.instance().release(this);
     }
@@ -108,10 +112,24 @@ import static org.fest.swing.testing.TestGroups.GUI;
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    private boolean recording;
+    private final MethodInvocations methodInvocations = new MethodInvocations();
+
     boolean disposed;
 
-    static MyWindow createNew() {
-      return new MyWindow();
+    @RunsInEDT
+    static MyWindow createAndShow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          MyWindow window = new MyWindow();
+          window.displayInCurrentThread();
+          return window;
+        }
+      });
+    }
+
+    private void displayInCurrentThread() {
+      TestWindow.displayInCurrentThread(this);
     }
 
     private MyWindow() {
@@ -119,10 +137,14 @@ import static org.fest.swing.testing.TestGroups.GUI;
     }
 
     @Override public void dispose() {
-      synchronized(this) { disposed = true; }
+      if (recording) methodInvocations.invoked("dispose");
       super.dispose();
     }
 
-    synchronized boolean wasDisposed() { return disposed; }
+    void startRecording() { recording = true; }
+
+    MethodInvocations requireInvoked(String methodName) {
+      return methodInvocations.requireInvoked(methodName);
+    }
   };
 }

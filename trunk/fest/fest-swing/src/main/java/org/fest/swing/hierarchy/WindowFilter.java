@@ -20,9 +20,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+
 import static org.fest.swing.awt.AWT.isSharedInvisibleFrame;
-import static org.fest.swing.query.ComponentParentQuery.parentOf;
-import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
 
 /**
  * Understands a filter of windows to ignore in a component hierarchy.
@@ -53,11 +53,12 @@ class WindowFilter {
     return implicitlyIgnored.containsKey(c);
   }
 
+  @RunsInCurrentThread
   boolean isIgnored(Component c) {
     if (c == null) return false;
     // TODO if ("sun.plugin.ConsoleWindow".equals(c.getClass().getName())) return !trackAppletConsole;
     if (ignored.containsKey(c)) return true;
-    if (c instanceof Window && isIgnored(parentOf(c))) return true;
+    if (c instanceof Window && isIgnored(c.getParent())) return true;
     return !(c instanceof Window) && isWindowIgnored(c);
   }
 
@@ -70,10 +71,12 @@ class WindowFilter {
     implicitlyIgnored.put(c, true);
   }
 
+  @RunsInCurrentThread
   void ignore(Component c) {
     filter(c, true);
   }
 
+  @RunsInCurrentThread
   void recognize(Component c) {
     filter(c, false);
   }
@@ -92,7 +95,7 @@ class WindowFilter {
     doFilter(c, ignore);
     implicitlyIgnored.remove(c);
     if (!(c instanceof Window)) return;
-    for (Window owned : ownedWindowsOf((Window)c))
+    for (Window owned : ((Window)c).getOwnedWindows())
       filter(owned, ignore);
   }
 

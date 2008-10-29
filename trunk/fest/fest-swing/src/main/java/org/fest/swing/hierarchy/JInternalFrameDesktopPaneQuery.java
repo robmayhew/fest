@@ -4,9 +4,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JInternalFrame.JDesktopIcon;
 
-import org.fest.swing.edt.GuiQuery;
-
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns the desktop the given
@@ -17,16 +15,13 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
+@RunsInCurrentThread
 final class JInternalFrameDesktopPaneQuery {
 
   static JDesktopPane desktopPaneOf(final JInternalFrame internalFrame) {
-    return execute(new GuiQuery<JDesktopPane>() {
-      protected JDesktopPane executeInEDT() {
-        JDesktopIcon icon = internalFrame.getDesktopIcon();
-        if (icon != null) return icon.getDesktopPane();
-        return null;
-      }
-    });
+    JDesktopIcon icon = internalFrame.getDesktopIcon();
+    if (icon != null) return icon.getDesktopPane();
+    return null;
   }
 
   private JInternalFrameDesktopPaneQuery() {}

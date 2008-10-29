@@ -23,9 +23,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MDITestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.hierarchy.JInternalFrameIconifyTask.iconify;
 import static org.fest.swing.testing.MDITestWindow.createAndShowNewWindow;
@@ -56,14 +58,21 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @Test(groups = GUI)
   public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() {
     ScreenLock.instance().acquire(this);
-    MDITestWindow window = createAndShowNewWindow(getClass());
+    final MDITestWindow window = createAndShowNewWindow(getClass());
     iconify(window.internalFrame());
-    Collection<Component> children = finder.nonExplicitChildrenOf(window.desktop());
+    Collection<Component> children = execute(new GuiQuery<Collection<Component>>() {
+      protected Collection<Component> executeInEDT() {
+        return finder.nonExplicitChildrenOf(window.desktop());
+      }
+    });
     try {
       assertThat(children).containsOnly(window.internalFrame());
     } finally {
-      window.destroy();
-      ScreenLock.instance().release(this);
+      try {
+        window.destroy();
+      } finally {
+        ScreenLock.instance().release(this);
+      }
     }
   }
 }

@@ -15,6 +15,9 @@
  */
 package org.fest.swing.hierarchy;
 
+import java.awt.Component;
+import java.awt.Container;
+
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JTextField;
@@ -23,6 +26,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MDITestWindow;
@@ -55,10 +59,10 @@ public class ParentFinderTest {
   }
 
   public void shouldReturnParentOfComponent() {
-    MyWindow window = MyWindow.createNew();
-    window.display();
+    final MyWindow window = MyWindow.createAndShow();
     try {
-      assertThat(finder.parentOf(window.textField)).isSameAs(contentPaneOf(window));
+      Container parent = findParent(finder, window.textField);
+      assertThat(parent).isSameAs(contentPaneOf(window));
     } finally {
       window.destroy();
     }
@@ -67,8 +71,19 @@ public class ParentFinderTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    static MyWindow createNew() {
-      return new MyWindow();
+    @RunsInEDT
+    static MyWindow createAndShow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          MyWindow window = new MyWindow();
+          window.displayInCurrentThread();
+          return window;
+        }
+      });
+    }
+
+    private void displayInCurrentThread() {
+      TestWindow.displayInCurrentThread(this);
     }
 
     final JTextField textField = new JTextField();
@@ -83,11 +98,19 @@ public class ParentFinderTest {
     MDITestWindow window = createAndShowNewWindow(getClass());
     JInternalFrame internalFrame = window.internalFrame();
     try {
-      assertThat(finder.parentOf(internalFrame)).isNotNull()
-                                                .isSameAs(desktopPaneOf(internalFrame));
+      assertThat(findParent(finder, internalFrame)).isNotNull()
+                                                   .isSameAs(desktopPaneOf(internalFrame));
     } finally {
       window.destroy();
     }
+  }
+
+  private static Container findParent(final ParentFinder finder, final Component c) {
+    return execute(new GuiQuery<Container>() {
+      protected Container executeInEDT() {
+        return finder.parentOf(c);
+      }
+    });
   }
 
   private static JDesktopPane desktopPaneOf(final JInternalFrame internalFrame) {

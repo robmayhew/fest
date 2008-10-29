@@ -19,6 +19,7 @@ import java.awt.Container;
 
 import javax.swing.JFrame;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -31,6 +32,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
+@RunsInEDT
 final class JFrameContentPaneQuery  {
 
   static Container contentPaneOf(final JFrame frame) {

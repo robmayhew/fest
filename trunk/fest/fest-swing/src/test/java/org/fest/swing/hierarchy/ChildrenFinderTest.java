@@ -18,6 +18,7 @@ package org.fest.swing.hierarchy;
 import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JDesktopPane;
@@ -27,15 +28,17 @@ import javax.swing.JTextField;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.factory.JMenus;
 import org.fest.swing.testing.MDITestWindow;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.hierarchy.ContainerComponentsQuery.componentsOf;
-import static org.fest.swing.hierarchy.JFrameContentPaneQuery.contentPaneOf;
 import static org.fest.swing.hierarchy.JInternalFrameIconifyTask.iconify;
 import static org.fest.swing.testing.MDITestWindow.createAndShowNewWindow;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -68,51 +71,95 @@ import static org.fest.swing.testing.TestGroups.GUI;
     iconify(window.internalFrame());
     JDesktopPane desktop = window.desktop();
     try {
-      assertThat(finder.childrenOf(desktop)).containsOnly(childrenOf(desktop));
+      assertThat(children(finder, desktop)).containsOnly(childrenOf(desktop));
     } finally {
-      window.destroy();
-      ScreenLock.instance().release(this);
+      try {
+        window.destroy();
+      } finally {
+        ScreenLock.instance().release(this);
+      }
     }
   }
 
   public void shouldReturnPopupMenuIfComponentIsJMenu() {
     JMenu menu = JMenus.menu().createNew();
-    assertThat(finder.childrenOf(menu)).containsOnly(childrenOf(menu));
+    assertThat(children(finder, menu)).containsOnly(childrenOf(menu));
   }
 
   @Test(groups = GUI)
   public void shouldReturnOwnedWindowsIfComponentIsWindow() {
     ScreenLock.instance().acquire(this);
-    TestWindow window = TestWindow.createAndShowNewWindow(ChildrenFinderTest.class);
+    TestWindow window = TestWindow.createAndShowNewWindow(getClass());
     TestDialog dialog = TestDialog.createAndShowNewDialog(window);
     try {
-      assertThat(finder.childrenOf(window)).containsOnly(childrenOf(window));
+      assertThat(children(finder, window)).containsOnly(childrenOf(window));
     } finally {
-      dialog.destroy();
-      window.destroy();
-      ScreenLock.instance().release(this);
+      try {
+        dialog.destroy();
+        window.destroy();
+      } finally {
+        ScreenLock.instance().release(this);
+      }
     }
   }
 
   @Test(groups = GUI)
   public void shouldReturnChildrenOfContainer() {
     ScreenLock.instance().acquire(this);
-    MyWindow frame = MyWindow.createAndShow();
+    final MyWindow window = MyWindow.createAndShow();
+    Collection<Component> children = execute(new GuiQuery<Collection<Component>>() {
+      protected Collection<Component> executeInEDT() {
+        return finder.childrenOf(window.getContentPane());
+      }
+    });
     try {
-      assertThat(finder.childrenOf(contentPaneOf(frame))).containsOnly(frame.textField);
+      assertThat(children).containsOnly(window.textField);
     } finally {
-      frame.destroy();
-      ScreenLock.instance().release(this);
+      try {
+        window.destroy();
+      } finally {
+        ScreenLock.instance().release(this);
+      }
     }
+  }
+
+  private static Collection<Component> children(final ChildrenFinder finder, final Component c) {
+    return execute(new GuiQuery<Collection<Component>>() {
+      protected Collection<Component> executeInEDT() {
+        return finder.childrenOf(c);
+      }
+    });
+  }
+
+  private Object[] childrenOf(final Container c) {
+    return execute(new GuiQuery<Object[]>() {
+      protected Object[] executeInEDT() {
+        List<Component> children = new ArrayList<Component>();
+        children.addAll(componentsOf(c));
+        children.addAll(desktopPaneChildrenFinder.nonExplicitChildrenOf(c));
+        children.addAll(menuChildrenFinder.nonExplicitChildrenOf(c));
+        children.addAll(windowChildrenFinder.nonExplicitChildrenOf(c));
+        return children.toArray();
+      }
+    });
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static MyWindow createAndShow() {
-      MyWindow window = new MyWindow();
-      window.display();
-      return window;
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          MyWindow window = new MyWindow();
+          window.displayInCurrentThread();
+          return window;
+        }
+      });
+    }
+
+    private void displayInCurrentThread() {
+      TestWindow.displayInCurrentThread(this);
     }
 
     final JTextField textField = new JTextField(20);
@@ -121,14 +168,5 @@ import static org.fest.swing.testing.TestGroups.GUI;
       super(ChildrenFinderTest.class);
       addComponents(textField);
     }
-  }
-
-  private Object[] childrenOf(Container c) {
-    List<Component> children = new ArrayList<Component>();
-    children.addAll(componentsOf(c));
-    children.addAll(desktopPaneChildrenFinder.nonExplicitChildrenOf(c));
-    children.addAll(menuChildrenFinder.nonExplicitChildrenOf(c));
-    children.addAll(windowChildrenFinder.nonExplicitChildrenOf(c));
-    return children.toArray();
   }
 }

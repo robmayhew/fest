@@ -22,13 +22,14 @@ import java.awt.Point;
 
 import javax.swing.JFrame;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.task.FrameShowTask.packAndShow;
 import static org.fest.swing.task.WindowDestroyTask.hideAndDispose;
-import static org.fest.swing.testing.LookAndFeel.applySubstanceBusinessLookAndFeel;
 
 /**
  * Understands the base window for all GUI tests.
@@ -42,12 +43,13 @@ public class TestWindow extends JFrame {
   static final Point DEFAULT_WINDOW_LOCATION = new Point(100, 100);
 
   /**
-   * Creates a new <code>{@link TestWindow}</code> and displays it on the screen. This method is executed in the event 
+   * Creates a new <code>{@link TestWindow}</code> and displays it on the screen. This method is executed in the event
    * dispatch thread.
-   * @param testClass the class of the test where the window to create will be used. The simple name of the given class 
+   * @param testClass the class of the test where the window to create will be used. The simple name of the given class
    * will be used as the title of the created window.
    * @return the created window.
    */
+  @RunsInEDT
   public static TestWindow createAndShowNewWindow(final Class<?> testClass) {
     return execute(new GuiQuery<TestWindow>() {
       protected TestWindow executeInEDT() {
@@ -64,6 +66,7 @@ public class TestWindow extends JFrame {
    * will be used as the title of the created window.
    * @return the created window.
    */
+  @RunsInEDT
   public static TestWindow createNewWindow(final Class<?> testClass) {
     return execute(new GuiQuery<TestWindow>() {
       protected TestWindow executeInEDT() {
@@ -81,6 +84,7 @@ public class TestWindow extends JFrame {
    * @param testClass the class of the test where the window to create will be used. The simple name of the given class
    * will be used as the title of the created window.
    */
+  @RunsInCurrentThread
   protected TestWindow(Class<?> testClass) {
     setTitle(testClass.getSimpleName());
     setLayout(new FlowLayout());
@@ -91,6 +95,7 @@ public class TestWindow extends JFrame {
    * Adds the given GUI components to this window. This method is <b>not</b> executed in the event dispatch thread.
    * @param components the components to add.
    */
+  @RunsInCurrentThread
   public void addComponents(Component...components) {
     for (Component c : components) add(c);
   }
@@ -98,6 +103,7 @@ public class TestWindow extends JFrame {
   /**
    * Displays this window on the screen. This method is executed in the event dispatch thread.
    */
+  @RunsInEDT
   public void display() {
     displayInEDT(this);
   }
@@ -114,16 +120,18 @@ public class TestWindow extends JFrame {
    * Displays the given window on the screen. This method is executed in the current thread where it is called.
    * @param window the window to display on the screen.
    */
+  @RunsInCurrentThread
   protected static void displayInCurrentThread(TestWindow window) {
     window.setLocation(DEFAULT_WINDOW_LOCATION);
     packAndShow(window);
   }
 
   /**
-   * Displays this window on the screen using the given dimension as its preferred size. This method is executed in the 
+   * Displays this window on the screen using the given dimension as its preferred size. This method is executed in the
    * event dispatch thread.
    * @param preferredSize the preferred size to set to this window before displaying it on the screen.
    */
+  @RunsInEDT
   public void display(Dimension preferredSize) {
     displayInEDT(this, preferredSize);
   }
@@ -137,11 +145,12 @@ public class TestWindow extends JFrame {
   }
 
   /**
-   * Displays the given window on the screen using the given dimension as its preferred size. This method is executed in 
+   * Displays the given window on the screen using the given dimension as its preferred size. This method is executed in
    * the current thread where it is called.
    * @param window the window to display on the screen.
    * @param preferredSize the preferred size to set to the given window before displaying it on the screen.
    */
+  @RunsInCurrentThread
   protected static void displayInCurrentThread(TestWindow window, Dimension preferredSize) {
     window.setLocation(DEFAULT_WINDOW_LOCATION);
     packAndShow(window, preferredSize);
@@ -150,13 +159,13 @@ public class TestWindow extends JFrame {
   /**
    * Chooses the look and feel.
    */
-  protected void chooseLookAndFeel() {
-    applySubstanceBusinessLookAndFeel();
-  }
+  @RunsInCurrentThread
+  protected void chooseLookAndFeel() {}
 
   /**
    * Hides and disposes this window. This method is executed in the event dispatch thread.
    */
+  @RunsInEDT
   public void destroy() {
     destroyInEDT(this);
   }
@@ -168,11 +177,12 @@ public class TestWindow extends JFrame {
       }
     });
   }
-  
+
   /**
    * Hides and disposes the given window. This method is executed in the current thread where it is called.
    * @param window the window to destroy.
    */
+  @RunsInCurrentThread
   protected static void destroyInCurrentThread(TestWindow window) {
     hideAndDispose(window);
   }

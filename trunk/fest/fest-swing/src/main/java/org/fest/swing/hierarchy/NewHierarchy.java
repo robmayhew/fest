@@ -15,15 +15,18 @@
  */
 package org.fest.swing.hierarchy;
 
-import static java.awt.AWTEvent.*;
-import static java.util.Collections.emptyList;
-import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
-
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.util.Collection;
+
+import org.fest.swing.annotation.RunsInCurrentThread;
+
+import static java.awt.AWTEvent.*;
+import static java.util.Collections.emptyList;
+
+import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListener;
 
 /**
  * Understands isolation of a component hierarchy to limit to only those components created during the lifetime of this
@@ -37,6 +40,7 @@ import java.util.Collection;
  *
  * @author Alex Ruiz
  */
+@RunsInCurrentThread
 public class NewHierarchy extends ExistingHierarchy {
 
   private final WindowFilter filter;

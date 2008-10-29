@@ -1,5 +1,5 @@
 /*
- * Created on May 22, 2007
+ * Created on Oct 28, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -11,26 +11,22 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  *
- * Copyright @2007-2008 the original author or authors.
+ * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Understands an annotation that identifies GUI tests. FEST only takes screenshots of failing tests that has been
- * marked with this annotation.
+ * Understands an annotation that documents that a method is executed in the event dispatch thread.
  *
  * @author Alex Ruiz
  */
-@Retention(RUNTIME)
-@Target({ METHOD, TYPE })
+@Target({ METHOD, CONSTRUCTOR, TYPE })
 @Documented
 @Inherited
-public @interface GUITest {}
+public @interface RunsInEDT {}

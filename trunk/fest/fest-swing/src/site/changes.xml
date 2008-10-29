@@ -11,7 +11,7 @@
         Replaced condition to verify a GuiAction is executed in the event dispatch thread with a 
         java.util.concurrent.CountDownLatch in org.fest.swing.edt.GuiActionRunner
       </action>
-      <action dev="alruiz, wanghy" type="remove" issue="216" 
+      <action dev="alruiz" type="remove" issue="216" 
           due-to="Simeon Fitch, Michael Hüttermann, Jean-Francois Poilpret, Tarjei Skorgenes">
         Removed org.fest.swing.driver.JListLocation.
       </action>
@@ -19,6 +19,10 @@
           due-to="Simeon Fitch, Michael Hüttermann, Jean-Francois Poilpret, Tarjei Skorgenes">
         Added org.fest.swing.timing.LazyLoadingDescription and org.fest.swing.edt.GuiLazyLoadingDescription to
         lazy-load the description of a org.fest.swing.timing.Condition.
+      </action>
+      <action dev="alruiz" type="add" issue="216" 
+          due-to="Simeon Fitch, Michael Hüttermann, Jean-Francois Poilpret, Tarjei Skorgenes">
+        Added annotations RunsInCurrentThread and RunsInEDT in package org.fest.swing.annotations.
       </action>
     </release>
     <release version="1.0b2" date="2008-10-16" description="Subsequent release">

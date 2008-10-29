@@ -15,6 +15,7 @@
  */
 package org.fest.swing.hierarchy;
 
+import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
 import org.testng.annotations.AfterMethod;
@@ -22,7 +23,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.ScreenLock;
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MDITestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -53,15 +54,21 @@ public class JInternalFrameDesktopPaneQueryTest {
   }
 
   public void shouldReturnNullIfJDesktopIconInJInternalFrameIsNull() {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
+    JDesktopPane desktopPane = execute(new GuiQuery<JDesktopPane>() {
+      protected JDesktopPane executeInEDT() {
         internalFrame.setDesktopIcon(null);
+        return JInternalFrameDesktopPaneQuery.desktopPaneOf(internalFrame);
       }
     });
-    assertThat(JInternalFrameDesktopPaneQuery.desktopPaneOf(internalFrame)).isNull();
+    assertThat(desktopPane).isNull();
   }
 
   public void shouldReturnJDesktopPaneFromJDesktopIconInJInternalFrameIsNull() {
-    assertThat(JInternalFrameDesktopPaneQuery.desktopPaneOf(internalFrame)).isSameAs(window.desktop());
+    JDesktopPane desktopPane = execute(new GuiQuery<JDesktopPane>() {
+      protected JDesktopPane executeInEDT() {
+        return JInternalFrameDesktopPaneQuery.desktopPaneOf(internalFrame);
+      }
+    });
+    assertThat(desktopPane).isSameAs(window.desktop());
   }
 }

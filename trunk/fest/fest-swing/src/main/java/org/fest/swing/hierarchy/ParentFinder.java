@@ -1,16 +1,16 @@
 /*
  * Created on Nov 1, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2007-2008 the original author or authors.
  */
 package org.fest.swing.hierarchy;
@@ -23,6 +23,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.query.ComponentParentQuery;
 import org.fest.swing.query.JPopupMenuInvokerQuery;
 
@@ -34,9 +35,10 @@ import static org.fest.swing.hierarchy.JInternalFrameDesktopPaneQuery.desktopPan
  * <code>{@link ComponentParentQuery}</code> and <code>{@link JPopupMenuInvokerQuery}</code>, this class is not
  * limited to simply call <code>{@link Component#getParent()}</code> and <code>{@link JPopupMenu#getInvoker()}</code>.
  * This class returns the most likely parent based on the type of a given <code>Component</code>.
- * 
+ *
  * @author Alex Ruiz
  */
+@RunsInCurrentThread
 class ParentFinder {
 
   /**
@@ -45,7 +47,7 @@ class ParentFinder {
    * @return the parent for the given component.
    */
   Container parentOf(Component c) {
-    Container p = ComponentParentQuery.parentOf(c);
+    Container p = c.getParent();
     if (p == null && c instanceof JInternalFrame) p = parentOf((JInternalFrame)c);
     return p;
   }
@@ -63,8 +65,8 @@ class ParentFinder {
    * @return the invoker of the given component if found. Otherwise, <code>null</code>.
    */
   Component invokerFor(Component c) {
-    if (c instanceof JPopupMenu) return JPopupMenuInvokerQuery.invokerOf((JPopupMenu)c);
-    Component parent = ComponentParentQuery.parentOf(c);
+    if (c instanceof JPopupMenu) return ((JPopupMenu)c).getInvoker();
+    Component parent = c.getParent();
     if (parent == null) return null;
     return invokerFor(parent);
   }
