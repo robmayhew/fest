@@ -23,7 +23,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.fest.swing.edt.GuiActionExecutionType;
-import org.fest.swing.query.JPopupMenuInvokerQuery;
 import org.fest.swing.util.MouseEventTarget;
 
 import static java.awt.event.InputEvent.*;
@@ -79,7 +78,6 @@ public class AWT {
   private static Point centerOf(Dimension d) {
     return new Point(d.width / 2, d.height / 2);
   }
-  
 
   /**
    * Returns a point at the center of the visible rectangle of the given <code>{@link JComponent}</code>. This method is
@@ -89,7 +87,7 @@ public class AWT {
    * @return a point at the center of the visible rectangle of the given <code>JComponent</code>.
    */
   public static Point centerOfVisibleRect(JComponent c, GuiActionExecutionType executionType) {
-    if (shouldRunInEDT(executionType)) return centerOf(visibleRectOf(c));
+    if (shouldRunInEDT(executionType)) return centerOfVisibleRect(c);
     return centerOf(c.getVisibleRect());
   }
 
@@ -154,16 +152,17 @@ public class AWT {
 
   /**
    * Returns the invoker, if any, of the given <code>{@link Component}</code>; or <code>null</code>, if the
-   * <code>Component</code> is not on a pop-up of any sort.
+   * <code>Component</code> is not on a pop-up of any sort. <b>Note:</b> This method is <b>not</b> executed in the event
+   * dispatch thread.
    * @param c the given <code>Component</code>.
    * @return the invoker, if any, of the given <code>Component</code>; or <code>null</code>, if the
    *         <code>Component</code> is not on a pop-up of any sort.
    */
-  public static Component invokerOf(Component c) {
-    if (c instanceof JPopupMenu) return JPopupMenuInvokerQuery.invokerOf((JPopupMenu)c);
-    Container parent = parentOf(c);
+  public static Component invokerOf(final Component c) {
+    if (c instanceof JPopupMenu) return ((JPopupMenu)c).getInvoker();
+    Container parent = c.getParent();
     return parent != null ? invokerOf(parent) : null;
-  }
+  } 
 
   /**
    * Safe version of <code>{@link Component#getLocationOnScreen}</code>, which avoids lockup if an AWT pop-up menu is

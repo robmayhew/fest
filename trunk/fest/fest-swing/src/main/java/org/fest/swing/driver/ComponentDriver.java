@@ -46,7 +46,6 @@ import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
 import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.swing.timing.Pause.pause;
-import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.*;
 
@@ -265,6 +264,7 @@ public class ComponentDriver {
    * @param keyPressInfo specifies the key and modifiers to press.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
    * @see java.awt.event.KeyEvent
    * @see java.awt.event.InputEvent
    */
@@ -280,6 +280,7 @@ public class ComponentDriver {
    * @param keyCode the code of the key to press.
    * @param modifiers the given modifiers.
    * @throws IllegalArgumentException if the given code is not a valid key code. *
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
    * @see java.awt.event.KeyEvent
    * @see java.awt.event.InputEvent
    */
@@ -292,7 +293,8 @@ public class ComponentDriver {
    * Simulates a user pressing given key on the <code>{@link Component}</code>.
    * @param c the target component.
    * @param keyCode the code of the key to press.
-   * @throws IllegalArgumentException if the given code is not a valid key code. *
+   * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
    * @see java.awt.event.KeyEvent
    */
   public void pressKey(Component c, int keyCode) {
@@ -304,7 +306,8 @@ public class ComponentDriver {
    * Simulates a user releasing the given key on the <code>{@link Component}</code>.
    * @param c the target component.
    * @param keyCode the code of the key to release.
-   * @throws IllegalArgumentException if the given code is not a valid key code. *
+   * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
    * @see java.awt.event.KeyEvent
    */
   public void releaseKey(Component c, int keyCode) {
@@ -316,6 +319,7 @@ public class ComponentDriver {
    * Gives input focus to the given <code>{@link Component}</code> and waits until the <code>{@link Component}</code>
    * has focus.
    * @param c the component to give focus to.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
   public void focusAndWaitForFocusGain(Component c) {
@@ -329,6 +333,7 @@ public class ComponentDriver {
    * @param c the component to give focus to.
    */
   public void focus(Component c) {
+    validateIsEnabled(c, RUN_IN_EDT);
     robot.focus(c);
   }
 
@@ -372,9 +377,25 @@ public class ComponentDriver {
    * otherwise.
    */
   protected final boolean isUserResizable(Component c) {
-    if (c instanceof Dialog) return ((Dialog)c).isResizable();
-    if (c instanceof Frame) return ((Frame)c).isResizable();
-    return canResizeWindows(); // most X11 window managers allow arbitrary resizing
+    if (c instanceof Dialog) return isResizable((Dialog)c);
+    if (c instanceof Frame)  return isResizable((Frame)c);
+    return false;
+  }
+
+  private static boolean isResizable(final Dialog d) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return d.isResizable();
+      }
+    });
+  }
+  
+  private static boolean isResizable(final Frame f) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return f.isResizable();
+      }
+    });
   }
 
   /**
@@ -384,7 +405,7 @@ public class ComponentDriver {
    * otherwise.
    */
   protected final boolean isUserMovable(Component c) {
-    return c instanceof Dialog || c instanceof Frame || canMoveWindows();
+    return c instanceof Dialog || c instanceof Frame;
   }
 
   /**
@@ -394,6 +415,7 @@ public class ComponentDriver {
    */
   protected final void performAccessibleActionOf(Component c) {
     performDefaultAccessibleAction(c);
+    robot.waitForIdle();
   }
 
   /**

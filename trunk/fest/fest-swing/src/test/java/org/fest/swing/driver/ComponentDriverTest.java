@@ -32,11 +32,14 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.StopWatch;
+import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
+import org.fest.swing.timing.Condition;
 
 import static java.awt.Event.SHIFT_MASK;
 import static java.awt.event.KeyEvent.*;
@@ -368,11 +371,6 @@ public class ComponentDriverTest {
     }
   }
 
-  private void disableButton() {
-    disable(button);
-    robot.waitForIdle();
-  }
-  
   @Test(expectedExceptions = NullPointerException.class, groups = GUI)
   public void shouldThrowErrorIfArrayOfKeysToPressAndReleaseIsNull() {
     int[] keyCodes = null;
@@ -445,6 +443,84 @@ public class ComponentDriverTest {
     assertThatTextFieldIsEmpty();
   }
 
+  public void shouldGiveFocusToComponent() {
+    driver.focus(button);
+    pause(new Condition("Component has focus") {
+      public boolean test() {
+        return hasFocus(button);
+      }
+    });
+  }
+  
+  public void shouldThrowErrorWhenGivingFocusToDisabledComponent() {
+    disableButton();
+    try {
+      driver.focus(button);
+      fail("Expecting exception");
+    } catch (ActionFailedException e) {}
+    assertThat(hasFocus(button)).isFalse();
+  }
+  
+  public void shouldReturnIsUserResizableIfFrameIsResizable() {
+    assertThat(driver.isUserResizable(window)).isTrue();
+  }
+  
+  public void shouldReturnIsNotUserResizableIfFrameIsNotResizable() {
+    makeNotResizable(window);
+    robot.waitForIdle();
+    assertThat(driver.isUserResizable(window)).isFalse();
+  }
+  
+  private static void makeNotResizable(final TestWindow window) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        window.setResizable(false);
+      }
+    });
+  }
+  
+  public void shouldReturnIsUserResizableIfDialogIsResizable() {
+    TestDialog dialog = TestDialog.createNewDialog(window);
+    assertThat(driver.isUserResizable(dialog)).isTrue();
+  }
+  
+  public void shouldReturnIsNotUserResizableIfDialogIsNotResizable() {
+    TestDialog dialog = TestDialog.createNewDialog(window);
+    makeNotResizable(dialog);
+    robot.waitForIdle();
+    assertThat(driver.isUserResizable(dialog)).isFalse();
+  }
+  
+  private static void makeNotResizable(final TestDialog dialog) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        dialog.setResizable(false);
+      }
+    });
+  }
+
+  public void shouldReturnIsNotUserResizableIfComponentIsNotFrameOrDialog() {
+    assertThat(driver.isUserResizable(button)).isFalse();
+  }
+  
+  public void shouldReturnIsMovableIfComponentIsFrame() {
+    assertThat(driver.isUserMovable(window)).isTrue();
+  }
+  
+  public void shouldReturnIsMovableIfComponentIsDialog() {
+    TestDialog dialog = TestDialog.createNewDialog(window);
+    assertThat(driver.isUserMovable(dialog)).isTrue();
+  }
+  
+  public void shouldReturnIsNotMovableIfComponentIsNotFrameOrDialog() {
+    assertThat(driver.isUserMovable(button)).isFalse();
+  }
+
+  private void disableButton() {
+    disable(button);
+    robot.waitForIdle();
+  }
+  
   private void disableTextField() {
     disable(textField);
   }
