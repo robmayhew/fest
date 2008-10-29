@@ -17,9 +17,15 @@ package org.fest.swing.monitor;
 
 import java.awt.*;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
+import org.fest.swing.util.Pair;
+
 import static java.lang.Math.max;
 
-import static org.fest.swing.awt.AWT.insetsFrom;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 
 /**
@@ -59,15 +65,32 @@ class WindowStatus {
    * Checks whether the given window is ready for input.
    * @param w the given window.
    */
-  void checkIfReady(Window w) {
+  @RunsInEDT
+  void checkIfReady(final Window w) {
     if (robot == null) return;
     // Must avoid frame borders, which are insensitive to mouse motion (at least on w32).
-    WindowMetrics metrics = new WindowMetrics(w);
-    mouseMove(w, metrics.center());
-    if (windows.isShowingButNotReady(w) && isEmptyFrame(w))
-      makeLargeEnoughToReceiveEvents(w, metrics);
+    Pair<WindowMetrics, Point> metricsAndCenter = metricsAndCenter(w);
+    final WindowMetrics metrics = metricsAndCenter.one;
+    mouseMove(w, metricsAndCenter.two);
+    if (!windows.isShowingButNotReady(w)) return;
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        makeLargeEnoughToReceiveEvents(w, metrics);
+      }
+    });
   }
 
+  @RunsInEDT
+  private static Pair<WindowMetrics, Point> metricsAndCenter(final Window w) {
+    return execute(new GuiQuery<Pair<WindowMetrics, Point>>() {
+      protected Pair<WindowMetrics, Point> executeInEDT() {
+        WindowMetrics metrics = new WindowMetrics(w);
+        return new Pair<WindowMetrics, Point>(metrics, metrics.center());
+      }
+    });
+  }
+
+  @RunsInEDT
   private void mouseMove(Window w, Point point) {
     int x = point.x;
     int y = point.y;
@@ -79,19 +102,20 @@ class WindowStatus {
     sign = -sign;
   }
 
-  private boolean isEmptyFrame(Window w) {
-    Insets insets = insetsFrom(w);
-    Dimension windowSize = sizeOf(w);
-    return insets.top + insets.bottom == windowSize.height || insets.left + insets.right == windowSize.width;
+  @RunsInCurrentThread
+  private void makeLargeEnoughToReceiveEvents(Window window, WindowMetrics metrics) {
+    if (!isEmptyFrame(window)) return;
+    int w = max(window.getWidth(), proposedWidth(metrics));
+    int h = max(window.getHeight(), proposedHeight(metrics));
+    window.setSize(new Dimension(w, h));
   }
 
-  private void makeLargeEnoughToReceiveEvents(Window window, WindowMetrics metrics) {
-    Dimension windowSize = sizeOf(window);
-    int w = max(windowSize.width, proposedWidth(metrics));
-    int h = max(windowSize.height, proposedHeight(metrics));
-    window.setSize(new Dimension(w, h));
-    // execute(setSizeTask(window, new Dimension(w, h)));
+  @RunsInCurrentThread
+  private boolean isEmptyFrame(Window w) {
+    Insets insets = w.getInsets();
+    return insets.top + insets.bottom == w.getHeight() || insets.left + insets.right == w.getWidth();
   }
+
 
   private int proposedWidth(WindowMetrics metrics) {
     return metrics.verticalInsets() + ARBITRARY_EXTRA_VALUE;

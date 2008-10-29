@@ -15,14 +15,14 @@
  */
 package org.fest.swing.monitor;
 
-import static org.fest.swing.query.ComponentShowingQuery.isShowing;
-
 import java.awt.Component;
 import java.awt.Window;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.WeakHashMap;
+
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
  * Understands the information collected by the monitors in this package.
@@ -62,18 +62,17 @@ class Windows {
     WindowVisibilityMonitor monitor = new WindowVisibilityMonitor(this);
     target.addWindowListener(monitor);
     target.addComponentListener(monitor);
-//    execute(addWindowListenerTask(target, monitor));
-//    execute(addComponentListenerTask(target, monitor));
   }
 
   /**
    * Marks the given window as "ready to use" and if not showing, as "hidden."
    * @param w the given window.
    */
+  @RunsInCurrentThread
   void markExisting(Window w) {
     synchronized(lock) {
       addWindowTo(w, open);
-      if (!isShowing(w)) addWindowTo(w, hidden);
+      if (!w.isShowing()) addWindowTo(w, hidden);
     }
   }
 

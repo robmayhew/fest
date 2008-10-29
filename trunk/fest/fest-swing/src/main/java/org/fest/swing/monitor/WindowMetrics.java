@@ -19,8 +19,7 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Window;
 
-import static org.fest.swing.awt.AWT.insetsFrom;
-import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
  * Understands some window metrics.
@@ -33,11 +32,13 @@ final class WindowMetrics {
 
   final Insets insets;
 
+  @RunsInCurrentThread
   WindowMetrics(Window w) {
     this.window = w;
-    insets = insetsFrom(w);
+    insets = w.getInsets();
   }
 
+  @RunsInCurrentThread
   Point center() {
     int x = window.getX() + insets.left + centerWidth();
     int y = window.getY() + insets.top + centerHeight();
@@ -45,7 +46,7 @@ final class WindowMetrics {
   }
 
   private int centerWidth() {
-    return (sizeOf(window).width - verticalInsets()) / 2;
+    return (window.getWidth() - verticalInsets()) / 2;
   }
 
   int verticalInsets() {
@@ -53,7 +54,7 @@ final class WindowMetrics {
   }
 
   private int centerHeight() {
-    return (sizeOf(window).height - horizontalInsets()) / 2;
+    return (window.getHeight() - horizontalInsets()) / 2;
   }
 
   int horizontalInsets() {

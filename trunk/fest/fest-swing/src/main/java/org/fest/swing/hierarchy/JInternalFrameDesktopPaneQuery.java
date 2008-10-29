@@ -15,9 +15,9 @@ import org.fest.swing.annotation.RunsInCurrentThread;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@RunsInCurrentThread
 final class JInternalFrameDesktopPaneQuery {
 
+  @RunsInCurrentThread
   static JDesktopPane desktopPaneOf(final JInternalFrame internalFrame) {
     JDesktopIcon icon = internalFrame.getDesktopIcon();
     if (icon != null) return icon.getDesktopPane();

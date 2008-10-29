@@ -15,8 +15,6 @@
  */
 package org.fest.swing.monitor;
 
-import static org.fest.assertions.Assertions.assertThat;
-
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.lang.ref.WeakReference;
@@ -25,9 +23,12 @@ import java.util.Map;
 
 import javax.swing.JTextField;
 
-import org.fest.swing.testing.ToolkitStub;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.testing.ToolkitStub;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link EventQueueMapping}</code>.
@@ -35,7 +36,7 @@ import org.testng.annotations.Test;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class EventQueueMappingTest {
+@Test public class EventQueueMappingTest {
 
   private EventQueue eventQueue;
   private ToolkitStub toolkit;
@@ -51,48 +52,42 @@ public class EventQueueMappingTest {
     queueMap = mapping.queueMap;
   }
 
-  @Test public void shouldAddEventQueue() {
+  public void shouldAddEventQueue() {
     mapping.addQueueFor(component);
     EventQueue storedEventQueue = queueMap.get(component).get();
     assertThat(storedEventQueue).isSameAs(eventQueue);
   }
 
-  @Test(dependsOnMethods = "shouldAddEventQueue")
   public void shouldReturnEventQueue() {
     mapping.addQueueFor(component);
     EventQueue storedEventQueue = mapping.queueFor(component);
     assertThat(storedEventQueue).isSameAs(eventQueue);
   }
 
-  @Test(dependsOnMethods = "shouldReturnEventQueue")
   public void shouldReturnEventQueueInComponentIfNoMappingFound() {
     assertThat(queueMap.keySet()).excludes(eventQueue);
     EventQueue storedEventQueue = mapping.queueFor(component);
     assertThat(storedEventQueue).isSameAs(eventQueue);
   }
 
-  @Test(dependsOnMethods = "shouldAddEventQueue")
   public void shouldReturnStoredEventQueue() {
     mapping.addQueueFor(component);
     EventQueue storedEventQueue = mapping.storedQueueFor(component);
     assertThat(storedEventQueue).isSameAs(eventQueue);
   }
 
-  @Test(dependsOnMethods = "shouldReturnStoredEventQueue")
   public void shouldReturnNullIfEventQueueNotStored() {
     assertThat(queueMap.keySet()).excludes(eventQueue);
     EventQueue storedEventQueue = mapping.storedQueueFor(component);
     assertThat(storedEventQueue).isNull();
   }
 
-  @Test(dependsOnMethods = "shouldReturnNullIfEventQueueNotStored")
   public void shouldReturnNullIfEventQueueReferenceIsNull() {
     queueMap.put(component, null);
     EventQueue storedEventQueue = mapping.storedQueueFor(component);
     assertThat(storedEventQueue).isNull();
   }
 
-  @Test(dependsOnMethods = "shouldAddEventQueue")
   public void shouldReturnAllQueues() {
     EventQueue anotherEventQueue = new EventQueue();
     ToolkitStub anotherToolkit = ToolkitStub.createNew(anotherEventQueue);
@@ -103,7 +98,6 @@ public class EventQueueMappingTest {
     assertThat(allEventQueues).containsOnly(eventQueue, anotherEventQueue);
   }
 
-  @Test(dependsOnMethods = "shouldReturnAllQueues")
   public void shouldNotFailIfMappingHasNullReference() {
     mapping.addQueueFor(component);
     queueMap.put(new JTextField(), null);

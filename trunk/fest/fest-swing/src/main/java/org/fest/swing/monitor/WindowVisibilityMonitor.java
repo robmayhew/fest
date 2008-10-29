@@ -21,6 +21,8 @@ import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import org.fest.swing.annotation.RunsInEDT;
+
 /**
  * Understands tracking of window visibility state.
  *
@@ -47,15 +49,14 @@ class WindowVisibilityMonitor extends WindowAdapter implements ComponentListener
     windows.markAsHidden((Window)source);
   }
 
+  @RunsInEDT
   @Override public void windowClosed(WindowEvent e) {
     Window w = e.getWindow();
-    // already in EDT
     w.removeComponentListener(this);
     w.removeWindowListener(this);
   }
 
   public void componentResized(ComponentEvent e) {}
-
   public void componentMoved(ComponentEvent e) {}
 
 }

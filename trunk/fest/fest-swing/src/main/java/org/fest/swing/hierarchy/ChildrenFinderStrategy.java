@@ -26,7 +26,6 @@ import org.fest.swing.annotation.RunsInCurrentThread;
  *
  * @author Yvonne Wang
  */
-@RunsInCurrentThread
 interface ChildrenFinderStrategy {
 
   /**
@@ -35,5 +34,6 @@ interface ChildrenFinderStrategy {
    * @param c the container whose children we are looking for.
    * @return a collection containing the non-explicit children found.
    */
+  @RunsInCurrentThread
   Collection<Component> nonExplicitChildrenOf(Container c);
 }

@@ -34,7 +34,6 @@ import static org.fest.swing.hierarchy.ContainerComponentsQuery.componentsOf;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@RunsInCurrentThread
 class ChildrenFinder {
 
   private static List<ChildrenFinderStrategy> strategies = new ArrayList<ChildrenFinderStrategy>();
@@ -45,6 +44,7 @@ class ChildrenFinder {
     strategies.add(new WindowChildrenFinder());
   }
 
+  @RunsInCurrentThread
   Collection<Component> childrenOf(Component c) {
     if (!(c instanceof Container)) return emptyList();
     Container container = (Container)c;

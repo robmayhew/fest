@@ -40,7 +40,6 @@ import static org.fest.swing.listener.WeakEventListener.attachAsWeakEventListene
  *
  * @author Alex Ruiz
  */
-@RunsInCurrentThread
 public class NewHierarchy extends ExistingHierarchy {
 
   private final WindowFilter filter;
@@ -78,6 +77,7 @@ public class NewHierarchy extends ExistingHierarchy {
     setUp(toolkit, ignoreExisting);
   }
 
+  @RunsInCurrentThread
   private void setUp(Toolkit toolkit, boolean ignoreExisting) {
     if (ignoreExisting) ignoreExisting();
     attachAsWeakEventListener(toolkit, transientWindowListener, WINDOW_EVENT_MASK | COMPONENT_EVENT_MASK);
@@ -86,6 +86,7 @@ public class NewHierarchy extends ExistingHierarchy {
   /**
    * Make all currently existing components invisible to this hierarchy, without affecting their current state.
    */
+  @RunsInCurrentThread
   public void ignoreExisting() {
     for (Container c : roots())
       filter.ignore(c);
@@ -95,6 +96,7 @@ public class NewHierarchy extends ExistingHierarchy {
    * Make the given component visible to this hierarchy.
    * @param c the given component.
    */
+  @RunsInCurrentThread
   public void recognize(Component c) {
     filter.recognize(c);
   }
@@ -104,6 +106,7 @@ public class NewHierarchy extends ExistingHierarchy {
    * @param c the given component.
    * @return all sub-components of the given component, omitting those which are currently filtered.
    */
+  @RunsInCurrentThread
   @Override public Collection<Component> childrenOf(Component c) {
     if (filter.isIgnored(c)) return emptyList();
     Collection<Component> children = super.childrenOf(c);
@@ -118,6 +121,7 @@ public class NewHierarchy extends ExistingHierarchy {
    * @param c the given component.
    * @return <code>true</code> if the given component is not filtered, <code>false</code> otherwise.
    */
+  @RunsInCurrentThread
   @Override public boolean contains(Component c) {
     return super.contains(c) && !filter.isIgnored(c);
   }
@@ -127,6 +131,7 @@ public class NewHierarchy extends ExistingHierarchy {
    * this hierarchy or be reachable in a hierarchy walk.
    * @param w the window to dispose.
    */
+  @RunsInCurrentThread
   @Override public void dispose(Window w) {
     if (!contains(w)) return;
     super.dispose(w);

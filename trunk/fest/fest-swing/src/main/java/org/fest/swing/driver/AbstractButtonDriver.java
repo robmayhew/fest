@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.AbstractButton;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
@@ -54,6 +55,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @param expected the text to match.
    * @throws AssertionError if the text of the button is not equal to the given one.
    */
+  @RunsInEDT
   public void requireText(AbstractButton button, String expected) {
     assertThat(textOf(button)).as(propertyName(button, TEXT_PROPERTY)).isEqualTo(expected);
   }
@@ -63,6 +65,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @param button the given button.
    * @return the text of the given button.
    */
+  @RunsInEDT
   public String textOf(AbstractButton button) {
     return AbstractButtonTextQuery.textOf(button);
   }
@@ -72,6 +75,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @param button the target button.
    * @throws ActionFailedException if the button is disabled.
    */
+  @RunsInEDT
   public void select(AbstractButton button) {
     boolean ready = false;
     try {
@@ -88,6 +92,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @param button the target button.
    * @throws ActionFailedException if the button is disabled.
    */
+  @RunsInEDT
   public void unselect(AbstractButton button) {
     boolean ready = false;
     try {
@@ -113,6 +118,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @param button the given button.
    * @throws AssertionError if the button is not selected.
    */
+  @RunsInEDT
   public void requireSelected(AbstractButton button) {
     assertButtonIsSelected(button, true);
   }
@@ -122,6 +128,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @param button the given button.
    * @throws AssertionError if the button is selected.
    */
+  @RunsInEDT
   public void requireNotSelected(AbstractButton button) {
     assertButtonIsSelected(button, false);
   }

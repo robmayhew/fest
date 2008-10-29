@@ -32,9 +32,9 @@ import static org.fest.util.Collections.list;
  *
  * @author Yvonne Wang
  */
-@RunsInCurrentThread
 final class JMenuChildrenFinder implements ChildrenFinderStrategy {
 
+  @RunsInCurrentThread
   public Collection<Component> nonExplicitChildrenOf(Container c) {
     if (!(c instanceof JMenu)) return emptyList();
     return list((Component)((JMenu)c).getPopupMenu());

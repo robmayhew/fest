@@ -38,7 +38,6 @@ import static org.fest.swing.hierarchy.JInternalFrameDesktopPaneQuery.desktopPan
  *
  * @author Alex Ruiz
  */
-@RunsInCurrentThread
 class ParentFinder {
 
   /**
@@ -46,29 +45,18 @@ class ParentFinder {
    * @param c the given component.
    * @return the parent for the given component.
    */
+  @RunsInCurrentThread
   Container parentOf(Component c) {
     Container p = c.getParent();
     if (p == null && c instanceof JInternalFrame) p = parentOf((JInternalFrame)c);
     return p;
   }
 
+  @RunsInCurrentThread
   private Container parentOf(JInternalFrame internalFrame) {
     // From Abbot: workaround for bug in JInternalFrame: COMPONENT_HIDDEN is sent before the desktop icon is set, so
     // JInternalFrame.getDesktopPane will throw a NPE if called while dispatching that event. Reported against 1.4.x.
     return desktopPaneOf(internalFrame);
-  }
-
-  /**
-   * Returns the invoker, if any, of the given component. Returns <code>null</code> if the component is not on a pop-up
-   * of any sort.
-   * @param c the given component.
-   * @return the invoker of the given component if found. Otherwise, <code>null</code>.
-   */
-  Component invokerFor(Component c) {
-    if (c instanceof JPopupMenu) return ((JPopupMenu)c).getInvoker();
-    Component parent = c.getParent();
-    if (parent == null) return null;
-    return invokerFor(parent);
   }
 
   /**
@@ -86,5 +74,19 @@ class ParentFinder {
       if (invoker != null) return windowFor(invoker);
     }
     return windowFor(parentOf(c));
+  }
+
+  /**
+   * Returns the invoker, if any, of the given component. Returns <code>null</code> if the component is not on a pop-up
+   * of any sort.
+   * @param c the given component.
+   * @return the invoker of the given component if found. Otherwise, <code>null</code>.
+   */
+  @RunsInCurrentThread
+  Component invokerFor(Component c) {
+    if (c instanceof JPopupMenu) return ((JPopupMenu)c).getInvoker();
+    Component parent = c.getParent();
+    if (parent == null) return null;
+    return invokerFor(parent);
   }
 }

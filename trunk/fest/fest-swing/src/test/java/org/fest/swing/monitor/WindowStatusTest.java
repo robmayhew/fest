@@ -18,12 +18,14 @@ package org.fest.swing.monitor;
 import java.awt.Dimension;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.util.logging.Logger;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.core.ScreenLock;
 import org.fest.swing.testing.TestWindow;
 
 import static org.easymock.EasyMock.expect;
@@ -32,6 +34,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.timing.Pause.pause;
+import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link WindowStatus}</code>.
@@ -39,6 +42,8 @@ import static org.fest.swing.timing.Pause.pause;
  * @author Alex Ruiz
  */
 public class WindowStatusTest {
+
+  private static Logger logger = Logger.getAnonymousLogger();
 
   private WindowStatus status;
 
@@ -52,10 +57,16 @@ public class WindowStatusTest {
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
+    try {
+      window.destroy();
+    } finally {
+      ScreenLock lock = ScreenLock.instance();
+      if (lock.acquiredBy(this)) lock.release(this);
+    }
   }
 
   @Test public void shouldMoveMouseToCenterWithFrameWidthGreaterThanHeight() {
+    ScreenLock.instance().acquire(this);
     window.display();
     Point center = new WindowMetrics(window).center();
     center.x += WindowStatus.sign();
@@ -72,6 +83,7 @@ public class WindowStatusTest {
   }
 
   @Test public void shouldMoveMouseToCenterWithFrameHeightGreaterThanWidth() {
+    ScreenLock.instance().acquire(this);
     window.display(new Dimension(200, 400));
     Point center = new WindowMetrics(window).center();
     center.y += WindowStatus.sign();
@@ -88,6 +100,7 @@ public class WindowStatusTest {
   }
 
   @Test public void shouldResizeWindowToReceiveEvents() {
+    ScreenLock.instance().acquire(this);
     window.display(new Dimension(0 ,0));
     Dimension original = sizeOf(window);
     new EasyMockTemplate(windows) {
@@ -100,7 +113,9 @@ public class WindowStatusTest {
       }
     }.run();
     // wait till frame is resized
-    pause(5000);
+    final int timeToPause = 5000;
+    logger.info(concat("Pausing for ", timeToPause, " ms"));
+    pause(timeToPause);
     assertThat(sizeOf(window).height).isGreaterThan(original.height);
   }
 

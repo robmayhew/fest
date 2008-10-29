@@ -33,14 +33,15 @@ import static org.fest.util.Collections.*;
  *
  * @author Yvonne Wang
  */
-@RunsInCurrentThread
 final class WindowChildrenFinder implements ChildrenFinderStrategy {
 
+  @RunsInCurrentThread
   public Collection<Component> nonExplicitChildrenOf(Container c) {
     if (!(c instanceof Window)) return emptyList();
     return ownedWindows((Window)c);
   }
 
+  @RunsInCurrentThread
   private Collection<Component> ownedWindows(Window w) {
     return windows(list(w.getOwnedWindows()));
   }

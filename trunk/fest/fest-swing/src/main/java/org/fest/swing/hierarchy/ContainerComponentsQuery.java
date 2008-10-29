@@ -16,9 +16,9 @@ import static org.fest.util.Collections.list;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@RunsInCurrentThread
 final class ContainerComponentsQuery {
 
+  @RunsInCurrentThread
   static List<Component> componentsOf(Container container) {
     return list(container.getComponents());
   }

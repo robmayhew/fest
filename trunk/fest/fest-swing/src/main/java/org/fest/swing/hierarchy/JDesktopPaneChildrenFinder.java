@@ -33,9 +33,9 @@ import static java.util.Collections.emptyList;
  *
  * @author Yvonne Wang
  */
-@RunsInCurrentThread
 final class JDesktopPaneChildrenFinder implements ChildrenFinderStrategy {
 
+  @RunsInCurrentThread
   public Collection<Component> nonExplicitChildrenOf(Container c) {
     if (!(c instanceof JDesktopPane)) return emptyList();
     return internalFramesFromIcons(c);
@@ -43,6 +43,7 @@ final class JDesktopPaneChildrenFinder implements ChildrenFinderStrategy {
 
   // From Abbot: add iconified frames, which are otherwise unreachable. For consistency, they are still considered
   // children of the desktop pane.
+  @RunsInCurrentThread
   private Collection<Component> internalFramesFromIcons(Container c) {
     Collection<Component> frames = new ArrayList<Component>();
     for (Component child : c.getComponents()) {

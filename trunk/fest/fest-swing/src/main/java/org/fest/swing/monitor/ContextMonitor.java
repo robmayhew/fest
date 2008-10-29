@@ -20,6 +20,8 @@ import java.awt.*;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ComponentEvent;
 
+import org.fest.swing.annotation.RunsInEDT;
+
 import static java.awt.AWTEvent.*;
 import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
 import static java.awt.event.WindowEvent.*;
@@ -49,6 +51,7 @@ final class ContextMonitor implements AWTEventListener {
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void eventDispatched(AWTEvent e) {
     if (!(e instanceof ComponentEvent)) return;
     ComponentEvent event = (ComponentEvent) e;

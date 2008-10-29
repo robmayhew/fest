@@ -27,6 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.listener.WeakEventListener;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
@@ -36,6 +37,8 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
 
 /**
  * Tests for <code>{@link WindowMonitor}</code>.
@@ -76,8 +79,7 @@ public class WindowMonitorTest {
         expectToMarkExisting(w);
         expectToAddContextFor(w);
         windows.attachNewWindowVisibilityMonitor(w);
-        // TODO all in EDT
-        for (Window owned : w.getOwnedWindows()) expectToExamine(owned);
+        for (Window owned : ownedWindowsOf(w)) expectToExamine(owned);
       }
 
       private void expectToMarkExisting(Window w) {
@@ -91,7 +93,11 @@ public class WindowMonitorTest {
       }
 
       protected final void codeToTest() {
-        monitor = new WindowMonitor(toolkit, context, windowStatus);
+        monitor = execute(new GuiQuery<WindowMonitor>() {
+          protected WindowMonitor executeInEDT() {
+            return new WindowMonitor(toolkit, context, windowStatus);
+          }
+        });
       }
     }.run();
     reset(context);

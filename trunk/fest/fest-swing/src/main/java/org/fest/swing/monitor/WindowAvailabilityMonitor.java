@@ -22,6 +22,8 @@ import java.awt.Window;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
 
+import org.fest.swing.annotation.RunsInEDT;
+
 import static java.awt.AWTEvent.*;
 import static javax.swing.SwingUtilities.getWindowAncestor;
 
@@ -46,6 +48,7 @@ final class WindowAvailabilityMonitor implements AWTEventListener {
     attachAsWeakEventListener(toolkit, this, EVENT_MASK);
   }
 
+  @RunsInEDT
   public void eventDispatched(AWTEvent e) {
     if (!(e instanceof MouseEvent)) return;
     Object source = e.getSource();

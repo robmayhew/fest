@@ -31,7 +31,6 @@ import static org.fest.swing.awt.AWT.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@RunsInCurrentThread
 public class ExistingHierarchy implements ComponentHierarchy {
 
   private static WindowMonitor windowMonitor = WindowMonitor.instance();
@@ -74,6 +73,7 @@ public class ExistingHierarchy implements ComponentHierarchy {
    * @param c the given component.
    * @return all descendants of interest of the given component.
    */
+  @RunsInCurrentThread
   public Collection<Component> childrenOf(Component c) {
     return childrenFinder.childrenOf(c);
   }
@@ -82,6 +82,7 @@ public class ExistingHierarchy implements ComponentHierarchy {
    * Properly dispose of the given window, making it and its native resources available for garbage collection.
    * @param w the window to dispose.
    */
+  @RunsInCurrentThread
   public void dispose(Window w) {
     if (isAppletViewer(w)) return;
     for (Window owned : w.getOwnedWindows()) dispose(owned);
