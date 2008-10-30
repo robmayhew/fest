@@ -14,19 +14,21 @@
  */
 package org.fest.assertions;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import org.fest.assertions.FileContentComparator.LineDiff;
+import org.fest.test.CodeToTest;
+
 import static org.fest.assertions.CommonFailures.*;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.fest.util.Strings.concat;
 import static org.fest.util.Systems.LINE_SEPARATOR;
+
 import static org.testng.Assert.*;
-
-import java.io.File;
-import java.io.IOException;
-
-import org.fest.assertions.FileContentComparator.LineDiff;
-import org.fest.test.CodeToTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 /**
  * Tests for <code>{@link FileAssert}</code>.
@@ -43,17 +45,31 @@ public class FileAssertTest {
     file = new FileStub("c:\\f.txt");
   }
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     FileAssert assertion = new FileAssert(file);
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     FileAssert assertion = new FileAssert(file);
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    FileAssert assertion = new FileAssert(file);
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    FileAssert assertion = new FileAssert(file);
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 

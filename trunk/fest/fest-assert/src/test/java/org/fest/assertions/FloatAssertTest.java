@@ -14,12 +14,14 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.FloatAssert.delta;
-import static org.fest.test.ExpectedFailure.expectAssertionError;
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
 
 import org.fest.test.CodeToTest;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.FloatAssert.delta;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
+
+import static org.testng.Assert.*;
 
 /**
  * Test for <code>{@link FloatAssert}</code>.
@@ -29,17 +31,31 @@ import org.testng.annotations.Test;
  */
 public class FloatAssertTest {
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     FloatAssert assertion = new FloatAssert(8.0f);
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     FloatAssert assertion = new FloatAssert(8.0f);
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    FloatAssert assertion = new FloatAssert(8.0f);
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    FloatAssert assertion = new FloatAssert(8.0f);
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 

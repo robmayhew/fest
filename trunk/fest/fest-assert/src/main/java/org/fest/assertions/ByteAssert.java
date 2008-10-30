@@ -47,7 +47,8 @@ public final class ByteAssert extends PrimitiveAssert {
    * @return this assertion object.
    */
   public ByteAssert as(String description) {
-    return (ByteAssert)description(description);
+    description(description);
+    return this;
   }
 
   /**
@@ -64,6 +65,41 @@ public final class ByteAssert extends PrimitiveAssert {
    * @return this assertion object.
    */
   public ByteAssert describedAs(String description) {
+    return as(description);
+  }
+
+  /**
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails. This method should be called before any assertion method, otherwise any assertion
+   * failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(value).<strong>as</strong>(new BasicDescription(&quot;Some value&quot;)).isEqualTo(otherValue);
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public ByteAssert as(Description description) {
+    description(description);
+    return this;
+  }
+
+  /**
+   * Alternative to <code>{@link #as(Description)}</code>, since "as" is a keyword in
+   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
+   * method, otherwise any assertion failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(value).<strong>describedAs</strong>(new BasicDescription(&quot;Some value&quot;)).isEqualTo(otherValue);
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public ByteAssert describedAs(Description description) {
     return as(description);
   }
 

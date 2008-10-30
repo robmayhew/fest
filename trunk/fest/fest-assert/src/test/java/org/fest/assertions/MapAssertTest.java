@@ -14,18 +14,20 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.CommonFailures.*;
-import static org.fest.assertions.MapAssert.entry;
-import static org.fest.test.ExpectedFailure.expectAssertionError;
-import static org.testng.Assert.*;
-
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.testng.annotations.Test;
+
 import org.fest.assertions.MapAssert.Entry;
 import org.fest.test.CodeToTest;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.CommonFailures.*;
+import static org.fest.assertions.MapAssert.entry;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
+
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link MapAssert}</code>.
@@ -38,17 +40,31 @@ public class MapAssertTest {
 
   private static final Map<Object, Object> EMPTY_MAP = new HashMap<Object, Object>();
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     MapAssert assertion = new MapAssert(EMPTY_MAP);
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     MapAssert assertion = new MapAssert(EMPTY_MAP);
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    MapAssert assertion = new MapAssert(EMPTY_MAP);
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    MapAssert assertion = new MapAssert(EMPTY_MAP);
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 

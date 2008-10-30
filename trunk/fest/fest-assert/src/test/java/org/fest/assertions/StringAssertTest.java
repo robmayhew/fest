@@ -15,13 +15,15 @@
  */
 package org.fest.assertions;
 
+import org.testng.annotations.Test;
+
+import org.fest.test.CodeToTest;
+
 import static org.fest.assertions.CommonFailures.*;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.fest.util.Strings.isEmpty;
-import static org.testng.Assert.*;
 
-import org.fest.test.CodeToTest;
-import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link StringAssert}</code>.
@@ -34,17 +36,31 @@ public class StringAssertTest {
 
   private static final String EMPTY_STRING = "";
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     StringAssert assertion = new StringAssert("Anakin");
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     StringAssert assertion = new StringAssert("Anakin");
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    StringAssert assertion = new StringAssert("Anakin");
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    StringAssert assertion = new StringAssert("Anakin");
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 

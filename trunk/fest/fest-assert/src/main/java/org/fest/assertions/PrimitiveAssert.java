@@ -40,11 +40,6 @@ abstract class PrimitiveAssert extends Assert {
    */
   abstract PrimitiveAssert as(String description);
 
-  PrimitiveAssert description(String description) {
-    this.description = description;
-    return this;
-  }
-
   /**
    * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in
    * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
@@ -59,6 +54,36 @@ abstract class PrimitiveAssert extends Assert {
    * @return this assertion object.
    */
   abstract PrimitiveAssert describedAs(String description);
+
+  /**
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails. This method should be called before any assertion method, otherwise any assertion
+   * failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(val).<strong>as</strong>(new BasicDescription(&quot;name&quot;)).isEqualTo(&quot;Frodo&quot;);
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  abstract PrimitiveAssert as(Description description);
+
+  /**
+   * Alternative to <code>{@link #as(Description)}</code>, since "as" is a keyword in
+   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
+   * method, otherwise any assertion failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(val).<strong>describedAs</strong>(new BasicDescription(&quot;name&quot;)).isEqualTo(&quot;Frodo&quot;);
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  abstract PrimitiveAssert describedAs(Description description);
 
   final void fail(String reason) {
     Fail.fail(formatted(reason));

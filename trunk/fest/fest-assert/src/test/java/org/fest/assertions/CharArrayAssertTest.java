@@ -14,12 +14,14 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.CommonFailures.*;
-import static org.fest.test.ExpectedFailure.expectAssertionError;
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
 
 import org.fest.test.CodeToTest;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.CommonFailures.*;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
+
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link CharArrayAssert}</code>.
@@ -32,17 +34,31 @@ public class CharArrayAssertTest {
   private static final char[] NULL_ARRAY = null;
   private static final char[] EMPTY_ARRAY = new char[0];
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     CharArrayAssert assertion = new CharArrayAssert('a', 'b');
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     CharArrayAssert assertion = new CharArrayAssert('a', 'b');
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    CharArrayAssert assertion = new CharArrayAssert('a', 'b');
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    CharArrayAssert assertion = new CharArrayAssert('a', 'b');
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 

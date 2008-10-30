@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fest</groupId>
   <artifactId>fest-assert</artifactId>
-  <version>1.0a2-SNAPSHOT</version>
+  <version>1.0rc1</version>
   <name>FEST Fluent Assertions</name>
   <description>'Flexible' or 'fluent' assertions for testing</description>
   <inceptionYear>2007</inceptionYear>
@@ -56,8 +56,14 @@
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>5.5</version>
+      <version>5.7</version>
       <classifier>jdk15</classifier>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>reportng</groupId>
+      <artifactId>reportng</artifactId>
+      <version>0.9.6</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

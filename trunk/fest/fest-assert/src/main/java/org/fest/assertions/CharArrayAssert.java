@@ -15,11 +15,11 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Fail.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.fest.assertions.Fail.*;
 
 /**
  * Understands assertion methods for <code>char</code> arrays. To create a new instance of this class use the
@@ -66,6 +66,41 @@ public final class CharArrayAssert extends ArrayAssert<char[]> {
    * @return this assertion object.
    */
   public CharArrayAssert describedAs(String description) {
+    return as(description);
+  }
+
+  /**
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails. This method should be called before any assertion method, otherwise any assertion
+   * failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(values).<strong>as</strong>(new BasicDescription(&quot;Some values&quot;)).isNotEmpty();
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public CharArrayAssert as(Description description) {
+    description(description);
+    return this;
+  }
+
+  /**
+   * Alternative to <code>{@link #as(Description)}</code>, since "as" is a keyword in
+   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
+   * method, otherwise any assertion failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(values).<strong>describedAs</strong>(new BasicDescription(&quot;Some values&quot;)).isNotEmpty();
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public CharArrayAssert describedAs(Description description) {
     return as(description);
   }
 

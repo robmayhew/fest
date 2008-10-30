@@ -22,14 +22,22 @@ package org.fest.assertions;
  */
 abstract class Assert {
 
-  String description;
+  Description description;
 
   /**
    * Returns the description of the actual <code>boolean</code> value in this assertion.
    * @return the description of the actual <code>boolean</code> value in this assertion.
    */
   public final String description() {
-    return description;
+    return description != null ? description.value() : null;
+  }
+
+  final void description(String description) {
+    description(new BasicDescription(description));
+  }
+
+  final void description(Description description) {
+    this.description = description;
   }
 
   /**

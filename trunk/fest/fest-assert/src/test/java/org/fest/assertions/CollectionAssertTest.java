@@ -15,17 +15,19 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.CommonFailures.expectIllegalArgumentExceptionIfConditionIsNull;
-import static org.fest.test.ExpectedFailure.expectAssertionError;
-import static org.fest.util.Collections.list;
-import static org.testng.Assert.*;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
+
+import org.fest.test.CodeToTest;
+
+import static org.fest.assertions.CommonFailures.expectIllegalArgumentExceptionIfConditionIsNull;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
+import static org.fest.util.Collections.list;
+
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link CollectionAssert}</code>.
@@ -37,17 +39,31 @@ public class CollectionAssertTest {
 
   private static final ArrayList<String> EMPTY_COLLECTION = new ArrayList<String>();
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     CollectionAssert assertion = new CollectionAssert(list("Anakin"));
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     CollectionAssert assertion = new CollectionAssert(list("Anakin"));
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    CollectionAssert assertion = new CollectionAssert(list("Anakin"));
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    CollectionAssert assertion = new CollectionAssert(list("Anakin"));
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 

@@ -14,14 +14,16 @@
  */
 package org.fest.assertions;
 
+import org.testng.annotations.Test;
+
+import org.fest.test.CodeToTest;
+
 import static org.fest.assertions.CommonFailures.*;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.concat;
-import static org.testng.Assert.*;
 
-import org.fest.test.CodeToTest;
-import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link ObjectAssert}</code>.
@@ -31,17 +33,31 @@ import org.testng.annotations.Test;
  */
 public class ObjectAssertTest {
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     ObjectAssert assertion = new ObjectAssert("Anakin");
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     ObjectAssert assertion = new ObjectAssert("Anakin");
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    ObjectAssert assertion = new ObjectAssert("Anakin");
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    ObjectAssert assertion = new ObjectAssert("Anakin");
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 

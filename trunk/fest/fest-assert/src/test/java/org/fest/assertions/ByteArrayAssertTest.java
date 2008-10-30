@@ -14,12 +14,14 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.CommonFailures.*;
-import static org.fest.test.ExpectedFailure.expectAssertionError;
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
 
 import org.fest.test.CodeToTest;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.CommonFailures.*;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
+
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link ByteArrayAssert}</code>.
@@ -32,17 +34,31 @@ public class ByteArrayAssertTest {
   private static final byte[] NULL_ARRAY = null;
   private static final byte[] EMPTY_ARRAY = new byte[0];
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     ByteArrayAssert assertion = new ByteArrayAssert(asByte(8), asByte(6));
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     ByteArrayAssert assertion = new ByteArrayAssert(asByte(8), asByte(6));
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    ByteArrayAssert assertion = new ByteArrayAssert(asByte(8), asByte(6));
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    ByteArrayAssert assertion = new ByteArrayAssert(asByte(8), asByte(6));
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 

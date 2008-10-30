@@ -14,11 +14,13 @@
  */
 package org.fest.assertions;
 
-import static org.fest.test.ExpectedFailure.expectAssertionError;
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
 
 import org.fest.test.CodeToTest;
-import org.testng.annotations.Test;
+
+import static org.fest.test.ExpectedFailure.expectAssertionError;
+
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link IntAssert}</code>.
@@ -28,17 +30,31 @@ import org.testng.annotations.Test;
  */
 public class IntAssertTest {
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     IntAssert assertion = new IntAssert(8);
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     IntAssert assertion = new IntAssert(8);
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    IntAssert assertion = new IntAssert(8);
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    IntAssert assertion = new IntAssert(8);
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 

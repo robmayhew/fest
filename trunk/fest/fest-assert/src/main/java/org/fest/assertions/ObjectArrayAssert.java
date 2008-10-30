@@ -15,14 +15,14 @@
  */
 package org.fest.assertions;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import static org.fest.assertions.Fail.*;
 import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Collections.*;
 import static org.fest.util.Strings.concat;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Understands assertions for <code>Object</code> arrays.  To create a new instance of this class use the
@@ -69,6 +69,41 @@ public final class ObjectArrayAssert extends ArrayAssert<Object[]> {
    * @return this assertion object.
    */
   public ObjectArrayAssert describedAs(String description) {
+    return as(description);
+  }
+
+  /**
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails. This method should be called before any assertion method, otherwise any assertion
+   * failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(names).<strong>as</strong>(new BasicDescription(&quot;Jedi Knights&quot;)).contains(&quot;Yoda&quot;);
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public ObjectArrayAssert as(Description description) {
+    description(description);
+    return this;
+  }
+
+  /**
+   * Alternative to <code>{@link #as(Description)}</code>, since "as" is a keyword in
+   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
+   * method, otherwise any assertion failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(names).<strong>describedAs</strong>(new BasicDescription(&quot;Jedi Knights&quot;)).contains(&quot;Yoda&quot;);
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public ObjectArrayAssert describedAs(Description description) {
     return as(description);
   }
 

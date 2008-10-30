@@ -14,11 +14,13 @@
  */
 package org.fest.assertions;
 
-import static org.fest.test.ExpectedFailure.expectAssertionError;
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
 
 import org.fest.test.CodeToTest;
-import org.testng.annotations.Test;
+
+import static org.fest.test.ExpectedFailure.expectAssertionError;
+
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link ByteAssert}</code>.
@@ -28,20 +30,33 @@ import org.testng.annotations.Test;
  */
 public class ByteAssertTest {
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     ByteAssert assertion = new ByteAssert(asByte(8));
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     ByteAssert assertion = new ByteAssert(asByte(8));
     assertNull(assertion.description());
     assertion.describedAs("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
+  @Test public void shouldSetDescription() {
+    ByteAssert assertion = new ByteAssert(asByte(8));
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    ByteAssert assertion = new ByteAssert(asByte(8));
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
 
   @Test public void shouldPassIfValuesAreEqual() {
     new ByteAssert(asByte(6)).isEqualTo(asByte(6));

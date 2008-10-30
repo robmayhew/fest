@@ -14,16 +14,16 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.Collections.*;
-import static org.fest.assertions.Formatting.inBrackets;
-import static org.fest.util.Strings.*;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.fest.util.Maps;
+
+import static org.fest.assertions.Collections.*;
+import static org.fest.assertions.Formatting.inBrackets;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands assertions for <code>{@link Map}</code>. To create a new instance of this class use the method
@@ -78,6 +78,41 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
    * @return this assertion object.
    */
   public MapAssert describedAs(String description) {
+    return as(description);
+  }
+
+  /**
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails. This method should be called before any assertion method, otherwise any assertion
+   * failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(cache).<strong>as</strong>(new BasicDescription(&quot;Cached Results&quot;)).keySetIncludes(&quot;430-094&quot;, &quot;5094-8&quot;);
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public MapAssert as(Description description) {
+    description(description);
+    return this;
+  }
+
+  /**
+   * Alternative to <code>{@link #as(Description)}</code>, since "as" is a keyword in <a
+   * href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
+   * method, otherwise any assertion failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(cache).<strong>describedAs</strong>(new BasicDescription(&quot;Cached Results&quot;)).keySetIncludes(&quot;430-094&quot;, &quot;5094-8&quot;);
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public MapAssert describedAs(Description description) {
     return as(description);
   }
 

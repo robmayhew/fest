@@ -14,12 +14,14 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.CommonFailures.*;
-import static org.fest.test.ExpectedFailure.expectAssertionError;
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
 
 import org.fest.test.CodeToTest;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.CommonFailures.*;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
+
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link DoubleArrayAssert}</code>.
@@ -32,17 +34,31 @@ public class DoubleArrayAssertTest {
   private static final double[] NULL_ARRAY = null;
   private static final double[] EMPTY_ARRAY = new double[0];
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     DoubleArrayAssert assertion = new DoubleArrayAssert(55.03, 4345.91);
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     DoubleArrayAssert assertion = new DoubleArrayAssert(55.03, 4345.91);
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    DoubleArrayAssert assertion = new DoubleArrayAssert(55.03, 4345.91);
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    DoubleArrayAssert assertion = new DoubleArrayAssert(55.03, 4345.91);
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 

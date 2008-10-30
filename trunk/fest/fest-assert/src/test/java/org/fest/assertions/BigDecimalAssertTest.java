@@ -14,15 +14,18 @@
  */
 package org.fest.assertions;
 
-import static java.math.BigDecimal.ZERO;
-import static org.fest.assertions.CommonFailures.*;
-import static org.fest.test.ExpectedFailure.expectAssertionError;
-import static org.testng.Assert.*;
-
 import java.math.BigDecimal;
 
-import org.fest.test.CodeToTest;
 import org.testng.annotations.Test;
+
+import org.fest.test.CodeToTest;
+
+import static java.math.BigDecimal.ZERO;
+
+import static org.fest.assertions.CommonFailures.*;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
+
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link BigDecimalAssert}</code>.
@@ -34,17 +37,31 @@ import org.testng.annotations.Test;
  */
 public class BigDecimalAssertTest {
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     BigDecimalAssert assertion = new BigDecimalAssert(eight());
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     BigDecimalAssert assertion = new BigDecimalAssert(eight());
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    BigDecimalAssert assertion = new BigDecimalAssert(eight());
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    BigDecimalAssert assertion = new BigDecimalAssert(eight());
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 

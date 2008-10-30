@@ -15,11 +15,13 @@
 package org.fest.assertions;
 
 
-import static org.fest.test.ExpectedFailure.expectAssertionError;
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
 
 import org.fest.test.CodeToTest;
-import org.testng.annotations.Test;
+
+import static org.fest.test.ExpectedFailure.expectAssertionError;
+
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link CharAssert}</code>.
@@ -30,17 +32,31 @@ import org.testng.annotations.Test;
  */
 public class CharAssertTest {
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     CharAssert assertion = new CharAssert('a');
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     CharAssert assertion = new CharAssert('a');
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    CharAssert assertion = new CharAssert('a');
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    CharAssert assertion = new CharAssert('a');
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 
@@ -195,7 +211,7 @@ public class CharAssertTest {
       }
     });
   }
-  
+
   @Test public void shouldPassIfActualIsUpperCase() {
     new CharAssert('A').isUpperCase();
   }

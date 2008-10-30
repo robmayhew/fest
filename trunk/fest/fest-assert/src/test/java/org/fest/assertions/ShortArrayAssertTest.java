@@ -15,12 +15,14 @@
  */
 package org.fest.assertions;
 
-import static org.fest.assertions.CommonFailures.*;
-import static org.fest.test.ExpectedFailure.expectAssertionError;
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
 
 import org.fest.test.CodeToTest;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.CommonFailures.*;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
+
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link ShortArrayAssert}</code>.
@@ -33,17 +35,31 @@ public class ShortArrayAssertTest {
   private static final short[] NULL_ARRAY = null;
   private static final short[] EMPTY_ARRAY = new short[0];
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     ShortArrayAssert assertion = new ShortArrayAssert(asShort(459), asShort(23));
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     ShortArrayAssert assertion = new ShortArrayAssert(asShort(459), asShort(23));
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    ShortArrayAssert assertion = new ShortArrayAssert(asShort(459), asShort(23));
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    ShortArrayAssert assertion = new ShortArrayAssert(asShort(459), asShort(23));
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 

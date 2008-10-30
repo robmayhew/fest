@@ -15,11 +15,11 @@
  */
 package org.fest.assertions;
 
+import java.util.Arrays;
+
 import static org.fest.assertions.Formatting.inBrackets;
 import static org.fest.util.Objects.namesOf;
 import static org.fest.util.Strings.concat;
-
-import java.util.Arrays;
 
 /**
  * Understands assertion methods for objects. To create a new instance of this class use the
@@ -118,6 +118,41 @@ public final class ObjectAssert extends GenericAssert<Object> {
    * @return this assertion object.
    */
   public ObjectAssert describedAs(String description) {
+    return as(description);
+  }
+
+  /**
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails. This method should be called before any assertion method, otherwise any assertion
+   * failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(value).<strong>as</strong>(new BasicDescription(&quot;Result&quot;)).isNotNull();
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public ObjectAssert as(Description description) {
+    description(description);
+    return this;
+  }
+
+  /**
+   * Alternative to <code>{@link #as(Description)}</code>, since "as" is a keyword in
+   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
+   * method, otherwise any assertion failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(value).<strong>describedAs</strong>(new BasicDescription(&quot;Result&quot;)).isNotNull();
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public ObjectAssert describedAs(Description description) {
     return as(description);
   }
 

@@ -43,7 +43,7 @@ abstract class GenericAssert<T> extends Assert {
    * @throws AssertionError if the actual value is not <code>null</code>.
    */
   public final void isNull() {
-    failIfNotNull(description, actual);
+    failIfNotNull(description(), actual);
   }
 
   /**
@@ -91,6 +91,36 @@ abstract class GenericAssert<T> extends Assert {
    * @return this assertion object.
    */
   abstract GenericAssert<T> describedAs(String description);
+
+  /**
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails. This method should be called before any assertion method, otherwise any assertion
+   * failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(val).<strong>as</strong>(new BasicDescription(&quot;name&quot;)).isEqualTo(&quot;Frodo&quot;);
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  abstract GenericAssert<T> as(Description description);
+
+  /**
+   * Alternative to <code>{@link #as(Description)}</code>, since "as" is a keyword in
+   * <a href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
+   * method, otherwise any assertion failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(val).<strong>describedAs</strong>(new BasicDescription(&quot;name&quot;)).isEqualTo(&quot;Frodo&quot;);
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  abstract GenericAssert<T> describedAs(Description description);
 
   /**
    * Verifies that the actual value is equal to the given one.
@@ -157,28 +187,24 @@ abstract class GenericAssert<T> extends Assert {
     if (condition == null) throw new IllegalArgumentException("Condition to check should be null");
   }
 
-  void description(String description) {
-    this.description = description;
-  }
-
   final void assertEqualTo(T expected) {
-    failIfNotEqual(description, actual, expected);
+    failIfNotEqual(description(), actual, expected);
   }
 
   final void assertNotEqualTo(T obj) {
-    failIfEqual(description, actual, obj);
+    failIfEqual(description(), actual, obj);
   }
 
   final void assertNotNull() {
-    failIfNull(description, actual);
+    failIfNull(description(), actual);
   }
 
   final void assertSameAs(T expected) {
-    failIfNotSame(description, actual, expected);
+    failIfNotSame(description(), actual, expected);
   }
 
   final void assertNotSameAs(T expected) {
-    failIfSame(description, actual, expected);
+    failIfSame(description(), actual, expected);
   }
 
   final void fail(String reason) {

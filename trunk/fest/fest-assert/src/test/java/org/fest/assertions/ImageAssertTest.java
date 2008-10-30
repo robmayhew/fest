@@ -14,13 +14,6 @@
  */
 package org.fest.assertions;
 
-import static java.awt.Color.*;
-import static org.fest.assertions.CommonFailures.*;
-import static org.fest.assertions.Resources.file;
-import static org.fest.test.ExpectedFailure.expectAssertionError;
-import static org.fest.util.Strings.concat;
-import static org.testng.Assert.*;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -28,9 +21,19 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import org.fest.test.CodeToTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
+
+import org.fest.test.CodeToTest;
+
+import static java.awt.Color.*;
+
+import static org.fest.assertions.CommonFailures.*;
+import static org.fest.assertions.Resources.file;
+import static org.fest.test.ExpectedFailure.expectAssertionError;
+import static org.fest.util.Strings.concat;
+
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link ImageAssert}</code>.
@@ -76,17 +79,31 @@ public class ImageAssertTest {
     });
   }
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     ImageAssert assertion = new ImageAssert(fivePixelBlueImage());
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     ImageAssert assertion = new ImageAssert(fivePixelBlueImage());
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    ImageAssert assertion = new ImageAssert(fivePixelBlueImage());
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    ImageAssert assertion = new ImageAssert(fivePixelBlueImage());
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 

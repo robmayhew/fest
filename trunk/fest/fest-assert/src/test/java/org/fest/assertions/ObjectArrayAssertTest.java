@@ -14,13 +14,15 @@
  */
 package org.fest.assertions;
 
+import org.testng.annotations.Test;
+
+import org.fest.test.CodeToTest;
+
 import static org.fest.assertions.CommonFailures.*;
 import static org.fest.test.ExpectedFailure.expectAssertionError;
 import static org.fest.util.Arrays.array;
-import static org.testng.Assert.*;
 
-import org.fest.test.CodeToTest;
-import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 /**
  * Tests for <code>{@link ObjectArrayAssert}</code>.
@@ -33,17 +35,31 @@ public class ObjectArrayAssertTest {
   private static final Object[] NULL_ARRAY = null;
   private static final Object[] EMPTY_ARRAY = new Object[0];
 
-  @Test public void shouldSetDescription() {
+  @Test public void shouldSetTextDescription() {
     ObjectArrayAssert assertion = new ObjectArrayAssert("Anakin");
     assertNull(assertion.description());
     assertion.as("A Test");
     assertEquals(assertion.description(), "A Test");
   }
 
-  @Test public void shouldSetDescriptionSafelyForGroovy() {
+  @Test public void shouldSetTextDescriptionSafelyForGroovy() {
     ObjectArrayAssert assertion = new ObjectArrayAssert("Anakin");
     assertNull(assertion.description());
     assertion.describedAs("A Test");
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescription() {
+    ObjectArrayAssert assertion = new ObjectArrayAssert("Anakin");
+    assertNull(assertion.description());
+    assertion.as(new BasicDescription("A Test"));
+    assertEquals(assertion.description(), "A Test");
+  }
+
+  @Test public void shouldSetDescriptionSafelyForGroovy() {
+    ObjectArrayAssert assertion = new ObjectArrayAssert("Anakin");
+    assertNull(assertion.description());
+    assertion.describedAs(new BasicDescription("A Test"));
     assertEquals(assertion.description(), "A Test");
   }
 

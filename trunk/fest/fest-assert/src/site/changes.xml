@@ -5,10 +5,7 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="1.0a2" date="TBD" description="Subsequent release">
-      <action dev="wanghy, alruiz" type="add">
-        Added condition org.fest.assertions.condition.AnyCondition.
-      </action>
+    <release version="1.0rc1" date="2008-10-30" description="Subsequent release">
       <action dev="wanghy" type="add" issue="112" due-to="Ted Young">
         Added method 'doesNotHaveDuplicates(Object...)' to ObjectArrayAssert.
       </action>
@@ -21,6 +18,12 @@
       </action>
       <action dev="wanghy, alruiz" type="add" issue="114" due-to="Ted Young">
         Assertions for primitive values can also be created from primitive wrappers.
+      </action>
+      <action dev="alruiz, wanghy" type="add" issue="227">
+        Added interface org.fest.assertions.Description.
+      </action>
+      <action dev="alruiz, wanghy" type="add" issue="227">
+        Added methods 'as(Description)' and 'describedAs(Description)' to all assertions.
       </action>
     </release>
     <release version="1.0a1" date="2008-02-18" description="Subsequent release">

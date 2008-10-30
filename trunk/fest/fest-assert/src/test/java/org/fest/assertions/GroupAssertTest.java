@@ -38,6 +38,8 @@ public class GroupAssertTest {
       GroupAssert<Object> isNotEmpty() { return null; }
       GenericAssert<Object> as(String description) { return null; }
       GenericAssert<Object> describedAs(String description) { return null; }
+      GenericAssert<Object> as(Description description) { return null; }
+      GenericAssert<Object> describedAs(Description description) { return null; }
       GenericAssert<Object> isEqualTo(Object expected) { return null; }
       GenericAssert<Object> isNotEqualTo(Object other) { return null; }
       GenericAssert<Object> isNotNull() { return null; }

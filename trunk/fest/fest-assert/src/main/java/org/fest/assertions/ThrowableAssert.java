@@ -75,6 +75,42 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
   }
 
   /**
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>.
+   * thrown when an assertion fails. This method should be called before any assertion method, otherwise any assertion
+   * failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(error).<strong>as</strong>(new BasicDescription(&quot;Number Formatting&quot;)).isInstanceOf(NumberFormatException.class);
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public ThrowableAssert as(Description description) {
+    objectAssert.as(description);
+    description(description);
+    return this;
+  }
+
+  /**
+   * Alternative to <code>{@link #as(Description)}</code>, since "as" is a keyword in <a
+   * href="http://groovy.codehaus.org/" target="_blank">Groovy</a>. This method should be called before any assertion
+   * method, otherwise any assertion failure will not show the provided description.
+   * <p>
+   * For example:
+   * <pre>
+   * assertThat(error).<strong>describedAs</strong>(new BasicDescription(&quot;Number Formatting&quot;)).isInstanceOf(NumberFormatException.class);
+   * </pre>
+   * </p>
+   * @param description the description of the actual value.
+   * @return this assertion object.
+   */
+  public ThrowableAssert describedAs(Description description) {
+    return as(description);
+  }
+
+  /**
    * Verifies that the actual <code>Throwable</code> is an instance of the given type.
    * @param type the type to check the actual <code>Throwable</code> against.
    * @return this assertion object.
