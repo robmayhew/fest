@@ -300,12 +300,12 @@ public class ComponentDriverTest {
     hideWindow();
     driver.requireNotVisible(window);
   }
-  
+
   private void hideWindow() {
     setVisible(window, false);
     robot.waitForIdle();
   }
-  
+
   public void shouldFailIfComponentIsVisibleAndExpectedToBeNotVisible() {
     try {
       driver.requireNotVisible(button);
@@ -315,11 +315,11 @@ public class ComponentDriverTest {
                              .contains("expected:<false> but was:<true>");
     }
   }
-  
+
   public void shouldPassIfComponentIsEnabledAsExpected() {
     driver.requireEnabled(button);
   }
-  
+
   public void shouldFailIfComponentIsNotEnabledAndExpectedToBeEnabled() {
     disableButton();
     try {
@@ -334,7 +334,7 @@ public class ComponentDriverTest {
   public void shouldPassIfComponentIsEnabledAsExpectedBeforeTimeout() {
     driver.requireEnabled(button, timeout(100));
   }
-  
+
   public void shouldFailIfComponentIsNotEnabledAsExpectedBeforeTimeout() {
     disableButton();
     int timeout = 1000;
@@ -355,12 +355,12 @@ public class ComponentDriverTest {
     long ellapsedTimeInMs = stopWatch.ellapsedTime() / 1000;
     assertThat(ellapsedTimeInMs).isGreaterThanOrEqualTo(minimumWaitedTime);
   }
-  
+
   public void shouldPassIfComponentIsNotEnabledAsExpected() {
     disableButton();
     driver.requireDisabled(button);
   }
-  
+
   public void shouldFailIfComponentIsEnabledAndExpectedToBeNotEnabled() {
     try {
       driver.requireDisabled(button);
@@ -376,7 +376,7 @@ public class ComponentDriverTest {
     int[] keyCodes = null;
     driver.pressAndReleaseKeys(button, keyCodes);
   }
-  
+
   public void shouldPressAndReleaseKeys() {
     assertThatTextFieldIsEmpty();
     int[] keyCodes = { VK_A, VK_C, VK_E };
@@ -393,18 +393,18 @@ public class ComponentDriverTest {
     } catch (ActionFailedException e) {}
     assertThatTextFieldIsEmpty();
   }
-  
+
   @Test(expectedExceptions = NullPointerException.class, groups = GUI)
   public void shouldThrowErrorIfKeyPressInfoIsNull() {
     driver.pressAndReleaseKey(button, null);
   }
-  
+
   public void shouldPressAndReleaseKeyInSpecifiedKeyPressInfo() {
     assertThatTextFieldIsEmpty();
     driver.pressAndReleaseKey(textField, keyCode(VK_A).modifiers(SHIFT_MASK));
     assertThat(textOf(textField)).isEqualTo("A");
   }
-  
+
   public void shouldThrowErrorWhenPressingAndReleasingKeyInDisabledComponent() {
     assertThatTextFieldIsEmpty();
     disableTextField();
@@ -432,7 +432,7 @@ public class ComponentDriverTest {
     } catch (ActionFailedException e) {}
     assertThatTextFieldIsEmpty();
   }
-  
+
   public void shouldThrowErrorWhenReleasingKeyInDisabledComponent() {
     assertThatTextFieldIsEmpty();
     disableTextField();
@@ -451,7 +451,7 @@ public class ComponentDriverTest {
       }
     });
   }
-  
+
   public void shouldThrowErrorWhenGivingFocusToDisabledComponent() {
     disableButton();
     try {
@@ -460,17 +460,17 @@ public class ComponentDriverTest {
     } catch (ActionFailedException e) {}
     assertThat(hasFocus(button)).isFalse();
   }
-  
+
   public void shouldReturnIsUserResizableIfFrameIsResizable() {
-    assertThat(driver.isUserResizable(window)).isTrue();
+    assertThat(isUserResizable(window, driver)).isTrue();
   }
-  
+
   public void shouldReturnIsNotUserResizableIfFrameIsNotResizable() {
     makeNotResizable(window);
     robot.waitForIdle();
-    assertThat(driver.isUserResizable(window)).isFalse();
+    assertThat(isUserResizable(window, driver)).isFalse();
   }
-  
+
   private static void makeNotResizable(final TestWindow window) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -478,19 +478,19 @@ public class ComponentDriverTest {
       }
     });
   }
-  
+
   public void shouldReturnIsUserResizableIfDialogIsResizable() {
     TestDialog dialog = TestDialog.createNewDialog(window);
-    assertThat(driver.isUserResizable(dialog)).isTrue();
+    assertThat(isUserResizable(dialog, driver)).isTrue();
   }
-  
+
   public void shouldReturnIsNotUserResizableIfDialogIsNotResizable() {
     TestDialog dialog = TestDialog.createNewDialog(window);
     makeNotResizable(dialog);
     robot.waitForIdle();
-    assertThat(driver.isUserResizable(dialog)).isFalse();
+    assertThat(isUserResizable(dialog, driver)).isFalse();
   }
-  
+
   private static void makeNotResizable(final TestDialog dialog) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -500,18 +500,26 @@ public class ComponentDriverTest {
   }
 
   public void shouldReturnIsNotUserResizableIfComponentIsNotFrameOrDialog() {
-    assertThat(driver.isUserResizable(button)).isFalse();
+    assertThat(isUserResizable(button, driver)).isFalse();
   }
-  
+
+  private static boolean isUserResizable(final Component c, final ComponentDriver driver) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return driver.isUserResizable(c);
+      }
+    });
+  }
+
   public void shouldReturnIsMovableIfComponentIsFrame() {
     assertThat(driver.isUserMovable(window)).isTrue();
   }
-  
+
   public void shouldReturnIsMovableIfComponentIsDialog() {
     TestDialog dialog = TestDialog.createNewDialog(window);
     assertThat(driver.isUserMovable(dialog)).isTrue();
   }
-  
+
   public void shouldReturnIsNotMovableIfComponentIsNotFrameOrDialog() {
     assertThat(driver.isUserMovable(button)).isFalse();
   }
@@ -520,7 +528,7 @@ public class ComponentDriverTest {
     disable(button);
     robot.waitForIdle();
   }
-  
+
   private void disableTextField() {
     disable(textField);
   }

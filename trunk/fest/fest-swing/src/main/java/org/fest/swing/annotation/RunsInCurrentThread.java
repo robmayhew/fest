@@ -15,18 +15,30 @@
 package org.fest.swing.annotation;
 
 import java.lang.annotation.Documented;
-import java.lang.annotation.Inherited;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
 
 /**
- * Understands an annotation that documents that a method is executed in the current thread. Callers are responsible for
- * calling such method in the event dispatch thread.
+ * Understands an annotation that documents that a method is accessing GUI components in a thread other than the event
+ * dispatch thread.
+ * <p>
+ * If this annotation is used at a type level:
+ * <ol>
+ * <li>
+ * <b>class:</b> all methods in a class are accessing GUI components in a thread other than the event dispatch thread.
+ * </li>
+ * <li>
+ * <b>interface:</b> methods in an interface that access GUI components should do it in a thread other than the event
+ * dispatch thread.
+ * </li>
+ * </ol>
+ * </p>
+ * <p>
+ * <b>Note:</b> Clients are responsible for calling methods marked with this annotation in the event dispatch thread.
  *
  * @author Alex Ruiz
  */
-@Target({ METHOD, CONSTRUCTOR, TYPE })
+@Target( { METHOD, CONSTRUCTOR, TYPE })
 @Documented
-@Inherited
 public @interface RunsInCurrentThread {}

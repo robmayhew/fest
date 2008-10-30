@@ -1,16 +1,16 @@
 /*
  * Created on Jun 25, 2008
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- * 
+ *
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.input;
@@ -40,7 +40,7 @@ public class DisposedWindowMonitorTest {
 
   private DisposedWindowMonitor monitor;
   private Window window;
-  
+
   @BeforeMethod public void setUp() {
     monitor = new DisposedWindowMonitor();
     window = frame().createNew();
@@ -50,7 +50,7 @@ public class DisposedWindowMonitorTest {
     assertThat(monitor.isDuplicateDispose(createMock(AWTEvent.class))).isFalse();
     assertThat(monitor.disposedWindows).isEmpty();
   }
-  
+
   public void shouldReturnIsNotDuplicateIfWindowIsClosing() {
     WindowEvent e = new WindowEvent(window, WINDOW_CLOSING);
     assertThat(monitor.isDuplicateDispose(e)).isFalse();
@@ -63,20 +63,20 @@ public class DisposedWindowMonitorTest {
     assertThat(monitor.isDuplicateDispose(e)).isFalse();
     assertThat(monitor.disposedWindows).isEmpty();
   }
-  
+
   public void shouldReturnIsDuplicateIfWindowIsClosedAndIsInDisposedWindowsMap() {
     monitor.disposedWindows.put(window, true);
     WindowEvent e = new WindowEvent(window, WINDOW_CLOSED);
     assertThat(monitor.isDuplicateDispose(e)).isTrue();
     assertThat(monitor.disposedWindows).hasSize(1);
-    assertThat(monitor.disposedWindows).contains(entry(window, true));
+    assertThat(monitor.disposedWindows).includes(entry(window, true));
   }
-  
+
   public void shouldReturnIsNotDuplicateIfWindowIsClosedAndIsNotInDisposedWindowsMap() {
     WindowEvent e = new WindowEvent(window, WINDOW_CLOSED);
     assertThat(monitor.isDuplicateDispose(e)).isFalse();
     assertThat(monitor.disposedWindows).hasSize(1)
-                                       .contains(entry(window, true));    
+                                       .includes(entry(window, true));
     ComponentListener[] componentListeners = window.getComponentListeners();
     assertThat(componentListeners).hasSize(1);
     assertThat(componentListeners[0]).isInstanceOf(DisposalMonitor.class);

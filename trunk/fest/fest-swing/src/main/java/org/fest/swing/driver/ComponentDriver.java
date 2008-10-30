@@ -21,8 +21,12 @@ import javax.accessibility.AccessibleAction;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
+import org.fest.assertions.Description;
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.*;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiLazyLoadingDescription;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.UnexpectedException;
@@ -44,7 +48,6 @@ import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
-import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.*;
@@ -83,7 +86,8 @@ public class ComponentDriver {
    * @param c the <code>Component</code> to click on.
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
-  public void click(final Component c) {
+  @RunsInEDT
+  public void click(Component c) {
     robot.click(c, whereToClick(c));
   }
 
@@ -94,6 +98,7 @@ public class ComponentDriver {
    * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
+  @RunsInEDT
   public void click(Component c, MouseButton button) {
     click(c, button, 1);
   }
@@ -105,6 +110,7 @@ public class ComponentDriver {
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
+  @RunsInEDT
   public void click(Component c, MouseClickInfo mouseClickInfo) {
     if (mouseClickInfo == null) throw new NullPointerException("The given MouseClickInfo should not be null");
     click(c, mouseClickInfo.button(), mouseClickInfo.times());
@@ -115,6 +121,7 @@ public class ComponentDriver {
    * @param c the <code>Component</code> to click on.
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
+  @RunsInEDT
   public void doubleClick(Component c) {
     click(c, LEFT_BUTTON, 2);
   }
@@ -124,6 +131,7 @@ public class ComponentDriver {
    * @param c the <code>Component</code> to click on.
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
+  @RunsInEDT
   public void rightClick(Component c) {
     click(c, RIGHT_BUTTON);
   }
@@ -136,6 +144,7 @@ public class ComponentDriver {
    * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
+  @RunsInEDT
   public void click(Component c, MouseButton button, int times) {
     if (button == null) throw new NullPointerException("The given MouseButton should not be null");
     robot.click(c, whereToClick(c), button, times);
@@ -148,6 +157,7 @@ public class ComponentDriver {
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    * @return the point where the center of the given <code>Component</code> is.
    */
+  @RunsInEDT
   protected Point whereToClick(final Component c) {
     Point where = null;
     try {
@@ -169,6 +179,7 @@ public class ComponentDriver {
    * @param where the position where to click.
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
+  @RunsInEDT
   public void click(Component c, Point where) {
     validateIsEnabled(c, RUN_IN_EDT);
     robot.click(c, where);
@@ -184,6 +195,7 @@ public class ComponentDriver {
    * @param size the given size to match.
    * @throws AssertionError if the size of the <code>Window</code> is not equal to the given size.
    */
+  @RunsInEDT
   public void requireSize(Component c, Dimension size) {
     assertThat(sizeOf(c)).as(propertyName(c, SIZE_PROPERTY)).isEqualTo(size);
   }
@@ -193,6 +205,7 @@ public class ComponentDriver {
    * @param c the target component.
    * @throws AssertionError if the <code>Component</code> is not visible.
    */
+  @RunsInEDT
   public void requireVisible(Component c) {
     assertThat(isVisible(c)).as(visibleProperty(c)).isTrue();
   }
@@ -202,11 +215,13 @@ public class ComponentDriver {
    * @param c the target component.
    * @throws AssertionError if the <code>Component</code> is visible.
    */
+  @RunsInEDT
   public void requireNotVisible(Component c) {
     assertThat(isVisible(c)).as(visibleProperty(c)).isFalse();
   }
 
-  private static String visibleProperty(Component c) {
+  @RunsInEDT
+  private static Description visibleProperty(Component c) {
     return propertyName(c, VISIBLE_PROPERTY);
   }
 
@@ -215,6 +230,7 @@ public class ComponentDriver {
    * @param c the target component.
    * @throws AssertionError if the <code>Component</code> is disabled.
    */
+  @RunsInEDT
   public void requireEnabled(Component c) {
     assertThat(isEnabled(c)).as(enabledProperty(c)).isTrue();
   }
@@ -225,6 +241,7 @@ public class ComponentDriver {
    * @param timeout the time this fixture will wait for the component to be enabled.
    * @throws WaitTimedOutError if the <code>Component</code> is never enabled.
    */
+  @RunsInEDT
   public void requireEnabled(Component c, Timeout timeout) {
     pause(untilIsEnabled(c), timeout);
   }
@@ -234,11 +251,13 @@ public class ComponentDriver {
    * @param c the target component.
    * @throws AssertionError if the <code>Component</code> is enabled.
    */
+  @RunsInEDT
   public void requireDisabled(Component c) {
     assertThat(isEnabled(c)).as(enabledProperty(c)).isFalse();
   }
 
-  private static String enabledProperty(Component c) {
+  @RunsInEDT
+  private static Description enabledProperty(Component c) {
     return propertyName(c, ENABLED_PROPERTY);
   }
 
@@ -251,6 +270,7 @@ public class ComponentDriver {
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    * @see java.awt.event.KeyEvent
    */
+  @RunsInEDT
   public void pressAndReleaseKeys(Component c, int... keyCodes) {
     if (keyCodes == null) throw new NullPointerException("The array of key codes should not be null");
     focusAndWaitForFocusGain(c);
@@ -268,6 +288,7 @@ public class ComponentDriver {
    * @see java.awt.event.KeyEvent
    * @see java.awt.event.InputEvent
    */
+  @RunsInEDT
   public void pressAndReleaseKey(Component c, KeyPressInfo keyPressInfo) {
     if (keyPressInfo == null) throw new NullPointerException("The given KeyPressInfo should not be null");
     pressAndReleaseKey(c, keyPressInfo.keyCode(), keyPressInfo.modifiers());
@@ -284,6 +305,7 @@ public class ComponentDriver {
    * @see java.awt.event.KeyEvent
    * @see java.awt.event.InputEvent
    */
+  @RunsInEDT
   public void pressAndReleaseKey(Component c, int keyCode, int[] modifiers) {
     focusAndWaitForFocusGain(c);
     robot.pressAndReleaseKey(keyCode, modifiers);
@@ -297,6 +319,7 @@ public class ComponentDriver {
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    * @see java.awt.event.KeyEvent
    */
+  @RunsInEDT
   public void pressKey(Component c, int keyCode) {
     focusAndWaitForFocusGain(c);
     robot.pressKey(keyCode);
@@ -310,6 +333,7 @@ public class ComponentDriver {
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    * @see java.awt.event.KeyEvent
    */
+  @RunsInEDT
   public void releaseKey(Component c, int keyCode) {
     focusAndWaitForFocusGain(c);
     robot.releaseKey(keyCode);
@@ -320,8 +344,8 @@ public class ComponentDriver {
    * has focus.
    * @param c the component to give focus to.
    * @throws ActionFailedException if the <code>Component</code> is disabled.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
+  @RunsInEDT
   public void focusAndWaitForFocusGain(Component c) {
     validateIsEnabled(c, RUN_IN_EDT);
     robot.focusAndWaitForFocusGain(c);
@@ -332,6 +356,7 @@ public class ComponentDriver {
    * this method returns.
    * @param c the component to give focus to.
    */
+  @RunsInEDT
   public void focus(Component c) {
     validateIsEnabled(c, RUN_IN_EDT);
     robot.focus(c);
@@ -342,6 +367,7 @@ public class ComponentDriver {
    * @param c the target component.
    * @param where the point where to start the drag action.
    */
+  @RunsInCurrentThread
   protected final void drag(Component c, Point where) {
     dragAndDrop.drag(c, where);
   }
@@ -371,31 +397,17 @@ public class ComponentDriver {
   }
 
   /**
-   * Indicates whether it is possible for the user to resize the given component.
+   * Indicates whether it is possible for the user to resize the given component. <b>Note:</b> This method is <b>not</b>
+   * executed in the event dispatch thread.
    * @param c the target component.
    * @return <code>true</code> if it is possible for the user to resize the given component, <code>false</code>
    * otherwise.
    */
+  @RunsInCurrentThread
   protected final boolean isUserResizable(Component c) {
-    if (c instanceof Dialog) return isResizable((Dialog)c);
-    if (c instanceof Frame)  return isResizable((Frame)c);
+    if (c instanceof  Frame) return  ((Frame)c).isResizable();
+    if (c instanceof Dialog) return ((Dialog)c).isResizable();
     return false;
-  }
-
-  private static boolean isResizable(final Dialog d) {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return d.isResizable();
-      }
-    });
-  }
-  
-  private static boolean isResizable(final Frame f) {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return f.isResizable();
-      }
-    });
   }
 
   /**
@@ -413,6 +425,7 @@ public class ComponentDriver {
    * @param c the given <code>Component</code>.
    * @throws ActionFailedException if <code>action</code> is <code>null</code> or empty.
    */
+  @RunsInCurrentThread
   protected final void performAccessibleActionOf(Component c) {
     performDefaultAccessibleAction(c);
     robot.waitForIdle();
@@ -425,13 +438,15 @@ public class ComponentDriver {
    * @param timeout the time in milliseconds to wait for the <code>Component</code> to be showing and ready.
    * @return <code>true</code> if the <code>Component</code> is showing and ready, <code>false</code> otherwise.
    */
+  @RunsInCurrentThread
   protected final boolean waitForShowing(Component c, long timeout) {
+    // TODO test
     if (robot.isReadyForInput(c)) return true;
     TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
     while (!robot.isReadyForInput(c)) {
       if (c instanceof JPopupMenu) {
         // move the mouse over the parent menu item to ensure the sub-menu shows
-        Component invoker = invokerOf((JPopupMenu)c);
+        Component invoker = ((JPopupMenu)c).getInvoker();
         if (invoker instanceof JMenu) robot.jitter(invoker);
       }
       if (watch.isTimeOut()) return false;
@@ -449,7 +464,12 @@ public class ComponentDriver {
    * @see ComponentFormatter
    * @see Formatting#format(Component)
    */
-  public static String propertyName(Component c, String propertyName) {
-    return concat(format(c), " - property:", quote(propertyName));
+  @RunsInEDT
+  public static Description propertyName(final Component c, final String propertyName) {
+    return new GuiLazyLoadingDescription() {
+      protected String loadDescription() {
+        return concat(format(c), " - property:", quote(propertyName));
+      }
+    };
   }
 }

@@ -17,9 +17,9 @@ package org.fest.swing.driver;
 
 import java.awt.Component;
 
+import org.fest.assertions.Description;
 import org.fest.swing.edt.GuiLazyLoadingDescription;
 import org.fest.swing.timing.Condition;
-import org.fest.swing.timing.LazyLoadingDescription;
 
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
@@ -42,8 +42,8 @@ class ComponentEnabledCondition extends Condition {
     super(description(c));
     this.c = c;
   }
-  
-  private static LazyLoadingDescription description(final Component c) {
+
+  private static Description description(final Component c) {
     return new GuiLazyLoadingDescription() {
       protected String loadDescription() {
         return concat(format(c), " to be enabled");

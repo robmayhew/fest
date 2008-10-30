@@ -19,6 +19,7 @@ import java.awt.Component;
 
 import javax.swing.JList;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.cell.JListCellReader;
 
 import static org.fest.swing.driver.ModelValueToString.asText;
@@ -31,27 +32,27 @@ import static org.fest.swing.driver.ModelValueToString.asText;
  */
 public class BasicJListCellReader implements JListCellReader {
 
-  private final CellRendererComponentReader cellRendererComponentReader;
+  private final CellRendererReader rendererReader;
 
   /**
-   * Creates a new </code>{@link BasicJListCellReader}</code> that uses a 
-   * <code>{@link BasicCellRendererComponentReader}</code> to read the value from the cell renderer component in a 
+   * Creates a new </code>{@link BasicJListCellReader}</code> that uses a
+   * <code>{@link BasicCellRendererReader}</code> to read the value from the cell renderer component in a
    * <code>JList</code>.
    */
   public BasicJListCellReader() {
-    this(new BasicCellRendererComponentReader());
+    this(new BasicCellRendererReader());
   }
 
   /**
    * Creates a new </code>{@link BasicJListCellReader}</code>.
-   * @param cellRendererComponentReader knows how to read values from the cell renderer component in a
+   * @param rendererReader knows how to read values from the cell renderer component in a
    * <code>JList</code>.
-   * @throws NullPointerException if <code>cellRendererComponentReader</code> is <code>null</code>.
+   * @throws NullPointerException if <code>rendererReader</code> is <code>null</code>.
    */
-  public BasicJListCellReader(CellRendererComponentReader cellRendererComponentReader) {
-    if (cellRendererComponentReader == null)
-      throw new NullPointerException("CellRendererComponentReader should not be null");
-    this.cellRendererComponentReader = cellRendererComponentReader;
+  public BasicJListCellReader(CellRendererReader rendererReader) {
+    if (rendererReader == null)
+      throw new NullPointerException("CellRendererReader should not be null");
+    this.rendererReader = rendererReader;
   }
 
   /**
@@ -61,12 +62,13 @@ public class BasicJListCellReader implements JListCellReader {
    * @param list the given <code>JList</code>.
    * @param index the index of the cell.
    * @return the internal value of a cell in a <code>JList</code> as expected in a test.
-   * @see CellRendererComponentReader#valueFrom(Component)
+   * @see CellRendererReader#valueFrom(Component)
    */
+  @RunsInCurrentThread
   public String valueAt(JList list, int index) {
     Object element = list.getModel().getElementAt(index);
     Component c = list.getCellRenderer().getListCellRendererComponent(list, element, index, true, true);
-    String value = (c != null) ? cellRendererComponentReader.valueFrom(c) : null;
+    String value = (c != null) ? rendererReader.valueFrom(c) : null;
     if (value != null) return value;
     return asText(list.getModel().getElementAt(index));
   }

@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.AbstractButton;
 
+import org.fest.assertions.Description;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
@@ -79,7 +80,7 @@ public class AbstractButtonDriver extends JComponentDriver {
   public void select(AbstractButton button) {
     boolean ready = false;
     try {
-      ready = !isSelectedAndEnabled(button);
+      ready = !isReadyForInput(button);
     } catch (UnexpectedException unexpected) {
       throw unexpected.bomb();
     }
@@ -96,7 +97,7 @@ public class AbstractButtonDriver extends JComponentDriver {
   public void unselect(AbstractButton button) {
     boolean ready = false;
     try {
-      ready = isSelectedAndEnabled(button);
+      ready = isReadyForInput(button);
     } catch (UnexpectedException unexpected) {
       throw unexpected.bomb();
     }
@@ -104,7 +105,8 @@ public class AbstractButtonDriver extends JComponentDriver {
     click(button);
   }
 
-  private static boolean isSelectedAndEnabled(final AbstractButton button) {
+  @RunsInEDT
+  private static boolean isReadyForInput(final AbstractButton button) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         validateIsEnabled(button, RUN_IN_CURRENT_THREAD);
@@ -133,10 +135,12 @@ public class AbstractButtonDriver extends JComponentDriver {
     assertButtonIsSelected(button, false);
   }
 
+  @RunsInEDT
   private void assertButtonIsSelected(AbstractButton button, boolean selected) {
     assertThat(isSelected(button)).as(selectedProperty(button)).isEqualTo(selected);
   }
 
+  @RunsInEDT
   private static boolean isSelected(final AbstractButton button) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
@@ -145,7 +149,8 @@ public class AbstractButtonDriver extends JComponentDriver {
     });
   }
 
-  private static String selectedProperty(AbstractButton button) {
+  @RunsInEDT
+  private static Description selectedProperty(AbstractButton button) {
     return propertyName(button, SELECTED_PROPERTY);
   }
 }

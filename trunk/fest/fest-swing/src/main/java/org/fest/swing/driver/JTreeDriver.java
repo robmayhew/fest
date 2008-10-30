@@ -24,6 +24,7 @@ import javax.swing.plaf.TreeUI;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.TreePath;
 
+import org.fest.assertions.Description;
 import org.fest.swing.cell.JTreeCellReader;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.*;
@@ -369,7 +370,7 @@ public class JTreeDriver extends JComponentDriver {
     fail(message);
   }
 
-  private String selectionProperty(JTree tree) {
+  private Description selectionProperty(JTree tree) {
     return propertyName(tree, SELECTION_PROPERTY);
   }
 
@@ -395,7 +396,7 @@ public class JTreeDriver extends JComponentDriver {
     assertThat(isEditable(tree)).as(editableProperty(tree)).isEqualTo(editable);
   }
 
-  private static String editableProperty(JTree tree) {
+  private static Description editableProperty(JTree tree) {
     return propertyName(tree, EDITABLE_PROPERTY);
   }
 

@@ -29,7 +29,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  * <code>{@link Component}</code> used by the cell renderer for a particular item in a <code>{@link JList}</code>.
  * @see JList#getCellRenderer()
  * @see ListCellRenderer#getListCellRendererComponent(JList, Object, int, boolean, boolean)
- * @see CellRendererComponentReader#valueFrom(Component)
+ * @see CellRendererReader#valueFrom(Component)
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang
@@ -38,7 +38,7 @@ final class JListCellValueAsTextQuery {
 
   static final JList REFERENCE_JLIST = new JList();
 
-  static String valueAtIndex(final JList list, final int index, final CellRendererComponentReader reader) {
+  static String valueAtIndex(final JList list, final int index, final CellRendererReader reader) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
         Object element = list.getModel().getElementAt(index);

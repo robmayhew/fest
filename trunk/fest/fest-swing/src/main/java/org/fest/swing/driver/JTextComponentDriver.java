@@ -23,6 +23,7 @@ import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
+import org.fest.assertions.Description;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.UnexpectedException;
@@ -112,8 +113,8 @@ public class JTextComponentDriver extends JComponentDriver {
   }
 
   /**
-   * Sets the given text into the <code>{@link JTextComponent}</code>. Unlike 
-   * <code>{@link #enterText(JTextComponent, String)}</code>, this method bypasses the event system and allows immediate 
+   * Sets the given text into the <code>{@link JTextComponent}</code>. Unlike
+   * <code>{@link #enterText(JTextComponent, String)}</code>, this method bypasses the event system and allows immediate
    * updating on the underlying document model.
    * <p>
    * Primarily desired for speeding up tests when precise user event fidelity isn't necessary.
@@ -249,7 +250,7 @@ public class JTextComponentDriver extends JComponentDriver {
     assertThat(textOf(textBox)).as(textProperty(textBox)).isEmpty();
   }
 
-  private static String textProperty(JTextComponent textBox) {
+  private static Description textProperty(JTextComponent textBox) {
     return propertyName(textBox, TEXT_PROPERTY);
   }
 
@@ -275,7 +276,7 @@ public class JTextComponentDriver extends JComponentDriver {
     assertThat(isEditable(textBox)).as(editableProperty(textBox)).isEqualTo(editable);
   }
 
-  private static String editableProperty(JTextComponent textBox) {
+  private static Description editableProperty(JTextComponent textBox) {
     return propertyName(textBox, EDITABLE_PROPERTY);
   }
 }

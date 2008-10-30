@@ -16,17 +16,26 @@
 package org.fest.swing.annotation;
 
 import java.lang.annotation.Documented;
-import java.lang.annotation.Inherited;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
 
 /**
- * Understands an annotation that documents that a method is executed in the event dispatch thread.
+ * Understands an annotation that documents that a method is accessing GUI components in the event dispatch thread.
+ * <p>
+ * If this annotation is used at a type level:
+ * <ol>
+ * <li>
+ * <b>class:</b> all methods in a class are accessing GUI components in the event dispatch thread.
+ * </li>
+ * <li>
+ * <b>interface:</b> methods in an interface that access GUI components should do it in the event dispatch thread.
+ * </li>
+ * </ol>
+ * </p>
  *
  * @author Alex Ruiz
  */
 @Target({ METHOD, CONSTRUCTOR, TYPE })
 @Documented
-@Inherited
 public @interface RunsInEDT {}

@@ -18,13 +18,13 @@ package org.fest.swing.driver;
 import java.awt.Component;
 
 /**
- * Understands an implementation of <code>{@link CellRendererComponentReader}</code> that returns a pre-set value as the
+ * Understands an implementation of <code>{@link CellRendererReader}</code> that returns a pre-set value as the
  * value read from a cell renderer component.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz 
  */
-public class CellRendererComponentReaderStub implements CellRendererComponentReader {
+public class CellRendererComponentReaderStub implements CellRendererReader {
 
   private final String valueToReturn;
   private Component cellRendererComponent;

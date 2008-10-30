@@ -23,6 +23,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 
+import org.fest.assertions.Description;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
@@ -50,7 +51,7 @@ import static org.fest.swing.driver.JTableSelectedRowsQuery.selectedRowsIn;
 import static org.fest.swing.driver.JTableSingleRowCellSelectedQuery.isCellSelected;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
-import static org.fest.swing.util.Arrays.assertEquals;
+import static org.fest.swing.util.Arrays.equal;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
@@ -83,9 +84,9 @@ public class JTableDriver extends JComponentDriver {
     cellReader(new BasicJTableCellReader());
     cellWriter(new BasicJTableCellWriter(robot));
   }
-  
+
   /**
-   * Returns the <code>{@link JTableHeader}</code> of the given <code>{@link JTable}</code>. 
+   * Returns the <code>{@link JTableHeader}</code> of the given <code>{@link JTable}</code>.
    * @param table the given <code>JTable</code>.
    * @return the <code>JTableHeader</code> of the given <code>JTable</code>.
    */
@@ -106,18 +107,18 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
-   * Returns a cell from the given <code>{@link JTable}</code> whose row index matches the given one and column name 
+   * Returns a cell from the given <code>{@link JTable}</code> whose row index matches the given one and column name
    * matches the given one.
    * @param table the target <code>JTable</code>.
    * @param cellByColumnName contains the given row index and column name to match.
-   * @return a cell from the given <code>JTable</code> whose row index matches the given one and column name 
+   * @return a cell from the given <code>JTable</code> whose row index matches the given one and column name
    * matches the given one.
    * @throws NullPointerException if <code>cellByColumnName</code> is <code>null</code>.
    * @throws IndexOutOfBoundsException if the row index in the given cell is out of bounds.
    * @throws ActionFailedException if a column with a matching name could not be found.
    */
   public TableCell cell(JTable table, TableCellByColumnName cellByColumnName) {
-    if (cellByColumnName == null) 
+    if (cellByColumnName == null)
       throw new NullPointerException("The instance of TableCellByColumnName should not be null");
     int row = cellByColumnName.row;
     validateRow(table, row);
@@ -125,7 +126,7 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
-   * Returns a cell from the given <code>{@link JTable}</code> whose value matches the given one. 
+   * Returns a cell from the given <code>{@link JTable}</code> whose value matches the given one.
    * @param table the target <code>JTable</code>.
    * @param value the value of the cell to look for.
    * @return a cell from the given <code>JTable</code> whose value matches the given one.
@@ -139,7 +140,7 @@ public class JTableDriver extends JComponentDriver {
         if (cellContainsValue(table, row, column, value)) return row(row).column(column);
     throw actionFailure(concat("Unable to find cell with value ", quote(value)));
   }
-  
+
   private boolean cellContainsValue(JTable table, int row, int column, String value) {
     return areEqual(value, value(table, row, column));
   }
@@ -339,7 +340,14 @@ public class JTableDriver extends JComponentDriver {
    */
   public void requireContents(JTable table, String[][] contents) {
     String[][] actual = contents(table);
-    assertEquals(actual, contents, propertyName(table, CONTENTS_PROPERTY));
+    if (!equal(actual, contents))
+      failNotEqual(actual, contents, propertyName(table, CONTENTS_PROPERTY));
+  }
+
+  private static void failNotEqual(String[][] actual, String[][] expected, Description description) {
+    String descriptionValue = description != null ? description.value() : null;
+    String message = descriptionValue == null ? "" : concat("[", descriptionValue, "]");
+    fail(concat(message, " expected:<", format(expected), "> but was:<", format(actual), ">"));
   }
 
   /**
@@ -397,7 +405,7 @@ public class JTableDriver extends JComponentDriver {
    * @throws AssertionError if the given table cell is not editable.
    * @throws NullPointerException if the cell is <code>null</code>.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
-   * @throws ActionFailedException if this driver's <code>JTableCellValueReader</code> is unable to enter the given 
+   * @throws ActionFailedException if this driver's <code>JTableCellValueReader</code> is unable to enter the given
    * value.
    * @see #cellWriter(JTableCellWriter)
    */
@@ -467,7 +475,7 @@ public class JTableDriver extends JComponentDriver {
     validate(table, cell);
     cellWriter.startCellEditing(table, cell.row, cell.column);
   }
-  
+
   /**
    * Stops editing the given cell of the <code>{@link JTable}</code>, using this driver's
    * <code>{@link JTableCellWriter}</code>. This method should be called after manipulating the
@@ -483,7 +491,7 @@ public class JTableDriver extends JComponentDriver {
     validate(table, cell);
     cellWriter.stopCellEditing(table, cell.row, cell.column);
   }
-  
+
   /**
    * Cancels editing the given cell of the <code>{@link JTable}</code>, using this driver's
    * <code>{@link JTableCellWriter}</code>. This method should be called after manipulating the
@@ -499,7 +507,7 @@ public class JTableDriver extends JComponentDriver {
     validate(table, cell);
     cellWriter.cancelCellEditing(table, cell.row, cell.column);
   }
-  
+
   /**
    * Validates that the given table cell is non <code>null</code> and its indices are not out of bounds.
    * @param table the target <code>JTable</code>.

@@ -20,9 +20,9 @@ import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.query.JComponentVisibleRectQuery;
 
 import static java.awt.event.KeyEvent.VK_UNDEFINED;
 
@@ -56,6 +56,7 @@ public class JComponentDriver extends ContainerDriver {
    * @param c the given <code>JComponent</code>.
    * @param r the visible <code>Rectangle</code>.
    */
+  @RunsInCurrentThread
   protected final void scrollToVisible(JComponent c, Rectangle r) {
     // From Abbot:
     // Ideally, we'd use scrollBar commands to effect the scrolling, but that gets really complicated for no real gain
@@ -66,15 +67,17 @@ public class JComponentDriver extends ContainerDriver {
   }
 
   /**
-   * Indicates whether the given <code>{@link JComponent}</code>'s visible <code>{@link Rectangle}</code> contains
-   * the given one.
+   * Indicates whether the given <code>{@link JComponent}</code>'s visible <code>{@link Rectangle}</code> contains the
+   * given one. <b>Note:</b> this method is <b>not</b> executed in the event dispatch thread. Callers are responsible
+   * for calling this method in the event dispatch thread.
    * @param c the given <code>JComponent</code>.
    * @param r the <code>Rectangle</code> to verify.
    * @return <code>true</code> if the given <code>Rectangle</code> is contained in the given <code>JComponent</code>'s
    *         visible <code>Rectangle</code>.
    */
+  @RunsInCurrentThread
   protected final boolean isVisible(JComponent c, Rectangle r) {
-    return JComponentVisibleRectQuery.visibleRectOf(c).contains(r);
+    return c.getVisibleRect().contains(r);
   }
 
   /**
@@ -85,8 +88,9 @@ public class JComponentDriver extends ContainerDriver {
    * @return <code>true</code> if the given <code>Point</code> is contained in the given <code>JComponent</code>'s
    *         visible <code>Rectangle</code>.
    */
+  @RunsInCurrentThread
   protected final boolean isVisible(JComponent c, Point p) {
-    return JComponentVisibleRectQuery.visibleRectOf(c).contains(p);
+    return c.getVisibleRect().contains(p);
   }
 
   /**
@@ -94,11 +98,13 @@ public class JComponentDriver extends ContainerDriver {
    * <code>{@link javax.swing.ActionMap}</code>.
    * @param c the given <code>JComponent</code>.
    * @param name the name of the <code>Action</code> to invoke.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
    * @throws ActionFailedException if an <code>Action</code> cannot be found under the given name.
    * @throws ActionFailedException if a <code>KeyStroke</code> cannot be found for the <code>Action</code> under the
-   *         given name.
+   * given name.
    * @throws ActionFailedException if it is not possible to type any of the found <code>KeyStroke</code>s.
    */
+  // TODO: should run in current thread.
   public final void invokeAction(JComponent c, String name) {
     focusAndWaitForFocusGain(c);
     for (KeyStroke keyStroke : keyStrokesForAction(c, name)) {

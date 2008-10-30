@@ -21,6 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.cell.JComboBoxCellReader;
 
 import static org.fest.swing.driver.ModelValueToString.asText;
@@ -34,28 +35,28 @@ import static org.fest.swing.driver.ModelValueToString.asText;
 public class BasicJComboBoxCellReader implements JComboBoxCellReader {
 
   private static final JList REFERENCE_JLIST = new JList();
-  
-  private final CellRendererComponentReader cellRendererComponentReader;
+
+  private final CellRendererReader rendererReader;
 
   /**
-   * Creates a new </code>{@link BasicJComboBoxCellReader}</code> that uses a 
-   * <code>{@link BasicCellRendererComponentReader}</code> to read the value from the cell renderer component in a 
+   * Creates a new </code>{@link BasicJComboBoxCellReader}</code> that uses a
+   * <code>{@link BasicCellRendererReader}</code> to read the value from the cell renderer component in a
    * <code>JComboBox</code>.
    */
   public BasicJComboBoxCellReader() {
-    this(new BasicCellRendererComponentReader());
+    this(new BasicCellRendererReader());
   }
 
   /**
    * Creates a new </code>{@link BasicJComboBoxCellReader}</code>.
-   * @param cellRendererComponentReader knows how to read values from the cell renderer component in a
+   * @param rendererReader knows how to read values from the cell renderer component in a
    * <code>JComboBox</code>.
-   * @throws NullPointerException if <code>cellRendererComponentReader</code> is <code>null</code>.
+   * @throws NullPointerException if <code>r</code> is <code>null</code>.
    */
-  public BasicJComboBoxCellReader(CellRendererComponentReader cellRendererComponentReader) {
-    if (cellRendererComponentReader == null)
-      throw new NullPointerException("CellRendererComponentReader should not be null");
-    this.cellRendererComponentReader = cellRendererComponentReader;
+  public BasicJComboBoxCellReader(CellRendererReader rendererReader) {
+    if (rendererReader == null)
+      throw new NullPointerException("CellRendererReader should not be null");
+    this.rendererReader = rendererReader;
   }
 
   /**
@@ -65,15 +66,17 @@ public class BasicJComboBoxCellReader implements JComboBoxCellReader {
    * @param comboBox the given <code>JComboBox</code>.
    * @param index the index of the cell.
    * @return the internal value of a cell in a <code>JComboBox</code> as expected in a test.
-   * @see CellRendererComponentReader#valueFrom(Component)
+   * @see CellRendererReader#valueFrom(Component)
    */
+  @RunsInCurrentThread
   public String valueAt(JComboBox comboBox, int index) {
     Component c = cellRendererComponent(comboBox, index);
-    String value = (c != null) ? cellRendererComponentReader.valueFrom(c) : null;
+    String value = (c != null) ? rendererReader.valueFrom(c) : null;
     if (value != null) return value;
     return asText(comboBox.getItemAt(index));
   }
 
+  @RunsInCurrentThread
   private Component cellRendererComponent(JComboBox comboBox, int index) {
     Object item = comboBox.getItemAt(index);
     ListCellRenderer renderer = comboBox.getRenderer();

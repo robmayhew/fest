@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.cell.JTableCellReader;
 
 import static java.lang.String.valueOf;
@@ -39,28 +40,28 @@ import static org.fest.swing.driver.ModelValueToString.asText;
  */
 public class BasicJTableCellReader implements JTableCellReader {
 
-  private final CellRendererComponentReader cellRendererComponentReader;
+  private final CellRendererReader rendererReader;
   private final BasicJComboBoxCellReader comboBoxCellReader = new BasicJComboBoxCellReader();
 
   /**
-   * Creates a new </code>{@link BasicJTableCellReader}</code> that uses a 
-   * <code>{@link BasicCellRendererComponentReader}</code> to read the value from the cell renderer component in a 
+   * Creates a new </code>{@link BasicJTableCellReader}</code> that uses a
+   * <code>{@link BasicCellRendererReader}</code> to read the value from the cell renderer component in a
    * <code>JTable</code>.
    */
   public BasicJTableCellReader() {
-    this(new BasicCellRendererComponentReader());
+    this(new BasicCellRendererReader());
   }
 
   /**
    * Creates a new </code>{@link BasicJTableCellReader}</code>.
-   * @param cellRendererComponentReader knows how to read values from the cell renderer component in a
+   * @param reader knows how to read values from the cell renderer component in a
    * <code>JTable</code>.
-   * @throws NullPointerException if <code>cellRendererComponentReader</code> is <code>null</code>.
+   * @throws NullPointerException if <code>reader</code> is <code>null</code>.
    */
-  public BasicJTableCellReader(CellRendererComponentReader cellRendererComponentReader) {
-    if (cellRendererComponentReader == null)
-      throw new NullPointerException("CellRendererComponentReader should not be null");
-    this.cellRendererComponentReader = cellRendererComponentReader;
+  public BasicJTableCellReader(CellRendererReader reader) {
+    if (reader == null)
+      throw new NullPointerException("CellRendererReader should not be null");
+    this.rendererReader = reader;
   }
 
   /**
@@ -81,9 +82,10 @@ public class BasicJTableCellReader implements JTableCellReader {
    * @param column the column index of the cell.
    * @return the internal value of a cell in a <code>JTable</code> as expected in a test.
    */
+  @RunsInCurrentThread
   public String valueAt(JTable table, int row, int column) {
     Component c = cellRendererIn(table, row, column);
-    String value = (c != null) ? cellRendererComponentReader.valueFrom(c) : null;
+    String value = (c != null) ? rendererReader.valueFrom(c) : null;
     if (value != null) return value;
     if (c instanceof JLabel) return ((JLabel)c).getText();
     if (c instanceof JCheckBox) return valueOf(((JCheckBox)c).isSelected());
@@ -105,6 +107,7 @@ public class BasicJTableCellReader implements JTableCellReader {
    * @param column the column index of the cell.
    * @return the font of the cell renderer for the given table cell.
    */
+  @RunsInCurrentThread
   public Font fontAt(JTable table, int row, int column) {
     Component c = cellRendererIn(table, row, column);
     return c != null ? c.getFont() : null;
@@ -119,6 +122,7 @@ public class BasicJTableCellReader implements JTableCellReader {
    * @param column the column index of the cell.
    * @return the background color of the cell renderer for the given table cell.
    */
+  @RunsInCurrentThread
   public Color backgroundAt(JTable table, int row, int column) {
     Component c = cellRendererIn(table, row, column);
     return c != null ? c.getBackground() : null;
@@ -133,11 +137,13 @@ public class BasicJTableCellReader implements JTableCellReader {
    * @param column the column index of the cell.
    * @return the foreground color of the cell renderer for the given table cell.
    */
+  @RunsInCurrentThread
   public Color foregroundAt(JTable table, int row, int column) {
     Component c = cellRendererIn(table, row, column);
     return c != null ? c.getForeground() : null;
   }
 
+  @RunsInCurrentThread
   private Component cellRendererIn(final JTable table, final int row, final int column) {
     Object value = table.getValueAt(row, column);
     TableCellRenderer cellRenderer = table.getCellRenderer(row, column);

@@ -21,6 +21,7 @@ import java.awt.Rectangle;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 
+import org.fest.assertions.Description;
 import org.fest.swing.awt.AWT;
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.core.MouseButton;
@@ -374,7 +375,7 @@ public class JListDriver extends JComponentDriver {
     if (selectionCount == 0) failNoSelection(list);
     assertThat(selectionCount).as(propertyName(list, SELECTED_INDICES_LENGTH_PROPERTY)).isEqualTo(items.length);
     for (int i = 0; i < selectionCount; i++) {
-      String description = propertyName(list, concat(SELECTED_INDICES_PROPERTY, "[", valueOf(i), "]"));
+      Description description = propertyName(list, concat(SELECTED_INDICES_PROPERTY, "[", valueOf(i), "]"));
       assertThat(selectionValues[i]).as(description).isEqualTo(items[i]);
     }
   }
@@ -409,7 +410,7 @@ public class JListDriver extends JComponentDriver {
     fail(concat("[", selectedIndexProperty(list), "] No selection"));
   }
 
-  private String selectedIndexProperty(JList list) {
+  private Description selectedIndexProperty(JList list) {
     return propertyName(list, SELECTED_INDEX_PROPERTY);
   }
 

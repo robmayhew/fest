@@ -15,11 +15,15 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JTree;
+import java.awt.Component;
 
+import javax.swing.JTree;
+import javax.swing.tree.TreeCellRenderer;
+
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.cell.JTreeCellReader;
 
-import static org.fest.swing.driver.JTreeCellValueAsTextQuery.nodeValue;
+import static org.fest.swing.util.Strings.isDefaultToString;
 
 /**
  * Understands the default implementation of <code>{@link JTreeCellReader}</code>.
@@ -27,22 +31,29 @@ import static org.fest.swing.driver.JTreeCellValueAsTextQuery.nodeValue;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class BasicJTreeCellReader extends BaseValueReader implements JTreeCellReader {
+public class BasicJTreeCellReader implements JTreeCellReader {
+
+  private final CellRendererReader rendererReader;
 
   /**
-   * Creates a new </code>{@link BasicJTreeCellReader}</code> that uses a 
-   * <code>{@link BasicCellRendererComponentReader}</code> to read the value from the cell renderer component in a 
+   * Creates a new </code>{@link BasicJTreeCellReader}</code> that uses a
+   * <code>{@link BasicCellRendererReader}</code> to read the value from the cell renderer component in a
    * <code>JTree</code>.
    */
-  public BasicJTreeCellReader() {}
+  public BasicJTreeCellReader() {
+    this(new BasicCellRendererReader());
+  }
 
   /**
    * Creates a new </code>{@link BasicJTreeCellReader}</code>.
-   * @param cellRendererComponentReader knows how to read values from the cell renderer component in a 
+   * @param rendererReader knows how to read values from the cell renderer component in a
    * <code>JTree</code>.
+   * @throws NullPointerException if <code>rendererReader</code> is <code>null</code>.
    */
-  public BasicJTreeCellReader(CellRendererComponentReader cellRendererComponentReader) {
-    super(cellRendererComponentReader);
+  public BasicJTreeCellReader(CellRendererReader rendererReader) {
+    if (rendererReader == null)
+      throw new NullPointerException("CellRendererReader should not be null");
+    this.rendererReader = rendererReader;
   }
 
   /**
@@ -51,7 +62,14 @@ public class BasicJTreeCellReader extends BaseValueReader implements JTreeCellRe
    * @param modelValue the value of a cell, retrieved from the model.
    * @return the internal value of a cell in a <code>JTree</code> as expected in a test.
    */
+  @RunsInCurrentThread
   public String valueAt(JTree tree, Object modelValue) {
-    return nodeValue(tree, modelValue, cellRendererComponentReader());
+    TreeCellRenderer r = tree.getCellRenderer();
+    Component c = r.getTreeCellRendererComponent(tree, modelValue, false, false, false, 0, false);
+    String value = (c != null) ? rendererReader.valueFrom(c) : null;
+    if (value != null) return value;
+    value= tree.convertValueToText(modelValue, false, false, false, 0, false);
+    if (isDefaultToString(value)) return null;
+    return value;
   }
 }

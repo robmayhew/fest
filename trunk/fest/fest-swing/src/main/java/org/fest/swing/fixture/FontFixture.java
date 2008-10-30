@@ -17,6 +17,9 @@ package org.fest.swing.fixture;
 
 import java.awt.Font;
 
+import org.fest.assertions.BasicDescription;
+import org.fest.assertions.Description;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.util.Strings.*;
 
@@ -38,7 +41,7 @@ public class FontFixture {
   private static final String SIZE_PROPERTY = "size";
 
   private final Font target;
-  private final String description;
+  private final Description description;
 
   /**
    * Creates a new </code>{@link FontFixture}</code>.
@@ -46,7 +49,7 @@ public class FontFixture {
    * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public FontFixture(Font target) {
-    this(target, null);
+    this(target, (Description)null);
   }
 
   /**
@@ -56,11 +59,21 @@ public class FontFixture {
    * @throws NullPointerException if <code>target</code> is <code>null</code>.
    */
   public FontFixture(Font target, String description) {
+    this(target, new BasicDescription(description));
+  }
+
+  /**
+   * Creates a new </code>{@link FontFixture}</code>.
+   * @param target the font to manage.
+   * @param description this fixture's description.
+   * @throws NullPointerException if <code>target</code> is <code>null</code>.
+   */
+  public FontFixture(Font target, Description description) {
     if (target == null) throw new NullPointerException("The given font should not be null");
     this.target = target;
     this.description = description;
   }
-  
+
   /**
    * Verifies that the family name of this fixture's font is equal to the given one.
    * @param family the expected family name.
@@ -173,7 +186,7 @@ public class FontFixture {
   }
 
   private String property(String s) {
-    if (!isEmpty(description)) return concat(description, PROPERTY_SEPARATOR, s);
+    if (!isEmpty(description())) return concat(description, PROPERTY_SEPARATOR, s);
     return s;
   }
 
@@ -187,5 +200,5 @@ public class FontFixture {
    * Returns this fixture's description.
    * @return this fixture's description.
    */
-  public final String description() { return description; }
+  public final String description() { return description != null ? description.value() : null; }
 }

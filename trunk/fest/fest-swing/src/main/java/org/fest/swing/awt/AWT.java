@@ -22,6 +22,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiActionExecutionType;
 import org.fest.swing.util.MouseEventTarget;
 
@@ -53,7 +55,7 @@ public class AWT {
   // Abbot: Macintosh *used* to map button2 to the pop-up trigger (1.3). Not clear when this changed.
   private static final boolean POPUP_ON_BUTTON2 = false;
 
-  
+
   /**
    * Returns a point at the center of the given <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
@@ -66,11 +68,12 @@ public class AWT {
   }
 
   /**
-   * Returns a point at the center of the given <code>{@link Component}</code>. This method is executed in the event 
+   * Returns a point at the center of the given <code>{@link Component}</code>. This method is executed in the event
    * dispatch thread.
    * @param c the given <code>Component</code>.
    * @return a point at the center of the given <code>Component</code>.
    */
+  @RunsInEDT
   public static Point centerOf(Component c) {
     return centerOf(sizeOf(c));
   }
@@ -158,11 +161,12 @@ public class AWT {
    * @return the invoker, if any, of the given <code>Component</code>; or <code>null</code>, if the
    *         <code>Component</code> is not on a pop-up of any sort.
    */
+  @RunsInCurrentThread
   public static Component invokerOf(final Component c) {
     if (c instanceof JPopupMenu) return ((JPopupMenu)c).getInvoker();
     Container parent = c.getParent();
     return parent != null ? invokerOf(parent) : null;
-  } 
+  }
 
   /**
    * Safe version of <code>{@link Component#getLocationOnScreen}</code>, which avoids lockup if an AWT pop-up menu is

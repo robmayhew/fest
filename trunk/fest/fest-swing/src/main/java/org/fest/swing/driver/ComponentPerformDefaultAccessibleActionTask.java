@@ -20,16 +20,15 @@ import java.awt.Component;
 import javax.accessibility.AccessibleAction;
 import javax.swing.Action;
 
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.util.Strings.concat;
 
 /**
  * Understands execution of the default (first) <code>{@link Action}</code> in a <code>{@link Component}</code>'s
- * <code>{@link AccessibleAction}</code>. This task is executed in the event dispatch thread.
+ * <code>{@link AccessibleAction}</code>. This task is <b>not</b> executed in the event dispatch thread.
  *
  * @author Alex Ruiz
  */
@@ -37,14 +36,11 @@ class ComponentPerformDefaultAccessibleActionTask {
 
   private static final int DEFAULT_ACTION_INDEX = 0;
 
+  @RunsInCurrentThread
   static void performDefaultAccessibleAction(final Component c) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        AccessibleAction action = c.getAccessibleContext().getAccessibleAction();
-        if (action == null || action.getAccessibleActionCount() == 0)
-          throw actionFailure(concat("Unable to perform accessible action for ", format(c)));
-        action.doAccessibleAction(DEFAULT_ACTION_INDEX);
-      }
-    });
+    AccessibleAction action = c.getAccessibleContext().getAccessibleAction();
+    if (action == null || action.getAccessibleActionCount() == 0)
+      throw actionFailure(concat("Unable to perform accessible action for ", format(c)));
+    action.doAccessibleAction(DEFAULT_ACTION_INDEX);
   }
 }

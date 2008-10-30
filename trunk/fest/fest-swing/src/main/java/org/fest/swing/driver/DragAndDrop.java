@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Settings;
@@ -27,7 +28,6 @@ import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
@@ -57,6 +57,7 @@ public class DragAndDrop {
    * @param target the target component.
    * @param where the point where to start the drag action.
    */
+  @RunsInCurrentThread
   public void drag(Component target, Point where) {
     robot.pressMouse(target, where, LEFT_BUTTON);
     int dragDelay = settings().dragDelay();
@@ -78,8 +79,9 @@ public class DragAndDrop {
     );
   }
 
+  @RunsInCurrentThread
   private void mouseMoveOnWindowsAndMacintosh(Component target, int x, int y) {
-    Dimension size = sizeOf(target);
+    Dimension size = target.getSize();
     int dx = distance(x, size.width);
     int dy = distance(y, size.height);
     if (dx == 0 && dy == 0) dx = DRAG_THRESHOLD;

@@ -25,6 +25,7 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 
+import org.fest.assertions.Description;
 import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.Robot;
@@ -177,7 +178,7 @@ public class JComboBoxDriver extends JComponentDriver {
     return cellReader.valueAt(comboBox, index);
   }
 
-  private String selectedIndexProperty(JComboBox comboBox) {
+  private Description selectedIndexProperty(JComboBox comboBox) {
     return propertyName(comboBox, SELECTED_INDEX_PROPERTY);
   }
 
@@ -219,7 +220,7 @@ public class JComboBoxDriver extends JComponentDriver {
     selectItemAtIndex(comboBox, index);
     robot.waitForIdle();
   }
-  
+
   private void hideDropDownListIfVisible(JComboBox comboBox) {
     if (!isDropDownVisible(comboBox)) return;
     dropDownVisibleThroughUIDelegate(comboBox, false);
@@ -325,7 +326,7 @@ public class JComboBoxDriver extends JComponentDriver {
     assertThat(isEditable(comboBox)).as(editableProperty(comboBox)).isEqualTo(expected);
   }
 
-  private static String editableProperty(JComboBox comboBox) {
+  private static Description editableProperty(JComboBox comboBox) {
     return propertyName(comboBox, EDITABLE_PROPERTY);
   }
 
