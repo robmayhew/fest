@@ -25,7 +25,7 @@ import org.fest.swing.exception.ActionFailedException;
 
 import static java.lang.Boolean.getBoolean;
 
-import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
+import static org.fest.swing.core.WindowAncestorFinder.windowAncestorOf;
 import static org.fest.swing.driver.WindowMoveToFrontTask.toFront;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
@@ -94,7 +94,7 @@ public class JMenuItemDriver extends JComponentDriver {
 
   private void moveParentWindowToFront(JMenuItemLocation location) {
     if (!location.inMenuBar()) return;
-    moveToFront(ancestorOf(location.parentOrInvoker()));
+    moveToFront(windowAncestorOf(location.parentOrInvoker()));
   }
 
   private void moveToFront(Window w) {

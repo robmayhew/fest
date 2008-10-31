@@ -23,22 +23,17 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
-import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.edt.GuiActionExecutionType;
 import org.fest.swing.util.MouseEventTarget;
 
 import static java.awt.event.InputEvent.*;
 import static javax.swing.SwingUtilities.convertPoint;
 
 import static org.fest.reflect.core.Reflection.method;
-import static org.fest.swing.edt.GuiActionExecutionType.RUN_IN_EDT;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
-import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
-import static org.fest.swing.query.JComponentVisibleRectQuery.visibleRectOf;
 import static org.fest.swing.util.Platform.isWindows;
 import static org.fest.util.Strings.*;
 
@@ -55,56 +50,25 @@ public class AWT {
   // Abbot: Macintosh *used* to map button2 to the pop-up trigger (1.3). Not clear when this changed.
   private static final boolean POPUP_ON_BUTTON2 = false;
 
-
   /**
    * Returns a point at the center of the given <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
-   * @param executionType specifies in which thread this method should be executed.
    * @return a point at the center of the given <code>Component</code>.
    */
-  public static Point centerOf(Component c, GuiActionExecutionType executionType) {
-    if (shouldRunInEDT(executionType)) return centerOf(c);
-    return centerOf(c.getSize());
-  }
-
-  /**
-   * Returns a point at the center of the given <code>{@link Component}</code>. This method is executed in the event
-   * dispatch thread.
-   * @param c the given <code>Component</code>.
-   * @return a point at the center of the given <code>Component</code>.
-   */
-  @RunsInEDT
+  @RunsInCurrentThread
   public static Point centerOf(Component c) {
-    return centerOf(sizeOf(c));
-  }
-
-  private static Point centerOf(Dimension d) {
-    return new Point(d.width / 2, d.height / 2);
+    Dimension size = c.getSize();
+    return new Point(size.width / 2, size.height / 2);
   }
 
   /**
-   * Returns a point at the center of the visible rectangle of the given <code>{@link JComponent}</code>. This method is
-   * executed in the event dispatch thread.
-   * @param c the given <code>JComponent</code>.
-   * @param executionType specifies in which thread this method should be executed.
-   * @return a point at the center of the visible rectangle of the given <code>JComponent</code>.
-   */
-  public static Point centerOfVisibleRect(JComponent c, GuiActionExecutionType executionType) {
-    if (shouldRunInEDT(executionType)) return centerOfVisibleRect(c);
-    return centerOf(c.getVisibleRect());
-  }
-
-  /**
-   * Returns a point at the center of the visible rectangle of the given <code>{@link JComponent}</code>. This method is
-   * executed in the event dispatch thread.
+   * Returns a point at the center of the visible rectangle of the given <code>{@link JComponent}</code>.
    * @param c the given <code>JComponent</code>.
    * @return a point at the center of the visible rectangle of the given <code>JComponent</code>.
    */
+  @RunsInCurrentThread
   public static Point centerOfVisibleRect(JComponent c) {
-    return centerOf(visibleRectOf(c));
-  }
-
-  private static Point centerOf(Rectangle r) {
+    Rectangle r = c.getVisibleRect();
     return new Point((r.x + (r.width / 2)), (r.y + (r.height / 2)));
   }
 
@@ -155,11 +119,11 @@ public class AWT {
 
   /**
    * Returns the invoker, if any, of the given <code>{@link Component}</code>; or <code>null</code>, if the
-   * <code>Component</code> is not on a pop-up of any sort. <b>Note:</b> This method is <b>not</b> executed in the event
-   * dispatch thread.
+   * <code>Component</code> is not on a pop-up of any sort. <b>Note:</b> this method is <b>not</b> executed in the event
+   * dispatch thread. Callers are responsible for calling this method in the event dispatch thread.
    * @param c the given <code>Component</code>.
    * @return the invoker, if any, of the given <code>Component</code>; or <code>null</code>, if the
-   *         <code>Component</code> is not on a pop-up of any sort.
+   * <code>Component</code> is not on a pop-up of any sort.
    */
   @RunsInCurrentThread
   public static Component invokerOf(final Component c) {
@@ -250,10 +214,6 @@ public class AWT {
     return new AWTEvent(c, eventId) {
       private static final long serialVersionUID = 1L;
     };
-  }
-
-  private static boolean shouldRunInEDT(GuiActionExecutionType executionType) {
-    return RUN_IN_EDT.equals(executionType);
   }
 
   /**

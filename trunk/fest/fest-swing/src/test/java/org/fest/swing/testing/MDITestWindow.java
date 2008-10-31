@@ -50,7 +50,7 @@ public class MDITestWindow extends TestWindow {
     return execute(new GuiQuery<MDITestWindow>() {
       protected MDITestWindow executeInEDT() {
         MDITestWindow window = createInCurrentThread(testClass);
-        TestWindow.displayInCurrentThread(window, new Dimension(500, 300));
+        TestWindow.display(window, new Dimension(500, 300));
         return window;
       }
     });

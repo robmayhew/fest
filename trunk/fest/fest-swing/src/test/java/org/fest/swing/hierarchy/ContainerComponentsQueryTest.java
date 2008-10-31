@@ -92,7 +92,7 @@ public class ContainerComponentsQueryTest {
     }
 
     private void displayInCurrentThread() {
-      TestWindow.displayInCurrentThread(this);
+      TestWindow.display(this);
     }
 
     private MyWindow() {

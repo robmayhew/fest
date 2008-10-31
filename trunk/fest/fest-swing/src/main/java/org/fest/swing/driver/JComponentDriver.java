@@ -14,6 +14,7 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -21,12 +22,19 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.UnexpectedException;
 
 import static java.awt.event.KeyEvent.VK_UNDEFINED;
 
-import static org.fest.swing.driver.JComponentKeyStrokesForActionQuery.keyStrokesForAction;
+import static org.fest.swing.awt.AWT.centerOfVisibleRect;
+import static org.fest.swing.driver.Actions.findActionKey;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
+import static org.fest.swing.driver.KeyStrokes.findKeyStrokesForAction;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.*;
 
@@ -47,7 +55,29 @@ public class JComponentDriver extends ContainerDriver {
     super(robot);
   }
 
-  // TODO override whereToClick
+  /**
+   * Returns the point where this driver should click a <code>{@link Component}</code>. This implementation returns the
+   * center of such <code>Component</code>.
+   * @param c the <code>Component</code> to click on.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @return the point where the center of the given <code>Component</code> is.
+   */
+  @RunsInEDT
+  @Override protected Point whereToClick(final Component c) {
+    if (!(c instanceof JComponent)) return super.whereToClick(c);
+    Point where = null;
+    try {
+      where = execute(new GuiQuery<Point>() {
+        protected Point executeInEDT() {
+          validateIsEnabled(c);
+          return centerOfVisibleRect((JComponent)c);
+        }
+      });
+    } catch (UnexpectedException unexpected) {
+      throw unexpected.bomb();
+    }
+    return where;
+  }
 
   /**
    * Invoke <code>{@link JComponent#scrollRectToVisible(Rectangle)}</code> on the given <code>{@link JComponent}</code>.
@@ -104,9 +134,11 @@ public class JComponentDriver extends ContainerDriver {
    * given name.
    * @throws ActionFailedException if it is not possible to type any of the found <code>KeyStroke</code>s.
    */
-  // TODO: should run in current thread.
-  public final void invokeAction(JComponent c, String name) {
-    focusAndWaitForFocusGain(c);
+  @RunsInCurrentThread
+  protected final void invokeAction(JComponent c, String name) {
+    // 'focusAndWaitForFocusGain' is already called in the EDT, but since the rest of GUI access is not done in the EDT,
+    // we rather be safe and mark this method with "@RunsInCurrentThread"
+    robot.focusAndWaitForFocusGain(c);
     for (KeyStroke keyStroke : keyStrokesForAction(c, name)) {
       try {
         type(keyStroke);
@@ -115,6 +147,12 @@ public class JComponentDriver extends ContainerDriver {
       } catch (IllegalArgumentException e) { /* try the next one, if any */ }
     }
     throw actionFailure(concat("Unable to type any key for the action with key ", quote(name)));
+  }
+
+  @RunsInCurrentThread
+  static KeyStroke[] keyStrokesForAction(JComponent component, String actionName) {
+    Object key = findActionKey(actionName, component.getActionMap());
+    return findKeyStrokesForAction(actionName, key, component.getInputMap());
   }
 
   private void type(KeyStroke keyStroke) {

@@ -26,12 +26,15 @@ import java.util.List;
 import javax.swing.*;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 import org.fest.swing.hierarchy.ExistingHierarchy;
 import org.fest.swing.input.InputState;
 import org.fest.swing.monitor.WindowMonitor;
+import org.fest.swing.util.Pair;
 import org.fest.swing.util.TimeoutWatch;
 
 import static java.awt.event.InputEvent.*;
@@ -44,12 +47,12 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.awt.AWT.*;
 import static org.fest.swing.core.ActivateWindowTask.activateWindow;
 import static org.fest.swing.core.EventMode.*;
-import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
+import static org.fest.swing.core.FocusOwnerFinder.*;
 import static org.fest.swing.core.InputModifiers.unify;
 import static org.fest.swing.core.MouseButton.*;
-import static org.fest.swing.core.WindowAncestorFinder.ancestorOf;
+import static org.fest.swing.core.WindowAncestorFinder.windowAncestorOf;
 import static org.fest.swing.core.WindowHideAndDisposeTask.hideAndDispose;
-import static org.fest.swing.edt.GuiActionExecutionType.RUN_IN_CURRENT_THREAD;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
@@ -219,46 +222,68 @@ public class RobotFixture implements Robot {
   }
 
   /** {@inheritDoc} */
-  public void focus(Component c) {
-    focus(c, false);
-  }
-
-  /** {@inheritDoc} */
+  @RunsInEDT
   public void focusAndWaitForFocusGain(Component c) {
     focus(c, true);
   }
 
-  private void focus(final Component c, boolean wait) {
-    Component currentOwner = focusOwner();
-    if (currentOwner == c) return;
-    FocusMonitor focusMonitor = FocusMonitor.attachTo(c);
+  /** {@inheritDoc} */
+  @RunsInEDT
+  public void focus(Component c) {
+    focus(c, false);
+  }
+
+  @RunsInEDT
+  private void focus(Component target, boolean wait) {
+    Component currentOwner = inEdtFocusOwner();
+    if (currentOwner == target) return;
+    FocusMonitor focusMonitor = FocusMonitor.attachTo(target);
     // for pointer focus
-    moveMouse(c);
+    moveMouse(target);
     // Make sure the correct window is in front
-    Window currentOwnerAncestor = currentOwner != null ? ancestorOf(currentOwner) : null;
-    Window componentAncestor = ancestorOf(c);
-    if (currentOwnerAncestor != componentAncestor) {
-      activate(componentAncestor);
-      waitForIdle();
-    }
-    giveFocusTo(c);
+    activateWindowOfFocusTarget(target, currentOwner);
+    giveFocusTo(target);
     try {
       if (wait) {
         TimeoutWatch watch = startWatchWithTimeoutOf(settings().timeoutToBeVisible());
         while (!focusMonitor.hasFocus()) {
-          if (watch.isTimeOut()) throw actionFailure(concat("Focus change to ", format(c), " failed"));
+          if (watch.isTimeOut()) throw actionFailure(concat("Focus change to ", format(target), " failed"));
           pause();
         }
       }
     } finally {
-      c.removeFocusListener(focusMonitor);
+      target.removeFocusListener(focusMonitor);
     }
+  }
+
+  @RunsInEDT
+  private void activateWindowOfFocusTarget(Component target, Component currentOwner) {
+    Pair<Window, Window> windowAncestors = windowAncestorsOf(currentOwner, target);
+    Window currentOwnerAncestor = windowAncestors.one;
+    Window targetAncestor = windowAncestors.two;
+    if (currentOwnerAncestor == targetAncestor) return;
+    activate(targetAncestor);
+    waitForIdle();
+  }
+
+  @RunsInEDT
+  private static Pair<Window, Window> windowAncestorsOf(final Component one, final Component two) {
+    return execute(new GuiQuery<Pair<Window, Window>>() {
+      protected Pair<Window, Window> executeInEDT() throws Throwable {
+        return new Pair<Window, Window>(windowAncestor(one), windowAncestor(two));
+      }
+
+      private Window windowAncestor(Component c) {
+        return (c != null) ? windowAncestorOf(c) : null;
+      }
+    });
   }
 
   /**
    * Activates the given <code>{@link Window}</code>. "Activate" means that the given window gets the keyboard focus.
    * @param w the window to activate.
    */
+  @RunsInEDT
   private void activate(Window w) {
     activateWindow(w);
     moveMouse(w); // For pointer-focus systems
@@ -314,37 +339,53 @@ public class RobotFixture implements Robot {
    * Simulates a user clicking once the given <code>{@link Component}</code> using the left mouse button.
    * @param c the <code>Component</code> to click on.
    */
+  @RunsInEDT
   public void click(Component c) {
     click(c, LEFT_BUTTON);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void rightClick(Component c) {
     click(c, RIGHT_BUTTON);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void click(Component c, MouseButton button) {
     click(c, button, 1);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void doubleClick(Component c) {
     click(c, LEFT_BUTTON, 2);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void click(Component c, MouseButton button, int times) {
-    Point where = (c instanceof JComponent) ? centerOfVisibleRect((JComponent)c) : centerOf(c);
-    click(c, where, button, times);
+    click(c, whereToClick(c), button, times);
+  }
+
+  @RunsInEDT
+  private Point whereToClick(final Component c) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        if (c instanceof JComponent) return centerOfVisibleRect((JComponent)c);
+        return centerOf(c);
+      }
+    });
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void click(Component c, Point where) {
     click(c, where, LEFT_BUTTON, 1);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void click(Component c, Point where, MouseButton button, int times) {
     focus(c);
     int mask = button.mask;
@@ -400,7 +441,7 @@ public class RobotFixture implements Robot {
   /** {@inheritDoc} */
   @RunsInCurrentThread
   public void jitter(Component c) {
-    jitter(c, centerOf(c, RUN_IN_CURRENT_THREAD));
+    jitter(c, centerOf(c));
   }
 
   /** {@inheritDoc} */
@@ -633,7 +674,7 @@ public class RobotFixture implements Robot {
   @RunsInCurrentThread
   public boolean isReadyForInput(Component c) {
     if (isAWTMode()) return c.isShowing();
-    Window w = ancestorOf(c);
+    Window w = windowAncestorOf(c);
     if (w == null) throw actionFailure(concat("Component ", format(c), " does not have a Window ancestor"));
     return c.isShowing() && windowMonitor.isWindowReady(w);
   }

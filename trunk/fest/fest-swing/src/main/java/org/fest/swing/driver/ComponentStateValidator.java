@@ -16,12 +16,12 @@ package org.fest.swing.driver;
 
 import java.awt.Component;
 
-import org.fest.swing.edt.GuiActionExecutionType;
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.UnexpectedException;
 
-import static org.fest.swing.edt.GuiActionExecutionType.RUN_IN_EDT;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
@@ -41,26 +41,32 @@ public final class ComponentStateValidator {
    * executed in the event dispatch thread. Callers are responsible for calling this method in the event dispatch
    * thread.
    * @param c the target component.
-   * @param executionType specifies in which thread this method should be executed.
    * @throws ActionFailedException if the <code>Component</code> is disabled.
    */
-  public static void validateIsEnabled(final Component c, GuiActionExecutionType executionType) {
-    if (RUN_IN_EDT.equals(executionType)) {
-      try {
-        execute(new GuiTask() {
-          protected void executeInEDT() {
-            validateIsEnabledInCurrentThread(c);
-          }
-        });
-      } catch (UnexpectedException unexpected) {
-        throw unexpected.bomb();
-      }
-      return;
+  @RunsInEDT
+  public static void inEdtValidateIsEnabled(final Component c) {
+    try {
+      execute(new GuiTask() {
+        protected void executeInEDT() {
+          validateIsEnabled(c);
+        }
+      });
+    } catch (UnexpectedException unexpected) {
+      throw unexpected.bomb();
     }
-    validateIsEnabledInCurrentThread(c);
   }
 
-  private static void validateIsEnabledInCurrentThread(Component c) {
+  /**
+   * Asserts that the <code>{@link Component}</code> is enabled. Unlike
+   * <code>{@link ComponentDriver#requireEnabled(Component)}</code>, this method is for internal use only, to be used to
+   * verify that a component is enabled before performing any action on it. <b>Note:</b> this method is <b>not</b>
+   * executed in the event dispatch thread. Callers are responsible for calling this method in the event dispatch
+   * thread.
+   * @param c the target component.
+   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   */
+  @RunsInCurrentThread
+  public static void validateIsEnabled(Component c) {
     if (!c.isEnabled()) throw actionFailure(concat("Expecting component ", format(c), " to be enabled"));
   }
 

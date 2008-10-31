@@ -41,8 +41,7 @@ import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.driver.ComponentEnabledCondition.untilIsEnabled;
 import static org.fest.swing.driver.ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction;
-import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
-import static org.fest.swing.edt.GuiActionExecutionType.*;
+import static org.fest.swing.driver.ComponentStateValidator.*;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
@@ -163,8 +162,8 @@ public class ComponentDriver {
     try {
       where = execute(new GuiQuery<Point>() {
         protected Point executeInEDT() {
-          validateIsEnabled(c, RUN_IN_CURRENT_THREAD);
-          return centerOf(c, RUN_IN_CURRENT_THREAD);
+          validateIsEnabled(c);
+          return centerOf(c);
         }
       });
     } catch (UnexpectedException unexpected) {
@@ -181,7 +180,7 @@ public class ComponentDriver {
    */
   @RunsInEDT
   public void click(Component c, Point where) {
-    validateIsEnabled(c, RUN_IN_EDT);
+    inEdtValidateIsEnabled(c);
     robot.click(c, where);
   }
 
@@ -347,7 +346,7 @@ public class ComponentDriver {
    */
   @RunsInEDT
   public void focusAndWaitForFocusGain(Component c) {
-    validateIsEnabled(c, RUN_IN_EDT);
+    inEdtValidateIsEnabled(c);
     robot.focusAndWaitForFocusGain(c);
   }
 
@@ -358,7 +357,7 @@ public class ComponentDriver {
    */
   @RunsInEDT
   public void focus(Component c) {
-    validateIsEnabled(c, RUN_IN_EDT);
+    inEdtValidateIsEnabled(c);
     robot.focus(c);
   }
 

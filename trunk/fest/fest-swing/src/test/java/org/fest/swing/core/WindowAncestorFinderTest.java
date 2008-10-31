@@ -49,16 +49,16 @@ public class WindowAncestorFinderTest {
   }
 
   @Test public void shouldFindWindowAncestor() {
-    Window ancestor = WindowAncestorFinder.ancestorOf(frame.button);
+    Window ancestor = WindowAncestorFinder.windowAncestorOf(frame.button);
     assertThat(ancestor).isSameAs(frame);
   }
 
   @Test public void shouldReturnNullIfComponentIsNull() {
-    assertThat(WindowAncestorFinder.ancestorOf(null)).isSameAs(null);
+    assertThat(WindowAncestorFinder.windowAncestorOf(null)).isSameAs(null);
   }
 
   @Test public void shouldReturnWindowAsItsOwnAncestor() {
-    Window ancestor = WindowAncestorFinder.ancestorOf(frame);
+    Window ancestor = WindowAncestorFinder.windowAncestorOf(frame);
     assertThat(ancestor).isSameAs(frame);
   }
 
@@ -66,13 +66,13 @@ public class WindowAncestorFinderTest {
     Robot robot = RobotFixture.robotWithCurrentAwtHierarchy();
     robot.showWindow(frame);
     robot.showPopupMenu(frame.textField);
-    Window ancestor = WindowAncestorFinder.ancestorOf(frame.popupMenu);
+    Window ancestor = WindowAncestorFinder.windowAncestorOf(frame.popupMenu);
     assertThat(ancestor).isSameAs(frame);
     robot.cleanUp();
   }
 
   @Test public void shouldReturnParentAsAncestorIfComponentIsMenuElementAndInvokerIsNull() {
-    Window ancestor = WindowAncestorFinder.ancestorOf(frame.popupMenu);
+    Window ancestor = WindowAncestorFinder.windowAncestorOf(frame.popupMenu);
     assertThat(ancestor).isSameAs(parentOf(frame.popupMenu));
   }
 

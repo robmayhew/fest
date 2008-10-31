@@ -54,7 +54,7 @@ public class TestWindow extends JFrame {
     return execute(new GuiQuery<TestWindow>() {
       protected TestWindow executeInEDT() {
         TestWindow window = createInCurrentThread(testClass);
-        TestWindow.displayInCurrentThread(window);
+        TestWindow.display(window);
         return window;
       }
     });
@@ -105,13 +105,9 @@ public class TestWindow extends JFrame {
    */
   @RunsInEDT
   public void display() {
-    displayInEDT(this);
-  }
-
-  private static void displayInEDT(final TestWindow window) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        displayInCurrentThread(window);
+        display(TestWindow.this);
       }
     });
   }
@@ -121,7 +117,7 @@ public class TestWindow extends JFrame {
    * @param window the window to display on the screen.
    */
   @RunsInCurrentThread
-  protected static void displayInCurrentThread(TestWindow window) {
+  protected static void display(TestWindow window) {
     window.setLocation(DEFAULT_WINDOW_LOCATION);
     packAndShow(window);
   }
@@ -132,14 +128,10 @@ public class TestWindow extends JFrame {
    * @param preferredSize the preferred size to set to this window before displaying it on the screen.
    */
   @RunsInEDT
-  public void display(Dimension preferredSize) {
-    displayInEDT(this, preferredSize);
-  }
-
-  private static void displayInEDT(final TestWindow window, final Dimension preferredSize) {
+  public void display(final Dimension preferredSize) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        displayInCurrentThread(window, preferredSize);
+        display(TestWindow.this, preferredSize);
       }
     });
   }
@@ -151,7 +143,7 @@ public class TestWindow extends JFrame {
    * @param preferredSize the preferred size to set to the given window before displaying it on the screen.
    */
   @RunsInCurrentThread
-  protected static void displayInCurrentThread(TestWindow window, Dimension preferredSize) {
+  protected static void display(TestWindow window, Dimension preferredSize) {
     window.setLocation(DEFAULT_WINDOW_LOCATION);
     packAndShow(window, preferredSize);
   }
@@ -167,13 +159,9 @@ public class TestWindow extends JFrame {
    */
   @RunsInEDT
   public void destroy() {
-    destroyInEDT(this);
-  }
-
-  private static void destroyInEDT(final TestWindow window) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        destroyInCurrentThread(window);
+        destroy(TestWindow.this);
       }
     });
   }
@@ -183,7 +171,7 @@ public class TestWindow extends JFrame {
    * @param window the window to destroy.
    */
   @RunsInCurrentThread
-  protected static void destroyInCurrentThread(TestWindow window) {
+  protected static void destroy(TestWindow window) {
     hideAndDispose(window);
   }
 }

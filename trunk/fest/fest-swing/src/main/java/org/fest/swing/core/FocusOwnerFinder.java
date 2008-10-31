@@ -19,13 +19,14 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.KeyboardFocusManager;
 import java.awt.Window;
-import java.util.List;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.hierarchy.ExistingHierarchy;
 
 import static org.fest.reflect.core.Reflection.staticField;
-import static org.fest.swing.query.ComponentShowingQuery.isShowing;
-import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands lookup of a <code>{@link Component}</code> owning the input focus.
@@ -36,9 +37,24 @@ import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
 public final class FocusOwnerFinder {
 
   /**
-   * Returns the focus owner.
+   * Returns the focus owner. This method is executed in the event dispatch thread.
    * @return the focus owner.
    */
+  @RunsInEDT
+  public static Component inEdtFocusOwner() {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        return focusOwner();
+      }
+    });
+  }
+
+  /**
+   * Returns the focus owner. <b>Note:</b> this method is <b>not</b> executed in the event dispatch thread. Callers are
+   * responsible for calling this method in the event dispatch thread.
+   * @return the focus owner.
+   */
+  @RunsInCurrentThread
   public static Component focusOwner() {
     try {
       return staticField("focusOwner").ofType(Component.class).in(KeyboardFocusManager.class).get();
@@ -47,21 +63,22 @@ public final class FocusOwnerFinder {
     }
   }
 
+  @RunsInCurrentThread
   static Component focusOwnerInHierarchy() {
     Component focus = null;
     for (Container c : new ExistingHierarchy().roots()) {
       if (!(c instanceof Window)) continue;
       Window w = (Window) c;
-      if (isShowing(w) && (focus = focusOwner(w)) != null) break;
+      if (w.isShowing() && (focus = focusOwner(w)) != null) break;
     }
     return focus;
   }
-  
+
+  @RunsInCurrentThread
   private static Component focusOwner(Window w) {
     Component focus = w.getFocusOwner();
     if (focus != null) return focus;
-    List<Window> ownedWindows = ownedWindowsOf(w);
-    for (Window owndedWindow : ownedWindows)
+    for (Window owndedWindow : w.getOwnedWindows())
       if ((focus = owndedWindow.getFocusOwner()) != null) return focus;
     return focus;
   }

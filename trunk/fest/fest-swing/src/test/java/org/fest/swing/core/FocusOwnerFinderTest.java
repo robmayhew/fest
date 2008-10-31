@@ -25,10 +25,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.task.ComponentHasFocusCondition.untilFocused;
 import static org.fest.swing.task.ComponentRequestFocusTask.giveFocusTo;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -48,27 +51,33 @@ public class FocusOwnerFinderTest {
 
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
-    window = MyWindow.createNew();
+    window = MyWindow.createAndShow();
     textField = window.textBox;
-    window.display();
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
-    ScreenLock.instance().release(this);
+    try {
+      window.destroy();
+    } finally {
+      ScreenLock.instance().release(this);
+    }
   }
 
   public void shouldFindFocusOwner() {
     giveFocusTo(textField);
     pause(untilFocused(textField));
-    Component focusOwner = FocusOwnerFinder.focusOwner();
+    Component focusOwner = execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        return FocusOwnerFinder.focusOwner();
+      }
+    });
     assertThat(focusOwner).isSameAs(textField);
   }
 
   public void shouldFindFocusOwnerInHierarchy() {
     giveFocusTo(textField);
     pause(untilFocused(textField));
-    Component focusOwner = FocusOwnerFinder.focusOwnerInHierarchy();
+    Component focusOwner = focusOwnerInHierarchy();
     assertThat(focusOwner).isSameAs(textField);
   }
 
@@ -76,9 +85,18 @@ public class FocusOwnerFinderTest {
     MyDialog dialog = MyDialog.createAndShow(window);
     giveFocusTo(dialog.button);
     pause(untilFocused(dialog.button));
-    Component focusOwner = FocusOwnerFinder.focusOwnerInHierarchy();
+    Component focusOwner = focusOwnerInHierarchy();
     assertThat(focusOwner).isSameAs(dialog.button);
     dialog.destroy();
+  }
+
+  @RunsInEDT
+  private Component focusOwnerInHierarchy() {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        return FocusOwnerFinder.focusOwnerInHierarchy();
+      }
+    });
   }
 
   private static class MyDialog extends TestDialog {
@@ -86,13 +104,22 @@ public class FocusOwnerFinderTest {
 
     final JButton button = new JButton("Click me");
 
-    static MyDialog createAndShow(Frame owner) {
-      MyDialog window = new MyDialog(owner);
-      window.display();
-      return window;
+    @RunsInEDT
+    static MyDialog createAndShow(final Frame owner) {
+      return execute(new GuiQuery<MyDialog>() {
+        protected MyDialog executeInEDT() {
+          MyDialog dialog = new MyDialog(owner);
+          dialog.displayInCurrentThread();
+          return dialog;
+        }
+      });
     }
 
-    MyDialog(Frame owner) {
+    private void displayInCurrentThread() {
+      TestDialog.display(this);
+    }
+
+    private MyDialog(Frame owner) {
       super(owner);
       add(button);
     }
@@ -103,8 +130,19 @@ public class FocusOwnerFinderTest {
 
     final JTextField textBox = new JTextField(20);
 
-    static MyWindow createNew() {
-      return new MyWindow();
+    @RunsInEDT
+    static MyWindow createAndShow() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          MyWindow window = new MyWindow();
+          window.displayInCurrentThread();
+          return window;
+        }
+      });
+    }
+
+    private void displayInCurrentThread() {
+      TestWindow.display(this);
     }
 
     private MyWindow() {

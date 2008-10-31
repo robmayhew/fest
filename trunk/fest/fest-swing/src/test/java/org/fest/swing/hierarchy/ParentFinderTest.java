@@ -83,7 +83,7 @@ public class ParentFinderTest {
     }
 
     private void displayInCurrentThread() {
-      TestWindow.displayInCurrentThread(this);
+      TestWindow.display(this);
     }
 
     final JTextField textField = new JTextField();

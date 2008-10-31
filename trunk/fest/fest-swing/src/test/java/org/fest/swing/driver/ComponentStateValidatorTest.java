@@ -28,7 +28,6 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.edt.GuiActionExecutionType.*;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 
@@ -55,13 +54,13 @@ public class ComponentStateValidatorTest {
   public void shouldNotThrowErrorInCurrentThreadIfComponentIsEnabled() {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        ComponentStateValidator.validateIsEnabled(window, RUN_IN_CURRENT_THREAD);
+        ComponentStateValidator.validateIsEnabled(window);
       }
     });
   }
 
   public void shouldNotThrowErrorInEDTIfComponentIsEnabled() {
-    ComponentStateValidator.validateIsEnabled(window, RUN_IN_EDT);
+    ComponentStateValidator.inEdtValidateIsEnabled(window);
   }
 
   public void shouldThrowErrorInCurrentThreadIfComponentIsDisabled() {
@@ -69,7 +68,7 @@ public class ComponentStateValidatorTest {
       execute(new GuiTask() {
         protected void executeInEDT() {
           window.setEnabled(false);
-          ComponentStateValidator.validateIsEnabled(window, RUN_IN_CURRENT_THREAD);
+          ComponentStateValidator.validateIsEnabled(window);
         }
       });
       fail("Expecting exception");
@@ -85,7 +84,7 @@ public class ComponentStateValidatorTest {
     disable(window);
     robot.waitForIdle();
     try {
-      ComponentStateValidator.validateIsEnabled(window, RUN_IN_EDT);
+      ComponentStateValidator.inEdtValidateIsEnabled(window);
       fail("Expecting exception");
     } catch (ActionFailedException e) {
       assertThat(e).message().contains("Expecting component")

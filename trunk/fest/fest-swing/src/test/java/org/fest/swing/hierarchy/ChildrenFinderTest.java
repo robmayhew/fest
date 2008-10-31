@@ -159,7 +159,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
     }
 
     private void displayInCurrentThread() {
-      TestWindow.displayInCurrentThread(this);
+      TestWindow.display(this);
     }
 
     final JTextField textField = new JTextField(20);

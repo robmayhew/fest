@@ -22,11 +22,11 @@ import javax.swing.JList;
 import javax.swing.JPopupMenu;
 
 import org.fest.assertions.Description;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.awt.AWT;
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
-import org.fest.swing.edt.GuiActionExecutionType;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -44,9 +44,8 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
-import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
+import static org.fest.swing.driver.ComponentStateValidator.*;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
-import static org.fest.swing.edt.GuiActionExecutionType.RUN_IN_CURRENT_THREAD;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
@@ -85,6 +84,7 @@ public class JListDriver extends JComponentDriver {
    * @return an array of <code>String</code>s that represents the contents of the given <code>JList</code>.
    * @see #cellReader(JListCellReader)
    */
+  @RunsInEDT
   public String[] contentsOf(JList list) {
     try {
       return contents(list, cellReader);
@@ -93,6 +93,7 @@ public class JListDriver extends JComponentDriver {
     }
   }
 
+  @RunsInEDT
   private static String[] contents(final JList list, final JListCellReader cellReader) {
     return execute(new GuiQuery<String[]>() {
       protected String[] executeInEDT() {
@@ -111,6 +112,7 @@ public class JListDriver extends JComponentDriver {
    * @return an array of <code>String</code>s that represents the selection in the given <code>JList</code>.
    * @see #cellReader(JListCellReader)
    */
+  @RunsInEDT
   public String[] selectionOf(JList list) {
     try {
       return selectionValues(list, cellReader);
@@ -119,6 +121,7 @@ public class JListDriver extends JComponentDriver {
     }
   }
 
+  @RunsInEDT
   private static String[] selectionValues(final JList list, final JListCellReader cellReader) {
     return execute(new GuiQuery<String[]>() {
       protected String[] executeInEDT() {
@@ -300,7 +303,7 @@ public class JListDriver extends JComponentDriver {
   // indicates if there is already a selection with the given index
   // returns the center of the cell for the given index
   private static Pair<Boolean, Point> scrollToItemIfNotSelected(JList list, int index) {
-    validateIsEnabled(list, GuiActionExecutionType. RUN_IN_EDT);
+    inEdtValidateIsEnabled(list);
     if (list.getSelectedIndex() == index) return new Pair<Boolean, Point>(true, null);
     return new Pair<Boolean, Point>(false, scrollToItemInCurrentThread(list, index));
   }
@@ -559,7 +562,7 @@ public class JListDriver extends JComponentDriver {
 
   // returns the center of the cell for the given index
   private static Point scrollToItemInCurrentThread(JList list, int index) {
-    validateIsEnabled(list, RUN_IN_CURRENT_THREAD);
+    validateIsEnabled(list);
     Rectangle cellBounds = cellBounds(list, index);
     list.scrollRectToVisible(cellBounds);
     return cellCenter(cellBounds);

@@ -143,7 +143,7 @@ public class NewHierarchyTest {
     }
 
     private void displayInCurrentThread() {
-      TestWindow.displayInCurrentThread(this);
+      TestWindow.display(this);
     }
 
     final JComboBox comboBox = new JComboBox(array("One", "Two"));

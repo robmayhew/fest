@@ -37,21 +37,22 @@ public final class WindowAncestorFinder {
 
   /**
    * Similar to <code>{@link javax.swing.SwingUtilities#getWindowAncestor(Component)}</code>, but returns the
-   * <code>{@link Component}</code> itself if it is a <code>{@link Window}</code>, or the invoker's
-   * <code>Window</code> if on a pop-up.
+   * <code>{@link Component}</code> itself if it is a <code>{@link Window}</code>, or the invoker's <code>Window</code>
+   * if on a pop-up. <b>Note:</b> this method is <b>not</b> executed in the event dispatch thread. Callers are
+   * responsible for calling this method in the event dispatch thread.
    * @param c the <code>Component</code> to get the <code>Window</code> ancestor of.
-   * @return the <code>Window</code> ancestor of the given <code>Component</code>, the <code>Component</code>
-   *         itself if it is a <code>Window</code>, or the invoker's <code>Window</code> if on a pop-up.
+   * @return the <code>Window</code> ancestor of the given <code>Component</code>, the <code>Component</code> itself if
+   * it is a <code>Window</code>, or the invoker's <code>Window</code> if on a pop-up.
    */
   @RunsInCurrentThread
-  public static Window ancestorOf(Component c) {
+  public static Window windowAncestorOf(Component c) {
     if (c == null) return null;
     if (c instanceof Window) return (Window) c;
     if (c instanceof MenuElement) {
       Component invoker = invokerOf(c);
-      if (invoker != null) return ancestorOf(invoker);
+      if (invoker != null) return windowAncestorOf(invoker);
     }
-    return ancestorOf(hierarchy.parentOf(c));
+    return windowAncestorOf(hierarchy.parentOf(c));
   }
 
   private WindowAncestorFinder() {}

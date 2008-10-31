@@ -15,14 +15,16 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.util.Strings.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
+
+import org.fest.swing.annotation.RunsInCurrentThread;
+
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands utility methods related to <code>{@link KeyStroke}</code>.
@@ -31,6 +33,7 @@ import javax.swing.KeyStroke;
  */
 final class KeyStrokes {
 
+  @RunsInCurrentThread
   static KeyStroke[] findKeyStrokesForAction(String actionName, Object actionKey, InputMap inputMap) {
     List<KeyStroke> keyStrokes = new ArrayList<KeyStroke>();
     for (KeyStroke keyStroke : inputMap.allKeys()) {
