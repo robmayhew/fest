@@ -16,6 +16,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JList;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -30,6 +31,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JListSelectedIndexQuery {
 
+  @RunsInEDT
   static int selectedIndexOf(final JList list) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {

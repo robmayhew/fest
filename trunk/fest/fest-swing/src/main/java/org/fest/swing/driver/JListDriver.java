@@ -22,6 +22,7 @@ import javax.swing.JList;
 import javax.swing.JPopupMenu;
 
 import org.fest.assertions.Description;
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.awt.AWT;
 import org.fest.swing.cell.JListCellReader;
@@ -47,7 +48,6 @@ import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.driver.ComponentStateValidator.*;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
 /**
@@ -99,7 +99,7 @@ public class JListDriver extends JComponentDriver {
       protected String[] executeInEDT() {
         String[] values = new String[listSize(list)];
         for (int i = 0; i < values.length; i++)
-          values[i] = cellValueInCurrentThread(list, i, cellReader);
+          values[i] = cellReader.valueAt(list, i);
         return values;
       }
     });
@@ -129,7 +129,7 @@ public class JListDriver extends JComponentDriver {
         int selectionCount = selectedIndices.length;
         String[] values = new String[selectionCount];
         for (int i = 0; i < selectionCount; i++)
-          values[i] = cellValueInCurrentThread(list, selectedIndices[i], cellReader);
+          values[i] = cellReader.valueAt(list, selectedIndices[i]);
         return values;
       }
     });
@@ -183,7 +183,7 @@ public class JListDriver extends JComponentDriver {
       final JListCellReader cellReader) {
     return execute(new GuiQuery<Pair<Boolean, Point>>() {
       protected Pair<Boolean, Point> executeInEDT() {
-        int index = itemIndexInCurrentThread(list, value, cellReader);
+        int index = JListItemFinder.instance().itemIndex(list, value, cellReader);
         return scrollToItemIfNotSelected(list, index);
       }
     });
@@ -356,7 +356,7 @@ public class JListDriver extends JComponentDriver {
 
   private static String singleSelectionValue(JList list, JListCellReader cellReader) {
     int selectedIndex = list.getSelectedIndex();
-    return (selectedIndex >= 0) ? cellValueInCurrentThread(list, selectedIndex, cellReader) : NO_SELECTION_VALUE;
+    return (selectedIndex >= 0) ? cellReader.valueAt(list, selectedIndex): NO_SELECTION_VALUE;
   }
 
   /**
@@ -390,7 +390,7 @@ public class JListDriver extends JComponentDriver {
         int selectionCount = selectedIndices.length;
         String[] selectionValues = new String[selectionCount];
         for (int i = 0; i < selectionCount; i++)
-          selectionValues[i] = cellValueInCurrentThread(list, selectedIndices[i], cellReader);
+          selectionValues[i] = cellReader.valueAt(list, selectedIndices[i]);
         return selectionValues;
       }
     });
@@ -523,7 +523,7 @@ public class JListDriver extends JComponentDriver {
   private static Point scrollToItem(final JList list, final String value, final JListCellReader cellReader) {
     return execute(new GuiQuery<Point>() {
       protected Point executeInEDT() {
-        int index = itemIndexInCurrentThread(list, value, cellReader);
+        int index = JListItemFinder.instance().itemIndex(list, value, cellReader);
         if (index < 0) return null;
         return scrollToItemInCurrentThread(list, index);
       }
@@ -568,8 +568,9 @@ public class JListDriver extends JComponentDriver {
     return cellCenter(cellBounds);
   }
 
+  @RunsInCurrentThread
   private static Rectangle cellBounds(JList list, int index) {
-    validate(list, index);
+    JListItemIndexValidator.instance().validateIndex(list, index);
     return list.getCellBounds(index, index);
   }
 
@@ -584,14 +585,17 @@ public class JListDriver extends JComponentDriver {
    * @return the coordinates of the item at the given item.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
+  @RunsInEDT
   public Point pointAt(JList list, String value) {
     return pointAtCellWithValue(list, value, cellReader);
   }
 
+  @RunsInEDT
   private static Point pointAtCellWithValue(final JList list, final String value, final JListCellReader cellReader) {
     return execute(new GuiQuery<Point>() {
       protected Point executeInEDT() {
-        return cellCenter(cellBounds(list, itemIndexInCurrentThread(list, value, cellReader)));
+        int itemIndex = JListItemFinder.instance().itemIndex(list, value, cellReader);
+        return cellCenter(cellBounds(list, itemIndex));
       }
     });
   }
@@ -603,6 +607,7 @@ public class JListDriver extends JComponentDriver {
    * @return the index of the first item matching the given value.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
+  @RunsInEDT
   public int indexOf(JList list, String value) {
     int index = -1;
     try {
@@ -614,19 +619,13 @@ public class JListDriver extends JComponentDriver {
     throw indexNotFoundFor(value);
   }
 
+  @RunsInEDT
   private static int itemIndex(final JList list, final String value, final JListCellReader cellReader) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {
-        return itemIndexInCurrentThread(list, value, cellReader);
+        return JListItemFinder.instance().itemIndex(list, value, cellReader);
       }
     });
-  }
-
-  private static int itemIndexInCurrentThread(JList list, String value, JListCellReader cellReader) {
-    int size = listSize(list);
-    for (int i = 0; i < size; i++)
-      if (areEqual(value, cellValueInCurrentThread(list, i, cellReader))) return i;
-    return -1;
   }
 
   /**
@@ -639,6 +638,7 @@ public class JListDriver extends JComponentDriver {
    * <code>JList</code>.
    * @see #cellReader(JListCellReader)
    */
+  @RunsInEDT
   public String value(JList list, int index) {
     try {
       return cellValue(list, index, cellReader);
@@ -647,26 +647,17 @@ public class JListDriver extends JComponentDriver {
     }
   }
 
+  @RunsInEDT
   private static String cellValue(final JList list, final int index, final JListCellReader cellReader) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
-        return cellValueInCurrentThread(list, index, cellReader);
+        JListItemIndexValidator.instance().validateIndex(list, index);
+        return cellReader.valueAt(list, index);
       }
     });
   }
 
-  private static String cellValueInCurrentThread(JList list, int index, JListCellReader cellReader) {
-    validate(list, index);
-    return cellReader.valueAt(list, index);
-  }
-
-  private static void validate(JList list, int index) {
-    int itemCount = listSize(list);
-    if (index >= 0 && index < itemCount) return;
-    throw new IndexOutOfBoundsException(concat(
-        "Item index (", valueOf(index), ") should be between [", valueOf(0), "] and [", valueOf(itemCount - 1), "] (inclusive)"));
-  }
-
+  @RunsInCurrentThread
   private static int listSize(JList list) {
     return list.getModel().getSize();
   }
