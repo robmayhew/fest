@@ -15,21 +15,22 @@
  */
 package org.fest.swing.monitor;
 
-import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Point;
+import java.awt.Window;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.testing.TestWindow.createAndShowNewWindow;
 
@@ -42,6 +43,10 @@ public class WindowMetricsTest {
 
   private WindowMetrics metrics;
   private TestWindow window;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
@@ -66,26 +71,32 @@ public class WindowMetricsTest {
   }
 
   @Test public void shouldCalculateCenter() {
-    Insets insets = insetsOf(window);
-    Dimension windowSize = sizeOf(window);
-    int x = window.getX() + insets.left + ((windowSize.width - (insets.left + insets.right)) / 2);
-    int y = window.getY() + insets.top + ((windowSize.height - (insets.top + insets.bottom)) / 2);
     Point center = execute(new GuiQuery<Point>() {
       protected Point executeInEDT() {
         return metrics.center();
       }
     });
-    assertThat(center.x).isEqualTo(x);
-    assertThat(center.y).isEqualTo(y);
+    assertThat(center).isEqualTo(expectedCenterOf(window));
+  }
+
+  private static Point expectedCenterOf(final Window w) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        Insets insets = w.getInsets();
+        int x = w.getX() + insets.left + ((w.getWidth() - (insets.left + insets.right)) / 2);
+        int y = w.getY() + insets.top + ((w.getHeight() - (insets.top + insets.bottom)) / 2);
+        return new Point(x, y);
+      }
+    });
   }
 
   @Test public void shouldAddVerticalInsets() {
     Insets insets = insetsOf(window);
-    assertThat(metrics.verticalInsets()).isEqualTo(insets.right + insets.left);
+    assertThat(metrics.leftAndRightInsets()).isEqualTo(insets.right + insets.left);
   }
 
   @Test public void shouldAddHorizontalInsets() {
     Insets insets = insetsOf(window);
-    assertThat(metrics.horizontalInsets()).isEqualTo(insets.top + insets.bottom);
+    assertThat(metrics.topAndBottomInsets()).isEqualTo(insets.top + insets.bottom);
   }
 }

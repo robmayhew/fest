@@ -23,11 +23,13 @@ import javax.swing.JInternalFrame;
 import javax.swing.JTextField;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MDITestWindow;
 import org.fest.swing.testing.TestWindow;
@@ -48,6 +50,10 @@ import static org.fest.swing.testing.TestGroups.GUI;
 public class ParentFinderTest {
 
   private ParentFinder finder;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);

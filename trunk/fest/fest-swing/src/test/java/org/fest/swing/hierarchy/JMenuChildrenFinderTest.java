@@ -23,11 +23,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPopupMenu;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
@@ -45,6 +47,10 @@ import static org.fest.swing.testing.TestGroups.GUI;
 @Test public class JMenuChildrenFinderTest {
 
   private JMenuChildrenFinder finder;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     finder = new JMenuChildrenFinder();

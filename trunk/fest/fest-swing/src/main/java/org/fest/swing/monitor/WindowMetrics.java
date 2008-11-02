@@ -40,24 +40,28 @@ final class WindowMetrics {
 
   @RunsInCurrentThread
   Point center() {
-    int x = window.getX() + insets.left + centerWidth();
-    int y = window.getY() + insets.top + centerHeight();
+    int x = window.getX() + insets.left + horizontalCenter();
+    int y = window.getY() + insets.top + verticalCenter();
     return new Point(x, y);
   }
 
-  private int centerWidth() {
-    return (window.getWidth() - verticalInsets()) / 2;
+  @RunsInCurrentThread
+  private int horizontalCenter() {
+    return (window.getWidth() - leftAndRightInsets()) / 2;
   }
 
-  int verticalInsets() {
+  @RunsInCurrentThread
+  int leftAndRightInsets() {
     return insets.left + insets.right;
   }
 
-  private int centerHeight() {
-    return (window.getHeight() - horizontalInsets()) / 2;
+  @RunsInCurrentThread
+  private int verticalCenter() {
+    return (window.getHeight() - topAndBottomInsets()) / 2;
   }
 
-  int horizontalInsets() {
+  @RunsInCurrentThread
+  int topAndBottomInsets() {
     return insets.top + insets.bottom;
   }
 }

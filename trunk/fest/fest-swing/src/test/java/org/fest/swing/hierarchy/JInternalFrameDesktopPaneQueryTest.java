@@ -19,10 +19,12 @@ import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MDITestWindow;
 
@@ -42,6 +44,10 @@ public class JInternalFrameDesktopPaneQueryTest {
   private MDITestWindow window;
   private JInternalFrame internalFrame;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
     window = MDITestWindow.createAndShowNewWindow(getClass());
@@ -49,8 +55,11 @@ public class JInternalFrameDesktopPaneQueryTest {
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
-    ScreenLock.instance().release(this);
+    try {
+      window.destroy();
+    } finally {
+      ScreenLock.instance().release(this);
+    }
   }
 
   public void shouldReturnNullIfJDesktopIconInJInternalFrameIsNull() {

@@ -21,11 +21,13 @@ import java.awt.Point;
 import java.util.logging.Logger;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.testing.TestWindow;
 
 import static org.easymock.EasyMock.expect;
@@ -46,9 +48,12 @@ public class WindowStatusTest {
   private static Logger logger = Logger.getAnonymousLogger();
 
   private WindowStatus status;
-
   private TestWindow window;
   private Windows windows;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() throws Exception {
     window = TestWindow.createNewWindow(getClass());

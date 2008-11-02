@@ -21,19 +21,23 @@ import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import javax.swing.JFrame;
-import javax.swing.JTextField;
-
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.MethodInvocations.Args;
 
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.testing.MethodInvocations.Args.args;
 
 /**
@@ -45,13 +49,21 @@ public class WindowVisibilityMonitorTest {
 
   private WindowVisibilityMonitor monitor;
 
-  private MyFrame frame;
+  private MyWindow window;
   private Windows windows;
 
-  @BeforeMethod public void setUp() throws Exception {
-    frame = new MyFrame();
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
+  @BeforeMethod public void setUp() {
+    window = MyWindow.createNeW();
     windows = createMock(Windows.class);
     createAndAttachMonitor();
+  }
+
+  @AfterMethod public void tearDown() {
+    window.destroy();
   }
 
   private void createAndAttachMonitor() {
@@ -61,7 +73,7 @@ public class WindowVisibilityMonitorTest {
   @Test public void shouldMarkWindowAsShowingIfWindowShown() {
     new EasyMockTemplate(windows) {
       protected void expectations() {
-        windows.markAsShowing(frame);
+        windows.markAsShowing(window);
       }
 
       protected void codeToTest() {
@@ -83,7 +95,7 @@ public class WindowVisibilityMonitorTest {
   @Test public void shouldMarkWindowAsHiddenIfWindowHidden() {
     new EasyMockTemplate(windows) {
       protected void expectations() {
-        windows.markAsHidden(frame);
+        windows.markAsHidden(window);
       }
 
       protected void codeToTest() {
@@ -103,37 +115,47 @@ public class WindowVisibilityMonitorTest {
   }
 
   @Test public void shouldRemoveItselfWhenWindowClosed() {
-    frame.startRecording();
+    window.startRecording();
     new EasyMockTemplate(windows) {
       protected void expectations() {}
 
       protected void codeToTest() {
-        monitor.windowClosed(new WindowEvent(frame, 8));
-        assertThat(frame.requireInvoked("removeWindowListener", args(monitor)));
-        assertThat(frame.requireInvoked("removeComponentListener", args(monitor)));
+        monitor.windowClosed(new WindowEvent(window, 8));
+        assertThat(window.requireInvoked("removeWindowListener", args(monitor)));
+        assertThat(window.requireInvoked("removeComponentListener", args(monitor)));
       }
     }.run();
   }
 
   private ComponentEvent componentEventWithWindowAsSource() {
-    return componentEvent(frame);
+    return componentEvent(window);
   }
 
   private ComponentEvent componentEventWithTextFieldAsSource() {
-    return componentEvent(new JTextField());
+    return componentEvent(textField().createNew());
   }
 
   private ComponentEvent componentEvent(Component source) {
     return new ComponentEvent(source, 8);
   }
 
-  private static class MyFrame extends JFrame {
+  private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     private boolean recording;
     private final MethodInvocations methodInvocations = new MethodInvocations();
 
-    MyFrame() {}
+    static MyWindow createNeW() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+    }
+
+    private MyWindow() {
+      super(WindowVisibilityMonitorTest.class);
+    }
 
     void startRecording() {
       recording = true;

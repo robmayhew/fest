@@ -21,12 +21,14 @@ import java.util.Collection;
 
 import javax.swing.JTextField;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.monitor.WindowMonitor;
 import org.fest.swing.testing.MethodInvocations;
@@ -50,7 +52,11 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   private ExistingHierarchy hierarchy;
 
-  @BeforeMethod public void setUp() throws Exception {
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
+  @BeforeMethod public void setUp() {
     hierarchy = new ExistingHierarchy();
   }
 

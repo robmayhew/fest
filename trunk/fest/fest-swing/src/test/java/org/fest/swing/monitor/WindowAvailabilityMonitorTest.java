@@ -23,10 +23,13 @@ import java.util.List;
 import javax.swing.JTextField;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.listener.WeakEventListener;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
@@ -35,6 +38,7 @@ import static java.awt.AWTEvent.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link WindowAvailabilityMonitor}</code>.
@@ -49,11 +53,15 @@ public class WindowAvailabilityMonitorTest {
 
   private ToolkitStub toolkit;
   private Windows windows;
-  private TestWindow window;
+  private MyWindow window;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() throws Exception {
     toolkit = ToolkitStub.createNew();
-    window = TestWindow.createNewWindow(getClass());
+    window = MyWindow.createNew();
     windows = createMock(Windows.class);
     monitor = new WindowAvailabilityMonitor(windows);
   }
@@ -83,8 +91,7 @@ public class WindowAvailabilityMonitorTest {
   }
 
   @Test public void shouldMarkSourceWindowAncestorAsReadyIfEventIsMouseEvent() {
-    final JTextField source = new JTextField();
-    window.add(source);
+    final JTextField source = window.textField;
     new EasyMockTemplate(windows) {
       protected void expectations() {
         windows.markAsReady(window);
@@ -108,5 +115,24 @@ public class WindowAvailabilityMonitorTest {
 
   private MouseEvent mouseEvent(Component source) {
     return new MouseEvent(source, 8, 8912, 0, 0, 0, 0, false, 0);
+  }
+
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    static MyWindow createNew() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+    }
+
+    final JTextField textField = new JTextField("Hello");
+
+    private MyWindow() {
+      super(WindowAvailabilityMonitorTest.class);
+      addComponents(textField);
+    }
   }
 }

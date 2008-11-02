@@ -22,13 +22,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link WindowEventQueueMapping}</code>.
@@ -42,6 +46,10 @@ public class WindowEventQueueMappingTest {
   private MyWindow window;
   private WindowEventQueueMapping mapping;
   private Map<EventQueue, Map<Window, Boolean>> queueMap;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     eventQueue = new EventQueue();
@@ -122,7 +130,11 @@ public class WindowEventQueueMappingTest {
     private static final long serialVersionUID = 1L;
 
     static MyWindow createNew(final Toolkit toolkit) {
-      return new MyWindow(toolkit);
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow(toolkit);
+        }
+      });
     }
 
     private final Toolkit toolkit;

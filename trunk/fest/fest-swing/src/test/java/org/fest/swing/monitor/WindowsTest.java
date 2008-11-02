@@ -21,10 +21,12 @@ import java.util.TimerTask;
 import java.util.logging.Logger;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestWindow;
 
@@ -54,6 +56,10 @@ import static org.fest.util.Strings.concat;
   private Map<Window, Boolean> closed;
   private Map<Window, Boolean> hidden;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @BeforeMethod public void setUp() {
     window = TestWindow.createNewWindow(getClass());
     windows = new Windows();
@@ -64,9 +70,12 @@ import static org.fest.util.Strings.concat;
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
-    ScreenLock screenLock = ScreenLock.instance();
-    if (screenLock.acquiredBy(this)) screenLock.release(this);
+    try {
+      window.destroy();
+    } finally {
+      ScreenLock screenLock = ScreenLock.instance();
+      if (screenLock.acquiredBy(this)) screenLock.release(this);
+    }
   }
 
   @Test(groups = GUI)

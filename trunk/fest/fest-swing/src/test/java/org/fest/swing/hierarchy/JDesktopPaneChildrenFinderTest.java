@@ -19,10 +19,12 @@ import java.awt.Component;
 import java.awt.Container;
 import java.util.Collection;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MDITestWindow;
 
@@ -41,6 +43,10 @@ import static org.fest.swing.testing.TestGroups.GUI;
 @Test public class JDesktopPaneChildrenFinderTest {
 
   private JDesktopPaneChildrenFinder finder;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     finder = new JDesktopPaneChildrenFinder();

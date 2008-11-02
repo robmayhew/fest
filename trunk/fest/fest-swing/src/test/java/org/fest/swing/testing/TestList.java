@@ -20,6 +20,8 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.util.Collections;
 
@@ -44,10 +46,12 @@ public final class TestList extends JList {
 
   final DefaultListModel model = new DefaultListModel();
 
+  @RunsInCurrentThread
   public TestList(String...elements) {
     this(null, Collections.list(elements));
   }
 
+  @RunsInCurrentThread
   public TestList(String name, List<String> elements) {
     setDragEnabled(true);
     setSelectionMode(MULTIPLE_INTERVAL_SELECTION);
@@ -57,6 +61,7 @@ public final class TestList extends JList {
     setTransferHandler(new ListTransferHandler());
   }
 
+  @RunsInEDT
   public String[] elements() {
     return execute(new GuiQuery<String[]>() {
       protected String[] executeInEDT() {

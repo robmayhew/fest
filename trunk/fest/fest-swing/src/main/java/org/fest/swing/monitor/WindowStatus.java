@@ -116,13 +116,14 @@ class WindowStatus {
     return insets.top + insets.bottom == w.getHeight() || insets.left + insets.right == w.getWidth();
   }
 
-
+  @RunsInCurrentThread
   private int proposedWidth(WindowMetrics metrics) {
-    return metrics.verticalInsets() + ARBITRARY_EXTRA_VALUE;
+    return metrics.leftAndRightInsets() + ARBITRARY_EXTRA_VALUE;
   }
 
+  @RunsInCurrentThread
   private int proposedHeight(WindowMetrics metrics) {
-    return metrics.horizontalInsets() + ARBITRARY_EXTRA_VALUE;
+    return metrics.topAndBottomInsets() + ARBITRARY_EXTRA_VALUE;
   }
 
   static int sign() { return sign; }

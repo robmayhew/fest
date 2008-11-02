@@ -26,13 +26,17 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.assertions.AssertExtension;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
+
+import static javax.swing.RepaintManager.setCurrentManager;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -57,6 +61,7 @@ public class AbstractButtonDriverTest {
   private AbstractButtonDriver driver;
 
   @BeforeMethod public void setUp() {
+    setCurrentManager(new CheckThreadViolationRepaintManager());
     robot = robotWithNewAwtHierarchy();
     driver = new AbstractButtonDriver(robot);
     MyWindow window = MyWindow.createNew();
@@ -135,7 +140,7 @@ public class AbstractButtonDriverTest {
     assertThatCheckBoxIsNotSelected();
   }
 
-  
+
   private static void unselectAndDisable(final JCheckBox checkBox) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -235,6 +240,7 @@ public class AbstractButtonDriverTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static MyWindow createNew() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {

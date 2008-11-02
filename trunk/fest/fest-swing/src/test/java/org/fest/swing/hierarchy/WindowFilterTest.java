@@ -21,9 +21,11 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestDialog;
@@ -45,6 +47,10 @@ public class WindowFilterTest {
   private Map<Component, Boolean> implictlyIgnored;
 
   private WindowFilter filter;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     filter = new WindowFilter(new ParentFinder(), new ChildrenFinder());

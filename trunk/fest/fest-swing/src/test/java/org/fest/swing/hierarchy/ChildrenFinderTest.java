@@ -25,11 +25,13 @@ import javax.swing.JDesktopPane;
 import javax.swing.JMenu;
 import javax.swing.JTextField;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.factory.JMenus;
 import org.fest.swing.testing.MDITestWindow;
@@ -56,6 +58,10 @@ import static org.fest.swing.testing.TestGroups.GUI;
   private JDesktopPaneChildrenFinder desktopPaneChildrenFinder;
   private JMenuChildrenFinder menuChildrenFinder;
   private WindowChildrenFinder windowChildrenFinder;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     finder = new ChildrenFinder();

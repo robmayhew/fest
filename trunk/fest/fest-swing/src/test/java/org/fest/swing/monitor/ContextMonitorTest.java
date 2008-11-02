@@ -25,14 +25,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.JTextField;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.listener.WeakEventListener;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
@@ -43,6 +39,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link ContextMonitor}</code>.
@@ -58,6 +55,10 @@ public class ContextMonitorTest {
   private Windows windows;
   private Context context;
   private TestWindow window;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() throws Exception {
     window = TestWindow.createNewWindow(getClass());
@@ -84,7 +85,7 @@ public class ContextMonitorTest {
       @Override protected void expectations() {}
 
       @Override protected void codeToTest() {
-        monitor.eventDispatched(new ComponentEvent(new JTextField(), 8));
+        monitor.eventDispatched(new ComponentEvent(textField().createNew(), 8));
       }
     }.run();
   }

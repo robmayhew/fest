@@ -45,8 +45,10 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
-import static org.fest.swing.driver.ComponentStateValidator.*;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
+import static org.fest.swing.driver.JListContentQuery.contents;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
+import static org.fest.swing.driver.JListSelectionValuesQuery.selectionValues;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Strings.*;
 
@@ -93,18 +95,6 @@ public class JListDriver extends JComponentDriver {
     }
   }
 
-  @RunsInEDT
-  private static String[] contents(final JList list, final JListCellReader cellReader) {
-    return execute(new GuiQuery<String[]>() {
-      protected String[] executeInEDT() {
-        String[] values = new String[listSize(list)];
-        for (int i = 0; i < values.length; i++)
-          values[i] = cellReader.valueAt(list, i);
-        return values;
-      }
-    });
-  }
-
   /**
    * Returns an array of <code>String</code>s that represents the selection in the given <code>{@link JList}</code>,
    * using this driver's <code>{@link JListCellReader}</code>.
@@ -119,20 +109,6 @@ public class JListDriver extends JComponentDriver {
     } catch (UnexpectedException unexpected) {
       throw unexpected.bomb();
     }
-  }
-
-  @RunsInEDT
-  private static String[] selectionValues(final JList list, final JListCellReader cellReader) {
-    return execute(new GuiQuery<String[]>() {
-      protected String[] executeInEDT() {
-        int[] selectedIndices = list.getSelectedIndices();
-        int selectionCount = selectedIndices.length;
-        String[] values = new String[selectionCount];
-        for (int i = 0; i < selectionCount; i++)
-          values[i] = cellReader.valueAt(list, selectedIndices[i]);
-        return values;
-      }
-    });
   }
 
   /**
@@ -166,6 +142,7 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
    * the <code>JList</code>.
    */
+  @RunsInEDT
   public void selectItem(JList list, String value) {
     Pair<Boolean, Point> result = null;
     try {
@@ -303,7 +280,7 @@ public class JListDriver extends JComponentDriver {
   // indicates if there is already a selection with the given index
   // returns the center of the cell for the given index
   private static Pair<Boolean, Point> scrollToItemIfNotSelected(JList list, int index) {
-    inEdtValidateIsEnabled(list);
+    validateIsEnabled(list);
     if (list.getSelectedIndex() == index) return new Pair<Boolean, Point>(true, null);
     return new Pair<Boolean, Point>(false, scrollToItemInCurrentThread(list, index));
   }
@@ -655,11 +632,6 @@ public class JListDriver extends JComponentDriver {
         return cellReader.valueAt(list, index);
       }
     });
-  }
-
-  @RunsInCurrentThread
-  private static int listSize(JList list) {
-    return list.getModel().getSize();
   }
 
   private static LocationUnavailableException indexNotFoundFor(String value) {

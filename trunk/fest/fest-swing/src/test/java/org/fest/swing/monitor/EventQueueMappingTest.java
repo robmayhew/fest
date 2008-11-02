@@ -21,14 +21,15 @@ import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.swing.JTextField;
-
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.testing.ToolkitStub;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link EventQueueMapping}</code>.
@@ -43,6 +44,10 @@ import static org.fest.assertions.Assertions.assertThat;
   private ComponentWithCustomEventQueue component;
   private EventQueueMapping mapping;
   private Map<Component, WeakReference<EventQueue>> queueMap;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     eventQueue = new EventQueue();
@@ -100,7 +105,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
   public void shouldNotFailIfMappingHasNullReference() {
     mapping.addQueueFor(component);
-    queueMap.put(new JTextField(), null);
+    queueMap.put(textField().createNew(), null);
     Collection<EventQueue> allEventQueues = mapping.eventQueues();
     assertThat(allEventQueues).containsOnly(eventQueue);
   }

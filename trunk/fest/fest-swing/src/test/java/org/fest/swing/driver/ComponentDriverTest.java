@@ -23,14 +23,12 @@ import java.util.concurrent.CountDownLatch;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
@@ -78,6 +76,9 @@ public class ComponentDriverTest {
   private MyButton button;
   private JTextField textField;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
