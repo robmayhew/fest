@@ -20,10 +20,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 import org.fest.swing.hierarchy.ExistingHierarchy;
 
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
 import static org.fest.swing.util.System.LINE_SEPARATOR;
@@ -81,77 +84,96 @@ public final class BasicComponentFinder implements ComponentFinder {
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public <T extends Component> T findByType(Class<T> type, boolean showing) {
     return type.cast(find(new TypeMatcher(type, showing)));
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public <T extends Component> T findByType(Container root, Class<T> type) {
     return findByType(root, type, false);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public <T extends Component> T findByType(Container root, Class<T> type, boolean showing) {
     return type.cast(find(root, new TypeMatcher(type, showing)));
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public <T extends Component> T findByName(String name, Class<T> type) {
     return findByName(name, type, false);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public <T extends Component> T findByName(String name, Class<T> type, boolean showing) {
     Component found = find(new NameAndTypeMatcher(name, type, showing));
     return type.cast(found);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public Component findByName(String name) {
     return findByName(name, false);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public Component findByName(String name, boolean showing) {
     return find(new NameMatcher(name, showing));
   }
 
   /** {@inheritDoc} */
-  @SuppressWarnings("unchecked")
+  @RunsInEDT
   public <T extends Component> T find(GenericTypeMatcher<T> m) {
-    return (T)find((ComponentMatcher)m);
+    Component found = find((ComponentMatcher)m);
+    return cast(found);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public Component find(ComponentMatcher m) {
     return find(hierarchy, m);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public <T extends Component> T findByName(Container root, String name, Class<T> type) {
     return findByName(root, name, type, false);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public <T extends Component> T findByName(Container root, String name, Class<T> type, boolean showing) {
     Component found = find(root, new NameAndTypeMatcher(name, type, showing));
     return type.cast(found);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public Component findByName(Container root, String name) {
     return findByName(root, name, false);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public Component findByName(Container root, String name, boolean showing) {
     return find(root, new NameMatcher(name, showing));
   }
 
   /** {@inheritDoc} */
-  @SuppressWarnings("unchecked")
+  @RunsInEDT
   public <T extends Component> T find(Container root, GenericTypeMatcher<T> m) {
-    return (T)find(root, (ComponentMatcher)m);
+    Component found = find(root, (ComponentMatcher)m);
+    return cast(found);
+  }
+
+  @SuppressWarnings("unchecked")
+  private <T> T cast(Component found) {
+    return (T)found;
   }
 
   /** {@inheritDoc} */
@@ -166,6 +188,7 @@ public final class BasicComponentFinder implements ComponentFinder {
     return found.iterator().next();
   }
 
+  @RunsInEDT
   private ComponentLookupException componentNotFound(ComponentHierarchy h, ComponentMatcher m) {
     String message = concat("Unable to find component using matcher ", m, ".");
     if (includeHierarchyIfComponentNotFound())
@@ -179,6 +202,7 @@ public final class BasicComponentFinder implements ComponentFinder {
     return null;
   }
 
+  @RunsInEDT
   private String formattedHierarchy(Container root) {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     PrintStream printStream = new PrintStream(out, true);
@@ -187,14 +211,24 @@ public final class BasicComponentFinder implements ComponentFinder {
     return new String(out.toByteArray());
   }
 
+  @RunsInEDT
   private static ComponentLookupException multipleComponentsFound(Collection<Component> found, ComponentMatcher m) {
     StringBuilder message = new StringBuilder();
     message.append("Found more than one component using matcher ").append(m).append(".").append(LINE_SEPARATOR)
            .append(LINE_SEPARATOR)
            .append("Found:");
-    for (Component c : found) message.append(LINE_SEPARATOR).append(format(c));
+    appendComponents(message, found);
     if (!found.isEmpty()) message.append(LINE_SEPARATOR);
     throw new ComponentLookupException(message.toString(), found);
+  }
+
+  @RunsInEDT
+  private static void appendComponents(final StringBuilder message, final Collection<Component> found) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        for (Component c : found) message.append(LINE_SEPARATOR).append(format(c));
+      }
+    });
   }
 
   /** {@inheritDoc} */

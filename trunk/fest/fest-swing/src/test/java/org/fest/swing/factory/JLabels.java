@@ -17,6 +17,10 @@ package org.fest.swing.factory;
 
 import javax.swing.JLabel;
 
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
+
 /**
  * Understands creation of <code>{@link JLabel}</code>s.
  *
@@ -45,10 +49,14 @@ public final class JLabels {
     }
     
     public JLabel createNew() {
-      JLabel label = new JLabel();
-      label.setName(name);
-      label.setText(text);
-      return label;
+      return execute(new GuiQuery<JLabel>() {
+        protected JLabel executeInEDT() {
+          JLabel label = new JLabel();
+          label.setName(name);
+          label.setText(text);
+          return label;
+        }
+      });
     }
   }
 }

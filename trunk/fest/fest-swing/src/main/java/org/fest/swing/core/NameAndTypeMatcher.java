@@ -17,6 +17,7 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static java.lang.String.valueOf;
@@ -75,10 +76,12 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
    * @return <code>true</code> if the name and visibility of the given <code>Component</code> matches the values
    *         specified in this matcher, <code>false</code> otherwise.
    */
+  @RunsInEDT
   public boolean matches(Component c) {
     return matches(c, name, type, requireShowing);
   }
 
+  @RunsInEDT
   private static boolean matches(final Component c, final String name, final Class<? extends Component> type,
       final boolean requireShowing) {
     return execute(new GuiQuery<Boolean>() {

@@ -17,6 +17,8 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 
+import org.fest.swing.annotation.RunsInEDT;
+
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 
 /**
@@ -57,6 +59,7 @@ public abstract class AbstractComponentMatcher implements ComponentMatcher {
    * @return <code>true</code> if the value of the "isShowing" property of the given component matches the value
    * specified in this matcher, <code>false</code> otherwise.
    */
+  @RunsInEDT
   protected final boolean isShowingMatches(Component c) {
     return !requireShowing || isShowing(c);
   }

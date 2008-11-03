@@ -18,10 +18,15 @@ package org.fest.swing.core;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link NameAndTypeMatcher}</code>.
@@ -32,6 +37,10 @@ public class NameAndTypeMatcherTest {
   
   private MyTextField textField;
   
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @BeforeMethod public void setUp() {
     textField = MyTextField.createNew("myTextField");
   }
@@ -75,9 +84,13 @@ public class NameAndTypeMatcherTest {
     private boolean showing;
 
     static MyTextField createNew(final String name) {
-      MyTextField textField = new MyTextField();
-      textField.setName(name);
-      return textField;
+      return execute(new GuiQuery<MyTextField>() {
+        protected MyTextField executeInEDT() {
+          MyTextField textField = new MyTextField();
+          textField.setName(name);
+          return textField;
+        }
+      });
     }
     
     private MyTextField() {}

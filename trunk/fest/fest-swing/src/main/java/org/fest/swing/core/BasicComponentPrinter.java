@@ -18,9 +18,12 @@ import java.awt.Component;
 import java.awt.Container;
 import java.io.PrintStream;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 import org.fest.swing.hierarchy.ExistingHierarchy;
 
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
 
@@ -66,21 +69,25 @@ public final class BasicComponentPrinter implements ComponentPrinter {
   ComponentHierarchy hierarchy() { return hierarchy; }
   
   /** {@inheritDoc} */
+  @RunsInEDT
   public void printComponents(PrintStream out) {
     printComponents(out, (Container)null);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void printComponents(PrintStream out, Container root) {
     printComponents(out, null, root);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void printComponents(PrintStream out, Class<? extends Component> type) {
     printComponents(out, type, null);
   }
   
   /** {@inheritDoc} */
+  @RunsInEDT
   public void printComponents(PrintStream out, Class<? extends Component> type, Container root) {
     print(hierarchy(root), type, out);
   }
@@ -89,8 +96,14 @@ public final class BasicComponentPrinter implements ComponentPrinter {
     return root != null ? new SingleComponentHierarchy(root, hierarchy) : hierarchy;
   }
   
-  private static void print(ComponentHierarchy hierarchy, Class<? extends Component> type, PrintStream out) {
-    for (Component c : hierarchy.roots()) print(c, hierarchy, type, 0, out);
+  @RunsInEDT
+  private static void print(final ComponentHierarchy hierarchy, final Class<? extends Component> type,
+      final PrintStream out) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        for (Component c : hierarchy.roots()) print(c, hierarchy, type, 0, out);
+      }
+    });
   }
   
   private static void print(Component c, ComponentHierarchy h, Class<? extends Component> type, int level,

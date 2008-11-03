@@ -18,9 +18,12 @@ package org.fest.swing.core;
 import javax.swing.JButton;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestWindow;
 
@@ -41,6 +44,10 @@ public class NameMatcherTest {
   private NameMatcher matcher;
   private MyWindow window;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
     window = MyWindow.createNew();
@@ -49,8 +56,11 @@ public class NameMatcherTest {
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
-    ScreenLock.instance().release(this);
+    try {
+      window.destroy();
+    } finally {
+       ScreenLock.instance().release(this);
+     }
   }
 
   @Test public void shouldReturnTrueIfNameMatches() {
@@ -108,7 +118,11 @@ public class NameMatcherTest {
     final JButton button = new JButton("A Button");
 
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

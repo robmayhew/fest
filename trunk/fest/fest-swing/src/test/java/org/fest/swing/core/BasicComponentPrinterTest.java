@@ -19,9 +19,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.hierarchy.ExistingHierarchy;
 import org.fest.swing.testing.PrintStreamStub;
@@ -46,6 +50,10 @@ public class BasicComponentPrinterTest {
   private MyWindow windowOne;
   private MyWindow windowTwo;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
     printer = (BasicComponentPrinter)BasicComponentPrinter.printerWithNewAwtHierarchy();
@@ -56,9 +64,12 @@ public class BasicComponentPrinterTest {
   }
 
   @AfterMethod public void tearDown() {
-    windowOne.destroy();
-    windowTwo.destroy();
-    ScreenLock.instance().release(this);
+    try {
+      windowOne.destroy();
+      windowTwo.destroy();
+    } finally {
+      ScreenLock.instance().release(this);
+    }
   }
 
   public void shouldCreatePrinterWithExistingHierarchy() {
@@ -108,10 +119,19 @@ public class BasicComponentPrinterTest {
 
     final JButton button = new JButton("A button");
 
+    @RunsInEDT
     static MyWindow createAndShow() {
-      MyWindow window = new MyWindow();
-      window.display();
-      return window;
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          MyWindow window = new MyWindow();
+          window.displayInCurrentThread();
+          return window;
+        }
+      });
+    }
+
+    private void displayInCurrentThread() {
+      TestWindow.display(this);
     }
 
     private MyWindow() {

@@ -25,6 +25,11 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiActionRunner;
+import org.fest.swing.edt.GuiQuery;
+
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.util.Strings.*;
 
@@ -112,11 +117,27 @@ public class Formatting {
   }
 
   /**
+   * Returns a <code>String</code> representation of the given <code>{@link Component}</code>. This method is invoked in 
+   * the event dispatch thread.
+   * @param c the given <code>Component</code>.
+   * @return a <code>String</code> representation of the given <code>Component</code>.
+   */
+  @RunsInEDT
+  public static String inEdtFormat(final Component c) {
+    return GuiActionRunner.execute(new GuiQuery<String>() {
+      protected String executeInEDT() {
+        return format(c);
+      }
+    });
+  }
+  
+  /**
    * Returns a <code>String</code> representation of the given <code>{@link Component}</code>. This method is
    * <strong>not</strong> invoked in the event dispatch thread.
    * @param c the given <code>Component</code>.
    * @return a <code>String</code> representation of the given <code>Component</code>.
    */
+  @RunsInCurrentThread
   public static String format(Component c) {
     if (c == null) return NULL_COMPONENT_MESSAGE;
     ComponentFormatter formatter = formatterFor(c.getClass());

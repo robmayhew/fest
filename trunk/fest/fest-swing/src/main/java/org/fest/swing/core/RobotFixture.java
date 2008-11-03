@@ -54,7 +54,7 @@ import static org.fest.swing.core.WindowAncestorFinder.windowAncestorOf;
 import static org.fest.swing.core.WindowHideAndDisposeTask.hideAndDispose;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.format.Formatting.*;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
 import static org.fest.swing.keystroke.KeyStrokeMap.keyStrokeFor;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
@@ -365,17 +365,7 @@ public class RobotFixture implements Robot {
   /** {@inheritDoc} */
   @RunsInEDT
   public void click(Component c, MouseButton button, int times) {
-    click(c, whereToClick(c), button, times);
-  }
-
-  @RunsInEDT
-  private Point whereToClick(final Component c) {
-    return execute(new GuiQuery<Point>() {
-      protected Point executeInEDT() {
-        if (c instanceof JComponent) return centerOfVisibleRect((JComponent)c);
-        return centerOf(c);
-      }
-    });
+    click(c, visibleCenterOf(c), button, times);
   }
 
   /** {@inheritDoc} */
@@ -654,20 +644,41 @@ public class RobotFixture implements Robot {
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public JPopupMenu showPopupMenu(Component invoker) {
-    return showPopupMenu(invoker, centerOf(invoker));
+    return showPopupMenu(invoker, visibleCenterOf(invoker));
+  }
+
+  @RunsInEDT
+  private Point visibleCenterOf(final Component c) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        if (c instanceof JComponent) return centerOfVisibleRect((JComponent)c);
+        return centerOf(c);
+      }
+    });
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public JPopupMenu showPopupMenu(Component invoker, Point location) {
     click(invoker, location, RIGHT_BUTTON, 1);
     JPopupMenu popup = findActivePopupMenu();
     if (popup == null)
-      throw new ComponentLookupException(concat("Unable to show popup at ", location, " on ", format(invoker)));
+      throw new ComponentLookupException(concat("Unable to show popup at ", location, " on ", inEdtFormat(invoker)));
     long start = currentTimeMillis();
-    while (!isReadyForInput(getWindowAncestor(popup)) && currentTimeMillis() - start > POPUP_DELAY)
+    while (!isWindowAncestorReadyForInput(popup) && currentTimeMillis() - start > POPUP_DELAY)
       pause();
     return popup;
+  }
+  
+  @RunsInEDT
+  private boolean isWindowAncestorReadyForInput(final JPopupMenu popup) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return isReadyForInput(getWindowAncestor(popup));
+      }
+    });
   }
 
   /** {@inheritDoc} */
@@ -684,6 +695,7 @@ public class RobotFixture implements Robot {
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public JPopupMenu findActivePopupMenu() {
     JPopupMenu popup = activePopupMenu();
     if (popup != null || isEventDispatchThread()) return popup;
@@ -695,6 +707,7 @@ public class RobotFixture implements Robot {
     return popup;
   }
 
+  @RunsInEDT
   private JPopupMenu activePopupMenu() {
     List<Component> found = new ArrayList<Component>(finder().findAll(POPUP_MATCHER));
     if (found.size() == 1) return (JPopupMenu)found.get(0);

@@ -50,6 +50,7 @@ import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
 import static org.fest.swing.driver.JListContentQuery.contents;
 import static org.fest.swing.driver.JListItemFinder.matchingItemIndex;
 import static org.fest.swing.driver.JListItemIndexValidator.validateIndex;
+import static org.fest.swing.driver.JListItemValueQuery.itemValue;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.driver.JListSelectionValuesQuery.selectionValues;
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -617,20 +618,10 @@ public class JListDriver extends JComponentDriver {
   @RunsInEDT
   public String value(JList list, int index) {
     try {
-      return cellValue(list, index, cellReader);
+      return itemValue(list, index, cellReader);
     } catch (UnexpectedException unexpected) {
       throw unexpected.bomb();
     }
-  }
-
-  @RunsInEDT
-  private static String cellValue(final JList list, final int index, final JListCellReader cellReader) {
-    return execute(new GuiQuery<String>() {
-      protected String executeInEDT() {
-        validateIndex(list, index);
-        return cellReader.valueAt(list, index);
-      }
-    });
   }
 
   private static LocationUnavailableException indexNotFoundFor(String value) {

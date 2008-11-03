@@ -119,7 +119,7 @@ public class JListSelectionValuesQueryTest {
       addComponents(decorate(list));
     }
 
-    private JScrollPane decorate(JList list) {
+    private static JScrollPane decorate(JList list) {
       JScrollPane scrollPane = new JScrollPane(list);
       scrollPane.setPreferredSize(LIST_SIZE);
       return scrollPane;

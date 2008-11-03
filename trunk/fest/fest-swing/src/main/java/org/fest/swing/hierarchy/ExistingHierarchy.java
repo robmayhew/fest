@@ -54,6 +54,7 @@ public class ExistingHierarchy implements ComponentHierarchy {
   }
 
   /** {@inheritDoc} */
+  @RunsInCurrentThread
   public Container parentOf(Component c) {
     return parentFinder.parentOf(c);
   }

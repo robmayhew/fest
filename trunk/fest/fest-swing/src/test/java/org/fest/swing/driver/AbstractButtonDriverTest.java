@@ -22,6 +22,7 @@ import javax.swing.AbstractButton;
 import javax.swing.JCheckBox;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -35,8 +36,6 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
-
-import static javax.swing.RepaintManager.setCurrentManager;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -60,8 +59,11 @@ public class AbstractButtonDriverTest {
   private JCheckBox checkBox;
   private AbstractButtonDriver driver;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @BeforeMethod public void setUp() {
-    setCurrentManager(new CheckThreadViolationRepaintManager());
     robot = robotWithNewAwtHierarchy();
     driver = new AbstractButtonDriver(robot);
     MyWindow window = MyWindow.createNew();

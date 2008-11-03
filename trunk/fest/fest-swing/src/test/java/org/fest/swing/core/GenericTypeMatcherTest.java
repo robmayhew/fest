@@ -17,7 +17,10 @@ package org.fest.swing.core;
 
 import javax.swing.JButton;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.factory.JButtons.button;
@@ -30,6 +33,10 @@ import static org.fest.swing.factory.JLabels.label;
  */
 public class GenericTypeMatcherTest {
   
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @Test public void shouldReturnTrueIfTypeAndSearchCriteriaMatch() {
     GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>() {
       @Override protected boolean isMatching(JButton component) {

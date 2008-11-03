@@ -1,16 +1,16 @@
 /*
- * Created on Oct 31, 2008
- *
+ * Created on Nov 3, 2008
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- *
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
- *
+ * 
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.driver;
@@ -20,10 +20,7 @@ import java.awt.Dimension;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.core.Robot;
@@ -38,12 +35,12 @@ import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
 /**
- * Tests for <code>{@link JListContentQuery}</code>.
+ * Tests for <code>{@link JListItemFinder}</code>.
  *
  * @author Alex Ruiz
  */
 @Test(groups = GUI)
-public class JListContentQueryTest {
+public class JListItemFinderTest {
 
   private Robot robot;
   private JList list;
@@ -65,9 +62,28 @@ public class JListContentQueryTest {
     robot.cleanUp();
   }
 
-  public void shouldReturnContentsOfJListAsText() {
-    String[] contents = JListContentQuery.contents(list, cellReader);
-    assertThat(contents).containsOnly("Yoda", "Luke");
+  @Test(dataProvider = "matchingItems", groups = GUI)
+  public void shouldReturnIndexOfMatchingItem(final String value, int expectedIndex) {
+    assertThat(findMatchingItem(value)).isEqualTo(expectedIndex);
+  }
+  
+  @DataProvider(name = "matchingItems") public Object[][] matchingItems() {
+    return new Object[][] {
+        { "Yoda", 0 },
+        { "Luke", 1 }
+    };
+  }
+  
+  public void shouldReturnNegativeOneIfMatchingItemNotFound() {
+    assertThat(findMatchingItem("Leia")).isEqualTo(-1);
+  }
+  
+  private int findMatchingItem(final String value) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return JListItemFinder.matchingItemIndex(list, value, cellReader);
+      }
+    });
   }
 
   private static class MyWindow extends TestWindow {
@@ -85,7 +101,7 @@ public class JListContentQueryTest {
     }
 
     private MyWindow() {
-      super(JListContentQueryTest.class);
+      super(JListItemFinderTest.class);
       addComponents(decorate(list));
     }
 

@@ -17,6 +17,8 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 
+import org.fest.swing.annotation.RunsInEDT;
+
 /**
  * Understands a <code>{@link ComponentMatcher}</code> that matches a <code>{@link Component}</code> by type and some 
  * custom search criteria.
@@ -49,15 +51,18 @@ public abstract class GenericTypeMatcher<T extends Component> extends AbstractCo
    * @return <code>true</code> if the given <code>Component</code> is an instance of the generic type of this matcher 
    * and matches some search criteria. Otherwise, <code>false</code>. 
    */
-  @SuppressWarnings("unchecked") 
+  @RunsInEDT
   public final boolean matches(Component c) {
     if (c == null) return false;
     try {
-      return (isShowingMatches(c)) && isMatching((T)c);
+      return (isShowingMatches(c)) && isMatching(cast(c));
     } catch(ClassCastException ignored) {
       return false;
     }
   }
+
+  @SuppressWarnings("unchecked") 
+  private T cast(Component c) { return (T)c; }
 
   /**
    * Verifies that the given component matches some search criteria.

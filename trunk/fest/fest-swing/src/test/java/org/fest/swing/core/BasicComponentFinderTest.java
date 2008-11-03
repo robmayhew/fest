@@ -21,14 +21,19 @@ import java.util.Collection;
 import javax.swing.*;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -45,6 +50,10 @@ public class BasicComponentFinderTest {
   private MyWindow windowOne;
   private MyWindow windowTwo;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
     finder = (BasicComponentFinder)BasicComponentFinder.finderWithNewAwtHierarchy();
@@ -52,9 +61,12 @@ public class BasicComponentFinderTest {
   }
 
   @AfterMethod public void tearDown() {
-    windowOne.destroy();
-    if (windowTwo != null) windowTwo.destroy();
-    ScreenLock.instance().release(this);
+    try {
+      windowOne.destroy();
+      if (windowTwo != null) windowTwo.destroy();
+    } finally {
+      ScreenLock.instance().release(this);
+    }
   }
 
   public void shouldFindComponentByType() {
@@ -269,10 +281,19 @@ public class BasicComponentFinderTest {
     final JTextField textField = new JTextField("A TextField");
     final JTextField anotherTextField = new JTextField("Another TextField");
 
+    @RunsInEDT
     static MyWindow createAndShow() {
-      MyWindow window = new MyWindow();
-      window.display();
-      return window;
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          MyWindow window = new MyWindow();
+          window.displayInCurrentThread();
+          return window;
+        }
+      });
+    }
+
+    private void displayInCurrentThread() {
+      TestWindow.display(this);
     }
 
     private MyWindow() {

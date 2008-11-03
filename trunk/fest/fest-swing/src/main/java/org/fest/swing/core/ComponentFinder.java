@@ -265,7 +265,9 @@ public interface ComponentFinder {
 
   /**
    * Finds a <code>{@link Component}</code> using the given <code>{@link ComponentMatcher}</code> in the hierarchy
-   * under the given root.
+   * under the given root. This method is <b>not</b> executed in the event dispatch thread. If a 
+   * <code>{@link ComponentLookupException}</code> is thrown, this method will include as part of the exception message,
+   * the components involved in the lookup. This list of components <b>is</b> created in the event dispatch thread.
    * @param root the root used as the starting point of the search.
    * @param m the matcher to use to find the component.
    * @return the found component.
@@ -278,7 +280,7 @@ public interface ComponentFinder {
    * Returns whether the message in a <code>{@link ComponentLookupException}</code> should include the current component 
    * hierarchy. The default value is <code>true</code>.
    * @return <code>true</code> if the component hierarchy is included as part of the 
-   *         <code>ComponentLookupException</code> message, <code>false</code> otherwise.
+   * <code>ComponentLookupException</code> message, <code>false</code> otherwise.
    */
   boolean includeHierarchyIfComponentNotFound();
 
@@ -294,7 +296,7 @@ public interface ComponentFinder {
    * <code>{@link ComponentMatcher}</code>.
    * @param m the matcher to use to find the component.
    * @return all the <code>Component</code>s that match the search criteria specified in the given
-   *         <code>ComponentMatcher</code>; or an empty collection, if there are no matching components.
+   * <code>ComponentMatcher</code>; or an empty collection, if there are no matching components.
    */
   Collection<Component> findAll(ComponentMatcher m);
 
@@ -304,7 +306,7 @@ public interface ComponentFinder {
    * @param root the root used as the starting point of the search.
    * @param m the matcher to use to find the component.
    * @return all the <code>Component</code>s under the given root that match the search criteria specified in the given
-   *         <code>ComponentMatcher</code>; or an empty collection, if there are no matching components.
+   * <code>ComponentMatcher</code>; or an empty collection, if there are no matching components.
    */
   Collection<Component> findAll(Container root, ComponentMatcher m);
 }
