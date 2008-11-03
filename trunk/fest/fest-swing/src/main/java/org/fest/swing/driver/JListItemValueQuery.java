@@ -20,6 +20,7 @@ import javax.swing.JList;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.exception.UnexpectedException;
 
 import static org.fest.swing.driver.JListItemIndexValidator.validateIndex;
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -34,12 +35,16 @@ final class JListItemValueQuery {
 
   @RunsInEDT
   static String itemValue(final JList list, final int index, final JListCellReader cellReader) {
-    return execute(new GuiQuery<String>() {
-      protected String executeInEDT() {
-        validateIndex(list, index);
-        return cellReader.valueAt(list, index);
-      }
-    });
+    try {
+      return execute(new GuiQuery<String>() {
+        protected String executeInEDT() {
+          validateIndex(list, index);
+          return cellReader.valueAt(list, index);
+        }
+      });
+    } catch (UnexpectedException unexpected) {
+      throw unexpected.bomb();
+    }
   }
 
   private JListItemValueQuery() {}

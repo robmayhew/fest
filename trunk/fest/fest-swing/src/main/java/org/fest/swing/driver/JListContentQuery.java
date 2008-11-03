@@ -19,12 +19,13 @@ import javax.swing.JList;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.exception.UnexpectedException;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands an action, executed in the event dispatch thread, that returns an array of <code>String</code>s that
- * represents the contents of a given <code>{@link JList}</code>
+ * represents the contents of a given <code>{@link JList}</code>.
  *
  * @author Alex Ruiz
  */
@@ -32,14 +33,18 @@ final class JListContentQuery {
 
   @RunsInEDT
   static String[] contents(final JList list, final JListCellReader cellReader) {
-    return execute(new GuiQuery<String[]>() {
-      protected String[] executeInEDT() {
-        String[] values = new String[list.getModel().getSize()];
-        for (int i = 0; i < values.length; i++)
-          values[i] = cellReader.valueAt(list, i);
-        return values;
-      }
-    });
+    try {
+      return execute(new GuiQuery<String[]>() {
+        protected String[] executeInEDT() {
+          String[] values = new String[list.getModel().getSize()];
+          for (int i = 0; i < values.length; i++)
+            values[i] = cellReader.valueAt(list, i);
+          return values;
+        }
+      });
+    } catch (UnexpectedException unexpected) {
+      throw unexpected.bomb();
+    }
   }
 
   private JListContentQuery() {}

@@ -47,11 +47,12 @@ import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
+import static org.fest.swing.driver.JListCellBoundsQuery.cellBounds;
 import static org.fest.swing.driver.JListContentQuery.contents;
 import static org.fest.swing.driver.JListItemFinder.matchingItemIndex;
-import static org.fest.swing.driver.JListItemIndexValidator.validateIndex;
 import static org.fest.swing.driver.JListItemValueQuery.itemValue;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
+import static org.fest.swing.driver.JListSelectionValueQuery.*;
 import static org.fest.swing.driver.JListSelectionValuesQuery.selectionValues;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Strings.*;
@@ -70,7 +71,6 @@ public class JListDriver extends JComponentDriver {
   private static final String SELECTED_INDICES_LENGTH_PROPERTY = concat(SELECTED_INDICES_PROPERTY, "#length");
   private static final String SELECTED_INDEX_PROPERTY = "selectedIndex";
 
-  private static final String NO_SELECTION_VALUE = "";
 
   private JListCellReader cellReader;
 
@@ -92,27 +92,7 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public String[] contentsOf(JList list) {
-    try {
-      return contents(list, cellReader);
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
-  }
-
-  /**
-   * Returns an array of <code>String</code>s that represents the selection in the given <code>{@link JList}</code>,
-   * using this driver's <code>{@link JListCellReader}</code>.
-   * @param list the target <code>JList</code>.
-   * @return an array of <code>String</code>s that represents the selection in the given <code>JList</code>.
-   * @see #cellReader(JListCellReader)
-   */
-  @RunsInEDT
-  public String[] selectionOf(JList list) {
-    try {
-      return selectionValues(list, cellReader);
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
+    return contents(list, cellReader);
   }
 
   /**
@@ -323,25 +303,9 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void requireSelection(final JList list, String value) {
-    String selectionValue = null;
-    try {
-      selectionValue = singleSelectionValue(list, cellReader);
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
-    failIfNoSelection(list, selectionValue);
-    assertThat(selectionValue).as(selectedIndexProperty(list)).isEqualTo(value);
-  }
-
-  //TODO create separate query class
-  @RunsInEDT
-  private static String singleSelectionValue(final JList list, final JListCellReader cellReader) {
-    return execute(new GuiQuery<String>() {
-      protected String executeInEDT() {
-        int selectedIndex = list.getSelectedIndex();
-        return (selectedIndex >= 0) ? cellReader.valueAt(list, selectedIndex): NO_SELECTION_VALUE;
-      }
-    });
+    String selection = singleSelectionValue(list, cellReader);
+    if (NO_SELECTION_VALUE == selection) failNoSelection(list);
+    assertThat(selection).as(selectedIndexProperty(list)).isEqualTo(value);
   }
 
   /**
@@ -354,13 +318,24 @@ public class JListDriver extends JComponentDriver {
   @RunsInEDT
   public void requireSelectedItems(JList list, String... items) {
     if (items == null) throw new NullPointerException("The array of items should not be null");
-    String[] selectionValues = selectionOf(list);
-    if (selectionValues.length == 0) failNoSelection(list);
-    requireEqualSelection(list, items, selectionValues);
+    requireEqualSelection(list, items, selectionOf(list));
   }
   
+  /**
+   * Returns an array of <code>String</code>s that represents the selection in the given <code>{@link JList}</code>,
+   * using this driver's <code>{@link JListCellReader}</code>.
+   * @param list the target <code>JList</code>.
+   * @return an array of <code>String</code>s that represents the selection in the given <code>JList</code>.
+   * @see #cellReader(JListCellReader)
+   */
+  @RunsInEDT
+  public String[] selectionOf(JList list) {
+    return selectionValues(list, cellReader);
+  }
+
   private void requireEqualSelection(JList list, String[] expected, String[] actual) {
     int selectionCount = actual.length;
+    if (selectionCount == 0) failNoSelection(list);
     assertThat(selectionCount).as(propertyName(list, SELECTED_INDICES_LENGTH_PROPERTY)).isEqualTo(expected.length);
     for (int i = 0; i < selectionCount; i++) {
       Description description = propertyName(list, concat(SELECTED_INDICES_PROPERTY, "[", valueOf(i), "]"));
@@ -379,13 +354,8 @@ public class JListDriver extends JComponentDriver {
   }
 
   @RunsInEDT
-  private void failIfNoSelection(JList list, String selectionValue) {
-    if (NO_SELECTION_VALUE == selectionValue) failNoSelection(list);
-  }
-
-  @RunsInEDT
   private void failNoSelection(JList list) {
-    fail(concat("[", selectedIndexProperty(list), "] No selection"));
+    fail(concat("[", selectedIndexProperty(list).value(), "] No selection"));
   }
 
   @RunsInEDT
@@ -576,7 +546,11 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public Point pointAt(JList list, String value) {
-    return pointAtMatchingItem(list, value, cellReader);
+    try {
+      return pointAtMatchingItem(list, value, cellReader);
+    } catch (UnexpectedException unexpected) {
+      throw unexpected.bomb();
+    }
   }
 
   @RunsInEDT
@@ -589,12 +563,6 @@ public class JListDriver extends JComponentDriver {
     });
   }
   
-  @RunsInCurrentThread
-  private static Rectangle cellBounds(JList list, int index) {
-    validateIndex(list, index);
-    return list.getCellBounds(index, index);
-  }
-
   /**
    * Returns the index of the first item matching the given value.
    * @param list the target <code>JList</code>
@@ -635,11 +603,7 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public String value(JList list, int index) {
-    try {
-      return itemValue(list, index, cellReader);
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
+    return itemValue(list, index, cellReader);
   }
 
   private static LocationUnavailableException indexNotFoundFor(String value) {
