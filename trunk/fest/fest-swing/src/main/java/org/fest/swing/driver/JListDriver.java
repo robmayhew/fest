@@ -43,10 +43,13 @@ import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
 import static org.fest.swing.driver.JListContentQuery.contents;
+import static org.fest.swing.driver.JListItemFinder.matchingItemIndex;
+import static org.fest.swing.driver.JListItemIndexValidator.validateIndex;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.driver.JListSelectionValuesQuery.selectionValues;
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -160,7 +163,7 @@ public class JListDriver extends JComponentDriver {
       final JListCellReader cellReader) {
     return execute(new GuiQuery<Pair<Boolean, Point>>() {
       protected Pair<Boolean, Point> executeInEDT() {
-        int index = JListItemFinder.instance().itemIndex(list, value, cellReader);
+        int index = matchingItemIndex(list, value, cellReader);
         return scrollToItemIfNotSelected(list, index);
       }
     });
@@ -500,7 +503,7 @@ public class JListDriver extends JComponentDriver {
   private static Point scrollToItem(final JList list, final String value, final JListCellReader cellReader) {
     return execute(new GuiQuery<Point>() {
       protected Point executeInEDT() {
-        int index = JListItemFinder.instance().itemIndex(list, value, cellReader);
+        int index = matchingItemIndex(list, value, cellReader);
         if (index < 0) return null;
         return scrollToItemInCurrentThread(list, index);
       }
@@ -542,17 +545,13 @@ public class JListDriver extends JComponentDriver {
     validateIsEnabled(list);
     Rectangle cellBounds = cellBounds(list, index);
     list.scrollRectToVisible(cellBounds);
-    return cellCenter(cellBounds);
+    return centerOf(cellBounds);
   }
 
   @RunsInCurrentThread
   private static Rectangle cellBounds(JList list, int index) {
-    JListItemIndexValidator.instance().validateIndex(list, index);
+    validateIndex(list, index);
     return list.getCellBounds(index, index);
-  }
-
-  private static Point cellCenter(Rectangle cellBounds) {
-    return new Point(cellBounds.x + cellBounds.width / 2, cellBounds.y + cellBounds.height / 2);
   }
 
   /**
@@ -571,8 +570,8 @@ public class JListDriver extends JComponentDriver {
   private static Point pointAtCellWithValue(final JList list, final String value, final JListCellReader cellReader) {
     return execute(new GuiQuery<Point>() {
       protected Point executeInEDT() {
-        int itemIndex = JListItemFinder.instance().itemIndex(list, value, cellReader);
-        return cellCenter(cellBounds(list, itemIndex));
+        int itemIndex = matchingItemIndex(list, value, cellReader);
+        return centerOf(cellBounds(list, itemIndex));
       }
     });
   }
@@ -600,7 +599,7 @@ public class JListDriver extends JComponentDriver {
   private static int itemIndex(final JList list, final String value, final JListCellReader cellReader) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {
-        return JListItemFinder.instance().itemIndex(list, value, cellReader);
+        return matchingItemIndex(list, value, cellReader);
       }
     });
   }
@@ -628,7 +627,7 @@ public class JListDriver extends JComponentDriver {
   private static String cellValue(final JList list, final int index, final JListCellReader cellReader) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
-        JListItemIndexValidator.instance().validateIndex(list, index);
+        validateIndex(list, index);
         return cellReader.valueAt(list, index);
       }
     });

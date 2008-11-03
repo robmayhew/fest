@@ -30,14 +30,8 @@ import static org.fest.util.Strings.concat;
  */
 class JListItemIndexValidator {
 
-  private static final JListItemIndexValidator INSTANCE = new JListItemIndexValidator();
-
-  static JListItemIndexValidator instance() {
-    return INSTANCE;
-  }
-
   @RunsInCurrentThread
-  void validateIndex(JList list, int index) {
+  static void validateIndex(JList list, int index) {
     int itemCount = list.getModel().getSize();
     if (index >= 0 && index < itemCount) return;
     throw new IndexOutOfBoundsException(concat(

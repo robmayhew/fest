@@ -69,6 +69,15 @@ public class AWT {
   @RunsInCurrentThread
   public static Point centerOfVisibleRect(JComponent c) {
     Rectangle r = c.getVisibleRect();
+    return centerOf(r);
+  }
+
+  /**
+   * Returns a point at the center of the given <code>{@link Rectangle}</code>.
+   * @param r the given <code>Rectangle</code>.
+   * @return a point at the center of the given <code>Rectangle</code>.
+   */
+  public static Point centerOf(Rectangle r) {
     return new Point((r.x + (r.width / 2)), (r.y + (r.height / 2)));
   }
 

@@ -29,14 +29,8 @@ import static org.fest.util.Objects.areEqual;
  */
 class JListItemFinder {
 
-  private static final JListItemFinder INSTANCE = new JListItemFinder();
-
-  static JListItemFinder instance() {
-    return INSTANCE;
-  }
-
   @RunsInCurrentThread
-  int itemIndex(JList list, String value, JListCellReader cellReader) {
+  static int matchingItemIndex(JList list, String value, JListCellReader cellReader) {
     int size = list.getModel().getSize();
     for (int i = 0; i < size; i++)
       if (areEqual(value, cellReader.valueAt(list, i))) return i;
