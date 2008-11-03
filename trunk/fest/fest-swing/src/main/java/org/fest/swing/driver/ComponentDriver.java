@@ -366,11 +366,11 @@ public class ComponentDriver {
    * @param c the target component.
    * @param where the point where to start the drag action.
    */
-  @RunsInCurrentThread
+  @RunsInEDT
   protected final void drag(Component c, Point where) {
     dragAndDrop.drag(c, where);
   }
-
+  
   /**
    * Ends a drag operation, releasing the mouse button over the given target location.
    * <p>
@@ -381,6 +381,7 @@ public class ComponentDriver {
    * @param where the point where the drag operation ends.
    * @throws ActionFailedException if there is no drag action in effect.
    */
+  @RunsInEDT
   protected final void drop(Component c, Point where) {
     dragAndDrop.drop(c, where);
   }

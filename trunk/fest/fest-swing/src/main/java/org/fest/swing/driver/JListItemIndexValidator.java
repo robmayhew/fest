@@ -28,7 +28,7 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz
  */
-class JListItemIndexValidator {
+final class JListItemIndexValidator {
 
   @RunsInCurrentThread
   static void validateIndex(JList list, int index) {

@@ -27,7 +27,7 @@ import static org.fest.util.Objects.areEqual;
  *
  * @author Alex Ruiz
  */
-class JListItemFinder {
+final class JListItemFinder {
 
   @RunsInCurrentThread
   static int matchingItemIndex(JList list, String value, JListCellReader cellReader) {
