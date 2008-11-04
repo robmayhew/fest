@@ -20,7 +20,6 @@ import javax.swing.JList;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.exception.UnexpectedException;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
@@ -34,20 +33,16 @@ final class JListSelectionValuesQuery {
 
   @RunsInEDT
   static String[] selectionValues(final JList list, final JListCellReader cellReader) {
-    try {
-      return execute(new GuiQuery<String[]>() {
-        protected String[] executeInEDT() {
-          int[] selectedIndices = list.getSelectedIndices();
-          int count = selectedIndices.length;
-          String[] values = new String[count];
-          for (int i = 0; i < count; i++)
-            values[i] = cellReader.valueAt(list, selectedIndices[i]);
-          return values;
-        }
-      });
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
+    return execute(new GuiQuery<String[]>() {
+      protected String[] executeInEDT() {
+        int[] selectedIndices = list.getSelectedIndices();
+        int count = selectedIndices.length;
+        String[] values = new String[count];
+        for (int i = 0; i < count; i++)
+          values[i] = cellReader.valueAt(list, selectedIndices[i]);
+        return values;
+      }
+    });
   }
 
   private JListSelectionValuesQuery() {}

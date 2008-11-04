@@ -22,7 +22,6 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.query.AbstractButtonTextQuery;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -77,13 +76,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void select(AbstractButton button) {
-    boolean ready = false;
-    try {
-      ready = !isReadyForInput(button);
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
-    if (!ready) return;
+    if (!(!isReadyForSelection(button))) return;
     click(button);
   }
 
@@ -94,18 +87,12 @@ public class AbstractButtonDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void unselect(AbstractButton button) {
-    boolean ready = false;
-    try {
-      ready = isReadyForInput(button);
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
-    if (!ready) return;
+    if (!isReadyForSelection(button)) return;
     click(button);
   }
 
   @RunsInEDT
-  private static boolean isReadyForInput(final AbstractButton button) {
+  private static boolean isReadyForSelection(final AbstractButton button) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         validateIsEnabled(button);

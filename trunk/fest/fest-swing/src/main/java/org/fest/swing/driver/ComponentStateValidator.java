@@ -20,7 +20,6 @@ import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.exception.UnexpectedException;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
@@ -45,15 +44,11 @@ public final class ComponentStateValidator {
    */
   @RunsInEDT
   public static void inEdtValidateIsEnabled(final Component c) {
-    try {
-      execute(new GuiTask() {
-        protected void executeInEDT() {
-          validateIsEnabled(c);
-        }
-      });
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        validateIsEnabled(c);
+      }
+    });
   }
 
   /**

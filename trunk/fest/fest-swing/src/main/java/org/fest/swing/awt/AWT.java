@@ -23,12 +23,15 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.util.MouseEventTarget;
 
 import static java.awt.event.InputEvent.*;
 import static javax.swing.SwingUtilities.convertPoint;
 
 import static org.fest.reflect.core.Reflection.method;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
@@ -49,6 +52,16 @@ public class AWT {
 
   // Abbot: Macintosh *used* to map button2 to the pop-up trigger (1.3). Not clear when this changed.
   private static final boolean POPUP_ON_BUTTON2 = false;
+
+  @RunsInEDT
+  public static Point visibleCenterOf(final Component c) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        if (c instanceof JComponent) return centerOfVisibleRect((JComponent)c);
+        return centerOf(c);
+      }
+    });
+  }
 
   /**
    * Returns a point at the center of the given <code>{@link Component}</code>.

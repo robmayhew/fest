@@ -35,12 +35,12 @@ import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
 /**
- * Tests for <code>{@link JListItemFinder}</code>.
+ * Tests for <code>{@link JListMatchingItemQuery}</code>.
  *
  * @author Alex Ruiz
  */
 @Test(groups = GUI)
-public class JListItemFinderTest {
+public class JListMatchingItemQueryTest {
 
   private Robot robot;
   private JList list;
@@ -81,7 +81,7 @@ public class JListItemFinderTest {
   private int findMatchingItem(final String value) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {
-        return JListItemFinder.matchingItemIndex(list, value, cellReader);
+        return JListMatchingItemQuery.matchingItemIndex(list, value, cellReader);
       }
     });
   }
@@ -101,7 +101,7 @@ public class JListItemFinderTest {
     }
 
     private MyWindow() {
-      super(JListItemFinderTest.class);
+      super(JListMatchingItemQueryTest.class);
       addComponents(decorate(list));
     }
 

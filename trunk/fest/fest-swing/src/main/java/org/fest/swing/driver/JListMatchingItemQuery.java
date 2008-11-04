@@ -15,11 +15,18 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Point;
+
 import javax.swing.JList;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JListCellReader;
+import org.fest.swing.edt.GuiQuery;
 
+import static org.fest.swing.awt.AWT.centerOf;
+import static org.fest.swing.driver.JListCellBoundsQuery.cellBounds;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Objects.areEqual;
 
 /**
@@ -27,8 +34,18 @@ import static org.fest.util.Objects.areEqual;
  *
  * @author Alex Ruiz
  */
-final class JListItemFinder {
+final class JListMatchingItemQuery {
 
+  @RunsInEDT
+  static Point centerOfMatchingItemCell(final JList list, final String value, final JListCellReader cellReader) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        int itemIndex = matchingItemIndex(list, value, cellReader);
+        return centerOf(cellBounds(list, itemIndex));
+      }
+    });
+  }
+  
   @RunsInCurrentThread
   static int matchingItemIndex(JList list, String value, JListCellReader cellReader) {
     int size = list.getModel().getSize();
@@ -37,5 +54,5 @@ final class JListItemFinder {
     return -1;
   }
 
-  private JListItemFinder() {}
+  private JListMatchingItemQuery() {}
 }

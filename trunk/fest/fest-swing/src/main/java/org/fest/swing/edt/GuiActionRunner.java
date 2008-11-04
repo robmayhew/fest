@@ -57,8 +57,8 @@ public class GuiActionRunner {
    * @param <T> the generic type of the return value.
    * @param query the query to execute.
    * @return the result of the query executed in the main thread.
-   * @throws UnexpectedException wrapping any exception thrown when executing the given query in the event dispatch
-   * thread.
+   * @throws UnexpectedException wrapping any <b>checked</b> exception thrown when executing the given query in the 
+   * event dispatch thread. Unchecked exceptions are re-thrown without any wrapping.
    * @see #executeInEDT()
    */
   public static <T> T execute(GuiQuery<T> query) {
@@ -78,8 +78,8 @@ public class GuiActionRunner {
   /**
    * Executes the given task in the event dispatch thread. This method waits until the task has finished its execution.
    * @param task the task to execute.
-   * @throws UnexpectedException wrapping any exception thrown when executing the given task in the event dispatch
-   * thread.
+   * @throws UnexpectedException wrapping any <b>checked</b> exception thrown when executing the given query in the 
+   * event dispatch thread. Unchecked exceptions are re-thrown without any wrapping.
    * @see #executeInEDT()
    */
   public static void execute(GuiTask task) {
@@ -124,11 +124,13 @@ public class GuiActionRunner {
   /**
    * Wraps (with a <code>{@link UnexpectedException}</code>) and retrows any catched exception in the given action.
    * @param action the given action that may have a catched exception during its execution.
-   * @throws UnexpectedException wrapping any catched exception during the execution of the given action.
+   * @throws UnexpectedException wrapping any <b>checked</b> exception thrown when executing the given query in the 
+   * event dispatch thread. Unchecked exceptions are rethrown without any wrapping.
    */
   private static void rethrowCatchedExceptionIn(GuiAction action) {
     Throwable catchedException = action.catchedException();
     action.clearCatchedException();
+    if (catchedException instanceof RuntimeException) throw (RuntimeException)catchedException;
     if (catchedException != null) throw unexpected(catchedException);
   }
 }

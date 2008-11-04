@@ -27,9 +27,7 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.*;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiLazyLoadingDescription;
-import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.format.ComponentFormatter;
 import org.fest.swing.format.Formatting;
@@ -37,12 +35,10 @@ import org.fest.swing.timing.Timeout;
 import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.driver.ComponentEnabledCondition.untilIsEnabled;
 import static org.fest.swing.driver.ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction;
-import static org.fest.swing.driver.ComponentStateValidator.*;
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.driver.ComponentStateValidator.inEdtValidateIsEnabled;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
@@ -87,7 +83,7 @@ public class ComponentDriver {
    */
   @RunsInEDT
   public void click(Component c) {
-    robot.click(c, whereToClick(c));
+    robot.click(c);
   }
 
   /**
@@ -146,30 +142,7 @@ public class ComponentDriver {
   @RunsInEDT
   public void click(Component c, MouseButton button, int times) {
     if (button == null) throw new NullPointerException("The given MouseButton should not be null");
-    robot.click(c, whereToClick(c), button, times);
-  }
-
-  /**
-   * Returns the point where this driver should click a <code>{@link Component}</code>. This implementation returns the
-   * center of such <code>Component</code>.
-   * @param c the <code>Component</code> to click on.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
-   * @return the point where the center of the given <code>Component</code> is.
-   */
-  @RunsInEDT
-  protected Point whereToClick(final Component c) {
-    Point where = null;
-    try {
-      where = execute(new GuiQuery<Point>() {
-        protected Point executeInEDT() {
-          validateIsEnabled(c);
-          return centerOf(c);
-        }
-      });
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
-    return where;
+    robot.click(c, button, times);
   }
 
   /**

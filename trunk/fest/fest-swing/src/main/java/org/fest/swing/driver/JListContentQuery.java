@@ -19,7 +19,6 @@ import javax.swing.JList;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.exception.UnexpectedException;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
@@ -33,18 +32,14 @@ final class JListContentQuery {
 
   @RunsInEDT
   static String[] contents(final JList list, final JListCellReader cellReader) {
-    try {
-      return execute(new GuiQuery<String[]>() {
-        protected String[] executeInEDT() {
-          String[] values = new String[list.getModel().getSize()];
-          for (int i = 0; i < values.length; i++)
-            values[i] = cellReader.valueAt(list, i);
-          return values;
-        }
-      });
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
+    return execute(new GuiQuery<String[]>() {
+      protected String[] executeInEDT() {
+        String[] values = new String[list.getModel().getSize()];
+        for (int i = 0; i < values.length; i++)
+          values[i] = cellReader.valueAt(list, i);
+        return values;
+      }
+    });
   }
 
   private JListContentQuery() {}

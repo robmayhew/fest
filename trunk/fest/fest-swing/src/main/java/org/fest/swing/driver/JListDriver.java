@@ -16,15 +16,12 @@
 package org.fest.swing.driver;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 
 import org.fest.assertions.Description;
-import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.awt.AWT;
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
@@ -32,8 +29,6 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
-import org.fest.swing.exception.UnexpectedException;
-import org.fest.swing.util.Pair;
 import org.fest.swing.util.Range.From;
 import org.fest.swing.util.Range.To;
 import org.fest.util.Arrays;
@@ -43,14 +38,14 @@ import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.awt.AWT.centerOf;
+import static org.fest.swing.awt.AWT.visibleCenterOf;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
-import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
-import static org.fest.swing.driver.JListCellBoundsQuery.cellBounds;
 import static org.fest.swing.driver.JListContentQuery.contents;
-import static org.fest.swing.driver.JListItemFinder.matchingItemIndex;
 import static org.fest.swing.driver.JListItemValueQuery.itemValue;
+import static org.fest.swing.driver.JListMatchingItemQuery.*;
+import static org.fest.swing.driver.JListScrollActionResult.ITEM_NOT_FOUND;
+import static org.fest.swing.driver.JListScrollToItemTask.*;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.driver.JListSelectionValueQuery.*;
 import static org.fest.swing.driver.JListSelectionValuesQuery.selectionValues;
@@ -70,7 +65,6 @@ public class JListDriver extends JComponentDriver {
   private static final String SELECTED_INDICES_PROPERTY = "selectedIndices";
   private static final String SELECTED_INDICES_LENGTH_PROPERTY = concat(SELECTED_INDICES_PROPERTY, "#length");
   private static final String SELECTED_INDEX_PROPERTY = "selectedIndex";
-
 
   private JListCellReader cellReader;
 
@@ -123,31 +117,18 @@ public class JListDriver extends JComponentDriver {
    * @param list the target <code>JList</code>.
    * @param value the value to match.
    * @throws ActionFailedException if the <code>JList</code> is disabled.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   * the <code>JList</code>.
+   * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   @RunsInEDT
   public void selectItem(JList list, String value) {
-    Pair<Boolean, Point> result = null;
-    try {
-      result = scrollToItemIfNotSelected(list, value, cellReader);
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
+    JListScrollActionResult result = scrollToNotSelectedItem(list, value, cellReader);
     robot.waitForIdle();
-    clickIfCellNotSelected(list, result);
+    verify(result, value);
+    robot.click(list, result.cellCenter());
   }
 
-  // indicates if there is already a selection with the given value
-  // returns the center of the cell for the given value
-  private static Pair<Boolean, Point> scrollToItemIfNotSelected(final JList list, final String value,
-      final JListCellReader cellReader) {
-    return execute(new GuiQuery<Pair<Boolean, Point>>() {
-      protected Pair<Boolean, Point> executeInEDT() {
-        int index = matchingItemIndex(list, value, cellReader);
-        return scrollToItemIfNotSelected(list, index);
-      }
-    });
+  private void verify(JListScrollActionResult result, String value) {
+    if (ITEM_NOT_FOUND.equals(result)) throw indexNotFoundFor(value);
   }
 
   /**
@@ -160,14 +141,10 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public void clickItem(JList list, String value, MouseButton button, int times) {
-    Point cellCenter = null;
-    try {
-      cellCenter = scrollToItem(list, value, cellReader);
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
+    JListScrollActionResult result = scrollToItem(list, value, cellReader);
     robot.waitForIdle();
-    robot.click(list, cellCenter, button, times);
+    verify(result, value);
+    robot.click(list, result.cellCenter(), button, times);
   }
 
   /**
@@ -234,39 +211,10 @@ public class JListDriver extends JComponentDriver {
    * <code>JList</code>.
    */
   public void selectItem(JList list, int index) {
-    Pair<Boolean, Point> result = null;
-    try {
-      result = scrollToItemIfNotSelectedInEDT(list, index);
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
+    Point cellCenter = scrollToNotSelectedItem(list, index);
     robot.waitForIdle();
-    clickIfCellNotSelected(list, result);
-  }
-  
-  // indicates if there is already a selection with the given index
-  // returns the center of the cell for the given index
-  private static Pair<Boolean, Point> scrollToItemIfNotSelectedInEDT(final JList list, final int index) {
-    return execute(new GuiQuery<Pair<Boolean, Point>>() {
-      protected Pair<Boolean, Point> executeInEDT() {
-        return scrollToItemIfNotSelected(list, index);
-      }
-    });
-  }
-
-  private void clickIfCellNotSelected(JList list, Pair<Boolean, Point> result) {
-    boolean alreadySelected = result.one;
-    if (alreadySelected) return;
-    Point cellCenter = result.two;
-    robot.click(list, cellCenter, LEFT_BUTTON, 1);
-  }
-
-  // indicates if there is already a selection with the given index
-  // returns the center of the cell for the given index
-  private static Pair<Boolean, Point> scrollToItemIfNotSelected(JList list, int index) {
-    validateIsEnabled(list);
-    if (list.getSelectedIndex() == index) return new Pair<Boolean, Point>(true, null);
-    return new Pair<Boolean, Point>(false, scrollToItemWithIndex(list, index));
+    if (cellCenter == null) return;
+    robot.click(list, cellCenter);
   }
 
   private void clickItem(JList list, int index) {
@@ -285,12 +233,7 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void clickItem(JList list, int index, MouseButton button, int times) {
-    Point cellCenter = null;
-    try {
-      cellCenter = scrollToItem(list, index);
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
+    Point cellCenter = scrollToItem(list, index);
     robot.waitForIdle();
     robot.click(list, cellCenter, button, times);
   }
@@ -371,14 +314,10 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void drag(JList list, String value) {
-    Point cellCenter = null;
-    try {
-      cellCenter = scrollToItem(list, value, cellReader);
-    } catch (UnexpectedException unexpected) {
-      unexpected.bomb();
-    }
+    JListScrollActionResult result = scrollToItem(list, value, cellReader);
     robot.waitForIdle();
-    super.drag(list, cellCenter);
+    verify(result, value);
+    super.drag(list, result.cellCenter());
   }
 
   /**
@@ -390,14 +329,10 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void drop(JList list, String value) {
-    Point cellCenter = null;
-    try {
-      cellCenter = scrollToItem(list, value, cellReader);
-    } catch (UnexpectedException unexpected) {
-      unexpected.bomb();
-    }
+    JListScrollActionResult result = scrollToItem(list, value, cellReader);
     robot.waitForIdle();
-    super.drop(list, cellCenter);
+    verify(result, value);
+    super.drop(list, result.cellCenter());
   }
 
   /**
@@ -409,12 +344,7 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void drag(JList list, int index) {
-    Point cellCenter = null;
-    try {
-      cellCenter = scrollToItem(list, index);
-    } catch (UnexpectedException unexpected) {
-      unexpected.bomb();
-    }
+    Point cellCenter = scrollToItem(list, index);
     robot.waitForIdle();
     super.drag(list, cellCenter);
   }
@@ -429,12 +359,7 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void drop(JList list, int index) {
-    Point cellCenter = null;
-    try {
-      cellCenter = scrollToItem(list, index);
-    } catch (UnexpectedException unexpected) {
-      unexpected.bomb();
-    }
+    Point cellCenter = scrollToItem(list, index);
     robot.waitForIdle();
     super.drop(list, cellCenter);
   }
@@ -446,20 +371,7 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void drop(JList list) {
-    try {
-      super.drop(list, centerOfList(list));
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
-  }
-
-  @RunsInEDT
-  private static Point centerOfList(final JList list) {
-    return execute(new GuiQuery<Point>() {
-      protected Point executeInEDT() {
-        return AWT.centerOf(list);
-      }
-    });
+    super.drop(list, visibleCenterOf(list));
   }
 
   /**
@@ -473,27 +385,10 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public JPopupMenu showPopupMenu(JList list, String value) {
-    Point cellCenter = null;
-    try {
-      cellCenter = scrollToItem(list, value, cellReader);
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
+    JListScrollActionResult result = scrollToItem(list, value, cellReader);
     robot.waitForIdle();
-    if (cellCenter == null) indexNotFoundFor(value);
-    return robot.showPopupMenu(list, cellCenter);
-  }
-
-  // returns the center of the cell for the given value
-  @RunsInEDT
-  private static Point scrollToItem(final JList list, final String value, final JListCellReader cellReader) {
-    return execute(new GuiQuery<Point>() {
-      protected Point executeInEDT() {
-        int index = matchingItemIndex(list, value, cellReader);
-        if (index < 0) return null;
-        return scrollToItemWithIndex(list, index);
-      }
-    });
+    verify(result, value);
+    return robot.showPopupMenu(list, result.cellCenter());
   }
 
   /**
@@ -508,33 +403,9 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public JPopupMenu showPopupMenu(JList list, int index) {
-    Point cellCenter = null;
-    try {
-      cellCenter = scrollToItem(list, index);
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
+    Point cellCenter = scrollToItem(list, index);
     robot.waitForIdle();
     return robot.showPopupMenu(list, cellCenter);
-  }
-
-  // returns the center of the cell for the given index
-  @RunsInEDT
-  private static Point scrollToItem(final JList list, final int index) {
-    return execute(new GuiQuery<Point>() {
-      protected Point executeInEDT() {
-        return scrollToItemWithIndex(list, index);
-      }
-    });
-  }
-
-  // returns the center of the cell for the given index
-  @RunsInCurrentThread
-  private static Point scrollToItemWithIndex(JList list, int index) {
-    validateIsEnabled(list);
-    Rectangle cellBounds = cellBounds(list, index);
-    list.scrollRectToVisible(cellBounds);
-    return centerOf(cellBounds);
   }
 
   /**
@@ -546,23 +417,9 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public Point pointAt(JList list, String value) {
-    try {
-      return pointAtMatchingItem(list, value, cellReader);
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
+    return centerOfMatchingItemCell(list, value, cellReader);
   }
 
-  @RunsInEDT
-  private static Point pointAtMatchingItem(final JList list, final String value, final JListCellReader cellReader) {
-    return execute(new GuiQuery<Point>() {
-      protected Point executeInEDT() {
-        int itemIndex = matchingItemIndex(list, value, cellReader);
-        return centerOf(cellBounds(list, itemIndex));
-      }
-    });
-  }
-  
   /**
    * Returns the index of the first item matching the given value.
    * @param list the target <code>JList</code>
@@ -572,12 +429,7 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public int indexOf(JList list, String value) {
-    int index = -1;
-    try {
-      index = itemIndex(list, value, cellReader);
-    } catch (UnexpectedException unexpected) {
-      throw unexpected.bomb();
-    }
+    int index = itemIndex(list, value, cellReader);
     if (index >= 0) return index;
     throw indexNotFoundFor(value);
   }

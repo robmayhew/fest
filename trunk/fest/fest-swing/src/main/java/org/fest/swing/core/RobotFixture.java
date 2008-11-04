@@ -23,7 +23,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JMenu;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
@@ -647,16 +650,6 @@ public class RobotFixture implements Robot {
   @RunsInEDT
   public JPopupMenu showPopupMenu(Component invoker) {
     return showPopupMenu(invoker, visibleCenterOf(invoker));
-  }
-
-  @RunsInEDT
-  private Point visibleCenterOf(final Component c) {
-    return execute(new GuiQuery<Point>() {
-      protected Point executeInEDT() {
-        if (c instanceof JComponent) return centerOfVisibleRect((JComponent)c);
-        return centerOf(c);
-      }
-    });
   }
 
   /** {@inheritDoc} */
