@@ -17,54 +17,37 @@ package org.fest.swing.driver;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.Robot;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.DialogSetResizableTask.setDialogResizable;
-import static org.fest.swing.driver.FrameSetResizableTask.setFrameResizable;
+import static org.fest.swing.factory.JButtons.button;
 import static org.fest.swing.factory.JDialogs.dialog;
 import static org.fest.swing.factory.JFrames.frame;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.factory.JInternalFrames.internalFrame;
 
 /**
  * Tests for <code>{@link ComponentResizableQuery}</code>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = GUI)
+@Test
 public class ComponentResizableQueryTest {
 
-  private Robot robot;
-  
   @BeforeClass public void setUpOnce() {
     CheckThreadViolationRepaintManager.install();
   }
-  
-  @BeforeMethod public void setUp() {
-    robot = robotWithNewAwtHierarchy();
-  }
-  
-  @AfterMethod public void tearDown() {
-    robot.cleanUp();
-  }
-  
   public void shouldReturnIsResizableIfFrameIsResizable() {
     JFrame frame = frame().createNew();
     assertThat(ComponentResizableQuery.isResizable(frame)).isTrue();
   }
 
   public void shouldReturnIsNotResizableIfFrameIsNotResizable() {
-    JFrame frame = frame().createNew();
-    setFrameResizable(frame, false);
-    robot.waitForIdle();
+    JFrame frame = frame().resizable(false).createNew();
     assertThat(ComponentResizableQuery.isResizable(frame)).isFalse();
   }
 
@@ -74,8 +57,21 @@ public class ComponentResizableQueryTest {
   }
 
   public void shouldReturnIsNotResizableIfDialogIsNotResizable() {
-    JDialog dialog = dialog().createNew();
-    setDialogResizable(dialog, false);
+    JDialog dialog = dialog().resizable(false).createNew();
     assertThat(ComponentResizableQuery.isResizable(dialog)).isFalse();
+  }
+  
+  public void shouldReturnIsResizableIfJInternalFrameIsResizable() {
+    JInternalFrame internalFrame = internalFrame().resizable(true).createNew();
+    assertThat(ComponentResizableQuery.isResizable(internalFrame)).isTrue();
+  }
+
+  public void shouldReturnIsNotResizableIfJInternalFrameIsNotResizable() {
+    JInternalFrame internalFrame = internalFrame().resizable(false).createNew();
+    assertThat(ComponentResizableQuery.isResizable(internalFrame)).isFalse();
+  }
+  
+  public void shouldReturnIsNotResizableIfComponentIsNotWindow() {
+    assertThat(ComponentResizableQuery.isResizable(button().createNew())).isFalse();
   }
 }

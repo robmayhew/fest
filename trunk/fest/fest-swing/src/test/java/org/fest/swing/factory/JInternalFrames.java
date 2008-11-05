@@ -17,6 +17,10 @@ package org.fest.swing.factory;
 
 import javax.swing.JInternalFrame;
 
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
+
 /**
  * Understands creation of <code>{@link JInternalFrame}</code>s.
  *
@@ -31,17 +35,28 @@ public final class JInternalFrames {
   }
   
   public static class JInternalFrameFactory {
-    String name;
+    private String name;
+    private boolean resizable;
 
     public JInternalFrameFactory withName(String newName) {
       name = newName;
       return this;
     }
     
+    public JInternalFrameFactory resizable(boolean shouldBeResizable) {
+      resizable = shouldBeResizable;
+      return this;
+    }
+    
     public JInternalFrame createNew() {
-      JInternalFrame internalFrame = new JInternalFrame();
-      internalFrame.setName(name);
-      return internalFrame;
+      return execute(new GuiQuery<JInternalFrame>() {
+        protected JInternalFrame executeInEDT() {
+          JInternalFrame internalFrame = new JInternalFrame();
+          internalFrame.setName(name);
+          internalFrame.setResizable(resizable);
+          return internalFrame;
+        }
+      });
     }
   }
 }

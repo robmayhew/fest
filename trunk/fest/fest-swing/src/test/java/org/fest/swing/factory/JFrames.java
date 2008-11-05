@@ -36,8 +36,9 @@ public final class JFrames {
   }
 
   public static class JFrameFactory {
-    String name;
-    String title;
+    private String name;
+    private String title;
+    private boolean resizable = true;
 
     public JFrameFactory withName(String newName) {
       name = newName;
@@ -48,6 +49,11 @@ public final class JFrames {
       title = newTitle;
       return this;
     }
+    
+    public JFrameFactory resizable(boolean shouldBeResizable) {
+      resizable = shouldBeResizable;
+      return this;
+    }
 
     @RunsInEDT
     public JFrame createNew() {
@@ -56,6 +62,7 @@ public final class JFrames {
           JFrame frame = new JFrame();
           frame.setName(name);
           frame.setTitle(title);
+          frame.setResizable(resizable);
           return frame;
         }
       });

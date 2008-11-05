@@ -39,9 +39,10 @@ public final class JDialogs {
   }
 
   public static class JDialogFactory {
-    String name;
-    String title;
-    Frame owner;
+    private String name;
+    private String title;
+    private Frame owner;
+    private boolean resizable = true;
 
     public JDialogFactory withOwner(Frame newOwner) {
       owner = newOwner;
@@ -55,6 +56,11 @@ public final class JDialogs {
 
     public JDialogFactory withTitle(String newTitle) {
       title = newTitle;
+      return this;
+    }
+    
+    public JDialogFactory resizable(boolean shouldBeResizable) {
+      resizable  = shouldBeResizable;
       return this;
     }
 
@@ -84,6 +90,7 @@ public final class JDialogs {
       JDialog dialog = owner != null ? new JDialog(owner) : new JDialog();
       dialog.setName(name);
       dialog.setTitle(title);
+      dialog.setResizable(resizable);
       return dialog;
     }
   }
