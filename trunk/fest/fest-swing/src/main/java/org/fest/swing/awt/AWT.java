@@ -192,12 +192,14 @@ public class AWT {
    * @param where the x,y coordinates relative to the given <code>Component</code>.
    * @return the new target for the mouse event.
    */
+  @RunsInEDT
   public static MouseEventTarget retargetMouseEvent(final Component c, int eventId, final Point where) {
     Component source = c;
     Point coordinates = where;
     while (!(c instanceof Window) && !eventTypeEnabled(source, eventId)) {
-      coordinates = convertPoint(source, coordinates.x, coordinates.y, parentOf(source));
-      source = parentOf(source);
+      Container parent = parentOf(source);
+      coordinates = convertPoint(source, coordinates.x, coordinates.y, parent);
+      source = parent;
     }
     return new MouseEventTarget(source, coordinates);
   }
@@ -219,14 +221,14 @@ public class AWT {
     return POPUP_ON_BUTTON2 ? BUTTON2_MASK : BUTTON3_MASK;
   }
 
-  public static boolean eventTypeEnabled(Component c, int eventId) {
+  private static boolean eventTypeEnabled(Component c, int eventId) {
     // certain AWT components should have events enabled, even if they claim not to.
     if (c instanceof Choice) return true;
     try {
       AWTEvent event = fakeAWTEventFrom(c, eventId);
       return method("eventEnabled").withReturnType(boolean.class)
-                                    .withParameterTypes(AWTEvent.class)
-                                    .in(c).invoke(event);
+                                   .withParameterTypes(AWTEvent.class)
+                                   .in(c).invoke(event);
     } catch (RuntimeException e) {
       return true;
     }

@@ -38,6 +38,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.driver.ComponentEnabledCondition.untilIsEnabled;
 import static org.fest.swing.driver.ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction;
+import static org.fest.swing.driver.ComponentResizableQuery.isResizable;
 import static org.fest.swing.driver.ComponentStateValidator.inEdtValidateIsEnabled;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
@@ -378,9 +379,7 @@ public class ComponentDriver {
    */
   @RunsInCurrentThread
   protected final boolean isUserResizable(Component c) {
-    if (c instanceof  Frame) return  ((Frame)c).isResizable();
-    if (c instanceof Dialog) return ((Dialog)c).isResizable();
-    return false;
+    return isResizable(c);
   }
 
   /**

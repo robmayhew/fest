@@ -18,6 +18,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Window;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ActionFailedException;
 
@@ -92,6 +93,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * Closing the <code>{@link Window}</code>.
    * @param w the target <code>Window</code>.
    */
+  @RunsInEDT
   public void close(Window w) {
     robot.close(w);
   }
@@ -100,6 +102,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * Shows the <code>{@link Window}</code>.
    * @param w the target <code>Window</code>.
    */
+  @RunsInEDT
   public void show(Window w) {
     robot.showWindow(w);
     requireVisible(w);
@@ -110,6 +113,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * @param w the target <code>Window</code>.
    * @param size the size to resize the <code>Window</code> to.
    */
+  @RunsInEDT
   public void show(Window w, Dimension size) {
     robot.showWindow(w, size);
     requireVisible(w);

@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import java.awt.Dialog;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -44,6 +45,7 @@ public class DialogDriver extends WindowDriver {
    * @param dialog the target <code>Dialog</code>.
    * @throws AssertionError if this fixture's <code>Dialog</code> is not modal.
    */
+  @RunsInEDT
   public void requireModal(Dialog dialog) {
     assertThat(isModal(dialog)).as(propertyName(dialog, "modal")).isTrue();
   }

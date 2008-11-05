@@ -153,11 +153,13 @@ public class RobotFixture implements Robot {
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void showWindow(Window w, Dimension size) {
     showWindow(w, size, true);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void showWindow(final Window w, final Dimension size, final boolean pack) {
     EventQueue.invokeLater(new Runnable() {
       public void run() {
@@ -169,11 +171,13 @@ public class RobotFixture implements Robot {
     waitForWindow(w);
   }
 
+  @RunsInCurrentThread
   void packAndEnsureSafePosition(Window w) {
     w.pack();
     w.setLocation(100, 100);
   }
 
+  @RunsInEDT
   private void waitForWindow(Window w) {
     long start = currentTimeMillis();
     while ((isRobotMode() && !windowMonitor.isWindowReady(w)) || !isShowing(w)) {
@@ -185,9 +189,10 @@ public class RobotFixture implements Robot {
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void close(Window w) {
     if (!isShowing(w)) return;
-    focus(w);
+    focusAndWaitForFocusGain(w);
     // Move to a corner and "pretend" to use the window manager control
     try {
       Point p = closeLocation(w);
@@ -207,18 +212,21 @@ public class RobotFixture implements Robot {
    * @return the <code>Applet</code> descendant of the given <code>Container</code>, or <code>null</code> if none
    *         is found.
    */
+  @RunsInEDT
   private Applet findAppletDescendent(Container c) {
-    List<Component> found = new ArrayList<Component>(finder.findAll(c,  new TypeMatcher(Applet.class)));
+    List<Component> found = new ArrayList<Component>(finder.findAll(c, new TypeMatcher(Applet.class)));
     if (found.size() == 1) return (Applet)found.get(0);
     return null;
   }
 
+  @RunsInEDT
   private Point closeLocation(Container c) {
     if (isOSX()) return closeLocationForOSX(c);
     Insets insets = insetsOf(c);
     return new Point(sizeOf(c).width - insets.right - 10, insets.top / 2);
   }
 
+  @RunsInEDT
   private Point closeLocationForOSX(Container c) {
     Insets insets = insetsOf(c);
     return new Point(insets.left + 15, insets.top / 2);
