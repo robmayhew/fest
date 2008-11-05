@@ -41,6 +41,7 @@ public class ComponentResizableQueryTest {
   @BeforeClass public void setUpOnce() {
     CheckThreadViolationRepaintManager.install();
   }
+  
   public void shouldReturnIsResizableIfFrameIsResizable() {
     JFrame frame = frame().createNew();
     assertThat(ComponentResizableQuery.isResizable(frame)).isTrue();
