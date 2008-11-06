@@ -24,7 +24,6 @@ import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -53,7 +52,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    */
   @RunsInEDT
   public void resizeWidthTo(Window w, int width) {
-    resizeTo(w, new Dimension(width, sizeOf(w).height));
+    resizeWidth(w, width);
   }
 
   /**
@@ -65,7 +64,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    */
   @RunsInEDT
   public void resizeHeightTo(Window w, int height) {
-    resizeTo(w, new Dimension(sizeOf(w).width, height));
+    resizeHeight(w, height);
   }
 
   /**
@@ -109,7 +108,6 @@ public class WindowDriver extends WindowLikeContainerDriver {
   @RunsInEDT
   public void show(Window w) {
     robot.showWindow(w);
-    requireVisible(w);
   }
 
   /**
@@ -120,6 +118,5 @@ public class WindowDriver extends WindowLikeContainerDriver {
   @RunsInEDT
   public void show(Window w, Dimension size) {
     robot.showWindow(w, size);
-    requireVisible(w);
   }
 }

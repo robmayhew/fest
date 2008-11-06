@@ -18,12 +18,14 @@ package org.fest.swing.driver;
 import java.awt.Point;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.FluentDimension;
@@ -33,12 +35,12 @@ import org.fest.swing.testing.TestWindow;
 import static java.awt.Frame.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -53,6 +55,10 @@ public class FrameDriverTest {
   private TestWindow window;
   private FrameDriver driver;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = TestWindow.createAndShowNewWindow(getClass());
@@ -96,38 +102,94 @@ public class FrameDriverTest {
   public void shouldResizeFrameToGivenSize(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     FluentDimension newSize = frameSize().addToWidth(20).addToHeight(40);
-    driver.resize(window, newSize.width, newSize.height);
+    driver.resizeTo(window, newSize);
     assertThat(sizeOf(window)).isEqualTo(newSize);
   }
 
   public void shouldThrowErrorWhenResizingDisabledFrame() {
     disable(window);
     robot.waitForIdle();
-    FluentDimension newSize = frameSize().addToWidth(20).addToHeight(40);
     try {
-      driver.resize(window, newSize.width, newSize.height);
-      fail("Expecting exception");
+      driver.resize(window, 10, 10);
+      failWhenExpectingException();
     } catch (ActionFailedException e) {
-      assertThat(e).message().contains("Expecting component")
-                             .contains("to be enabled");
+      assertActionFailureDueToDisableComponent(e);
     }
   }
   
   public void shouldThrowErrorWhenResizingNotResizableFrame() {
     makeNotResizable(window);
     robot.waitForIdle();
-    FluentDimension newSize = frameSize().addToWidth(20).addToHeight(40);
     try {
-      driver.resize(window, newSize.width, newSize.height);
-      fail("Expecting exception");
+      driver.resize(window, 10, 10);
+      failWhenExpectingException();
     } catch (ActionFailedException e) {
-      assertThat(e).message().contains("Expecting container")
-                             .contains("to be resizable by the user");
+      assertActionFailureDueToNotResizableContainer(e);
     }
   }
   
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldResizeFrameToGivenWidth(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    FluentDimension newSize = frameSize().addToWidth(20);
+    driver.resizeWidthTo(window, newSize.width);
+    assertThat(sizeOf(window)).isEqualTo(newSize);
+  }
+
+  public void shouldThrowErrorWhenResizingWidthOfDisabledFrame() {
+    disable(window);
+    robot.waitForIdle();
+    try {
+      driver.resizeWidthTo(window, 10);
+      failWhenExpectingException();
+    } catch (ActionFailedException e) {
+      assertActionFailureDueToDisableComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenResizingWidthOfNotResizableFrame() {
+    makeNotResizable(window);
+    robot.waitForIdle();
+    try {
+      driver.resizeWidthTo(window, 10);
+      failWhenExpectingException();
+    } catch (ActionFailedException e) {
+      assertActionFailureDueToNotResizableContainer(e);
+    }
+  }
+
+  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+  public void shouldResizeFrameToGivenHeight(EventMode eventMode) {
+    robot.settings().eventMode(eventMode);
+    FluentDimension newSize = frameSize().addToHeight(30);
+    driver.resizeHeightTo(window, newSize.height);
+    assertThat(sizeOf(window)).isEqualTo(newSize);
+  }
+
   private final FluentDimension frameSize() {
     return new FluentDimension(sizeOf(window));
+  }
+
+  public void shouldThrowErrorWhenResizingHeightOfDisabledFrame() {
+    disable(window);
+    robot.waitForIdle();
+    try {
+      driver.resizeHeightTo(window, 10);
+      failWhenExpectingException();
+    } catch (ActionFailedException e) {
+      assertActionFailureDueToDisableComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenResizingHeightOfNotResizableFrame() {
+    makeNotResizable(window);
+    robot.waitForIdle();
+    try {
+      driver.resizeHeightTo(window, 10);
+      failWhenExpectingException();
+    } catch (ActionFailedException e) {
+      assertActionFailureDueToNotResizableContainer(e);
+    }
   }
 
   private static void makeNotResizable(final TestWindow window) {
@@ -141,12 +203,12 @@ public class FrameDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldMoveFrame(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    Point p = frameLocationOnScreen().addToX(10).addToY(10);
+    Point p = locationOnScreenOfWindow().addToX(10).addToY(10);
     driver.move(window, p.x, p.y);
-    assertThat(frameLocationOnScreen()).isEqualTo(p);
+    assertThat(locationOnScreenOfWindow()).isEqualTo(p);
   }
 
-  private FluentPoint frameLocationOnScreen() {
+  private FluentPoint locationOnScreenOfWindow() {
     return new FluentPoint(locationOnScreen(window));
   }
 }

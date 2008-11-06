@@ -15,6 +15,7 @@
 package org.fest.swing.driver;
 
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Point;
 
@@ -23,10 +24,12 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.util.Pair;
 
 import static org.fest.swing.awt.AWT.locationOnScreenOf;
 import static org.fest.swing.driver.ComponentMoveTask.moveComponent;
-import static org.fest.swing.driver.ContainerResizeInfoQuery.resizeInfoOf;
+import static org.fest.swing.driver.ComponentResizableQuery.isResizable;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
@@ -51,6 +54,34 @@ public abstract class ContainerDriver extends ComponentDriver {
   }
 
   /**
+   * Resizes the <code>{@link Container}</code> horizontally.
+   * @param c the target <code>Container</code>.
+   * @param width the width that the <code>Container</code> should have after being resized.
+   * @throws ActionFailedException if the <code>Container</code> is not enabled.
+   * @throws ActionFailedException if the <code>Container</code> is not resizable by the user.
+   */
+  @RunsInEDT
+  protected final void resizeWidth(Container c, int width) {
+    Pair<Dimension, Insets> resizeInfo = resizeInfo(c);
+    Dimension size = resizeInfo.one;
+    resizeBy(c, resizeInfo, width - size.width, 0);
+  }
+  
+  /**
+   * Resizes the <code>{@link Container}</code> vertically.
+   * @param c the target <code>Container</code>.
+   * @param height the height that the <code>Container</code> should have after being resized.
+   * @throws ActionFailedException if the <code>Container</code> is not enabled.
+   * @throws ActionFailedException if the <code>Container</code> is not resizable by the user.
+   */
+  @RunsInEDT
+  protected final void resizeHeight(Container c, int height) {
+    Pair<Dimension, Insets> resizeInfo = resizeInfo(c);
+    Dimension size = resizeInfo.one;
+    resizeBy(c, resizeInfo, 0, height - size.height);
+  }
+
+  /**
    * Resizes the <code>{@link Container}</code> to the given size.
    * @param c the target <code>Container</code>.
    * @param width the width to resize the <code>Container</code> to.
@@ -59,28 +90,48 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @throws ActionFailedException if the <code>Container</code> is not resizable by the user.
    */
   @RunsInEDT
-  public void resize(Container c, int width, int height) {
-    ContainerResizeInfo resizeInfo = resizeInfoOf(c);
-    resizeBy(c, resizeInfo, width - resizeInfo.width, height - resizeInfo.height);
+  protected final void resize(Container c, int width, int height) {
+    Pair<Dimension, Insets> resizeInfo = resizeInfo(c);
+    Dimension size = resizeInfo.one;
+    resizeBy(c, resizeInfo, width - size.width, height - size.height);
   }
 
   @RunsInEDT
-  private void resizeBy(Container c, ContainerResizeInfo resizeInfo, int x, int y) {
+  private static Pair<Dimension, Insets> resizeInfo(final Container c) {
+    return execute(new GuiQuery<Pair<Dimension, Insets>>() {
+      protected Pair<Dimension, Insets> executeInEDT() {
+        validateCanResize(c);
+        return new Pair<Dimension, Insets>(c.getSize(), c.getInsets());
+      }
+    });
+  }
+  
+  @RunsInCurrentThread
+  private static void validateCanResize(Container c) {
+    validateIsEnabled(c);
+    if (!isResizable(c)) 
+      throw actionFailure(concat("Expecting container ", format(c), " to be resizable by the user"));
+  }
+  
+  @RunsInEDT
+  private void resizeBy(Container c, Pair<Dimension, Insets> resizeInfo, int x, int y) {
     simulateResizeStarted(c, resizeInfo, x, y);
-    setComponentSize(c, resizeInfo.width + x, resizeInfo.height + y);
+    Dimension size = resizeInfo.one;
+    setComponentSize(c, size.width + x, size.height + y);
     robot.waitForIdle();
   }
 
   @RunsInEDT
-  private void simulateResizeStarted(Container c, ContainerResizeInfo resizeInfo, int x, int y) {
+  private void simulateResizeStarted(Container c, Pair<Dimension, Insets> resizeInfo, int x, int y) {
     Point p = resizeLocation(resizeInfo);
     robot.moveMouse(c, p.x, p.y);
     robot.moveMouse(c, p.x + x, p.y + y);
     robot.waitForIdle();
   }
 
-  private static Point resizeLocation(final ContainerResizeInfo resizeInfo) {
-    return resizeLocation(resizeInfo.width, resizeInfo.height, resizeInfo.right, resizeInfo.bottom);
+  private static Point resizeLocation(final Pair<Dimension, Insets> resizeInfo) {
+    Dimension size = resizeInfo.one;
+    return resizeLocation(size.width, size.height, resizeInfo.two);
   }
 
   /**
