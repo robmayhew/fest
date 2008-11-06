@@ -14,6 +14,15 @@
  */
 package org.fest.swing.driver;
 
+import static org.fest.swing.awt.AWT.locationOnScreenOf;
+import static org.fest.swing.driver.ComponentMoveTask.moveComponent;
+import static org.fest.swing.driver.ComponentResizableQuery.isResizable;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.task.ComponentSetSizeTask.setComponentSize;
+import static org.fest.util.Strings.concat;
+
 import java.awt.Container;
 import java.awt.Insets;
 import java.awt.Point;
@@ -23,15 +32,6 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
-
-import static org.fest.swing.awt.AWT.locationOnScreenOf;
-import static org.fest.swing.driver.ComponentMoveTask.moveComponent;
-import static org.fest.swing.driver.ComponentResizableQuery.isResizable;
-import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.task.ComponentSetSizeTask.setComponentSize;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link Container}</code>. This class is intended for internal use
@@ -70,11 +70,12 @@ public abstract class ContainerDriver extends ComponentDriver {
       }
     });
   }
-  
+
   @RunsInEDT
   private void resizeBy(Container c, ComponentResizeInfo resizeInfo, int x, int y) {
     simulateResizeStarted(c, resizeInfo, x, y);
     setComponentSize(c, resizeInfo.width + x, resizeInfo.height + y);
+    robot.waitForIdle();
   }
 
   @RunsInEDT
@@ -85,11 +86,11 @@ public abstract class ContainerDriver extends ComponentDriver {
     robot.moveMouse(c, p.x + x, p.y + y);
     robot.waitForIdle();
   }
-  
+
   private static Point resizeLocation(final ComponentResizeInfo resizeInfo) {
-    return resizeLocation(resizeInfo.width, resizeInfo.height, resizeInfo.insets);
+    return resizeLocation(resizeInfo.width, resizeInfo.height, resizeInfo.right, resizeInfo.bottom);
   }
-  
+
   /**
    * Returns where the mouse usually grabs to resize a window. The lower right corner of the window is usually a good
    * choice.
@@ -109,11 +110,15 @@ public abstract class ContainerDriver extends ComponentDriver {
   private static Point resizeLocation(Container c) {
     return resizeLocation(c.getWidth(), c.getHeight(), c.getInsets());
   }
-  
+
   private static Point resizeLocation(int width, int height, Insets insets) {
-    return new Point(width - insets.right / 2, height - insets.bottom / 2);
+    return resizeLocation(width, height, insets.right, insets.bottom);
   }
-  
+
+  private static Point resizeLocation(int width, int height, int right, int bottom) {
+    return new Point(width - right / 2, height - bottom / 2);
+  }
+
   /**
    * Move the given <code>{@link Container}</code> to the requested location.
    * @param c the target <code>Container</code>.
@@ -126,7 +131,7 @@ public abstract class ContainerDriver extends ComponentDriver {
     if (onScreen == null) throw componentNotShowingOnScreen(c);
     moveBy(c, onScreen, x - onScreen.x, y - onScreen.y);
   }
-  
+
   private ActionFailedException componentNotShowingOnScreen(Container c) {
     throw actionFailure(concat("The component ", format(c), " is not showing on the screen"));
   }
