@@ -14,15 +14,6 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.swing.awt.AWT.locationOnScreenOf;
-import static org.fest.swing.driver.ComponentMoveTask.moveComponent;
-import static org.fest.swing.driver.ComponentResizableQuery.isResizable;
-import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.task.ComponentSetSizeTask.setComponentSize;
-import static org.fest.util.Strings.concat;
-
 import java.awt.Container;
 import java.awt.Insets;
 import java.awt.Point;
@@ -32,6 +23,15 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
+
+import static org.fest.swing.awt.AWT.locationOnScreenOf;
+import static org.fest.swing.driver.ComponentMoveTask.moveComponent;
+import static org.fest.swing.driver.ContainerResizeInfoQuery.resizeInfoOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.task.ComponentSetSizeTask.setComponentSize;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link Container}</code>. This class is intended for internal use
@@ -55,39 +55,31 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param c the target <code>Container</code>.
    * @param width the width to resize the <code>Container</code> to.
    * @param height the height to resize the <code>Container</code> to.
+   * @throws ActionFailedException if the <code>Container</code> is not enabled.
+   * @throws ActionFailedException if the <code>Container</code> is not resizable by the user.
    */
   @RunsInEDT
   public void resize(Container c, int width, int height) {
-    ComponentResizeInfo resizeInfo = resizeInfoOf(c);
+    ContainerResizeInfo resizeInfo = resizeInfoOf(c);
     resizeBy(c, resizeInfo, width - resizeInfo.width, height - resizeInfo.height);
   }
 
   @RunsInEDT
-  private static ComponentResizeInfo resizeInfoOf(final Container c) {
-    return execute(new GuiQuery<ComponentResizeInfo>() {
-      protected ComponentResizeInfo executeInEDT() {
-        return new ComponentResizeInfo(isResizable(c), c.getWidth(), c.getHeight(), c.getInsets());
-      }
-    });
-  }
-
-  @RunsInEDT
-  private void resizeBy(Container c, ComponentResizeInfo resizeInfo, int x, int y) {
+  private void resizeBy(Container c, ContainerResizeInfo resizeInfo, int x, int y) {
     simulateResizeStarted(c, resizeInfo, x, y);
     setComponentSize(c, resizeInfo.width + x, resizeInfo.height + y);
     robot.waitForIdle();
   }
 
   @RunsInEDT
-  private void simulateResizeStarted(Container c, ComponentResizeInfo resizeInfo, int x, int y) {
-    if (!resizeInfo.resizable) return;
+  private void simulateResizeStarted(Container c, ContainerResizeInfo resizeInfo, int x, int y) {
     Point p = resizeLocation(resizeInfo);
     robot.moveMouse(c, p.x, p.y);
     robot.moveMouse(c, p.x + x, p.y + y);
     robot.waitForIdle();
   }
 
-  private static Point resizeLocation(final ComponentResizeInfo resizeInfo) {
+  private static Point resizeLocation(final ContainerResizeInfo resizeInfo) {
     return resizeLocation(resizeInfo.width, resizeInfo.height, resizeInfo.right, resizeInfo.bottom);
   }
 

@@ -18,20 +18,18 @@ package org.fest.swing.driver;
 import java.awt.Insets;
 
 /**
- * Understands information needed to resize a component.
+ * Understands information needed to resize a <code>{@link java.awt.Container}</code>.
  *
  * @author Alex Ruiz
  */
-class ComponentResizeInfo {
+class ContainerResizeInfo {
 
-  final boolean resizable;
   final int width;
   final int height;
   final int right;
   final int bottom;
 
-  ComponentResizeInfo(boolean resizable, int width, int height, Insets insets) {
-    this.resizable = resizable;
+  ContainerResizeInfo(int width, int height, Insets insets) {
     this.width = width;
     this.height = height;
     right = insets.right;

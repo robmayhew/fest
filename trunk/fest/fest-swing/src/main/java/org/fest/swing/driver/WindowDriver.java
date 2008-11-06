@@ -48,8 +48,10 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * Resizes the <code>{@link Window}</code> horizontally.
    * @param w the target <code>Window</code>.
    * @param width the width that the <code>Window</code> should have after being resized.
-   * @throws ActionFailedException if the <code>Window</code> is not resizable.
+   * @throws ActionFailedException if the <code>Window</code> is not enabled.
+   * @throws ActionFailedException if the <code>Window</code> is not resizable by the user.
    */
+  @RunsInEDT
   public void resizeWidthTo(Window w, int width) {
     resizeTo(w, new Dimension(width, sizeOf(w).height));
   }
@@ -58,8 +60,10 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * Resizes the <code>{@link Window}</code> vertically.
    * @param w the target <code>Window</code>.
    * @param height the height that the <code>Window</code> should have after being resized.
-   * @throws ActionFailedException if the <code>Window</code> is not resizable.
+   * @throws ActionFailedException if the <code>Window</code> is not enabled.
+   * @throws ActionFailedException if the <code>Window</code> is not resizable by the user.
    */
+  @RunsInEDT
   public void resizeHeightTo(Window w, int height) {
     resizeTo(w, new Dimension(sizeOf(w).width, height));
   }
@@ -68,11 +72,11 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * Resizes the <code>{@link Window}</code> to the given size.
    * @param w the target <code>Window</code>.
    * @param size the size to resize the <code>Window</code> to.
-   * @throws ActionFailedException if the <code>Window</code> is not resizable.
+   * @throws ActionFailedException if the <code>Window</code> is not enabled.
+   * @throws ActionFailedException if the <code>Window</code> is not resizable by the user.
    */
+  @RunsInEDT
   public void resizeTo(Window w, Dimension size) {
-    if (!isUserResizable(w))
-      throw actionFailure(concat("The window ", format(w), " is not resizable by the user"));
     resize(w, size.width, size.height);
   }
 
