@@ -70,8 +70,8 @@ class WindowStatus {
     if (robot == null) return;
     // Must avoid frame borders, which are insensitive to mouse motion (at least on w32).
     Pair<WindowMetrics, Point> metricsAndCenter = metricsAndCenter(w);
-    final WindowMetrics metrics = metricsAndCenter.one;
-    mouseMove(w, metricsAndCenter.two);
+    final WindowMetrics metrics = metricsAndCenter.i;
+    mouseMove(w, metricsAndCenter.ii);
     if (!windows.isShowingButNotReady(w)) return;
     execute(new GuiTask() {
       protected void executeInEDT() {

@@ -388,7 +388,7 @@ public class ComponentDriver {
    * @return <code>true</code> if it is possible for the user to move the given component, <code>false</code>
    * otherwise.
    */
-  protected final boolean isUserMovable(Component c) {
+  protected static boolean isUserMovable(Component c) {
     return c instanceof Dialog || c instanceof Frame;
   }
 

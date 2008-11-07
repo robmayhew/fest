@@ -32,10 +32,8 @@ import static javax.swing.SwingUtilities.convertPoint;
 
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
-import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.util.Platform.isWindows;
 import static org.fest.util.Strings.*;
@@ -162,10 +160,10 @@ public class AWT {
    * @return the a point specifying the <code>Component</code>'s top-left corner in the screen's coordinate space, or
    *         <code>null</code>, if the <code>Component</code> is not showing on the screen.
    */
+  @RunsInCurrentThread
   public static Point locationOnScreenOf(Component c) {
-    // TODO one query only!
-    if (!isAWTTreeLockHeld()) return new Point(locationOnScreen(c));
-    if (!isShowing(c)) return null;
+    if (!isAWTTreeLockHeld()) return new Point(c.getLocationOnScreen());
+    if (!c.isShowing()) return null;
     Point location = new Point(c.getLocation());
     if (c instanceof Window) return location;
     Container parent = c.getParent();

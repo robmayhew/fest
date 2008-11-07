@@ -105,6 +105,7 @@ public class MDITestWindow extends TestWindow {
     // TODO: should be create and add
     JInternalFrame internalFrame = new JInternalFrame(concat("Internal Frame ", ++internalFrameCounter));
     internalFrame.setIconifiable(true);
+    internalFrame.setMaximizable(true);
     internalFrame.setSize(new Dimension(200, 100));
     internalFrame.setVisible(true);
     return internalFrame;

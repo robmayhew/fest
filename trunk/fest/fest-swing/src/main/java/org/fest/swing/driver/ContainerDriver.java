@@ -14,10 +14,7 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.Point;
+import java.awt.*;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
@@ -25,8 +22,8 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.util.Pair;
+import org.fest.swing.util.Triple;
 
-import static org.fest.swing.awt.AWT.locationOnScreenOf;
 import static org.fest.swing.driver.ComponentMoveTask.moveComponent;
 import static org.fest.swing.driver.ComponentResizableQuery.isResizable;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
@@ -59,11 +56,12 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param width the width that the <code>Container</code> should have after being resized.
    * @throws ActionFailedException if the <code>Container</code> is not enabled.
    * @throws ActionFailedException if the <code>Container</code> is not resizable by the user.
+   * @throws ActionFailedException if the <code>Container</code> is not showing on the screen.
    */
   @RunsInEDT
   protected final void resizeWidth(Container c, int width) {
     Pair<Dimension, Insets> resizeInfo = resizeInfo(c);
-    Dimension size = resizeInfo.one;
+    Dimension size = resizeInfo.i;
     resizeBy(c, resizeInfo, width - size.width, 0);
   }
   
@@ -73,11 +71,12 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param height the height that the <code>Container</code> should have after being resized.
    * @throws ActionFailedException if the <code>Container</code> is not enabled.
    * @throws ActionFailedException if the <code>Container</code> is not resizable by the user.
+   * @throws ActionFailedException if the <code>Container</code> is not showing on the screen.
    */
   @RunsInEDT
   protected final void resizeHeight(Container c, int height) {
     Pair<Dimension, Insets> resizeInfo = resizeInfo(c);
-    Dimension size = resizeInfo.one;
+    Dimension size = resizeInfo.i;
     resizeBy(c, resizeInfo, 0, height - size.height);
   }
 
@@ -88,11 +87,12 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param height the height to resize the <code>Container</code> to.
    * @throws ActionFailedException if the <code>Container</code> is not enabled.
    * @throws ActionFailedException if the <code>Container</code> is not resizable by the user.
+   * @throws ActionFailedException if the <code>Container</code> is not showing on the screen.
    */
   @RunsInEDT
   protected final void resize(Container c, int width, int height) {
     Pair<Dimension, Insets> resizeInfo = resizeInfo(c);
-    Dimension size = resizeInfo.one;
+    Dimension size = resizeInfo.i;
     resizeBy(c, resizeInfo, width - size.width, height - size.height);
   }
 
@@ -110,13 +110,14 @@ public abstract class ContainerDriver extends ComponentDriver {
   private static void validateCanResize(Container c) {
     validateIsEnabled(c);
     if (!isResizable(c)) 
-      throw actionFailure(concat("Expecting container ", format(c), " to be resizable by the user"));
+      throw actionFailure(concat("Expecting component ", format(c), " to be resizable by the user"));
+    validateIsShowing(c);
   }
   
   @RunsInEDT
   private void resizeBy(Container c, Pair<Dimension, Insets> resizeInfo, int x, int y) {
     simulateResizeStarted(c, resizeInfo, x, y);
-    Dimension size = resizeInfo.one;
+    Dimension size = resizeInfo.i;
     setComponentSize(c, size.width + x, size.height + y);
     robot.waitForIdle();
   }
@@ -130,32 +131,11 @@ public abstract class ContainerDriver extends ComponentDriver {
   }
 
   private static Point resizeLocation(final Pair<Dimension, Insets> resizeInfo) {
-    Dimension size = resizeInfo.one;
-    return resizeLocation(size.width, size.height, resizeInfo.two);
+    return resizeLocation(resizeInfo.i, resizeInfo.ii);
   }
 
-  /**
-   * Returns where the mouse usually grabs to resize a window. The lower right corner of the window is usually a good
-   * choice.
-   * @param c the target <code>Container</code>.
-   * @return where the mouse usually grabs to resize a window.
-   */
-  @RunsInEDT
-  protected Point resizeLocationOf(final Container c) {
-    return execute(new GuiQuery<Point>() {
-      protected Point executeInEDT() {
-        return resizeLocation(c);
-      }
-    });
-  }
-
-  @RunsInCurrentThread
-  private static Point resizeLocation(Container c) {
-    return resizeLocation(c.getWidth(), c.getHeight(), c.getInsets());
-  }
-
-  private static Point resizeLocation(int width, int height, Insets insets) {
-    return resizeLocation(width, height, insets.right, insets.bottom);
+  private static Point resizeLocation(Dimension size, Insets insets) {
+    return resizeLocation(size.width, size.height, insets.right, insets.bottom);
   }
 
   private static Point resizeLocation(int width, int height, int right, int bottom) {
@@ -167,46 +147,73 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param c the target <code>Container</code>.
    * @param x the horizontal coordinate.
    * @param y the vertical coordinate.
-   * @throws ActionFailedException if the given container is not showing on the screen.
+   * @throws ActionFailedException if the <code>Container</code> is not enabled.
+   * @throws ActionFailedException if the <code>Container</code> is not movable by the user.
+   * @throws ActionFailedException if the <code>Container</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void move(Container c, int x, int y) {
-    Point onScreen = locationOnScreenOf(c);
-    if (onScreen == null) throw componentNotShowingOnScreen(c);
-    moveBy(c, onScreen, x - onScreen.x, y - onScreen.y);
+    Triple<Dimension, Insets, Point> moveInfo = moveInfo(c);
+    Point locationOnScreen = moveInfo.iii;
+    moveBy(c, moveInfo, x - locationOnScreen.x, y - locationOnScreen.y);
   }
 
-  private ActionFailedException componentNotShowingOnScreen(Container c) {
-    throw actionFailure(concat("The component ", format(c), " is not showing on the screen"));
+  @RunsInEDT
+  private static Triple<Dimension, Insets, Point> moveInfo(final Container c) {
+    return execute(new GuiQuery<Triple<Dimension, Insets, Point>>() {
+      protected Triple<Dimension, Insets, Point> executeInEDT() {
+        validateCanMove(c);
+        Point locationOnScreen = null;
+        try {
+          locationOnScreen = c.getLocationOnScreen();
+        } catch (IllegalComponentStateException e) {
+          // we should not get to this point, validateIsShowing should have already catched that the container is not 
+          // visible.
+        }
+        if (locationOnScreen == null) throw componentNotShowingOnScreen(c);
+        return new Triple<Dimension, Insets, Point>(c.getSize(), c.getInsets(), locationOnScreen) ;
+      }
+    });
+  }
+    
+  @RunsInCurrentThread
+  private static void validateCanMove(Container c) {
+    validateIsEnabled(c);
+    if (!isUserMovable(c))
+      throw actionFailure(concat("Expecting component ", format(c), " to be movable by the user"));
+    validateIsShowing(c);
   }
 
-  private void moveBy(Container c, Point locationOnScreen, int horizontally, int vertically) {
-    simulateMoveStarted(c, horizontally, vertically);
-    Point location = new Point(locationOnScreen.x + horizontally, locationOnScreen.y + vertically);
+  @RunsInCurrentThread
+  private static void validateIsShowing(Container c) {
+    if (!c.isShowing()) throw componentNotShowingOnScreen(c);
+  }
+  
+  @RunsInCurrentThread
+  private static ActionFailedException componentNotShowingOnScreen(Container c) {
+    throw actionFailure(concat("Expecting component ", format(c), " to be showing on the screen"));
+  }
+
+  @RunsInEDT
+  private void moveBy(Container c, Triple<Dimension, Insets, Point> moveInfo, int x, int y) {
+    simulateMoveStarted(c, moveInfo, x, y);
+    Point locationOnScreen = moveInfo.iii;
+    Point location = new Point(locationOnScreen.x + x, locationOnScreen.y + y);
     moveComponent(c, location);
-    simulateMoveComplete(c);
     robot.waitForIdle();
   }
 
-  private void simulateMoveStarted(Container c, int horizontally, int vertically) {
-    if (!isUserMovable(c)) return;
-    Point p = moveLocationOf(c);
+  @RunsInEDT
+  private void simulateMoveStarted(Container c, Triple<Dimension, Insets, Point> moveInfo, int x, int y) {
+    Point p = moveLocation(moveInfo.i, moveInfo.ii);
     robot.moveMouse(c, p.x, p.y);
-    robot.moveMouse(c, p.x + horizontally, p.y + vertically);
+    robot.moveMouse(c, p.x + x, p.y + y);
+    robot.waitForIdle();
   }
 
-  private void simulateMoveComplete(Container c) {
-    if (!isUserMovable(c)) return;
-    Point p = moveLocationOf(c);
-    robot.moveMouse(c, p.x, p.y);
-  }
-
-  /**
-   * Returns where the mouse usually grabs to move a container (or window.) Center of the top of the frame is usually a
-   * good choice.
-   * @param c the given <code>Container</code>.
-   * @return where the mouse usually grabs to move a container (or window.)
-   */
-  protected Point moveLocationOf(Container c) {
-    return ContainerMoveLocationQuery.moveLocationOf(c);
+  // Returns where the mouse usually grabs to move a container (or window.) Center of the top of the frame is usually a
+  // good choice.
+  private Point moveLocation(Dimension size, Insets insets) {
+    return new Point(size.width / 2, insets.top / 2);
   }
 }

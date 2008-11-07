@@ -206,9 +206,9 @@ public class JTextComponentDriver extends JComponentDriver {
   private void scrollToVisibleIfIsTextField(JTextComponent textBox, Rectangle r) {
     if (!(textBox instanceof JTextField)) return;
     Pair<Point, Container> pointAndParent = pointAndParentForScrolling((JTextField)textBox);
-    Container parent = pointAndParent.two;
+    Container parent = pointAndParent.ii;
     if (parent == null || parent instanceof CellRendererPane || !(parent instanceof JComponent)) return;
-    super.scrollToVisible((JComponent)parent, rectangleWithPointAddedToCoordinates(pointAndParent.one, r));
+    super.scrollToVisible((JComponent)parent, rectangleWithPointAddedToCoordinates(pointAndParent.i, r));
   }
 
   private Rectangle rectangleWithPointAddedToCoordinates(Point p, Rectangle r) {

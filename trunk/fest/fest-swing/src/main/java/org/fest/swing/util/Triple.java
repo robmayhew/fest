@@ -16,28 +16,27 @@
 package org.fest.swing.util;
 
 /**
- * Understands a tuple of size 2.
+ * Understands a tuple of size 3.
  * @param <I> the generic type of the 1st. value in this tuple.
  * @param <II> the generic type of the 2nd. value in this tuple.
+ * @param <III> the generic type of the 3rd. value in this tuple. 
  *
- * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class Pair<I, II> {
+public class Triple<I, II, III> extends Pair<I, II> {
 
-  /** The first value in this tuple. */
-  public final I i;
-
-  /** The second value in this tuple. */
-  public final II ii;
+  /** The third value in this tuple. */
+  public final III iii;
 
   /**
-   * Creates a new </code>{@link Pair}</code>.
+   * Creates a new </code>{@link Triple}</code>.
    * @param i the 1st. value in this tuple.
    * @param ii the 2nd. value in this tuple.
+   * @param iii the 3rd. value in this tuple.
    */
-  public Pair(I i, II ii) {
-    this.i = i;
-    this.ii = ii;
+  public Triple(I i, II ii, III iii) {
+    super(i, ii);
+    this.iii = iii;
   }
+
 }

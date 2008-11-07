@@ -270,8 +270,8 @@ public class RobotFixture implements Robot {
   @RunsInEDT
   private void activateWindowOfFocusTarget(Component target, Component currentOwner) {
     Pair<Window, Window> windowAncestors = windowAncestorsOf(currentOwner, target);
-    Window currentOwnerAncestor = windowAncestors.one;
-    Window targetAncestor = windowAncestors.two;
+    Window currentOwnerAncestor = windowAncestors.i;
+    Window targetAncestor = windowAncestors.ii;
     if (currentOwnerAncestor == targetAncestor) return;
     activate(targetAncestor);
     waitForIdle();
