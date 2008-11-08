@@ -61,13 +61,10 @@ import static org.fest.swing.format.Formatting.*;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
 import static org.fest.swing.keystroke.KeyStrokeMap.keyStrokeFor;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
-import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
-import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.swing.task.ComponentRequestFocusTask.giveFocusTo;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.swing.util.Modifiers.*;
-import static org.fest.swing.util.Platform.isOSX;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Strings.*;
 
@@ -191,13 +188,6 @@ public class RobotFixture implements Robot {
   /** {@inheritDoc} */
   @RunsInEDT
   public void close(Window w) {
-    if (!isShowing(w)) return;
-    focusAndWaitForFocusGain(w);
-    // Move to a corner and "pretend" to use the window manager control
-    try {
-      Point p = closeLocation(w);
-      moveMouse(w, p.x, p.y);
-    } catch (RuntimeException e) {}
     WindowEvent event = new WindowEvent(w, WINDOW_CLOSING);
     // If the window contains an applet, send the event on the applet's queue instead to ensure a shutdown from the
     // applet's context (assists AppletViewer cleanup).
@@ -217,19 +207,6 @@ public class RobotFixture implements Robot {
     List<Component> found = new ArrayList<Component>(finder.findAll(c, new TypeMatcher(Applet.class)));
     if (found.size() == 1) return (Applet)found.get(0);
     return null;
-  }
-
-  @RunsInEDT
-  private Point closeLocation(Container c) {
-    if (isOSX()) return closeLocationForOSX(c);
-    Insets insets = insetsOf(c);
-    return new Point(sizeOf(c).width - insets.right - 10, insets.top / 2);
-  }
-
-  @RunsInEDT
-  private Point closeLocationForOSX(Container c) {
-    Insets insets = insetsOf(c);
-    return new Point(insets.left + 15, insets.top / 2);
   }
 
   /** {@inheritDoc} */
@@ -672,7 +649,7 @@ public class RobotFixture implements Robot {
       pause();
     return popup;
   }
-  
+
   @RunsInEDT
   private boolean isWindowAncestorReadyForInput(final JPopupMenu popup) {
     return execute(new GuiQuery<Boolean>() {

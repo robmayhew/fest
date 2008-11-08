@@ -18,11 +18,15 @@ import java.awt.Frame;
 import java.awt.Point;
 import java.awt.Toolkit;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 
 import static java.awt.Frame.*;
 
+import static org.fest.swing.driver.WindowLikeContainerLocations.*;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 
 /**
@@ -46,12 +50,25 @@ public class FrameDriver extends WindowDriver {
   /**
    * Iconifies the given <code>{@link Frame}</code>.
    * @param frame the given <code>Frame</code>.
+   * @throws ActionFailedException if the <code>Frame</code> is not enabled.
+   * @throws ActionFailedException if the <code>Frame</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void iconify(Frame frame) {
-    Point p = iconifyLocation(frame);
+    Point p = iconifyInfo(frame);
     if (p != null) robot.moveMouse(frame, p.x, p.y);
-    updateFrameExtendedState(frame, ICONIFIED);
     robot.waitForIdle();
+    updateFrameExtendedState(frame, ICONIFIED);
+  }
+
+  @RunsInEDT
+  private static Point iconifyInfo(final Frame frame) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        validateIsEnabledAndShowing(frame);
+        return iconifyLocationOf(frame);
+      }
+    });
   }
 
   /**
@@ -60,7 +77,6 @@ public class FrameDriver extends WindowDriver {
    */
   public void deiconify(Frame frame) {
     updateFrameExtendedState(frame, NORMAL);
-    robot.waitForIdle();
   }
 
   /**
@@ -69,21 +85,32 @@ public class FrameDriver extends WindowDriver {
    */
   public void normalize(Frame frame) {
     updateFrameExtendedState(frame, NORMAL);
-    robot.waitForIdle();
   }
 
   /**
    * Makes the <code>{@link Frame}</code> full size.
    * @param frame the target <code>Frame</code>.
+   * @throws ActionFailedException if the <code>Frame</code> is not enabled.
+   * @throws ActionFailedException if the <code>Frame</code> is not showing on the screen.
    * @throws ActionFailedException if the operating system does not support maximizing frames.
    */
   public void maximize(Frame frame) {
-    Point p = maximizeLocation(frame);
+    Point p = maximizeInfo(frame);
     if (p != null) robot.moveMouse(frame, p.x, p.y);
+    robot.waitForIdle();
     if (!supportsMaximize(Toolkit.getDefaultToolkit()))
       throw actionFailure("Platform does not support maximizing frames");
     updateFrameExtendedState(frame, MAXIMIZED_BOTH);
-    robot.waitForIdle();
+  }
+
+  @RunsInEDT
+  private static Point maximizeInfo(final Frame frame) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        validateIsEnabledAndShowing(frame);
+        return maximizeLocationOf(frame);
+      }
+    });
   }
 
   private void updateFrameExtendedState(Frame frame, int state) {

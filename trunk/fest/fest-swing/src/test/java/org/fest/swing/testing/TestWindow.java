@@ -28,7 +28,7 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.task.FrameShowTask.packAndShow;
+import static org.fest.swing.task.FrameShowTask.*;
 import static org.fest.swing.task.WindowDestroyTask.hideAndDispose;
 
 /**
@@ -51,13 +51,15 @@ public class TestWindow extends JFrame {
    */
   @RunsInEDT
   public static TestWindow createAndShowNewWindow(final Class<?> testClass) {
-    return execute(new GuiQuery<TestWindow>() {
+    TestWindow w = execute(new GuiQuery<TestWindow>() {
       protected TestWindow executeInEDT() {
         TestWindow window = createInCurrentThread(testClass);
         TestWindow.display(window);
         return window;
       }
     });
+    waitForShowing(w);
+    return w;
   }
 
   /**
@@ -110,6 +112,7 @@ public class TestWindow extends JFrame {
         display(TestWindow.this);
       }
     });
+    waitForShowing(TestWindow.this);
   }
 
   /**

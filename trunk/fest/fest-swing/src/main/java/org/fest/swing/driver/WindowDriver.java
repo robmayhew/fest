@@ -20,11 +20,12 @@ import java.awt.Window;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.format.Formatting.format;
-import static org.fest.util.Strings.concat;
+import static org.fest.swing.driver.ComponentStateValidator.*;
+import static org.fest.swing.driver.WindowLikeContainerLocations.closeLocationOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands simulation of user input on a <code>{@link Window}</code>. Unlike <code>WindowFixture</code>, this
@@ -33,7 +34,7 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz
  */
-public class WindowDriver extends WindowLikeContainerDriver {
+public class WindowDriver extends ContainerDriver {
 
   /**
    * Creates a new </code>{@link WindowDriver}</code>.
@@ -49,6 +50,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * @param width the width that the <code>Window</code> should have after being resized.
    * @throws ActionFailedException if the <code>Window</code> is not enabled.
    * @throws ActionFailedException if the <code>Window</code> is not resizable by the user.
+   * @throws ActionFailedException if the <code>Window</code> is not showing on the screen.
    */
   @RunsInEDT
   public void resizeWidthTo(Window w, int width) {
@@ -61,6 +63,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * @param height the height that the <code>Window</code> should have after being resized.
    * @throws ActionFailedException if the <code>Window</code> is not enabled.
    * @throws ActionFailedException if the <code>Window</code> is not resizable by the user.
+   * @throws ActionFailedException if the <code>Window</code> is not showing on the screen.
    */
   @RunsInEDT
   public void resizeHeightTo(Window w, int height) {
@@ -73,6 +76,7 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * @param size the size to resize the <code>Window</code> to.
    * @throws ActionFailedException if the <code>Window</code> is not enabled.
    * @throws ActionFailedException if the <code>Window</code> is not resizable by the user.
+   * @throws ActionFailedException if the <code>Window</code> is not showing on the screen.
    */
   @RunsInEDT
   public void resizeTo(Window w, Dimension size) {
@@ -83,22 +87,45 @@ public class WindowDriver extends WindowLikeContainerDriver {
    * Moves the <code>{@link Window}</code> to the given location.
    * @param w the target <code>Window</code>.
    * @param where the location to move the <code>Window</code> to.
-   * @throws ActionFailedException if the <code>Window</code> is not movable.
-   * @throws ActionFailedException if the given <code>Window</code> is not showing on the screen.
+   * @throws ActionFailedException if the <code>Window</code> is not enabled.
+   * @throws ActionFailedException if the <code>Window</code> is not movable by the user.
+   * @throws ActionFailedException if the <code>Window</code> is not showing on the screen.
    */
   public void moveTo(Window w, Point where) {
-    if (!isUserMovable(w))
-      throw actionFailure(concat("The window ", format(w), " is not movable by the user"));
     move(w, where.x, where.y);
   }
 
   /**
    * Closing the <code>{@link Window}</code>.
    * @param w the target <code>Window</code>.
+   * @throws ActionFailedException if the <code>Window</code> is not enabled.
+   * @throws ActionFailedException if the <code>Window</code> is not showing on the screen.
    */
   @RunsInEDT
   public void close(Window w) {
+    robot.moveMouse(w, closeInfo(w));
     robot.close(w);
+  }
+
+  @RunsInEDT
+  private static Point closeInfo(final Window w) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        validateIsEnabledAndShowing(w);
+        return closeLocationOf(w);
+      }
+    });
+  }
+
+  /**
+   * Validates that the given <code>{@link Window}</code> is enabled and showing on the screen.
+   * @param w the target <code>Window</code>.
+   * @throws ActionFailedException if the <code>Window</code> is not enabled.
+   * @throws ActionFailedException if the <code>Window</code> is not showing on the screen.
+   */
+  protected static void validateIsEnabledAndShowing(Window w) {
+    validateIsEnabled(w);
+    validateIsShowing(w);
   }
 
   /**

@@ -25,7 +25,7 @@ import static org.fest.swing.timing.Pause.pause;
 /**
  * Understands a task that makes a <code>{@link Frame}</code> visible. This task is <b>not</b> executed in the event
  * dispatch thread.
- * 
+ *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
@@ -36,14 +36,17 @@ public final class FrameShowTask {
     packAndShow(frame);
   }
 
-  public static void packAndShow(final Frame frame) {
+  public static void packAndShow(Frame frame) {
     frame.pack();
     frame.setVisible(true);
+  }
+
+  public static void waitForShowing(final Frame frame) {
     pause(new Condition("Frame is showing") {
       public boolean test() {
         return frame.isShowing();
       }
-    });
+    }, 20000);
   }
 
   private FrameShowTask() {}

@@ -15,6 +15,7 @@
 package org.fest.swing.driver;
 
 import java.awt.Component;
+import java.awt.Container;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
@@ -63,6 +64,27 @@ public final class ComponentStateValidator {
   @RunsInCurrentThread
   public static void validateIsEnabled(Component c) {
     if (!c.isEnabled()) throw actionFailure(concat("Expecting component ", format(c), " to be enabled"));
+  }
+
+  /**
+   * Asserts that the <code>{@link Component}</code> is showing on the screen.
+   * @param c the target component.
+   * @throws ActionFailedException if the <code>Component</code> is not showing on the screen.
+   */
+  @RunsInCurrentThread
+  public static void validateIsShowing(Container c) {
+    if (!c.isShowing()) throw componentNotShowingOnScreenFailure(c);
+  }
+
+  /**
+   * Throws a <code>{@link ActionFailedException}</code> when a <code>{@link Component}</code> is not showing on the
+   * screen.
+   * @param c the target component.
+   * @return the thrown exception.
+   */
+  @RunsInCurrentThread
+  public static ActionFailedException componentNotShowingOnScreenFailure(Container c) {
+    return actionFailure(concat("Expecting component ", format(c), " to be showing on the screen"));
   }
 
   private ComponentStateValidator() {}

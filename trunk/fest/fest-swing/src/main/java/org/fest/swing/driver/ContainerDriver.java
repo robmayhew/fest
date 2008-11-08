@@ -26,7 +26,7 @@ import org.fest.swing.util.Triple;
 
 import static org.fest.swing.driver.ComponentMoveTask.moveComponent;
 import static org.fest.swing.driver.ComponentResizableQuery.isResizable;
-import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
+import static org.fest.swing.driver.ComponentStateValidator.*;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
@@ -64,7 +64,7 @@ public abstract class ContainerDriver extends ComponentDriver {
     Dimension size = resizeInfo.i;
     resizeBy(c, resizeInfo, width - size.width, 0);
   }
-  
+
   /**
    * Resizes the <code>{@link Container}</code> vertically.
    * @param c the target <code>Container</code>.
@@ -105,15 +105,15 @@ public abstract class ContainerDriver extends ComponentDriver {
       }
     });
   }
-  
+
   @RunsInCurrentThread
   private static void validateCanResize(Container c) {
     validateIsEnabled(c);
-    if (!isResizable(c)) 
+    if (!isResizable(c))
       throw actionFailure(concat("Expecting component ", format(c), " to be resizable by the user"));
     validateIsShowing(c);
   }
-  
+
   @RunsInEDT
   private void resizeBy(Container c, Pair<Dimension, Insets> resizeInfo, int x, int y) {
     simulateResizeStarted(c, resizeInfo, x, y);
@@ -167,31 +167,21 @@ public abstract class ContainerDriver extends ComponentDriver {
         try {
           locationOnScreen = c.getLocationOnScreen();
         } catch (IllegalComponentStateException e) {
-          // we should not get to this point, validateIsShowing should have already catched that the container is not 
+          // we should not get to this point, validateIsShowing should have already catched that the container is not
           // visible.
         }
-        if (locationOnScreen == null) throw componentNotShowingOnScreen(c);
+        if (locationOnScreen == null) throw componentNotShowingOnScreenFailure(c);
         return new Triple<Dimension, Insets, Point>(c.getSize(), c.getInsets(), locationOnScreen) ;
       }
     });
   }
-    
+
   @RunsInCurrentThread
   private static void validateCanMove(Container c) {
     validateIsEnabled(c);
     if (!isUserMovable(c))
       throw actionFailure(concat("Expecting component ", format(c), " to be movable by the user"));
     validateIsShowing(c);
-  }
-
-  @RunsInCurrentThread
-  private static void validateIsShowing(Container c) {
-    if (!c.isShowing()) throw componentNotShowingOnScreen(c);
-  }
-  
-  @RunsInCurrentThread
-  private static ActionFailedException componentNotShowingOnScreen(Container c) {
-    throw actionFailure(concat("Expecting component ", format(c), " to be showing on the screen"));
   }
 
   @RunsInEDT

@@ -59,11 +59,12 @@ public class FrameDriverTest {
   @BeforeClass public void setUpOnce() {
     CheckThreadViolationRepaintManager.install();
   }
-  
+
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    window = TestWindow.createAndShowNewWindow(getClass());
+    window = TestWindow.createNewWindow(getClass());
     driver = new FrameDriver(robot);
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
@@ -117,7 +118,7 @@ public class FrameDriverTest {
       assertActionFailureDueToDisabledComponent(e);
     }
   }
-  
+
   public void shouldThrowErrorWhenResizingNotShowingFrame() {
     hide(window);
     robot.waitForIdle();
@@ -139,7 +140,7 @@ public class FrameDriverTest {
       assertActionFailureDueToNotResizableComponent(e);
     }
   }
-  
+
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldResizeFrameToGivenWidth(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
@@ -233,7 +234,7 @@ public class FrameDriverTest {
       }
     });
   }
-  
+
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldMoveFrame(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
