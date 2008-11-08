@@ -22,7 +22,7 @@ import java.awt.Frame;
 import javax.swing.JInternalFrame;
 
 /**
- * Understands SOMETHING DUMMY.
+ * Understands an action that indicates whether it is possible for the user to move the given component.
  *
  * @author Alex Ruiz 
  */

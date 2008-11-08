@@ -17,6 +17,7 @@ package org.fest.swing.task;
 
 import java.awt.Component;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -28,6 +29,17 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 public final class ComponentSetVisibleTask {
 
+  @RunsInEDT
+  public static void show(Component c) {
+    setVisible(c, true);
+  }
+  
+  @RunsInEDT
+  public static void hide(Component c) {
+    setVisible(c, false);
+  }
+  
+  @RunsInEDT
   public static void setVisible(final Component c, final boolean visible) {
     execute(new GuiTask() {
       protected void executeInEDT() {

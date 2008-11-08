@@ -27,12 +27,16 @@ import static org.fest.assertions.Fail.fail;
  */
 public final class CommonAssertions {
 
-  public static void assertActionFailureDueToDisableComponent(ActionFailedException e) {
+  public static void assertActionFailureDueToDisabledComponent(ActionFailedException e) {
     assertThat(e).message().contains("Expecting component").contains("to be enabled");
   }
   
-  public static void assertActionFailureDueToNotResizableContainer(ActionFailedException e) {
-    assertThat(e).message().contains("Expecting container").contains("to be resizable by the user");
+  public static void assertActionFailureDueToNotResizableComponent(ActionFailedException e) {
+    assertThat(e).message().contains("Expecting component").contains("to be resizable by the user");
+  }
+  
+  public static void assertActionFailureDueToNotShowingComponent(ActionFailedException e) {
+    assertThat(e).message().contains("Expecting component").contains("to be showing on the screen");
   }
   
   public static void failWhenExpectingException() {

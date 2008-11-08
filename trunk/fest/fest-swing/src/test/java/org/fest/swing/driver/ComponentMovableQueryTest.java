@@ -15,17 +15,28 @@
  */
 package org.fest.swing.driver;
 
-import org.fest.swing.testing.MDITestWindow;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JFrames.frame;
+
 
 /**
  * Tests for <code>{@link ComponentMovableQuery}</code>.
  *
  * @author Alex Ruiz
  */
-public class ComponentMovableQueryTest {
+@Test public class ComponentMovableQueryTest {
 
-  public static void main(String...args) {
-    MDITestWindow window = MDITestWindow.createAndShowNewWindow(ComponentMovableQuery.class);
-    //window.setEnabled(false);
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
   }
+  
+  public void shouldReturnIsMovableIfComponentIsFrame() {
+    assertThat(ComponentMovableQuery.isUserMovable(frame().createNew())).isTrue();
+  }
+ 
 }

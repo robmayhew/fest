@@ -40,6 +40,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.task.ComponentSetVisibleTask.hide;
 import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -113,10 +114,21 @@ public class FrameDriverTest {
       driver.resize(window, 10, 10);
       failWhenExpectingException();
     } catch (ActionFailedException e) {
-      assertActionFailureDueToDisableComponent(e);
+      assertActionFailureDueToDisabledComponent(e);
     }
   }
   
+  public void shouldThrowErrorWhenResizingNotShowingFrame() {
+    hide(window);
+    robot.waitForIdle();
+    try {
+      driver.resize(window, 10, 10);
+      failWhenExpectingException();
+    } catch (ActionFailedException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+
   public void shouldThrowErrorWhenResizingNotResizableFrame() {
     makeNotResizable(window);
     robot.waitForIdle();
@@ -124,7 +136,7 @@ public class FrameDriverTest {
       driver.resize(window, 10, 10);
       failWhenExpectingException();
     } catch (ActionFailedException e) {
-      assertActionFailureDueToNotResizableContainer(e);
+      assertActionFailureDueToNotResizableComponent(e);
     }
   }
   
@@ -143,7 +155,18 @@ public class FrameDriverTest {
       driver.resizeWidthTo(window, 10);
       failWhenExpectingException();
     } catch (ActionFailedException e) {
-      assertActionFailureDueToDisableComponent(e);
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenResizingWidthOfNotShowingFrame() {
+    hide(window);
+    robot.waitForIdle();
+    try {
+      driver.resizeWidthTo(window, 10);
+      failWhenExpectingException();
+    } catch (ActionFailedException e) {
+      assertActionFailureDueToNotShowingComponent(e);
     }
   }
 
@@ -154,7 +177,7 @@ public class FrameDriverTest {
       driver.resizeWidthTo(window, 10);
       failWhenExpectingException();
     } catch (ActionFailedException e) {
-      assertActionFailureDueToNotResizableContainer(e);
+      assertActionFailureDueToNotResizableComponent(e);
     }
   }
 
@@ -177,7 +200,18 @@ public class FrameDriverTest {
       driver.resizeHeightTo(window, 10);
       failWhenExpectingException();
     } catch (ActionFailedException e) {
-      assertActionFailureDueToDisableComponent(e);
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenResizingHeightOfNotShowingFrame() {
+    hide(window);
+    robot.waitForIdle();
+    try {
+      driver.resizeHeightTo(window, 10);
+      failWhenExpectingException();
+    } catch (ActionFailedException e) {
+      assertActionFailureDueToNotShowingComponent(e);
     }
   }
 
@@ -188,7 +222,7 @@ public class FrameDriverTest {
       driver.resizeHeightTo(window, 10);
       failWhenExpectingException();
     } catch (ActionFailedException e) {
-      assertActionFailureDueToNotResizableContainer(e);
+      assertActionFailureDueToNotResizableComponent(e);
     }
   }
 
@@ -204,11 +238,33 @@ public class FrameDriverTest {
   public void shouldMoveFrame(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     Point p = locationOnScreenOfWindow().addToX(10).addToY(10);
-    driver.move(window, p.x, p.y);
+    driver.moveTo(window, p);
     assertThat(locationOnScreenOfWindow()).isEqualTo(p);
   }
 
   private FluentPoint locationOnScreenOfWindow() {
     return new FluentPoint(locationOnScreen(window));
+  }
+
+  public void shouldThrowErrorWhenMovingDisabledFrame() {
+    disable(window);
+    robot.waitForIdle();
+    try {
+      driver.moveTo(window, new Point(6, 8));
+      failWhenExpectingException();
+    } catch (ActionFailedException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenMovingNotShowingFrame() {
+    hide(window);
+    robot.waitForIdle();
+    try {
+      driver.moveTo(window, new Point(6, 8));
+      failWhenExpectingException();
+    } catch (ActionFailedException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 }
