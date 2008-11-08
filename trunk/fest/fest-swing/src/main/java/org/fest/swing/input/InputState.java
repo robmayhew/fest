@@ -20,6 +20,9 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.listener.EventDispatchThreadedEventListener;
 
@@ -33,16 +36,18 @@ import static org.fest.swing.input.MouseInfo.BUTTON_MASK;
  * Class to keep track of a given input state. Includes mouse/pointer position and keyboard modifier key state.
  * <p>
  * Synchronization assumes that any given instance might be called from more than one event dispatch thread.
- * <p>
+ * </p>
  */
 // TODO: add a BitSet with the full keyboard key press state
+@ThreadSafe
 public class InputState {
 
-  private final MouseInfo mouseInfo = new MouseInfo();
-  private final DragDropInfo dragDropInfo = new DragDropInfo();
+  @GuardedBy("this") private final MouseInfo mouseInfo = new MouseInfo();
+  @GuardedBy("this") private final DragDropInfo dragDropInfo = new DragDropInfo();
 
-  private int modifiers;
-  private long lastEventTime;
+  @GuardedBy("this") private int modifiers;
+  @GuardedBy("this") private long lastEventTime;
+  
   private EventNormalizer normalizer;
 
   public InputState(Toolkit toolkit) {

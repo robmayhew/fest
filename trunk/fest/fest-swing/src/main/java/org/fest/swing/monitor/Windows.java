@@ -22,6 +22,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.WeakHashMap;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
@@ -29,21 +32,22 @@ import org.fest.swing.annotation.RunsInCurrentThread;
  *
  * @author Alex Ruiz
  */
+@ThreadSafe
 class Windows {
 
   static int WINDOW_READY_DELAY = 10000;
 
   /** <code>{@link Window#isShowing() isShowing}</code> is true but are not yet ready for input. */
-  final Map<Window, TimerTask> pending = new WeakHashMap<Window, TimerTask>();
+  @GuardedBy("lock") final Map<Window, TimerTask> pending = new WeakHashMap<Window, TimerTask>();
 
   /** Considered to be ready to use. */
-  final Map<Window, Boolean> open = new WeakHashMap<Window, Boolean>();
+  @GuardedBy("lock") final Map<Window, Boolean> open = new WeakHashMap<Window, Boolean>();
 
   /** Have sent a <code>{@link java.awt.event.WindowEvent#WINDOW_CLOSED WINDOW_CLOSED}</code> event. */
-  final Map<Window, Boolean> closed = new WeakHashMap<Window, Boolean>();
+  @GuardedBy("lock") final Map<Window, Boolean> closed = new WeakHashMap<Window, Boolean>();
 
   /** Not visible. */
-  final Map<Window, Boolean> hidden = new WeakHashMap<Window, Boolean>();
+  @GuardedBy("lock") final Map<Window, Boolean> hidden = new WeakHashMap<Window, Boolean>();
 
   private final Timer windowReadyTimer;
 

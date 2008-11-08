@@ -19,6 +19,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.util.Collections.list;
 
@@ -27,13 +30,14 @@ import static org.fest.util.Collections.list;
  * 
  * @author Alex Ruiz
  */
+@ThreadSafe
 class Context {
 
   /** Maps unique event queues to the set of root windows found on each queue. */
-  private final WindowEventQueueMapping windowEventQueueMapping;
+  @GuardedBy("lock") private final WindowEventQueueMapping windowEventQueueMapping;
 
   /** Maps components to their corresponding event queues. */
-  private final EventQueueMapping eventQueueMapping;
+  @GuardedBy("lock") private final EventQueueMapping eventQueueMapping;
 
   private final Object lock = new Object();
 

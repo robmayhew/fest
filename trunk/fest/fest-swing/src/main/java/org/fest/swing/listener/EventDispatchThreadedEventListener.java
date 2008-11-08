@@ -14,12 +14,14 @@
  */
 package org.fest.swing.listener;
 
-import static javax.swing.SwingUtilities.*;
-
 import java.awt.AWTEvent;
 import java.awt.event.AWTEventListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+import static javax.swing.SwingUtilities.*;
 
 /**
  * Understands a <code>{@link AWTEventListener}</code> that ensures all events are handled on the event dispatch
@@ -33,9 +35,10 @@ import java.util.List;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@ThreadSafe
 public abstract class EventDispatchThreadedEventListener implements AWTEventListener {
 
-  private final List<AWTEvent> deferredEvents = new ArrayList<AWTEvent>();
+  @GuardedBy("lock") private final List<AWTEvent> deferredEvents = new ArrayList<AWTEvent>();
   private final Object lock = new Object();
 
   private final Runnable processDeferredEventsTask = new Runnable() {

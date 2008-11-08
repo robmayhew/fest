@@ -17,6 +17,9 @@ package org.fest.swing.edt;
 
 import java.util.concurrent.CountDownLatch;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import org.fest.swing.exception.UnexpectedException;
 
 import static javax.swing.SwingUtilities.*;
@@ -28,8 +31,10 @@ import static org.fest.swing.exception.UnexpectedException.unexpected;
  *
  * @author Alex Ruiz
  */
+@ThreadSafe
 public class GuiActionRunner {
 
+  @GuardedBy("this")
   private static boolean executeInEDT = true;
   
   /**

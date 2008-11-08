@@ -21,7 +21,10 @@ import org.testng.annotations.Test;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JButtons.button;
+import static org.fest.swing.factory.JDialogs.dialog;
 import static org.fest.swing.factory.JFrames.frame;
+import static org.fest.swing.factory.JInternalFrames.internalFrame;
 
 
 /**
@@ -38,5 +41,16 @@ import static org.fest.swing.factory.JFrames.frame;
   public void shouldReturnIsMovableIfComponentIsFrame() {
     assertThat(ComponentMovableQuery.isUserMovable(frame().createNew())).isTrue();
   }
+  
+  public void shouldReturnIsMovableIfComponentIsDialog() {
+    assertThat(ComponentMovableQuery.isUserMovable(dialog().createNew())).isTrue();
+  }
  
+  public void shouldReturnIsMovableIfComponentIsJInternalFrame() {
+    assertThat(ComponentMovableQuery.isUserMovable(internalFrame().createNew())).isTrue();
+  }
+  
+  public void shouldReturnIsNotMovableIfComponentIsNotWindow() {
+    assertThat(ComponentMovableQuery.isUserMovable(button().createNew())).isFalse();
+  }
 }

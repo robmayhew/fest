@@ -32,7 +32,7 @@ import static java.awt.event.KeyEvent.CHAR_UNDEFINED;
 public class KeyStrokeMap {
 
   private static final String ENGLISH = "en";
-  
+
   private static final Map<Character, KeyStroke> CHAR_TO_KEY_STROKE = new HashMap<Character, KeyStroke>();
   private static final Map<KeyStroke, Character> KEY_STROKE_TO_CHAR = new HashMap<KeyStroke, Character>();
 
