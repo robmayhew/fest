@@ -512,19 +512,6 @@ public class ComponentDriverTest {
     });
   }
 
-  public void shouldReturnIsMovableIfComponentIsFrame() {
-    assertThat(driver.isUserMovable(window)).isTrue();
-  }
-
-  public void shouldReturnIsMovableIfComponentIsDialog() {
-    TestDialog dialog = TestDialog.createNewDialog(window);
-    assertThat(driver.isUserMovable(dialog)).isTrue();
-  }
-
-  public void shouldReturnIsNotMovableIfComponentIsNotFrameOrDialog() {
-    assertThat(driver.isUserMovable(button)).isFalse();
-  }
-
   private void disableButton() {
     disable(button);
     robot.waitForIdle();

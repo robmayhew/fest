@@ -33,6 +33,7 @@ import static org.fest.swing.driver.JInternalFrameIconifiableQuery.isIconifiable
 import static org.fest.swing.driver.JInternalFrameMaximizableQuery.isMaximizable;
 import static org.fest.swing.driver.JInternalFrameSetIconTask.setIcon;
 import static org.fest.swing.driver.JInternalFrameSetMaximumTask.setMaximum;
+import static org.fest.swing.driver.WindowLikeContainerLocations.*;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
@@ -46,7 +47,7 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JInternalFrameDriver extends WindowLikeContainerDriver {
+public class JInternalFrameDriver extends ContainerDriver {
 
   /**
    * Creates a new </code>{@link JInternalFrameDriver}</code>.
@@ -96,7 +97,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
   private void maximizeOrNormalize(JInternalFrame internalFrame, JInternalFrameAction action) {
     Container clickTarget = internalFrame;
     if (isIconified(internalFrame)) clickTarget = JInternalFrameDesktopIconQuery.desktopIconOf(internalFrame);
-    Point p = maximizeLocation(clickTarget);
+    Point p = maximizeLocationOf(clickTarget);
     robot.moveMouse(clickTarget, p.x, p.y);
     if (isIconified(internalFrame)) deiconify(internalFrame);
     setMaximumProperty(internalFrame, action);
@@ -112,7 +113,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     if (isIconified(internalFrame)) return;
     if (!isIconifiable(internalFrame))
       throw actionFailure(concat("The JInternalFrame <", format(internalFrame), "> is not iconifiable"));
-    Point p = iconifyLocation(internalFrame);
+    Point p = iconifyLocationOf(internalFrame);
     robot.moveMouse(internalFrame, p.x, p.y);
     setIconProperty(internalFrame, ICONIFY);
   }
@@ -125,7 +126,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
   public void deiconify(JInternalFrame internalFrame) {
     if (!isIconified(internalFrame)) return;
     Container c = desktopIconOf(internalFrame);
-    Point p = iconifyLocation(c);
+    Point p = iconifyLocationOf(c);
     robot.moveMouse(c, p.x, p.y);
     setIconProperty(internalFrame, DEICONIFY);
   }
@@ -208,7 +209,7 @@ public class JInternalFrameDriver extends WindowLikeContainerDriver {
     if (!isClosable(internalFrame))
       throw actionFailure(concat("The JInternalFrame <", format(internalFrame), "> is not closable"));
     // This is LAF-specific, so it must be done programmatically.
-    robot.moveMouse(internalFrame, closeLocation(internalFrame));
+    robot.moveMouse(internalFrame, closeLocationOf(internalFrame));
     JInternalFrameCloseTask.close(internalFrame);
     robot.waitForIdle();
   }

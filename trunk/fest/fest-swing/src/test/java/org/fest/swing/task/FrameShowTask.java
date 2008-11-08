@@ -18,8 +18,10 @@ package org.fest.swing.task;
 import java.awt.Dimension;
 import java.awt.Frame;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.timing.Condition;
 
+import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.timing.Pause.pause;
 
 /**
@@ -31,20 +33,23 @@ import static org.fest.swing.timing.Pause.pause;
  */
 public final class FrameShowTask {
 
+  @RunsInEDT
   public static void packAndShow(Frame frame, Dimension preferredSize) {
     frame.setPreferredSize(preferredSize);
     packAndShow(frame);
   }
 
+  @RunsInEDT
   public static void packAndShow(Frame frame) {
     frame.pack();
     frame.setVisible(true);
   }
 
+  @RunsInEDT
   public static void waitForShowing(final Frame frame) {
     pause(new Condition("Frame is showing") {
       public boolean test() {
-        return frame.isShowing();
+        return isShowing(frame);
       }
     }, 20000);
   }

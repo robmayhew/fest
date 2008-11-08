@@ -56,7 +56,7 @@ public class FrameDriver extends WindowDriver {
   @RunsInEDT
   public void iconify(Frame frame) {
     Point p = iconifyInfo(frame);
-    if (p != null) robot.moveMouse(frame, p.x, p.y);
+    simulateMaximize(frame, p);
     robot.waitForIdle();
     updateFrameExtendedState(frame, ICONIFIED);
   }
@@ -75,6 +75,7 @@ public class FrameDriver extends WindowDriver {
    * Deiconifies the given <code>{@link Frame}</code>.
    * @param frame the given <code>Frame</code>.
    */
+  @RunsInEDT("It is actually thread-safe")
   public void deiconify(Frame frame) {
     updateFrameExtendedState(frame, NORMAL);
   }
@@ -83,6 +84,7 @@ public class FrameDriver extends WindowDriver {
    * Normalizes the given <code>{@link Frame}</code>.
    * @param frame the given <code>Frame</code>.
    */
+  @RunsInEDT("It is actually thread-safe")
   public void normalize(Frame frame) {
     updateFrameExtendedState(frame, NORMAL);
   }
@@ -94,13 +96,21 @@ public class FrameDriver extends WindowDriver {
    * @throws ActionFailedException if the <code>Frame</code> is not showing on the screen.
    * @throws ActionFailedException if the operating system does not support maximizing frames.
    */
+  @RunsInEDT
   public void maximize(Frame frame) {
     Point p = maximizeInfo(frame);
-    if (p != null) robot.moveMouse(frame, p.x, p.y);
-    robot.waitForIdle();
+    simulateMaximize(frame, p);
     if (!supportsMaximize(Toolkit.getDefaultToolkit()))
       throw actionFailure("Platform does not support maximizing frames");
     updateFrameExtendedState(frame, MAXIMIZED_BOTH);
+  }
+
+  private void simulateMaximize(Frame frame, Point p) {
+    if (p == null) return;
+    try {
+      robot.moveMouse(frame, p.x, p.y);
+    } catch (RuntimeException ignored) {}
+    robot.waitForIdle();
   }
 
   @RunsInEDT
@@ -113,6 +123,7 @@ public class FrameDriver extends WindowDriver {
     });
   }
 
+  @RunsInEDT("It is actually thread-safe")
   private void updateFrameExtendedState(Frame frame, int state) {
     frame.setExtendedState(state);
   }

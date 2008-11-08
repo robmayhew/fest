@@ -38,4 +38,7 @@ import static java.lang.annotation.ElementType.*;
  */
 @Target({ METHOD, CONSTRUCTOR, TYPE })
 @Documented
-public @interface RunsInEDT {}
+public @interface RunsInEDT {
+
+  String value() default "";
+}

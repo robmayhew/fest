@@ -125,8 +125,10 @@ public abstract class ContainerDriver extends ComponentDriver {
   @RunsInEDT
   private void simulateResizeStarted(Container c, Pair<Dimension, Insets> resizeInfo, int x, int y) {
     Point p = resizeLocation(resizeInfo);
-    robot.moveMouse(c, p.x, p.y);
-    robot.moveMouse(c, p.x + x, p.y + y);
+    try {
+      robot.moveMouse(c, p.x, p.y);
+      robot.moveMouse(c, p.x + x, p.y + y);
+    } catch (RuntimeException ignored) {}
     robot.waitForIdle();
   }
 
@@ -196,8 +198,10 @@ public abstract class ContainerDriver extends ComponentDriver {
   @RunsInEDT
   private void simulateMoveStarted(Container c, Triple<Dimension, Insets, Point> moveInfo, int x, int y) {
     Point p = moveLocation(moveInfo.i, moveInfo.ii);
-    robot.moveMouse(c, p.x, p.y);
-    robot.moveMouse(c, p.x + x, p.y + y);
+    try {
+      robot.moveMouse(c, p.x, p.y);
+      robot.moveMouse(c, p.x + x, p.y + y);
+    } catch (RuntimeException ignored) {}
     robot.waitForIdle();
   }
 
