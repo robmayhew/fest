@@ -31,7 +31,6 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.StopWatch;
@@ -43,7 +42,6 @@ import static java.awt.Event.SHIFT_MASK;
 import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.KeyPressInfo.keyCode;
 import static org.fest.swing.core.MouseButton.*;
@@ -54,6 +52,7 @@ import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
+import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.StopWatch.startNewStopWatch;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.timing.Pause.pause;
@@ -106,8 +105,10 @@ public class ComponentDriverTest {
     disableButton();
     try {
       driver.click(button);
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertThat(clickRecorder).wasNotClicked();
   }
 
@@ -134,8 +135,10 @@ public class ComponentDriverTest {
     disableButton();
     try {
       driver.click(button, RIGHT_BUTTON);
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertThat(clickRecorder).wasNotClicked();
   }
 
@@ -162,8 +165,10 @@ public class ComponentDriverTest {
     disableButton();
     try {
       driver.click(button, leftButton());
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertThat(clickRecorder).wasNotClicked();
   }
 
@@ -179,8 +184,10 @@ public class ComponentDriverTest {
     disableButton();
     try {
       driver.doubleClick(button);
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertThat(clickRecorder).wasNotClicked();
   }
 
@@ -197,8 +204,10 @@ public class ComponentDriverTest {
     disableButton();
     try {
       driver.rightClick(button);
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertThat(clickRecorder).wasNotClicked();
   }
 
@@ -218,8 +227,10 @@ public class ComponentDriverTest {
     disableButton();
     try {
       driver.click(button, new Point(10, 10));
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertThat(clickRecorder).wasNotClicked();
   }
 
@@ -257,8 +268,10 @@ public class ComponentDriverTest {
     disableButton();
     try {
       driver.focusAndWaitForFocusGain(button);
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertThat(clickRecorder).wasNotClicked();
   }
 
@@ -274,7 +287,7 @@ public class ComponentDriverTest {
   public void shouldFailIfActualSizeIsNotEqualToExpectedOne() {
     try {
       driver.requireSize(button, new Dimension(0, 0));
-      fail("Expecting exception");
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'size'")
                              .contains("expected:<(0, 0)>")
@@ -290,7 +303,7 @@ public class ComponentDriverTest {
     hideWindow();
     try {
       driver.requireVisible(window);
-      fail("Expecting exception");
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'visible'")
                              .contains("expected:<true> but was:<false>");
@@ -310,7 +323,7 @@ public class ComponentDriverTest {
   public void shouldFailIfComponentIsVisibleAndExpectedToBeNotVisible() {
     try {
       driver.requireNotVisible(button);
-      fail("Expecting exception");
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'visible'")
                              .contains("expected:<false> but was:<true>");
@@ -325,7 +338,7 @@ public class ComponentDriverTest {
     disableButton();
     try {
       driver.requireEnabled(button);
-      fail("Expecting exception");
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'enabled'")
                              .contains("expected:<true> but was:<false>");
@@ -342,7 +355,7 @@ public class ComponentDriverTest {
     StopWatch stopWatch = startNewStopWatch();
     try {
       driver.requireEnabled(button, timeout(timeout));
-      fail("Expecting exception");
+      failWhenExpectingException();
     } catch (WaitTimedOutError e) {
       assertThat(e).message().contains("Timed out waiting for")
                              .contains(button.getClass().getName())
@@ -365,7 +378,7 @@ public class ComponentDriverTest {
   public void shouldFailIfComponentIsEnabledAndExpectedToBeNotEnabled() {
     try {
       driver.requireDisabled(button);
-      fail("Expecting exception");
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'enabled'")
                              .contains("expected:<false> but was:<true>");
@@ -390,8 +403,10 @@ public class ComponentDriverTest {
     disableTextField();
     try {
       driver.pressAndReleaseKeys(textField, VK_A);
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertThatTextFieldIsEmpty();
   }
 
@@ -411,8 +426,10 @@ public class ComponentDriverTest {
     disableTextField();
     try {
       driver.pressAndReleaseKey(textField, keyCode(VK_A).modifiers(SHIFT_MASK));
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertThatTextFieldIsEmpty();
   }
 
@@ -429,8 +446,10 @@ public class ComponentDriverTest {
     disableTextField();
     try {
       driver.pressKey(textField, VK_A);
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertThatTextFieldIsEmpty();
   }
 
@@ -439,8 +458,10 @@ public class ComponentDriverTest {
     disableTextField();
     try {
       driver.releaseKey(textField, VK_A);
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertThatTextFieldIsEmpty();
   }
 
@@ -457,8 +478,10 @@ public class ComponentDriverTest {
     disableButton();
     try {
       driver.focus(button);
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertThat(hasFocus(button)).isFalse();
   }
 

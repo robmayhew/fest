@@ -20,7 +20,6 @@ import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.util.Pair;
 import org.fest.swing.util.Triple;
 
@@ -28,7 +27,6 @@ import static org.fest.swing.driver.ComponentMoveTask.moveComponent;
 import static org.fest.swing.driver.ComponentResizableQuery.isResizable;
 import static org.fest.swing.driver.ComponentStateValidator.*;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.task.ComponentSetSizeTask.setComponentSize;
 import static org.fest.util.Strings.concat;
@@ -54,9 +52,9 @@ public abstract class ContainerDriver extends ComponentDriver {
    * Resizes the <code>{@link Container}</code> horizontally.
    * @param c the target <code>Container</code>.
    * @param width the width that the <code>Container</code> should have after being resized.
-   * @throws ActionFailedException if the <code>Container</code> is not enabled.
-   * @throws ActionFailedException if the <code>Container</code> is not resizable by the user.
-   * @throws ActionFailedException if the <code>Container</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>Container</code> is not enabled.
+   * @throws IllegalStateException if the <code>Container</code> is not resizable by the user.
+   * @throws IllegalStateException if the <code>Container</code> is not showing on the screen.
    */
   @RunsInEDT
   protected final void resizeWidth(Container c, int width) {
@@ -69,9 +67,9 @@ public abstract class ContainerDriver extends ComponentDriver {
    * Resizes the <code>{@link Container}</code> vertically.
    * @param c the target <code>Container</code>.
    * @param height the height that the <code>Container</code> should have after being resized.
-   * @throws ActionFailedException if the <code>Container</code> is not enabled.
-   * @throws ActionFailedException if the <code>Container</code> is not resizable by the user.
-   * @throws ActionFailedException if the <code>Container</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>Container</code> is not enabled.
+   * @throws IllegalStateException if the <code>Container</code> is not resizable by the user.
+   * @throws IllegalStateException if the <code>Container</code> is not showing on the screen.
    */
   @RunsInEDT
   protected final void resizeHeight(Container c, int height) {
@@ -85,9 +83,9 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param c the target <code>Container</code>.
    * @param width the width to resize the <code>Container</code> to.
    * @param height the height to resize the <code>Container</code> to.
-   * @throws ActionFailedException if the <code>Container</code> is not enabled.
-   * @throws ActionFailedException if the <code>Container</code> is not resizable by the user.
-   * @throws ActionFailedException if the <code>Container</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>Container</code> is not enabled.
+   * @throws IllegalStateException if the <code>Container</code> is not resizable by the user.
+   * @throws IllegalStateException if the <code>Container</code> is not showing on the screen.
    */
   @RunsInEDT
   protected final void resize(Container c, int width, int height) {
@@ -110,7 +108,7 @@ public abstract class ContainerDriver extends ComponentDriver {
   private static void validateCanResize(Container c) {
     validateIsEnabled(c);
     if (!isResizable(c))
-      throw actionFailure(concat("Expecting component ", format(c), " to be resizable by the user"));
+      throw new IllegalStateException(concat("Expecting component ", format(c), " to be resizable by the user"));
     validateIsShowing(c);
   }
 
@@ -149,9 +147,9 @@ public abstract class ContainerDriver extends ComponentDriver {
    * @param c the target <code>Container</code>.
    * @param x the horizontal coordinate.
    * @param y the vertical coordinate.
-   * @throws ActionFailedException if the <code>Container</code> is not enabled.
-   * @throws ActionFailedException if the <code>Container</code> is not movable by the user.
-   * @throws ActionFailedException if the <code>Container</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>Container</code> is not enabled.
+   * @throws IllegalStateException if the <code>Container</code> is not movable by the user.
+   * @throws IllegalStateException if the <code>Container</code> is not showing on the screen.
    */
   @RunsInEDT
   public void move(Container c, int x, int y) {
@@ -182,7 +180,7 @@ public abstract class ContainerDriver extends ComponentDriver {
   private static void validateCanMove(Container c) {
     validateIsEnabled(c);
     if (!isUserMovable(c))
-      throw actionFailure(concat("Expecting component ", format(c), " to be movable by the user"));
+      throw new IllegalStateException(concat("Expecting component ", format(c), " to be movable by the user"));
     validateIsShowing(c);
   }
 

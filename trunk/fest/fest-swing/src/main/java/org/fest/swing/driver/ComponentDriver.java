@@ -27,6 +27,7 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.*;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiLazyLoadingDescription;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.format.ComponentFormatter;
@@ -39,7 +40,8 @@ import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.driver.ComponentEnabledCondition.untilIsEnabled;
 import static org.fest.swing.driver.ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction;
 import static org.fest.swing.driver.ComponentResizableQuery.isResizable;
-import static org.fest.swing.driver.ComponentStateValidator.inEdtValidateIsEnabled;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
@@ -80,10 +82,11 @@ public class ComponentDriver {
   /**
    * Simulates a user clicking once the given <code>{@link Component}</code> using the left mouse button.
    * @param c the <code>Component</code> to click on.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    */
   @RunsInEDT
   public void click(Component c) {
+    inEdtValidateIsEnabled(c);
     robot.click(c);
   }
 
@@ -92,7 +95,7 @@ public class ComponentDriver {
    * @param c the <code>Component</code> to click on.
    * @param button the mouse button to use.
    * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    */
   @RunsInEDT
   public void click(Component c, MouseButton button) {
@@ -104,7 +107,7 @@ public class ComponentDriver {
    * @param c the <code>Component</code> to click on.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    */
   @RunsInEDT
   public void click(Component c, MouseClickInfo mouseClickInfo) {
@@ -115,7 +118,7 @@ public class ComponentDriver {
   /**
    * Simulates a user double-clicking the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    */
   @RunsInEDT
   public void doubleClick(Component c) {
@@ -125,7 +128,7 @@ public class ComponentDriver {
   /**
    * Simulates a user right-clicking the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    */
   @RunsInEDT
   public void rightClick(Component c) {
@@ -138,11 +141,12 @@ public class ComponentDriver {
    * @param button the mouse button to click.
    * @param times the number of times to click the given mouse button.
    * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    */
   @RunsInEDT
   public void click(Component c, MouseButton button, int times) {
     if (button == null) throw new NullPointerException("The given MouseButton should not be null");
+    validateIsEnabled(c);
     robot.click(c, button, times);
   }
 
@@ -150,7 +154,7 @@ public class ComponentDriver {
    * Simulates a user clicking at the given position on the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
    * @param where the position where to click.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    */
   @RunsInEDT
   public void click(Component c, Point where) {
@@ -158,6 +162,15 @@ public class ComponentDriver {
     robot.click(c, where);
   }
 
+  @RunsInEDT
+  private static void inEdtValidateIsEnabled(final Component c) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        validateIsEnabled(c);
+      }
+    });
+  }
+  
   protected Settings settings() {
     return robot.settings();
   }

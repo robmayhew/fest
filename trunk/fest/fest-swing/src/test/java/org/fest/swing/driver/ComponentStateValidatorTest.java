@@ -21,15 +21,12 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiTask;
-import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.testing.TestWindow;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.testing.CommonAssertions.*;
 
 /**
  * Tests for <code>{@link ComponentStateValidator}</code>.
@@ -59,36 +56,18 @@ public class ComponentStateValidatorTest {
     });
   }
 
-  public void shouldNotThrowErrorInEDTIfComponentIsEnabled() {
-    ComponentStateValidator.inEdtValidateIsEnabled(window);
-  }
-
   public void shouldThrowErrorInCurrentThreadIfComponentIsDisabled() {
-    try {
-      execute(new GuiTask() {
-        protected void executeInEDT() {
-          window.setEnabled(false);
-          ComponentStateValidator.validateIsEnabled(window);
-        }
-      });
-      fail("Expecting exception");
-    } catch (UnexpectedException unexpected) {
-      Throwable cause = unexpected.getCause();
-      assertThat(cause).isInstanceOf(ActionFailedException.class)
-                       .message().contains("Expecting component")
-                                 .contains("to be enabled");
-    }
-  }
-
-  public void shouldThrowErrorInEDTIfComponentIsDisabled() {
     disable(window);
     robot.waitForIdle();
     try {
-      ComponentStateValidator.inEdtValidateIsEnabled(window);
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {
-      assertThat(e).message().contains("Expecting component")
-                             .contains("to be enabled");
+      execute(new GuiTask() {
+        protected void executeInEDT() {
+          ComponentStateValidator.validateIsEnabled(window);
+        }
+      });
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
     }
   }
 }

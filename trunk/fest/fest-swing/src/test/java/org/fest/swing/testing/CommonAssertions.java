@@ -15,8 +15,6 @@
  */
 package org.fest.swing.testing;
 
-import org.fest.swing.exception.ActionFailedException;
-
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 
@@ -27,15 +25,15 @@ import static org.fest.assertions.Fail.fail;
  */
 public final class CommonAssertions {
 
-  public static void assertActionFailureDueToDisabledComponent(ActionFailedException e) {
+  public static void assertActionFailureDueToDisabledComponent(IllegalStateException e) {
     assertThat(e).message().contains("Expecting component").contains("to be enabled");
   }
   
-  public static void assertActionFailureDueToNotResizableComponent(ActionFailedException e) {
+  public static void assertActionFailureDueToNotResizableComponent(IllegalStateException e) {
     assertThat(e).message().contains("Expecting component").contains("to be resizable by the user");
   }
   
-  public static void assertActionFailureDueToNotShowingComponent(ActionFailedException e) {
+  public static void assertActionFailureDueToNotShowingComponent(IllegalStateException e) {
     assertThat(e).message().contains("Expecting component").contains("to be showing on the screen");
   }
   

@@ -27,7 +27,6 @@ import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiTask;
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.FluentDimension;
 import org.fest.swing.testing.FluentPoint;
 import org.fest.swing.testing.TestWindow;
@@ -114,7 +113,7 @@ public class FrameDriverTest {
     try {
       driver.resize(window, 10, 10);
       failWhenExpectingException();
-    } catch (ActionFailedException e) {
+    } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
     }
   }
@@ -125,7 +124,7 @@ public class FrameDriverTest {
     try {
       driver.resize(window, 10, 10);
       failWhenExpectingException();
-    } catch (ActionFailedException e) {
+    } catch (IllegalStateException e) {
       assertActionFailureDueToNotShowingComponent(e);
     }
   }
@@ -136,7 +135,7 @@ public class FrameDriverTest {
     try {
       driver.resize(window, 10, 10);
       failWhenExpectingException();
-    } catch (ActionFailedException e) {
+    } catch (IllegalStateException e) {
       assertActionFailureDueToNotResizableComponent(e);
     }
   }
@@ -155,7 +154,7 @@ public class FrameDriverTest {
     try {
       driver.resizeWidthTo(window, 10);
       failWhenExpectingException();
-    } catch (ActionFailedException e) {
+    } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
     }
   }
@@ -166,7 +165,7 @@ public class FrameDriverTest {
     try {
       driver.resizeWidthTo(window, 10);
       failWhenExpectingException();
-    } catch (ActionFailedException e) {
+    } catch (IllegalStateException e) {
       assertActionFailureDueToNotShowingComponent(e);
     }
   }
@@ -177,7 +176,7 @@ public class FrameDriverTest {
     try {
       driver.resizeWidthTo(window, 10);
       failWhenExpectingException();
-    } catch (ActionFailedException e) {
+    } catch (IllegalStateException e) {
       assertActionFailureDueToNotResizableComponent(e);
     }
   }
@@ -200,7 +199,7 @@ public class FrameDriverTest {
     try {
       driver.resizeHeightTo(window, 10);
       failWhenExpectingException();
-    } catch (ActionFailedException e) {
+    } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
     }
   }
@@ -211,7 +210,7 @@ public class FrameDriverTest {
     try {
       driver.resizeHeightTo(window, 10);
       failWhenExpectingException();
-    } catch (ActionFailedException e) {
+    } catch (IllegalStateException e) {
       assertActionFailureDueToNotShowingComponent(e);
     }
   }
@@ -222,7 +221,7 @@ public class FrameDriverTest {
     try {
       driver.resizeHeightTo(window, 10);
       failWhenExpectingException();
-    } catch (ActionFailedException e) {
+    } catch (IllegalStateException e) {
       assertActionFailureDueToNotResizableComponent(e);
     }
   }
@@ -253,7 +252,7 @@ public class FrameDriverTest {
     try {
       driver.moveTo(window, new Point(6, 8));
       failWhenExpectingException();
-    } catch (ActionFailedException e) {
+    } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
     }
   }
@@ -264,7 +263,7 @@ public class FrameDriverTest {
     try {
       driver.moveTo(window, new Point(6, 8));
       failWhenExpectingException();
-    } catch (ActionFailedException e) {
+    } catch (IllegalStateException e) {
       assertActionFailureDueToNotShowingComponent(e);
     }
   }

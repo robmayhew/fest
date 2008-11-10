@@ -27,6 +27,7 @@ import org.fest.swing.exception.ActionFailedException;
 import static java.awt.event.KeyEvent.VK_UNDEFINED;
 
 import static org.fest.swing.driver.Actions.findActionKey;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
 import static org.fest.swing.driver.KeyStrokes.findKeyStrokesForAction;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.*;
@@ -97,7 +98,7 @@ public class JComponentDriver extends ContainerDriver {
    * <code>{@link javax.swing.ActionMap}</code>.
    * @param c the given <code>JComponent</code>.
    * @param name the name of the <code>Action</code> to invoke.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    * @throws ActionFailedException if an <code>Action</code> cannot be found under the given name.
    * @throws ActionFailedException if a <code>KeyStroke</code> cannot be found for the <code>Action</code> under the
    * given name.
@@ -107,6 +108,7 @@ public class JComponentDriver extends ContainerDriver {
   protected final void invokeAction(JComponent c, String name) {
     // 'focusAndWaitForFocusGain' is already called in the EDT, but since the rest of GUI access is not done in the EDT,
     // we rather be safe and mark this method with "@RunsInCurrentThread"
+    validateIsEnabled(c);
     robot.focusAndWaitForFocusGain(c);
     for (KeyStroke keyStroke : keyStrokesForAction(c, name)) {
       try {

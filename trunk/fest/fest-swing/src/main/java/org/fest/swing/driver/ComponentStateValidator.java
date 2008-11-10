@@ -18,12 +18,7 @@ import java.awt.Component;
 import java.awt.Container;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
-import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.edt.GuiTask;
-import org.fest.swing.exception.ActionFailedException;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.util.Strings.concat;
 
@@ -41,35 +36,17 @@ public final class ComponentStateValidator {
    * executed in the event dispatch thread. Callers are responsible for calling this method in the event dispatch
    * thread.
    * @param c the target component.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
-   */
-  @RunsInEDT
-  public static void inEdtValidateIsEnabled(final Component c) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        validateIsEnabled(c);
-      }
-    });
-  }
-
-  /**
-   * Asserts that the <code>{@link Component}</code> is enabled. Unlike
-   * <code>{@link ComponentDriver#requireEnabled(Component)}</code>, this method is for internal use only, to be used to
-   * verify that a component is enabled before performing any action on it. <b>Note:</b> this method is <b>not</b>
-   * executed in the event dispatch thread. Callers are responsible for calling this method in the event dispatch
-   * thread.
-   * @param c the target component.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    */
   @RunsInCurrentThread
   public static void validateIsEnabled(Component c) {
-    if (!c.isEnabled()) throw actionFailure(concat("Expecting component ", format(c), " to be enabled"));
+    if (!c.isEnabled()) throw new IllegalStateException(concat("Expecting component ", format(c), " to be enabled"));
   }
 
   /**
    * Asserts that the <code>{@link Component}</code> is showing on the screen.
    * @param c the target component.
-   * @throws ActionFailedException if the <code>Component</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    */
   @RunsInCurrentThread
   public static void validateIsShowing(Container c) {
@@ -77,14 +54,14 @@ public final class ComponentStateValidator {
   }
 
   /**
-   * Throws a <code>{@link ActionFailedException}</code> when a <code>{@link Component}</code> is not showing on the
+   * Throws a <code>{@link IllegalStateException}</code> when a <code>{@link Component}</code> is not showing on the
    * screen.
    * @param c the target component.
    * @return the thrown exception.
    */
   @RunsInCurrentThread
-  public static ActionFailedException componentNotShowingOnScreenFailure(Container c) {
-    return actionFailure(concat("Expecting component ", format(c), " to be showing on the screen"));
+  public static IllegalStateException componentNotShowingOnScreenFailure(Container c) {
+    return new IllegalStateException(concat("Expecting component ", format(c), " to be showing on the screen"));
   }
 
   private ComponentStateValidator() {}

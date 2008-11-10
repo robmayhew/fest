@@ -21,7 +21,6 @@ import org.fest.assertions.Description;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.query.AbstractButtonTextQuery;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -72,7 +71,7 @@ public class AbstractButtonDriver extends JComponentDriver {
   /**
    * Selects the given button only it is not already selected.
    * @param button the target button.
-   * @throws ActionFailedException if the button is disabled.
+   * @throws IllegalStateException if the button is disabled.
    */
   @RunsInEDT
   public void select(AbstractButton button) {
@@ -83,7 +82,7 @@ public class AbstractButtonDriver extends JComponentDriver {
   /**
    * Unselects the given button only if it is selected.
    * @param button the target button.
-   * @throws ActionFailedException if the button is disabled.
+   * @throws IllegalStateException if the button is disabled.
    */
   @RunsInEDT
   public void unselect(AbstractButton button) {

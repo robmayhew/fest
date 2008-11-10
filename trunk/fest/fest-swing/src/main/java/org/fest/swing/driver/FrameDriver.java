@@ -51,8 +51,8 @@ public class FrameDriver extends WindowDriver {
   /**
    * Iconifies the given <code>{@link Frame}</code>.
    * @param frame the given <code>Frame</code>.
-   * @throws ActionFailedException if the <code>Frame</code> is not enabled.
-   * @throws ActionFailedException if the <code>Frame</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>Frame</code> is not enabled.
+   * @throws IllegalStateException if the <code>Frame</code> is not showing on the screen.
    */
   @RunsInEDT
   public void iconify(Frame frame) {
@@ -93,8 +93,8 @@ public class FrameDriver extends WindowDriver {
   /**
    * Makes the <code>{@link Frame}</code> full size.
    * @param frame the target <code>Frame</code>.
-   * @throws ActionFailedException if the <code>Frame</code> is not enabled.
-   * @throws ActionFailedException if the <code>Frame</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>Frame</code> is not enabled.
+   * @throws IllegalStateException if the <code>Frame</code> is not showing on the screen.
    * @throws ActionFailedException if the operating system does not support maximizing frames.
    */
   @RunsInEDT
