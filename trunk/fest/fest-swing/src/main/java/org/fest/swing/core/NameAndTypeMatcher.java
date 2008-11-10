@@ -17,12 +17,10 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 
-import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
@@ -59,12 +57,9 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
    * @throws NullPointerException if the given type is <code>null</code>.
    */
   public NameAndTypeMatcher(String name, Class<? extends Component> type, boolean requireShowing) {
-    if (name == null) 
-      throw new NullPointerException("The name of the component to find should not be null");
-    if (isEmpty(name))
-      throw new IllegalArgumentException("The name of the component to find should not be empty");
-    if (type == null)
-      throw new NullPointerException("The type of component to find should not be null");
+    if (name == null) throw new NullPointerException("The name of the component to find should not be null");
+    if (isEmpty(name)) throw new IllegalArgumentException("The name of the component to find should not be empty");
+    if (type == null) throw new NullPointerException("The type of component to find should not be null");
     this.name = name;
     this.type = type;
     this.requireShowing = requireShowing;
@@ -76,19 +71,9 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
    * @return <code>true</code> if the name and visibility of the given <code>Component</code> matches the values
    *         specified in this matcher, <code>false</code> otherwise.
    */
-  @RunsInEDT
+  @RunsInCurrentThread
   public boolean matches(Component c) {
-    return matches(c, name, type, requireShowing);
-  }
-
-  @RunsInEDT
-  private static boolean matches(final Component c, final String name, final Class<? extends Component> type,
-      final boolean requireShowing) {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return areEqual(name, c.getName()) && type.isAssignableFrom(c.getClass()) && (!requireShowing || c.isShowing());
-      }
-    });
+    return areEqual(name, c.getName()) && type.isAssignableFrom(c.getClass()) && (!requireShowing || c.isShowing());
   }
   
   @Override public String toString() {

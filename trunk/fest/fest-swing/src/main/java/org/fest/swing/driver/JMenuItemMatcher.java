@@ -19,11 +19,10 @@ import java.awt.Component;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.core.ComponentMatcher;
 
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
-import static org.fest.swing.query.ComponentParentQuery.parentOf;
-import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
@@ -48,13 +47,15 @@ public class JMenuItemMatcher implements ComponentMatcher {
     this.label = join(path).with(SEPARATOR);
   }
 
+  @RunsInCurrentThread
   public boolean matches(Component c) {
     if (!(c instanceof JMenuItem)) return false;
     JMenuItem menuItem = (JMenuItem) c;
-    String text = textOf(menuItem);
+    String text = menuItem.getText();
     return areEqual(label, text) || areEqual(label, pathOf(menuItem));
   }
 
+  @RunsInCurrentThread
   private String pathOf(JMenuItem menuItem) {
     Component parent = parentOrInvokerOf(menuItem);
     if (parent instanceof JMenuItem) 
@@ -62,10 +63,11 @@ public class JMenuItemMatcher implements ComponentMatcher {
     return textOf(menuItem);
   }
 
+  @RunsInCurrentThread
   private Component parentOrInvokerOf(JMenuItem menuItem) {
-    Component parent = parentOf(menuItem);
+    Component parent = menuItem.getParent();
     if (parent instanceof JPopupMenu) 
-      parent = invokerOf((JPopupMenu)parent);
+      parent = ((JPopupMenu)parent).getInvoker();
     return parent;
   }
 

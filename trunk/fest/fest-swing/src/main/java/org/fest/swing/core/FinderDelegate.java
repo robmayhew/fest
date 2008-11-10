@@ -20,7 +20,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.hierarchy.ComponentHierarchy;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Finds all the components in a <code>{@link ComponentHierarchy}</code> that match the search criteria specified in a
@@ -30,16 +34,44 @@ import org.fest.swing.hierarchy.ComponentHierarchy;
  */
 final class FinderDelegate {
 
+  @RunsInEDT
   Collection<Component> find(ComponentHierarchy h, ComponentMatcher m)  {
     Set<Component> found = new HashSet<Component>();
-    for (Object o : h.roots()) find(h, m, (Component)o, found);
+    for (Object o : rootsOf(h)) find(h, m, (Component)o, found);
     return found;
   }
-
-  private static void find(ComponentHierarchy h, ComponentMatcher m, Component root, Set<Component> found) {
-    for (Object o : h.childrenOf(root)) 
-      find(h, m, (Component)o, found);
-    if (m.matches(root)) found.add(root);
+  
+  @RunsInEDT
+  private static Collection<? extends Component> rootsOf(final ComponentHierarchy h ) {
+    return execute(new GuiQuery<Collection<? extends Component>>() {
+      protected Collection<? extends Component> executeInEDT() {
+        return h.roots();
+      }
+    });
   }
 
+  @RunsInEDT
+  private void find(ComponentHierarchy h, ComponentMatcher m, Component root, Set<Component> found) {
+    for (Component c : childrenOfComponent(root, h)) 
+      find(h, m, c, found);
+    if (isMatching(root, m)) found.add(root);
+  }
+  
+  @RunsInEDT
+  private static Collection<Component> childrenOfComponent(final Component c, final ComponentHierarchy h) {
+    return execute(new GuiQuery<Collection<Component>>() {
+      protected Collection<Component> executeInEDT() {
+        return h.childrenOf(c);
+      }
+    });
+  }
+
+  @RunsInEDT
+  private static boolean isMatching(final Component c, final ComponentMatcher m) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return m.matches(c);
+      }
+    });
+  }
 }

@@ -17,11 +17,10 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
@@ -67,16 +66,9 @@ public final class NameMatcher implements ComponentMatcher {
    * @return <code>true</code> if the name and visibility of the given <code>Component</code> matches the values
    *         specified in this matcher, <code>false</code> otherwise.
    */
+  @RunsInCurrentThread
   public boolean matches(Component c) {
-    return matches(c, name, requireShowing);
-  }
-  
-  private static boolean matches(final Component c, final String name, final boolean requireShowing) {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return areEqual(name, c.getName()) && (!requireShowing || c.isShowing());
-      }
-    });
+    return areEqual(name, c.getName()) && (!requireShowing || c.isShowing());
   }
 
   /**

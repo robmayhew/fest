@@ -17,7 +17,7 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 
-import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 import static java.lang.String.valueOf;
 
@@ -60,7 +60,7 @@ public final class TypeMatcher extends AbstractComponentMatcher {
    * @return <code>true</code> if the type and visibility of the given <code>Component</code> matches the values
    *         specified in this matcher, <code>false</code> otherwise.
    */
-  @RunsInEDT
+  @RunsInCurrentThread
   public boolean matches(Component c) {
     return type.isAssignableFrom(c.getClass()) && isShowingMatches(c);
   }

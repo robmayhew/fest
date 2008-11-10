@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.util.Collection;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.exception.ComponentLookupException;
 
 /**
@@ -26,6 +27,7 @@ import org.fest.swing.exception.ComponentLookupException;
  * 
  * @author Alex Ruiz
  */
+@RunsInEDT
 public interface ComponentFinder {
 
   /**
@@ -182,7 +184,9 @@ public interface ComponentFinder {
   Component findByName(String name, boolean showing);
 
   /**
-   * Finds a <code>{@link Component}</code> using the given <code>{@link GenericTypeMatcher}</code>.
+   * Finds a <code>{@link Component}</code> using the given <code>{@link GenericTypeMatcher}</code>.  The given matcher
+   * will be evaluated in the event dispatch thread. Implementations of <code>GenericTypeMatcher</code> do not need to
+   * be concerned about the event dispatch thread.
    * @param <T> the type of component the given matcher can handle.
    * @param m the matcher to use to find the component of interest.
    * @return the found component.
@@ -191,7 +195,9 @@ public interface ComponentFinder {
   <T extends Component> T find(GenericTypeMatcher<T> m);
 
   /**
-   * Finds a <code>{@link Component}</code> using the given <code>{@link ComponentMatcher}</code>.
+   * Finds a <code>{@link Component}</code> using the given <code>{@link ComponentMatcher}</code>. The given matcher
+   * will be evaluated in the event dispatch thread. Implementations of <code>ComponentMatcher</code> do not need to
+   * be concerned about the event dispatch thread.
    * @param m the matcher to use to find the component of interest.
    * @return the found component.
    * @throws ComponentLookupException if a component matching the given criteria could not be found.
@@ -253,7 +259,8 @@ public interface ComponentFinder {
 
   /**
    * Finds a <code>{@link Component}</code> using the given <code>{@link GenericTypeMatcher}</code> in the hierarchy
-   * under the given root.
+   * under the given root. The given matcher will be evaluated in the event dispatch thread. Implementations of 
+   * <code>GenericTypeMatcher</code> do not need to be concerned about the event dispatch thread.
    * @param <T> the type of component the given matcher can handle.
    * @param root the root used as the starting point of the search.
    * @param m the matcher to use to find the component.
@@ -265,9 +272,8 @@ public interface ComponentFinder {
 
   /**
    * Finds a <code>{@link Component}</code> using the given <code>{@link ComponentMatcher}</code> in the hierarchy
-   * under the given root. This method is <b>not</b> executed in the event dispatch thread. If a 
-   * <code>{@link ComponentLookupException}</code> is thrown, this method will include as part of the exception message,
-   * the components involved in the lookup. This list of components <b>is</b> created in the event dispatch thread.
+   * under the given root.  The given matcher will be evaluated in the event dispatch thread. Implementations of 
+   * <code>ComponentMatcher</code> do not need to be concerned about the event dispatch thread.
    * @param root the root used as the starting point of the search.
    * @param m the matcher to use to find the component.
    * @return the found component.

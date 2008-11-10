@@ -19,6 +19,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 
 import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.annotation.ThreadSafeAction;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
@@ -75,7 +76,7 @@ public class FrameDriver extends WindowDriver {
    * Deiconifies the given <code>{@link Frame}</code>.
    * @param frame the given <code>Frame</code>.
    */
-  @RunsInEDT("It is actually thread-safe")
+  @ThreadSafeAction
   public void deiconify(Frame frame) {
     updateFrameExtendedState(frame, NORMAL);
   }
@@ -84,7 +85,7 @@ public class FrameDriver extends WindowDriver {
    * Normalizes the given <code>{@link Frame}</code>.
    * @param frame the given <code>Frame</code>.
    */
-  @RunsInEDT("It is actually thread-safe")
+  @ThreadSafeAction
   public void normalize(Frame frame) {
     updateFrameExtendedState(frame, NORMAL);
   }
@@ -106,7 +107,6 @@ public class FrameDriver extends WindowDriver {
   }
 
   private void simulateMaximize(Frame frame, Point p) {
-    if (p == null) return;
     try {
       robot.moveMouse(frame, p.x, p.y);
     } catch (RuntimeException ignored) {}
@@ -123,7 +123,7 @@ public class FrameDriver extends WindowDriver {
     });
   }
 
-  @RunsInEDT("It is actually thread-safe")
+  @ThreadSafeAction
   private void updateFrameExtendedState(Frame frame, int state) {
     frame.setExtendedState(state);
   }

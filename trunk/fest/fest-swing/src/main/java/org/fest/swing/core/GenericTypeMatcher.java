@@ -17,7 +17,7 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 
-import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
  * Understands a <code>{@link ComponentMatcher}</code> that matches a <code>{@link Component}</code> by type and some 
@@ -51,7 +51,7 @@ public abstract class GenericTypeMatcher<T extends Component> extends AbstractCo
    * @return <code>true</code> if the given <code>Component</code> is an instance of the generic type of this matcher 
    * and matches some search criteria. Otherwise, <code>false</code>. 
    */
-  @RunsInEDT
+  @RunsInCurrentThread
   public final boolean matches(Component c) {
     if (c == null) return false;
     try {
@@ -69,5 +69,6 @@ public abstract class GenericTypeMatcher<T extends Component> extends AbstractCo
    * @param component the <code>Component</code> to verify.
    * @return <code>true</code> if the given component matches the defined search criteria; otherwise, <code>false</code>.
    */
+  @RunsInCurrentThread
   protected abstract boolean isMatching(T component);
 }
