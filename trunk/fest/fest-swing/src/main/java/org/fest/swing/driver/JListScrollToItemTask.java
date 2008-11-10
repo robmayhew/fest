@@ -24,13 +24,13 @@ import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.util.Pair;
 
 import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
 import static org.fest.swing.driver.JListCellBoundsQuery.cellBounds;
 import static org.fest.swing.driver.JListItemIndexValidator.validateIndex;
 import static org.fest.swing.driver.JListMatchingItemQuery.matchingItemIndex;
-import static org.fest.swing.driver.JListScrollActionResult.ITEM_NOT_FOUND;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
@@ -41,6 +41,8 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JListScrollToItemTask {
 
+  static final Pair<Integer, Point> ITEM_NOT_FOUND = new Pair<Integer, Point>(-1, null);
+  
   @RunsInEDT
   static Point scrollToItem(final JList list, final int index) {
     return execute(new GuiQuery<Point>() {
@@ -53,25 +55,25 @@ final class JListScrollToItemTask {
   }
 
   @RunsInEDT
-  static JListScrollActionResult scrollToItem(final JList list, final String value, final JListCellReader cellReader) {
-    return execute(new GuiQuery<JListScrollActionResult>() {
-      protected JListScrollActionResult executeInEDT() {
+  static Pair<Integer, Point> scrollToItem(final JList list, final String value, final JListCellReader cellReader) {
+    return execute(new GuiQuery<Pair<Integer, Point>>() {
+      protected Pair<Integer, Point> executeInEDT() {
         validateIsEnabled(list);
         int index = matchingItemIndex(list, value, cellReader);
         if (index < 0) return ITEM_NOT_FOUND;
-        return new JListScrollActionResult(index, scrollToItemWithIndex(list, index));
+        return new Pair<Integer, Point>(index, scrollToItemWithIndex(list, index));
       }
     });
   }
   
   @RunsInEDT
-  static JListScrollActionResult scrollToNotSelectedItem(final JList list, final String value, final JListCellReader cellReader) {
-    return execute(new GuiQuery<JListScrollActionResult>() {
-      protected JListScrollActionResult executeInEDT() {
+  static Pair<Integer, Point> scrollToNotSelectedItem(final JList list, final String value, final JListCellReader cellReader) {
+    return execute(new GuiQuery<Pair<Integer, Point>>() {
+      protected Pair<Integer, Point> executeInEDT() {
         validateIsEnabled(list);
         int index = matchingItemIndex(list, value, cellReader);
         if (index < 0) return ITEM_NOT_FOUND;
-        return new JListScrollActionResult(index, scrollToNotSelectedItemWithIndex(list, index));
+        return new Pair<Integer, Point>(index, scrollToNotSelectedItemWithIndex(list, index));
       }
     });
   }

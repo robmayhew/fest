@@ -29,6 +29,7 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
+import org.fest.swing.util.Pair;
 import org.fest.swing.util.Range.From;
 import org.fest.swing.util.Range.To;
 import org.fest.util.Arrays;
@@ -44,7 +45,6 @@ import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.driver.JListContentQuery.contents;
 import static org.fest.swing.driver.JListItemValueQuery.itemValue;
 import static org.fest.swing.driver.JListMatchingItemQuery.*;
-import static org.fest.swing.driver.JListScrollActionResult.ITEM_NOT_FOUND;
 import static org.fest.swing.driver.JListScrollToItemTask.*;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.driver.JListSelectionValueQuery.*;
@@ -116,14 +116,10 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void selectItem(JList list, String value) {
-    JListScrollActionResult result = scrollToNotSelectedItem(list, value, cellReader);
+    Pair<Integer, Point> scrollInfo = scrollToNotSelectedItem(list, value, cellReader);
     robot.waitForIdle();
-    verify(result, value);
-    robot.click(list, result.cellCenter());
-  }
-
-  private void verify(JListScrollActionResult result, String value) {
-    if (ITEM_NOT_FOUND.equals(result)) throw indexNotFoundFor(value);
+    verify(scrollInfo, value);
+    robot.click(list, cellCenterIn(scrollInfo));
   }
 
   /**
@@ -136,10 +132,10 @@ public class JListDriver extends JComponentDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public void clickItem(JList list, String value, MouseButton button, int times) {
-    JListScrollActionResult result = scrollToItem(list, value, cellReader);
+    Pair<Integer, Point> scrollInfo = scrollToItem(list, value, cellReader);
     robot.waitForIdle();
-    verify(result, value);
-    robot.click(list, result.cellCenter(), button, times);
+    verify(scrollInfo, value);
+    robot.click(list, cellCenterIn(scrollInfo), button, times);
   }
 
   /**
@@ -309,10 +305,10 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void drag(JList list, String value) {
-    JListScrollActionResult result = scrollToItem(list, value, cellReader);
+    Pair<Integer, Point> scrollInfo = scrollToItem(list, value, cellReader);
     robot.waitForIdle();
-    verify(result, value);
-    super.drag(list, result.cellCenter());
+    verify(scrollInfo, value);
+    super.drag(list, cellCenterIn(scrollInfo));
   }
 
   /**
@@ -324,10 +320,10 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void drop(JList list, String value) {
-    JListScrollActionResult result = scrollToItem(list, value, cellReader);
+    Pair<Integer, Point> scrollInfo = scrollToItem(list, value, cellReader);
     robot.waitForIdle();
-    verify(result, value);
-    super.drop(list, result.cellCenter());
+    verify(scrollInfo, value);
+    super.drop(list, cellCenterIn(scrollInfo));
   }
 
   /**
@@ -380,10 +376,18 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public JPopupMenu showPopupMenu(JList list, String value) {
-    JListScrollActionResult result = scrollToItem(list, value, cellReader);
+    Pair<Integer, Point> scrollInfo = scrollToItem(list, value, cellReader);
     robot.waitForIdle();
-    verify(result, value);
-    return robot.showPopupMenu(list, result.cellCenter());
+    verify(scrollInfo, value);
+    return robot.showPopupMenu(list, cellCenterIn(scrollInfo));
+  }
+
+  private void verify(Pair<Integer, Point> scrollInfo, String value) {
+    if (ITEM_NOT_FOUND.equals(scrollInfo)) throw indexNotFoundFor(value);
+  }
+
+  private Point cellCenterIn(Pair<Integer, Point> scrollInfo) {
+    return scrollInfo.ii;
   }
 
   /**

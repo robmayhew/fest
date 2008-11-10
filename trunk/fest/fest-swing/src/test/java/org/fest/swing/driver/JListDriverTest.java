@@ -34,7 +34,6 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.MethodInvocations;
@@ -44,7 +43,6 @@ import org.fest.swing.testing.TestWindow;
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
@@ -52,6 +50,7 @@ import static org.fest.swing.driver.JListSetSelectedIndexTask.setSelectedIndex;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
+import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.Range.*;
 import static org.fest.util.Arrays.array;
@@ -106,7 +105,7 @@ public class JListDriverTest {
   public void shouldThrowErrorIfIndexForValueNotFound() {
     try {
       driver.indexOf(dragList, "four");
-      fail();
+      failWhenExpectingException();
     } catch (LocationUnavailableException expected) {
       assertThat(expected).message().isEqualTo("Unable to find an element matching the value 'four'");
     }
@@ -121,7 +120,7 @@ public class JListDriverTest {
   public void shouldThrowErrorIfIndexOutOfBoundsWhenLookingForText() {
     try {
       driver.value(dragList, 6);
-      fail();
+      failWhenExpectingException();
     } catch (IndexOutOfBoundsException expected) {
       assertThat(expected).message().isEqualTo("Item index (6) should be between [0] and [2] (inclusive)");
     }
@@ -184,8 +183,10 @@ public class JListDriverTest {
     clearAndDisableDragList();
     try {
       driver.selectItem(dragList, 2);
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertDragListHasNoSelection();
   }
 
@@ -211,8 +212,10 @@ public class JListDriverTest {
     clearAndDisableDragList();
     try {
       driver.selectItem(dragList, "two");
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertDragListHasNoSelection();
   }
 
@@ -242,8 +245,10 @@ public class JListDriverTest {
     clearAndDisableDragList();
     try {
       driver.selectItems(dragList, array("two", "three"));
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertDragListHasNoSelection();
   }
 
@@ -279,8 +284,10 @@ public class JListDriverTest {
     clearAndDisableDragList();
     try {
       driver.selectItems(dragList, new int[] { 1, 2 });
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertDragListHasNoSelection();
   }
 
@@ -297,8 +304,10 @@ public class JListDriverTest {
     clearAndDisableDragList();
     try {
       driver.selectItems(dragList, from(0), to(1));
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertDragListHasNoSelection();
   }
 
@@ -323,8 +332,10 @@ public class JListDriverTest {
     clearAndDisableDragList();
     try {
       driver.selectItems(dragList, 0, 1);
-      fail("Expecting exception");
-    } catch (ActionFailedException e) {}
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
     assertDragListHasNoSelection();
   }
 
@@ -351,7 +362,7 @@ public class JListDriverTest {
     robot.waitForIdle();
     try {
       driver.requireSelection(dragList, "one");
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("No selection");
     }
@@ -362,7 +373,7 @@ public class JListDriverTest {
     robot.waitForIdle();
     try {
       driver.requireSelection(dragList, "one");
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("expected:<'one'> but was:<'two'>");
     }
@@ -394,7 +405,7 @@ public class JListDriverTest {
     robot.waitForIdle();
     try {
       driver.requireSelectedItems(dragList, "one", "two");
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("No selection");
     }
@@ -405,7 +416,7 @@ public class JListDriverTest {
     robot.waitForIdle();
     try {
       driver.requireSelectedItems(dragList, "one", "two");
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selectedIndices#length'] expected:<2> but was:<1>");
     }
@@ -416,7 +427,7 @@ public class JListDriverTest {
     robot.waitForIdle();
     try {
       driver.requireSelectedItems(dragList, "one");
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("expected:<'one'> but was:<'three'>");
     }
@@ -433,7 +444,7 @@ public class JListDriverTest {
     robot.waitForIdle();
     try {
       driver.requireNoSelection(dragList);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selectedIndex'")
                              .contains("expected:<-1> but was:<0>");
