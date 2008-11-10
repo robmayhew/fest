@@ -28,15 +28,16 @@ import org.fest.swing.edt.GuiQuery;
 import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
 import static org.fest.swing.driver.JListCellBoundsQuery.cellBounds;
-import static org.fest.swing.driver.JListMatchingItemQuery.matchingItemIndex;
 import static org.fest.swing.driver.JListItemIndexValidator.validateIndex;
+import static org.fest.swing.driver.JListMatchingItemQuery.matchingItemIndex;
 import static org.fest.swing.driver.JListScrollActionResult.ITEM_NOT_FOUND;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands SOMETHING DUMMY.
- *
- * @author 
+ * Understands actions, executed in the event dispatch thread, that perform scrolling to an element in a
+ * <code>{@link JList}</code>.
+ * 
+ * @author Alex Ruiz
  */
 final class JListScrollToItemTask {
 
