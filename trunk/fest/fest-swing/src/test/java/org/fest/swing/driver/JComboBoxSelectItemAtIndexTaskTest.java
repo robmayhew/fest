@@ -31,7 +31,7 @@ import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.array;
 
 /**
- * Tests for <code>{@link JComboBoxSelectItemAtIndexTask}</code>.
+ * Tests for <code>{@link JComboBoxSetSelectedIndexTask}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
@@ -57,7 +57,7 @@ public class JComboBoxSelectItemAtIndexTaskTest {
 
   public void shouldSetSelectedIndex() {
     assertThat(selectedIndexOf(comboBox)).isNotEqualTo(index);
-    JComboBoxSelectItemAtIndexTask.selectItemAtIndex(comboBox, index);
+    JComboBoxSetSelectedIndexTask.setSelectedIndex(comboBox, index);
     robot.waitForIdle();
     assertThat(selectedIndexOf(comboBox)).isEqualTo(index);
   }

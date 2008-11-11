@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -29,6 +30,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JComboBoxSetPopupVisibleTask {
   
+  @RunsInEDT
   static void setPopupVisible(final JComboBox comboBox, final boolean visible) {
     execute(new GuiTask() {
       protected void executeInEDT() {

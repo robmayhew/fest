@@ -15,7 +15,9 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Point;
 
 import javax.accessibility.AccessibleAction;
 import javax.swing.JMenu;
@@ -25,7 +27,6 @@ import org.fest.assertions.Description;
 import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.*;
-import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiLazyLoadingDescription;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
@@ -39,7 +40,6 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.driver.ComponentEnabledCondition.untilIsEnabled;
 import static org.fest.swing.driver.ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction;
-import static org.fest.swing.driver.ComponentResizableQuery.isResizable;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
@@ -86,7 +86,7 @@ public class ComponentDriver {
    */
   @RunsInEDT
   public void click(Component c) {
-    inEdtValidateIsEnabled(c);
+    assertIsEnabled(c);
     robot.click(c);
   }
 
@@ -146,7 +146,7 @@ public class ComponentDriver {
   @RunsInEDT
   public void click(Component c, MouseButton button, int times) {
     if (button == null) throw new NullPointerException("The given MouseButton should not be null");
-    validateIsEnabled(c);
+    assertIsEnabled(c);
     robot.click(c, button, times);
   }
 
@@ -158,12 +158,12 @@ public class ComponentDriver {
    */
   @RunsInEDT
   public void click(Component c, Point where) {
-    inEdtValidateIsEnabled(c);
+    assertIsEnabled(c);
     robot.click(c, where);
   }
 
   @RunsInEDT
-  private static void inEdtValidateIsEnabled(final Component c) {
+  private static void assertIsEnabled(final Component c) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         validateIsEnabled(c);
@@ -252,13 +252,14 @@ public class ComponentDriver {
    * @param c the target component.
    * @param keyCodes one or more codes of the keys to press.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    * @throws IllegalArgumentException if the given code is not a valid key code.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
    * @see java.awt.event.KeyEvent
    */
   @RunsInEDT
   public void pressAndReleaseKeys(Component c, int... keyCodes) {
     if (keyCodes == null) throw new NullPointerException("The array of key codes should not be null");
+    assertIsEnabled(c);
     focusAndWaitForFocusGain(c);
     robot.pressAndReleaseKeys(keyCodes);
   }
@@ -270,7 +271,7 @@ public class ComponentDriver {
    * @param keyPressInfo specifies the key and modifiers to press.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    * @see java.awt.event.KeyEvent
    * @see java.awt.event.InputEvent
    */
@@ -287,7 +288,7 @@ public class ComponentDriver {
    * @param keyCode the code of the key to press.
    * @param modifiers the given modifiers.
    * @throws IllegalArgumentException if the given code is not a valid key code. *
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    * @see java.awt.event.KeyEvent
    * @see java.awt.event.InputEvent
    */
@@ -302,7 +303,7 @@ public class ComponentDriver {
    * @param c the target component.
    * @param keyCode the code of the key to press.
    * @throws IllegalArgumentException if the given code is not a valid key code.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    * @see java.awt.event.KeyEvent
    */
   @RunsInEDT
@@ -316,7 +317,7 @@ public class ComponentDriver {
    * @param c the target component.
    * @param keyCode the code of the key to release.
    * @throws IllegalArgumentException if the given code is not a valid key code.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    * @see java.awt.event.KeyEvent
    */
   @RunsInEDT
@@ -329,11 +330,11 @@ public class ComponentDriver {
    * Gives input focus to the given <code>{@link Component}</code> and waits until the <code>{@link Component}</code>
    * has focus.
    * @param c the component to give focus to.
-   * @throws ActionFailedException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
    */
   @RunsInEDT
   public void focusAndWaitForFocusGain(Component c) {
-    inEdtValidateIsEnabled(c);
+    assertIsEnabled(c);
     robot.focusAndWaitForFocusGain(c);
   }
 
@@ -344,7 +345,7 @@ public class ComponentDriver {
    */
   @RunsInEDT
   public void focus(Component c) {
-    inEdtValidateIsEnabled(c);
+    assertIsEnabled(c);
     robot.focus(c);
   }
 
@@ -381,28 +382,6 @@ public class ComponentDriver {
    */
   protected final void dragOver(Component c, Point where) {
     dragAndDrop.dragOver(c, where);
-  }
-
-  /**
-   * Indicates whether it is possible for the user to resize the given component. <b>Note:</b> This method is <b>not</b>
-   * executed in the event dispatch thread.
-   * @param c the target component.
-   * @return <code>true</code> if it is possible for the user to resize the given component, <code>false</code>
-   * otherwise.
-   */
-  @RunsInCurrentThread
-  protected final boolean isUserResizable(Component c) {
-    return isResizable(c);
-  }
-
-  /**
-   * Indicates whether it is possible for the user to move the given component.
-   * @param c the target component.
-   * @return <code>true</code> if it is possible for the user to move the given component, <code>false</code>
-   * otherwise.
-   */
-  protected static boolean isUserMovable(Component c) {
-    return c instanceof Dialog || c instanceof Frame;
   }
 
   /**

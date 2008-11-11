@@ -67,30 +67,31 @@ final class JListScrollToItemTask {
   }
   
   @RunsInEDT
-  static Pair<Integer, Point> scrollToNotSelectedItem(final JList list, final String value, final JListCellReader cellReader) {
+  static Pair<Integer, Point> scrollToItemIfNotSelectedYet(final JList list, final String value,
+      final JListCellReader cellReader) {
     return execute(new GuiQuery<Pair<Integer, Point>>() {
       protected Pair<Integer, Point> executeInEDT() {
         validateIsEnabled(list);
         int index = matchingItemIndex(list, value, cellReader);
         if (index < 0) return ITEM_NOT_FOUND;
-        return new Pair<Integer, Point>(index, scrollToNotSelectedItemWithIndex(list, index));
+        return new Pair<Integer, Point>(index, scrollToItemWithIndexIfNotSelectedYet(list, index));
       }
     });
   }
 
   @RunsInEDT
-  static Point scrollToNotSelectedItem(final JList list, final int index) {
+  static Point scrollToItemIfNotSelectedYet(final JList list, final int index) {
     return execute(new GuiQuery<Point>() {
       protected Point executeInEDT() {
         validateIsEnabled(list);
         validateIndex(list, index);
-        return scrollToNotSelectedItemWithIndex(list, index);
+        return scrollToItemWithIndexIfNotSelectedYet(list, index);
       }
     });
   }
   
   @RunsInCurrentThread
-  private static Point scrollToNotSelectedItemWithIndex(final JList list, final int index) {
+  private static Point scrollToItemWithIndexIfNotSelectedYet(final JList list, final int index) {
     if (list.getSelectedIndex() == index) return null;
     return scrollToItemWithIndex(list, index);
   }

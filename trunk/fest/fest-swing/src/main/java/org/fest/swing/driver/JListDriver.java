@@ -116,7 +116,7 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void selectItem(JList list, String value) {
-    Pair<Integer, Point> scrollInfo = scrollToNotSelectedItem(list, value, cellReader);
+    Pair<Integer, Point> scrollInfo = scrollToItemIfNotSelectedYet(list, value, cellReader);
     robot.waitForIdle();
     verify(scrollInfo, value);
     robot.click(list, cellCenterIn(scrollInfo));
@@ -152,13 +152,8 @@ public class JListDriver extends JComponentDriver {
     if (indices == null) throw new NullPointerException("The array of indices should not be null");
     if (isEmptyArray(indices)) throw new IllegalArgumentException("The array of indices should not be empty");
     new MultipleSelectionTemplate(robot) {
-      int elementCount() {
-        return indices.length;
-      }
-
-      void selectElement(int index) {
-        selectItem(list, indices[index]);
-      }
+      int elementCount() { return indices.length; }
+      void selectElement(int index) { selectItem(list, indices[index]); }
     }.multiSelect();
   }
 
@@ -173,6 +168,7 @@ public class JListDriver extends JComponentDriver {
    * @throws IndexOutOfBoundsException if the any index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    */
+  @RunsInEDT
   public void selectItems(JList list, From from, To to) {
     selectItems(list, from.value, to.value);
   }
@@ -186,10 +182,11 @@ public class JListDriver extends JComponentDriver {
    * @throws IndexOutOfBoundsException if the any index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    */
+  @RunsInEDT
   public void selectItems(JList list, int start, int end) {
     selectItem(list, start);
     robot.pressKey(VK_SHIFT);
-    clickItem(list, end);
+    clickItem(list, end, LEFT_BUTTON, 1);
     robot.releaseKey(VK_SHIFT);
   }
 
@@ -201,15 +198,12 @@ public class JListDriver extends JComponentDriver {
    * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    */
+  @RunsInEDT
   public void selectItem(JList list, int index) {
-    Point cellCenter = scrollToNotSelectedItem(list, index);
+    Point cellCenter = scrollToItemIfNotSelectedYet(list, index);
     robot.waitForIdle();
     if (cellCenter == null) return;
     robot.click(list, cellCenter);
-  }
-
-  private void clickItem(JList list, int index) {
-    clickItem(list, index, LEFT_BUTTON, 1);
   }
 
   /**

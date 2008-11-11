@@ -74,8 +74,14 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @throws IllegalStateException if the button is disabled.
    */
   @RunsInEDT
-  public void select(AbstractButton button) {
-    if (!(!isReadyForSelection(button))) return;
+  public void select(final AbstractButton button) {
+    boolean isSelected = execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        validateIsEnabled(button);
+        return button.isSelected();
+      }
+    });
+    if (isSelected) return;
     click(button);
   }
 
@@ -85,19 +91,15 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @throws IllegalStateException if the button is disabled.
    */
   @RunsInEDT
-  public void unselect(AbstractButton button) {
-    if (!isReadyForSelection(button)) return;
-    click(button);
-  }
-
-  @RunsInEDT
-  private static boolean isReadyForSelection(final AbstractButton button) {
-    return execute(new GuiQuery<Boolean>() {
+  public void unselect(final AbstractButton button) {
+    boolean isNotSelected = execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         validateIsEnabled(button);
-        return button.isSelected();
+        return !button.isSelected();
       }
     });
+    if (isNotSelected) return;
+    click(button);
   }
 
   /**
@@ -107,7 +109,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void requireSelected(AbstractButton button) {
-    assertButtonIsSelected(button, true);
+    assertThatButtonIsSelected(button, true);
   }
 
   /**
@@ -117,11 +119,11 @@ public class AbstractButtonDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void requireNotSelected(AbstractButton button) {
-    assertButtonIsSelected(button, false);
+    assertThatButtonIsSelected(button, false);
   }
 
   @RunsInEDT
-  private void assertButtonIsSelected(AbstractButton button, boolean selected) {
+  private void assertThatButtonIsSelected(AbstractButton button, boolean selected) {
     assertThat(isSelected(button)).as(selectedProperty(button)).isEqualTo(selected);
   }
 

@@ -23,6 +23,7 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.util.Pair;
 import org.fest.swing.util.Triple;
 
+import static org.fest.swing.driver.ComponentMovableQuery.isUserMovable;
 import static org.fest.swing.driver.ComponentMoveTask.moveComponent;
 import static org.fest.swing.driver.ComponentResizableQuery.isResizable;
 import static org.fest.swing.driver.ComponentStateValidator.*;

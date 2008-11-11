@@ -431,24 +431,6 @@ public class JComboBoxDriverTest {
     }
   }
 
-  public void shouldFailIfItemIndexIsNegative() {
-    try {
-      driver.validateIndex(comboBox, -1);
-      fail();
-    } catch (IndexOutOfBoundsException e) {
-      assertThat(e).message().contains("Item index (-1) should be between [0] and [2]");
-    }
-  }
-
-  public void shouldFailIfItemIndexIsGreaterThanLastItemIndex() {
-    try {
-      driver.validateIndex(comboBox, 6);
-      fail();
-    } catch (IndexOutOfBoundsException e) {
-      assertThat(e).message().contains("Item index (6) should be between [0] and [2]");
-    }
-  }
-
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldShowDropDownListWhenComboBoxIsNotEditable(EventMode eventMode) {
     robot.settings().eventMode(eventMode);

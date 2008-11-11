@@ -30,11 +30,9 @@ import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.StopWatch;
-import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.timing.Condition;
 
@@ -483,56 +481,6 @@ public class ComponentDriverTest {
       assertActionFailureDueToDisabledComponent(e);
     }
     assertThat(hasFocus(button)).isFalse();
-  }
-
-  public void shouldReturnIsUserResizableIfFrameIsResizable() {
-    assertThat(isUserResizable(window, driver)).isTrue();
-  }
-
-  public void shouldReturnIsNotUserResizableIfFrameIsNotResizable() {
-    makeNotResizable(window);
-    robot.waitForIdle();
-    assertThat(isUserResizable(window, driver)).isFalse();
-  }
-
-  private static void makeNotResizable(final TestWindow window) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        window.setResizable(false);
-      }
-    });
-  }
-
-  public void shouldReturnIsUserResizableIfDialogIsResizable() {
-    TestDialog dialog = TestDialog.createNewDialog(window);
-    assertThat(isUserResizable(dialog, driver)).isTrue();
-  }
-
-  public void shouldReturnIsNotUserResizableIfDialogIsNotResizable() {
-    TestDialog dialog = TestDialog.createNewDialog(window);
-    makeNotResizable(dialog);
-    robot.waitForIdle();
-    assertThat(isUserResizable(dialog, driver)).isFalse();
-  }
-
-  private static void makeNotResizable(final TestDialog dialog) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        dialog.setResizable(false);
-      }
-    });
-  }
-
-  public void shouldReturnIsNotUserResizableIfComponentIsNotFrameOrDialog() {
-    assertThat(isUserResizable(button, driver)).isFalse();
-  }
-
-  private static boolean isUserResizable(final Component c, final ComponentDriver driver) {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return driver.isUserResizable(c);
-      }
-    });
   }
 
   private void disableButton() {

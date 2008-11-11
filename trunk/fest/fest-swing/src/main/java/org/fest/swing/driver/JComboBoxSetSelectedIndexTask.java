@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -27,9 +28,10 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  *
  * @author Alex Ruiz
  */
-final class JComboBoxSelectItemAtIndexTask {
+final class JComboBoxSetSelectedIndexTask {
 
-  static void selectItemAtIndex(final JComboBox comboBox, final int index) {
+  @RunsInEDT
+  static void setSelectedIndex(final JComboBox comboBox, final int index) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         comboBox.setSelectedIndex(index);
@@ -37,5 +39,5 @@ final class JComboBoxSelectItemAtIndexTask {
     });
   }
 
-  private JComboBoxSelectItemAtIndexTask() {}
+  private JComboBoxSetSelectedIndexTask() {}
 }
