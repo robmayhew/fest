@@ -23,7 +23,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 
-import static org.fest.swing.driver.ComponentStateValidator.*;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.WindowLikeContainerLocations.closeLocationOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
@@ -122,17 +122,6 @@ public class WindowDriver extends ContainerDriver {
         return closeLocationOf(w);
       }
     });
-  }
-
-  /**
-   * Validates that the given <code>{@link Window}</code> is enabled and showing on the screen.
-   * @param w the target <code>Window</code>.
-   * @throws ActionFailedException if the <code>Window</code> is not enabled.
-   * @throws ActionFailedException if the <code>Window</code> is not showing on the screen.
-   */
-  protected static void validateIsEnabledAndShowing(Window w) {
-    validateIsEnabled(w);
-    validateIsShowing(w);
   }
 
   /**

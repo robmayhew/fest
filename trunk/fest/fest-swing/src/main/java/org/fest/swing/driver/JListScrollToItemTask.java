@@ -27,7 +27,7 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.util.Pair;
 
 import static org.fest.swing.awt.AWT.centerOf;
-import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.JListCellBoundsQuery.cellBounds;
 import static org.fest.swing.driver.JListItemIndexValidator.validateIndex;
 import static org.fest.swing.driver.JListMatchingItemQuery.matchingItemIndex;
@@ -47,7 +47,7 @@ final class JListScrollToItemTask {
   static Point scrollToItem(final JList list, final int index) {
     return execute(new GuiQuery<Point>() {
       protected Point executeInEDT() {
-        validateIsEnabled(list);
+        validateIsEnabledAndShowing(list);
         validateIndex(list, index);
         return scrollToItemWithIndex(list, index);
       }
@@ -58,7 +58,7 @@ final class JListScrollToItemTask {
   static Pair<Integer, Point> scrollToItem(final JList list, final String value, final JListCellReader cellReader) {
     return execute(new GuiQuery<Pair<Integer, Point>>() {
       protected Pair<Integer, Point> executeInEDT() {
-        validateIsEnabled(list);
+        validateIsEnabledAndShowing(list);
         int index = matchingItemIndex(list, value, cellReader);
         if (index < 0) return ITEM_NOT_FOUND;
         return new Pair<Integer, Point>(index, scrollToItemWithIndex(list, index));
@@ -71,7 +71,7 @@ final class JListScrollToItemTask {
       final JListCellReader cellReader) {
     return execute(new GuiQuery<Pair<Integer, Point>>() {
       protected Pair<Integer, Point> executeInEDT() {
-        validateIsEnabled(list);
+        validateIsEnabledAndShowing(list);
         int index = matchingItemIndex(list, value, cellReader);
         if (index < 0) return ITEM_NOT_FOUND;
         return new Pair<Integer, Point>(index, scrollToItemWithIndexIfNotSelectedYet(list, index));
@@ -83,7 +83,7 @@ final class JListScrollToItemTask {
   static Point scrollToItemIfNotSelectedYet(final JList list, final int index) {
     return execute(new GuiQuery<Point>() {
       protected Point executeInEDT() {
-        validateIsEnabled(list);
+        validateIsEnabledAndShowing(list);
         validateIndex(list, index);
         return scrollToItemWithIndexIfNotSelectedYet(list, index);
       }

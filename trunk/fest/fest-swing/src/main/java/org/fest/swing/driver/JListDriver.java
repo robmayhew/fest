@@ -96,6 +96,7 @@ public class JListDriver extends JComponentDriver {
    * @throws NullPointerException if the given array is <code>null</code>.
    * @throws IllegalArgumentException if the given array is empty.
    * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws LocationUnavailableException if an element matching the any of the given values cannot be found.
    */
   public void selectItems(final JList list, final String[] values) {
@@ -112,6 +113,7 @@ public class JListDriver extends JComponentDriver {
    * @param list the target <code>JList</code>.
    * @param value the value to match.
    * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   @RunsInEDT
@@ -129,6 +131,7 @@ public class JListDriver extends JComponentDriver {
    * @param button the button to use.
    * @param times the number of times to click.
    * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   public void clickItem(JList list, String value, MouseButton button, int times) {
@@ -145,6 +148,7 @@ public class JListDriver extends JComponentDriver {
    * @throws NullPointerException if the given array is <code>null</code>.
    * @throws IllegalArgumentException if the given array is empty.
    * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if any of the indices is negative or greater than the index of the last item in
    * the <code>JList</code>.
    */
@@ -165,6 +169,7 @@ public class JListDriver extends JComponentDriver {
    * @param from the starting point of the selection.
    * @param to the last item to select.
    * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the any index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    */
@@ -179,6 +184,7 @@ public class JListDriver extends JComponentDriver {
    * @param start the starting point of the selection.
    * @param end the last item to select (inclusive.)
    * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the any index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    */
@@ -195,6 +201,7 @@ public class JListDriver extends JComponentDriver {
    * @param list the target <code>JList</code>.
    * @param index the index of the item to click.
    * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    */
@@ -213,6 +220,7 @@ public class JListDriver extends JComponentDriver {
    * @param button the button to use.
    * @param times the number of times to click.
    * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the
    * <code>JList</code>.
    */
@@ -295,6 +303,8 @@ public class JListDriver extends JComponentDriver {
    * Starts a drag operation at the location of the first item matching the given value.
    * @param list the target <code>JList</code>.
    * @param value the value to match.
+   * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
   @RunsInEDT
@@ -309,6 +319,8 @@ public class JListDriver extends JComponentDriver {
    * Ends a drag operation at the location of the first item matching the given value.
    * @param list the target <code>JList</code>.
    * @param value the value to match.
+   * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.
    */
@@ -324,8 +336,10 @@ public class JListDriver extends JComponentDriver {
    * Starts a drag operation at the location of the given index.
    * @param list the target <code>JList</code>.
    * @param index the given index.
+   * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
+   * the <code>JList</code>.
    */
   @RunsInEDT
   public void drag(JList list, int index) {
@@ -338,8 +352,10 @@ public class JListDriver extends JComponentDriver {
    * Ends a drag operation at the location of the given index.
    * @param list the target <code>JList</code>.
    * @param index the given index.
+   * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
+   * the <code>JList</code>.
    * @throws ActionFailedException if there is no drag action in effect.
    */
   @RunsInEDT
@@ -352,10 +368,13 @@ public class JListDriver extends JComponentDriver {
   /**
    * Ends a drag operation at the center of the <code>{@link JList}</code>.
    * @param list the target <code>JList</code>.
+   * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws ActionFailedException if there is no drag action in effect.
    */
   @RunsInEDT
   public void drop(JList list) {
+    assertIsEnabledAndShowing(list);
     super.drop(list, visibleCenterOf(list));
   }
 
@@ -365,6 +384,7 @@ public class JListDriver extends JComponentDriver {
    * @param value the value to match.
    * @return a fixture that manages the displayed pop-up menu.
    * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    */
@@ -390,6 +410,7 @@ public class JListDriver extends JComponentDriver {
    * @param index the index of the item.
    * @return a driver that manages the displayed pop-up menu.
    * @throws IllegalStateException if the <code>JList</code> is disabled.
+   * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the
    * <code>JList</code>.

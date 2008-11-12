@@ -15,7 +15,6 @@
 package org.fest.swing.driver;
 
 import java.awt.Component;
-import java.awt.Container;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
 
@@ -28,18 +27,25 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  */
 public final class ComponentStateValidator {
-
+  
   /**
-   * Asserts that the <code>{@link Component}</code> is enabled. Unlike
-   * <code>{@link ComponentDriver#requireEnabled(Component)}</code>, this method is for internal use only, to be used to
-   * verify that a component is enabled before performing any action on it. <b>Note:</b> this method is <b>not</b>
-   * executed in the event dispatch thread. Callers are responsible for calling this method in the event dispatch
-   * thread.
+   * Asserts that the <code>{@link Component}</code> is enabled and showing.
+   * @param c the target component.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
+   */
+  public static void validateIsEnabledAndShowing(Component c) {
+    validateIsEnabled(c);
+    validateIsShowing(c);
+  }
+  
+  /**
+   * Asserts that the <code>{@link Component}</code> is enabled.
    * @param c the target component.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
    */
   @RunsInCurrentThread
-  public static void validateIsEnabled(Component c) {
+  private static void validateIsEnabled(Component c) {
     if (!c.isEnabled()) throw new IllegalStateException(concat("Expecting component ", format(c), " to be enabled"));
   }
 
@@ -49,7 +55,7 @@ public final class ComponentStateValidator {
    * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    */
   @RunsInCurrentThread
-  public static void validateIsShowing(Container c) {
+  private static void validateIsShowing(Component c) {
     if (!c.isShowing()) throw componentNotShowingOnScreenFailure(c);
   }
 
@@ -60,7 +66,7 @@ public final class ComponentStateValidator {
    * @return the thrown exception.
    */
   @RunsInCurrentThread
-  public static IllegalStateException componentNotShowingOnScreenFailure(Container c) {
+  public static IllegalStateException componentNotShowingOnScreenFailure(Component c) {
     return new IllegalStateException(concat("Expecting component ", format(c), " to be showing on the screen"));
   }
 

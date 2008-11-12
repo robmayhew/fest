@@ -43,7 +43,7 @@ import static javax.swing.text.DefaultEditorKit.selectAllAction;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
-import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.JComboBoxContentQuery.contents;
 import static org.fest.swing.driver.JComboBoxEditableQuery.isEditable;
 import static org.fest.swing.driver.JComboBoxEditorAccessibleQuery.isEditorAccessible;
@@ -214,6 +214,7 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param comboBox the target <code>JComboBox</code>.
    * @param index the given index.
    * @throws IllegalStateException if the <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if the <code>JComboBox</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the
    * <code>JComboBox</code>.
    */
@@ -229,7 +230,7 @@ public class JComboBoxDriver extends JComponentDriver {
   private static void validateCanSelectItem(final JComboBox comboBox, final int index) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        validateIsEnabled(comboBox);
+        validateIsEnabledAndShowing(comboBox);
         validateIndex(comboBox, index);
       }
     });

@@ -38,12 +38,12 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
 import static org.fest.swing.task.AbstractButtonSetSelectedTask.setSelected;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -91,7 +91,7 @@ public class AbstractButtonDriverTest {
     ActionPerformedRecorder action = ActionPerformedRecorder.attachTo(checkBox);
     try {
       driver.click(checkBox);
-      fail();
+      failWhenExpectingException();
     } catch (ActionFailedException e) {}
     assertThat(action).wasNotPerformed();
   }
@@ -107,7 +107,7 @@ public class AbstractButtonDriverTest {
   public void shouldFailIfTextIsNotEqualToExpectedOne() {
     try {
       driver.requireText(checkBox, "Bye");
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'text'")
                              .contains("expected:<'Bye'> but was:<'Hello'>");
@@ -137,7 +137,7 @@ public class AbstractButtonDriverTest {
     robot.waitForIdle();
     try {
       driver.select(checkBox);
-      fail();
+      failWhenExpectingException();
     } catch (ActionFailedException e) {}
     assertThatCheckBoxIsNotSelected();
   }
@@ -179,7 +179,7 @@ public class AbstractButtonDriverTest {
     robot.waitForIdle();
     try {
       driver.unselect(checkBox);
-      fail();
+      failWhenExpectingException();
     } catch (ActionFailedException e) {}
     assertThatCheckBoxIsSelected();
   }
@@ -206,7 +206,7 @@ public class AbstractButtonDriverTest {
     unselectCheckBox();
     try {
       driver.requireSelected(checkBox);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selected'")
                              .contains("expected:<true> but was:<false>");
@@ -227,7 +227,7 @@ public class AbstractButtonDriverTest {
     selectCheckBox();
     try {
       driver.requireNotSelected(checkBox);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selected'")
                              .contains("expected:<false> but was:<true>");

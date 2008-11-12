@@ -26,6 +26,7 @@ import org.fest.swing.exception.ActionFailedException;
 
 import static java.awt.Frame.*;
 
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.WindowLikeContainerLocations.*;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
@@ -75,18 +76,24 @@ public class FrameDriver extends WindowDriver {
   /**
    * Deiconifies the given <code>{@link Frame}</code>.
    * @param frame the given <code>Frame</code>.
+   * @throws IllegalStateException if the <code>Frame</code> is not enabled.
+   * @throws IllegalStateException if the <code>Frame</code> is not showing on the screen.
    */
-  @ThreadSafeAction
+  @RunsInEDT
   public void deiconify(Frame frame) {
+    assertIsEnabledAndShowing(frame);
     updateFrameExtendedState(frame, NORMAL);
   }
 
   /**
    * Normalizes the given <code>{@link Frame}</code>.
    * @param frame the given <code>Frame</code>.
+   * @throws IllegalStateException if the <code>Frame</code> is not enabled.
+   * @throws IllegalStateException if the <code>Frame</code> is not showing on the screen.
    */
-  @ThreadSafeAction
+  @RunsInEDT
   public void normalize(Frame frame) {
+    assertIsEnabledAndShowing(frame);
     updateFrameExtendedState(frame, NORMAL);
   }
 

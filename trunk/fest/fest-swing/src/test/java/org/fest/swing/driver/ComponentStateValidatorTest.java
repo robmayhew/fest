@@ -16,58 +16,78 @@
 package org.fest.swing.driver;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.task.ComponentSetVisibleTask.hide;
 import static org.fest.swing.testing.CommonAssertions.*;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link ComponentStateValidator}</code>.
  *
  * @author Alex Ruiz
  */
-@Test
+@Test(groups = GUI)
 public class ComponentStateValidatorTest {
 
   private Robot robot;
   private TestWindow window;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = TestWindow.createNewWindow(getClass());
+    robot.showWindow(window);
   }
 
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
 
-  public void shouldNotThrowErrorInCurrentThreadIfComponentIsEnabled() {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        ComponentStateValidator.validateIsEnabled(window);
-      }
-    });
+  public void shouldNotThrowErrorIfComponentIsEnabledAndShowing() {
+    validateWindowIsEnabledAndShowing();
   }
 
-  public void shouldThrowErrorInCurrentThreadIfComponentIsDisabled() {
+  public void shouldThrowErrorIfComponentIsDisabled() {
     disable(window);
     robot.waitForIdle();
     try {
-      execute(new GuiTask() {
-        protected void executeInEDT() {
-          ComponentStateValidator.validateIsEnabled(window);
-        }
-      });
+      validateWindowIsEnabledAndShowing();
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
     }
+  }
+  
+  public void shouldThrowExceptionInComponentIsNotShowing() {
+    hide(window);
+    robot.waitForIdle();
+    try {
+      validateWindowIsEnabledAndShowing();
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+  
+  private void validateWindowIsEnabledAndShowing() {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        ComponentStateValidator.validateIsEnabledAndShowing(window);
+      }
+    });
   }
 }

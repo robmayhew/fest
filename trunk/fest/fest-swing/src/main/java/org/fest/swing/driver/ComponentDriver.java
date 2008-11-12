@@ -40,7 +40,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.driver.ComponentEnabledCondition.untilIsEnabled;
 import static org.fest.swing.driver.ComponentPerformDefaultAccessibleActionTask.performDefaultAccessibleAction;
-import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
@@ -83,10 +83,11 @@ public class ComponentDriver {
    * Simulates a user clicking once the given <code>{@link Component}</code> using the left mouse button.
    * @param c the <code>Component</code> to click on.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    */
   @RunsInEDT
   public void click(Component c) {
-    assertIsEnabled(c);
+    assertIsEnabledAndShowing(c);
     robot.click(c);
   }
 
@@ -96,6 +97,7 @@ public class ComponentDriver {
    * @param button the mouse button to use.
    * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    */
   @RunsInEDT
   public void click(Component c, MouseButton button) {
@@ -108,6 +110,7 @@ public class ComponentDriver {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    */
   @RunsInEDT
   public void click(Component c, MouseClickInfo mouseClickInfo) {
@@ -119,6 +122,7 @@ public class ComponentDriver {
    * Simulates a user double-clicking the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    */
   @RunsInEDT
   public void doubleClick(Component c) {
@@ -129,6 +133,7 @@ public class ComponentDriver {
    * Simulates a user right-clicking the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    */
   @RunsInEDT
   public void rightClick(Component c) {
@@ -142,11 +147,12 @@ public class ComponentDriver {
    * @param times the number of times to click the given mouse button.
    * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    */
   @RunsInEDT
   public void click(Component c, MouseButton button, int times) {
     if (button == null) throw new NullPointerException("The given MouseButton should not be null");
-    assertIsEnabled(c);
+    assertIsEnabledAndShowing(c);
     robot.click(c, button, times);
   }
 
@@ -155,22 +161,14 @@ public class ComponentDriver {
    * @param c the <code>Component</code> to click on.
    * @param where the position where to click.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    */
   @RunsInEDT
   public void click(Component c, Point where) {
-    assertIsEnabled(c);
+    assertIsEnabledAndShowing(c);
     robot.click(c, where);
   }
 
-  @RunsInEDT
-  private static void assertIsEnabled(final Component c) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        validateIsEnabled(c);
-      }
-    });
-  }
-  
   protected Settings settings() {
     return robot.settings();
   }
@@ -253,13 +251,14 @@ public class ComponentDriver {
    * @param keyCodes one or more codes of the keys to press.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @see java.awt.event.KeyEvent
    */
   @RunsInEDT
   public void pressAndReleaseKeys(Component c, int... keyCodes) {
     if (keyCodes == null) throw new NullPointerException("The array of key codes should not be null");
-    assertIsEnabled(c);
+    assertIsEnabledAndShowing(c);
     focusAndWaitForFocusGain(c);
     robot.pressAndReleaseKeys(keyCodes);
   }
@@ -272,6 +271,7 @@ public class ComponentDriver {
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    * @see java.awt.event.InputEvent
    */
@@ -289,6 +289,7 @@ public class ComponentDriver {
    * @param modifiers the given modifiers.
    * @throws IllegalArgumentException if the given code is not a valid key code. *
    * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    * @see java.awt.event.InputEvent
    */
@@ -304,6 +305,7 @@ public class ComponentDriver {
    * @param keyCode the code of the key to press.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   @RunsInEDT
@@ -318,6 +320,7 @@ public class ComponentDriver {
    * @param keyCode the code of the key to release.
    * @throws IllegalArgumentException if the given code is not a valid key code.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   @RunsInEDT
@@ -331,10 +334,11 @@ public class ComponentDriver {
    * has focus.
    * @param c the component to give focus to.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    */
   @RunsInEDT
   public void focusAndWaitForFocusGain(Component c) {
-    assertIsEnabled(c);
+    assertIsEnabledAndShowing(c);
     robot.focusAndWaitForFocusGain(c);
   }
 
@@ -342,10 +346,12 @@ public class ComponentDriver {
    * Gives input focus to the given <code>{@link Component}</code>. Note that the component may not yet have focus when
    * this method returns.
    * @param c the component to give focus to.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    */
   @RunsInEDT
   public void focus(Component c) {
-    assertIsEnabled(c);
+    assertIsEnabledAndShowing(c);
     robot.focus(c);
   }
 
@@ -419,6 +425,15 @@ public class ComponentDriver {
     return true;
   }
 
+  @RunsInEDT
+  protected static void assertIsEnabledAndShowing(final Component c) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        validateIsEnabledAndShowing(c);
+      }
+    });
+  }
+  
   /**
    * Formats the name of a property of the given <code>{@link Component}</code> by concatenating the value obtained
    * from <code>{@link Formatting#format(Component)}</code> with the given property name.

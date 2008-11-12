@@ -107,10 +107,9 @@ public abstract class ContainerDriver extends ComponentDriver {
 
   @RunsInCurrentThread
   private static void validateCanResize(Container c) {
-    validateIsEnabled(c);
+    validateIsEnabledAndShowing(c);
     if (!isResizable(c))
       throw new IllegalStateException(concat("Expecting component ", format(c), " to be resizable by the user"));
-    validateIsShowing(c);
   }
 
   @RunsInEDT
@@ -179,10 +178,9 @@ public abstract class ContainerDriver extends ComponentDriver {
 
   @RunsInCurrentThread
   private static void validateCanMove(Container c) {
-    validateIsEnabled(c);
+    validateIsEnabledAndShowing(c);
     if (!isUserMovable(c))
       throw new IllegalStateException(concat("Expecting component ", format(c), " to be movable by the user"));
-    validateIsShowing(c);
   }
 
   @RunsInEDT

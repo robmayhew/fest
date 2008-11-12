@@ -24,7 +24,7 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.query.AbstractButtonTextQuery;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabled;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
@@ -72,12 +72,13 @@ public class AbstractButtonDriver extends JComponentDriver {
    * Selects the given button only it is not already selected.
    * @param button the target button.
    * @throws IllegalStateException if the button is disabled.
+   * @throws IllegalStateException if the button is not showing on the screen.
    */
   @RunsInEDT
   public void select(final AbstractButton button) {
     boolean isSelected = execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
-        validateIsEnabled(button);
+        validateIsEnabledAndShowing(button);
         return button.isSelected();
       }
     });
@@ -89,12 +90,13 @@ public class AbstractButtonDriver extends JComponentDriver {
    * Unselects the given button only if it is selected.
    * @param button the target button.
    * @throws IllegalStateException if the button is disabled.
+   * @throws IllegalStateException if the button is not showing on the screen.
    */
   @RunsInEDT
   public void unselect(final AbstractButton button) {
     boolean isNotSelected = execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
-        validateIsEnabled(button);
+        validateIsEnabledAndShowing(button);
         return !button.isSelected();
       }
     });

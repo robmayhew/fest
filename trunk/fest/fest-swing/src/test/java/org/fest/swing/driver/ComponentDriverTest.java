@@ -110,6 +110,18 @@ public class ComponentDriverTest {
     assertThat(clickRecorder).wasNotClicked();
   }
 
+  public void shouldThrowErrorWhenClickingNotShowingComponent() {
+    ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
+    hideWindow();
+    try {
+      driver.click(button);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+    assertThat(clickRecorder).wasNotClicked();
+  }
+
   @Test(dataProvider = "mouseButtons", groups = GUI)
   public void shouldClickComponentWithGivenMouseButtonOnce(MouseButton mouseButton) {
     ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
@@ -136,6 +148,18 @@ public class ComponentDriverTest {
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
+    }
+    assertThat(clickRecorder).wasNotClicked();
+  }
+
+  public void shouldThrowErrorWhenClickingNotShowingComponentWithGivenMouseButton() {
+    ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
+    hideWindow();
+    try {
+      driver.click(button, RIGHT_BUTTON);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
     }
     assertThat(clickRecorder).wasNotClicked();
   }
@@ -170,6 +194,18 @@ public class ComponentDriverTest {
     assertThat(clickRecorder).wasNotClicked();
   }
 
+  public void shouldThrowErrorWhenClickingNotShowingComponentWithGivenMouseClickInfo() {
+    ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
+    hideWindow();
+    try {
+      driver.click(button, leftButton());
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+    assertThat(clickRecorder).wasNotClicked();
+  }
+
   public void shouldDoubleClickComponent() {
     ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
     driver.doubleClick(button);
@@ -185,6 +221,18 @@ public class ComponentDriverTest {
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
+    }
+    assertThat(clickRecorder).wasNotClicked();
+  }
+
+  public void shouldThrowErrorWhenDoubleClickingNotShowingComponent() {
+    ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
+    hideWindow();
+    try {
+      driver.doubleClick(button);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
     }
     assertThat(clickRecorder).wasNotClicked();
   }
@@ -209,6 +257,18 @@ public class ComponentDriverTest {
     assertThat(clickRecorder).wasNotClicked();
   }
 
+  public void shouldThrowErrorWhenRightClickingNotShowingComponent() {
+    ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
+    hideWindow();
+    try {
+      driver.rightClick(button);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+    assertThat(clickRecorder).wasNotClicked();
+  }
+
   public void shouldClickComponentOnGivenPoint() {
     Point center = centerOf(button);
     Point where = new Point(center.x + 1, center.y + 1);
@@ -228,6 +288,18 @@ public class ComponentDriverTest {
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
+    }
+    assertThat(clickRecorder).wasNotClicked();
+  }
+
+  public void shouldThrowErrorWhenClickingNotShowingComponentAtGivenPoint() {
+    ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
+    hideWindow();
+    try {
+      driver.click(button, new Point(10, 10));
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
     }
     assertThat(clickRecorder).wasNotClicked();
   }
@@ -261,8 +333,7 @@ public class ComponentDriverTest {
     });
   }
 
-  public void shouldThrowErrorWhenGivingFocusToDisabledComponentAndWaiting() {
-    ClickRecorder clickRecorder = ClickRecorder.attachTo(button);
+  public void shouldThrowErrorWhenGivingFocusToDisabledComponenAndWaiting() {
     disableButton();
     try {
       driver.focusAndWaitForFocusGain(button);
@@ -270,7 +341,16 @@ public class ComponentDriverTest {
     } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
     }
-    assertThat(clickRecorder).wasNotClicked();
+  }
+
+  public void shouldThrowErrorWhenGivingFocusToNotShowingComponenAndWaiting() {
+    hideWindow();
+    try {
+      driver.focusAndWaitForFocusGain(button);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
   public void shouldReturnSettingsFromRobot() {
@@ -311,11 +391,6 @@ public class ComponentDriverTest {
   public void shouldPassIfComponentIsNotVisibleAsExpected() {
     hideWindow();
     driver.requireNotVisible(window);
-  }
-
-  private void hideWindow() {
-    setVisible(window, false);
-    robot.waitForIdle();
   }
 
   public void shouldFailIfComponentIsVisibleAndExpectedToBeNotVisible() {
@@ -408,6 +483,18 @@ public class ComponentDriverTest {
     assertThatTextFieldIsEmpty();
   }
 
+  public void shouldThrowErrorWhenPressingAndReleasingKeysInNotVisibleComponent() {
+    assertThatTextFieldIsEmpty();
+    hideWindow();
+    try {
+      driver.pressAndReleaseKeys(textField, VK_A);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+    assertThatTextFieldIsEmpty();
+  }
+
   @Test(expectedExceptions = NullPointerException.class, groups = GUI)
   public void shouldThrowErrorIfKeyPressInfoIsNull() {
     driver.pressAndReleaseKey(button, null);
@@ -431,6 +518,18 @@ public class ComponentDriverTest {
     assertThatTextFieldIsEmpty();
   }
 
+  public void shouldThrowErrorWhenPressingAndReleasingKeyInNotShowingComponent() {
+    assertThatTextFieldIsEmpty();
+    hideWindow();
+    try {
+      driver.pressAndReleaseKey(textField, keyCode(VK_A).modifiers(SHIFT_MASK));
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+    assertThatTextFieldIsEmpty();
+  }
+
   public void shouldPressKeyAndReleaseKey() {
     assertThatTextFieldIsEmpty();
     int key = VK_A;
@@ -441,12 +540,25 @@ public class ComponentDriverTest {
   }
 
   public void shouldThrowErrorWhenPressingKeyInDisabledComponent() {
+    assertThatTextFieldIsEmpty();
     disableTextField();
     try {
       driver.pressKey(textField, VK_A);
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
+    }
+    assertThatTextFieldIsEmpty();
+  }
+
+  public void shouldThrowErrorWhenPressingKeyInNotShowingComponent() {
+    assertThatTextFieldIsEmpty();
+    hideWindow();
+    try {
+      driver.pressKey(textField, VK_A);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
     }
     assertThatTextFieldIsEmpty();
   }
@@ -459,6 +571,18 @@ public class ComponentDriverTest {
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
+    }
+    assertThatTextFieldIsEmpty();
+  }
+
+  public void shouldThrowErrorWhenReleasingKeyInNotShowingComponent() {
+    assertThatTextFieldIsEmpty();
+    hideWindow();
+    try {
+      driver.releaseKey(textField, VK_A);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
     }
     assertThatTextFieldIsEmpty();
   }
@@ -483,6 +607,17 @@ public class ComponentDriverTest {
     assertThat(hasFocus(button)).isFalse();
   }
 
+  public void shouldThrowErrorWhenGivingFocusToNotShowingComponent() {
+    hideWindow();
+    try {
+      driver.focus(button);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+    assertThat(hasFocus(button)).isFalse();
+  }
+
   private void disableButton() {
     disable(button);
     robot.waitForIdle();
@@ -490,6 +625,11 @@ public class ComponentDriverTest {
 
   private void disableTextField() {
     disable(textField);
+  }
+
+  private void hideWindow() {
+    setVisible(window, false);
+    robot.waitForIdle();
   }
 
   private void assertThatTextFieldIsEmpty() {
