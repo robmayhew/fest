@@ -41,7 +41,6 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.driver.JComboBoxDropDownVisibleQuery.isDropDownVisible;
 import static org.fest.swing.driver.JComboBoxSetEditableTask.setEditable;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
@@ -437,7 +436,7 @@ public class JComboBoxDriverTest {
     makeComboBoxNotEditable();
     robot.waitForIdle();
     driver.showDropDownList(comboBox);
-    assertDropDownVisible();
+    assertThatDropDownIsVisible();
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -446,7 +445,7 @@ public class JComboBoxDriverTest {
     makeComboBoxEditable();
     robot.waitForIdle();
     driver.showDropDownList(comboBox);
-    assertDropDownVisible();
+    assertThatDropDownIsVisible();
   }
 
   private void makeComboBoxEditable() {
@@ -457,7 +456,7 @@ public class JComboBoxDriverTest {
     setEditable(comboBox, false);
   }
 
-  private void assertDropDownVisible() {
+  private void assertThatDropDownIsVisible() {
     assertThat(isDropDownVisible(comboBox)).isTrue();
   }
 
@@ -468,6 +467,14 @@ public class JComboBoxDriverTest {
     robot.waitForIdle();
     driver.showDropDownList(comboBox);
     assertThat(isDropDownVisible(comboBox)).isFalse();
+  }
+
+  private static boolean isDropDownVisible(final JComboBox comboBox) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return comboBox.getUI().isPopupVisible(comboBox);
+      }
+    });
   }
 
   private void assertCellReaderWasCalled() {
