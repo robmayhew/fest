@@ -26,7 +26,6 @@ import javax.swing.JList;
 import javax.swing.JPopupMenu;
 
 import org.fest.assertions.Description;
-import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JComboBoxCellReader;
 import org.fest.swing.core.ComponentMatcher;
@@ -50,10 +49,10 @@ import static org.fest.swing.driver.JComboBoxEditorAccessibleQuery.isEditorAcces
 import static org.fest.swing.driver.JComboBoxEditorQuery.editorOf;
 import static org.fest.swing.driver.JComboBoxItemCountQuery.itemCountOf;
 import static org.fest.swing.driver.JComboBoxItemIndexValidator.validateIndex;
+import static org.fest.swing.driver.JComboBoxSelectionValueQuery.*;
 import static org.fest.swing.driver.JComboBoxSetPopupVisibleTask.setPopupVisible;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
-import static org.fest.swing.query.JComboBoxSelectedItemQuery.selectedItemOf;
 import static org.fest.swing.task.JComboBoxSetSelectedIndexTask.setSelectedIndex;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
@@ -75,7 +74,6 @@ public class JComboBoxDriver extends JComponentDriver {
   private static final String SELECTED_INDEX_PROPERTY = "selectedIndex";
 
   private static final ComponentMatcher LIST_MATCHER = new TypeMatcher(JList.class);
-  private static final String NO_SELECTION_VALUE = "";
 
   private final JListDriver listDriver;
 
@@ -137,33 +135,9 @@ public class JComboBoxDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void requireSelection(JComboBox comboBox, String value) {
-    String selection = selection(comboBox, value, cellReader);
+    String selection = selection(comboBox, cellReader);
     if (NO_SELECTION_VALUE == selection) failNoSelection(comboBox);
     assertThat(selection).as(selectedIndexProperty(comboBox)).isEqualTo(value);
-  }
-
-  @RunsInEDT
-  private static String selection(final JComboBox comboBox, final String value, final JComboBoxCellReader cellReader) {
-    return execute(new GuiQuery<String>() {
-      protected String executeInEDT() {
-        if (comboBox.isEditable()) return selectionInEditableComboBox(comboBox, value);
-        int selectedIndex = comboBox.getSelectedIndex();
-        if (selectedIndex == -1) return NO_SELECTION_VALUE;
-        return itemValue(comboBox, selectedIndex, cellReader);
-      }
-    });
-  }
-
-  @RunsInCurrentThread
-  private static String selectionInEditableComboBox(JComboBox comboBox, String value) {
-    Object selectedItem = selectedItemOf(comboBox);
-    if (selectedItem == null) return NO_SELECTION_VALUE;
-    return selectedItem.toString();
-  }
-  
-  @RunsInCurrentThread
-  private static String itemValue(JComboBox comboBox, int index, JComboBoxCellReader cellReader) {
-    return cellReader.valueAt(comboBox, index);
   }
 
   @RunsInEDT

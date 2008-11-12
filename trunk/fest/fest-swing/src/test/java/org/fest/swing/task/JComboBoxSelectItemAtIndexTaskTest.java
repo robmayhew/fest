@@ -18,15 +18,18 @@ package org.fest.swing.task;
 import javax.swing.JComboBox;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
-import org.fest.swing.task.JComboBoxSetSelectedIndexTask;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.array;
@@ -44,6 +47,10 @@ public class JComboBoxSelectItemAtIndexTaskTest {
   private JComboBox comboBox;
   private int index;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
@@ -69,7 +76,11 @@ public class JComboBoxSelectItemAtIndexTaskTest {
     final JComboBox comboBox = new JComboBox(array("first", "second", "third"));
 
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {
