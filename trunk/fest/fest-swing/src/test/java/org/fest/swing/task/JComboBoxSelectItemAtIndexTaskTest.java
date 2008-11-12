@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.driver;
+package org.fest.swing.task;
 
 import javax.swing.JComboBox;
 
@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.task.JComboBoxSetSelectedIndexTask;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;

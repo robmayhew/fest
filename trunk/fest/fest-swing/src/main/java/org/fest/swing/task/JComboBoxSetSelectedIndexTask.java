@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.driver;
+package org.fest.swing.task;
 
 import javax.swing.JComboBox;
 
@@ -25,13 +25,21 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
 /**
  * Understands a task that selects the element in the given index in the given <code>{@link JComboBox}</code>. This task
  * is executed in the event dispatch thread.
+ * @see JComboBox#setSelectedIndex(int)
  *
  * @author Alex Ruiz
  */
-final class JComboBoxSetSelectedIndexTask {
+public final class JComboBoxSetSelectedIndexTask {
 
+  /**
+   * Selects the element in the given index in the given <code>{@link JComboBox}</code>. This task is executed in the 
+   * event dispatch thread.
+   * @param comboBox the given <code>JComboBox</code>.
+   * @param index the index to select.
+   * @see JComboBox#setSelectedIndex(int)
+   */
   @RunsInEDT
-  static void setSelectedIndex(final JComboBox comboBox, final int index) {
+  public static void setSelectedIndex(final JComboBox comboBox, final int index) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         comboBox.setSelectedIndex(index);

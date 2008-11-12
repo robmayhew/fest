@@ -23,8 +23,10 @@ import javax.swing.ListCellRenderer;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.cell.JComboBoxCellReader;
+import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.driver.ModelValueToString.asText;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands the default implementation of <code>{@link JComboBoxCellReader}</code>.
@@ -34,8 +36,16 @@ import static org.fest.swing.driver.ModelValueToString.asText;
  */
 public class BasicJComboBoxCellReader implements JComboBoxCellReader {
 
-  private static final JList REFERENCE_JLIST = new JList();
+  private static final JList REFERENCE_JLIST = newJList();
 
+  private static JList newJList() {
+    return execute(new GuiQuery<JList>() {
+      protected JList executeInEDT() {
+        return new JList();
+      }
+    });
+  }
+  
   private final CellRendererReader rendererReader;
 
   /**
