@@ -79,12 +79,74 @@ public class FrameDriverTest {
     assertThat(frameState()).isEqualTo(NORMAL);
   }
 
+  public void shouldThrowErrorWhenIconifyingDisabledFrame() {
+    disableWindow();
+    try {
+      driver.iconify(window);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenIconifyingNotShowingFrame() {
+    hideWindow();
+    try {
+      driver.iconify(window);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenDeiconifyingDisabledFrame() {
+    driver.iconify(window);
+    disableWindow();
+    try {
+      driver.deiconify(window);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenDeiconifyingNotShowingFrame() {
+    driver.iconify(window);
+    hideWindow();
+    try {
+      driver.deiconify(window);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldMaximizeFrame(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     driver.maximize(window);
     int frameState = frameState() & MAXIMIZED_BOTH;
     assertThat(frameState).isEqualTo(MAXIMIZED_BOTH);
+  }
+
+  public void shouldThrowErrorWhenMaximizingDisabledFrame() {
+    disableWindow();
+    try {
+      driver.maximize(window);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenMaximizingNotShowingFrame() {
+    hideWindow();
+    try {
+      driver.maximize(window);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -99,6 +161,28 @@ public class FrameDriverTest {
     return window.getExtendedState();
   }
 
+  public void shouldThrowErrorWhenNormalizingDisabledFrame() {
+    driver.maximize(window);
+    disableWindow();
+    try {
+      driver.normalize(window);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenNormalizingNotShowingFrame() {
+    driver.maximize(window);
+    hideWindow();
+    try {
+      driver.normalize(window);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldResizeFrameToGivenSize(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
@@ -108,8 +192,7 @@ public class FrameDriverTest {
   }
 
   public void shouldThrowErrorWhenResizingDisabledFrame() {
-    disable(window);
-    robot.waitForIdle();
+    disableWindow();
     try {
       driver.resize(window, 10, 10);
       failWhenExpectingException();
@@ -119,8 +202,7 @@ public class FrameDriverTest {
   }
 
   public void shouldThrowErrorWhenResizingNotShowingFrame() {
-    hide(window);
-    robot.waitForIdle();
+    hideWindow();
     try {
       driver.resize(window, 10, 10);
       failWhenExpectingException();
@@ -149,8 +231,7 @@ public class FrameDriverTest {
   }
 
   public void shouldThrowErrorWhenResizingWidthOfDisabledFrame() {
-    disable(window);
-    robot.waitForIdle();
+    disableWindow();
     try {
       driver.resizeWidthTo(window, 10);
       failWhenExpectingException();
@@ -160,8 +241,7 @@ public class FrameDriverTest {
   }
 
   public void shouldThrowErrorWhenResizingWidthOfNotShowingFrame() {
-    hide(window);
-    robot.waitForIdle();
+    hideWindow();
     try {
       driver.resizeWidthTo(window, 10);
       failWhenExpectingException();
@@ -194,8 +274,7 @@ public class FrameDriverTest {
   }
 
   public void shouldThrowErrorWhenResizingHeightOfDisabledFrame() {
-    disable(window);
-    robot.waitForIdle();
+    disableWindow();
     try {
       driver.resizeHeightTo(window, 10);
       failWhenExpectingException();
@@ -205,8 +284,7 @@ public class FrameDriverTest {
   }
 
   public void shouldThrowErrorWhenResizingHeightOfNotShowingFrame() {
-    hide(window);
-    robot.waitForIdle();
+    hideWindow();
     try {
       driver.resizeHeightTo(window, 10);
       failWhenExpectingException();
@@ -247,8 +325,7 @@ public class FrameDriverTest {
   }
 
   public void shouldThrowErrorWhenMovingDisabledFrame() {
-    disable(window);
-    robot.waitForIdle();
+    disableWindow();
     try {
       driver.moveTo(window, new Point(6, 8));
       failWhenExpectingException();
@@ -257,14 +334,23 @@ public class FrameDriverTest {
     }
   }
 
-  public void shouldThrowErrorWhenMovingNotShowingFrame() {
-    hide(window);
+  private void disableWindow() {
+    disable(window);
     robot.waitForIdle();
+  }
+
+  public void shouldThrowErrorWhenMovingNotShowingFrame() {
+    hideWindow();
     try {
       driver.moveTo(window, new Point(6, 8));
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToNotShowingComponent(e);
     }
+  }
+
+  private void hideWindow() {
+    hide(window);
+    robot.waitForIdle();
   }
 }
