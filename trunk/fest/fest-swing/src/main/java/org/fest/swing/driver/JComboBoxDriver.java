@@ -47,17 +47,15 @@ import static org.fest.swing.driver.JComboBoxContentQuery.contents;
 import static org.fest.swing.driver.JComboBoxEditableQuery.isEditable;
 import static org.fest.swing.driver.JComboBoxEditorAccessibleQuery.isEditorAccessible;
 import static org.fest.swing.driver.JComboBoxEditorQuery.editorOf;
-import static org.fest.swing.driver.JComboBoxItemCountQuery.itemCountOf;
 import static org.fest.swing.driver.JComboBoxItemIndexValidator.validateIndex;
+import static org.fest.swing.driver.JComboBoxMatchingItemQuery.matchingItemIndex;
 import static org.fest.swing.driver.JComboBoxSelectionValueQuery.*;
 import static org.fest.swing.driver.JComboBoxSetPopupVisibleTask.setPopupVisible;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.task.JComboBoxSetSelectedIndexTask.setSelectedIndex;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Arrays.format;
-import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
 /**
@@ -111,19 +109,13 @@ public class JComboBoxDriver extends JComponentDriver {
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
    * @see #cellReader(JComboBoxCellReader)
    */
+  @RunsInEDT
   public void selectItem(JComboBox comboBox, String value) {
-    int itemCount = itemCountOf(comboBox);
-    for (int i = 0; i < itemCount; i++) {
-      if (areEqual(value(comboBox, i), value)) {
-        selectItem(comboBox, i);
-        return;
-      }
-    }
-    // While actions are supposed to represent real user actions, it's possible that the current environment does not
-    // match sufficiently, so we need to throw an appropriate exception that can be used to diagnose the problem.
-    throw new LocationUnavailableException(
-        concat("Unable to find item ", quote(value), " among the JComboBox contents (",
-            format(contentsOf(comboBox)), ")"));
+    int index = matchingItemIndex(comboBox, value, cellReader);
+    if (index < 0)
+      throw new LocationUnavailableException(concat(
+          "Unable to find item ", quote(value), " among the JComboBox contents (", format(contentsOf(comboBox)), ")"));
+    selectItem(comboBox, index);
   }
 
   /**
@@ -136,13 +128,9 @@ public class JComboBoxDriver extends JComponentDriver {
   @RunsInEDT
   public void requireSelection(JComboBox comboBox, String value) {
     String selection = selection(comboBox, cellReader);
-    if (NO_SELECTION_VALUE == selection) failNoSelection(comboBox);
+    if (NO_SELECTION_VALUE == selection)
+      fail(concat("[", selectedIndexProperty(comboBox).value(), "] No selection"));
     assertThat(selection).as(selectedIndexProperty(comboBox)).isEqualTo(value);
-  }
-
-  @RunsInEDT
-  private void failNoSelection(JComboBox comboBox) {
-    fail(concat("[", selectedIndexProperty(comboBox).value(), "] No selection"));
   }
 
   /**
@@ -152,7 +140,10 @@ public class JComboBoxDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void requireNoSelection(JComboBox comboBox) {
-    assertThat(selectedIndexOf(comboBox)).as(selectedIndexProperty(comboBox)).isEqualTo(-1);
+    String selection = selection(comboBox, cellReader);
+    if (NO_SELECTION_VALUE == selection) return;
+    fail(concat(
+        "[", selectedIndexProperty(comboBox).value(), "] Expecting no selection, but found:<", quote(selection), ">"));
   }
 
   /**
