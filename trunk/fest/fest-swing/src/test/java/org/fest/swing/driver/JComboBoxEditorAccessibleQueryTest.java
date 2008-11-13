@@ -17,18 +17,17 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.JComboBoxSetEditableTask.setEditable;
-import static org.fest.swing.task.ComponentSetEnabledTask.setEnabled;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.array;
 
@@ -45,6 +44,10 @@ public class JComboBoxEditorAccessibleQueryTest {
   private MyWindow window;
   private JComboBox comboBox;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = MyWindow.createNew();
@@ -58,11 +61,18 @@ public class JComboBoxEditorAccessibleQueryTest {
 
   @Test(dataProvider = "accessible", groups = { GUI, EDT_ACTION })
   public void shouldReturnIndicateIfJComboBoxEditorIsAccessible(boolean editable, boolean enabled) {
-    setEditable(comboBox, editable);
-    setEnabled(comboBox, enabled);
+    setEditableAndEnabled(comboBox, editable, enabled);
     robot.waitForIdle();
     boolean accessible = editable && enabled;
-    assertThat(JComboBoxEditorAccessibleQuery.isEditorAccessible(comboBox)).isEqualTo(accessible);
+    assertThat(isEditorAccessible()).isEqualTo(accessible);
+  }
+
+  private boolean isEditorAccessible() {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return JComboBoxEditorAccessibleQuery.isEditorAccessible(comboBox);
+      }
+    });
   }
 
   @DataProvider(name = "accessible") public Object[][] accessible() {
@@ -73,6 +83,15 @@ public class JComboBoxEditorAccessibleQueryTest {
         { false, false },
     };
   }
+  
+  private static void setEditableAndEnabled(final JComboBox comboBox, final boolean editable, final boolean enabled) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        comboBox.setEditable(editable);
+        comboBox.setEnabled(enabled);
+      }
+    });
+  }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
@@ -80,7 +99,11 @@ public class JComboBoxEditorAccessibleQueryTest {
     final JComboBox comboBox = new JComboBox(array("first", "second", "third"));
 
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

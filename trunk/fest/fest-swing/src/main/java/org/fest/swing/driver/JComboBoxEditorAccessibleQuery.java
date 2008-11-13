@@ -19,28 +19,20 @@ import java.awt.Component;
 
 import javax.swing.JComboBox;
 
-import org.fest.swing.edt.GuiQuery;
-
-import static org.fest.swing.edt.GuiActionRunner.execute;
-
 /**
- * Understands an action, executed in the event dispatch thread, that indicates whether editor of a
- * <code>{@link JComboBox}</code> is accessible or not. To be accessible, a <code>JComboBox</code> needs to be enabled
- * and editable.
+ * Understands an action that indicates whether editor of a <code>{@link JComboBox}</code> is accessible or not. To be
+ * accessible, a <code>JComboBox</code> needs to be enabled and editable. <b>Note:</b> this action is <b>not</b> 
+ * executed in the event dispatch thread.
  * @see JComboBox#isEditable()
  * @see Component#isEnabled()
- *
+ * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
 final class JComboBoxEditorAccessibleQuery {
 
   static boolean isEditorAccessible(final JComboBox comboBox) {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return comboBox.isEditable() && comboBox.isEnabled();
-      }
-    });
+    return comboBox.isEditable() && comboBox.isEnabled();
   }
 
   private JComboBoxEditorAccessibleQuery() {}
