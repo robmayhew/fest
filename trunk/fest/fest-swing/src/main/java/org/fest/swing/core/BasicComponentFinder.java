@@ -128,9 +128,10 @@ public final class BasicComponentFinder implements ComponentFinder {
 
   /** {@inheritDoc} */
   @RunsInEDT
+  @SuppressWarnings("unchecked")
   public <T extends Component> T find(GenericTypeMatcher<T> m) {
     Component found = find((ComponentMatcher)m);
-    return cast(found);
+    return (T)found;
   }
 
   /** {@inheritDoc} */
@@ -166,13 +167,9 @@ public final class BasicComponentFinder implements ComponentFinder {
 
   /** {@inheritDoc} */
   @RunsInEDT
+  @SuppressWarnings("unchecked")
   public <T extends Component> T find(Container root, GenericTypeMatcher<T> m) {
     Component found = find(root, (ComponentMatcher)m);
-    return cast(found);
-  }
-
-  @SuppressWarnings("unchecked")
-  private <T> T cast(Component found) {
     return (T)found;
   }
 

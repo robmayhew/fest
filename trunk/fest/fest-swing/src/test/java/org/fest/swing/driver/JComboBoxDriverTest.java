@@ -24,29 +24,31 @@ import javax.swing.ListModel;
 import javax.swing.text.JTextComponent;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.LocationUnavailableException;
-import org.fest.swing.query.JLabelTextQuery;
-import org.fest.swing.query.JTextComponentTextQuery;
 import org.fest.swing.testing.MethodInvocations;
-import org.fest.swing.testing.StopWatch;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.driver.JComboBoxSetEditableTask.setEditable;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.task.ComponentSetVisibleTask.hide;
 import static org.fest.swing.task.JComboBoxSetSelectedIndexTask.setSelectedIndex;
-import static org.fest.swing.task.JComboBoxSetSelectedItemTask.setSelectedItem;
+import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -63,13 +65,18 @@ public class JComboBoxDriverTest {
   private JComboBoxCellReaderStub cellReader;
   private JComboBox comboBox;
   private JComboBoxDriver driver;
+  private MyWindow window;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
     cellReader = new JComboBoxCellReaderStub();
     driver = new JComboBoxDriver(robot);
     driver.cellReader(cellReader);
-    MyWindow window = MyWindow.createNew();
+    window = MyWindow.createNew();
     comboBox = window.comboBox;
     robot.showWindow(window);
   }
@@ -87,42 +94,63 @@ public class JComboBoxDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldSelectItemAtGivenIndex(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    StopWatch stopWatch = StopWatch.startNewStopWatch();
+    clearSelectionInComboBox();
     driver.selectItem(comboBox, 2);
-    stopWatch.stop();
-    System.out.println(stopWatch.ellapsedTime());
     assertThatSelectedItemIsEqualTo("third");
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSelectItemWithGivenIndexIfComboBoxIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearSelectionInComboBox();
-    disable(comboBox);
-    robot.waitForIdle();
-    driver.selectItem(comboBox, 0);
-    assertComboBoxHasNoSelection();
+  public void shouldThrowErrorWhenSelectingItemWithGivenIndexInDisabledJComboBox() {
+    clearSelectionAndDisableComboBox();
+    try {
+      driver.selectItem(comboBox, 0);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+    assertThatComboBoxHasNoSelection();
+  }
+
+  public void shouldThrowErrorWhenSelectingItemWithGivenIndexInNotShowingJComboBox() {
+    hideWindow();
+    try {
+      driver.selectItem(comboBox, 0);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldSelectItemWithGivenText(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
+    clearSelectionInComboBox();
     driver.selectItem(comboBox, "second");
     assertThatSelectedItemIsEqualTo("second");
     assertCellReaderWasCalled();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSelectItemWithGivenTextIfComboBoxIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearSelectionInComboBox();
-    disable(comboBox);
-    robot.waitForIdle();
-    driver.selectItem(comboBox, "first");
-    assertComboBoxHasNoSelection();
+  public void shouldThrowErrorWhenSelectingItemWithGivenTextInDisabledJComboBox() {
+    clearSelectionAndDisableComboBox();
+    try {
+      driver.selectItem(comboBox, "first");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+    assertThatComboBoxHasNoSelection();
   }
 
-  private void assertComboBoxHasNoSelection() {
+  public void shouldThrowErrorWhenSelectingItemWithGivenTextInNotShowingJComboBox() {
+    hideWindow();
+    try {
+      driver.selectItem(comboBox, "first");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+
+  private void assertThatComboBoxHasNoSelection() {
     assertThatSelectedIndexIsEqualTo(-1);
   }
 
@@ -148,7 +176,7 @@ public class JComboBoxDriverTest {
   }
 
   @Test(groups = GUI, expectedExceptions = LocationUnavailableException.class)
-  public void shouldThrowErrorIfTextOfItemToSelectDoesNotExist() {
+  public void shouldThrowErrorIfMatchingItemToSelectDoesNotExist() {
     driver.selectItem(comboBox, "hundred");
   }
 
@@ -163,30 +191,34 @@ public class JComboBoxDriverTest {
     robot.settings().eventMode(eventMode);
     driver.click(comboBox);
     JList dropDownList = driver.dropDownList();
-    assertThatListContains(dropDownList, "first", "second", "third");
+    assertThat(contentsOf(dropDownList)).isEqualTo(array("first", "second", "third"));
   }
 
-  private static void assertThatListContains(final JList list, final String...expected) {
-    final int expectedSize = expected.length;
-    ListModel model = list.getModel();
-    assertThat(model.getSize()).isEqualTo(expectedSize);
-    for (int i = 0; i < expectedSize; i++)
-      assertThat(model.getElementAt(i)).isEqualTo(expected[i]);
+  @RunsInEDT
+  private Object[] contentsOf(final JList list) {
+    return execute(new GuiQuery<Object[]>() {
+      protected Object[] executeInEDT() {
+        ListModel model = list.getModel();
+        int elementCount = model.getSize();
+        Object[] elements = new Object[elementCount];
+        for (int i = 0; i < elementCount; i++) 
+          elements[i] = model.getElementAt(i);
+        return elements;
+      }
+    });
   }
 
   public void shouldPassIfItHasExpectedSelection() {
     selectFirstItemInComboBox();
-    robot.waitForIdle();
     driver.requireSelection(comboBox, "first");
     assertCellReaderWasCalled();
   }
 
   public void shouldFailIfItDoesNotHaveExpectedSelection() {
     selectFirstItemInComboBox();
-    robot.waitForIdle();
     try {
       driver.requireSelection(comboBox, "second");
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selectedIndex'")
                              .contains("expected:<'second'> but was:<'first'>");
@@ -195,10 +227,9 @@ public class JComboBoxDriverTest {
 
   public void shouldFailIfItDoesNotHaveAnySelectionAndExpectingSelection() {
     clearSelectionInComboBox();
-    robot.waitForIdle();
     try {
       driver.requireSelection(comboBox, "second");
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selectedIndex'")
                              .contains("No selection");
@@ -206,116 +237,143 @@ public class JComboBoxDriverTest {
   }
 
   public void shouldPassIfItIsEditableAndHasExpectedSelection() {
-    setEditable(comboBox, true);
-    setSelectedItem(comboBox, "Hello World");
-    robot.waitForIdle();
+    makeComboBoxEditableAndSelectItem("Hello World");
     driver.requireSelection(comboBox, "Hello World");
   }
 
   public void shouldFailIfItIsEditableAndDoesNotHaveExpectedSelection() {
-    setEditable(comboBox, true);
-    setSelectedItem(comboBox, "Hello World");
-    robot.waitForIdle();
+    makeComboBoxEditableAndSelectItem("Hello World");
     try {
       driver.requireSelection(comboBox, "second");
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selectedIndex'")
                              .contains("expected:<'second'> but was:<'Hello World'>");
     }
   }
+  
+  @RunsInEDT
+  private void makeComboBoxEditableAndSelectItem(Object itemToSelect) {
+    setEditableAndSetSelectedItem(comboBox, itemToSelect);
+    robot.waitForIdle();
+  }
+  
+  @RunsInEDT
+  private static void setEditableAndSetSelectedItem(final JComboBox comboBox, final Object itemToSelect) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        comboBox.setEditable(true);
+        comboBox.setSelectedItem(itemToSelect);
+      }
+    });
+  }
 
   public void shouldFailIfItEditableAndDoesNotHaveAnySelectionAndExpectingSelection() {
-    clearSelectionInComboBox();
-    setEditable(comboBox, true);
+    setEditableAndClearSelection(comboBox);
     robot.waitForIdle();
     try {
       driver.requireSelection(comboBox, "second");
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selectedIndex'")
                              .contains("No selection");
     }
   }
+  
+  @RunsInEDT
+  private static void setEditableAndClearSelection(final JComboBox comboBox) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        comboBox.setSelectedIndex(-1);
+        comboBox.setEditable(true);
+      }
+    });
+  }
 
   public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
     clearSelectionInComboBox();
-    robot.waitForIdle();
     driver.requireNoSelection(comboBox);
   }
 
+  @RunsInEDT
   private void clearSelectionInComboBox() {
     setSelectedIndex(comboBox, (-1));
+    robot.waitForIdle();
   }
 
   public void shouldFailIfHasSelectionAndExpectingNoSelection() {
     selectFirstItemInComboBox();
-    robot.waitForIdle();
     try {
       driver.requireNoSelection(comboBox);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selectedIndex'")
-                             .contains("expected:<-1> but was:<0>");
+                             .contains("Expecting no selection, but found:<'first'>");
     }
   }
 
   public void shouldPassIfComboBoxIsEditable() {
     makeComboBoxEditable();
-    robot.waitForIdle();
     driver.requireEditable(comboBox);
   }
 
   public void shouldFailIfComboBoxIsNotEditableAndExpectingEditable() {
     makeComboBoxNotEditable();
-    robot.waitForIdle();
     try {
       driver.requireEditable(comboBox);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'editable'").contains("expected:<true> but was:<false>");
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSelectAllTextIfComboBoxIsNotEditable(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    selectFirstItemInComboBox();
+  public void shouldThrowErrorWhenSelectingAllTextInDisabledJComboBox() {
+    disableComboBox();
+    try {
+      driver.selectAllText(comboBox);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenSelectingAllTextInNotShowingJComboBox() {
+    hideWindow();
+    try {
+      driver.selectAllText(comboBox);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenSelectingAllTextInNotEditableJComboBox() {
     makeComboBoxNotEditable();
-    robot.waitForIdle();
-    driver.selectAllText(comboBox);
-    assertFirstItemIsSelectedInComboBox();
+    try {
+      driver.selectAllText(comboBox);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotEditableComboBox(e);
+    }
   }
-
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSelectAllTextIfComboBoxIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    selectFirstItemInComboBox();
-    makeComboBoxEditable();
-    disable(comboBox);
-    robot.waitForIdle();
-    driver.selectAllText(comboBox);
-    assertFirstItemIsSelectedInComboBox();
-  }
-
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
+@Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldSelectAllText(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    selectFirstItemInComboBox();
-    makeComboBoxEditable();
+    setEditableAndSelectFirstElement(comboBox, true);
     robot.waitForIdle();
     driver.selectAllText(comboBox);
     assertSelectedTextIsEqualTo("first");
   }
 
+  @RunsInEDT
   private void assertSelectedTextIsEqualTo(String expected) {
     Component editor = editorOf(comboBox);
     assertThat(editor).isInstanceOf(JTextComponent.class);
     JTextComponent textBox = (JTextComponent)editor;
-    String selectedText = selectedTextOf(textBox);
-    assertThat(selectedText).isEqualTo(expected);
+    assertThat(selectedTextOf(textBox)).isEqualTo(expected);
   }
-
+  
+  @RunsInEDT
   private static String selectedTextOf(final JTextComponent textBox) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
@@ -324,85 +382,113 @@ public class JComboBoxDriverTest {
     });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotEnterTextIfComboBoxIsNotEditable(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    selectFirstItemInComboBox();
-    makeComboBoxNotEditable();
-    robot.waitForIdle();
-    driver.enterText(comboBox, "Hello");
-    assertFirstItemIsSelectedInComboBox();
+  public void shouldThrowErrorWhenEnteringTextInDisabledJComboBox() {
+    disableComboBox();
+    try {
+      driver.enterText(comboBox, "Hello");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotEnterTextIfComboBoxIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    selectFirstItemInComboBox();
-    makeComboBoxEditable();
+  private void disableComboBox() {
     disable(comboBox);
     robot.waitForIdle();
-    driver.enterText(comboBox, "Hello");
-    assertFirstItemIsSelectedInComboBox();
+  }
+
+  public void shouldThrowErrorWhenEnteringTextInNotShowingJComboBox() {
+    hideWindow();
+    try {
+      driver.enterText(comboBox, "Hello");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenEnteringTextInNotEditableJComboBox() {
+   makeComboBoxNotEditable();
+    try {
+      driver.enterText(comboBox, "Hello");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotEditableComboBox(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldEnterText(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     makeComboBoxEditable();
-    robot.waitForIdle();
     driver.enterText(comboBox, "Hello");
     assertThat(textIn(comboBox)).contains("Hello");
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotReplaceTextIfComboBoxIsNotEditable(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    selectFirstItemInComboBox();
-    makeComboBoxNotEditable();
-    robot.waitForIdle();
-    driver.replaceText(comboBox, "Hello");
-    assertFirstItemIsSelectedInComboBox();
-  }
-
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotReplaceTextIfComboBoxIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    selectFirstItemInComboBox();
-    makeComboBoxEditable();
-    disable(comboBox);
-    robot.waitForIdle();
-    driver.replaceText(comboBox, "Hello");
-    assertFirstItemIsSelectedInComboBox();
-  }
-
-  private void assertFirstItemIsSelectedInComboBox() {
-    assertThatSelectedIndexIsEqualTo(0);
+  private void assertActionFailureDueToNotEditableComboBox(IllegalStateException e) {
+    assertThat(e).message().contains("Expecting component").contains("to be editable");
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldReplaceText(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    selectFirstItemInComboBox();
-    makeComboBoxEditable();
-    robot.waitForIdle();
+    setEditableAndSelectFirstElement(comboBox, true);
     driver.replaceText(comboBox, "Hello");
     assertThat(textIn(comboBox)).isEqualTo("Hello");
   }
 
-  private void selectFirstItemInComboBox() {
-    setSelectedIndex(comboBox, 0);
+  @RunsInEDT
+  private static void setEditableAndSelectFirstElement(final JComboBox comboBox, final boolean editable) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        comboBox.setSelectedIndex(0);
+        comboBox.setEditable(editable);
+      }
+    });
   }
 
+  public void shouldThrowErrorWhenReplacingTextInDisabledJComboBox() {
+    disableComboBox();
+    try {
+      driver.replaceText(comboBox, "Hello");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenReplacingTextInNotEditableJComboBox() {
+    makeComboBoxNotEditable();
+    try {
+      driver.replaceText(comboBox, "Hello");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotEditableComboBox(e);
+    }
+  }
+
+  @RunsInEDT
+  private void selectFirstItemInComboBox() {
+    setSelectedIndex(comboBox, 0);
+    robot.waitForIdle();
+  }
+
+  @RunsInEDT
   private void assertThatSelectedIndexIsEqualTo(int expected) {
     int selectedIndex = selectedIndexOf(comboBox);
     assertThat(selectedIndex).isEqualTo(expected);
   }
 
+  @RunsInEDT
   private static String textIn(final JComboBox comboBox) {
-    Component editor = editorOf(comboBox);
-    if (editor instanceof JLabel) return JLabelTextQuery.textOf((JLabel)editor);
-    if (editor instanceof JTextComponent) return JTextComponentTextQuery.textOf((JTextComponent)editor);
-    return null;
+    return execute(new GuiQuery<String>() {
+      protected String executeInEDT()  {
+        Component editor = comboBox.getEditor().getEditorComponent();
+        if (editor instanceof JLabel) return ((JLabel)editor).getText();
+        if (editor instanceof JTextComponent) return ((JTextComponent)editor).getText();
+        return null;
+      }
+    });
   }
 
   private static Component editorOf(final JComboBox comboBox) {
@@ -415,16 +501,14 @@ public class JComboBoxDriverTest {
 
   public void shouldPassIfComboBoxIsNotEditable() {
     makeComboBoxNotEditable();
-    robot.waitForIdle();
     driver.requireNotEditable(comboBox);
   }
 
   public void shouldFailIfComboBoxIsEditableAndExpectingNotEditable() {
     makeComboBoxEditable();
-    robot.waitForIdle();
     try {
       driver.requireNotEditable(comboBox);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'editable'").contains("expected:<false> but was:<true>");
     }
@@ -434,7 +518,6 @@ public class JComboBoxDriverTest {
   public void shouldShowDropDownListWhenComboBoxIsNotEditable(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     makeComboBoxNotEditable();
-    robot.waitForIdle();
     driver.showDropDownList(comboBox);
     assertThatDropDownIsVisible();
   }
@@ -443,32 +526,50 @@ public class JComboBoxDriverTest {
   public void shouldShowDropDownListWhenComboBoxIsEditable(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     makeComboBoxEditable();
-    robot.waitForIdle();
     driver.showDropDownList(comboBox);
     assertThatDropDownIsVisible();
   }
 
+  @RunsInEDT
   private void makeComboBoxEditable() {
     setEditable(comboBox, true);
+    robot.waitForIdle();
   }
 
+  @RunsInEDT
   private void makeComboBoxNotEditable() {
     setEditable(comboBox, false);
+    robot.waitForIdle();
   }
 
+  @RunsInEDT
   private void assertThatDropDownIsVisible() {
     assertThat(isDropDownVisible(comboBox)).isTrue();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotShowDropDownListWhenComboBoxIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    disable(comboBox);
+  @RunsInEDT
+  private void hideWindow() {
+    hide(window);
     robot.waitForIdle();
-    driver.showDropDownList(comboBox);
-    assertThat(isDropDownVisible(comboBox)).isFalse();
   }
 
+  @RunsInEDT
+  private void clearSelectionAndDisableComboBox() {
+    clearSelectionAndDisable(comboBox);
+    robot.waitForIdle();
+  }
+  
+  @RunsInEDT
+  private static void clearSelectionAndDisable(final JComboBox comboBox) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        comboBox.setSelectedIndex(-1);
+        comboBox.setEnabled(false);
+      }
+    });
+  }
+
+  @RunsInEDT
   private static boolean isDropDownVisible(final JComboBox comboBox) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
@@ -492,7 +593,11 @@ public class JComboBoxDriverTest {
     final JComboBox comboBox = new JComboBox(array("first", "second", "third"));
 
     static MyWindow createNew() {
-      return new MyWindow();
+      return GuiActionRunner.execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

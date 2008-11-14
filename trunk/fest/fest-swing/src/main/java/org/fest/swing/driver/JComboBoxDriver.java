@@ -38,7 +38,7 @@ import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.JComboBoxContentQuery.contents;
 import static org.fest.swing.driver.JComboBoxEditableQuery.isEditable;
-import static org.fest.swing.driver.JComboBoxEditorAccessibleQuery.isEditorAccessible;
+import static org.fest.swing.driver.JComboBoxAccessibleEditorValidator.validateEditorIsAccessible;
 import static org.fest.swing.driver.JComboBoxItemIndexValidator.validateIndex;
 import static org.fest.swing.driver.JComboBoxMatchingItemQuery.matchingItemIndex;
 import static org.fest.swing.driver.JComboBoxSelectionValueQuery.*;
@@ -224,9 +224,12 @@ public class JComboBoxDriver extends JComponentDriver {
    * is executed only if the <code>{@link JComboBox}</code> is editable.
    * @param comboBox the target <code>JComboBox</code>.
    * @param text the text to enter.
+   * @throws IllegalStateException if the <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if the <code>JComboBox</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JComboBox</code> is not editable.
    */
+  @RunsInEDT
   public void replaceText(JComboBox comboBox, String text) {
-    if (!isEditorAccessible(comboBox)) return;
     selectAllText(comboBox);
     enterText(comboBox, text);
   }
@@ -237,12 +240,13 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param comboBox the target <code>JComboBox</code>.
    * @throws IllegalStateException if the <code>JComboBox</code> is disabled.
    * @throws IllegalStateException if the <code>JComboBox</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JComboBox</code> is not editable.
    */
   @RunsInEDT
   public void selectAllText(JComboBox comboBox) {
     Component editor = accessibleEditorOf(comboBox);
     if (!(editor instanceof JComponent)) return;
-    focusAndWaitForFocusGain(editor);
+    focus(editor);
     invokeAction((JComponent) editor, selectAllAction);
   }
 
@@ -250,7 +254,7 @@ public class JComboBoxDriver extends JComponentDriver {
   private static Component accessibleEditorOf(final JComboBox comboBox) {
     return execute(new GuiQuery<Component>() {
       protected Component executeInEDT() {
-        if (!isEditorAccessible(comboBox)) return null;
+        validateEditorIsAccessible(comboBox);
         return comboBox.getEditor().getEditorComponent();
       }
     });
@@ -263,19 +267,20 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param text the text to enter.
    * @throws IllegalStateException if the <code>JComboBox</code> is disabled.
    * @throws IllegalStateException if the <code>JComboBox</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JComboBox</code> is not editable.
    */
   @RunsInEDT
   public void enterText(JComboBox comboBox, String text) {
-    if (!editorAccessible(comboBox)) return;
-    focusAndWaitForFocusGain(comboBox);
+    inEdtValidateEditorIsAccessible(comboBox);
+    focus(comboBox);
     robot.enterText(text);
   }
 
   @RunsInEDT
-  private static boolean editorAccessible(final JComboBox comboBox) {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return isEditorAccessible(comboBox);
+  private static void inEdtValidateEditorIsAccessible(final JComboBox comboBox) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        validateEditorIsAccessible(comboBox);
       }
     });
   }

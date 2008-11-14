@@ -22,9 +22,11 @@ import javax.swing.JComboBox;
 import org.fest.swing.annotation.RunsInCurrentThread;
 
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
+import static org.fest.swing.format.Formatting.format;
+import static org.fest.util.Strings.concat;
 
 /**
- * Understands an action that indicates whether editor of a <code>{@link JComboBox}</code> is accessible or not. To be
+ * Understands an action that validates that the editor of a <code>{@link JComboBox}</code> is accessible or not. To be
  * accessible, a <code>JComboBox</code> needs to be enabled and editable. <b>Note:</b> this action is <b>not</b> 
  * executed in the event dispatch thread.
  * @see JComboBox#isEditable()
@@ -33,13 +35,14 @@ import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAnd
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-final class JComboBoxEditorAccessibleQuery {
+final class JComboBoxAccessibleEditorValidator {
 
   @RunsInCurrentThread
-  static boolean isEditorAccessible(final JComboBox comboBox) {
+  static void validateEditorIsAccessible(JComboBox comboBox) {
     validateIsEnabledAndShowing(comboBox);
-    return comboBox.isEditable();
+    if (!comboBox.isEditable()) 
+      throw new IllegalStateException(concat("Expecting component ", format(comboBox), " to be editable"));
   }
 
-  private JComboBoxEditorAccessibleQuery() {}
+  private JComboBoxAccessibleEditorValidator() {}
 }
