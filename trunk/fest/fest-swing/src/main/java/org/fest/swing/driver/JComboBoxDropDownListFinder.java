@@ -23,10 +23,10 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.TypeMatcher;
-import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.util.TimeoutWatch;
 
 import static org.fest.swing.timing.Pause.pause;
@@ -54,20 +54,17 @@ final class JComboBoxDropDownListFinder {
    * calling this method in the event dispatch thread.
    * @return the found <code>JList</code>, or <code>null</code> if a drop-down list cannot be found.
    */
+  @RunsInEDT
   JList findDropDownList() {
     JPopupMenu popup = robot.findActivePopupMenu();
     if (popup == null) {
       TimeoutWatch watch = startWatchWithTimeoutOf(robot.settings().timeoutToFindPopup());
       while ((popup = robot.findActivePopupMenu()) == null) {
-        if (watch.isTimeOut()) throw listNotFound();
+        if (watch.isTimeOut()) return null;
         pause();
       }
     }
     return findListIn(popup);
-  }
-
-  private ComponentLookupException listNotFound() {
-    throw new ComponentLookupException("Unable to find the pop-up list for the JComboBox");
   }
 
   private JList findListIn(Container parent) {

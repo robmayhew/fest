@@ -16,26 +16,19 @@
 package org.fest.swing.driver;
 
 import java.awt.Component;
-import java.awt.Container;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
-import javax.swing.JPopupMenu;
 
 import org.fest.assertions.Description;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JComboBoxCellReader;
-import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
-import org.fest.swing.util.TimeoutWatch;
 
 import static javax.swing.text.DefaultEditorKit.selectAllAction;
 
@@ -46,15 +39,12 @@ import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAnd
 import static org.fest.swing.driver.JComboBoxContentQuery.contents;
 import static org.fest.swing.driver.JComboBoxEditableQuery.isEditable;
 import static org.fest.swing.driver.JComboBoxEditorAccessibleQuery.isEditorAccessible;
-import static org.fest.swing.driver.JComboBoxEditorQuery.editorOf;
 import static org.fest.swing.driver.JComboBoxItemIndexValidator.validateIndex;
 import static org.fest.swing.driver.JComboBoxMatchingItemQuery.matchingItemIndex;
 import static org.fest.swing.driver.JComboBoxSelectionValueQuery.*;
 import static org.fest.swing.driver.JComboBoxSetPopupVisibleTask.setPopupVisible;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.task.JComboBoxSetSelectedIndexTask.setSelectedIndex;
-import static org.fest.swing.timing.Pause.pause;
-import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.*;
 
@@ -71,9 +61,8 @@ public class JComboBoxDriver extends JComponentDriver {
   private static final String EDITABLE_PROPERTY = "editable";
   private static final String SELECTED_INDEX_PROPERTY = "selectedIndex";
 
-  private static final ComponentMatcher LIST_MATCHER = new TypeMatcher(JList.class);
-
   private final JListDriver listDriver;
+  private final JComboBoxDropDownListFinder dropDownListFinder;
 
   private JComboBoxCellReader cellReader;
 
@@ -84,6 +73,7 @@ public class JComboBoxDriver extends JComponentDriver {
   public JComboBoxDriver(Robot robot) {
     super(robot);
     listDriver = new JListDriver(robot);
+    dropDownListFinder = new JComboBoxDropDownListFinder(robot);
     cellReader(new BasicJComboBoxCellReader());
   }
 
@@ -209,7 +199,7 @@ public class JComboBoxDriver extends JComponentDriver {
 
   @RunsInEDT
   private void selectItemAtIndex(final JComboBox comboBox, final int index) {
-    JList dropDownList = findDropDownList();
+    JList dropDownList = dropDownListFinder.findDropDownList();
     if (dropDownList != null) {
       listDriver.selectItem(dropDownList, index);
       return;
@@ -245,25 +235,49 @@ public class JComboBoxDriver extends JComponentDriver {
    * Simulates a user selecting the text in the <code>{@link JComboBox}</code>. This action is executed only if the
    * <code>{@link JComboBox}</code> is editable.
    * @param comboBox the target <code>JComboBox</code>.
+   * @throws IllegalStateException if the <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if the <code>JComboBox</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void selectAllText(JComboBox comboBox) {
-    if (!isEditorAccessible(comboBox)) return;
-    Component editor = editorOf(comboBox);
+    Component editor = accessibleEditorOf(comboBox);
     if (!(editor instanceof JComponent)) return;
-    focus(editor);
+    focusAndWaitForFocusGain(editor);
     invokeAction((JComponent) editor, selectAllAction);
   }
 
+  @RunsInEDT
+  private static Component accessibleEditorOf(final JComboBox comboBox) {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        if (!isEditorAccessible(comboBox)) return null;
+        return comboBox.getEditor().getEditorComponent();
+      }
+    });
+  }
+  
   /**
    * Simulates a user entering the specified text in the <code>{@link JComboBox}</code>. This action is executed only
    * if the <code>{@link JComboBox}</code> is editable.
    * @param comboBox the target <code>JComboBox</code>.
    * @param text the text to enter.
+   * @throws IllegalStateException if the <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if the <code>JComboBox</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void enterText(JComboBox comboBox, String text) {
-    if (!isEditorAccessible(comboBox)) return;
-    focus(comboBox);
+    if (!editorAccessible(comboBox)) return;
+    focusAndWaitForFocusGain(comboBox);
     robot.enterText(text);
+  }
+
+  @RunsInEDT
+  private static boolean editorAccessible(final JComboBox comboBox) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return isEditorAccessible(comboBox);
+      }
+    });
   }
 
   /**
@@ -274,35 +288,13 @@ public class JComboBoxDriver extends JComponentDriver {
    */
   @RunsInEDT
   public JList dropDownList() {
-    JList list = findDropDownList();
+    JList list = dropDownListFinder.findDropDownList();
     if (list == null) throw listNotFound();
     return list;
   }
 
-  @RunsInEDT
-  private JList findDropDownList() {
-    JPopupMenu popup = robot.findActivePopupMenu();
-    if (popup == null) {
-      TimeoutWatch watch = startWatchWithTimeoutOf(robot.settings().timeoutToFindPopup());
-      while ((popup = robot.findActivePopupMenu()) == null) {
-        if (watch.isTimeOut()) throw listNotFound();
-        pause();
-      }
-    }
-    return findListIn(popup);
-  }
-
   private ComponentLookupException listNotFound() {
     throw new ComponentLookupException("Unable to find the pop-up list for the JComboBox");
-  }
-
-  @RunsInEDT
-  private JList findListIn(Container parent) {
-    List<Component> found = new ArrayList<Component>(robot.finder().findAll(LIST_MATCHER));
-    if (found.size() != 1) return null;
-    final Component c = found.get(0);
-    if (c instanceof JList) return (JList)c;
-    return null;
   }
 
   /**

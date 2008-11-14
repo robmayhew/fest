@@ -17,17 +17,25 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
+import org.fest.swing.testing.BooleanProvider;
+import org.fest.swing.testing.CommonAssertions;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JComboBoxSetEditableTask.setEditable;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.task.ComponentSetVisibleTask.hide;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.array;
 
@@ -59,12 +67,36 @@ public class JComboBoxEditorAccessibleQueryTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "accessible", groups = { GUI, EDT_ACTION })
-  public void shouldReturnIndicateIfJComboBoxEditorIsAccessible(boolean editable, boolean enabled) {
-    setEditableAndEnabled(comboBox, editable, enabled);
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
+  public void shouldIndicateIfJComboBoxEditorIsAccessible(boolean editable) {
+    setEditable(comboBox, editable);
     robot.waitForIdle();
-    boolean accessible = editable && enabled;
-    assertThat(isEditorAccessible()).isEqualTo(accessible);
+    assertThat(isEditorAccessible()).isEqualTo(editable);
+  }
+
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
+  public void shouldThrowErrorIfJComboBoxIsNotEnabled(boolean editable) {
+    setEditableAndDisabled(comboBox, editable);
+    robot.waitForIdle();
+    try {
+      assertThat(isEditorAccessible()).isEqualTo(editable);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      CommonAssertions.assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
+  public void shouldThrowErrorIfJComboBoxIsNotShowing(boolean editable) {
+    setEditable(comboBox, editable);
+    hide(window);
+    robot.waitForIdle();
+    try {
+      assertThat(isEditorAccessible()).isEqualTo(editable);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      CommonAssertions.assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
   private boolean isEditorAccessible() {
@@ -75,20 +107,11 @@ public class JComboBoxEditorAccessibleQueryTest {
     });
   }
 
-  @DataProvider(name = "accessible") public Object[][] accessible() {
-    return new Object[][] {
-        { true , true  },
-        { true , false },
-        { false, true  },
-        { false, false },
-    };
-  }
-  
-  private static void setEditableAndEnabled(final JComboBox comboBox, final boolean editable, final boolean enabled) {
+  private static void setEditableAndDisabled(final JComboBox comboBox, final boolean editable) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         comboBox.setEditable(editable);
-        comboBox.setEnabled(enabled);
+        comboBox.setEnabled(false);
       }
     });
   }
