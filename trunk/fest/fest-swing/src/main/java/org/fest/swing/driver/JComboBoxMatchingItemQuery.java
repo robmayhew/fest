@@ -34,7 +34,7 @@ final class JComboBoxMatchingItemQuery {
   @RunsInEDT
   static int matchingItemIndex(final JComboBox comboBox, final String value, final JComboBoxCellReader cellReader) {
     return execute(new GuiQuery<Integer>() {
-      protected Integer executeInEDT() throws Throwable {
+      protected Integer executeInEDT() {
         int itemCount = comboBox.getItemCount();
         for (int i = 0; i < itemCount; i++)
           if (areEqual(cellReader.valueAt(comboBox, i), value)) return i;
