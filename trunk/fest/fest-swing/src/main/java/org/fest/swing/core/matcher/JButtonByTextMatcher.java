@@ -17,9 +17,9 @@ package org.fest.swing.core.matcher;
 
 import javax.swing.JButton;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.core.GenericTypeMatcher;
 
-import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.util.Objects.areEqual;
 
 /**
@@ -66,7 +66,8 @@ public class JButtonByTextMatcher extends GenericTypeMatcher<JButton> {
    * @return <code>true</code> if the text in the <code>JButton</code> is equal to the text in this matcher, 
    * <code>false</code> otherwise.
    */
+  @RunsInCurrentThread
   protected boolean isMatching(JButton button) {
-    return areEqual(textOf(button), text);
+    return areEqual(button.getText(), text);
   }
 }

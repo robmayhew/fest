@@ -50,12 +50,12 @@ public abstract class JTableCellWriterTestCase {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    writer = createWriter(robot);
+    writer = createWriter();
     frame = TableDialogEditDemoWindow.createNew(getClass());
     robot.showWindow(frame, new Dimension(500, 100));
   }
 
-  protected abstract JTableCellWriter createWriter(Robot robot);
+  protected abstract JTableCellWriter createWriter();
 
   @AfterMethod public void tearDown() {
     robot.cleanUp();

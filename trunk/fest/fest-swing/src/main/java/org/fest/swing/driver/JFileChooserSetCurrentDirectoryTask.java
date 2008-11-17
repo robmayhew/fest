@@ -21,6 +21,7 @@ import javax.swing.JFileChooser;
 
 import org.fest.swing.edt.GuiTask;
 
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
@@ -31,9 +32,10 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JFileChooserSetCurrentDirectoryTask {
 
-  static void setCurrentDir(final JFileChooser fileChooser, final File dir) {
+  static void validateAndSetCurrentDirectory(final JFileChooser fileChooser, final File dir) {
     execute(new GuiTask() {
       protected void executeInEDT() {
+        validateIsEnabledAndShowing(fileChooser);
         fileChooser.setCurrentDirectory(dir);
       }
     });

@@ -18,34 +18,19 @@ package org.fest.swing.driver;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 
-import org.fest.swing.edt.GuiQuery;
-
-import static org.fest.swing.edt.GuiActionRunner.execute;
-
 /**
- * Understands an action, executed in the event dispatch thread, that returns the text used in the "cancel button" of a
- * <code>{@link JFileChooser}</code>.
+ * Understands an action that returns the text used in the "cancel" button of a <code>{@link JFileChooser}</code>.
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
 final class JFileChooserCancelButtonTextQuery {
 
-  private static final JFileChooserCancelButtonTextGuiQuery QUERY = new JFileChooserCancelButtonTextGuiQuery();
-
   private static final String CANCEL_BUTTON_TEXT_KEY = "FileChooser.cancelButtonText";
 
   static String cancelButtonText() {
-    return execute(QUERY);
+    return UIManager.getString(CANCEL_BUTTON_TEXT_KEY);
   }
 
   private JFileChooserCancelButtonTextQuery() {}
-
-  private static class JFileChooserCancelButtonTextGuiQuery extends GuiQuery<String> {
-    JFileChooserCancelButtonTextGuiQuery() {}
-    
-    protected String executeInEDT() {
-      return UIManager.getString(CANCEL_BUTTON_TEXT_KEY);
-    }
-  }
 }

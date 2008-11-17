@@ -19,9 +19,15 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
+import static javax.swing.JFileChooser.*;
+
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands a task that selects a file in a <code>{@link JFileChooser}</code>. This task is executed in the event
@@ -31,13 +37,30 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JFileChooserSelectFileTask {
 
-  static void setSelectedFile(final JFileChooser fileChooser, final File file) {
+  @RunsInEDT
+  static void validateAndSelectFile(final JFileChooser fileChooser, final File file) {
     execute(new GuiTask() {
       protected void executeInEDT() {
+        validateIsEnabledAndShowing(fileChooser);
+        validateFileToChoose(fileChooser, file);
         fileChooser.setSelectedFile(file);
       }
     });
   }
   
+  @RunsInCurrentThread
+  private static void validateFileToChoose(JFileChooser fileChooser, File file) {
+    int mode = fileChooser.getFileSelectionMode();
+    boolean isFolder = file.isDirectory();
+    if (mode == FILES_ONLY && isFolder)
+      throw cannotSelectFile(file, "the file chooser cannot open directories");
+    if (mode == DIRECTORIES_ONLY && !isFolder)
+      throw cannotSelectFile(file, "the file chooser can only open directories");
+  }
+
+  private static IllegalArgumentException cannotSelectFile(File file, String reason) {
+    return new IllegalArgumentException(concat("Unable to select file ", file, ": ", reason));
+  }
+
   private JFileChooserSelectFileTask() {}
 }

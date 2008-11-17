@@ -15,11 +15,11 @@
  */
 package org.fest.swing.driver;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.testng.annotations.Test;
 
 import org.fest.swing.cell.JTableCellWriter;
-import org.fest.swing.core.Robot;
-import org.testng.annotations.Test;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * Tests for <code>{@link JTableTextComponentEditorCellWriter}</code>.
@@ -29,8 +29,8 @@ import org.testng.annotations.Test;
  */
 public class JTableTextComponentEditorCellWriterTest extends JTableCellWriterTestCase {
 
-  protected JTableCellWriter createWriter(Robot robot) {
-    return new JTableTextComponentEditorCellWriter(robot);
+  protected JTableCellWriter createWriter() {
+    return new JTableTextComponentEditorCellWriter(robot());
   }
 
   @Test public void shouldEnterTextInTextComponentEditor() {

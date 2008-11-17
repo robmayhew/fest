@@ -61,7 +61,7 @@ public class JFileChooserSetCurrentDirectoryTaskTest {
   }
 
   public void shouldSetCurrentDirectory() {
-    JFileChooserSetCurrentDirectoryTask.setCurrentDir(fileChooser, directoryToSelect);
+    JFileChooserSetCurrentDirectoryTask.validateAndSetCurrentDirectory(fileChooser, directoryToSelect);
     robot.waitForIdle();
     assertThat(currentDirectoryPath()).isEqualTo(canonicalPathOf(directoryToSelect));
   }

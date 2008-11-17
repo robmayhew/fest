@@ -15,7 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Dimension;
 import java.io.File;
 
 import javax.swing.JButton;
@@ -27,9 +26,10 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.timing.Condition;
 
@@ -37,10 +37,12 @@ import static javax.swing.JFileChooser.*;
 import static javax.swing.SwingUtilities.invokeLater;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.task.ComponentSetVisibleTask.hide;
+import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.util.Files.*;
@@ -56,13 +58,18 @@ import static org.fest.util.Strings.isEmpty;
 public class JFileChooserDriverTest {
 
   private Robot robot;
-  private JFileChooser fileChooser;
   private JFileChooserDriver driver;
+  private MyWindow window;
+  private JFileChooser fileChooser;
 
+  @BeforeMethod public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JFileChooserDriver(robot);
-    MyWindow window = MyWindow.createNew();
+    window = MyWindow.createNew();
     fileChooser = window.fileChooser;
     robot.showWindow(window);
   }
@@ -89,6 +96,7 @@ public class JFileChooserDriverTest {
     temporaryFile.delete();
   }
 
+  @RunsInEDT
   private static File selectedFileIn(final JFileChooser fileChooser) {
     return execute(new GuiQuery<File>() {
       protected File executeInEDT() {
@@ -97,27 +105,53 @@ public class JFileChooserDriverTest {
     });
   }
 
-  public void shouldThrowErrorIfChooserCanOnlySelectFoldersAndFileToSelectIsFile() {
+  public void shouldThrowErrorWhenSelectingFileInDisabledJFileChooser() {
     File temporaryFile = newTemporaryFile();
-    setFileSelectionMode(fileChooser, DIRECTORIES_ONLY);
+    disableFileChooser();
     try {
       driver.selectFile(fileChooser, temporaryFile);
-      fail();
-    } catch (ActionFailedException expected) {
-      assertThat(expected).message().contains("the file chooser can only open directories");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
     } finally {
       temporaryFile.delete();
     }
   }
 
-  public void shouldThrowErrorIfChooserCanOnlySelectFilesAndFileToSelectIsFolder() {
+  public void shouldThrowErrorWhenSelectingFileInNotShowingJFileChooser() {
+    File temporaryFile = newTemporaryFile();
+    hideWindow();
+    try {
+      driver.selectFile(fileChooser, temporaryFile);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    } finally {
+      temporaryFile.delete();
+    }
+  }
+
+  public void shouldThrowErrorIfJFileChooserCanOnlySelectFoldersAndFileToSelectIsFile() {
+    File temporaryFile = newTemporaryFile();
+    setFileSelectionMode(fileChooser, DIRECTORIES_ONLY);
+    try {
+      driver.selectFile(fileChooser, temporaryFile);
+      failWhenExpectingException();
+    } catch (IllegalArgumentException e) {
+      assertThat(e).message().contains("the file chooser can only open directories");
+    } finally {
+      temporaryFile.delete();
+    }
+  }
+
+  public void shouldThrowErrorIfJFileChooserCanOnlySelectFilesAndFileToSelectIsFolder() {
     File temporaryFolder = newTemporaryFolder();
     setFileSelectionMode(fileChooser, FILES_ONLY);
     try {
       driver.selectFile(fileChooser, temporaryFolder);
-      fail();
-    } catch (ActionFailedException expected) {
-      assertThat(expected).message().contains("the file chooser cannot open directories");
+      failWhenExpectingException();
+    } catch (IllegalArgumentException e) {
+      assertThat(e).message().contains("the file chooser cannot open directories");
     } finally {
       temporaryFolder.delete();
     }
@@ -154,12 +188,48 @@ public class JFileChooserDriverTest {
   }
 
   public void shouldSetCurrentDirectory() {
+    File userHome = userHomeDirectory();
+    driver.setCurrentDirectory(fileChooser, userHome);
+    assertThat(currentDirectoryAbsolutePath(fileChooser)).isEqualTo(userHome.getAbsolutePath());
+  }
+
+  public void shouldThrowErrorWhenSettingCurrentDirectoryInDisabledJFileChooser() {
+    disableFileChooser();
+    try {
+      driver.setCurrentDirectory(fileChooser, userHomeDirectory());
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  @RunsInEDT
+  private void disableFileChooser() {
+    disable(fileChooser);
+    robot.waitForIdle();
+  }
+  
+  public void shouldThrowErrorWhenSettingCurrentDirectoryInNotShowingJFileChooser() {
+    hideWindow();
+    try {
+      driver.setCurrentDirectory(fileChooser, userHomeDirectory());
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+  
+  private File userHomeDirectory() {
     String homePath = System.getProperty("user.home");
     File userHome = new File(homePath);
     assertThat(userHome.isDirectory()).isTrue();
-    String userHomeAbsolutePath = userHome.getAbsolutePath();
-    driver.setCurrentDirectory(fileChooser, userHome);
-    assertThat(userHomeAbsolutePath).isEqualTo(currentDirectoryAbsolutePath(fileChooser));
+    return userHome;
+  }
+
+  @RunsInEDT
+  private void hideWindow() {
+    hide(window);
+    robot.waitForIdle();
   }
 
   private static String currentDirectoryAbsolutePath(final JFileChooser fileChooser) {
@@ -176,16 +246,20 @@ public class JFileChooserDriverTest {
 
     final JFileChooser fileChooser = new JFileChooser();
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
     
     private MyWindow() {
       super(JFileChooserDriverTest.class);
       fileChooser.setCurrentDirectory(temporaryFolder());
       fileChooser.setDialogType(OPEN_DIALOG);
-      add(fileChooser);
-      setPreferredSize(new Dimension(600, 600));
+      addComponents(fileChooser);
     }
   }
 }

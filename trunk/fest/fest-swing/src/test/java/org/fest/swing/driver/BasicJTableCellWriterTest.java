@@ -20,7 +20,6 @@ import org.testng.annotations.Test;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.Robot;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -33,8 +32,8 @@ import static org.fest.swing.testing.TestGroups.GUI;
  */
 public class BasicJTableCellWriterTest extends JTableCellWriterTestCase {
 
-  protected JTableCellWriter createWriter(Robot robot) {
-    return new BasicJTableCellWriter(robot);
+  protected JTableCellWriter createWriter() {
+    return new BasicJTableCellWriter(robot());
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
