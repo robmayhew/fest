@@ -57,8 +57,7 @@ public class FrameDriver extends WindowDriver {
    */
   @RunsInEDT
   public void iconify(Frame frame) {
-    Point p = iconifyInfo(frame);
-    simulateMaximize(frame, p);
+    moveMouseIgnoringAnyError(frame, iconifyInfo(frame));
     robot.waitForIdle();
     updateFrameExtendedState(frame, ICONIFIED);
   }
@@ -106,18 +105,10 @@ public class FrameDriver extends WindowDriver {
    */
   @RunsInEDT
   public void maximize(Frame frame) {
-    Point p = maximizeInfo(frame);
-    simulateMaximize(frame, p);
+    moveMouseIgnoringAnyError(frame, maximizeInfo(frame));
     if (!supportsMaximize(Toolkit.getDefaultToolkit()))
       throw actionFailure("Platform does not support maximizing frames");
     updateFrameExtendedState(frame, MAXIMIZED_BOTH);
-  }
-
-  private void simulateMaximize(Frame frame, Point p) {
-    try {
-      robot.moveMouse(frame, p.x, p.y);
-    } catch (RuntimeException ignored) {}
-    robot.waitForIdle();
   }
 
   @RunsInEDT

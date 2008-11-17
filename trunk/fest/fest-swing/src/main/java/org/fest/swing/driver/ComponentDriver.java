@@ -451,4 +451,31 @@ public class ComponentDriver {
       }
     };
   }
+
+  /**
+   * Simulates a user moving the mouse pointer to the given coordinates relative to the given
+   * <code>{@link Component}</code>. This method will <b>not</b> throw any exceptions if the it was not possible to
+   * move the mouse pointer.
+   * @param c the given <code>Component</code>.
+   * @param p coordinates relative to the given <code>Component</code>.
+   */
+  @RunsInEDT
+  protected final void moveMouseIgnoringAnyError(Component c, Point p) {
+    moveMouseIgnoringAnyError(c, p.x, p.y);
+  }
+
+  /**
+   * Simulates a user moving the mouse pointer to the given coordinates relative to the given
+   * <code>{@link Component}</code>. This method will <b>not</b> throw any exceptions if the it was not possible to
+   * move the mouse pointer.
+   * @param c the given <code>Component</code>.
+   * @param x horizontal coordinate relative to the given <code>Component</code>.
+   * @param y vertical coordinate relative to the given <code>Component</code>.
+   */
+  @RunsInEDT
+  protected final void moveMouseIgnoringAnyError(Component c, int x, int y) {
+    try {
+      robot.moveMouse(c, x, y);
+    } catch (RuntimeException ignored) {}
+  }
 }

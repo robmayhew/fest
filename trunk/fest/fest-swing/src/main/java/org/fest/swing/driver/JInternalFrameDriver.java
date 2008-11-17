@@ -21,19 +21,24 @@ import java.beans.PropertyVetoException;
 
 import javax.swing.JInternalFrame;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.UnexpectedException;
 
+import static org.fest.swing.driver.ComponentStateValidator.validateIsShowing;
 import static org.fest.swing.driver.JInternalFrameAction.*;
 import static org.fest.swing.driver.JInternalFrameClosableQuery.isClosable;
 import static org.fest.swing.driver.JInternalFrameDesktopIconQuery.desktopIconOf;
 import static org.fest.swing.driver.JInternalFrameIconQuery.isIconified;
 import static org.fest.swing.driver.JInternalFrameIconifiableQuery.isIconifiable;
-import static org.fest.swing.driver.JInternalFrameMaximizableQuery.isMaximizable;
 import static org.fest.swing.driver.JInternalFrameSetIconTask.setIcon;
 import static org.fest.swing.driver.JInternalFrameSetMaximumTask.setMaximum;
 import static org.fest.swing.driver.WindowLikeContainerLocations.*;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
@@ -61,46 +66,118 @@ public class JInternalFrameDriver extends ContainerDriver {
    * Brings the given <code>{@link JInternalFrame}</code> to the front.
    * @param internalFrame the target <code>JInternalFrame</code>.
    */
+  @RunsInEDT
   public void moveToFront(JInternalFrame internalFrame) {
-    JInternalFrameMoveToFrontTask.moveToFront(internalFrame);
+    toFront(internalFrame);
   }
 
+  @RunsInEDT
+  private static void toFront(final JInternalFrame internalFrame) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        // it seems that moving to front always works, regardless if the internal frame is invisible and/or disabled.
+        internalFrame.toFront();
+      }
+    });
+  }
+  
   /**
    * Brings the given <code>{@link JInternalFrame}</code> to the back.
    * @param internalFrame the target <code>JInternalFrame</code>.
    */
+  @RunsInEDT
   public void moveToBack(JInternalFrame internalFrame) {
-    JInternalFrameMoveToBackTask.moveToBack(internalFrame);
+    toBack(internalFrame);
+  }
+  
+  @RunsInEDT
+  private static void toBack(final JInternalFrame internalFrame) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        // it seems that moving to back always works, regardless if the internal frame is invisible and/or disabled.
+        internalFrame.moveToBack();
+      }
+    });
   }
 
   /**
    * Maximizes the given <code>{@link JInternalFrame}</code>, deconifying it first if it is iconified.
    * @param internalFrame the target <code>JInternalFrame</code>.
-   * @throws ActionFailedException if the given <code>JInternalFrame</code> is not maximizable.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not maximizable.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not showing on the screen.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
+  @RunsInEDT
   public void maximize(JInternalFrame internalFrame) {
-    if (!isMaximizable(internalFrame))
-      throw actionFailure(concat("The JInternalFrame <", format(internalFrame), "> is not maximizable"));
-    maximizeOrNormalize(internalFrame, MAXIMIZE);
+    Point maximizeLocation = validateAndFindMaximizeLocation(internalFrame);
+    maximizeOrNormalize(internalFrame, MAXIMIZE, maximizeLocation);
   }
-
+  
+  @RunsInEDT
+  private static Point validateAndFindMaximizeLocation(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        validateCanMaximize(internalFrame);
+        return findMaximizeLocation(internalFrame);
+      }
+    });
+  }
+  
+  @RunsInCurrentThread
+  private static void validateCanMaximize(JInternalFrame internalFrame) {
+    validateIsShowingOrIconified(internalFrame);
+    if (!internalFrame.isMaximizable()) 
+      throw new IllegalStateException(concat("The JInternalFrame <", format(internalFrame), "> is not maximizable"));
+  }
+  
   /**
    * Normalizes the given <code>{@link JInternalFrame}</code>, deconifying it first if it is iconified.
    * @param internalFrame the target <code>JInternalFrame</code>.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not showing on the screen.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
+  @RunsInEDT
   public void normalize(JInternalFrame internalFrame) {
-    maximizeOrNormalize(internalFrame, NORMALIZE);
+    Point normalizeLocation = validateAndFindNormalizeLocation(internalFrame);
+    maximizeOrNormalize(internalFrame, NORMALIZE, normalizeLocation);
   }
 
-  private void maximizeOrNormalize(JInternalFrame internalFrame, JInternalFrameAction action) {
-    Container clickTarget = internalFrame;
-    if (isIconified(internalFrame)) clickTarget = JInternalFrameDesktopIconQuery.desktopIconOf(internalFrame);
-    Point p = maximizeLocationOf(clickTarget);
-    robot.moveMouse(clickTarget, p.x, p.y);
-    if (isIconified(internalFrame)) deiconify(internalFrame);
+  @RunsInEDT
+  private static Point validateAndFindNormalizeLocation(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        validateIsShowingOrIconified(internalFrame);
+        return findMaximizeLocation(internalFrame);
+      }
+    });
+  }
+  
+  @RunsInCurrentThread
+  private static void validateIsShowingOrIconified(JInternalFrame internalFrame) {
+    if (!internalFrame.isIcon()) validateIsShowing(internalFrame);
+  }
+  
+  @RunsInCurrentThread
+  private static Point findMaximizeLocation(JInternalFrame internalFrame) {
+    Container clickTarget = internalFrame.isIcon() ? internalFrame.getDesktopIcon() : internalFrame;
+    return maximizeLocationOf(clickTarget);
+  }
+
+  @RunsInEDT
+  private void maximizeOrNormalize(JInternalFrame internalFrame, JInternalFrameAction action, Point toMoveMouseTo) {
+    moveMouseIgnoringAnyError(internalFrame, toMoveMouseTo);
     setMaximumProperty(internalFrame, action);
+  }
+
+  @RunsInEDT
+  private void setMaximumProperty(JInternalFrame internalFrame, JInternalFrameAction action) {
+    try {
+      setIconProperty(internalFrame, DEICONIFY);
+      setMaximum(internalFrame, action);
+      robot.waitForIdle();
+    } catch (UnexpectedException unexpected) {
+      failIfVetoed(internalFrame, action, unexpected);
+    }
   }
 
   /**
@@ -134,15 +211,6 @@ public class JInternalFrameDriver extends ContainerDriver {
   private void setIconProperty(JInternalFrame internalFrame, JInternalFrameAction action) {
     try {
       setIcon(internalFrame, action);
-      robot.waitForIdle();
-    } catch (UnexpectedException unexpected) {
-      failIfVetoed(internalFrame, action, unexpected);
-    }
-  }
-
-  private void setMaximumProperty(JInternalFrame internalFrame, JInternalFrameAction action) {
-    try {
-      setMaximum(internalFrame, action);
       robot.waitForIdle();
     } catch (UnexpectedException unexpected) {
       failIfVetoed(internalFrame, action, unexpected);

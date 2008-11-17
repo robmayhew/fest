@@ -45,7 +45,7 @@ public final class ComponentStateValidator {
    * @throws IllegalStateException if the <code>Component</code> is disabled.
    */
   @RunsInCurrentThread
-  private static void validateIsEnabled(Component c) {
+  public static void validateIsEnabled(Component c) {
     if (!c.isEnabled()) throw new IllegalStateException(concat("Expecting component ", format(c), " to be enabled"));
   }
 
@@ -55,7 +55,7 @@ public final class ComponentStateValidator {
    * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    */
   @RunsInCurrentThread
-  private static void validateIsShowing(Component c) {
+  public static void validateIsShowing(Component c) {
     if (!c.isShowing()) throw componentNotShowingOnScreenFailure(c);
   }
 

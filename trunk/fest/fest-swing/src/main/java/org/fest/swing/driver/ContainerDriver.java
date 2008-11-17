@@ -123,11 +123,8 @@ public abstract class ContainerDriver extends ComponentDriver {
   @RunsInEDT
   private void simulateResizeStarted(Container c, Pair<Dimension, Insets> resizeInfo, int x, int y) {
     Point p = resizeLocation(resizeInfo);
-    try {
-      robot.moveMouse(c, p.x, p.y);
-      robot.moveMouse(c, p.x + x, p.y + y);
-    } catch (RuntimeException ignored) {}
-    robot.waitForIdle();
+    moveMouseIgnoringAnyError(c, p);
+    moveMouseIgnoringAnyError(c, p.x + x, p.y + y);
   }
 
   private static Point resizeLocation(final Pair<Dimension, Insets> resizeInfo) {
@@ -195,11 +192,8 @@ public abstract class ContainerDriver extends ComponentDriver {
   @RunsInEDT
   private void simulateMoveStarted(Container c, Triple<Dimension, Insets, Point> moveInfo, int x, int y) {
     Point p = moveLocation(moveInfo.i, moveInfo.ii);
-    try {
-      robot.moveMouse(c, p.x, p.y);
-      robot.moveMouse(c, p.x + x, p.y + y);
-    } catch (RuntimeException ignored) {}
-    robot.waitForIdle();
+    moveMouseIgnoringAnyError(c, p);
+    moveMouseIgnoringAnyError(c, p.x + x, p.y + y);
   }
 
   // Returns where the mouse usually grabs to move a container (or window.) Center of the top of the frame is usually a

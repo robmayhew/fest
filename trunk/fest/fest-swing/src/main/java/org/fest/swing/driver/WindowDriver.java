@@ -103,15 +103,8 @@ public class WindowDriver extends ContainerDriver {
    */
   @RunsInEDT
   public void close(Window w) {
-    Point closeInfo = closeInfo(w);
-    simulateClosingWindow(w, closeInfo);
+    moveMouseIgnoringAnyError(w, closeInfo(w));
     robot.close(w);
-  }
-
-  private void simulateClosingWindow(Window w, Point p) {
-    try {
-      robot.moveMouse(w, p);
-    } catch (RuntimeException ignored) {}
   }
 
   @RunsInEDT

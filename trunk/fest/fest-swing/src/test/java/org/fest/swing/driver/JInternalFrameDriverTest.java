@@ -23,10 +23,15 @@ import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.*;
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
@@ -46,6 +51,9 @@ import static org.fest.swing.driver.JInternalFrameIconQuery.isIconified;
 import static org.fest.swing.driver.JInternalFrameSetIconTask.setIcon;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.task.ComponentSetVisibleTask.hide;
+import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
@@ -59,14 +67,19 @@ import static org.fest.util.Strings.concat;
 public class JInternalFrameDriverTest {
 
   private Robot robot;
+  private MyWindow window;
   private JInternalFrame internalFrame;
   private JDesktopPane desktopPane;
   private JInternalFrameDriver driver;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JInternalFrameDriver(robot);
-    MyWindow window = MyWindow.createNew();
+    window = MyWindow.createNew();
     internalFrame = window.internalFrame;
     desktopPane = window.desktopPane;
     robot.showWindow(window);
@@ -141,29 +154,69 @@ public class JInternalFrameDriverTest {
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldMaximizeInternalFrame(EventMode eventMode) {
+  public void shouldMaximizeJInternalFrame(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     driver.maximize(internalFrame);
     assertThat(isMaximized(internalFrame)).isTrue();
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldMaximizeIconifiedInternalFrame(EventMode eventMode) {
+  public void shouldMaximizeIconifiedJInternalFrame(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     iconifyJInternalFrame();
     driver.maximize(internalFrame);
     assertThat(isMaximized(internalFrame)).isTrue();
   }
-
+  
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorIfMaximizingFrameThatIsNotMaximizable(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldMaximizeDisabledJInternalFrame(EventMode eventMode) {
+    disableInternalFrame();
+    driver.maximize(internalFrame);
+    assertThat(isMaximized(internalFrame)).isTrue();
+  }
+
+  private void disableInternalFrame() {
+    disable(internalFrame);
+    robot.waitForIdle();
+  }
+
+  public void shouldThrowErrorWhenMaximizingNotShowingJInternalFrame() {
+    hideWindow();
+    try {
+      driver.maximize(internalFrame);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenMaximizingHiddenJInternalFrame() {
+    hideInternalJFrame();
+    try {
+      driver.maximize(internalFrame);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+
+  private void hideInternalJFrame() {
+    hide(internalFrame);
+    robot.waitForIdle();
+  }
+
+  private void hideWindow() {
+    hide(window);
+    robot.waitForIdle();
+  }
+  
+  public void shouldThrowErrorIfMaximizingNotMaximizableJInternalFrame() {
     setNotMaximizable(internalFrame);
     robot.waitForIdle();
     try {
       driver.maximize(internalFrame);
-      fail();
-    } catch (ActionFailedException e) {
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
       assertThat(e).message().contains("The JInternalFrame <")
                              .contains("> is not maximizable");
     }
@@ -331,8 +384,13 @@ public class JInternalFrameDriverTest {
     final JDesktopPane desktopPane;
     final JInternalFrame internalFrame;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {
