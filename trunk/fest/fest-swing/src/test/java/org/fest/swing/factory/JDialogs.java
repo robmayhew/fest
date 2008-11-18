@@ -40,9 +40,9 @@ public final class JDialogs {
 
   public static class JDialogFactory {
     private String name;
-    private String title;
     private Frame owner;
     private boolean resizable = true;
+    private String title;
 
     public JDialogFactory withOwner(Frame newOwner) {
       owner = newOwner;

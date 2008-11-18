@@ -28,20 +28,18 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.UnexpectedException;
+import org.fest.swing.util.Pair;
 
 import static org.fest.swing.driver.ComponentStateValidator.validateIsShowing;
 import static org.fest.swing.driver.JInternalFrameAction.*;
 import static org.fest.swing.driver.JInternalFrameClosableQuery.isClosable;
-import static org.fest.swing.driver.JInternalFrameDesktopIconQuery.desktopIconOf;
 import static org.fest.swing.driver.JInternalFrameIconQuery.isIconified;
-import static org.fest.swing.driver.JInternalFrameIconifiableQuery.isIconifiable;
 import static org.fest.swing.driver.JInternalFrameSetIconTask.setIcon;
 import static org.fest.swing.driver.JInternalFrameSetMaximumTask.setMaximum;
 import static org.fest.swing.driver.WindowLikeContainerLocations.*;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -172,7 +170,6 @@ public class JInternalFrameDriver extends ContainerDriver {
   @RunsInEDT
   private void setMaximumProperty(JInternalFrame internalFrame, JInternalFrameAction action) {
     try {
-      setIconProperty(internalFrame, DEICONIFY);
       setMaximum(internalFrame, action);
       robot.waitForIdle();
     } catch (UnexpectedException unexpected) {
@@ -183,31 +180,74 @@ public class JInternalFrameDriver extends ContainerDriver {
   /**
    * Iconifies the given <code>{@link JInternalFrame}</code>.
    * @param internalFrame the target <code>JInternalFrame</code>.
-   * @throws ActionFailedException if the given <code>JInternalFrame</code> is not iconifiable.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not iconifiable.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
+  @RunsInEDT
   public void iconify(JInternalFrame internalFrame) {
-    if (isIconified(internalFrame)) return;
-    if (!isIconifiable(internalFrame))
-      throw actionFailure(concat("The JInternalFrame <", format(internalFrame), "> is not iconifiable"));
-    Point p = iconifyLocationOf(internalFrame);
-    robot.moveMouse(internalFrame, p.x, p.y);
+    Pair<Boolean, Point> iconifyInfo = validateAndfindIconifyInfo(internalFrame);
+    if (iconifyInfo.i) return; // internal frame is already iconified
+    moveMouseIgnoringAnyError(internalFrame, iconifyInfo.ii);
     setIconProperty(internalFrame, ICONIFY);
+  }
+
+  @RunsInEDT
+  private static Pair<Boolean, Point> validateAndfindIconifyInfo(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Pair<Boolean, Point>>() {
+      protected Pair<Boolean, Point> executeInEDT() throws Throwable {
+        validateIsShowingOrIconified(internalFrame);
+        if (!internalFrame.isIconifiable())
+          throw new IllegalStateException(concat("The JInternalFrame <", format(internalFrame), "> is not iconifiable"));
+        return iconifyInfo(internalFrame);
+      }
+    });
+  }
+  
+  @RunsInCurrentThread
+  private static Pair<Boolean, Point> iconifyInfo(JInternalFrame internalFrame) {
+    boolean iconified = isIconified(internalFrame);
+    if (iconified) return new Pair<Boolean, Point>(true, null);
+    return new Pair<Boolean, Point>(iconified, findIconifyLocation(internalFrame));
   }
 
   /**
    * De-iconifies the given <code>{@link JInternalFrame}</code>.
    * @param internalFrame the target <code>JInternalFrame</code>.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not showing on the screen.
    * @throws ActionFailedException if the <code>JInternalFrame</code> vetoes the action.
    */
+  @RunsInEDT
   public void deiconify(JInternalFrame internalFrame) {
-    if (!isIconified(internalFrame)) return;
-    Container c = desktopIconOf(internalFrame);
-    Point p = iconifyLocationOf(c);
-    robot.moveMouse(c, p.x, p.y);
+    Pair<Boolean, Point> deiconifyInfo = validateAndfindDeiconifyInfo(internalFrame);
+    if (deiconifyInfo.i) return; // internal frame is already de-iconified
+    moveMouseIgnoringAnyError(internalFrame, deiconifyInfo.ii);
     setIconProperty(internalFrame, DEICONIFY);
   }
+  
+  @RunsInEDT
+  private static Pair<Boolean, Point> validateAndfindDeiconifyInfo(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Pair<Boolean, Point>>() {
+      protected Pair<Boolean, Point> executeInEDT() throws Throwable {
+        validateIsShowingOrIconified(internalFrame);
+        return deiconifyInfo(internalFrame);
+      }
+    });
+  }
 
+  @RunsInCurrentThread
+  private static Pair<Boolean, Point> deiconifyInfo(JInternalFrame internalFrame) {
+    boolean deiconified = !isIconified(internalFrame);
+    if (deiconified) return new Pair<Boolean, Point>(true, null);
+    return new Pair<Boolean, Point>(deiconified, findIconifyLocation(internalFrame));
+  }
+
+  @RunsInCurrentThread
+  private static Point findIconifyLocation(JInternalFrame internalFrame) {
+    return iconifyLocationOf(internalFrame.getDesktopIcon());
+  }
+
+  @RunsInEDT
   private void setIconProperty(JInternalFrame internalFrame, JInternalFrameAction action) {
     try {
       setIcon(internalFrame, action);
@@ -234,10 +274,11 @@ public class JInternalFrameDriver extends ContainerDriver {
    * Resizes the <code>{@link JInternalFrame}</code> horizontally.
    * @param internalFrame the target <code>JInternalFrame</code>.
    * @param width the width that the <code>JInternalFrame</code> should have after being resized.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void resizeWidthTo(JInternalFrame internalFrame, int width) {
-    Dimension size = sizeOf(internalFrame);
-    resizeTo(internalFrame, new Dimension(width, size.height));
+    resizeWidth(internalFrame, width);
   }
 
   /**

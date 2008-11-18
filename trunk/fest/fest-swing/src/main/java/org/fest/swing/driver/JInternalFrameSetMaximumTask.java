@@ -34,6 +34,7 @@ final class JInternalFrameSetMaximumTask {
   static void setMaximum(final JInternalFrame internalFrame, final JInternalFrameAction action) {
     execute(new GuiTask() {
       protected void executeInEDT() throws PropertyVetoException {
+        internalFrame.setIcon(false);
         internalFrame.setMaximum(action.value);
       }
     });

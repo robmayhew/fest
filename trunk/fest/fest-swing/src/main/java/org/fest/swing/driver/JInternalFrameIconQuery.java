@@ -16,13 +16,11 @@ package org.fest.swing.driver;
 
 import javax.swing.JInternalFrame;
 
-import org.fest.swing.edt.GuiQuery;
-
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
- * Understands an action, executed in the event dispatch thread, that indicates if a <code>{@link JInternalFrame}</code>
- * is iconified or not.
+ * Understands an action that indicates if a <code>{@link JInternalFrame}</code> is iconified or not. <b>Note:</b> this
+ * action is <b>not</b> executed in the event dispatch thread.
  * @see JInternalFrame#isIcon()
  *
  * @author Yvonne Wang
@@ -30,12 +28,10 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JInternalFrameIconQuery {
 
-  static boolean isIconified(final JInternalFrame frame) {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return frame.isIcon();
-      }
-    });
+  @RunsInCurrentThread
+  static boolean isIconified(JInternalFrame frame) {
+    if (frame.isMaximum()) return false;
+    return frame.isIcon();
   }
 
   private JInternalFrameIconQuery() {}

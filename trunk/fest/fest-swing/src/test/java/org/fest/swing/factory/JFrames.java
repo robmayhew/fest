@@ -37,9 +37,9 @@ public final class JFrames {
 
   public static class JFrameFactory {
     private String name;
-    private String title;
     private boolean resizable = true;
-
+    private String title;
+    
     public JFrameFactory withName(String newName) {
       name = newName;
       return this;

@@ -18,15 +18,20 @@ package org.fest.swing.driver;
 import javax.swing.JInternalFrame;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MDITestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JInternalFrameAction.*;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -40,6 +45,10 @@ public class JInternalFrameSetMaximumTaskTest {
   private Robot robot;
   private JInternalFrame internalFrame;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     MDITestWindow window = MDITestWindow.createNewWindow(getClass());
@@ -52,12 +61,29 @@ public class JInternalFrameSetMaximumTaskTest {
   }
 
   public void shouldMaximizeAndNormalizeJInternalFrame() {
-    assertThat(internalFrame.isMaximum()).isFalse();
+    assertThat(isMaximum(internalFrame)).isFalse();
+    maximize();
+    assertThat(isMaximum(internalFrame)).isTrue();
+    normalize();
+    assertThat(isMaximum(internalFrame)).isFalse();
+  }
+
+  private void maximize() {
     JInternalFrameSetMaximumTask.setMaximum(internalFrame, MAXIMIZE);
     robot.waitForIdle();
-    assertThat(internalFrame.isMaximum()).isTrue();
+  }
+  
+  private void normalize() {
     JInternalFrameSetMaximumTask.setMaximum(internalFrame, NORMALIZE);
     robot.waitForIdle();
-    assertThat(internalFrame.isMaximum()).isFalse();
+  }
+
+  @RunsInEDT
+  private static boolean isMaximum(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return internalFrame.isMaximum() && !internalFrame.isIcon();
+      }
+    });
   }
 }

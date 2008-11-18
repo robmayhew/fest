@@ -25,8 +25,8 @@ import org.fest.swing.util.Triple;
 
 import static org.fest.swing.driver.ComponentMovableQuery.isUserMovable;
 import static org.fest.swing.driver.ComponentMoveTask.moveComponent;
-import static org.fest.swing.driver.ComponentResizableQuery.isResizable;
 import static org.fest.swing.driver.ComponentStateValidator.*;
+import static org.fest.swing.driver.ContainerStateValidator.validateCanResize;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.task.ComponentSetSizeTask.setComponentSize;
@@ -103,13 +103,6 @@ public abstract class ContainerDriver extends ComponentDriver {
         return new Pair<Dimension, Insets>(c.getSize(), c.getInsets());
       }
     });
-  }
-
-  @RunsInCurrentThread
-  private static void validateCanResize(Container c) {
-    validateIsEnabledAndShowing(c);
-    if (!isResizable(c))
-      throw new IllegalStateException(concat("Expecting component ", format(c), " to be resizable by the user"));
   }
 
   @RunsInEDT

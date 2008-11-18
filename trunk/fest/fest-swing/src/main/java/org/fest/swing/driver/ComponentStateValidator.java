@@ -22,7 +22,7 @@ import static org.fest.swing.format.Formatting.format;
 import static org.fest.util.Strings.concat;
 
 /**
- * Understands validation methods related to the state of a <code>{@link Component}</code>.
+ * Understands validation of the state of a <code>{@link Component}</code>.
  *
  * @author Alex Ruiz
  */

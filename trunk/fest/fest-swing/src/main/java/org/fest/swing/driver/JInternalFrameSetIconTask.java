@@ -18,6 +18,7 @@ import java.beans.PropertyVetoException;
 
 import javax.swing.JInternalFrame;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -30,11 +31,12 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JInternalFrameSetIconTask {
 
+  @RunsInEDT
   static void setIcon(final JInternalFrame internalFrame, final JInternalFrameAction action) {
-    final boolean icon = action.value;
     execute(new GuiTask() {
       protected void executeInEDT() throws PropertyVetoException {
-        internalFrame.setIcon(icon);
+        internalFrame.setMaximum(false);
+        internalFrame.setIcon(action.value);
       }
     });
   }

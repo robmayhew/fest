@@ -43,7 +43,6 @@ import org.fest.swing.testing.TestWindow;
 import static java.lang.String.valueOf;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.ComponentLocationQuery.locationOf;
 import static org.fest.swing.driver.JInternalFrameAction.*;
@@ -94,7 +93,7 @@ public class JInternalFrameDriverTest {
     JInternalFrameAction action = MAXIMIZE;
     try {
       driver.failIfVetoed(internalFrame, action, new UnexpectedException(vetoed));
-      fail();
+      failWhenExpectingException();
     } catch (ActionFailedException e) {
       assertThat(e).message().contains(action.name)
                              .contains("was vetoed: <Test>");
@@ -138,8 +137,8 @@ public class JInternalFrameDriverTest {
     robot.waitForIdle();
     try {
       driver.iconify(internalFrame);
-      fail();
-    } catch (ActionFailedException e) {
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
       assertThat(e).message().contains("The JInternalFrame <")
                              .contains("> is not iconifiable");
     }
@@ -325,7 +324,7 @@ public class JInternalFrameDriverTest {
     robot.waitForIdle();
     try {
       driver.close(internalFrame);
-      fail();
+      failWhenExpectingException();
     } catch (ActionFailedException e) {
       assertThat(e).message().contains("The JInternalFrame <")
                              .contains("> is not closable");
