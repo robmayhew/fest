@@ -309,23 +309,21 @@ public class JInternalFrameDriverTest {
     assertThat(closed).isTrue();
   }
 
-  private static Boolean isClosed(final JInternalFrame internalFrame) {
+  private static boolean isClosed(final JInternalFrame internalFrame) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return internalFrame.isClosed();
       }
     });
   }
-
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorIfClosingFrameThatIsNotClosable(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  
+  public void shouldThrowErrorIfClosingFrameThatIsNotClosable() {
     setNotClosable(internalFrame);
     robot.waitForIdle();
     try {
       driver.close(internalFrame);
       failWhenExpectingException();
-    } catch (ActionFailedException e) {
+    } catch (IllegalStateException e) {
       assertThat(e).message().contains("The JInternalFrame <")
                              .contains("> is not closable");
     }

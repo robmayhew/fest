@@ -32,7 +32,6 @@ import org.fest.swing.util.Pair;
 
 import static org.fest.swing.driver.ComponentStateValidator.validateIsShowing;
 import static org.fest.swing.driver.JInternalFrameAction.*;
-import static org.fest.swing.driver.JInternalFrameClosableQuery.isClosable;
 import static org.fest.swing.driver.JInternalFrameIconQuery.isIconified;
 import static org.fest.swing.driver.JInternalFrameSetIconTask.setIcon;
 import static org.fest.swing.driver.JInternalFrameSetMaximumTask.setMaximum;
@@ -275,6 +274,7 @@ public class JInternalFrameDriver extends ContainerDriver {
    * @param internalFrame the target <code>JInternalFrame</code>.
    * @param width the width that the <code>JInternalFrame</code> should have after being resized.
    * @throws IllegalStateException if the <code>JInternalFrame</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not resizable by the user.
    */
   @RunsInEDT
   public void resizeWidthTo(JInternalFrame internalFrame, int width) {
@@ -285,16 +285,22 @@ public class JInternalFrameDriver extends ContainerDriver {
    * Resizes the <code>{@link JInternalFrame}</code> vertically.
    * @param w the target <code>JInternalFrame</code>.
    * @param height the height that the <code>JInternalFrame</code> should have after being resized.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not resizable by the user.
    */
+  @RunsInEDT
   public void resizeHeightTo(JInternalFrame w, int height) {
-    resizeTo(w, new Dimension(w.getWidth(), height));
+    resizeHeight(w, height);
   }
 
   /**
    * Resizes the <code>{@link JInternalFrame}</code> to the given size.
    * @param internalFrame the target <code>JInternalFrame</code>.
    * @param size the size to resize the <code>JInternalFrame</code> to.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not resizable by the user.
    */
+  @RunsInEDT
   public void resizeTo(JInternalFrame internalFrame, Dimension size) {
     resize(internalFrame, size.width, size.height);
   }
@@ -303,8 +309,9 @@ public class JInternalFrameDriver extends ContainerDriver {
    * Moves the <code>{@link JInternalFrame}</code> to the given location.
    * @param internalFrame the target <code>JInternalFrame</code>.
    * @param where the location to move the <code>JInternalFrame</code> to.
-   * @throws ActionFailedException if the given <code>JInternalFrame</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void moveTo(JInternalFrame internalFrame, Point where) {
     move(internalFrame, where.x, where.y);
   }
@@ -312,14 +319,39 @@ public class JInternalFrameDriver extends ContainerDriver {
   /**
    * Closes the given <code>{@link JInternalFrame}</code>.
    * @param internalFrame the target <code>JInternalFrame</code>.
-   * @throws ActionFailedException if the <code>JInternalFrame</code> is not closable.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JInternalFrame</code> is not closable.
    */
+  @RunsInEDT
   public void close(JInternalFrame internalFrame) {
-    if (!isClosable(internalFrame))
-      throw actionFailure(concat("The JInternalFrame <", format(internalFrame), "> is not closable"));
-    // This is LAF-specific, so it must be done programmatically.
-    robot.moveMouse(internalFrame, closeLocationOf(internalFrame));
+    Pair<Boolean, Point> closeInfo = validateAndFindCloseInfo(internalFrame);
+    if (closeInfo.i) return; // internal frame is already closed
+    moveMouseIgnoringAnyError(internalFrame, closeInfo.ii);
     JInternalFrameCloseTask.close(internalFrame);
     robot.waitForIdle();
   }
+ 
+  @RunsInEDT
+  private static Pair<Boolean, Point> validateAndFindCloseInfo(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Pair<Boolean, Point>>() {
+      protected Pair<Boolean, Point> executeInEDT() {
+        validateCanClose(internalFrame);
+        return closeInfo(internalFrame);
+      }
+    });
+  }
+  
+  @RunsInCurrentThread
+  private static void validateCanClose(JInternalFrame internalFrame) {
+    validateIsShowing(internalFrame);
+    if (!internalFrame.isClosable())
+      throw new IllegalStateException(concat("The JInternalFrame <", format(internalFrame), "> is not closable"));
+  }
+  
+  @RunsInCurrentThread
+  private static Pair<Boolean, Point> closeInfo(JInternalFrame internalFrame) {
+    if (internalFrame.isClosed()) return new Pair<Boolean, Point>(true, null);
+    return new Pair<Boolean, Point>(false, closeLocationOf(internalFrame));
+  }
+  
 }
