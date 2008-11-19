@@ -19,6 +19,8 @@ import java.awt.Point;
 
 import javax.swing.JScrollBar;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+
 /**
  * Understands a location in a horizontal <code>{@link JScrollBar}</code>.
  *
@@ -27,23 +29,27 @@ import javax.swing.JScrollBar;
  */
 class HorizontalJScrollBarLocationStrategy extends JScrollBarLocationStrategy {
 
-  public int arrow(JScrollBar scrollBar) {
-    return heightOf(scrollBar);
-  }
-
-  public Point thumbLocation(JScrollBar scrollBar, double fraction) {
+  @RunsInCurrentThread
+  Point thumbLocation(JScrollBar scrollBar, double fraction) {
     int arrow = arrow(scrollBar);
-    return new Point(arrow + (int) (fraction * (widthOf(scrollBar) - 2 * arrow)), arrow / 2);
+    return new Point(arrow + (int) (fraction * (scrollBar.getWidth() - 2 * arrow)), arrow / 2);
   }
 
-  public Point blockLocation(JScrollBar scrollBar, Point unitLocation, int offset) {
+  @RunsInCurrentThread
+  Point blockLocation(JScrollBar scrollBar, Point unitLocation, int offset) {
     Point p = new Point(unitLocation);
     p.x += offset;
     return p;
   }
 
-  public Point unitLocationToScrollUp(JScrollBar scrollBar) {
+  @RunsInCurrentThread
+  Point unitLocationToScrollUp(JScrollBar scrollBar) {
     int arrow = arrow(scrollBar);
-    return new Point(widthOf(scrollBar) - arrow / 2, arrow / 2);
+    return new Point(scrollBar.getWidth() - arrow / 2, arrow / 2);
+  }
+
+  @RunsInCurrentThread
+  int arrow(JScrollBar scrollBar) {
+    return scrollBar.getHeight();
   }
 }

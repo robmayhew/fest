@@ -21,10 +21,9 @@ import java.util.Map;
 
 import javax.swing.JScrollBar;
 
-import static java.awt.Adjustable.*;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
-import static org.fest.swing.driver.JScrollBarValueRangeQuery.valueRangeOf;
-import static org.fest.swing.driver.JScrollBarOrientationQuery.orientationOf;
+import static java.awt.Adjustable.*;
 
 /**
  * Understands a location in a <code>{@link JScrollBar}</code>.
@@ -34,11 +33,11 @@ import static org.fest.swing.driver.JScrollBarOrientationQuery.orientationOf;
  */
 public final class JScrollBarLocation {
   // TODO Test horizontal scroll bar
-  
+
   private static final int BLOCK_OFFSET = 4;
 
   private final Map<Integer, JScrollBarLocationStrategy> strategyMap = new HashMap<Integer, JScrollBarLocationStrategy>();
-  
+
   /**
    * Creates a new </code>{@link JScrollBarLocation}</code>.
    */
@@ -46,21 +45,22 @@ public final class JScrollBarLocation {
     strategyMap.put(HORIZONTAL, new HorizontalJScrollBarLocationStrategy());
     strategyMap.put(VERTICAL, new VerticalJScrollBarLocationStrategy());
   }
-  
+
   /**
    * Returns the location where to move the mouse pointer to scroll to the given position.
    * @param scrollBar the target <code>JScrollBar</code>.
    * @param position the position to scroll to.
    * @return the location where to move the mouse pointer to scroll to the given position.
    */
+  @RunsInCurrentThread
   public Point thumbLocation(JScrollBar scrollBar, int position) {
     double fraction = (double) position / maximumMinusMinimum(scrollBar);
     return locationStrategyFor(scrollBar).thumbLocation(scrollBar, fraction);
   }
 
+  @RunsInCurrentThread
   private int maximumMinusMinimum(JScrollBar scrollBar) {
-    ValueRange valueRange = valueRangeOf(scrollBar);
-    return valueRange.maximum - valueRange.minimum;
+    return scrollBar.getMaximum() - scrollBar.getMinimum();
   }
 
   /**
@@ -68,6 +68,7 @@ public final class JScrollBarLocation {
    * @param scrollBar the target <code>JScrollBar</code>.
    * @return the location where to move the mouse pointer to scroll one block up (or right.)
    */
+  @RunsInCurrentThread
   public Point blockLocationToScrollUp(JScrollBar scrollBar) {
     Point p = unitLocationToScrollUp(scrollBar);
     int offset = BLOCK_OFFSET;
@@ -79,12 +80,14 @@ public final class JScrollBarLocation {
    * @param scrollBar the target <code>JScrollBar</code>.
    * @return the location where to move the mouse pointer to scroll one block down (or left.)
    */
+  @RunsInCurrentThread
   public Point blockLocationToScrollDown(JScrollBar scrollBar) {
     Point p = unitLocationToScrollDown(scrollBar);
     int offset = -BLOCK_OFFSET;
     return blockLocation(scrollBar, p, offset);
   }
 
+  @RunsInCurrentThread
   private Point blockLocation(JScrollBar scrollBar, Point unitLocation, int offset) {
     return locationStrategyFor(scrollBar).blockLocation(scrollBar, unitLocation, offset);
   }
@@ -94,6 +97,7 @@ public final class JScrollBarLocation {
    * @param scrollBar the target <code>JScrollBar</code>.
    * @return the location where to move the mouse pointer to scroll one unit up (or right.)
    */
+  @RunsInCurrentThread
   public Point unitLocationToScrollUp(JScrollBar scrollBar) {
     return locationStrategyFor(scrollBar).unitLocationToScrollUp(scrollBar);
   }
@@ -103,12 +107,14 @@ public final class JScrollBarLocation {
    * @param scrollBar the target <code>JScrollBar</code>.
    * @return the location where to move the mouse pointer to scroll one unit down (or left.)
    */
+  @RunsInCurrentThread
   public Point unitLocationToScrollDown(JScrollBar scrollBar) {
     int arrow = locationStrategyFor(scrollBar).arrow(scrollBar);
     return new Point(arrow / 2, arrow / 2);
   }
 
+  @RunsInCurrentThread
   private JScrollBarLocationStrategy locationStrategyFor(JScrollBar scrollBar) {
-    return strategyMap.get(orientationOf(scrollBar));
+    return strategyMap.get(scrollBar.getOrientation());
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Created on Jul 31, 2008
+ * Created on Nov 19, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,28 +13,29 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.driver;
-
-import java.awt.Point;
-
-import javax.swing.JScrollBar;
-
-import org.fest.swing.annotation.RunsInCurrentThread;
+package org.fest.swing.util;
 
 /**
- * Understands a location in a <code>{@link JScrollBar}</code> in a orientation-specific way.
+ * Understands a range of values.
+ * @param <T> the generic type of the values in this range.
  *
- * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@RunsInCurrentThread
-abstract class JScrollBarLocationStrategy {
+public final class GenericRange<T> {
 
-  abstract int arrow(JScrollBar scrollBar);
+  /** Initial value of this range. */
+  public final T from;
 
-  abstract Point thumbLocation(JScrollBar scrollBar, double fraction);
+  /** Final value of this range. */
+  public final T to;
 
-  abstract Point blockLocation(JScrollBar scrollBar, Point unitLocation, int offset);
-
-  abstract Point unitLocationToScrollUp(JScrollBar scrollBar);
+  /**
+   * Creates a new </code>{@link GenericRange}</code>.
+   * @param from the initial value of this range.
+   * @param to the final value of this range.
+   */
+  public GenericRange(T from, T to) {
+    this.from = from;
+    this.to = to;
+  }
 }

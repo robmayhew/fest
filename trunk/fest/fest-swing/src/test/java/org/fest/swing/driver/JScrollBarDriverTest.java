@@ -20,22 +20,25 @@ import java.awt.Dimension;
 import javax.swing.JScrollBar;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
-import org.fest.swing.edt.GuiTask;
-import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.task.ComponentSetEnabledTask;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JScrollBarSetValueTask.setValue;
 import static org.fest.swing.driver.JScrollBarValueQuery.valueOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
 
@@ -54,6 +57,10 @@ public class JScrollBarDriverTest {
   private Robot robot;
   private JScrollBar scrollBar;
   private JScrollBarDriver driver;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
@@ -78,7 +85,7 @@ public class JScrollBarDriverTest {
     robot.waitForIdle();
     try {
       driver.requireValue(scrollBar, 20);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'value'")
                              .contains("expected:<20> but was:<30>");
@@ -89,8 +96,8 @@ public class JScrollBarDriverTest {
   public void shouldThrowErrorIfTimesToScrollUnitUpIsZeroOrNegative(int times) {
     try {
       driver.scrollUnitUp(scrollBar, times);
-      fail();
-    } catch (ActionFailedException expected) {
+      failWhenExpectingException();
+    } catch (IllegalArgumentException expected) {
       String message = concat(
           "The number of times to scroll up one unit should be greater than zero, but was <", times, ">");
       assertThat(expected).message().isEqualTo(message);
@@ -104,13 +111,14 @@ public class JScrollBarDriverTest {
     assertThatScrollBarValueIsEqualTo(36);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotScrollUnitUpTheGivenNumberOfTimesIfScrollBarIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableScrollBar();
-    int value = valueOf(scrollBar);
-    driver.scrollUnitUp(scrollBar, 6);
-    assertThatScrollBarValueIsEqualTo(value);
+  public void shouldThrowErrorWhenScrollingDisabledJScrollBarUnitUpTheGivenNumberOfTimes() {
+    disableScrollBar();
+    try {
+      driver.scrollUnitUp(scrollBar, 6);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -120,21 +128,22 @@ public class JScrollBarDriverTest {
     assertThatScrollBarValueIsEqualTo(31);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotScrollUnitUpIfScrollBarIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableScrollBar();
-    int value = valueOf(scrollBar);
-    driver.scrollUnitUp(scrollBar);
-    assertThatScrollBarValueIsEqualTo(value);
+  public void shouldThrowErrorWhenScrollingDisabledJScrollBarUnitUp() {
+    disableScrollBar();
+    try {
+      driver.scrollUnitUp(scrollBar);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
   }
 
   @Test(dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
   public void shouldThrowErrorIfTimesToScrollUnitDownIsZeroOrNegative(int times) {
     try {
       driver.scrollUnitDown(scrollBar, times);
-      fail();
-    } catch (ActionFailedException expected) {
+      failWhenExpectingException();
+    } catch (IllegalArgumentException expected) {
       String message = concat(
           "The number of times to scroll down one unit should be greater than zero, but was <", times, ">");
       assertThat(expected).message().isEqualTo(message);
@@ -148,13 +157,14 @@ public class JScrollBarDriverTest {
     assertThatScrollBarValueIsEqualTo(22);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotScrollUnitDownTheGivenNumberOfTimesIfScrollBarIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableScrollBar();
-    int value = valueOf(scrollBar);
-    driver.scrollUnitDown(scrollBar, 8);
-    assertThatScrollBarValueIsEqualTo(value);
+  public void shouldThrowErrorWhenScrollingDisabledJScrollBarUnitDownTheGivenNumberOfTimes() {
+    disableScrollBar();
+    try {
+      driver.scrollUnitDown(scrollBar, 8);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -164,21 +174,22 @@ public class JScrollBarDriverTest {
     assertThatScrollBarValueIsEqualTo(29);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotScrollUnitDownIfScrollBarIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableScrollBar();
-    int value = valueOf(scrollBar);
-    driver.scrollUnitDown(scrollBar);
-    assertThatScrollBarValueIsEqualTo(value);
+  public void shouldThrowErrorWhenScrollingDisabledJScrollBarUnitDown() {
+    disableScrollBar();
+    try {
+      driver.scrollUnitDown(scrollBar);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
   public void shouldThrowErrorIfTimesToScrollBlockUpIsZeroOrNegative(int times) {
     try {
       driver.scrollBlockUp(scrollBar, times);
-      fail();
-    } catch (ActionFailedException expected) {
+      failWhenExpectingException();
+    } catch (IllegalArgumentException expected) {
       String message = concat(
           "The number of times to scroll up one block should be greater than zero, but was <", times, ">");
       assertThat(expected).message().isEqualTo(message);
@@ -192,13 +203,14 @@ public class JScrollBarDriverTest {
     assertThatScrollBarValueIsEqualTo(50);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotScrollBlockUpTheGivenNumberOfTimesIfScrollBarIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableScrollBar();
-    int value = valueOf(scrollBar);
-    driver.scrollBlockUp(scrollBar, 2);
-    assertThatScrollBarValueIsEqualTo(value);
+  public void shouldThrowErrorWhenScrollingDisabledJScrollBarBlockUpTheGivenNumberOfTimes() {
+    disableScrollBar();
+    try {
+      driver.scrollBlockUp(scrollBar, 2);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -208,21 +220,22 @@ public class JScrollBarDriverTest {
     assertThatScrollBarValueIsEqualTo(40);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotScrollBlockUpIfScrollBarIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableScrollBar();
-    int value = valueOf(scrollBar);
-    driver.scrollBlockUp(scrollBar);
-    assertThatScrollBarValueIsEqualTo(value);
+  public void shouldThrowErrorWhenScrollingDisabledJScrollBarBlockUp() {
+    disableScrollBar();
+    try {
+      driver.scrollBlockUp(scrollBar);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
   public void shouldThrowErrorIfTimesToScrollBlockDownIsZeroOrNegative(int times) {
     try {
       driver.scrollBlockDown(scrollBar, times);
-      fail();
-    } catch (ActionFailedException expected) {
+      failWhenExpectingException();
+    } catch (IllegalArgumentException expected) {
       String message = concat(
           "The number of times to scroll down one block should be greater than zero, but was <", times, ">");
       assertThat(expected).message().isEqualTo(message);
@@ -236,13 +249,14 @@ public class JScrollBarDriverTest {
     assertThatScrollBarValueIsEqualTo(10);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotScrollBlockUpDownTheGivenNumberOfTimesIfScrollBarIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableScrollBar();
-    int value = valueOf(scrollBar);
-    driver.scrollBlockDown(scrollBar, 2);
-    assertThatScrollBarValueIsEqualTo(value);
+  public void shouldThrowErrorWhenScrollingDisabledJScrollBarBlockUpDown() {
+    disableScrollBar();
+    try {
+      driver.scrollBlockDown(scrollBar, 2);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -252,13 +266,14 @@ public class JScrollBarDriverTest {
     assertThatScrollBarValueIsEqualTo(20);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotScrollBlockDownIfScrollBarIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableScrollBar();
-    int value = valueOf(scrollBar);
-    driver.scrollBlockDown(scrollBar);
-    assertThatScrollBarValueIsEqualTo(value);
+  public void shouldThrowErrorWhenScrollingDisabledJScrollBarBlockDown() {
+    disableScrollBar();
+    try {
+      driver.scrollBlockDown(scrollBar);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -282,13 +297,14 @@ public class JScrollBarDriverTest {
     assertThatScrollBarValueIsEqualTo(MINIMUM);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotScrollToGivenPositionIfScrollBarIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableScrollBar();
-    int value = valueOf(scrollBar);
-    driver.scrollTo(scrollBar, 68);
-    assertThatScrollBarValueIsEqualTo(value);
+  public void shouldThrowErrorWhenScrollingDisabledJScrollBarToGivenPosition() {
+    disableScrollBar();
+    try {
+      driver.scrollTo(scrollBar, 68);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
   }
 
   private void assertThatScrollBarValueIsEqualTo(int expected) {
@@ -300,8 +316,8 @@ public class JScrollBarDriverTest {
     robot.settings().eventMode(eventMode);
     try {
       driver.scrollTo(scrollBar, 0);
-      fail();
-    } catch (ActionFailedException expected) {
+      failWhenExpectingException();
+    } catch (IllegalArgumentException expected) {
       assertThat(expected).message().isEqualTo("Position <0> is not within the JScrollBar bounds of <10> and <80>");
     }
   }
@@ -311,20 +327,15 @@ public class JScrollBarDriverTest {
     try {
       robot.settings().eventMode(eventMode);
       driver.scrollTo(scrollBar, 90);
-      fail();
-    } catch (ActionFailedException expected) {
+      failWhenExpectingException();
+    } catch (IllegalArgumentException expected) {
       assertThat(expected).message().isEqualTo("Position <90> is not within the JScrollBar bounds of <10> and <80>");
     }
   }
 
-  // do it in one task, instead of using two separate (and already existing) tasks
-  private void clearAndDisableScrollBar() {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        scrollBar.setValue(MINIMUM);
-        scrollBar.setEnabled(false);
-      }
-    });
+  @RunsInEDT
+  private void disableScrollBar() {
+    ComponentSetEnabledTask.disable(scrollBar);
     robot.waitForIdle();
   }
 
@@ -334,7 +345,11 @@ public class JScrollBarDriverTest {
     final JScrollBar scrollBar = new JScrollBar();
 
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {
