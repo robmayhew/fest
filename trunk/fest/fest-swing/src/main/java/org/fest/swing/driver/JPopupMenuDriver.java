@@ -14,20 +14,17 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
 import java.awt.Container;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.MenuElement;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 
-import static org.fest.swing.driver.JPopupMenuElementsQuery.elementsOf;
-import static org.fest.swing.driver.MenuElementComponentQuery.componentIn;
-import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
+import static org.fest.swing.driver.JPopupMenuElementsAsTextQuery.menuElementsAsText;
 
 /**
  * Understands simulation of user input on a <code>{@link JPopupMenu}</code>. Unlike <code>JPopupMenuFixture</code>,
@@ -51,17 +48,9 @@ public class JPopupMenuDriver extends JComponentDriver {
    * @param popupMenu the target <code>JPopupMenu</code>.
    * @return the contents of the pop-up menu as a <code>String</code> array.
    */
+  @RunsInEDT
   public String[] menuLabelsOf(JPopupMenu popupMenu) {
-    MenuElement[] subElements = elementsOf(popupMenu);
-    String[] result = new String[subElements.length];
-    for (int i = 0; i < subElements.length; i++) result[i] = asString(subElements[i]);
-    return result;
-  }
-
-  static String asString(final MenuElement e) {
-    Component c = componentIn(e);
-    if (c instanceof JMenuItem) return textOf((JMenuItem)c);
-    return "-";
+    return menuElementsAsText(popupMenu);
   }
 
   /**
@@ -69,10 +58,11 @@ public class JPopupMenuDriver extends JComponentDriver {
    * the specified one.
    * @param popupMenu the target <code>JPopupMenu</code>.
    * @param name the name to match.
-   * @return a fixture that manages the <code>JMenuItem</code> found.
+   * @return the <code>JMenuItem</code> found.
    * @throws ComponentLookupException if a <code>JMenuItem</code> having a matching name could not be found.
    * @throws ComponentLookupException if more than one <code>JMenuItem</code> having a matching name is found.
    */
+  @RunsInEDT
   public JMenuItem menuItem(JPopupMenu popupMenu, String name) {
     return robot.finder().findByName(popupMenu, name, JMenuItem.class);
   }
@@ -82,11 +72,11 @@ public class JPopupMenuDriver extends JComponentDriver {
    * specified search criteria.
    * @param popupMenu the target <code>JPopupMenu</code>.
    * @param matcher contains the search criteria for finding a <code>JMenuItem</code>.
-   * @return a fixture that manages the <code>JMenuItem</code> found.
+   * @return the <code>JMenuItem</code> found.
    * @throws ComponentLookupException if a <code>JMenuItem</code> that matches the given search criteria could not be
-   *         found.
+   * found.
    * @throws ComponentLookupException if more than one <code>JMenuItem</code> that matches the given search criteria
-   *         is found.
+   * is found.
    */
   public JMenuItem menuItem(JPopupMenu popupMenu, GenericTypeMatcher<? extends JMenuItem> matcher) {
     return robot.finder().find(popupMenu, matcher);

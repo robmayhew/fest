@@ -15,11 +15,9 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-
-import javax.swing.*;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -57,16 +55,6 @@ public class JPopupMenuDriverTest {
 
   @AfterMethod public void tearDown() {
     robot.cleanUp();
-  }
-
-  public void shouldReturnTextOfMenuItem() {
-    String s = JPopupMenuDriver.asString(new JMenuItem("Hello"));
-    assertThat(s).isEqualTo("Hello");
-  }
-
-  public void shouldReturnDashIfNotMenuItem() {
-    MenuElement e = MyMenuElement.createNew();
-    assertThat(JPopupMenuDriver.asString(e)).isEqualTo("-");
   }
 
   public void shouldReturnsPopupLabels() {
@@ -113,24 +101,5 @@ public class JPopupMenuDriverTest {
       menuItem1.setName("first");
       popupMenu.add(menuItem2);
     }
-  }
-
-  private static class MyMenuElement implements MenuElement {
-    private final JButton button = new JButton();
-
-    static MenuElement createNew() {
-      return new MyMenuElement();
-    }
-    
-    private MyMenuElement() {}
-    
-    public Component getComponent() {
-      return button;
-    }
-
-    public MenuElement[] getSubElements() { return null; }
-    public void menuSelectionChanged(boolean isIncluded) {}
-    public void processKeyEvent(KeyEvent event, MenuElement[] path, MenuSelectionManager manager) {}
-    public void processMouseEvent(MouseEvent event, MenuElement[] path, MenuSelectionManager manager) {}
   }
 }
