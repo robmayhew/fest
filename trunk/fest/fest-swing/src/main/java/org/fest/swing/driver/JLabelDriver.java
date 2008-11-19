@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JLabel;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.query.JLabelTextQuery;
 
@@ -47,6 +48,7 @@ public class JLabelDriver extends JComponentDriver {
    * @param expected the text to match.
    * @throws AssertionError if the text of the <code>JLabel</code> is not equal to the given one.
    */
+  @RunsInEDT
   public void requireText(JLabel label, String expected) {
     assertThat(textOf(label)).as(propertyName(label, TEXT_PROPERTY)).isEqualTo(expected);
   }
@@ -56,6 +58,7 @@ public class JLabelDriver extends JComponentDriver {
    * @param label the given <code>JLabel</code>.
    * @return the text of the given <code>JLabel</code>.
    */
+  @RunsInEDT
   public String textOf(JLabel label) {
     return JLabelTextQuery.textOf(label);
   }

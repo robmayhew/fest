@@ -21,8 +21,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import static org.fest.swing.query.ComponentParentQuery.parentOf;
-import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
+
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 
 /**
@@ -41,11 +42,12 @@ public final class JMenuItemLocation {
    * Creates a new </code>{@link JMenuItemLocation}</code>.
    * @param menuItem the target <code>JMenuItem</code>.
    */
+  @RunsInCurrentThread
   public JMenuItemLocation(JMenuItem menuItem) {
-    parentOrInvoker = parentOf(menuItem);
+    parentOrInvoker = menuItem.getParent();
     if (parentOrInvoker instanceof JPopupMenu) {
       parentPopup = (JPopupMenu)parentOrInvoker;
-      parentOrInvoker = invokerOf((JPopupMenu)parentOrInvoker);
+      parentOrInvoker = ((JPopupMenu)parentOrInvoker).getInvoker();
     }
     inMenuBar = parentOrInvoker instanceof JMenuBar;
   }
@@ -64,6 +66,7 @@ public final class JMenuItemLocation {
    * @return <code>true</code> if the parent of the <code>JMenuItem</code> is another menu, <code>false</code> 
    * otherwise.
    */
+  @RunsInEDT
   public boolean isParentAMenu() {
     if (!(parentOrInvoker instanceof JMenuItem)) return false;
     return parentPopup == null || !isShowing(parentPopup);

@@ -20,16 +20,20 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 
 import static java.lang.Boolean.getBoolean;
 
 import static org.fest.swing.core.WindowAncestorFinder.windowAncestorOf;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.WindowMoveToFrontTask.toFront;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.query.JMenuPopupMenuQuery.popupMenuOf;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.swing.util.Platform.isOSX;
@@ -59,13 +63,24 @@ public class JMenuItemDriver extends JComponentDriver {
     super(robot);
   }
 
+  @RunsInEDT
   private void show(JMenuItem menuItem) {
-    JMenuItemLocation location = new JMenuItemLocation(menuItem);
+    JMenuItemLocation location = locationOf(menuItem);
     activateParentIfIsAMenu(location);
     moveParentWindowToFront(location);
     if (menuItem instanceof JMenu && !location.inMenuBar()) waitForSubMenuToShow();
   }
 
+  private static JMenuItemLocation locationOf(final JMenuItem menuItem) {
+    return execute(new GuiQuery<JMenuItemLocation>() {
+      protected JMenuItemLocation executeInEDT() {
+        return new JMenuItemLocation(menuItem);
+      }
+      
+    });
+  }
+
+  @RunsInEDT
   private void activateParentIfIsAMenu(JMenuItemLocation location) {
     if (!location.isParentAMenu()) return;
     click((JMenuItem)location.parentOrInvoker());
@@ -74,29 +89,35 @@ public class JMenuItemDriver extends JComponentDriver {
   /**
    * Finds and selects the given <code>{@link JMenuItem}</code>.
    * @param menuItem the <code>JMenuItem</code> to select.
-   * @throws ActionFailedException if the menu to select is disabled.
+   * @throws IllegalStateException if the menu to select is disabled.
+   * @throws IllegalStateException if the menu to select is not showing on the screen.
    * @throws ActionFailedException if the menu has a pop-up and it fails to show up.
-   * @see #show(JMenuItem)
    */
+  @RunsInEDT
   public void click(JMenuItem menuItem) {
     show(menuItem);
     doClick(menuItem);
     ensurePopupIsShowing(menuItem);
   }
 
+  @RunsInEDT
   private void ensurePopupIsShowing(JMenuItem menuItem) {
     if (!(menuItem instanceof JMenu)) return;
     JPopupMenu popup = popupMenuOf((JMenu)menuItem);
+    // TODO review EDT access
     if (!waitForShowing(popup, robot.settings().timeoutToFindPopup()))
       throw actionFailure(concat("Clicking on menu item <", format(menuItem), "> never showed a pop-up menu"));
     waitForSubMenuToShow();
   }
 
+  @RunsInEDT
   private void moveParentWindowToFront(JMenuItemLocation location) {
     if (!location.inMenuBar()) return;
+    // TODO windowAncestorOf is not being called in EDT
     moveToFront(windowAncestorOf(location.parentOrInvoker()));
   }
 
+  @RunsInEDT
   private void moveToFront(Window w) {
     if (w == null) return;
     // Make sure the window is in front, or its menus may be obscured by another window.
@@ -110,10 +131,10 @@ public class JMenuItemDriver extends JComponentDriver {
     if (SUBMENU_DELAY > delayBetweenEvents) pause(SUBMENU_DELAY - delayBetweenEvents);
   }
 
+  @RunsInEDT
   private void doClick(JMenuItem menuItem) {
-    if (!isEnabled(menuItem)) actionFailure(concat("Menu item <", format(menuItem), "> is disabled"));
     if (isMacOSMenuBar()) {
-      clickMenuInMacOSMenuBar(menuItem);
+      validateAndDoClick(menuItem);
       return;
     }
     super.click(menuItem);
@@ -124,8 +145,13 @@ public class JMenuItemDriver extends JComponentDriver {
     return isOSX() && (getBoolean("apple.laf.useScreenMenuBar") || getBoolean("com.apple.macos.useScreenMenuBar"));
   }
 
-  private void clickMenuInMacOSMenuBar(JMenuItem menuItem) {
-    AbstractButtonClickTask.doClick(menuItem);
-    robot.waitForIdle();
+  @RunsInEDT
+  private static void validateAndDoClick(final JMenuItem menuItem) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        validateIsEnabledAndShowing(menuItem);
+        menuItem.doClick();
+      }
+    });
   }
 }
