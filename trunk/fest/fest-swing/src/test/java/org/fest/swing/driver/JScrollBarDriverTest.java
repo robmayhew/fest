@@ -30,7 +30,6 @@ import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.task.ComponentSetEnabledTask;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -38,6 +37,8 @@ import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JScrollBarSetValueTask.setValue;
 import static org.fest.swing.driver.JScrollBarValueQuery.valueOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.task.ComponentSetVisibleTask.hide;
 import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Strings.concat;
@@ -55,8 +56,9 @@ public class JScrollBarDriverTest {
   private static final int EXTENT = 10;
 
   private Robot robot;
-  private JScrollBar scrollBar;
   private JScrollBarDriver driver;
+  private MyWindow window;
+  private JScrollBar scrollBar;
 
   @BeforeClass public void setUpOnce() {
     CheckThreadViolationRepaintManager.install();
@@ -65,7 +67,7 @@ public class JScrollBarDriverTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JScrollBarDriver(robot);
-    MyWindow window = MyWindow.createNew();
+    window = MyWindow.createNew();
     scrollBar = window.scrollBar;
     robot.showWindow(window);
   }
@@ -112,6 +114,7 @@ public class JScrollBarDriverTest {
   }
 
   public void shouldThrowErrorWhenScrollingDisabledJScrollBarUnitUpTheGivenNumberOfTimes() {
+    // TODO test not showing
     disableScrollBar();
     try {
       driver.scrollUnitUp(scrollBar, 6);
@@ -129,6 +132,7 @@ public class JScrollBarDriverTest {
   }
 
   public void shouldThrowErrorWhenScrollingDisabledJScrollBarUnitUp() {
+    // TODO test not showing
     disableScrollBar();
     try {
       driver.scrollUnitUp(scrollBar);
@@ -158,6 +162,7 @@ public class JScrollBarDriverTest {
   }
 
   public void shouldThrowErrorWhenScrollingDisabledJScrollBarUnitDownTheGivenNumberOfTimes() {
+    // TODO test not showing
     disableScrollBar();
     try {
       driver.scrollUnitDown(scrollBar, 8);
@@ -181,6 +186,16 @@ public class JScrollBarDriverTest {
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenScrollingNotShowingJScrollBarUnitDown() {
+    hideWindow();
+    try {
+      driver.scrollUnitDown(scrollBar);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
     }
   }
 
@@ -213,6 +228,16 @@ public class JScrollBarDriverTest {
     }
   }
 
+  public void shouldThrowErrorWhenScrollingNotShowingJScrollBarBlockUpTheGivenNumberOfTimes() {
+    hideWindow();
+    try {
+      driver.scrollBlockUp(scrollBar, 2);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldScrollBlockUp(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
@@ -227,6 +252,16 @@ public class JScrollBarDriverTest {
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenScrollingNotShowingJScrollBarBlockUp() {
+    hideWindow();
+    try {
+      driver.scrollBlockUp(scrollBar);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
     }
   }
 
@@ -259,6 +294,16 @@ public class JScrollBarDriverTest {
     }
   }
 
+  public void shouldThrowErrorWhenScrollingNotShowingJScrollBarBlockUpDown() {
+    hideWindow();
+    try {
+      driver.scrollBlockDown(scrollBar, 2);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldScrollBlockDown(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
@@ -273,6 +318,16 @@ public class JScrollBarDriverTest {
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenScrollingNotShowingJScrollBarBlockDown() {
+    hideWindow();
+    try {
+      driver.scrollBlockDown(scrollBar);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
     }
   }
 
@@ -307,13 +362,21 @@ public class JScrollBarDriverTest {
     }
   }
 
+  public void shouldThrowErrorWhenScrollingNotShowingJScrollBarToGivenPosition() {
+    hideWindow();
+    try {
+      driver.scrollTo(scrollBar, 68);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+
   private void assertThatScrollBarValueIsEqualTo(int expected) {
     assertThat(valueOf(scrollBar)).isEqualTo(expected);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorIfPositionIsLessThanMinimum(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorIfPositionIsLessThanMinimum() {
     try {
       driver.scrollTo(scrollBar, 0);
       failWhenExpectingException();
@@ -322,10 +385,8 @@ public class JScrollBarDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorIfPositionIsGreaterThanMaximum(EventMode eventMode) {
+  public void shouldThrowErrorIfPositionIsGreaterThanMaximum() {
     try {
-      robot.settings().eventMode(eventMode);
       driver.scrollTo(scrollBar, 90);
       failWhenExpectingException();
     } catch (IllegalArgumentException expected) {
@@ -335,7 +396,13 @@ public class JScrollBarDriverTest {
 
   @RunsInEDT
   private void disableScrollBar() {
-    ComponentSetEnabledTask.disable(scrollBar);
+    disable(scrollBar);
+    robot.waitForIdle();
+  }
+
+  @RunsInEDT
+  private void hideWindow() {
+    hide(window);
     robot.waitForIdle();
   }
 
