@@ -19,6 +19,7 @@ import java.awt.Dialog;
 
 import javax.swing.JOptionPane;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -32,6 +33,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JOptionPaneTitleQuery {
 
+  @RunsInEDT
   static String titleOf(final JOptionPane optionPane) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {

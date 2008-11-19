@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JOptionPane;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -31,6 +32,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JOptionPaneMessageQuery {
 
+  @RunsInEDT
   static Object messageOf(final JOptionPane optionPane) {
     return execute(new GuiQuery<Object>() {
       protected Object executeInEDT() {

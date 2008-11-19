@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.matcher.JButtonByTextMatcher;
 import org.fest.swing.exception.ComponentLookupException;
@@ -60,8 +61,9 @@ public class JOptionPaneDriver extends JComponentDriver {
    * Asserts that the <code>{@link JOptionPane}</code> has the given title.
    * @param optionPane the target <code>JOptionPane</code>.
    * @param title the title to match.
-   * @throws AssertionError if the </code>void</code> does not have the given title.
+   * @throws AssertionError if the <code>JOptionPane</code> does not have the given title.
    */
+  @RunsInEDT
   public void requireTitle(JOptionPane optionPane, String title) {
     assertThat(titleOf(optionPane)).as(propertyName(optionPane, TITLE_PROPERTY)).isEqualTo(title);
   }
@@ -70,22 +72,22 @@ public class JOptionPaneDriver extends JComponentDriver {
    * Asserts that the <code>{@link JOptionPane}</code> shows the given message.
    * @param optionPane the target <code>JOptionPane</code>.
    * @param message the message to verify.
-   * @throws AssertionError if the </code>void</code> does not show the given message.
+   * @throws AssertionError if the <code>JOptionPane</code> does not show the given message.
    */
+  @RunsInEDT
   public void requireMessage(JOptionPane optionPane, Object message) {
-    Object actualMessage = messageOf(optionPane);
-    assertThat(actualMessage).as(propertyName(optionPane, MESSAGE_PROPERTY)).isEqualTo(message);
+    assertThat(messageOf(optionPane)).as(propertyName(optionPane, MESSAGE_PROPERTY)).isEqualTo(message);
   }
 
   /**
    * Asserts that the <code>{@link JOptionPane}</code> has the given options.
    * @param optionPane the target <code>JOptionPane</code>.
    * @param options the options to verify.
-   * @throws AssertionError if the </code>void</code> does not have the given options.
+   * @throws AssertionError if the <code>JOptionPane</code> does not have the given options.
    */
+  @RunsInEDT
   public void requireOptions(JOptionPane optionPane, Object[] options) {
-    Object[] actualOptions = optionsOf(optionPane);
-    assertThat(actualOptions).as(propertyName(optionPane, OPTIONS_PROPERTY)).isEqualTo(options);
+    assertThat(optionsOf(optionPane)).as(propertyName(optionPane, OPTIONS_PROPERTY)).isEqualTo(options);
   }
 
   /**
@@ -94,6 +96,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @return the "OK" button.
    * @throws ComponentLookupException if the a "OK" button cannot be found.
    */
+  @RunsInEDT
   public JButton okButton(JOptionPane optionPane) {
     return buttonWithTextFromUIManager(optionPane, "OptionPane.okButtonText");
   }
@@ -105,6 +108,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @return the "Cancel" button.
    * @throws ComponentLookupException if the a "Cancel" button cannot be found.
    */
+  @RunsInEDT
   public JButton cancelButton(JOptionPane optionPane) {
     return buttonWithTextFromUIManager(optionPane, "OptionPane.cancelButtonText");
   }
@@ -115,6 +119,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @return the "Yes" button.
    * @throws ComponentLookupException if the a "Yes" button cannot be found.
    */
+  @RunsInEDT
   public JButton yesButton(JOptionPane optionPane) {
     return buttonWithTextFromUIManager(optionPane, "OptionPane.yesButtonText");
   }
@@ -125,10 +130,12 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @return the "No" button.
    * @throws ComponentLookupException if the a "No" button cannot be found.
    */
+  @RunsInEDT
   public JButton noButton(JOptionPane optionPane) {
     return buttonWithTextFromUIManager(optionPane, "OptionPane.noButtonText");
   }
 
+  @RunsInEDT
   private JButton buttonWithTextFromUIManager(JOptionPane optionPane, String key) {
     return buttonWithText(optionPane, UIManager.getString(key));
   }
@@ -140,6 +147,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @return a button containing the given text.
    * @throws ComponentLookupException if the a button with the given text cannot be found.
    */
+  @RunsInEDT
   public JButton buttonWithText(JOptionPane optionPane, String text) {
     return robot.finder().find(optionPane, JButtonByTextMatcher.withTextAndShowing(text));
   }
@@ -151,6 +159,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @throws ComponentLookupException if a matching component could not be found.
    * @throws ComponentLookupException if more than one matching component is found.
    */
+  @RunsInEDT
   public JButton button(JOptionPane optionPane) {
     return robot.finder().findByType(optionPane, JButton.class);
   }
@@ -161,6 +170,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * @return the text component in the given message.
    * @throws ComponentLookupException if the message type is not input and therefore it does not contain a text component.
    */
+  @RunsInEDT
   public JTextComponent textBox(JOptionPane optionPane) {
     return robot.finder().findByType(optionPane, JTextComponent.class);
   }
@@ -169,6 +179,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * Asserts that the <code>{@link JOptionPane}</code> is displaying an error message.
    * @param optionPane the target <code>JOptionPane</code>.
    */
+  @RunsInEDT
   public void requireErrorMessage(JOptionPane optionPane) {
     assertEqualMessageType(optionPane, ERROR_MESSAGE);
   }
@@ -177,6 +188,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * Asserts that the <code>{@link JOptionPane}</code> is displaying an information message.
    * @param optionPane the target <code>JOptionPane</code>.
    */
+  @RunsInEDT
   public void requireInformationMessage(JOptionPane optionPane) {
     assertEqualMessageType(optionPane, INFORMATION_MESSAGE);
   }
@@ -185,6 +197,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * Asserts that the <code>{@link JOptionPane}</code> is displaying a warning message.
    * @param optionPane the target <code>JOptionPane</code>.
    */
+  @RunsInEDT
   public void requireWarningMessage(JOptionPane optionPane) {
     assertEqualMessageType(optionPane, WARNING_MESSAGE);
   }
@@ -193,6 +206,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    * Asserts that the <code>{@link JOptionPane}</code> is displaying a question.
    * @param optionPane the target <code>JOptionPane</code>.
    */
+  @RunsInEDT
   public void requireQuestionMessage(JOptionPane optionPane) {
     assertEqualMessageType(optionPane, QUESTION_MESSAGE);
   }
@@ -201,15 +215,18 @@ public class JOptionPaneDriver extends JComponentDriver {
    * Asserts that the <code>{@link JOptionPane}</code> is displaying a plain message.
    * @param optionPane the target <code>JOptionPane</code>.
    */
+  @RunsInEDT
   public void requirePlainMessage(JOptionPane optionPane) {
     assertEqualMessageType(optionPane, PLAIN_MESSAGE);
   }
 
+  @RunsInEDT
   private void assertEqualMessageType(JOptionPane optionPane, int expected) {
     String actualType = actualMessageTypeAsText(optionPane);
     assertThat(actualType).as(propertyName(optionPane, MESSAGE_TYPE_PROPERTY)).isEqualTo(messageTypeAsText(expected));
   }
 
+  @RunsInEDT
   private String actualMessageTypeAsText(final JOptionPane optionPane) {
     return messageTypeAsText(messageTypeOf(optionPane));
   }

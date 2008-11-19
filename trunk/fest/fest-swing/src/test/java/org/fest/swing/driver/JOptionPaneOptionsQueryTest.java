@@ -19,14 +19,19 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MethodInvocations;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.JOptionPaneLauncher.launch;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.array;
@@ -42,6 +47,10 @@ public class JOptionPaneOptionsQueryTest {
 
   private Robot robot;
   private MyOptionPane optionPane;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
@@ -67,8 +76,13 @@ public class JOptionPaneOptionsQueryTest {
 
     final JButton option = new JButton("Hello");
 
+    @RunsInEDT
     static MyOptionPane createNew() {
-      return new MyOptionPane();
+      return execute(new GuiQuery<MyOptionPane>() {
+        protected MyOptionPane executeInEDT() {
+          return new MyOptionPane();
+        }
+      });
     }
 
     private MyOptionPane() {

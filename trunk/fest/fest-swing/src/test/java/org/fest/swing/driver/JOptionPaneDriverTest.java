@@ -25,19 +25,24 @@ import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestWindow;
 
 import static javax.swing.JOptionPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.util.Arrays.array;
@@ -53,6 +58,10 @@ public class JOptionPaneDriverTest {
   private Robot robot;
   private JOptionPaneDriver driver;
   private MyWindow window;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
@@ -136,7 +145,7 @@ public class JOptionPaneDriverTest {
     JOptionPane optionPane =showJOptionPane(); 
     try {
       driver.requireTitle(optionPane, "Darth Vader");
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'title'").contains("expected:<'Darth Vader'> but was:<'Yoda'>");
     }
@@ -153,7 +162,7 @@ public class JOptionPaneDriverTest {
     JOptionPane optionPane = showJOptionPane();
     try {
       driver.requireOptions(optionPane, array("Third"));
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'options'")
                              .contains("expected:<['Third']> but was:<['First', 'Second']>");
@@ -171,7 +180,7 @@ public class JOptionPaneDriverTest {
     JOptionPane optionPane = showJOptionPane();
     try {
       driver.requireMessage(optionPane, "Anakin");
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'message'").contains("expected:<'Anakin'> but was:<'Palpatine'>");
     }
@@ -188,7 +197,7 @@ public class JOptionPaneDriverTest {
     JOptionPane optionPane = showJOptionPane();
     try {
       driver.requireErrorMessage(optionPane);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'messageType'")
                              .contains("expected:<'Error Message'> but was:<'Information Message'>");
@@ -206,7 +215,7 @@ public class JOptionPaneDriverTest {
     JOptionPane optionPane = showJOptionPane();
     try {
       driver.requireInformationMessage(optionPane);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'messageType'")
                              .contains("expected:<'Information Message'> but was:<'Error Message'>");
@@ -224,7 +233,7 @@ public class JOptionPaneDriverTest {
     JOptionPane optionPane = showJOptionPane();
     try {
       driver.requireWarningMessage(optionPane);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'messageType'")
                              .contains("expected:<'Warning Message'> but was:<'Error Message'>");
@@ -242,7 +251,7 @@ public class JOptionPaneDriverTest {
     JOptionPane optionPane = showJOptionPane();
     try {
       driver.requireQuestionMessage(optionPane);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'messageType'")
                              .contains("expected:<'Question Message'> but was:<'Error Message'>");
@@ -260,7 +269,7 @@ public class JOptionPaneDriverTest {
     JOptionPane optionPane = showJOptionPane();
     try {
       driver.requirePlainMessage(optionPane);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'messageType'")
                              .contains("expected:<'Plain Message'> but was:<'Error Message'>");
@@ -278,8 +287,13 @@ public class JOptionPaneDriverTest {
 
     final JButton button = new JButton("Click me");
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
     
     private MyWindow() {

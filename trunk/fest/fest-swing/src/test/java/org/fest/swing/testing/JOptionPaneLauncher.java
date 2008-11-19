@@ -18,6 +18,7 @@ package org.fest.swing.testing;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.timing.Condition;
 
@@ -40,6 +41,7 @@ public final class JOptionPaneLauncher {
    * @param optionPane the <code>JOptionPane</code> to launch.
    * @return the dialog hosting the <code>JOptionPane</code>.
    */
+  @RunsInEDT
   public static JDialog launch(JOptionPane optionPane) {
     return launch(optionPane, "A Message");
   }
@@ -50,6 +52,7 @@ public final class JOptionPaneLauncher {
    * @param title the title of the dialog to host the <code>JOptionPane</code>.
    * @return the dialog hosting the <code>JOptionPane</code>.
    */
+  @RunsInEDT
   public static JDialog launch(final JOptionPane optionPane, final String title) {
     final JDialog dialog = execute(new GuiQuery<JDialog>() {
       protected JDialog executeInEDT() {
