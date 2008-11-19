@@ -114,13 +114,22 @@ public class JScrollBarDriverTest {
   }
 
   public void shouldThrowErrorWhenScrollingDisabledJScrollBarUnitUpTheGivenNumberOfTimes() {
-    // TODO test not showing
     disableScrollBar();
     try {
       driver.scrollUnitUp(scrollBar, 6);
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenScrollingNotShowingJScrollBarUnitUpTheGivenNumberOfTimes() {
+    hideWindow();
+    try {
+      driver.scrollUnitUp(scrollBar, 6);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
     }
   }
 
@@ -132,13 +141,22 @@ public class JScrollBarDriverTest {
   }
 
   public void shouldThrowErrorWhenScrollingDisabledJScrollBarUnitUp() {
-    // TODO test not showing
     disableScrollBar();
     try {
       driver.scrollUnitUp(scrollBar);
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenScrollingNotShowingJScrollBarUnitUp() {
+    hideWindow();
+    try {
+      driver.scrollUnitUp(scrollBar);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
     }
   }
 
@@ -162,13 +180,22 @@ public class JScrollBarDriverTest {
   }
 
   public void shouldThrowErrorWhenScrollingDisabledJScrollBarUnitDownTheGivenNumberOfTimes() {
-    // TODO test not showing
     disableScrollBar();
     try {
       driver.scrollUnitDown(scrollBar, 8);
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenScrollingNotShowingJScrollBarUnitDownTheGivenNumberOfTimes() {
+    hideWindow();
+    try {
+      driver.scrollUnitDown(scrollBar, 8);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
     }
   }
 
