@@ -17,8 +17,10 @@ package org.fest.swing.driver;
 
 import javax.swing.JSpinner;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
@@ -30,9 +32,11 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JSpinnerSetValueTask {
 
+  @RunsInEDT
   static void setValue(final JSpinner spinner, final Object value) {
     execute(new GuiTask() {
       protected void executeInEDT() {
+        validateIsEnabledAndShowing(spinner);
         spinner.setValue(value);
       }
     });

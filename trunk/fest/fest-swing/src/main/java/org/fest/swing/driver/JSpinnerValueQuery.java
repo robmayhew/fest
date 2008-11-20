@@ -16,6 +16,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JSpinner;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -29,6 +30,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JSpinnerValueQuery {
 
+  @RunsInEDT
   static Object valueOf(final JSpinner spinner) {
     return execute(new GuiQuery<Object>() {
       protected Object executeInEDT() {

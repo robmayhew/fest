@@ -19,16 +19,24 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.MethodInvocations.Args;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.task.ComponentSetVisibleTask.hide;
+import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.MethodInvocations.Args.args;
 import static org.fest.swing.testing.TestGroups.*;
 
@@ -41,16 +49,21 @@ import static org.fest.swing.testing.TestGroups.*;
 public class JSpinnerSetValueTaskTest {
 
   private Robot robot;
+  private MyWindow window;
   private MySpinner spinner;
 
-  @BeforeMethod public final void setUp() {
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
+  @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    MyWindow window = MyWindow.createNew();
+    window = MyWindow.createNew();
     spinner = window.spinner;
     robot.showWindow(window);
   }
 
-  @AfterMethod public final void tearDown() {
+  @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
 
@@ -62,15 +75,39 @@ public class JSpinnerSetValueTaskTest {
     assertThat(JSpinnerValueQuery.valueOf(spinner)).isEqualTo(value);
     spinner.requireInvoked("setValue", args(value));
   }
+
+  public void shouldThrowErrorIfJSpinnerIsDisabled() {
+    disable(spinner);
+    robot.waitForIdle();
+    try {
+      JSpinnerSetValueTask.setValue(spinner, "Two");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
   
-  final Robot robot() { return robot; }
-  final JSpinner spinner() { return spinner; }
+  public void shouldThrowErrorIfJSpinnerIsNotShowing() {
+    hide(window);
+    robot.waitForIdle();
+    try {
+      JSpinnerSetValueTask.setValue(spinner, "Two");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    public static MyWindow createNew() {
-      return new MyWindow();
+    @RunsInEDT
+    static MyWindow createNew() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     final MySpinner spinner = new MySpinner("One", "Two", "Three");

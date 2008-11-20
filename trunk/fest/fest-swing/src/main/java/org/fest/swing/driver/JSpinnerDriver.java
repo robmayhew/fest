@@ -16,27 +16,30 @@
 package org.fest.swing.driver;
 
 import java.awt.Component;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JSpinner;
 import javax.swing.text.JTextComponent;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.TypeMatcher;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.UnexpectedException;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.driver.JSpinnerCommitEditTask.commitEdit;
-import static org.fest.swing.driver.JSpinnerDecrementValueTask.decrementValue;
-import static org.fest.swing.driver.JSpinnerIncrementValueTask.incrementValue;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
+import static org.fest.swing.driver.JSpinnerSetValueTask.setValue;
 import static org.fest.swing.driver.JSpinnerValueQuery.valueOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
-import static org.fest.util.Strings.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user input on a <code>{@link JSpinner}</code>. Unlike <code>JSpinnerFixture</code>, this
@@ -51,63 +54,132 @@ public class JSpinnerDriver extends JComponentDriver {
   private static final TypeMatcher EDITOR_MATCHER = new TypeMatcher(JTextComponent.class, true);
   private static final String VALUE_PROPERTY = "value";
   
-  private final JTextComponentDriver textComponentDriver;
-
   /**
    * Creates a new </code>{@link JSpinnerDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
   public JSpinnerDriver(Robot robot) {
     super(robot);
-    textComponentDriver = new JTextComponentDriver(robot);
   }
 
   /**
    * Increments the value of the <code>{@link JSpinner}</code> the given number of times.
    * @param spinner the target <code>JSpinner</code>.
    * @param times how many times the value of this fixture's <code>JSpinner</code> should be incremented.
-   * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
+   * @throws IllegalArgumentException if <code>times</code> is less than or equal to zero.
+   * @throws IllegalStateException if the <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if the <code>JSpinner</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void increment(JSpinner spinner, int times) {
     validate(times, "increment the value");
-    for (int i = 0; i < times; i++) increment(spinner);
-  }
-
-  /**
-   * Increments the value of the <code>{@link JSpinner}</code>.
-   * @param spinner the target <code>JSpinner</code>.
-   */
-  public void increment(JSpinner spinner) {
-    if (!isEnabled(spinner)) return;
-    incrementValue(spinner);
+    validateAndIncrementValue(spinner, times);
     robot.waitForIdle();
   }
 
+  @RunsInEDT
+  private static void validateAndIncrementValue(final JSpinner spinner, final int times) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        validateIsEnabledAndShowing(spinner);
+        incrementValue(spinner, times);
+      }
+    });
+  }
+
+  @RunsInCurrentThread
+  private static void incrementValue(JSpinner spinner, int times) {
+    for (int i = 0; i < times; i++) {
+      Object newValue = spinner.getNextValue();
+      if (newValue != null) spinner.setValue(newValue);
+      return;
+    }
+  }
+  
+  /**
+   * Increments the value of the <code>{@link JSpinner}</code>.
+   * @param spinner the target <code>JSpinner</code>.
+   * @throws IllegalStateException if the <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if the <code>JSpinner</code> is not showing on the screen.
+   */
+  @RunsInEDT
+  public void increment(JSpinner spinner) {
+    validateAndIncrementValue(spinner);
+    robot.waitForIdle();
+  }
+
+  @RunsInEDT
+  private static void validateAndIncrementValue(final JSpinner spinner) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        validateIsEnabledAndShowing(spinner);
+        Object newValue = spinner.getNextValue();
+        if (newValue != null) spinner.setValue(newValue);
+      }
+    });
+  }
+  
   /**
    * Decrements the value of the <code>{@link JSpinner}</code> the given number of times.
    * @param spinner the target <code>JSpinner</code>.
    * @param times how many times the value of this fixture's <code>JSpinner</code> should be decremented.
-   * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
+   * @throws IllegalArgumentException if <code>times</code> is less than or equal to zero.
+   * @throws IllegalStateException if the <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if the <code>JSpinner</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void decrement(JSpinner spinner, int times) {
     validate(times, "decrement the value");
-    for (int i = 0; i < times; i++) decrement(spinner);
+    validateAndDecrementValue(spinner, times);
+    robot.waitForIdle();
   }
 
   private void validate(int times, String action) {
     if (times > 0) return;
-    throw actionFailure(concat(
+    throw new IllegalArgumentException(concat(
         "The number of times to ", action, " should be greater than zero, but was <", times, ">"));
+  }
+
+  @RunsInEDT
+  private static void validateAndDecrementValue(final JSpinner spinner, final int times) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        validateIsEnabledAndShowing(spinner);
+        decrementValue(spinner, times);
+      }
+    });
+  }
+
+  @RunsInCurrentThread
+  private static void decrementValue(JSpinner spinner, int times) {
+    for (int i = 0; i < times; i++) {
+      Object newValue = spinner.getPreviousValue();
+      if (newValue != null) spinner.setValue(newValue);
+      return;
+    }
   }
 
   /**
    * Decrements the value of the <code>{@link JSpinner}</code>.
    * @param spinner the target <code>JSpinner</code>.
+   * @throws IllegalStateException if the <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if the <code>JSpinner</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void decrement(JSpinner spinner) {
-    if (!isEnabled(spinner)) return;
-    decrementValue(spinner);
+    validateAndDecrementValue(spinner);
     robot.waitForIdle();
+  }
+
+  @RunsInEDT
+  private static void validateAndDecrementValue(final JSpinner spinner) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        validateIsEnabledAndShowing(spinner);
+        Object newValue = spinner.getPreviousValue();
+        if (newValue != null) spinner.setValue(newValue);
+      }
+    });
   }
 
   /**
@@ -115,15 +187,26 @@ public class JSpinnerDriver extends JComponentDriver {
    * <code>{@link JTextComponent}</code> under it.
    * @param spinner the target <code>JSpinner</code>.
    * @param text the text to enter.
+   * @throws IllegalStateException if the <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if the <code>JSpinner</code> is not showing on the screen.
    * @throws ActionFailedException if the editor of the <code>JSpinner</code> is not a <code>JTextComponent</code> or
    * cannot be found.
-   * @throws UnexpectedException if the entering the text in the <code>JSpinner</code>'s editor fails.
+   * @throws UnexpectedException if entering the text in the <code>JSpinner</code>'s editor fails.
    */
+  @RunsInEDT
   public void enterTextAndCommit(JSpinner spinner, String text) {
-    if (!isEnabled(spinner)) return;
     enterText(spinner, text);
-    commitEdit(spinner);
+    commit(spinner);
     robot.waitForIdle();
+  }
+
+  @RunsInEDT
+  private static void commit(final JSpinner spinner) {
+    execute(new GuiTask() {
+      protected void executeInEDT() throws ParseException {
+        spinner.commitEdit();
+      }
+    });
   }
 
   /**
@@ -131,18 +214,24 @@ public class JSpinnerDriver extends JComponentDriver {
    * <code>{@link JTextComponent}</code> under it. This method does not commit the value to the <code>JSpinner</code>.
    * @param spinner the target <code>JSpinner</code>.
    * @param text the text to enter.
+   * @throws IllegalStateException if the <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if the <code>JSpinner</code> is not showing on the screen.
    * @throws ActionFailedException if the editor of the <code>JSpinner</code> is not a <code>JTextComponent</code> or
    * cannot be found.
-   * @throws UnexpectedException if the entering the text in the <code>JSpinner</code>'s editor fails.
+   * @throws UnexpectedException if entering the text in the <code>JSpinner</code>'s editor fails.
    * @see #enterTextAndCommit(JSpinner, String)
    */
+  @RunsInEDT
   public void enterText(JSpinner spinner, String text) {
-    if (!isEnabled(spinner)) return;
+    assertIsEnabledAndShowing(spinner);
     JTextComponent editor = findEditor(spinner);
-    if (editor == null) throw actionFailure(concat("Unable to find editor for ", format(spinner)));
-    textComponentDriver.replaceText(editor, text);
+    validateAndSelectAllTextInEditor(spinner, editor);
+    robot.waitForIdle();
+    robot.focus(editor);
+    robot.enterText(text);
   }
-
+  
+  @RunsInEDT
   private JTextComponent findEditor(JSpinner spinner) {
     List<Component> found = new ArrayList<Component>(robot.finder().findAll(spinner, EDITOR_MATCHER));
     if (found.size() != 1) return null;
@@ -150,21 +239,33 @@ public class JSpinnerDriver extends JComponentDriver {
     if (c instanceof JTextComponent) return (JTextComponent)c;
     return null;
   }
+
+  @RunsInEDT
+  private static void validateAndSelectAllTextInEditor(final JSpinner spinner, final JTextComponent editor) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        validateJSpinnerEditor(spinner, editor);
+        editor.selectAll();
+      }
+    });
+  }
+
+  @RunsInCurrentThread
+  private static void validateJSpinnerEditor(final JSpinner spinner, final JTextComponent editor) {
+    if (editor == null) throw actionFailure(concat("Unable to find editor for ", format(spinner)));
+  }
   
   /**
    * Selects the given value in the given <code>{@link JSpinner}</code>. 
    * @param spinner the target <code>JSpinner</code>.
    * @param value the value to select.
+   * @throws IllegalStateException if the <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if the <code>JSpinner</code> is not showing on the screen.
    * @throws IllegalArgumentException if the given <code>JSpinner</code> does not support the given value.
    */
+  @RunsInEDT
   public void selectValue(JSpinner spinner, Object value) {
-    if (!isEnabled(spinner)) return;
-    try {
-      JSpinnerSetValueTask.setValue(spinner, value);
-    } catch (UnexpectedException unexpected) {
-      if (!(unexpected.getCause() instanceof IllegalArgumentException)) throw unexpected;
-      throw new IllegalArgumentException(concat("Value ", quote(value), " is not valid"));
-    }
+    setValue(spinner, value);
     robot.waitForIdle();
   }
 
@@ -175,6 +276,7 @@ public class JSpinnerDriver extends JComponentDriver {
    * @throws ComponentLookupException if the given <code>JSpinner</code> does not have a <code>JTextComponent</code> as
    * editor.
    */
+  @RunsInEDT
   public JTextComponent editor(JSpinner spinner) {
     return (JTextComponent)robot.finder().find(spinner, EDITOR_MATCHER);
   }
@@ -185,6 +287,7 @@ public class JSpinnerDriver extends JComponentDriver {
    * @param value the expected value of this fixture's <code>JSpinner</code>.
    * @throws AssertionError if the value of the <code>JSpinner</code> is not equal to the given one.
    */
+  @RunsInEDT
   public void requireValue(JSpinner spinner, Object value) {
     assertThat(valueOf(spinner)).as(propertyName(spinner, VALUE_PROPERTY)).isEqualTo(value);
   }
