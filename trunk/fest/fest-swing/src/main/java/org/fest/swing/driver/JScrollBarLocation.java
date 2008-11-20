@@ -36,16 +36,13 @@ public final class JScrollBarLocation {
 
   private static final int BLOCK_OFFSET = 4;
 
-  private final Map<Integer, JScrollBarLocationStrategy> strategyMap = new HashMap<Integer, JScrollBarLocationStrategy>();
+  private static final Map<Integer, JScrollBarLocationStrategy> LOCATIONS = new HashMap<Integer, JScrollBarLocationStrategy>();
 
-  /**
-   * Creates a new </code>{@link JScrollBarLocation}</code>.
-   */
-  public JScrollBarLocation() {
-    strategyMap.put(HORIZONTAL, new HorizontalJScrollBarLocationStrategy());
-    strategyMap.put(VERTICAL, new VerticalJScrollBarLocationStrategy());
+  static {
+    LOCATIONS.put(HORIZONTAL, new HorizontalJScrollBarLocation());
+    LOCATIONS.put(VERTICAL, new VerticalJScrollBarLocation());
   }
-
+  
   /**
    * Returns the location where to move the mouse pointer to scroll to the given position.
    * @param scrollBar the target <code>JScrollBar</code>.
@@ -115,6 +112,6 @@ public final class JScrollBarLocation {
 
   @RunsInCurrentThread
   private JScrollBarLocationStrategy locationStrategyFor(JScrollBar scrollBar) {
-    return strategyMap.get(scrollBar.getOrientation());
+    return LOCATIONS.get(scrollBar.getOrientation());
   }
 }

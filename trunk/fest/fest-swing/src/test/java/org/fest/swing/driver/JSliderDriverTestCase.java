@@ -19,27 +19,24 @@ import java.awt.Dimension;
 
 import javax.swing.JSlider;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
-import org.fest.swing.edt.GuiTask;
-import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.JSliderMaximumQuery.maximumOf;
-import static org.fest.swing.driver.JSliderOrientationQuery.orientationOf;
-import static org.fest.swing.driver.JSliderSetValueTask.setValue;
 import static org.fest.swing.driver.JSliderValueQuery.valueOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.task.ComponentSetVisibleTask.hide;
+import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -52,13 +49,18 @@ import static org.fest.swing.testing.TestGroups.GUI;
 public abstract class JSliderDriverTestCase {
 
   private Robot robot;
-  private JSlider slider;
+  private MyWindow window;
   private JSliderDriver driver;
+  private JSlider slider;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JSliderDriver(robot);
-    MyWindow window = MyWindow.createNew(getClass(), orientation());
+    window = MyWindow.createNew(getClass(), orientation());
     slider = window.slider;
     robot.showWindow(window);
   }
@@ -88,15 +90,24 @@ public abstract class JSliderDriverTestCase {
     };
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSlideToValueIfSliderIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableSlider();
-    int value = 10;
-    setJSliderValue(value);
-    robot.waitForIdle();
-    driver.slideToMaximum(slider);
-    assertThatSliderValueIsEqualTo(value);
+  public void shouldThrowErrorWhenSlidingDisabledJSliderToValue() {
+    disableJSlider();
+    try {
+      driver.slide(slider, 6);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenSlidingNotShowingJSliderToValue() {
+    hideWindow();
+    try {
+      driver.slide(slider, 6);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -106,32 +117,67 @@ public abstract class JSliderDriverTestCase {
     assertThatSliderValueIsEqualTo(maximumOf(slider));
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSlideToMaximumIfSliderIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableSlider();
-    robot.waitForIdle();
-    int value = valueOf(slider);
-    driver.slideToMaximum(slider);
-    assertThatSliderValueIsEqualTo(value);
+  private static int maximumOf(final JSlider slider) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return slider.getMaximum();
+      }
+    });
+  }
+
+  public void shouldThrowErrorWhenSlidingDisabledJSliderToMaximum() {
+    disableJSlider();
+    try {
+      driver.slideToMaximum(slider);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+  
+  public void shouldThrowErrorWhenSlidingNotShowingJSliderToMaximum() {
+    hideWindow();
+    try {
+      driver.slideToMaximum(slider);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldSlideToMinimum(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     driver.slideToMinimum(slider);
-    assertThatSliderValueIsEqualTo(slider.getMinimum());
+    assertThatSliderValueIsEqualTo(minimumOf(slider));
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSlideToMinimumIfSliderIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableSlider();
-    robot.waitForIdle();
-    int value = maximumOf(slider);
-    setJSliderValue(value);
-    driver.slideToMinimum(slider);
-    assertThatSliderValueIsEqualTo(value);
+  private static int minimumOf(final JSlider slider) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return slider.getMinimum();
+      }
+    });
+  }
+  
+  public void shouldThrowErrorWhenSlidingDisabledJSliderToMinimum() {
+    disableJSlider();
+    try {
+      driver.slideToMinimum(slider);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenSlidingNotShowingJSliderToMinimum() {
+    hideWindow();
+    try {
+      driver.slideToMinimum(slider);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
   private void assertThatSliderValueIsEqualTo(int expected) {
@@ -141,8 +187,8 @@ public abstract class JSliderDriverTestCase {
   public void shouldThrowErrorIfValueIsLessThanMinimum() {
     try {
       driver.slide(slider, -1);
-      fail();
-    } catch (ActionFailedException expected) {
+      failWhenExpectingException();
+    } catch (IllegalArgumentException expected) {
       assertThat(expected).message().isEqualTo("Value <-1> is not within the JSlider bounds of <0> and <30>");
     }
   }
@@ -150,36 +196,48 @@ public abstract class JSliderDriverTestCase {
   public void shouldThrowErrorIfValueIsGreaterThanMaximum() {
     try {
       driver.slide(slider, 31);
-      fail();
-    } catch (ActionFailedException expected) {
+      failWhenExpectingException();
+    } catch (IllegalArgumentException expected) {
       assertThat(expected).message().isEqualTo("Value <31> is not within the JSlider bounds of <0> and <30>");
     }
   }
 
-  private void clearAndDisableSlider() {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        slider.setValue(0);
-        slider.setEnabled(false);
-      }
-    });
+  @RunsInEDT
+  private void disableJSlider() {
+    disable(slider);
+    robot.waitForIdle();
   }
 
-  private void setJSliderValue(int value) {
-    setValue(slider, value);
+  @RunsInEDT
+  private void hideWindow() {
+    hide(window);
+    robot.waitForIdle();
   }
-
+  
   protected int sliderOrientation() {
     return orientationOf(slider);
   }
 
+  private static int orientationOf(final JSlider slider) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return slider.getOrientation();
+      }
+    });
+  }
+  
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JSlider slider = new JSlider();
 
+    @RunsInEDT
     static MyWindow createNew(final Class<? extends JSliderDriverTestCase> testClass, final int orientation) {
-      return new MyWindow(testClass, orientation);
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow(testClass, orientation);
+        }
+      });
     }
 
     private MyWindow(Class<? extends JSliderDriverTestCase> testClass, int orientation) {

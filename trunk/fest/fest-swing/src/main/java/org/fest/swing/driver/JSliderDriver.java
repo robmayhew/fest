@@ -14,18 +14,20 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Point;
+
 import javax.swing.JSlider;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
-import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.util.GenericRange;
+import org.fest.swing.util.Pair;
 
-import static org.fest.swing.driver.JSliderMaximumQuery.maximumOf;
-import static org.fest.swing.driver.JSliderMinimumQuery.minimumOf;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.JSliderSetValueTask.setValue;
-import static org.fest.swing.driver.JSliderValueQuery.valueOf;
-import static org.fest.swing.driver.JSliderValueRangeQuery.valueRangeOf;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -52,40 +54,103 @@ public class JSliderDriver extends JComponentDriver {
   /**
    * Slides the knob to its maximum.
    * @param slider the target <code>JSlider</code>.
+   * @throws IllegalStateException if the <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if the <code>JSlider</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void slideToMaximum(JSlider slider) {
-    slide(slider, maximumOf(slider));
+    slide(slider, validateAndFindSlideToMaximumInfo(slider, location));
+  }
+
+  @RunsInEDT
+  private static Pair<Integer, GenericRange<Point>> validateAndFindSlideToMaximumInfo(final JSlider slider, 
+      final JSliderLocation location) {
+    return execute(new GuiQuery<Pair<Integer, GenericRange<Point>>>() {
+      protected Pair<Integer, GenericRange<Point>> executeInEDT() {
+        validateIsEnabledAndShowing(slider);
+        int value = slider.getMaximum();
+        GenericRange<Point> fromAndTo = slideInfo(slider, location, value);
+        return new Pair<Integer, GenericRange<Point>>(value, fromAndTo);
+      }
+    });
   }
 
   /**
    * Slides the knob to its minimum.
    * @param slider the target <code>JSlider</code>.
+   * @throws IllegalStateException if the <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if the <code>JSlider</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void slideToMinimum(JSlider slider) {
-    slide(slider, minimumOf(slider));
+    slide(slider, validateAndFindSlideToMinimumInfo(slider, location));
+  }
+
+  @RunsInEDT
+  private static Pair<Integer, GenericRange<Point>> validateAndFindSlideToMinimumInfo(final JSlider slider, 
+      final JSliderLocation location) {
+    return execute(new GuiQuery<Pair<Integer, GenericRange<Point>>>() {
+      protected Pair<Integer, GenericRange<Point>> executeInEDT() {
+        validateIsEnabledAndShowing(slider);
+        int value = slider.getMinimum();
+        GenericRange<Point> fromAndTo = slideInfo(slider, location, value);
+        return new Pair<Integer, GenericRange<Point>>(value, fromAndTo);
+      }
+    });
+  }
+
+  @RunsInEDT
+  private void slide(JSlider slider, Pair<Integer, GenericRange<Point>> slideInfo) {
+    slide(slider, slideInfo.i, slideInfo.ii);
   }
 
   /**
    * Slides the knob to the requested value.
    * @param slider the target <code>JSlider</code>.
    * @param value the requested value.
-   * @throws ActionFailedException if the given position is not within the <code>JSlider</code> bounds.
+   * @throws IllegalStateException if the <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if the <code>JSlider</code> is not showing on the screen.
+   * @throws IllegalArgumentException if the given position is not within the <code>JSlider</code> bounds.
    */
+  @RunsInEDT
   public void slide(JSlider slider, int value) {
-    validateValue(slider, value);
-    if (!isEnabled(slider)) return;
-    drag(slider, location.pointAt(slider, valueOf(slider)));
-    drop(slider, location.pointAt(slider, value));
-    // the drag is only approximate, so set the value directly
+    GenericRange<Point> slideInfo = validateAndFindSlideInfo(slider, location, value);
+    slide(slider, value, slideInfo);
+  }
+
+  @RunsInEDT
+  private void slide(JSlider slider, int value, GenericRange<Point> fromAndTo) {
+    moveMouseIgnoringAnyError(slider, fromAndTo.from);
+    moveMouseIgnoringAnyError(slider, fromAndTo.to);
     setValue(slider, value);
     robot.waitForIdle();
   }
+  
+  @RunsInEDT
+  private static GenericRange<Point> validateAndFindSlideInfo(final JSlider slider, final JSliderLocation location, 
+      final int value) {
+    return execute(new GuiQuery<GenericRange<Point>>() {
+      protected GenericRange<Point> executeInEDT() {
+        validateValue(slider, value);
+        validateIsEnabledAndShowing(slider);
+        return slideInfo(slider, location, value);
+      }
+    });
+  }
 
-  private void validateValue(JSlider slider, int value) {
-    ValueRange valueRange = valueRangeOf(slider);
-    int min = valueRange.minimum;
-    int max = valueRange.maximum;
+  @RunsInCurrentThread
+  private static void validateValue(JSlider slider, int value) {
+    int min = slider.getMinimum();
+    int max = slider.getMaximum();
     if (value >= min && value <= max) return;
-    throw actionFailure(concat("Value <", value, "> is not within the JSlider bounds of <", min, "> and <", max, ">"));
+    throw new IllegalArgumentException(
+        concat("Value <", value, "> is not within the JSlider bounds of <", min, "> and <", max, ">"));
+  }
+
+  @RunsInCurrentThread
+  private static GenericRange<Point> slideInfo(JSlider slider, JSliderLocation location, int value) {
+    Point from = location.pointAt(slider, slider.getValue());
+    Point to = location.pointAt(slider, value);
+    return new GenericRange<Point>(from, to);
   }
 }

@@ -18,6 +18,7 @@ package org.fest.swing.driver;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
 
@@ -44,10 +45,12 @@ public class JScrollPaneDriver extends JComponentDriver {
    * @param scrollPane the given <code>JScrollBar</code>.
    * @return the horizontal scroll bar in the given <code>JScrollBar</code>.
    */
+  @RunsInEDT
   public JScrollBar horizontalScrollBarIn(JScrollPane scrollPane) {
     return horizontalScrollBar(scrollPane);
   }
 
+  @RunsInEDT
   private static JScrollBar horizontalScrollBar(final JScrollPane scrollPane) {
     return execute(new GuiQuery<JScrollBar>() {
       protected JScrollBar executeInEDT() {
@@ -61,10 +64,12 @@ public class JScrollPaneDriver extends JComponentDriver {
    * @param scrollPane the given <code>JScrollBar</code>.
    * @return the vertical scroll bar in the given <code>JScrollBar</code>.
    */
+  @RunsInEDT
   public JScrollBar verticalScrollBarIn(JScrollPane scrollPane) {
     return verticalScrollBar(scrollPane);
   }
 
+  @RunsInEDT
   private static JScrollBar verticalScrollBar(final JScrollPane scrollPane) {
     return execute(new GuiQuery<JScrollBar>() {
       protected JScrollBar executeInEDT() {

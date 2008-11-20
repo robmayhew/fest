@@ -17,15 +17,14 @@ package org.fest.swing.driver;
 
 import java.awt.Insets;
 import java.awt.Point;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JSlider;
 
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
-import static javax.swing.SwingConstants.VERTICAL;
-
-import static org.fest.swing.driver.JSliderOrientationQuery.orientationOf;
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static javax.swing.SwingConstants.*;
 
 /**
  * Understands a location in a <code>{@link JSlider}</code>.
@@ -35,79 +34,83 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 public final class JSliderLocation {
 
+  private static final Map<Integer, JSliderLocationStrategy> LOCATIONS = new HashMap<Integer, JSliderLocationStrategy>();
+
+  static {
+    LOCATIONS.put(HORIZONTAL, new JSliderHorizontalLocation());
+    LOCATIONS.put(VERTICAL, new JSliderVerticalLocation());
+  }
+  
   /**
    * Returns the coordinates of the given value in the given <code>{@link JSlider}</code>.
    * @param slider the given <code>JSlider</code>.
    * @param value the given value.
    * @return the coordinates of the given value in the given <code>JSlider</code>.
    */
+  @RunsInCurrentThread
   public Point pointAt(JSlider slider, int value) {
-    if (orientationOf(slider) == VERTICAL) return locationForVerticalOrientation(slider, value);
-    return locationForHorizontalOrientation(slider, value);
+    return LOCATIONS.get(slider.getOrientation()).locationForValue(slider, value);
   }
 
-  private static Point locationForVerticalOrientation(JSlider slider, int value) {
-    return execute(new JSliderLocationQueryStrategy(slider, value) {
-      int max(Insets insets) {
-        return slider().getHeight() - insets.top - insets.bottom - 1;
-      }
-
-      int coordinateOf(Point center) {
-        return center.y;
-      }
-
-      Point update(Point center, int coordinate) {
-        return new Point(center.x, coordinate);
-      }
-    });
-  }
-
-  private static Point locationForHorizontalOrientation(JSlider slider, int value) {
-    return execute(new JSliderLocationQueryStrategy(slider, value) {
-      int max(Insets insets) {
-        return slider().getWidth() - insets.left - insets.right - 1;
-      }
-
-      int coordinateOf(Point center) {
-        return center.x;
-      }
-
-      Point update(Point center, int coordinate) {
-        return new Point(coordinate, center.y);
-      }
-    });
-  }
-
-  private static abstract class JSliderLocationQueryStrategy extends GuiQuery<Point> {
-    private final JSlider slider;
-    private final int value;
-
-    JSliderLocationQueryStrategy(JSlider slider, int value) {
-      this.slider = slider;
-      this.value = value;
+  private static class JSliderHorizontalLocation extends JSliderLocationStrategy {
+    @RunsInCurrentThread
+    int max(JSlider slider, Insets insets) {
+      return slider.getWidth() - insets.left - insets.right - 1;
     }
 
-    protected final Point executeInEDT() {
+    @RunsInCurrentThread
+    int coordinateOf(Point center) {
+      return center.x;
+    }
+
+    @RunsInCurrentThread
+    Point update(Point center, int coordinate) {
+      return new Point(coordinate, center.y);
+    }
+  }
+
+  private static class JSliderVerticalLocation extends JSliderLocationStrategy {
+    @RunsInCurrentThread
+    int max(JSlider slider, Insets insets) {
+      return slider.getHeight() - insets.top - insets.bottom - 1;
+    }
+
+    @RunsInCurrentThread
+    int coordinateOf(Point center) {
+      return center.y;
+    }
+
+    @RunsInCurrentThread
+    Point update(Point center, int coordinate) {
+      return new Point(center.x, coordinate);
+    }
+  }
+  
+  private static abstract class JSliderLocationStrategy {
+    @RunsInCurrentThread
+    final Point locationForValue(JSlider slider, int value) {
       Point center = new Point(slider.getWidth() / 2, slider.getHeight() / 2);
-      int max = max(slider.getInsets());
+      int max = max(slider, slider.getInsets());
       int coordinate = coordinateOf(center);
-      coordinate = (int)(percent() * max);
+      coordinate = (int)(percent(slider, value) * max);
       if (slider.getInverted()) coordinate = max - coordinate;
       return update(center, coordinate);
     }
 
-    abstract int max(Insets insets);
+    @RunsInCurrentThread
+    abstract int max(JSlider slider, Insets insets);
 
+    @RunsInCurrentThread
     abstract int coordinateOf(Point center);
 
+    @RunsInCurrentThread
     abstract Point update(Point center, int coordinate);
 
-    private float percent() {
+    @RunsInCurrentThread
+    private float percent(JSlider slider, int value) {
       int minimum = slider.getMinimum();
       int range = slider.getMaximum() - minimum;
       return (float)(value - minimum) / range;
     }
-
-    JSlider slider() { return slider; }
   }
 }

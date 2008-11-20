@@ -27,29 +27,29 @@ import org.fest.swing.annotation.RunsInCurrentThread;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-class HorizontalJScrollBarLocationStrategy extends JScrollBarLocationStrategy {
+class VerticalJScrollBarLocation extends JScrollBarLocationStrategy {
 
   @RunsInCurrentThread
   Point thumbLocation(JScrollBar scrollBar, double fraction) {
     int arrow = arrow(scrollBar);
-    return new Point(arrow + (int) (fraction * (scrollBar.getWidth() - 2 * arrow)), arrow / 2);
+    return new Point(arrow / 2, arrow + (int) (fraction * (scrollBar.getHeight() - 2 * arrow)));
   }
 
   @RunsInCurrentThread
   Point blockLocation(JScrollBar scrollBar, Point unitLocation, int offset) {
     Point p = new Point(unitLocation);
-    p.x += offset;
+    p.y += offset;
     return p;
   }
 
   @RunsInCurrentThread
   Point unitLocationToScrollUp(JScrollBar scrollBar) {
     int arrow = arrow(scrollBar);
-    return new Point(scrollBar.getWidth() - arrow / 2, arrow / 2);
+    return new Point(arrow / 2, scrollBar.getHeight() - arrow / 2);
   }
 
   @RunsInCurrentThread
   int arrow(JScrollBar scrollBar) {
-    return scrollBar.getHeight();
+    return scrollBar.getWidth();
   }
 }
