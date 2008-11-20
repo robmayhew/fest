@@ -39,7 +39,7 @@ import static org.fest.swing.driver.JSpinnerValueQuery.valueOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.util.Strings.concat;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands simulation of user input on a <code>{@link JSpinner}</code>. Unlike <code>JSpinnerFixture</code>, this
@@ -91,8 +91,8 @@ public class JSpinnerDriver extends JComponentDriver {
   private static void incrementValue(JSpinner spinner, int times) {
     for (int i = 0; i < times; i++) {
       Object newValue = spinner.getNextValue();
-      if (newValue != null) spinner.setValue(newValue);
-      return;
+      if (newValue == null) return;
+      spinner.setValue(newValue);
     }
   }
   
@@ -154,8 +154,8 @@ public class JSpinnerDriver extends JComponentDriver {
   private static void decrementValue(JSpinner spinner, int times) {
     for (int i = 0; i < times; i++) {
       Object newValue = spinner.getPreviousValue();
-      if (newValue != null) spinner.setValue(newValue);
-      return;
+      if (newValue == null) return;
+      spinner.setValue(newValue);
     }
   }
 
@@ -265,7 +265,12 @@ public class JSpinnerDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void selectValue(JSpinner spinner, Object value) {
-    setValue(spinner, value);
+    try {
+      setValue(spinner, value);
+    } catch (IllegalArgumentException e) {
+      // message from original exception is useless
+      throw new IllegalArgumentException(concat("Value ", quote(value), " is not valid"));
+    }
     robot.waitForIdle();
   }
 

@@ -23,24 +23,30 @@ import javax.swing.SpinnerListModel;
 import javax.swing.text.JTextComponent;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.assertions.Fail;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JSpinnerSetValueTask.setValue;
 import static org.fest.swing.driver.JSpinnerValueQuery.valueOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
+import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.task.ComponentSetVisibleTask.hide;
+import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
@@ -54,13 +60,18 @@ import static org.fest.util.Strings.concat;
 public class JSpinnerDriverTest {
 
   private Robot robot;
-  private JSpinner spinner;
   private JSpinnerDriver driver;
+  private MyWindow window;
+  private JSpinner spinner;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JSpinnerDriver(robot);
-    MyWindow window = MyWindow.createNew();
+    window = MyWindow.createNew();
     spinner = window.spinner;
     robot.showWindow(window);
   }
@@ -77,15 +88,26 @@ public class JSpinnerDriverTest {
     assertThatSpinnerValueIsEqualTo("Sam");
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotIncrementValueIfSpinnerIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisable(spinner);
-    robot.waitForIdle();
-    driver.increment(spinner);
-    assertFirstValueIsSelected();
+  public void shouldThrowErrorWhenIncrementingValueInDisabledJSpinner() {
+    disableSpinner();
+    try {
+      driver.increment(spinner);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
   }
 
+  public void shouldThrowErrorWhenIncrementingValueInNotShowingJSpinner() {
+    hideWindow();
+    try {
+      driver.increment(spinner);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+  
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldIncrementValueTheGivenTimes(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
@@ -94,21 +116,32 @@ public class JSpinnerDriverTest {
     assertLastValueIsSelected();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotIncrementValueTheGivenTimesIfSpinnerIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisable(spinner);
-    robot.waitForIdle();
-    driver.increment(spinner, 2);
-    assertFirstValueIsSelected();
+  public void shouldThrowErrorWhenIncrementingValueInDisabledJSpinnerTheGivenTimes() {
+    disableSpinner();
+    try {
+      driver.increment(spinner, 2);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenIncrementingValueInNotShowingJSpinnerTheGivenTimes() {
+    hideWindow();
+    try {
+      driver.increment(spinner, 2);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
   public void shouldThrowErrorIfTimesToIncrementIsZeroOrNegative(int times) {
     try {
       driver.increment(spinner, times);
-      fail();
-    } catch (ActionFailedException expected) {
+      failWhenExpectingException();
+    } catch (IllegalArgumentException expected) {
       String message = concat(
           "The number of times to increment the value should be greater than zero, but was <", times, ">");
       assertThat(expected).message().isEqualTo(message);
@@ -123,14 +156,24 @@ public class JSpinnerDriverTest {
     assertFirstValueIsSelected();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotDecrementValueIfSpinnerIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisable(spinner);
-    selectLastValue();
-    robot.waitForIdle();
-    driver.decrement(spinner);
-    assertLastValueIsSelected();
+  public void shouldThrowErrorWhenDecrementingValueInDisabledJSpinner() {
+    disableSpinner();
+    try {
+      driver.decrement(spinner);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenDecrementingValueInNotShowingJSpinner() {
+    hideWindow();
+    try {
+      driver.decrement(spinner);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
   private void assertFirstValueIsSelected() {
@@ -141,27 +184,36 @@ public class JSpinnerDriverTest {
   public void shouldDecrementValueTheGivenTimes(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     selectLastValue();
-    robot.waitForIdle();
     driver.decrement(spinner, 2);
     assertFirstValueIsSelected();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotDecrementValueTheGivenTimesIfSpinnerIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisable(spinner);
-    selectLastValue();
-    robot.waitForIdle();
-    driver.decrement(spinner, 2);
-    assertLastValueIsSelected();
+  public void shouldThrowErrorWhenDecrementingValueInDisabledJSpinnerTheGivenTimes() {
+    disableSpinner();
+    try {
+      driver.decrement(spinner, 2);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenDecrementingValueInNotShowingJSpinnerTheGivenTimes() {
+    hideWindow();
+    try {
+      driver.decrement(spinner, 2);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "zeroAndNegative", dataProviderClass = ZeroAndNegativeProvider.class)
   public void shouldThrowErrorIfTimesToDecrementIsZeroOrNegative(int times) {
     try {
       driver.decrement(spinner, times);
-      fail();
-    } catch (ActionFailedException expected) {
+      failWhenExpectingException();
+    } catch (IllegalArgumentException expected) {
       String message = concat(
           "The number of times to decrement the value should be greater than zero, but was <", times, ">");
       assertThat(expected).message().isEqualTo(message);
@@ -182,6 +234,7 @@ public class JSpinnerDriverTest {
     driver.editor(spinner);
   }
 
+  @RunsInEDT
   private static void setJLabelAsEditorIn(final JSpinner spinner) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -197,13 +250,24 @@ public class JSpinnerDriverTest {
     assertLastValueIsSelected();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotEnterTextAndCommitIfSpinnerIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisable(spinner);
-    robot.waitForIdle();
-    driver.enterTextAndCommit(spinner, "Gandalf");
-    assertFirstValueIsSelected();
+  public void shouldThrowErrorWhenEnteringAndCommittingTextInDisabledJSpinner() {
+    disableSpinner();
+    try {
+      driver.enterTextAndCommit(spinner, "Gandalf");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenEnteringAndCommittingTextInNotShowingJSpinner() {
+    hideWindow();
+    try {
+      driver.enterTextAndCommit(spinner, "Gandalf");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -217,13 +281,24 @@ public class JSpinnerDriverTest {
     assertThatSpinnerValueIsEqualTo("Frodo");
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotEnterTextIfSpinnerIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisable(spinner);
-    driver.enterText(spinner, "Gandalf");
-    robot.waitForIdle();
-    assertFirstValueIsSelected();
+  public void shouldThrowErrorWhenEnteringTextInDisabledJSpinner() {
+    disableSpinner();
+    try {
+      driver.enterText(spinner, "Gandalf");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenEnteringTextInNotShowingJSpinner() {
+    hideWindow();
+    try {
+      driver.enterText(spinner, "Gandalf");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -233,20 +308,11 @@ public class JSpinnerDriverTest {
     assertLastValueIsSelected();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSetValueIfSpinnerIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisable(spinner);
-    driver.selectValue(spinner, "Gandalf");
-    robot.waitForIdle();
-    assertFirstValueIsSelected();
-  }
-
   @Test(groups = GUI)
   public void shouldThrowErrorIfValueToSelectNotValid() {
     try {
       driver.selectValue(spinner, "Yoda");
-      Fail.fail("expecting test to fail");
+      failWhenExpectingException();
     } catch (IllegalArgumentException e) {
       assertThat(e).message().contains("Value 'Yoda' is not valid");
     }
@@ -263,39 +329,36 @@ public class JSpinnerDriverTest {
 
   public void shouldFailIfValueIsNotEqualToExpected() {
     selectLastValue();
-    robot.waitForIdle();
     try {
       driver.requireValue(spinner, "Frodo");
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'value'")
                              .contains("expected:<'Frodo'> but was:<'Gandalf'>");
     }
   }
 
+  @RunsInEDT
   private void selectLastValue() {
     setValue(spinner, "Gandalf");
+    robot.waitForIdle();
   }
 
+  @RunsInEDT
   private void assertThatSpinnerValueIsEqualTo(Object expected) {
     assertThat(valueOf(spinner)).isEqualTo(expected);
   }
 
-  private static void clearAndDisable(final JSpinner spinner) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        spinner.setValue("Frodo");
-        spinner.setEnabled(false);
-      }
-    });
+  @RunsInEDT
+  private void disableSpinner() {
+    disable(spinner);
+    robot.waitForIdle();
   }
-
-  private static void setValue(final JSpinner spinner, final String value) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        spinner.setValue(value);
-      }
-    });
+  
+  @RunsInEDT
+  private void hideWindow() {
+    hide(window);
+    robot.waitForIdle();
   }
 
   private static class MyWindow extends TestWindow {
@@ -303,8 +366,13 @@ public class JSpinnerDriverTest {
 
     final JSpinner spinner = new JSpinner(new SpinnerListModel(array("Frodo", "Sam", "Gandalf")));
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {
