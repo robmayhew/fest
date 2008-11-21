@@ -44,7 +44,7 @@ import static org.fest.swing.driver.CommonValidations.*;
 import static org.fest.swing.driver.JTableCellEditableQuery.isCellEditable;
 import static org.fest.swing.driver.JTableCellValidator.*;
 import static org.fest.swing.driver.JTableColumnByIdentifierQuery.columnIndexByIdentifier;
-import static org.fest.swing.driver.JTableColumnCountQuery.columnCountOf;
+import static org.fest.swing.driver.JTableContentsQuery.tableContents;
 import static org.fest.swing.driver.JTableHasSelectionQuery.hasSelection;
 import static org.fest.swing.driver.JTableHeaderQuery.tableHeader;
 import static org.fest.swing.driver.JTableMatchingCellQuery.cellWithValue;
@@ -422,6 +422,7 @@ public class JTableDriver extends JComponentDriver {
    * @param contents the expected <code>String</code> representation of the cell values in the <code>JTable</code>.
    * @see #cellReader(JTableCellReader)
    */
+  @RunsInEDT
   public void requireContents(JTable table, String[][] contents) {
     String[][] actual = contents(table);
     if (!equal(actual, contents))
@@ -441,16 +442,11 @@ public class JTableDriver extends JComponentDriver {
    * @return the <code>String</code> representation of the cells in the <code>JTable</code>.
    * @see #cellReader(JTableCellReader)
    */
+  @RunsInEDT
   public String[][] contents(JTable table) {
-    int rowCount = rowCountOf(table);
-    int columnCount = columnCountOf(table);
-    String[][] contents = new String[rowCount][columnCount];
-    for (int row = 0; row < rowCount; row++)
-      for (int col = 0; col < columnCount; col++)
-        contents[row][col] = cellReader.valueAt(table, row, col);
-    return contents;
+    return tableContents(table, cellReader);
   }
-
+  
   /**
    * Asserts that the value of the given cell is equal to the expected one.
    * @param table the target <code>JTable</code>.
