@@ -19,15 +19,12 @@ import java.awt.Rectangle;
 
 import javax.swing.JTabbedPane;
 
-import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.exception.LocationUnavailableException;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.driver.JTabbedPaneTabBoundsQuery.boundsOf;
-import static org.fest.swing.driver.JTabbedPaneTabCountQuery.tabCountOf;
 import static org.fest.swing.driver.JTabbedPaneTabIndexQuery.indexOfTab;
-import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.*;
 
 /**
@@ -45,6 +42,7 @@ public class JTabbedPaneLocation {
    * @return the index of the first tab that matches the given <code>String</code>.
    * @throws LocationUnavailableException if a tab matching the given title could not be found.
    */
+  @RunsInCurrentThread
   public int indexOf(final JTabbedPane tabbedPane, final String title) {
     int index = indexOfTab(tabbedPane, title);
     if (index >= 0) return index;
@@ -56,22 +54,24 @@ public class JTabbedPaneLocation {
    * @param tabbedPane the target <code>JTabbedPane</code>.
    * @param index the given index.
    * @return the coordinates of the tab under the given index.
-   * @throws ActionFailedException if the given index is negative or out of bounds.
+   * @throws IndexOutOfBoundsException if the given index is negative or out of bounds.
    * @throws LocationUnavailableException if the tab under the given index is not visible.
    */
+  @RunsInCurrentThread
   public Point pointAt(final JTabbedPane tabbedPane, final int index) {
     validateIndex(tabbedPane, index);
-    Rectangle rect = boundsOf(tabbedPane, index);
+    Rectangle rect = tabbedPane.getUI().getTabBounds(tabbedPane, index);
     // From Abbot: TODO figure out the effects of tab layout policy sometimes tabs are not directly visible
     if (rect == null || rect.x < 0)
       throw new LocationUnavailableException(concat("The tab '", valueOf(index), "' is not visible"));
     return new Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
   }
 
+  @RunsInCurrentThread
   void validateIndex(JTabbedPane tabbedPane, int index) {
-    int max = tabCountOf(tabbedPane) - 1;
+    int max = tabbedPane.getTabCount() - 1;
     if (index >= 0 && index <= max) return;
-    throw actionFailure(concat(
+    throw new IndexOutOfBoundsException(concat(
         "Index <", valueOf(index), "> is not within the JTabbedPane bounds of <0> and <", valueOf(max), "> (inclusive)"));
   }
 }

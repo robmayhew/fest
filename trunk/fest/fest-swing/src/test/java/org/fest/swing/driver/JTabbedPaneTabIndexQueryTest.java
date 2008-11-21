@@ -23,7 +23,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestWindow;
 
@@ -44,6 +47,10 @@ public class JTabbedPaneTabIndexQueryTest {
   private Robot robot;
   private JTabbedPane tabbedPane;
 
+  @BeforeMethod public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
@@ -57,7 +64,7 @@ public class JTabbedPaneTabIndexQueryTest {
 
   @Test(dataProvider = "tabTitlesAndIndices", groups = { GUI, EDT_ACTION })
   public void shouldReturnIndexForTab(String tabTitle, int expectedIndex) {
-    int index = JTabbedPaneTabIndexQuery.indexOfTab(tabbedPane, tabTitle);
+    int index = indexOfTab(tabbedPane, tabTitle);
     assertThat(index).isEqualTo(expectedIndex);
   }
 
@@ -70,17 +77,27 @@ public class JTabbedPaneTabIndexQueryTest {
   }
 
   public void shouldNotFindIndexIfTitleIsNotMatching() {
-    int index = JTabbedPaneTabIndexQuery.indexOfTab(tabbedPane, "Hello");
+    int index = indexOfTab(tabbedPane, "Hello");
     assertThat(index).isEqualTo(-1);
   }
 
   public void shouldNotFindIndexIfTabbedPaneHasNoTabs() {
     removeAllTabsIn(tabbedPane);
     robot.waitForIdle();
-    int index = JTabbedPaneTabIndexQuery.indexOfTab(tabbedPane, "First");
+    int index = indexOfTab(tabbedPane, "First");
     assertThat(index).isEqualTo(-1);
   }
 
+  @RunsInEDT
+  private static int indexOfTab(final JTabbedPane tabbedPane, final String title) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return JTabbedPaneTabIndexQuery.indexOfTab(tabbedPane, title);
+      }
+    });
+  }
+
+  @RunsInEDT
   private static void removeAllTabsIn(final JTabbedPane tabbedPane) {
     execute(new GuiTask() {
       public void executeInEDT() {
@@ -94,8 +111,13 @@ public class JTabbedPaneTabIndexQueryTest {
 
     final JTabbedPane tabbedPane = new JTabbedPane();
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

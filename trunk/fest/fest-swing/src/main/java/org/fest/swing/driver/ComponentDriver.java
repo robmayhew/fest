@@ -425,6 +425,13 @@ public class ComponentDriver {
     return true;
   }
 
+  /**
+   * Validates that the given <code>{@link Component}</code> is enabled and showing on the screen. This method is
+   * executed in the event dispatch thread.
+   * @param c the <code>Component</code> to check.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
+   */
   @RunsInEDT
   protected static void assertIsEnabledAndShowing(final Component c) {
     execute(new GuiTask() {

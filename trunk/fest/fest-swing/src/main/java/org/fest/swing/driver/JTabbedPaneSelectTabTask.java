@@ -16,6 +16,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JTabbedPane;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -29,6 +30,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JTabbedPaneSelectTabTask {
 
+  @RunsInEDT
   static void setSelectedTab(final JTabbedPane tabbedPane, final int index) {
     execute(new GuiTask() {
       protected void executeInEDT() {

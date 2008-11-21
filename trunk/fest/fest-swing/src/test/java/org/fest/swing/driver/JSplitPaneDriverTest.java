@@ -20,13 +20,13 @@ import java.awt.Dimension;
 import javax.swing.JList;
 import javax.swing.JSplitPane;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static javax.swing.JSplitPane.*;
@@ -34,8 +34,9 @@ import static javax.swing.JSplitPane.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
-import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -50,6 +51,10 @@ public class JSplitPaneDriverTest {
   private JSplitPane splitPane;
   private JSplitPaneDriver driver;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithCurrentAwtHierarchy();
     driver = new JSplitPaneDriver(robot);
@@ -59,30 +64,18 @@ public class JSplitPaneDriverTest {
     robot.cleanUp();
   }
 
-  @Test(groups = GUI, dataProvider = "orientations")
+  @Test(groups = GUI, dataProvider = "orientationsAndModes")
   public void shouldMoveDividerToGivenLocation(int orientation, EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    MyWindow window = MyWindow.createAndShow(orientation);
+    MyWindow window = MyWindow.createNew(orientation);
     splitPane = window.splitPane;
+    robot.showWindow(window);
     int newLocation = splitPane.getDividerLocation() + 100;
     driver.moveDividerTo(splitPane, newLocation);
     assertThat(splitPane.getDividerLocation()).isEqualTo(newLocation);
   }
 
-  @Test(groups = GUI, dataProvider = "orientations")
-  public void shouldNotMoveDividerToGivenLocationIfSplitPaneIsNotEnabled(int orientation, EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    MyWindow window = MyWindow.createAndShow(orientation);
-    splitPane = window.splitPane;
-    disable(splitPane);
-    robot.waitForIdle();
-    assertThat(isEnabled(splitPane)).isFalse();
-    int originalLocation = splitPane.getDividerLocation();
-    driver.moveDividerTo(splitPane, originalLocation + 100);
-    assertThat(splitPane.getDividerLocation()).isEqualTo(originalLocation);
-  }
-
-  @DataProvider(name = "orientations") public Object[][] orientations() {
+  @DataProvider(name = "orientationsAndModes") public Object[][] orientationsAndModes() {
     return new Object[][] {
         // { VERTICAL_SPLIT, AWT },
         { VERTICAL_SPLIT, ROBOT },
@@ -91,15 +84,51 @@ public class JSplitPaneDriverTest {
     };
   }
 
+  @Test(groups = GUI, dataProvider = "orientations")
+  public void shouldThrowErrorWhenMovingDividerInDisabledJSplitPane(int orientation) {
+    MyWindow window = MyWindow.createNew(orientation);
+    splitPane = window.splitPane;
+    robot.showWindow(window);
+    disable(splitPane);
+    robot.waitForIdle();
+    try {
+      driver.moveDividerTo(splitPane, 100);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  @Test(groups = GUI, dataProvider = "orientations")
+  public void shouldThrowErrorWhenMovingDividerInNotShowingJSplitPane(int orientation) {
+    MyWindow window = MyWindow.createNew(orientation);
+    splitPane = window.splitPane;
+    try {
+      driver.moveDividerTo(splitPane, 100);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+
+  @DataProvider(name = "orientations") public Object[][] orientations() {
+    return new Object[][] {
+        { VERTICAL_SPLIT }, { HORIZONTAL_SPLIT }
+    };
+  }
+
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JSplitPane splitPane;
 
-    static MyWindow createAndShow(int orientation) {
-      MyWindow window = new MyWindow(orientation);
-      window.display();
-      return window;
+    @RunsInEDT
+    static MyWindow createNew(final int orientation) {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow(orientation);
+        }
+      });
     }
 
     private MyWindow(int orientation) {

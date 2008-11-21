@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JTabbedPane;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -31,6 +32,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JTabbedPaneTabTitlesQuery {
 
+  @RunsInEDT
   static String[] tabTitlesOf(final JTabbedPane tabbedPane) {
     return execute(new GuiQuery<String[]>() {
       protected String[] executeInEDT() {
