@@ -17,12 +17,11 @@ package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.data.TableCell;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.driver.JTableColumnCountQuery.columnCountOf;
-import static org.fest.swing.driver.JTableRowCountQuery.rowCountOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -39,9 +38,10 @@ public final class JTableCellValidator {
    * @throws NullPointerException if the cell is <code>null</code>.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
-  public static void validateCell(JTable table, TableCell cell) {
+  @RunsInCurrentThread
+  public static void validateCellIndices(JTable table, TableCell cell) {
     if (cell == null) throw new NullPointerException("Table cell cannot be null");
-    validateBounds(table, cell.row, cell.column);
+    validateIndices(table, cell.row, cell.column);
   }
 
   /**
@@ -52,10 +52,11 @@ public final class JTableCellValidator {
    * @throws IndexOutOfBoundsException if any of the indices is out of bounds or if the <code>JTable</code> does not
    * have any rows.
    */
-  public static void validateBounds(JTable table, int row, int column) {
-    if (rowCountOf(table) == 0) throw new IndexOutOfBoundsException("Table does not contain any rows");
-    validateRow(table, row);
-    validateColumn(table, column);
+  @RunsInCurrentThread
+  public static void validateIndices(JTable table, int row, int column) {
+    if (table.getRowCount() == 0) throw new IndexOutOfBoundsException("Table does not contain any rows");
+    validateRowIndex(table, row);
+    validateColumnIndex(table, column);
   }
 
   /**
@@ -64,8 +65,9 @@ public final class JTableCellValidator {
    * @param row the row to validate.
    * @throws IndexOutOfBoundsException if the row index is out of bounds.
    */
-  public static void validateRow(JTable table, int row) {
-    validateIndex(row, rowCountOf(table), "row");
+  @RunsInCurrentThread
+  public static void validateRowIndex(JTable table, int row) {
+    validateIndex(row, table.getRowCount(), "row");
   }
 
   /**
@@ -74,15 +76,16 @@ public final class JTableCellValidator {
    * @param column the column to validate.
    * @throws IndexOutOfBoundsException if the column index is out of bounds.
    */
-  public static void validateColumn(JTable table, int column) {
-    validateIndex(column, columnCountOf(table), "column");
+  @RunsInCurrentThread
+  public static void validateColumnIndex(JTable table, int column) {
+    validateIndex(column, table.getColumnCount(), "column");
   }
 
+  @RunsInCurrentThread
   private static void validateIndex(int index, int itemCount, String indexName) {
     if (index >= 0 && index < itemCount) return;
     throw new IndexOutOfBoundsException(concat(
-        indexName, " ", quote(valueOf(index)), " should be between ", quote("0"), " and ",
-        quote(valueOf(itemCount))));
+        indexName, " ", quote(valueOf(index)), " should be between <0> and <", valueOf(itemCount - 1), ">"));
   }
 
   private JTableCellValidator() {}

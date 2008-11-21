@@ -24,12 +24,14 @@ import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 
 import org.fest.assertions.Description;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
 import org.fest.swing.data.TableCellByColumnName;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.util.Arrays;
@@ -45,15 +47,14 @@ import static org.fest.swing.driver.JTableColumnByIdentifierQuery.columnIndexByI
 import static org.fest.swing.driver.JTableColumnCountQuery.columnCountOf;
 import static org.fest.swing.driver.JTableHasSelectionQuery.hasSelection;
 import static org.fest.swing.driver.JTableHeaderQuery.tableHeader;
-import static org.fest.swing.driver.JTableSelectedCellQuery.selectedCellOf;
-import static org.fest.swing.driver.JTableSelectedRowCountQuery.selectedRowCountOf;
+import static org.fest.swing.driver.JTableMatchingCellQuery.cellWithValue;
 import static org.fest.swing.driver.JTableSelectedRowsQuery.selectedRowsIn;
 import static org.fest.swing.driver.JTableSingleRowCellSelectedQuery.isCellSelected;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.util.Arrays.equal;
 import static org.fest.util.Arrays.format;
-import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
 /**
@@ -101,9 +102,19 @@ public class JTableDriver extends JComponentDriver {
    * @return the <code>String</code> representation of the value of the selected cell.
    * @see #cellReader(JTableCellReader)
    */
+  @RunsInEDT
   public String selectionValue(JTable table) {
-    if (selectedRowCountOf(table) == 0) return null;
-    return value(table, selectedCellOf(table));
+    return selectionValue(table, cellReader);
+  }
+  
+  @RunsInEDT
+  private static String selectionValue(final JTable table, final JTableCellReader cellReader) {
+    return execute(new GuiQuery<String>() {
+      protected String executeInEDT() {
+        if (table.getSelectedRowCount() == 0) return null;
+        return cellReader.valueAt(table, table.getSelectedRow(), table.getSelectedColumn());
+      }
+    });
   }
 
   /**
@@ -121,7 +132,7 @@ public class JTableDriver extends JComponentDriver {
     if (cellByColumnName == null)
       throw new NullPointerException("The instance of TableCellByColumnName should not be null");
     int row = cellByColumnName.row;
-    validateRow(table, row);
+    validateRowIndex(table, row);
     return row(row).column(columnIndex(table, cellByColumnName.columnName));
   }
 
@@ -132,18 +143,11 @@ public class JTableDriver extends JComponentDriver {
    * @return a cell from the given <code>JTable</code> whose value matches the given one.
    * @throws ActionFailedException if a cell with a matching value cannot be found.
    */
+  @RunsInEDT
   public TableCell cell(JTable table, String value) {
-    int rowCount = rowCountOf(table);
-    int columnCount = columnCountOf(table);
-    for (int row = 0; row < rowCount; row++)
-      for (int column = 0; column < columnCount; column++)
-        if (cellContainsValue(table, row, column, value)) return row(row).column(column);
-    throw actionFailure(concat("Unable to find cell with value ", quote(value)));
+    return cellWithValue(table, value, cellReader);
   }
-
-  private boolean cellContainsValue(JTable table, int row, int column, String value) {
-    return areEqual(value, value(table, row, column));
-  }
+  
 
   /**
    * Returns the <code>String</code> representation of the value at the given cell, using this driver's
@@ -171,8 +175,8 @@ public class JTableDriver extends JComponentDriver {
    * @see #cellReader(JTableCellReader)
    */
   public String value(JTable table, int row, int column) {
-    validateRow(table, row);
-    validateColumn(table, column);
+    validateRowIndex(table, row);
+    validateColumnIndex(table, column);
     return cellReader.valueAt(table, row, column);
   }
 
@@ -517,7 +521,7 @@ public class JTableDriver extends JComponentDriver {
    */
   public void validate(JTable table, TableCell cell) {
     if (cell == null) throw new NullPointerException("Table cell cannot be null");
-    validateBounds(table, cell.row, cell.column);
+    validateIndices(table, cell.row, cell.column);
   }
 
   /**

@@ -31,30 +31,30 @@ public class JTableCellValidatorTest {
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfTableIsEmpty() {
     TableCell cell = TableCell.row(2).column(3);
-    JTableCellValidator.validateCell(new JTable(), cell);
+    JTableCellValidator.validateCellIndices(new JTable(), cell);
   }
 
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfRowIndexIsNegative() {
     TableCell cell = TableCell.row(-2).column(3);
-    JTableCellValidator.validateCell(new JTable(4, 3), cell);
+    JTableCellValidator.validateCellIndices(new JTable(4, 3), cell);
   }
 
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfColumnIndexIsNegative() {
     TableCell cell = TableCell.row(2).column(-3);
-    JTableCellValidator.validateCell(new JTable(4, 3), cell);
+    JTableCellValidator.validateCellIndices(new JTable(4, 3), cell);
   }
   
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfRowIsOutOfBounds() {
     TableCell cell = TableCell.row(4).column(2);
-    JTableCellValidator.validateCell(new JTable(4, 3), cell);
+    JTableCellValidator.validateCellIndices(new JTable(4, 3), cell);
   }  
   
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfColumnIsOutOfBounds() {
     TableCell cell = TableCell.row(0).column(3);
-    JTableCellValidator.validateCell(new JTable(4, 3), cell);
+    JTableCellValidator.validateCellIndices(new JTable(4, 3), cell);
   }  
 }
