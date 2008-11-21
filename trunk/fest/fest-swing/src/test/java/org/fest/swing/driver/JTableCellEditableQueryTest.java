@@ -17,17 +17,19 @@ package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TableRenderDemo;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.data.TableCell.row;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -42,6 +44,10 @@ public class JTableCellEditableQueryTest {
   private Robot robot;
   private JTable table;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
@@ -53,12 +59,28 @@ public class JTableCellEditableQueryTest {
     robot.cleanUp();
   }
 
-  public void shouldIndicateWhetherCellIsEditableOrNot() {
-    assertThat(JTableCellEditableQuery.isCellEditable(table, row(0).column(0))).isFalse();
-    assertThat(JTableCellEditableQuery.isCellEditable(table, row(0).column(1))).isFalse();
-    assertThat(JTableCellEditableQuery.isCellEditable(table, row(0).column(2))).isTrue();
-    assertThat(JTableCellEditableQuery.isCellEditable(table, row(0).column(3))).isTrue();
-    assertThat(JTableCellEditableQuery.isCellEditable(table, row(0).column(4))).isTrue();
+  @Test(dataProvider = "cells", groups = { GUI, EDT_ACTION })
+  public void shouldIndicateWhetherCellIsEditableOrNot(int column, boolean editable) {
+    // TODO test validation of cell indices
+    assertThat(isCellEditable(table, 0, column)).isEqualTo(editable);
+  }
+
+  private static boolean isCellEditable(final JTable table, final int row, final int column) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return JTableCellEditableQuery.isCellEditable(table, row(row).column(column));
+      }
+    });
+  }
+  
+  @DataProvider(name = "cells") public Object[][] cells() {
+    return new Object[][] {
+        { 0, false },  
+        { 1, false },  
+        { 2, true },  
+        { 3, true },  
+        { 4, true },  
+    };
   }
 
   private static class MyWindow extends TestWindow {
@@ -66,8 +88,13 @@ public class JTableCellEditableQueryTest {
 
     final JTable table;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

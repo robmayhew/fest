@@ -503,6 +503,7 @@ public class JTableDriver extends JComponentDriver {
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws AssertionError if the given table cell is not editable.
    */
+  @RunsInEDT
   public void requireEditable(JTable table, TableCell cell) {
     requireEditableEqualTo(table, cell, true);
   }
@@ -515,16 +516,22 @@ public class JTableDriver extends JComponentDriver {
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws AssertionError if the given table cell is editable.
    */
+  @RunsInEDT
   public void requireNotEditable(JTable table, TableCell cell) {
     requireEditableEqualTo(table, cell, false);
   }
 
-  private void requireEditableEqualTo(JTable table, TableCell cell, boolean editable) {
-    validate(table, cell);
-    boolean cellEditable = isCellEditable(table, cell);
+  @RunsInEDT
+  private static void requireEditableEqualTo(final JTable table, final TableCell cell, boolean editable) {
+    validateNotNull(cell);
+    boolean cellEditable = execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return isCellEditable(table, cell);
+      }
+    });
     assertThat(cellEditable).as(cellProperty(table, cell, EDITABLE_PROPERTY)).isEqualTo(editable);
   }
-
+  
   /**
    * Returns the editor in the given cell of the <code>{@link JTable}</code>, using this driver's
    * <code>{@link JTableCellWriter}</code>.

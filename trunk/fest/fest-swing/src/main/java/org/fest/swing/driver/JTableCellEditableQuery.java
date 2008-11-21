@@ -17,10 +17,10 @@ package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.data.TableCell;
-import org.fest.swing.edt.GuiQuery;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.driver.JTableCellValidator.validateCellIndices;
 
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a cell in a
@@ -32,12 +32,10 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JTableCellEditableQuery {
 
-  static boolean isCellEditable(final JTable table, final TableCell cell) {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return table.isCellEditable(cell.row, cell.column);
-      }
-    });
+  @RunsInCurrentThread
+  static boolean isCellEditable(JTable table, TableCell cell) {
+    validateCellIndices(table, cell);
+    return table.isCellEditable(cell.row, cell.column);
   }
 
   private JTableCellEditableQuery() {}
