@@ -32,9 +32,9 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
 import org.fest.swing.data.TableCellByColumnName;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
-import org.fest.util.Arrays;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
@@ -48,13 +48,12 @@ import static org.fest.swing.driver.JTableColumnCountQuery.columnCountOf;
 import static org.fest.swing.driver.JTableHasSelectionQuery.hasSelection;
 import static org.fest.swing.driver.JTableHeaderQuery.tableHeader;
 import static org.fest.swing.driver.JTableMatchingCellQuery.cellWithValue;
-import static org.fest.swing.driver.JTableSelectedRowsQuery.selectedRowsIn;
 import static org.fest.swing.driver.JTableSingleRowCellSelectedQuery.isCellSelected;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.util.Arrays.equal;
-import static org.fest.util.Arrays.format;
+import static org.fest.util.Arrays.*;
 import static org.fest.util.Strings.*;
 
 /**
@@ -91,6 +90,7 @@ public class JTableDriver extends JComponentDriver {
    * @param table the given <code>JTable</code>.
    * @return the <code>JTableHeader</code> of the given <code>JTable</code>.
    */
+  @RunsInEDT
   public JTableHeader tableHeaderOf(JTable table) {
     return tableHeader(table);
   }
@@ -121,19 +121,30 @@ public class JTableDriver extends JComponentDriver {
    * Returns a cell from the given <code>{@link JTable}</code> whose row index matches the given one and column name
    * matches the given one.
    * @param table the target <code>JTable</code>.
-   * @param cellByColumnName contains the given row index and column name to match.
+   * @param cell contains the given row index and column name to match.
    * @return a cell from the given <code>JTable</code> whose row index matches the given one and column name
    * matches the given one.
    * @throws NullPointerException if <code>cellByColumnName</code> is <code>null</code>.
    * @throws IndexOutOfBoundsException if the row index in the given cell is out of bounds.
    * @throws ActionFailedException if a column with a matching name could not be found.
    */
-  public TableCell cell(JTable table, TableCellByColumnName cellByColumnName) {
-    if (cellByColumnName == null)
+  @RunsInEDT
+  public TableCell cell(JTable table, TableCellByColumnName cell) {
+    if (cell == null)
       throw new NullPointerException("The instance of TableCellByColumnName should not be null");
-    int row = cellByColumnName.row;
-    validateRowIndex(table, row);
-    return row(row).column(columnIndex(table, cellByColumnName.columnName));
+    return findCell(table, cell.row, cell.columnName);
+  }
+
+  @RunsInEDT
+  private static TableCell findCell(final JTable table, final int row, final Object columnName) {
+    return execute(new GuiQuery<TableCell>() {
+      protected TableCell executeInEDT() {
+        validateRowIndex(table, row);
+        int column = columnIndexByIdentifier(table, columnName);
+        if (column < 0) failColumnIndexNotFound(columnName);
+        return row(row).column(column);
+      }
+    });
   }
 
   /**
@@ -159,9 +170,20 @@ public class JTableDriver extends JComponentDriver {
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @see #cellReader(JTableCellReader)
    */
+  @RunsInEDT
   public String value(JTable table, TableCell cell) {
-    validate(table, cell);
-    return value(table, cell.row, cell.column);
+    validateNotNull(cell);
+    return cellValue(table, cell, cellReader);
+  }
+
+  @RunsInEDT
+  private static String cellValue(final JTable table, final TableCell cell, final JTableCellReader cellReader) {
+    return execute(new GuiQuery<String>() {
+      protected String executeInEDT() {
+        validateCellIndices(table, cell);
+        return cellReader.valueAt(table, cell.row, cell.column);
+      }
+    });
   }
 
   /**
@@ -174,12 +196,22 @@ public class JTableDriver extends JComponentDriver {
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @see #cellReader(JTableCellReader)
    */
+  @RunsInEDT
   public String value(JTable table, int row, int column) {
-    validateRowIndex(table, row);
-    validateColumnIndex(table, column);
-    return cellReader.valueAt(table, row, column);
+    return cellValue(table, row, column, cellReader);
   }
 
+  @RunsInEDT
+  private static String cellValue(final JTable table, final int row, final int column, 
+      final JTableCellReader cellReader) {
+    return execute(new GuiQuery<String>() {
+      protected String executeInEDT() {
+        validateIndices(table, row, column);
+        return cellReader.valueAt(table, row, column);
+      }
+    });
+  }
+  
   /**
    * Returns the font of the given table cell.
    * @param table the target <code>JTable</code>.
@@ -188,11 +220,22 @@ public class JTableDriver extends JComponentDriver {
    * @throws NullPointerException if the cell is <code>null</code>.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
+  @RunsInEDT
   public Font font(JTable table, TableCell cell) {
-    validate(table, cell);
-    return cellReader.fontAt(table, cell.row, cell.column);
+    validateNotNull(cell);
+    return cellFont(table, cell, cellReader);
   }
 
+  @RunsInEDT
+  private static Font cellFont(final JTable table, final TableCell cell, final JTableCellReader cellReader) {
+    return execute(new GuiQuery<Font>() {
+      protected Font executeInEDT() {
+        validateCellIndices(table, cell);
+        return cellReader.fontAt(table, cell.row, cell.column);
+      }
+    });
+  }
+  
   /**
    * Returns the background color of the given table cell.
    * @param table the target <code>JTable</code>.
@@ -201,11 +244,22 @@ public class JTableDriver extends JComponentDriver {
    * @throws ActionFailedException if the cell is <code>null</code>.
    * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
    */
+  @RunsInEDT
   public Color background(JTable table, TableCell cell) {
-    validate(table, cell);
-    return cellReader.backgroundAt(table, cell.row, cell.column);
+    validateNotNull(cell);
+    return cellBackground(table, cell, cellReader);
   }
 
+  @RunsInEDT
+  private static Color cellBackground(final JTable table, final TableCell cell, final JTableCellReader cellReader) {
+    return execute(new GuiQuery<Color>() {
+      protected Color executeInEDT() {
+        validateCellIndices(table, cell);
+        return cellReader.backgroundAt(table, cell.row, cell.column);
+      }
+    });
+  }
+  
   /**
    * Returns the foreground color of the given table cell.
    * @param table the target <code>JTable</code>.
@@ -214,9 +268,20 @@ public class JTableDriver extends JComponentDriver {
    * @throws NullPointerException if the cell is <code>null</code>.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
+  @RunsInEDT
   public Color foreground(JTable table, TableCell cell) {
-    validate(table, cell);
-    return cellReader.foregroundAt(table, cell.row, cell.column);
+    validateNotNull(cell);
+    return cellForeground(table, cell, cellReader);
+  }
+
+  @RunsInEDT
+  private static Color cellForeground(final JTable table, final TableCell cell, final JTableCellReader cellReader) {
+    return execute(new GuiQuery<Color>() {
+      protected Color executeInEDT() {
+        validateCellIndices(table, cell);
+        return cellReader.foregroundAt(table, cell.row, cell.column);
+      }
+    });
   }
 
   /**
@@ -229,8 +294,7 @@ public class JTableDriver extends JComponentDriver {
    * @throws IndexOutOfBoundsException if any of the indices of any of the <code>cells</code> are out of bounds.
    */
   public void selectCells(final JTable table, final TableCell[] cells) {
-    if (cells == null) throw new NullPointerException("Array of table cells to select should not be null");
-    if (Arrays.isEmpty(cells)) throw new IllegalArgumentException("Array of table cells to select should not be empty");
+    validateCellsToSelect(cells);
     new MultipleSelectionTemplate(robot) {
       int elementCount() {
         return cells.length;
@@ -242,16 +306,32 @@ public class JTableDriver extends JComponentDriver {
     }.multiSelect();
   }
 
+  private void validateCellsToSelect(final TableCell[] cells) {
+    if (cells == null) throw new NullPointerException("Array of table cells to select should not be null");
+    if (isEmpty(cells)) throw new IllegalArgumentException("Array of table cells to select should not be empty");
+  }
+
   /**
    * Verifies that the <code>{@link JTable}</code> does not have any selection.
    * @param table the target <code>JTable</code>.
    * @throws AssertionError is the <code>JTable</code> has a selection.
    */
+  @RunsInEDT
   public void requireNoSelection(JTable table) {
-    if (!hasSelection(table)) return;
-    String message = concat("[", propertyName(table, SELECTION_PROPERTY), "] expected no selection but was:<rows=",
-        format(selectedRowsIn(table)), ", columns=", format(selectedRowsIn(table)), ">");
-    fail(message);
+    assertNoSelection(table);
+  }
+
+  @RunsInEDT
+  private void assertNoSelection(final JTable table) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        if (hasSelection(table)) return;
+        String message = concat("[", propertyName(table, SELECTION_PROPERTY).value(), 
+            "] expected no selection but was:<rows=", format(table.getSelectedRows()), ", columns=", 
+            format(table.getSelectedColumns()), ">");
+        fail(message);
+      }
+    });
   }
 
   /**
@@ -520,8 +600,12 @@ public class JTableDriver extends JComponentDriver {
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
   public void validate(JTable table, TableCell cell) {
-    if (cell == null) throw new NullPointerException("Table cell cannot be null");
+    validateNotNull(cell);
     validateIndices(table, cell.row, cell.column);
+  }
+  
+  private static void validateNotNull(TableCell cell) {
+    if (cell == null) throw new NullPointerException("Table cell cannot be null");
   }
 
   /**
@@ -563,10 +647,23 @@ public class JTableDriver extends JComponentDriver {
    * @return the index of the column whose name matches the given one.
    * @throws ActionFailedException if a column with a matching name could not be found.
    */
+  @RunsInEDT
   public int columnIndex(JTable table, Object columnName) {
-    int index = columnIndexByIdentifier(table, columnName);
-    if (index < 0)
-      throw actionFailure(concat("Unable to find a column with name ", quote(columnName)));
-    return index;
+    return findColumnIndex(table, columnName);
+  }
+
+  @RunsInEDT
+  private static int findColumnIndex(final JTable table, final Object columnName) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        int index = columnIndexByIdentifier(table, columnName);
+        if (index < 0) failColumnIndexNotFound(columnName);
+        return index;
+      }
+    });
+  }
+
+  private static ActionFailedException failColumnIndexNotFound(Object columnName) {
+    throw actionFailure(concat("Unable to find a column with name ", quote(columnName)));
   }
 }

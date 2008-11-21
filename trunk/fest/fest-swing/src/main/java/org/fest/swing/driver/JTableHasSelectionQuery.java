@@ -17,25 +17,19 @@ package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
-import org.fest.swing.edt.GuiQuery;
-
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
- * Understands an action, executed in the event dispatch thread, that indicates whether a <code>{@link JTable}</code>
- * has any selection or not.
- *
+ * Understands an action that indicates whether a <code>{@link JTable}</code> has any selection or not.
+ * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
 final class JTableHasSelectionQuery {
 
-  static boolean hasSelection(final JTable table) {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return table.getSelectedRowCount() > 0 || table.getSelectedColumnCount() > 0;
-      }
-    });
+  @RunsInCurrentThread
+  static boolean hasSelection(JTable table) {
+    return table.getSelectedRowCount() > 0 || table.getSelectedColumnCount() > 0;
   }
 
   private JTableHasSelectionQuery() {}

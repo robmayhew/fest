@@ -17,12 +17,11 @@ package org.fest.swing.driver;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 
-import org.fest.swing.edt.GuiActionRunner;
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
- * Understands an action, executed in the event dispatch thread, that returns the index of a column in a
- * <code>{@link JTable}</code> whose identifier matches the given one.
+ * Understands an action that returns the index of a column in a <code>{@link JTable}</code> whose identifier matches
+ * the given one.
  * @see JTable#getColumn(Object)
  * @see TableColumn#getModelIndex()
  * 
@@ -30,17 +29,14 @@ import org.fest.swing.edt.GuiQuery;
  */
 final class JTableColumnByIdentifierQuery {
 
+  @RunsInCurrentThread
   static int columnIndexByIdentifier(final JTable table, final Object identifier) {
-    return GuiActionRunner.execute(new GuiQuery<Integer>() {
-      protected Integer executeInEDT() {
-        try {
-          TableColumn column = table.getColumn(identifier);
-          return column.getModelIndex();
-        } catch (IllegalArgumentException e) {
-          return -1;
-        }
-      }
-    });
+    try {
+      TableColumn column = table.getColumn(identifier);
+      return column.getModelIndex();
+    } catch (IllegalArgumentException e) {
+      return -1;
+    }
   }
   
   private JTableColumnByIdentifierQuery() {}

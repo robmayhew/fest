@@ -19,9 +19,8 @@ import java.awt.Rectangle;
 
 import javax.swing.JTable;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.data.TableCell;
-
-import static org.fest.swing.driver.JTableCellRectQuery.cellRectOf;
 
 /**
  * Understands a visible location on a <code>{@link JTable}</code>.
@@ -39,6 +38,7 @@ public final class JTableLocation {
    * @param column the given column.
    * @return the coordinates of the given row and column.
    */
+  @RunsInCurrentThread
   public Point pointAt(JTable table, int row, int column) {
     Rectangle cellBounds = cellBounds(table, row, column);
     return new Point(cellBounds.x + cellBounds.width / 2, cellBounds.y + cellBounds.height / 2);
@@ -50,6 +50,7 @@ public final class JTableLocation {
    * @param cell the given cell.
    * @return the bounds of the given cell.
    */
+  @RunsInCurrentThread
   public Rectangle cellBounds(JTable table, TableCell cell) {
     return cellBounds(table, cell.row, cell.column);
   }
@@ -61,8 +62,9 @@ public final class JTableLocation {
    * @param column the given column.
    * @return the bounds of the given row and column.
    */
+  @RunsInCurrentThread
   public Rectangle cellBounds(JTable table, int row, int column) {
-    return cellRectOf(table, row, column);
+    return table.getCellRect(row, column, false);
   }
 
 }

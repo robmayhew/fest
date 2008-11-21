@@ -17,12 +17,12 @@ package org.fest.swing.driver;
 
 import javax.swing.table.TableColumn;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
@@ -32,6 +32,7 @@ import static java.lang.Integer.parseInt;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.MethodInvocations.Args.args;
 import static org.fest.swing.testing.TestGroups.*;
 
@@ -46,6 +47,10 @@ public class JTableColumnByIdentifierQueryTest {
   private Robot robot;
   private MyTable table;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
@@ -61,7 +66,7 @@ public class JTableColumnByIdentifierQueryTest {
   public void shouldReturnColumnIndexGivenIdentifier(String identifier) {
     table.startRecording();
     int index = parseInt(identifier);
-    assertThat(JTableColumnByIdentifierQuery.columnIndexByIdentifier(table, identifier)).isEqualTo(index);
+    assertThat(columnIndexByIdentifier(table, identifier)).isEqualTo(index);
     table.requireInvoked("getColumn", args(identifier));
   }
 
@@ -72,8 +77,17 @@ public class JTableColumnByIdentifierQueryTest {
   public void shouldReturnNegativeOneIfColumnIndexNotFound() {
     String identifier = "Hello World";
     table.startRecording();
-    assertThat(JTableColumnByIdentifierQuery.columnIndexByIdentifier(table, identifier)).isEqualTo(-1);
+    assertThat(columnIndexByIdentifier(table, identifier)).isEqualTo(-1);
     table.requireInvoked("getColumn", args(identifier));    
+  }
+
+  @RunsInEDT
+  private static int columnIndexByIdentifier(final MyTable table, final String identifier) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return JTableColumnByIdentifierQuery.columnIndexByIdentifier(table, identifier);
+      }
+    });
   }
 
   private static class MyWindow extends TestWindow {
@@ -81,8 +95,13 @@ public class JTableColumnByIdentifierQueryTest {
 
     final MyTable table = new MyTable();
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

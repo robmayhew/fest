@@ -16,10 +16,14 @@
 package org.fest.swing.driver;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
@@ -42,6 +46,10 @@ public class JTableHasSelectionQueryTest {
   private Robot robot;
   private TestTable table;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
@@ -56,15 +64,16 @@ public class JTableHasSelectionQueryTest {
   public void shouldReturnFalseIfTableHasNoSelection() {
     clearSelectionOf(table);
     robot.waitForIdle();
-    assertThat(JTableHasSelectionQuery.hasSelection(table)).isFalse();
+    assertThat(hasSelection(table)).isFalse();
   }
 
   public void shouldReturnTrueIfTableHasSelection() {
     selectAllIn(table);
     robot.waitForIdle();
-    assertThat(JTableHasSelectionQuery.hasSelection(table)).isTrue();
+    assertThat(hasSelection(table)).isTrue();
   }
 
+  @RunsInEDT
   private static void selectAllIn(final TestTable table) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -72,12 +81,26 @@ public class JTableHasSelectionQueryTest {
       }
     });
   }
+  
+  @RunsInEDT
+  private static boolean hasSelection(final TestTable table) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return JTableHasSelectionQuery.hasSelection(table);
+      }
+    });
+  }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     final TestTable table = new TestTable(2, 4);

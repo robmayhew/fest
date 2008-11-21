@@ -41,23 +41,24 @@ final class JTableMatchingCellQuery {
   static TableCell cellWithValue(final JTable table, final String value, final JTableCellReader cellReader) {
     return execute(new GuiQuery<TableCell>() {
       protected TableCell executeInEDT() {
-        return cell(table, value, cellReader);
+        return findMatchingCell(table, value, cellReader);
       }
     });
   }
 
   @RunsInCurrentThread
-  private static TableCell cell(JTable table, String value, JTableCellReader cellReader) {
-    int rowCount = table.getRowCount();
-    int columnCount = table.getColumnCount();
-    for (int row = 0; row < rowCount; row++)
-      for (int column = 0; column < columnCount; column++)
-        if (cellContainsValue(table, row, column, value, cellReader)) return row(row).column(column);
+  private static TableCell findMatchingCell(JTable table, String value, JTableCellReader cellReader) {
+    int rCount = table.getRowCount();
+    int cCount = table.getColumnCount();
+    for (int r = 0; r < rCount; r++)
+      for (int c = 0; c < cCount; c++)
+        if (cellHasValue(table, r, c, value, cellReader)) return row(r).column(c);
     throw actionFailure(concat("Unable to find cell with value ", quote(value)));
   }
 
   @RunsInCurrentThread
-  private static boolean cellContainsValue(JTable table, int row, int column, String value, JTableCellReader cellReader) {
+  private static boolean cellHasValue(JTable table, int row, int column, String value, 
+      JTableCellReader cellReader) {
     return areEqual(value, cellReader.valueAt(table, row, column));
   }
   
