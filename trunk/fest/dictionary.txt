@@ -33,3 +33,4 @@ circa
 hexadecimal
 apr
 apache
+resizable
