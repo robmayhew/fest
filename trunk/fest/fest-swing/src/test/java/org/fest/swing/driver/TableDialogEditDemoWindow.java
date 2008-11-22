@@ -17,8 +17,12 @@ package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TableDialogEditDemo;
 import org.fest.swing.testing.TestWindow;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a frame hosting <code>{@link TableDialogEditDemo}</code>.
@@ -32,8 +36,13 @@ class TableDialogEditDemoWindow extends TestWindow {
 
   final JTable table;
 
-  public static TableDialogEditDemoWindow createNew(Class<?> testClass) {
-    return new TableDialogEditDemoWindow(testClass);
+  @RunsInEDT
+  public static TableDialogEditDemoWindow createNew(final Class<?> testClass) {
+    return execute(new GuiQuery<TableDialogEditDemoWindow>() {
+      protected TableDialogEditDemoWindow executeInEDT() {
+        return new TableDialogEditDemoWindow(testClass);
+      }
+    });
   }
 
   private TableDialogEditDemoWindow(Class<?> testClass) {

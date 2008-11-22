@@ -20,6 +20,7 @@ import java.awt.Dimension;
 import javax.swing.JTable;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -27,6 +28,7 @@ import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -48,6 +50,10 @@ public abstract class JTableCellWriterTestCase {
   private TableDialogEditDemoWindow frame;
   private JTableCellWriter writer;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     writer = createWriter();
@@ -77,28 +83,6 @@ public abstract class JTableCellWriterTestCase {
     robot.settings().eventMode(eventMode);
     try {
       writer.startCellEditing(frame.table, 0, 1);
-      fail();
-    } catch (ActionFailedException e) {
-      assertMessageIncludesComponentNotHandled(e);
-    }
-  }
-
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenStopingEditing(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    try {
-      writer.stopCellEditing(frame.table, 0, 1);
-      fail();
-    } catch (ActionFailedException e) {
-      assertMessageIncludesComponentNotHandled(e);
-    }
-  }
-
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenCancellingEditing(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    try {
-      writer.cancelCellEditing(frame.table, 0, 1);
       fail();
     } catch (ActionFailedException e) {
       assertMessageIncludesComponentNotHandled(e);

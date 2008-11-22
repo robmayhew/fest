@@ -40,8 +40,17 @@ public final class JTableCellValidator {
    */
   @RunsInCurrentThread
   public static void validateCellIndices(JTable table, TableCell cell) {
-    if (cell == null) throw new NullPointerException("Table cell cannot be null");
+    validateNotNull(cell);
     validateIndices(table, cell.row, cell.column);
+  }
+
+  /**
+   * Validates that the given table cell is not <code>null</code>.
+   * @param cell the cell to validate.
+   * @throws NullPointerException if the cell is <code>null</code>.
+   */
+  public static void validateNotNull(TableCell cell) {
+    if (cell == null) throw new NullPointerException("Table cell cannot be null");
   }
 
   /**

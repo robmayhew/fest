@@ -1,5 +1,5 @@
 /*
- * Created on Jun 10, 2008
+ * Created on Nov 22, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -23,25 +23,24 @@ import org.fest.swing.edt.GuiTask;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands a task that cancels editing of a cell in a <code>{@link JTable}</code>. This task is executed in the
+ * Understands a task that stops editing of a cell in a <code>{@link JTable}</code>. This task is executed in the
  * event dispatch thread.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-final class JTableCancelCellEditingTask {
+final class JTableStopCellEditingTask {
 
   @RunsInEDT
-  static void cancelEditing(final JTable table, final int row, final int column) {
-    // TODO test
+  static void stopEditing(final JTable table, final int row, final int column) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         TableCellEditor cellEditor = table.getCellEditor(row, column);
         if (cellEditor == null) return;
-        cellEditor.cancelCellEditing();
+        cellEditor.stopCellEditing();
       }
     });
   }
 
-  private JTableCancelCellEditingTask() {}
+  private JTableStopCellEditingTask() {}
 }

@@ -18,11 +18,15 @@ package org.fest.swing.driver;
 import javax.swing.JTable;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
@@ -44,6 +48,10 @@ public class JTableSingleRowCellSelectedQueryTest {
 
   private Robot robot;
   private JTable table;
+  
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
@@ -60,19 +68,20 @@ public class JTableSingleRowCellSelectedQueryTest {
     TableCell cell = row(0).column(2);
     selectCells(table, cell, cell);
     robot.waitForIdle();
-    assertThat(JTableSingleRowCellSelectedQuery.isCellSelected(table, 0, 2)).isTrue();
+    assertThat(isCellSelected(table, 0, 2)).isTrue();
   }
   
   public void shouldReturnCellIsNotSelectedIfCellIsNotSelected() {
-    assertThat(JTableSingleRowCellSelectedQuery.isCellSelected(table, 0, 2)).isFalse();
+    assertThat(isCellSelected(table, 0, 2)).isFalse();
   }
 
   public void shouldReturnCellIsNotSelectedIfRowIsSelectedAndColumnIsNot() {
     selectRow(table, 0);
     robot.waitForIdle();
-    assertThat(JTableSingleRowCellSelectedQuery.isCellSelected(table, 0, 2)).isFalse();
+    assertThat(isCellSelected(table, 0, 2)).isFalse();
   }
   
+  @RunsInEDT
   private static void selectRow(final JTable table, final int row) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -84,16 +93,30 @@ public class JTableSingleRowCellSelectedQueryTest {
   public void shouldReturnCellIsNotSelectedIfRowAndColumnAreSelectedAndMultipleRowsAreSelected() {
     selectCells(table, row(0).column(2), row(0).column(4));
     robot.waitForIdle();
-    assertThat(JTableSingleRowCellSelectedQuery.isCellSelected(table, 0, 2)).isFalse();
+    assertThat(isCellSelected(table, 0, 2)).isFalse();
   }
 
+  @RunsInEDT
+  private static boolean isCellSelected(final JTable table, final int row, final int column) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return JTableSingleRowCellSelectedQuery.isCellSelected(table, row, column);
+      }
+    });
+  }
+  
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTable table = new TestTable(3, 6);
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

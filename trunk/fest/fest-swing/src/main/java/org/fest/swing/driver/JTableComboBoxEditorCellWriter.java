@@ -16,16 +16,21 @@
 package org.fest.swing.driver;
 
 import java.awt.Component;
+import java.awt.Point;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.util.Pair;
 
-import static org.fest.swing.driver.JTableCancelCellEditingTask.cancelEditing;
-import static org.fest.swing.driver.WaitForComponentToShowCondition.untilIsShowing;
-import static org.fest.swing.timing.Pause.pause;
+import static org.fest.swing.driver.ComponentShownWaiter.waitTillShown;
+import static org.fest.swing.driver.JTableCellEditorQuery.cellEditorIn;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands an implementation of <code>{@link JTableCellWriter}</code> that knows how to use
@@ -42,35 +47,45 @@ public class JTableComboBoxEditorCellWriter extends AbstractJTableCellWriter {
     super(robot);
     driver = new JComboBoxDriver(robot);
   }
-
+  
   /** {@inheritDoc} */
+  @RunsInEDT
   public void enterValue(JTable table, int row, int column, String value) {
-    JComboBox editor = editor(table, row, column);
-    startCellEditing(table, row, column);
+    JComboBox editor = doStartCellEditing(table, row, column);
     driver.selectItem(editor, value);
+    stopCellEditing(table, row, column);
   }
-
+  
   /** {@inheritDoc} */
+  @RunsInEDT
   public void startCellEditing(JTable table, int row, int column) {
-    JComboBox editor = editor(table, row, column);
-    clickCell(table, row, column);
-    pause(untilIsShowing(editor));
+    doStartCellEditing(table, row, column);
   }
 
-  /** {@inheritDoc} */
-  public void stopCellEditing(JTable table, int row, int column) {
-    editor(table, row, column);
+  @RunsInEDT
+  private JComboBox doStartCellEditing(JTable table, int row, int column) {
+    Pair<Point, JComboBox> info = startEditingCellInfo(table, row, column, location);
+    robot.click(table, info.i); // activate JComboBox editor
+    JComboBox editor = info.ii;
+    waitTillShown(editor);
+    return editor;
   }
 
-  /** {@inheritDoc} */
-  public void cancelCellEditing(JTable table, int row, int column) {
-    editor(table, row, column);
-    cancelEditing(table, row, column);
-    robot.waitForIdle();
+  @RunsInEDT
+  private static Pair<Point, JComboBox> startEditingCellInfo(final JTable table, final int row, final int column, 
+      final JTableLocation location) {
+    return execute(new GuiQuery<Pair<Point, JComboBox>>() {
+      protected Pair<Point, JComboBox> executeInEDT() {
+        JComboBox editor = editor(table, row, column);
+        scrollToCell(table, row, column, location);
+        return new Pair<Point, JComboBox>(location.pointAt(table, row, column), editor);
+      }
+    });
   }
 
-  private JComboBox editor(JTable table, int row, int column) {
-    Component editor = editorForCell(table, row, column);
+  @RunsInCurrentThread
+  private static JComboBox editor(JTable table, int row, int column) {
+    Component editor = cellEditorIn(table, row, column);
     if (editor instanceof JComboBox) return (JComboBox)editor;
     throw cannotHandleEditor(editor);
   }

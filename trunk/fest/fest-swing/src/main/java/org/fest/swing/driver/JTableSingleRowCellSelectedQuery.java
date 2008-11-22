@@ -17,24 +17,18 @@ package org.fest.swing.driver;
 
 import javax.swing.JTable;
 
-import org.fest.swing.edt.GuiQuery;
-
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
- * Understands an action, executed in the event dispatch thread, that indicates whether a cell in a 
- * <code>{@link JTable}</code> is selected or not.
+ * Understands an action that indicates whether a cell in a <code>{@link JTable}</code> is selected or not.
  * 
  * @author Alex Ruiz
  */
 final class JTableSingleRowCellSelectedQuery  {
 
+  @RunsInCurrentThread
   static boolean isCellSelected(final JTable table, final int row, final int column) {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return table.isRowSelected(row) && table.isColumnSelected(column) && table.getSelectedRowCount() == 1;
-      }
-    });
+    return table.isRowSelected(row) && table.isColumnSelected(column) && table.getSelectedRowCount() == 1;
   }
   
   private JTableSingleRowCellSelectedQuery() {}

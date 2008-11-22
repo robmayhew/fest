@@ -16,15 +16,24 @@
 package org.fest.swing.driver;
 
 import java.awt.Component;
+import java.awt.Point;
 
 import javax.swing.JTable;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
+import static org.fest.swing.driver.JTableCancelCellEditingTask.cancelEditing;
 import static org.fest.swing.driver.JTableCellEditorQuery.cellEditorIn;
+import static org.fest.swing.driver.JTableCellValidator.validateIndices;
+import static org.fest.swing.driver.JTableStopCellEditingTask.stopEditing;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.concat;
 
@@ -37,21 +46,37 @@ import static org.fest.util.Strings.concat;
 public abstract class AbstractJTableCellWriter implements JTableCellWriter {
 
   protected final Robot robot;
-  private final JComponentDriver driver;
-
-  private final JTableLocation tableLocation = new JTableLocation();
+  protected final JTableLocation location = new JTableLocation();
 
   public AbstractJTableCellWriter(Robot robot) {
     this.robot = robot;
-    this.driver = new JComponentDriver(robot);
   }
+
+  /** {@inheritDoc} */
+  @RunsInEDT
+  public void cancelCellEditing(JTable table, int row, int column) {
+    cancelEditing(table, row, column);
+    robot.waitForIdle();
+  }
+  
+  /** {@inheritDoc} */
+  @RunsInEDT
+  public void stopCellEditing(JTable table, int row, int column) {
+    stopEditing(table, row, column);
+    robot.waitForIdle();
+  }
+
 
   /**
    * Simulates a user clicking the given table cell.
    * @param table the target <code>JTable</code>.
    * @param row the given row.
    * @param column the given column.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
+  @RunsInEDT
   protected final void clickCell(JTable table, int row, int column) {
     clickCell(table, row, column, 1);
   }
@@ -62,10 +87,33 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
    * @param row the given row.
    * @param column the given column.
    * @param times how many times the cell should click the cell.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
+  @RunsInEDT
   protected final void clickCell(JTable table, int row, int column, int times) {
-    driver.scrollToVisible(table, tableLocation.cellBounds(table, row, column));
-    robot.click(table, tableLocation.pointAt(table, row, column), LEFT_BUTTON, times);
+    // TODO validate times
+    Point pointAtCell = scrollToPointAtCell(table, row, column, location);
+    robot.click(table, pointAtCell, LEFT_BUTTON, times);
+  }
+
+  @RunsInEDT
+  private static Point scrollToPointAtCell(final JTable table, final int row, final int column, 
+      final JTableLocation location) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        scrollToCell(table, row, column, location);
+        return location.pointAt(table, row, column);
+      }
+    });
+  }
+  
+  @RunsInCurrentThread
+  protected static void scrollToCell(final JTable table, final int row, final int column, final JTableLocation location) {
+    validateIsEnabledAndShowing(table);
+    validateIndices(table, row, column);
+    table.scrollRectToVisible(location.cellBounds(table, row, column));
   }
 
   /**
@@ -74,16 +122,17 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
    * @param editor the given editor.
    * @return the thrown exception.
    */
-  protected final ActionFailedException cannotHandleEditor(Component editor) {
+  protected static final ActionFailedException cannotHandleEditor(Component editor) {
     throw actionFailure(concat("Unable to handle editor component of type ", editorTypeName(editor)));
   }
 
-  private String editorTypeName(Component editor) {
+  private static String editorTypeName(Component editor) {
     if (editor == null) return "<null>";
     return editor.getClass().getName();
   }
 
   /** {@inheritDoc} */
+  // TODO decide if this method should be called in EDT or not
   public Component editorForCell(final JTable table, final int row, final int column) {
     return cellEditorIn(table, row, column);
   }

@@ -20,28 +20,22 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
-import org.fest.swing.edt.GuiQuery;
-
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
- * Understands an action, executed in the event dispatch thread, that returns the <code>{@link Component}</code> of a
- * <code>{@link JTable}</code> cell editor.
+ * Understands an action that returns the <code>{@link Component}</code> of a <code>{@link JTable}</code> cell editor.
  * @see JTable#getCellEditor()
  * @see TableCellEditor#getTableCellEditorComponent(JTable, Object, boolean, int, int)
- *
+ * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
 final class JTableCellEditorQuery {
 
+  @RunsInCurrentThread
   static Component cellEditorIn(final JTable table, final int row, final int column) {
-    return execute(new GuiQuery<Component>() {
-      protected Component executeInEDT() {
-        TableCellEditor cellEditor = table.getCellEditor(row, column);
-        return cellEditor.getTableCellEditorComponent(table, table.getValueAt(row, column), false, row, column);
-      }
-    });
+    TableCellEditor cellEditor = table.getCellEditor(row, column);
+    return cellEditor.getTableCellEditorComponent(table, table.getValueAt(row, column), false, row, column);
   }
 
   private JTableCellEditorQuery() {}

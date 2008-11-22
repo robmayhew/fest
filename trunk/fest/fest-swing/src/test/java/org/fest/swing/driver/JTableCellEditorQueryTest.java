@@ -22,17 +22,18 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.text.JTextComponent;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TableRenderDemo;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -47,6 +48,10 @@ public class JTableCellEditorQueryTest {
   private Robot robot;
   private JTable table;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
@@ -61,7 +66,7 @@ public class JTableCellEditorQueryTest {
   @Test(dataProvider = "editorTypes", groups = { GUI, EDT_ACTION })
   public void shouldReturnEditorComponentOfJTableCell(int column, Class<?> editorType) {
     int row = 0;
-    Component editor = JTableCellEditorQuery.cellEditorIn(table, row, column);
+    Component editor = cellEditorIn(table, row, column);
     assertThat(editor).isInstanceOf(editorType);
   }
 
@@ -73,13 +78,27 @@ public class JTableCellEditorQueryTest {
     };
   }
 
+  @RunsInEDT
+  private static Component cellEditorIn(final JTable table, final int row, final int column) {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        return JTableCellEditorQuery.cellEditorIn(table, row, column);
+      }
+    });
+  }
+  
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
     final JTable table;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

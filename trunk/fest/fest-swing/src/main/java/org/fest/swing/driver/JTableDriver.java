@@ -24,6 +24,7 @@ import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 
 import org.fest.assertions.Description;
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
@@ -35,12 +36,14 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.util.Pair;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.data.TableCell.row;
 import static org.fest.swing.driver.CommonValidations.*;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.JTableCellEditableQuery.isCellEditable;
 import static org.fest.swing.driver.JTableCellValidator.*;
 import static org.fest.swing.driver.JTableColumnByIdentifierQuery.columnIndexByIdentifier;
@@ -51,7 +54,6 @@ import static org.fest.swing.driver.JTableMatchingCellQuery.cellWithValue;
 import static org.fest.swing.driver.JTableSingleRowCellSelectedQuery.isCellSelected;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.util.Arrays.equal;
 import static org.fest.util.Arrays.*;
 import static org.fest.util.Strings.*;
@@ -307,7 +309,7 @@ public class JTableDriver extends JComponentDriver {
   }
 
   private void validateCellsToSelect(final TableCell[] cells) {
-    if (cells == null) throw new NullPointerException("Array of table cells to select should not be null");
+    if (cells == null)  throw new NullPointerException("Array of table cells to select should not be null");
     if (isEmpty(cells)) throw new IllegalArgumentException("Array of table cells to select should not be empty");
   }
 
@@ -339,15 +341,31 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the cell to select.
    * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
+  @RunsInEDT
   public void selectCell(JTable table, TableCell cell) {
-    if (!isEnabled(table)) return;
-    validate(table, cell);
-    if (isCellSelected(table, cell.row, cell.column)) return;
-    click(table, cell, LEFT_BUTTON, 1);
+    Pair<Boolean, Point> cellSelectionInfo = cellSelectionInfo(table, cell, location);
+    if (cellSelectionInfo.i) return; // cell already selected
+    robot.click(table, cellSelectionInfo.ii, LEFT_BUTTON, 1);
   }
 
+  @RunsInEDT
+  private static Pair<Boolean, Point> cellSelectionInfo(final JTable table, final TableCell cell, final JTableLocation location) {
+    validateNotNull(cell);
+    return execute(new GuiQuery<Pair<Boolean, Point>>() {
+      protected Pair<Boolean, Point> executeInEDT() {
+        if (isCellSelected(table, cell.row, cell.column)) return new Pair<Boolean, Point>(true, null);
+        scrollToCell(table, cell, location);
+        Point pointAtCell = location.pointAt(table, cell.row, cell.column);
+        return new Pair<Boolean, Point>(false, pointAtCell);
+      }
+    });
+  }
+
+  
   /**
    * Clicks the given cell, using the specified mouse button, the given number of times.
    * @param table the target <code>JTable</code>.
@@ -355,12 +373,15 @@ public class JTableDriver extends JComponentDriver {
    * @param mouseButton the mouse button to use.
    * @param times the number of times to click the cell.
    * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
+  @RunsInEDT
   public void click(JTable table, TableCell cell, MouseButton mouseButton, int times) {
-    validate(table, cell);
-    scrollToVisible(table, location.cellBounds(table, cell));
-    robot.click(table, pointAt(table, cell), mouseButton, times);
+    // TODO validate times
+    Point pointAtCell = scrollToPointAtCell(table, cell, location);
+    robot.click(table, pointAtCell, mouseButton, times);
   }
 
   /**
@@ -368,12 +389,14 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
    * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
+  @RunsInEDT
   public void drag(JTable table, TableCell cell) {
-    validate(table, cell);
-    scrollToVisible(table, location.cellBounds(table, cell));
-    drag(table, pointAt(table, cell));
+    Point pointAtCell = scrollToPointAtCell(table, cell, location);
+    drag(table, pointAtCell);
   }
 
   /**
@@ -381,12 +404,14 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
    * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
+  @RunsInEDT
   public void drop(JTable table, TableCell cell) {
-    validate(table, cell);
-    scrollToVisible(table, location.cellBounds(table, cell));
-    drop(table, pointAt(table, cell));
+    Point pointAtCell = scrollToPointAtCell(table, cell, location);
+    drop(table, pointAtCell);
   }
 
   /**
@@ -394,11 +419,32 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
    * @return the displayed pop-up menu.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
+  @RunsInEDT
   public JPopupMenu showPopupMenuAt(JTable table, TableCell cell) {
-    scrollToVisible(table, location.cellBounds(table, cell));
-    return robot.showPopupMenu(table, pointAt(table, cell));
+    Point pointAtCell = scrollToPointAtCell(table, cell, location);
+    return robot.showPopupMenu(table, pointAtCell);
+  }
+
+  @RunsInEDT
+  private static Point scrollToPointAtCell(final JTable table, final TableCell cell, final JTableLocation location) {
+    validateNotNull(cell);
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        scrollToCell(table, cell, location);
+        return location.pointAt(table, cell.row, cell.column);
+      }
+    });
+  }
+  
+  @RunsInCurrentThread
+  private static void scrollToCell(final JTable table, final TableCell cell, final JTableLocation location) {
+    validateIsEnabledAndShowing(table);
+    validateCellIndices(table, cell);
+    table.scrollRectToVisible(location.cellBounds(table, cell));
   }
 
   /**
@@ -409,9 +455,19 @@ public class JTableDriver extends JComponentDriver {
    * @throws NullPointerException if the cell is <code>null</code>.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
+  @RunsInEDT
   public Point pointAt(JTable table, TableCell cell) {
-    validate(table, cell);
-    return location.pointAt(table, cell.row, cell.column);
+    return pointAtCell(table, cell, location);
+  }
+
+  @RunsInEDT
+  private static Point pointAtCell(final JTable table, final TableCell cell, final JTableLocation location) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        validateCellIndices(table, cell);
+        return location.pointAt(table, cell.row, cell.column);
+      }
+    });
   }
 
   /**
@@ -456,8 +512,8 @@ public class JTableDriver extends JComponentDriver {
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws AssertionError if the value of the given cell is not equal to the expected one.
    */
+  @RunsInEDT
   public void requireCellValue(JTable table, TableCell cell, String value) {
-    validate(table, cell);
     assertThat(value(table, cell)).as(cellProperty(table, cell, VALUE_PROPERTY)).isEqualTo(value);
   }
 
@@ -471,6 +527,7 @@ public class JTableDriver extends JComponentDriver {
    * @return the formatted name of a property from the given table cell.
    * @see ComponentDriver#propertyName(java.awt.Component, String)
    */
+  @RunsInEDT
   public static String cellProperty(JTable table, TableCell cell, String propertyName) {
     return concat(propertyName(table, propertyName), " - ", cell);
   }
@@ -604,13 +661,9 @@ public class JTableDriver extends JComponentDriver {
    */
   public void validate(JTable table, TableCell cell) {
     validateNotNull(cell);
-    validateIndices(table, cell.row, cell.column);
+    validateCellIndices(table, cell);
   }
   
-  private static void validateNotNull(TableCell cell) {
-    if (cell == null) throw new NullPointerException("Table cell cannot be null");
-  }
-
   /**
    * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of a
    * <code>{@link JTable}</code> and the values expected in a test.
