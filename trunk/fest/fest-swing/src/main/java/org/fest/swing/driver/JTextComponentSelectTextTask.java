@@ -17,25 +17,20 @@ package org.fest.swing.driver;
 
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.edt.GuiTask;
-
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
- * Understands a task that selects text in a given <code>{@link JTextComponent}</code>. This task is executed in the 
- * event dispatch thread.
- *
+ * Understands a task that selects text in a given <code>{@link JTextComponent}</code>. This task is <b>not</b> executed
+ * in the event dispatch thread.
+ * 
  * @author Alex Ruiz
  */
 final class JTextComponentSelectTextTask {
   
-  static void selectTextInRange(final JTextComponent textBox, final int start, final int end) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        textBox.setCaretPosition(start);
-        textBox.moveCaretPosition(end);
-      }
-    });
+  @RunsInCurrentThread
+  static void selectTextInRange(JTextComponent textBox, int start, int end) {
+    textBox.setCaretPosition(start);
+    textBox.moveCaretPosition(end);
   }
   
   private JTextComponentSelectTextTask() {}

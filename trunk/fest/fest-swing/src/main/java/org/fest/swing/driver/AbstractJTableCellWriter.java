@@ -132,8 +132,17 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
   }
 
   /** {@inheritDoc} */
-  // TODO decide if this method should be called in EDT or not
-  public Component editorForCell(final JTable table, final int row, final int column) {
-    return cellEditorIn(table, row, column);
+  @RunsInEDT
+  public Component editorForCell(JTable table, int row, int column) {
+    return cellEditor(table, row, column);
+  }
+  
+  @RunsInEDT
+  private static Component cellEditor(final JTable table, final int row, final int column) {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        return cellEditorIn(table, row, column);
+      }
+    });
   }
 }

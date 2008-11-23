@@ -23,37 +23,34 @@ import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.util.Pair;
 
-import static org.fest.swing.edt.GuiActionRunner.execute;
-
 /**
- * Understands an action, executed in the event dispatch thread, that returns the point and parent to use as a reference
- * when scrolling a <code>{@link JTextField}</code> up or down.
+ * Understands an action that returns the point and parent to use as a reference when scrolling a
+ * <code>{@link JTextField}</code> up or down.
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
 final class PointAndParentForScrollingJTextFieldQuery {
 
+  @RunsInCurrentThread
   static Pair<Point, Container> pointAndParentForScrolling(final JTextField textField) {
-    return execute(new GuiQuery<Pair<Point, Container>>() {
-      protected Pair<Point, Container> executeInEDT() {
-        Point origin = new Point(textField.getX(), textField.getY());
-        Container parent = textField.getParent();
-        while (parent != null && !(parent instanceof JComponent) && !(parent instanceof CellRendererPane)) {
-          addRectangleCoordinatesToPoint(parent.getBounds(), origin);
-          parent = parent.getParent();
-        }
-        return new Pair<Point, Container>(origin, parent);
-      }
-
-      private void addRectangleCoordinatesToPoint(Rectangle r, Point p) {
-        p.x += r.x;
-        p.y += r.y;
-      }
-    });
+    Point origin = new Point(textField.getX(), textField.getY());
+    Container parent = textField.getParent();
+    while (parent != null && !(parent instanceof JComponent) && !(parent instanceof CellRendererPane)) {
+      origin = addRectangleToPoint(parent.getBounds(), origin);
+      parent = parent.getParent();
+    }
+    return new Pair<Point, Container>(origin, parent);
+  }
+  
+  private static Point addRectangleToPoint(Rectangle r, Point p) {
+    Point newPoint = new Point(p);
+    newPoint.x += r.x;
+    newPoint.y += r.y;
+    return newPoint;
   }
   
   private PointAndParentForScrollingJTextFieldQuery() {}

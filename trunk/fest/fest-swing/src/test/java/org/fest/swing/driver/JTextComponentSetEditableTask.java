@@ -18,6 +18,7 @@ package org.fest.swing.driver;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -30,6 +31,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JTextComponentSetEditableTask {
 
+  @RunsInEDT
   static void setTextFieldEditable(final JTextField textField, final boolean editable) {
     execute(new GuiTask() {
       protected void executeInEDT() {

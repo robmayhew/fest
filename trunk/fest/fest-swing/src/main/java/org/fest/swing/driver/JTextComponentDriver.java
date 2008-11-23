@@ -21,12 +21,16 @@ import java.awt.Rectangle;
 import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
 import org.fest.assertions.Description;
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.util.Pair;
 
 import static java.lang.Math.*;
@@ -34,16 +38,14 @@ import static java.lang.String.valueOf;
 import static javax.swing.text.DefaultEditorKit.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.JTextComponentEditableQuery.isEditable;
 import static org.fest.swing.driver.JTextComponentSelectTextTask.selectTextInRange;
-import static org.fest.swing.driver.JTextComponentSelectionEndQuery.selectionEndOf;
-import static org.fest.swing.driver.JTextComponentSelectionStartQuery.selectionStartOf;
 import static org.fest.swing.driver.JTextComponentSetTextTask.setTextIn;
 import static org.fest.swing.driver.PointAndParentForScrollingJTextFieldQuery.pointAndParentForScrolling;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
-import static org.fest.swing.query.JComponentVisibleRectQuery.visibleRectOf;
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
 import static org.fest.util.Strings.*;
 
@@ -70,34 +72,41 @@ public class JTextComponentDriver extends JComponentDriver {
   /**
    * Deletes the text of the <code>{@link JTextComponent}</code>.
    * @param textBox the target <code>JTextComponent</code>.
+   * @throws IllegalStateException if the <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if the <code>JTextComponent</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void deleteText(JTextComponent textBox) {
-    replaceText(textBox, null);
+    selectAll(textBox);
+    invokeAction(textBox, deletePrevCharAction);
   }
 
   /**
-   * Types the given text into the <code>{@link JTextComponent}</code>, replacing any existing text already there. If
-   * the empty <code>String</code> or <code>null</code> is given, simply removes all existing text.
+   * Types the given text into the <code>{@link JTextComponent}</code>, replacing any existing text already there.
    * @param textBox the target <code>JTextComponent</code>.
    * @param text the text to enter.
+   * @throws NullPointerException if the text to enter is <code>null</code>.
+   * @throws IllegalArgumentException if the text to enter is empty.
+   * @throws IllegalStateException if the <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if the <code>JTextComponent</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void replaceText(JTextComponent textBox, String text) {
-    if (!isEnabled(textBox)) return;
+    if (text == null) throw new NullPointerException("The text to enter should not be null");
+    if (isEmpty(text)) throw new IllegalArgumentException("The text to enter should not be empty");
     selectAll(textBox);
-    if (isEmpty(text) && !isEmpty(textOf(textBox))) {
-      invokeAction(textBox, deletePrevCharAction);
-      return;
-    }
     enterText(textBox, text);
   }
 
   /**
    * Selects the text in the <code>{@link JTextComponent}</code>.
    * @param textBox the target <code>JTextComponent</code>.
+   * @throws IllegalStateException if the <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if the <code>JTextComponent</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void selectAll(JTextComponent textBox) {
-    if (!isEnabled(textBox)) return;
-    scrollToVisible(textBox, 0);
+    validateAndScrollToPosition(textBox, 0);
     invokeAction(textBox, selectAllAction);
   }
 
@@ -105,10 +114,12 @@ public class JTextComponentDriver extends JComponentDriver {
    * Types the given text into the <code>{@link JTextComponent}</code>.
    * @param textBox the target <code>JTextComponent</code>.
    * @param text the text to enter.
+   * @throws IllegalStateException if the <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if the <code>JTextComponent</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void enterText(JTextComponent textBox, String text) {
-    if (!isEnabled(textBox)) return;
-    focus(textBox);
+    focusAndWaitForFocusGain(textBox);
     robot.enterText(text);
   }
 
@@ -121,10 +132,12 @@ public class JTextComponentDriver extends JComponentDriver {
    * </p>
    * @param textBox the target <code>JTextComponent</code>.
    * @param text the text to enter.
+   * @throws IllegalStateException if the <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if the <code>JTextComponent</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void setText(JTextComponent textBox, String text) {
-    if (!isEnabled(textBox)) return;
-    focus(textBox);
+    focusAndWaitForFocusGain(textBox);
     setTextIn(textBox, text);
     robot.waitForIdle();
   }
@@ -133,32 +146,65 @@ public class JTextComponentDriver extends JComponentDriver {
    * Select the given text range.
    * @param textBox the target <code>JTextComponent</code>.
    * @param text the text to select.
+   * @throws IllegalStateException if the <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if the <code>JTextComponent</code> is not showing on the screen.
+   * @throws IllegalArgumentException if the <code>JTextComponent</code> does not contain the given text to select.
    * @throws ActionFailedException if selecting the text fails.
    */
+  @RunsInEDT
   public void selectText(JTextComponent textBox, String text) {
-    if (!isEnabled(textBox)) return;
-    String actualText = textOf(textBox);
-    if (isEmpty(actualText)) return;
-    int indexFound = actualText.indexOf(text);
-    if (indexFound == -1) return;
+    int indexFound = indexOfText(textBox, text);
+    if (indexFound == -1) throw new IllegalArgumentException(concat("The text ", quote(text), " was not found"));
     selectText(textBox, indexFound, indexFound + text.length());
   }
 
+  @RunsInEDT
+  private static int indexOfText(final JTextComponent textBox, final String text) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        validateIsEnabledAndShowing(textBox);
+        String actualText = textBox.getText();
+        if (isEmpty(actualText)) return -1;
+        return actualText.indexOf(text);
+      }
+    });
+  }
+  
   /**
    * Select the given text range.
    * @param textBox the target <code>JTextComponent</code>.
    * @param start the starting index of the selection.
    * @param end the ending index of the selection.
+   * @throws IllegalStateException if the <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if the <code>JTextComponent</code> is not showing on the screen.
    * @throws ActionFailedException if selecting the text in the given range fails.
    */
+  @RunsInEDT
   public void selectText(JTextComponent textBox, int start, int end) {
-    if (!isEnabled(textBox) || isEmpty(textOf(textBox))) return;
-    robot.moveMouse(textBox, scrollToVisible(textBox, start));
-    robot.moveMouse(textBox, scrollToVisible(textBox, end));
-    selectTextInRange(textBox, start, end);
-    verifySelectionMade(textBox, start, end);
+    robot.moveMouse(textBox, validateAndScrollToPosition(textBox, start));
+    robot.moveMouse(textBox, scrollToPosition(textBox, end));
+    performAndValidateTextSelection(textBox, start, end);
+  }
+  
+  @RunsInEDT
+  private static Point validateAndScrollToPosition(final JTextComponent textBox, final int index) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        validateIsEnabledAndShowing(textBox);
+        return scrollToVisible(textBox, index);
+      }
+    });
   }
 
+  @RunsInEDT
+  private static Point scrollToPosition(final JTextComponent textBox, final int index) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        return scrollToVisible(textBox, index);
+      }
+    });
+  }
+  
   /**
    * Move the pointer to the location of the given index. Takes care of auto-scrolling through text.
    * @param textBox the target <code>JTextComponent</code>.
@@ -166,7 +212,8 @@ public class JTextComponentDriver extends JComponentDriver {
    * @return the position of the pointer after being moved.
    * @throws ActionFailedException if it was not possible to scroll to the location of the given index.
    */
-  private Point scrollToVisible(JTextComponent textBox, int index) {
+  @RunsInCurrentThread
+  private static Point scrollToVisible(JTextComponent textBox, int index) {
     Rectangle indexLocation = locationOf(textBox, index);
     if (isRectangleVisible(textBox, indexLocation)) return centerOf(indexLocation);
     scrollToVisible(textBox, indexLocation);
@@ -177,54 +224,70 @@ public class JTextComponentDriver extends JComponentDriver {
         "' by scrolling the point (", formatOriginOf(indexLocation), ") on ", format(textBox)));
   }
 
-  private Rectangle locationOf(JTextComponent textBox, int index) {
+  @RunsInCurrentThread
+  private static Rectangle locationOf(JTextComponent textBox, int index) {
     Rectangle r = null;
     try {
-      r = JTextComponentModelToViewQuery.modelToView(textBox, index);
-    } catch (UnexpectedException e) {
+      r = textBox.modelToView(index);
+    } catch (BadLocationException e) {
       throw actionFailure(concat("Unable to get location for index '", valueOf(index), "' in ", format(textBox)));
     }
     if (r != null) return r;
-    throw actionFailure(concat("Text component", format(textBox)," has zero size"));
+    throw actionFailure(concat("Text in component", format(textBox)," has zero length"));
   }
 
-  private boolean isRectangleVisible(JTextComponent textBox, Rectangle r) {
-    return visibleRectOf(textBox).contains(r.x, r.y);
+  @RunsInCurrentThread
+  private static boolean isRectangleVisible(JTextComponent textBox, Rectangle r) {
+    Rectangle visible = textBox.getVisibleRect();
+    if (visible == null) return false;
+    return visible.contains(r.x, r.y);
   }
 
-  private String formatOriginOf(Rectangle r) {
+  private static String formatOriginOf(Rectangle r) {
     return concat(valueOf(r.x), ",", valueOf(r.y));
   }
 
-  private void scrollToVisible(JTextComponent textBox, Rectangle r) {
-    super.scrollToVisible(textBox, r);
-    // Taken from JComponent
+  @RunsInCurrentThread
+  private static void scrollToVisible(JTextComponent textBox, Rectangle r) {
+    textBox.scrollRectToVisible(r);
     if (isVisible(textBox, r)) return;
     scrollToVisibleIfIsTextField(textBox, r);
   }
 
-  private void scrollToVisibleIfIsTextField(JTextComponent textBox, Rectangle r) {
+  @RunsInCurrentThread
+  private static void scrollToVisibleIfIsTextField(JTextComponent textBox, Rectangle r) {
     if (!(textBox instanceof JTextField)) return;
     Pair<Point, Container> pointAndParent = pointAndParentForScrolling((JTextField)textBox);
     Container parent = pointAndParent.ii;
     if (parent == null || parent instanceof CellRendererPane || !(parent instanceof JComponent)) return;
-    super.scrollToVisible((JComponent)parent, rectangleWithPointAddedToCoordinates(pointAndParent.i, r));
+    ((JComponent)parent).scrollRectToVisible(addPointToRectangle(pointAndParent.i, r));
   }
 
-  private Rectangle rectangleWithPointAddedToCoordinates(Point p, Rectangle r) {
+  private static Rectangle addPointToRectangle(Point p, Rectangle r) {
     Rectangle destination = new Rectangle(r);
     destination.x += p.x;
     destination.y += p.y;
     return destination;
   }
 
-  private Point centerOf(Rectangle r) {
+  private static Point centerOf(Rectangle r) {
     return new Point(r.x + r.width / 2, r.y + r.height / 2);
   }
 
-  private void verifySelectionMade(JTextComponent textBox, int start, int end) {
-    int actualStart = selectionStartOf(textBox);
-    int actualEnd = selectionEndOf(textBox);
+  @RunsInEDT
+  private static void performAndValidateTextSelection(final JTextComponent textBox, final int start, final int end) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        selectTextInRange(textBox, start, end);
+        verifyTextWasSelected(textBox, start, end);
+      }
+    });
+  }
+  
+  @RunsInCurrentThread
+  private static void verifyTextWasSelected(JTextComponent textBox, int start, int end) {
+    int actualStart = textBox.getSelectionStart();
+    int actualEnd = textBox.getSelectionEnd();
     if (actualStart == min(start, end) && actualEnd == max(start, end)) return;
     throw actionFailure(concat(
         "Unable to select text using indices '", valueOf(start), "' and '", valueOf(end),
@@ -237,6 +300,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @param expected the text to match.
    * @throws AssertionError if the text of the <code>JTextComponent</code> is not equal to the given one.
    */
+  @RunsInEDT
   public void requireText(JTextComponent textBox, String expected) {
     assertThat(textOf(textBox)).as(textProperty(textBox)).isEqualTo(expected);
   }
@@ -246,10 +310,12 @@ public class JTextComponentDriver extends JComponentDriver {
    * @param textBox the given <code>JTextComponent</code>.
    * @throws AssertionError if the <code>JTextComponent</code> is not empty.
    */
+  @RunsInEDT
   public void requireEmpty(JTextComponent textBox) {
     assertThat(textOf(textBox)).as(textProperty(textBox)).isEmpty();
   }
 
+  @RunsInEDT
   private static Description textProperty(JTextComponent textBox) {
     return propertyName(textBox, TEXT_PROPERTY);
   }
@@ -259,6 +325,7 @@ public class JTextComponentDriver extends JComponentDriver {
    * @param textBox the given <code>JTextComponent</code>.
    * @throws AssertionError if the <code>JTextComponent</code> is not editable.
    */
+  @RunsInEDT
   public void requireEditable(JTextComponent textBox) {
     assertEditable(textBox, true);
   }
@@ -268,14 +335,17 @@ public class JTextComponentDriver extends JComponentDriver {
    * @param textBox the given <code>JTextComponent</code>.
    * @throws AssertionError if the <code>JTextComponent</code> is editable.
    */
+  @RunsInEDT
   public void requireNotEditable(JTextComponent textBox) {
     assertEditable(textBox, false);
   }
 
+  @RunsInEDT
   private void assertEditable(JTextComponent textBox, boolean editable) {
     assertThat(isEditable(textBox)).as(editableProperty(textBox)).isEqualTo(editable);
   }
 
+  @RunsInEDT
   private static Description editableProperty(JTextComponent textBox) {
     return propertyName(textBox, EDITABLE_PROPERTY);
   }

@@ -19,7 +19,7 @@ import java.awt.Component;
 
 import javax.swing.JTable;
 
-import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.exception.ActionFailedException;
 
 /**
@@ -28,7 +28,7 @@ import org.fest.swing.exception.ActionFailedException;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@RunsInCurrentThread
+@RunsInEDT
 public interface JTableCellWriter {
 
   /**

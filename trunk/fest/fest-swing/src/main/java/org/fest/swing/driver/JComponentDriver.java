@@ -76,7 +76,7 @@ public class JComponentDriver extends ContainerDriver {
    *         visible <code>Rectangle</code>.
    */
   @RunsInCurrentThread
-  protected final boolean isVisible(JComponent c, Rectangle r) {
+  protected static boolean isVisible(JComponent c, Rectangle r) {
     return c.getVisibleRect().contains(r);
   }
 

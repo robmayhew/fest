@@ -47,5 +47,7 @@ public class JTableCheckBoxEditorCellWriterTest extends JTableCellWriterTestCase
     assertThat(valueAt(row,column)).isEqualTo(true);
     writer().enterValue(table(), row, column, "false");
     assertThat(valueAt(row,column)).isEqualTo(false);
+    writer().enterValue(table(), row, column, "false");
+    assertThat(valueAt(row,column)).isEqualTo(false);
   }
 }

@@ -16,15 +16,23 @@
 package org.fest.swing.driver;
 
 import java.awt.Component;
+import java.awt.Point;
 
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.text.JTextComponent;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.util.Pair;
 
-import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
+import static java.lang.Boolean.parseBoolean;
+
+import static org.fest.swing.driver.JTableCellEditorQuery.cellEditorIn;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands an implementation of <code>{@link JTableCellWriter}</code> that knows how to use
@@ -40,31 +48,35 @@ public class JTableCheckBoxEditorCellWriter extends AbstractJTableCellWriter  {
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void enterValue(JTable table, int row, int column, String value) {
-    JCheckBox editor = editor(table, row, column);
-    boolean realValue = Boolean.parseBoolean(value);
-    // TODO consolidate into coarser GUI action
-    if (isSelected(editor) == realValue) return;
-    clickCell(table, row, column);
+    boolean realValue = parseBoolean(value);
+    Pair<Boolean, Point> editingInfo = doStartCellEditing(table, row, column, location);
+    if (editingInfo.i == realValue) return; // JCheckBox already has value to set.
+    robot.click(table, editingInfo.ii);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void startCellEditing(JTable table, int row, int column) {
-    editor(table, row, column);
+    doStartCellEditing(table, row, column, location);
   }
 
-  /** {@inheritDoc} */
-  public void stopCellEditing(JTable table, int row, int column) {
-    editor(table, row, column);
+  @RunsInEDT
+  private static Pair<Boolean, Point> doStartCellEditing(final JTable table, final int row, final int column, 
+      final JTableLocation location) {
+    return execute(new GuiQuery<Pair<Boolean, Point>>() {
+      protected Pair<Boolean, Point> executeInEDT() {
+        JCheckBox editor = editor(table, row, column);
+        scrollToCell(table, row, column, location);
+        return new Pair<Boolean, Point>(editor.isSelected(), location.pointAt(table, row, column));
+      }
+    });
   }
 
-  /** {@inheritDoc} */
-  public void cancelCellEditing(JTable table, int row, int column) {
-    editor(table, row, column);
-  }
-
-  private JCheckBox editor(JTable table, int row, int column) {
-    Component editor = editorForCell(table, row, column);
+  @RunsInCurrentThread
+  private static JCheckBox editor(JTable table, int row, int column) {
+    Component editor = cellEditorIn(table, row, column);
     if (editor instanceof JCheckBox) return (JCheckBox)editor;
     throw cannotHandleEditor(editor);
   }

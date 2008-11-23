@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.text.JTextComponent;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -30,6 +31,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JTextComponentEditableQuery {
 
+  @RunsInEDT
   static boolean isEditable(final JTextComponent textBox) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {

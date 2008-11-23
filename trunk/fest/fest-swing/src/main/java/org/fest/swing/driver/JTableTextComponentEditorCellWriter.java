@@ -23,9 +23,6 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
 
-import static java.awt.event.KeyEvent.VK_ENTER;
-
-import static org.fest.swing.driver.JTableCancelCellEditingTask.cancelEditing;
 import static org.fest.swing.driver.WaitForComponentToShowCondition.untilIsShowing;
 import static org.fest.swing.timing.Pause.pause;
 
@@ -50,7 +47,7 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
     JTextComponent editor = editor(table, row, column);
     startCellEditing(table, row, column);
     driver.replaceText(editor, value);
-    stopEditing(editor);
+    stopCellEditing(table, row, column);
   }
 
   /** {@inheritDoc} */
@@ -58,22 +55,6 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
     JTextComponent editor = editor(table, row, column);
     clickCell(table, row, column, 2);
     pause(untilIsShowing(editor));
-  }
-
-  /** {@inheritDoc} */
-  public void stopCellEditing(JTable table, int row, int column) {
-    stopEditing(editor(table, row, column));
-  }
-
-  private void stopEditing(JTextComponent editor) {
-    driver.pressAndReleaseKeys(editor, VK_ENTER);
-  }
-
-  /** {@inheritDoc} */
-  public void cancelCellEditing(JTable table, int row, int column) {
-    editor(table, row, column);
-    cancelEditing(table, row, column);
-    robot.waitForIdle();
   }
 
   private JTextComponent editor(JTable table, int row, int column) {

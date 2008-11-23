@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.text.JTextComponent;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -29,6 +30,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JTextComponentSetTextTask {
 
+  @RunsInEDT
   static void setTextIn(final JTextComponent textBox, final String text) {
     execute(new GuiTask() {
       protected void executeInEDT() {
