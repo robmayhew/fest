@@ -22,7 +22,10 @@ import java.util.Set;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
-import static org.fest.swing.query.ComponentParentQuery.parentOf;
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Collections.list;
 
 /**
@@ -92,16 +95,27 @@ class Context {
    * @param c the given component.
    * @return the event queue corresponding to the given component
    */
+  @RunsInEDT
   EventQueue eventQueueFor(Component c) {
-    Component component = c;
-    // Components above the applet in the hierarchy may or may not share the same context with the applet itself.
-    while (!(component instanceof java.applet.Applet) && parentOf(component) != null)
-      component = parentOf(component);
+    Component component = topParentOf(c);
     synchronized (lock) {
       return eventQueueMapping.queueFor(component);
     }
   }
 
+  @RunsInEDT
+  private static Component topParentOf(final Component c) {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        Component parent = c;
+        // Components above the applet in the hierarchy may or may not share the same context with the applet itself.
+        while (!(parent instanceof java.applet.Applet) && parent.getParent() != null)
+          parent = parent.getParent();
+        return parent;
+      }
+    });
+  }
+  
   /**
    * Returns all known event queues.
    * @return all known event queues.

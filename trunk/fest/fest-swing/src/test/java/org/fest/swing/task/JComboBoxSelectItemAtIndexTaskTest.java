@@ -22,6 +22,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
@@ -75,6 +76,7 @@ public class JComboBoxSelectItemAtIndexTaskTest {
 
     final JComboBox comboBox = new JComboBox(array("first", "second", "third"));
 
+    @RunsInEDT
     static MyWindow createNew() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {

@@ -24,11 +24,14 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.finder.WindowFinder;
 
@@ -50,6 +53,10 @@ import static org.fest.util.Strings.*;
 public class Bug195_MultipleDialogFixturesTest {
 
   private Robot robot;
+  
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     robot = robotWithCurrentAwtHierarchy();
@@ -61,12 +68,12 @@ public class Bug195_MultipleDialogFixturesTest {
 
   // Runs the test (that fails for me. :( )
   public void shouldFindDialogMultipleTimes() {
-    JDialog dialog = new TestDialog("title 1");
+    JDialog dialog = TestDialog.createNew("title 1");
     robot.showWindow(dialog);
     DialogFixture fixtureOne = WindowFinder.findDialog(new DialogTitleStartsWithMatcher("title")).using(robot);
     fixtureOne.button("OK").click();
 
-    dialog = new TestDialog("title 2");
+    dialog = TestDialog.createNew("title 2");
     robot.showWindow(dialog);
     DialogFixture fixtureTwo = WindowFinder.findDialog(new DialogTitleStartsWithMatcher("title")).using(robot);
     fixtureTwo.button("OK").click();
@@ -86,6 +93,7 @@ public class Bug195_MultipleDialogFixturesTest {
       return title != null && title.toUpperCase().startsWith(matchString) && isShowing(dialog);
     }
 
+    @RunsInEDT
     private static boolean isShowing(final Dialog dialog) {
       return execute(new GuiQuery<Boolean>() {
         protected Boolean executeInEDT() {
@@ -105,7 +113,16 @@ public class Bug195_MultipleDialogFixturesTest {
 
     JButton okayButton = new JButton();
 
-    public TestDialog(String title) {
+    @RunsInEDT
+    static TestDialog createNew(final String title) {
+      return execute(new GuiQuery<TestDialog>() {
+        protected TestDialog executeInEDT() {
+          return new TestDialog(title);
+        }
+      });
+    }
+    
+    private TestDialog(String title) {
       super();
       setName(title);
       setLayout(new BorderLayout());

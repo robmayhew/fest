@@ -17,6 +17,7 @@ package org.fest.swing.query;
 import java.awt.Color;
 import java.awt.Component;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -38,6 +39,7 @@ public final class ComponentBackgroundQuery {
    * @return the background color of the given <code>Component</code>.
    * @see Component#getBackground()
    */
+  @RunsInEDT
   public static Color backgroundOf(final Component component) {
     return execute(new GuiQuery<Color>() {
       protected Color executeInEDT() {

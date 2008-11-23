@@ -23,6 +23,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
@@ -63,21 +64,32 @@ public class JInternalFrameDesktopPaneQueryTest {
   }
 
   public void shouldReturnNullIfJDesktopIconInJInternalFrameIsNull() {
+    JDesktopPane desktopPane = setNullIconAndReturnDesktopPane(internalFrame);
+    assertThat(desktopPane).isNull();
+  }
+
+  @RunsInEDT
+  private static JDesktopPane setNullIconAndReturnDesktopPane(final JInternalFrame internalFrame) {
     JDesktopPane desktopPane = execute(new GuiQuery<JDesktopPane>() {
       protected JDesktopPane executeInEDT() {
         internalFrame.setDesktopIcon(null);
         return JInternalFrameDesktopPaneQuery.desktopPaneOf(internalFrame);
       }
     });
-    assertThat(desktopPane).isNull();
+    return desktopPane;
   }
 
   public void shouldReturnJDesktopPaneFromJDesktopIconInJInternalFrameIsNull() {
-    JDesktopPane desktopPane = execute(new GuiQuery<JDesktopPane>() {
+    JDesktopPane desktopPane = desktopFrameOf(internalFrame);
+    assertThat(desktopPane).isSameAs(window.desktop());
+  }
+
+  @RunsInEDT
+  private static JDesktopPane desktopFrameOf(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<JDesktopPane>() {
       protected JDesktopPane executeInEDT() {
         return JInternalFrameDesktopPaneQuery.desktopPaneOf(internalFrame);
       }
     });
-    assertThat(desktopPane).isSameAs(window.desktop());
   }
 }

@@ -22,6 +22,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 
@@ -83,6 +84,7 @@ public class NameAndTypeMatcherTest {
 
     private boolean showing;
 
+    @RunsInEDT
     static MyTextField createNew(final String name) {
       return execute(new GuiQuery<MyTextField>() {
         protected MyTextField executeInEDT() {

@@ -17,6 +17,7 @@ package org.fest.swing.query;
 
 import java.awt.Component;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -30,6 +31,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 public final class ComponentHasFocusQuery {
 
+  @RunsInEDT
   public static boolean hasFocus(final Component component) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {

@@ -32,11 +32,10 @@ import static javax.swing.SwingUtilities.convertPoint;
 
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.util.Platform.isWindows;
-import static org.fest.util.Strings.*;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands utility methods related to AWT.
@@ -132,17 +131,6 @@ public class AWT {
     // Must perform an additional check, since applets may have their own version in their AppContext
     return c instanceof Frame
         && (c == JOptionPane.getRootFrame() || c.getClass().getName().startsWith(ROOT_FRAME_CLASSNAME));
-  }
-
-  /**
-   * Returns the name of the given component. If the component is <code>null</code>, this method will return
-   * <code>null</code>.
-   * @param c the given component.
-   * @return the name of the given component, or <code>null</code> if the component is <code>null</code>.
-   */
-  public static String quoteNameOf(Component c) {
-    if (c == null) return null;
-    return quote(nameOf(c));
   }
 
   /**

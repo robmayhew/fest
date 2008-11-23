@@ -29,7 +29,6 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -65,11 +64,10 @@ public class ContainerComponentsQueryTest {
   }
 
   public void shouldReturnComponentsOfContainer() {
-    window.startRecording();
     assertThat(componentsOf(window)).containsOnly(window.button);
-    window.requireInvoked("getComponents");
   }
 
+  @RunsInEDT
   private static List<Component> componentsOf(final MyWindow window) {
     return execute(new GuiQuery<List<Component>>() {
       protected List<Component> executeInEDT() {
@@ -82,9 +80,6 @@ public class ContainerComponentsQueryTest {
     private static final long serialVersionUID = 1L;
 
     final JButton button = new JButton("A button");
-
-    private boolean recording;
-    private final MethodInvocations methodInvocations = new MethodInvocations();
 
     @RunsInEDT
     static MyWindow createAndShow() {
@@ -104,17 +99,6 @@ public class ContainerComponentsQueryTest {
     private MyWindow() {
       super(ContainerComponentsQueryTest.class);
       addComponents(button);
-    }
-
-    @Override public Component[] getComponents() {
-      if (recording) methodInvocations.invoked("getComponents");
-      return super.getComponents();
-    }
-
-    void startRecording() { recording = true; }
-
-    MethodInvocations requireInvoked(String methodName) {
-      return methodInvocations.requireInvoked(methodName);
     }
   }
 }

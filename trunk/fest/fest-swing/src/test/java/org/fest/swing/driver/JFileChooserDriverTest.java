@@ -232,6 +232,7 @@ public class JFileChooserDriverTest {
     robot.waitForIdle();
   }
 
+  @RunsInEDT
   private static String currentDirectoryAbsolutePath(final JFileChooser fileChooser) {
     File currentDirectory = execute(new GuiQuery<File>() {
       protected File executeInEDT() {

@@ -106,6 +106,7 @@ public class JListSelectionValuesQueryTest {
 
     final JList list = new JList(array("One", "Two", "Three", "Four"));
 
+    @RunsInEDT
     static MyWindow createNew() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {

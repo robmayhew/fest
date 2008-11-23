@@ -22,11 +22,10 @@ import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JTextField;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestWindow;
@@ -56,6 +55,10 @@ public abstract class InputEventGeneratorTestCase {
 
   protected static final String MOVE_MOUSE_TEST = "Move Mouse Test";
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() throws Exception {
     ScreenLock.instance().acquire(this);
     window = MyWindow.createNew(getClass());
@@ -69,8 +72,11 @@ public abstract class InputEventGeneratorTestCase {
   abstract InputEventGenerator generator();
 
   @AfterMethod public void tearDown() {
-    window.destroy();
-    ScreenLock.instance().release(this);
+    try {
+      window.destroy();
+    } finally {
+      ScreenLock.instance().release(this);
+    }
   }
 
   @Test(groups = { GUI, MOVE_MOUSE_TEST }, enabled = false)
@@ -151,6 +157,7 @@ public abstract class InputEventGeneratorTestCase {
 
     final JTextField textBox = new JTextField(20);
 
+    @RunsInEDT
     static MyWindow createNew(final Class<? extends InputEventGeneratorTestCase> testClass) {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {

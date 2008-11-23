@@ -23,17 +23,20 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestTree;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.swing.timing.Pause.pause;
 
@@ -48,6 +51,10 @@ public class Bug133_ScrollJTreeElementTest {
   private FrameFixture fixture;
   private MyWindow window;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     window = MyWindow.createNew();
     fixture = new FrameFixture(window);
@@ -87,12 +94,13 @@ public class Bug133_ScrollJTreeElementTest {
   private void assertPathNotFoundInDragTree(String path) {
     try {
       fixture.tree("drag").selectPath(path);
-      fail();
+      failWhenExpectingException();
     } catch (LocationUnavailableException e) {
       assertThat(e.getMessage()).contains(path);
     }
   }
 
+  @RunsInEDT
   private static Object selectionOf(final JTree tree) {
     return execute(new GuiQuery<Object>() {
       protected Object executeInEDT() {
@@ -109,8 +117,13 @@ public class Bug133_ScrollJTreeElementTest {
     final JTree dragTree = new TestTree("drag");
     final JTree dropTree = new TestTree("drop");
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

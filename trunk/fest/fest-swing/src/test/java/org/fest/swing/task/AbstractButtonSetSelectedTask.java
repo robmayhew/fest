@@ -17,6 +17,7 @@ package org.fest.swing.task;
 
 import javax.swing.AbstractButton;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -29,6 +30,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 public final class AbstractButtonSetSelectedTask {
 
+  @RunsInEDT
   public static void setSelected(final AbstractButton button, final boolean selected) {
     execute(new GuiTask() {
       protected void executeInEDT() {

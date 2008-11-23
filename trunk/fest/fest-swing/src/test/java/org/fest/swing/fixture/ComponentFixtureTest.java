@@ -21,13 +21,16 @@ import java.awt.Font;
 
 import javax.swing.JTextField;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ComponentFinder;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Settings;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.easymock.EasyMock.expect;
@@ -51,6 +54,10 @@ public class ComponentFixtureTest {
   private String name;
   private JTextField target;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = createMock(Robot.class);
     settings = new Settings();
@@ -138,6 +145,7 @@ public class ComponentFixtureTest {
                                          .contains("property:'font'");
   }
 
+  @RunsInEDT
   private static Font fontOf(final Component component) {
     return execute(new GuiQuery<Font>() {
       protected Font executeInEDT() {
@@ -154,6 +162,7 @@ public class ComponentFixtureTest {
                                           .contains("property:'background'");
   }
 
+  @RunsInEDT
   private static Color backgroundOf(final Component component) {
     return execute(new GuiQuery<Color>() {
       protected Color executeInEDT() {
@@ -169,6 +178,7 @@ public class ComponentFixtureTest {
                                           .contains("property:'foreground'");
   }
 
+  @RunsInEDT
   private static Color foregroundOf(final Component component) {
     return execute(new GuiQuery<Color>() {
       protected Color executeInEDT() {

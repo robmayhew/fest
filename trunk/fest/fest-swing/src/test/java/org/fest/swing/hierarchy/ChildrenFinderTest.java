@@ -129,6 +129,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
     }
   }
 
+  @RunsInEDT
   private static Collection<Component> children(final ChildrenFinder finder, final Component c) {
     return execute(new GuiQuery<Collection<Component>>() {
       protected Collection<Component> executeInEDT() {
@@ -137,6 +138,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
     });
   }
 
+  @RunsInEDT
   private Object[] childrenOf(final Container c) {
     return execute(new GuiQuery<Object[]>() {
       protected Object[] executeInEDT() {

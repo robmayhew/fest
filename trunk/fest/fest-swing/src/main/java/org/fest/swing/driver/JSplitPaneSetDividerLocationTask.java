@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import javax.swing.JSplitPane;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -30,6 +31,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JSplitPaneSetDividerLocationTask {
 
+  @RunsInEDT
   static void setDividerLocation(final JSplitPane splitPane, final int location) {
     execute(new GuiTask() {
       protected void executeInEDT() {

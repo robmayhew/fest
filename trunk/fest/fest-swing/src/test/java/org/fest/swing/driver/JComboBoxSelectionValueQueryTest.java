@@ -82,6 +82,7 @@ public class JComboBoxSelectionValueQueryTest {
     assertThat(JComboBoxSelectionValueQuery.selection(comboBox, cellReader)).isSameAs("first");
   }
   
+  @RunsInEDT
   private static void makeEditableAndSelectIndex(final JComboBox comboBox, final int index) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -97,6 +98,7 @@ public class JComboBoxSelectionValueQueryTest {
     assertThat(JComboBoxSelectionValueQuery.selection(comboBox, cellReader)).isSameAs("Hello");
   }
 
+  @RunsInEDT
   private static void makeEditableAndSelectValue(final JComboBox comboBox, final String value) {
     execute(new GuiTask() {
       protected void executeInEDT() {

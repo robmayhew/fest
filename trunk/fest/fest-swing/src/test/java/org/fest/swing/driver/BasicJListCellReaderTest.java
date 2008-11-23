@@ -20,10 +20,13 @@ import javax.swing.JList;
 import javax.swing.JToolBar;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.CustomCellRenderer;
@@ -48,6 +51,10 @@ public class BasicJListCellReaderTest {
   private MyList list;
   private BasicJListCellReader reader;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
@@ -62,7 +69,7 @@ public class BasicJListCellReaderTest {
 
   public void shouldReturnModelValueToString() {
     list.setElements(new Jedi("Yoda"));
-    Object value = firstItemValue(list, reader);
+    Object value = firstItemValue(reader, list);
     assertThat(value).isEqualTo("Yoda");
   }
 
@@ -70,7 +77,7 @@ public class BasicJListCellReaderTest {
     list.setElements(new Object[] { null });
     setNotRecognizedRendererComponent(list);
     robot.waitForIdle();
-    Object value = firstItemValue(list, reader);
+    String value = firstItemValue(reader, list);
     assertThat(value).isNull();
   }
 
@@ -78,10 +85,11 @@ public class BasicJListCellReaderTest {
     list.setElements(new Jedi(null));
     setJLabelAsRendererComponent(list, "First");
     robot.waitForIdle();
-    Object value = firstItemValue(list, reader);
+    String value = firstItemValue(reader, list);
     assertThat(value).isEqualTo("First");
   }
 
+  @RunsInEDT
   private static void setJLabelAsRendererComponent(final JList list, final String labelText) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -90,6 +98,7 @@ public class BasicJListCellReaderTest {
     });
   }
 
+  @RunsInEDT
   private static void setNotRecognizedRendererComponent(final JList list) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -98,7 +107,8 @@ public class BasicJListCellReaderTest {
     });
   }
 
-  private static String firstItemValue(final JList list, final BasicJListCellReader reader) {
+  @RunsInEDT
+  private static String firstItemValue(final BasicJListCellReader reader, final JList list) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
         return reader.valueAt(list, 0);
@@ -111,8 +121,13 @@ public class BasicJListCellReaderTest {
 
     final MyList list = new MyList("One", "Two");
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

@@ -17,6 +17,7 @@ package org.fest.swing.query;
 
 import javax.swing.AbstractButton;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -38,6 +39,7 @@ public final class AbstractButtonTextQuery {
    * @return the text of the given <code>AbstractButton</code>.
    * @see AbstractButton#getText()
    */
+  @RunsInEDT
   public static String textOf(final AbstractButton button) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {

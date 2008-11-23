@@ -30,7 +30,6 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
 
-import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.util.Strings.*;
 
 /**
@@ -145,7 +144,7 @@ public class Formatting {
     if (c == null) return NULL_COMPONENT_MESSAGE;
     ComponentFormatter formatter = formatterFor(c.getClass());
     if (formatter != null) return formatter.format(c);
-    String name = nameOf(c);
+    String name = c.getName();
     if (isEmpty(name)) return c.toString();
     return concat(c.getClass().getName(), "[name=", quote(name), "]");
   }

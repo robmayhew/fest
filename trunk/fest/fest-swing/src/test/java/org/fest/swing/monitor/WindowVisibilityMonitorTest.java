@@ -27,6 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MethodInvocations;
@@ -57,7 +58,7 @@ public class WindowVisibilityMonitorTest {
   }
 
   @BeforeMethod public void setUp() {
-    window = MyWindow.createNeW();
+    window = MyWindow.createNew();
     windows = createMock(Windows.class);
     createAndAttachMonitor();
   }
@@ -131,6 +132,7 @@ public class WindowVisibilityMonitorTest {
     return componentEvent(window);
   }
 
+  @RunsInEDT
   private ComponentEvent componentEventWithTextFieldAsSource() {
     return componentEvent(textField().createNew());
   }
@@ -145,7 +147,8 @@ public class WindowVisibilityMonitorTest {
     private boolean recording;
     private final MethodInvocations methodInvocations = new MethodInvocations();
 
-    static MyWindow createNeW() {
+    @RunsInEDT
+    static MyWindow createNew() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {
           return new MyWindow();

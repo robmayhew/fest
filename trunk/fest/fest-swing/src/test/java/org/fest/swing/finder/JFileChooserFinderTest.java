@@ -37,7 +37,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.timing.Pause.pause;
 
@@ -94,7 +93,7 @@ public class JFileChooserFinderTest {
     clickBrowseButton();
     GenericTypeMatcher<JFileChooser> matcher = new GenericTypeMatcher<JFileChooser>( ) {
       protected boolean isMatching(JFileChooser fileChooser) {
-        return "fileChooser".equals(nameOf(fileChooser));
+        return "fileChooser".equals(fileChooser.getName());
       }
     };
     JFileChooserFixture found = JFileChooserFinder.findFileChooser(matcher).using(robot);

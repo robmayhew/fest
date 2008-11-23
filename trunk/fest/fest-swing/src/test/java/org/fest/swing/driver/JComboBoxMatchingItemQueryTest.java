@@ -61,9 +61,9 @@ public class JComboBoxMatchingItemQueryTest {
     robot.cleanUp();
   }
   
-  public void shouldReturnMatchingIndex() {
-    for (int i = 0; i < 3; i++)
-      assertThat(JComboBoxMatchingItemQuery.matchingItemIndex(comboBox, ITEMS[i], cellReader)).isEqualTo(i);
+  @Test(dataProvider = "indices", groups = { GUI, ACTION })
+  public void shouldReturnMatchingIndex(int index) {
+    assertThat(JComboBoxMatchingItemQuery.matchingItemIndex(comboBox, ITEMS[index], cellReader)).isEqualTo(index);
   }
   
   public void shouldReturnNegativeOneIfNoMatchingIndexFound() {

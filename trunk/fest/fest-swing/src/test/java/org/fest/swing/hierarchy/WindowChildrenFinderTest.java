@@ -26,6 +26,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
@@ -89,6 +90,7 @@ public class WindowChildrenFinderTest {
     }
   }
 
+  @RunsInEDT
   private static Collection<Component> findChildren(final WindowChildrenFinder finder, final Window w) {
     return execute(new GuiQuery<Collection<Component>>() {
       protected Collection<Component> executeInEDT() {

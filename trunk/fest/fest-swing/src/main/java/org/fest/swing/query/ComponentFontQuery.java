@@ -3,6 +3,7 @@ package org.fest.swing.query;
 import java.awt.Component;
 import java.awt.Font;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -24,6 +25,7 @@ final public class ComponentFontQuery {
    * @return the font of the given <code>Component</code>.
    * @see Component#getFont()
    */
+  @RunsInEDT
   public static Font fontOf(final Component component) {
     return execute(new GuiQuery<Font>() {
       protected Font executeInEDT() {

@@ -16,6 +16,7 @@ package org.fest.swing.query;
 
 import javax.swing.AbstractButton;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -37,6 +38,7 @@ public final class AbstractButtonSelectedQuery {
    * @return <code>true</code> if the given <code>AbstractButton</code> is selected, <code>false</code> otherwise.
    * @see AbstractButton#isSelected()
    */
+  @RunsInEDT
   public static boolean isSelected(final AbstractButton button) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {

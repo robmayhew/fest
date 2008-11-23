@@ -15,16 +15,21 @@
  */
 package org.fest.swing.query;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.ACTION;
-import static org.fest.swing.testing.TestGroups.GUI;
-
-import org.fest.swing.core.ScreenLock;
-import org.fest.swing.testing.MethodInvocations;
-import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiActionRunner;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentShowingQuery}</code>.
@@ -36,6 +41,10 @@ import org.testng.annotations.Test;
 public class ComponentShowingQueryTest {
 
   private MyWindow window;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
@@ -66,8 +75,13 @@ public class ComponentShowingQueryTest {
     private boolean recording;
     private final MethodInvocations methodInvocations = new MethodInvocations();
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return GuiActionRunner.execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

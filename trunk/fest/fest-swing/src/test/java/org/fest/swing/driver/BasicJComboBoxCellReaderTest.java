@@ -21,10 +21,13 @@ import javax.swing.JLabel;
 import javax.swing.JToolBar;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.CustomCellRenderer;
@@ -49,6 +52,10 @@ public class BasicJComboBoxCellReaderTest {
   private JComboBox comboBox;
   private BasicJComboBoxCellReader reader;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     reader = new BasicJComboBoxCellReader();
@@ -64,7 +71,7 @@ public class BasicJComboBoxCellReaderTest {
   public void shouldReturnModelValueToString() {
     setModelValues(comboBox, array(new Jedi("Yoda")));
     robot.waitForIdle();
-    Object value = firstItemValue(comboBox, reader);
+    String value = firstItemValue(reader, comboBox);
     assertThat(value).isEqualTo("Yoda");
   }
 
@@ -72,7 +79,7 @@ public class BasicJComboBoxCellReaderTest {
     setModelValues(comboBox, new Object[] { null });
     setNotRecognizedRendererComponent(comboBox);
     robot.waitForIdle();
-    Object value = firstItemValue(comboBox, reader);
+    String value = firstItemValue(reader, comboBox);
     assertThat(value).isNull();
   }
 
@@ -80,10 +87,11 @@ public class BasicJComboBoxCellReaderTest {
     setModelValues(comboBox, array(new Jedi(null)));
     setJLabelAsRendererComponent(comboBox, "First");
     robot.waitForIdle();
-    Object value = firstItemValue(comboBox, reader);
+    String value = firstItemValue(reader, comboBox);
     assertThat(value).isEqualTo("First");
   }
 
+  @RunsInEDT
   private static void setModelValues(final JComboBox comboBox, final Object[] values) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -92,6 +100,7 @@ public class BasicJComboBoxCellReaderTest {
     });
   }
 
+  @RunsInEDT
   private static void setJLabelAsRendererComponent(final JComboBox comboBox, final String labelText) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -100,6 +109,7 @@ public class BasicJComboBoxCellReaderTest {
     });
   }
 
+  @RunsInEDT
   private static void setNotRecognizedRendererComponent(final JComboBox comboBox) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -108,7 +118,8 @@ public class BasicJComboBoxCellReaderTest {
     });
   }
 
-  private static String firstItemValue(final JComboBox comboBox, final BasicJComboBoxCellReader reader) {
+  @RunsInEDT
+  private static String firstItemValue(final BasicJComboBoxCellReader reader, final JComboBox comboBox) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
         return reader.valueAt(comboBox, 0);
@@ -121,8 +132,13 @@ public class BasicJComboBoxCellReaderTest {
 
     final JComboBox comboBox = new JComboBox(array("First"));
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

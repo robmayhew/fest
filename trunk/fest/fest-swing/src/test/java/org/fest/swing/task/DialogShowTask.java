@@ -17,6 +17,7 @@ package org.fest.swing.task;
 import java.awt.Dialog;
 import java.awt.Dimension;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.timing.Condition;
 
 import static org.fest.swing.timing.Pause.pause;
@@ -30,11 +31,13 @@ import static org.fest.swing.timing.Pause.pause;
  */
 public final class DialogShowTask {
 
+  @RunsInCurrentThread
   public static void packAndShow(Dialog dialog, Dimension preferredSize) {
     dialog.setPreferredSize(preferredSize);
     packAndShow(dialog);
   }
 
+  @RunsInCurrentThread
   public static void packAndShow(final Dialog dialog) {
     dialog.pack();
     dialog.setVisible(true);

@@ -24,6 +24,7 @@ import org.testng.annotations.*;
 
 import org.fest.assertions.Assertions;
 import org.fest.assertions.Fail;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
@@ -95,6 +96,7 @@ public class JListItemIndexValidatorTest {
 
     final JList list = new JList(array("One", "Two", "Three"));
 
+    @RunsInEDT
     static MyWindow createNew() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {

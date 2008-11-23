@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 
 import org.testng.annotations.*;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
@@ -64,12 +65,17 @@ public class JListItemValueQueryTest {
 
   @Test(dataProvider = "items", groups = GUI)
   public void shouldReturnItemValueAsText(final int index, String expectedValue) {
-    String actualValue = execute(new GuiQuery<String>() {
+    String actualValue = itemValue(list, index, cellReader);
+    assertThat(actualValue).isEqualTo(expectedValue);
+  }
+
+  @RunsInEDT
+  private static String itemValue(final JList list, final int index, final JListCellReader cellReader) {
+    return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
         return JListItemValueQuery.itemValue(list, index, cellReader);
       }
     });
-    assertThat(actualValue).isEqualTo(expectedValue);
   }
     
   @DataProvider(name = "items") public Object[][] items() {
@@ -85,6 +91,7 @@ public class JListItemValueQueryTest {
 
     final JList list = new JList(array(new Jedi("Yoda"), new Jedi("Luke")));
 
+    @RunsInEDT
     static MyWindow createNew() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {

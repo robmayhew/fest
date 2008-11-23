@@ -25,9 +25,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
@@ -39,7 +41,6 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.ComponentBoundsQuery.boundsOf;
 import static org.fest.swing.driver.ComponentLocationQuery.locationOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -148,6 +149,15 @@ public class JToolBarDriverTest {
     int x = bounds.x + bounds.width + 10;
     int y = bounds.y + bounds.height + 10;
     return new Point(x, y);
+  }
+
+  @RunsInEDT
+  private static Rectangle boundsOf(final Component component) {
+    return execute(new GuiQuery<Rectangle>() {
+      protected Rectangle executeInEDT() {
+        return component.getBounds();
+      }
+    });
   }
 
   @DataProvider(name = "unfloatConstraints") public Object[][] unfloatConstraints() {

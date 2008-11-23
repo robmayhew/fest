@@ -21,10 +21,13 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
@@ -47,6 +50,10 @@ public class JFileChooserSetCurrentDirectoryTaskTest {
   private JFileChooser fileChooser;
   private File directoryToSelect;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     directoryToSelect = temporaryFolder();
@@ -70,6 +77,7 @@ public class JFileChooserSetCurrentDirectoryTaskTest {
     return canonicalPathOf(currentDirectoryOf(fileChooser));
   }
 
+  @RunsInEDT
   private static File currentDirectoryOf(final JFileChooser fileChooser) {
     return execute(new GuiQuery<File>() {
       protected File executeInEDT() {
@@ -89,8 +97,13 @@ public class JFileChooserSetCurrentDirectoryTaskTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     final JFileChooser fileChooser = new JFileChooser();

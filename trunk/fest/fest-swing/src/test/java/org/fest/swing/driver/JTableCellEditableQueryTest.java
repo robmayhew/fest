@@ -65,6 +65,7 @@ public class JTableCellEditableQueryTest {
     assertThat(isCellEditable(table, 0, column)).isEqualTo(editable);
   }
 
+  @RunsInEDT
   private static boolean isCellEditable(final JTable table, final int row, final int column) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {

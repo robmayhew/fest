@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 
 import org.testng.annotations.*;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
@@ -78,6 +79,7 @@ public class JListMatchingItemQueryTest {
     assertThat(findMatchingItem("Leia")).isEqualTo(-1);
   }
   
+  @RunsInEDT
   private int findMatchingItem(final String value) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {
@@ -92,6 +94,7 @@ public class JListMatchingItemQueryTest {
 
     final JList list = new JList(array(new Jedi("Yoda"), new Jedi("Luke")));
 
+    @RunsInEDT
     static MyWindow createNew() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {

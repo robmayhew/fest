@@ -56,6 +56,7 @@ public class JSplitPaneDriver extends JComponentDriver {
    * @throws IllegalStateException if the <code>JSplitPane</code> is disabled.
    * @throws IllegalStateException if the <code>JSplitPane</code> is not showing on the screen.
    */
+  @RunsInEDT
   public void moveDividerTo(JSplitPane splitPane, int location) {
     simulateMovingDivider(splitPane, location);
     setDividerLocation(splitPane, location);

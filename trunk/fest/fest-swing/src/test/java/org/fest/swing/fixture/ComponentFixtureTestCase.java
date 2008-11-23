@@ -16,12 +16,14 @@ package org.fest.swing.fixture;
 
 import java.awt.Component;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 import org.fest.swing.core.ComponentFinder;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Settings;
 import org.fest.swing.driver.ComponentDriver;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -40,6 +42,10 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   private Robot robot;
   private ComponentFinder finder;
   private Settings settings;
+  
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
   
   @BeforeMethod public final void setUp() {
     robot = createMock(Robot.class);

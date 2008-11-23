@@ -67,7 +67,6 @@ import static org.fest.swing.factory.JToolBars.toolBar;
 import static org.fest.swing.factory.JTrees.tree;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
-import static org.fest.swing.query.ComponentNameQuery.nameOf;
 import static org.fest.swing.query.DialogTitleQuery.titleOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -169,7 +168,7 @@ public class ContainerFixtureTest {
     JComboBox expectedComboBox = addJComboBox();
     GenericTypeMatcher<JComboBox> itemCountMatcher = new GenericTypeMatcher<JComboBox>() {
       protected boolean isMatching(JComboBox comboBox) {
-        return nameOf(comboBox).equals("comboBox");
+        return "comboBox".equals(comboBox.getName());
       }
     };
     JComboBoxFixture comboBoxFixture = fixture.comboBox(itemCountMatcher);
@@ -232,7 +231,7 @@ public class ContainerFixtureTest {
     JFileChooser expectedFileChooser = addJFileChooser();
     GenericTypeMatcher<JFileChooser> nameMatcher = new GenericTypeMatcher<JFileChooser>() {
       protected boolean isMatching(JFileChooser fileChooser) {
-        return "fileChooser".equals(nameOf(fileChooser));
+        return "fileChooser".equals(fileChooser.getName());
       }
     };
     JFileChooserFixture fileChooserFixture = fixture.fileChooser(nameMatcher);
@@ -293,7 +292,7 @@ public class ContainerFixtureTest {
     JList expectedList = addJList();
     GenericTypeMatcher<JList> nameMatcher = new GenericTypeMatcher<JList>() {
       protected boolean isMatching(JList list) {
-        return "list".equals(nameOf(list));
+        return "list".equals(list.getName());
       }
     };
     JListFixture listFixture = fixture.list(nameMatcher);
@@ -487,7 +486,7 @@ public class ContainerFixtureTest {
     JScrollPane expectedScrollPane = addJScrollPane();
     GenericTypeMatcher<JScrollPane> nameMatcher = new GenericTypeMatcher<JScrollPane>() {
       protected boolean isMatching(JScrollPane scrollPane) {
-        return "scrollPane".equals(nameOf(scrollPane));
+        return "scrollPane".equals(scrollPane.getName());
       }
     };
     JScrollPaneFixture scrollPaneFixture = fixture.scrollPane(nameMatcher);
@@ -742,7 +741,7 @@ public class ContainerFixtureTest {
     JToolBar expectedToolBar = addJToolBar();
     GenericTypeMatcher<JToolBar> columnMatcher = new GenericTypeMatcher<JToolBar>() {
       protected boolean isMatching(JToolBar toolBar) {
-        return "toolBar".equals(nameOf(toolBar));
+        return "toolBar".equals(toolBar.getName());
       }
     };
     JToolBarFixture toolBarFixture = fixture.toolBar(columnMatcher);
@@ -773,7 +772,7 @@ public class ContainerFixtureTest {
     JTree expectedTree = addJTree();
     GenericTypeMatcher<JTree> columnMatcher = new GenericTypeMatcher<JTree>() {
       protected boolean isMatching(JTree tree) {
-        return "tree".equals(nameOf(tree));
+        return "tree".equals(tree.getName());
       }
     };
     JTreeFixture treeFixture = fixture.tree(columnMatcher);

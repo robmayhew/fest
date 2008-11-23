@@ -30,7 +30,6 @@ import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAnd
 import static org.fest.swing.driver.JScrollBarSetValueTask.setValue;
 import static org.fest.swing.driver.JScrollBarValueQuery.valueOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -192,7 +191,6 @@ public class JScrollBarDriver extends JComponentDriver {
 
   @RunsInEDT
   private void scroll(JScrollBar scrollBar, Pair<Point, Integer> scrollInfo) {
-    if (!isEnabled(scrollBar)) return;
     // For now, do it programmatically, faking the mouse movement and clicking
     robot.moveMouse(scrollBar, scrollInfo.i);
     setValueProperty(scrollBar, scrollInfo.ii);

@@ -85,6 +85,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
     }
   }
 
+  @RunsInEDT
   private static JPopupMenu popupMenuOf(final JMenu menu) {
     return execute(new GuiQuery<JPopupMenu>() {
       protected JPopupMenu executeInEDT() {

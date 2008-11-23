@@ -15,20 +15,25 @@
  */
 package org.fest.swing.query;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.ACTION;
-import static org.fest.swing.testing.TestGroups.GUI;
-
 import java.awt.Dimension;
 import java.awt.Point;
 
-import org.fest.swing.core.Robot;
-import org.fest.swing.testing.MethodInvocations;
-import org.fest.swing.testing.TestWindow;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.testing.TestWindow;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link ComponentLocationOnScreenQuery}</code>.
@@ -41,6 +46,10 @@ public class ComponentLocationOnScreenQueryTest {
 
   private Robot robot;
   private MyWindow window;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
@@ -65,8 +74,13 @@ public class ComponentLocationOnScreenQueryTest {
     private boolean recording;
     private final MethodInvocations methodInvocations = new MethodInvocations();
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

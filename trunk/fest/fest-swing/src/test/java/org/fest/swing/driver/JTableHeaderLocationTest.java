@@ -24,13 +24,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestTable;
@@ -53,6 +52,10 @@ public class JTableHeaderLocationTest {
   private JTableHeaderLocation location;
   private JTableHeader tableHeader;
 
+  @BeforeClass public void setUpClass() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
     location = new JTableHeaderLocation();
@@ -67,7 +70,7 @@ public class JTableHeaderLocationTest {
 
   @Test(groups = GUI, dataProvider = "columnIndices")
   public void shouldReturnPointAtHeaderByIndex(int index) {
-    Point point = location.pointAt(tableHeader, index);
+    Point point = pointAt(location, tableHeader, index);
     assertThat(point).isEqualTo(expectedPoint(index));
   }
 
@@ -77,7 +80,7 @@ public class JTableHeaderLocationTest {
 
   @Test(groups = GUI, dataProvider = "columnNames")
   public void shouldClickColumnWithName(String columnName, int columnIndex) {
-    Point point = location.pointAt(tableHeader, columnName);
+    Point point = pointAt(location, tableHeader, columnName);
     assertThat(point).isEqualTo(expectedPoint(columnIndex));
   }
 
@@ -85,6 +88,7 @@ public class JTableHeaderLocationTest {
     return new Object[][] { { "0", 0 }, { "1", 1 } };
   }
 
+  @RunsInEDT
   private Point expectedPoint(int index) {
     final JTableHeader header = tableHeader;
     Rectangle r = rectOf(header, index);
@@ -92,6 +96,7 @@ public class JTableHeaderLocationTest {
     return expected;
   }
 
+  @RunsInEDT
   private static Rectangle rectOf(final JTableHeader tableHeader, final int index) {
     return execute(new GuiQuery<Rectangle>() {
       protected Rectangle executeInEDT() {
@@ -102,16 +107,35 @@ public class JTableHeaderLocationTest {
 
   @Test(groups = GUI, dataProvider = "indicesOutOfBound", expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfColumnIndexOutOfBounds(int columnIndex) {
-    location.pointAt(tableHeader, columnIndex);
+    pointAt(location, tableHeader, columnIndex);
   }
 
   @DataProvider(name = "indicesOutOfBound") public Object[][] indicesOutOfBound() {
     return new Object[][] { { -1 }, { 2 } };
   }
 
+  @RunsInEDT
+  private static Point pointAt(final JTableHeaderLocation location, final JTableHeader tableHeader, final int index) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() throws Throwable {
+        return location.pointAt(tableHeader, index);
+      }
+    });
+  }
+
   @Test(groups = GUI, expectedExceptions = LocationUnavailableException.class)
   public void shouldThrowErrorIfColumnNameNotMatching() {
-    location.pointAt(tableHeader, "Hello");
+    pointAt(location, tableHeader, "Hello");
+  }
+  
+  @RunsInEDT
+  private static Point pointAt(final JTableHeaderLocation location, final JTableHeader tableHeader, 
+      final String columnName) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() throws Throwable {
+        return location.pointAt(tableHeader, columnName);
+      }
+    });
   }
 
   private static class MyWindow extends TestWindow {
@@ -122,8 +146,13 @@ public class JTableHeaderLocationTest {
     final TestTable table;
     final JTableHeader tableHeader;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

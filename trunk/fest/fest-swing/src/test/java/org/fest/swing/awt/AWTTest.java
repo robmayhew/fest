@@ -21,7 +21,6 @@ import java.awt.Insets;
 import java.awt.Point;
 
 import javax.swing.JDialog;
-import javax.swing.JTextField;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -130,14 +129,5 @@ public class AWTTest {
 
   public void shouldReturnFalseIfComponentIsNotSharedInvisibleFrameAndNull() {
     assertThat(AWT.isSharedInvisibleFrame(null)).isFalse();
-  }
-
-  public void shouldReturnNullAsNameIfComponentIsNull() {
-    assertThat(AWT.quoteNameOf(null)).isNull();
-  }
-
-  public void shouldReturnComponentNameInQuotes() {
-    JTextField textField = textField().withName("firstName").createNew();
-    assertThat(AWT.quoteNameOf(textField)).isEqualTo("'firstName'");
   }
 }

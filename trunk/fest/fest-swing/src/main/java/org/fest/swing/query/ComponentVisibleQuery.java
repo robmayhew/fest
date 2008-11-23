@@ -16,6 +16,7 @@ package org.fest.swing.query;
 
 import java.awt.Component;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -37,6 +38,7 @@ public final class ComponentVisibleQuery {
    * @return <code>true</code> if the given <code>Component</code> is visible, <code>false</code> otherwise.
    * @see Component#isVisible()
    */
+  @RunsInEDT
   public static boolean isVisible(final Component component) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {

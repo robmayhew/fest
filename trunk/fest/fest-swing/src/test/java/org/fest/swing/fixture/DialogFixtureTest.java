@@ -24,6 +24,7 @@ import javax.swing.JDialog;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.DialogDriver;
@@ -52,25 +53,21 @@ public class DialogFixtureTest extends CommonComponentFixtureTestCase<Dialog> {
 
   void onSetUp() {
     driver = createMock(DialogDriver.class);
-    target = createAndShowDialogInEDT();
+    target = createDialog();
     fixture = new DialogFixture(robot(), target);
     fixture.updateDriver(driver);
   }
 
-  private static Dialog createAndShowDialogInEDT() {
+  @RunsInEDT
+  private static Dialog createDialog() {
     return execute(new GuiQuery<Dialog>() {
       protected Dialog executeInEDT() throws Throwable {
-        return createAndShowDialog();
+        JDialog dialog = new JDialog();
+        dialog.setName("dialog");
+        dialog.setTitle(DialogFixtureTest.class.getSimpleName());
+        return dialog;
       }
     });
-  }
-
-  private static Dialog createAndShowDialog() {
-    JDialog dialog = new JDialog();
-    dialog.setName("dialog");
-    dialog.setTitle(DialogFixtureTest.class.getSimpleName());
-    packAndShow(dialog, new Dimension(200, 100));
-    return dialog;
   }
 
   public void shouldCreateFixtureWithGivenComponentName() {

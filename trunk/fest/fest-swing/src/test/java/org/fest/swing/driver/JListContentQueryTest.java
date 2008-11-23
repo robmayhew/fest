@@ -25,6 +25,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
@@ -76,6 +77,7 @@ public class JListContentQueryTest {
 
     final JList list = new JList(array(new Jedi("Yoda"), new Jedi("Luke")));
 
+    @RunsInEDT
     static MyWindow createNew() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {

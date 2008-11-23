@@ -20,12 +20,10 @@ import javax.swing.AbstractButton;
 import org.fest.assertions.Description;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
-import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.query.AbstractButtonTextQuery;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
 
 /**
  * Understands simulation of user input on an <code>{@link AbstractButton}</code>. This class is intended for internal
@@ -76,13 +74,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void select(final AbstractButton button) {
-    boolean isSelected = execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        validateIsEnabledAndShowing(button);
-        return button.isSelected();
-      }
-    });
-    if (isSelected) return;
+    if (isSelected(button)) return;
     click(button);
   }
 
@@ -94,13 +86,7 @@ public class AbstractButtonDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void unselect(final AbstractButton button) {
-    boolean isNotSelected = execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        validateIsEnabledAndShowing(button);
-        return !button.isSelected();
-      }
-    });
-    if (isNotSelected) return;
+    if (!isSelected(button)) return;
     click(button);
   }
 
@@ -127,15 +113,6 @@ public class AbstractButtonDriver extends JComponentDriver {
   @RunsInEDT
   private void assertThatButtonIsSelected(AbstractButton button, boolean selected) {
     assertThat(isSelected(button)).as(selectedProperty(button)).isEqualTo(selected);
-  }
-
-  @RunsInEDT
-  private static boolean isSelected(final AbstractButton button) {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() {
-        return button.isSelected();
-      }
-    });
   }
 
   @RunsInEDT

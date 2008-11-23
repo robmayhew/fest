@@ -111,6 +111,7 @@ public class ParentFinderTest {
     }
   }
 
+  @RunsInEDT
   private static Container findParent(final ParentFinder finder, final Component c) {
     return execute(new GuiQuery<Container>() {
       protected Container executeInEDT() {
@@ -119,6 +120,7 @@ public class ParentFinderTest {
     });
   }
 
+  @RunsInEDT
   private static JDesktopPane desktopPaneOf(final JInternalFrame internalFrame) {
     return execute(new GuiQuery<JDesktopPane>() {
       protected JDesktopPane executeInEDT() {

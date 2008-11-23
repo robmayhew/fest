@@ -24,6 +24,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
@@ -51,7 +52,12 @@ public class WindowMetricsTest {
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
     window = createAndShowNewWindow(getClass());
-    metrics = execute(new GuiQuery<WindowMetrics>() {
+    metrics = createNewWindowMetrics(window);
+  }
+
+  @RunsInEDT
+  private static WindowMetrics createNewWindowMetrics(final Window window) {
+    return execute(new GuiQuery<WindowMetrics>() {
       protected WindowMetrics executeInEDT() {
         return new WindowMetrics(window);
       }
@@ -71,14 +77,20 @@ public class WindowMetricsTest {
   }
 
   @Test public void shouldCalculateCenter() {
-    Point center = execute(new GuiQuery<Point>() {
+    Point center = centerOf(metrics);
+    assertThat(center).isEqualTo(expectedCenterOf(window));
+  }
+
+  @RunsInEDT
+  private static Point centerOf(final WindowMetrics metrics) {
+    return execute(new GuiQuery<Point>() {
       protected Point executeInEDT() {
         return metrics.center();
       }
     });
-    assertThat(center).isEqualTo(expectedCenterOf(window));
   }
 
+  @RunsInEDT
   private static Point expectedCenterOf(final Window w) {
     return execute(new GuiQuery<Point>() {
       protected Point executeInEDT() {
