@@ -23,8 +23,11 @@ import org.fest.swing.annotation.RunsInCurrentThread;
 import static org.fest.swing.driver.JListItemIndexValidator.validateIndex;
 
 /**
- * Understands an action that returns the bounding rectangle for the cell specified by the given index. This action is
- * <b>not</b> executed in the event dispatch thread.
+ * Understands an action that returns the bounding rectangle for the cell specified by the given index.
+ * <p>
+ * <b>Note:</b> Methods in this class are <b>not</b> executed in the event dispatch thread (EDT.) Clients are
+ * responsible for invoking them in the EDT.
+ * </p>
  * @see JList#getCellBounds(int, int)
  * 
  * @author Alex Ruiz

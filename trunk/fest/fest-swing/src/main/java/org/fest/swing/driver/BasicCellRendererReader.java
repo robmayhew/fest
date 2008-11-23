@@ -30,9 +30,11 @@ public class BasicCellRendererReader implements CellRendererReader {
   /**
    * Reads the value in the given cell renderer component, or returns <code>null</code> if the renderer belongs to an
    * unknown component type. Internally, this method will call <code>getText()</code> if the given renderer is an
-   * instance of <code>{@link JLabel}</code></li>. <b>Note:</b> this method is <b>not</b> called in the event dispatch
-   * thread. This is a helper method, callers of this method are responsible for calling it in the event dispatch
-   * thread.
+   * instance of <code>{@link JLabel}</code></li>.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the given cell renderer component.
    * @return the value of the given <code>Component</code>, or <code>null</code> if the renderer belongs to an unknown
    * component type.
@@ -42,5 +44,4 @@ public class BasicCellRendererReader implements CellRendererReader {
     if (c instanceof JLabel) return ((JLabel)c).getText();
     return null;
   }
-
 }

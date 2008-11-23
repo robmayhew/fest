@@ -31,6 +31,7 @@ import javax.swing.KeyStroke;
 import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.hierarchy.ComponentHierarchy;
@@ -416,7 +417,14 @@ public class RobotFixture implements Robot {
     eventGenerator().pressMouse(c, where, button.mask);
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Makes the mouse pointer show small quick jumpy movements on the given <code>{@link Component}</code>.
+   * @param c the given <code>Component</code>.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
+   */
   @RunsInCurrentThread
   public void jitter(Component c) {
     jitter(c, centerOf(c));
@@ -659,7 +667,16 @@ public class RobotFixture implements Robot {
     });
   }
 
-  /** {@inheritDoc} */
+  /**
+   * Indicates whether the given <code>{@link Component}</code> is ready for input.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
+   * @param c the given <code>Component</code>.
+   * @return <code>true</code> if the given <code>Component</code> is ready for input, <code>false</code> otherwise.
+   * @throws ActionFailedException if the given <code>Component</code> does not have a <code>Window</code> ancestor.
+   */
   @RunsInCurrentThread
   public boolean isReadyForInput(Component c) {
     if (isAWTMode()) return c.isShowing();

@@ -25,6 +25,10 @@ import static org.fest.swing.driver.JTableCellValidator.validateCellIndices;
 /**
  * Understands an action, executed in the event dispatch thread, that indicates whether a cell in a
  * <code>{@link JTable}</code> is editable or not.
+ * <p>
+ * <b>Note:</b> Methods in this class are <b>not</b> executed in the event dispatch thread (EDT.) Clients are
+ * responsible for invoking them in the EDT.
+ * </p>
  * @see JTable#isCellEditable(int, int)
  *
  * @author Alex Ruiz

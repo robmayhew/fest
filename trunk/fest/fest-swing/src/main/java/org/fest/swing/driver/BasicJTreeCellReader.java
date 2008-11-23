@@ -58,6 +58,10 @@ public class BasicJTreeCellReader implements JTreeCellReader {
 
   /**
    * Returns the internal value of a cell in a <code>{@link JTree}</code> as expected in a test.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param tree the given <code>JTree</code>.
    * @param modelValue the value of a cell, retrieved from the model.
    * @return the internal value of a cell in a <code>JTree</code> as expected in a test.

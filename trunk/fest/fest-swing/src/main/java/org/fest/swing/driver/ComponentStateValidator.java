@@ -30,10 +30,15 @@ public final class ComponentStateValidator {
   
   /**
    * Asserts that the <code>{@link Component}</code> is enabled and showing.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the target component.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
    * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    */
+  @RunsInCurrentThread
   public static void validateIsEnabledAndShowing(Component c) {
     validateIsEnabled(c);
     validateIsShowing(c);
@@ -41,6 +46,10 @@ public final class ComponentStateValidator {
   
   /**
    * Asserts that the <code>{@link Component}</code> is enabled.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the target component.
    * @throws IllegalStateException if the <code>Component</code> is disabled.
    */
@@ -51,6 +60,10 @@ public final class ComponentStateValidator {
 
   /**
    * Asserts that the <code>{@link Component}</code> is showing on the screen.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the target component.
    * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    */
@@ -62,6 +75,10 @@ public final class ComponentStateValidator {
   /**
    * Throws a <code>{@link IllegalStateException}</code> when a <code>{@link Component}</code> is not showing on the
    * screen.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the target component.
    * @return the thrown exception.
    */

@@ -37,6 +37,10 @@ public class JTableHeaderLocation {
 
   /**
    * Returns the coordinates of the column which name matches the given one.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param tableHeader the target <code>JTableHeader</code>.
    * @param columnName the column name to match
    * @return the coordinates of the column under the given index.
@@ -57,6 +61,10 @@ public class JTableHeaderLocation {
 
   /**
    * Returns the coordinates of the column under the given index.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param tableHeader the target <code>JTableHeader</code>.
    * @param index the given index.
    * @return the coordinates of the column under the given index.
@@ -84,6 +92,10 @@ public class JTableHeaderLocation {
   
   /**
    * Returns the index of the column which name matches the given value or -1 if a matching column was not found.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param tableHeader the target <code>JTableHeader</code>.
    * @param columnName the column name to match.
    * @return the index of the column which name matches the given value or -1 if a matching column was not found.

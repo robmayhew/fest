@@ -17,9 +17,9 @@ package org.fest.swing.core.matcher;
 
 import javax.swing.JLabel;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.core.GenericTypeMatcher;
 
-import static org.fest.swing.query.JLabelTextQuery.textOf;
 import static org.fest.util.Objects.areEqual;
 
 /**
@@ -62,11 +62,16 @@ public class JLabelByTextMatcher extends GenericTypeMatcher<JLabel> {
 
   /**
    * Indicates whether the text of the given <code>{@link JLabel}</code> is equal to the text in this matcher.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param label the <code>JLabel</code> to match.
    * @return <code>true</code> if the text in the <code>JLabel</code> is equal to the text in this matcher, 
    * <code>false</code> otherwise.
    */
+  @RunsInCurrentThread
   protected boolean isMatching(JLabel label) {
-    return areEqual(textOf(label), text);
+    return areEqual(label.getText(), text);
   }
 }

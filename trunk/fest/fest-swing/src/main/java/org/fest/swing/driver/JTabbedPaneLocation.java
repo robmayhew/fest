@@ -37,6 +37,10 @@ public class JTabbedPaneLocation {
 
   /**
    * Returns the index of the first tab that matches the given <code>String</code>.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param tabbedPane the target <code>JTabbedPane</code>.
    * @param title the title to match.
    * @return the index of the first tab that matches the given <code>String</code>.
@@ -51,6 +55,10 @@ public class JTabbedPaneLocation {
 
   /**
    * Returns the coordinates of the tab under the given index.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param tabbedPane the target <code>JTabbedPane</code>.
    * @param index the given index.
    * @return the coordinates of the tab under the given index.

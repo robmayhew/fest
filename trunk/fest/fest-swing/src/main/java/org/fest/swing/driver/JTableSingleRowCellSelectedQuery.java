@@ -21,6 +21,10 @@ import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
  * Understands an action that indicates whether a cell in a <code>{@link JTable}</code> is selected or not.
+ * <p>
+ * <b>Note:</b> Methods in this class are <b>not</b> executed in the event dispatch thread (EDT.) Clients are
+ * responsible for invoking them in the EDT.
+ * </p>
  * 
  * @author Alex Ruiz
  */

@@ -19,10 +19,13 @@ import javax.swing.JInternalFrame;
 import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
- * Understands an action that indicates if a <code>{@link JInternalFrame}</code> is iconified or not. <b>Note:</b> this
- * action is <b>not</b> executed in the event dispatch thread.
+ * Understands an action that indicates if a <code>{@link JInternalFrame}</code> is iconified or not.
+ * <p>
+ * <b>Note:</b> Methods in this class are <b>not</b> executed in the event dispatch thread (EDT.) Clients are
+ * responsible for invoking them in the EDT.
+ * </p>
  * @see JInternalFrame#isIcon()
- *
+ * 
  * @author Yvonne Wang
  * @author Alex Ruiz
  */

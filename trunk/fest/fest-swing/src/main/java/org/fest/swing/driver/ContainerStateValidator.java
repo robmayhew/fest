@@ -29,6 +29,10 @@ import static org.fest.util.Strings.concat;
 
 /**
  * Understands validation of the state of a <code>{@link Container}</code>.
+ * <p>
+ * <b>Note:</b> Methods in this class are <b>not</b> executed in the event dispatch thread (EDT.) Clients are 
+ * responsible for invoking them in the EDT.
+ * </p>
  *
  * @author Alex Ruiz
  */

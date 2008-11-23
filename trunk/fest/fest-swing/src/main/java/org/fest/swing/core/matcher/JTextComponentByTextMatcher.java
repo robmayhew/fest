@@ -17,6 +17,7 @@ package org.fest.swing.core.matcher;
 
 import javax.swing.text.JTextComponent;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.core.GenericTypeMatcher;
 
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
@@ -64,10 +65,15 @@ public class JTextComponentByTextMatcher extends GenericTypeMatcher<JTextCompone
 
   /**
    * Indicates whether the text of the given <code>{@link JTextComponent}</code> is equal to the text in this matcher.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param textComponent the <code>JTextComponent</code> to match.
    * @return <code>true</code> if the text in the <code>JTextComponent</code> is equal to the text in this matcher,
    * <code>false</code> otherwise.
    */
+  @RunsInCurrentThread
   protected boolean isMatching(JTextComponent textComponent) {
     return areEqual(textOf(textComponent), text);
   }

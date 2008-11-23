@@ -51,8 +51,10 @@ public class JComponentDriver extends ContainerDriver {
 
   /**
    * Invoke <code>{@link JComponent#scrollRectToVisible(Rectangle)}</code> on the given <code>{@link JComponent}</code>.
-   * <b>Note:</b> this method is <b>not</b> executed in the event dispatch thread. Callers are responsible for calling
-   * this method in the event dispatch thread.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the given <code>JComponent</code>.
    * @param r the visible <code>Rectangle</code>.
    */
@@ -68,8 +70,11 @@ public class JComponentDriver extends ContainerDriver {
 
   /**
    * Indicates whether the given <code>{@link JComponent}</code>'s visible <code>{@link Rectangle}</code> contains the
-   * given one. <b>Note:</b> this method is <b>not</b> executed in the event dispatch thread. Callers are responsible
-   * for calling this method in the event dispatch thread.
+   * given one.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the given <code>JComponent</code>.
    * @param r the <code>Rectangle</code> to verify.
    * @return <code>true</code> if the given <code>Rectangle</code> is contained in the given <code>JComponent</code>'s
@@ -83,10 +88,14 @@ public class JComponentDriver extends ContainerDriver {
   /**
    * Indicates whether the given <code>{@link JComponent}</code>'s visible <code>{@link Rectangle}</code> contains
    * the given <code>{@link Point}</code>.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the given <code>JComponent</code>.
    * @param p the <code>Point</code> to verify.
    * @return <code>true</code> if the given <code>Point</code> is contained in the given <code>JComponent</code>'s
-   *         visible <code>Rectangle</code>.
+   * visible <code>Rectangle</code>.
    */
   @RunsInCurrentThread
   protected final boolean isVisible(JComponent c, Point p) {

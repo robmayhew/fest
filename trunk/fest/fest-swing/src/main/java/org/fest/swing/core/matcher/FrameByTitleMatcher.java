@@ -17,9 +17,9 @@ package org.fest.swing.core.matcher;
 
 import java.awt.Frame;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.core.GenericTypeMatcher;
 
-import static org.fest.swing.query.FrameTitleQuery.titleOf;
 import static org.fest.util.Objects.areEqual;
 
 /**
@@ -62,11 +62,16 @@ public class FrameByTitleMatcher extends GenericTypeMatcher<Frame> {
 
   /**
    * Indicates whether the title of the given <code>{@link Frame}</code> is equal to the one specified in this matcher.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param frame the <code>Frame</code> to verify.
    * @return <code>true</code> if the title of the <code>Frame</code> is equal to the one specified in this matcher,
    * otherwise <code>false</code>.
    */
+  @RunsInCurrentThread
   protected boolean isMatching(Frame frame) {
-    return areEqual(titleOf(frame), title);
+    return areEqual(frame.getTitle(), title);
   }
 }

@@ -43,6 +43,10 @@ public final class JSliderLocation {
   
   /**
    * Returns the coordinates of the given value in the given <code>{@link JSlider}</code>.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param slider the given <code>JSlider</code>.
    * @param value the given value.
    * @return the coordinates of the given value in the given <code>JSlider</code>.

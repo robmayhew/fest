@@ -28,6 +28,10 @@ import static org.fest.util.Strings.*;
 
 /**
  * Understands utility methods related to <code>{@link KeyStroke}</code>.
+ * <p>
+ * <b>Note:</b> Methods in this class are <b>not</b> executed in the event dispatch thread (EDT.) Clients are
+ * responsible for invoking them in the EDT.
+ * </p>
  *
  * @author Alex Ruiz
  */

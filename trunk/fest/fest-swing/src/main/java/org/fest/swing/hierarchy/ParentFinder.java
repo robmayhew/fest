@@ -35,6 +35,10 @@ import static org.fest.swing.hierarchy.JInternalFrameDesktopPaneQuery.desktopPan
  * <code>{@link ComponentParentQuery}</code> and <code>{@link JPopupMenuInvokerQuery}</code>, this class is not
  * limited to simply call <code>{@link Component#getParent()}</code> and <code>{@link JPopupMenu#getInvoker()}</code>.
  * This class returns the most likely parent based on the type of a given <code>Component</code>.
+ * <p>
+ * <b>Note:</b> Methods in this class are <b>not</b> executed in the event dispatch thread (EDT.) Clients are
+ * responsible for invoking them in the EDT.
+ * </p>
  *
  * @author Alex Ruiz
  */

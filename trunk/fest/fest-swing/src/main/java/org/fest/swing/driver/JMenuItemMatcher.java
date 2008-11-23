@@ -47,6 +47,16 @@ public class JMenuItemMatcher implements ComponentMatcher {
     this.label = join(path).with(SEPARATOR);
   }
 
+  /**
+   * Indicates whether the given component is a <code>{@link JMenuItem}</code> whose text matches the path specified
+   * in this matcher.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
+   * @param c the component to verify.
+   * @returns <code>true</code> if the component matches, <code>false</code> otherwise.
+   */
   @RunsInCurrentThread
   public boolean matches(Component c) {
     if (!(c instanceof JMenuItem)) return false;

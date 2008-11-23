@@ -17,9 +17,9 @@ package org.fest.swing.core.matcher;
 
 import java.awt.Dialog;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.core.GenericTypeMatcher;
 
-import static org.fest.swing.query.DialogTitleQuery.titleOf;
 import static org.fest.util.Objects.areEqual;
 
 /**
@@ -62,11 +62,16 @@ public class DialogByTitleMatcher extends GenericTypeMatcher<Dialog> {
 
   /** 
    * Indicates whether the title of the given <code>{@link Dialog}</code> is equal to the one specified in this matcher.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param dialog the <code>Dialog</code> to verify.
    * @return <code>true</code> if the title of the <code>Dialog</code> is equal to the one specified in this matcher,
    * otherwise <code>false</code>. 
    */
+  @RunsInCurrentThread
   protected boolean isMatching(Dialog dialog) {
-    return areEqual(titleOf(dialog), title);
+    return areEqual(dialog.getTitle(), title);
   }
 }

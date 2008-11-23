@@ -53,6 +53,10 @@ public abstract class AbstractComponentMatcher implements ComponentMatcher {
   /**
    * Indicates if the value of the "isShowing" property of the given component matches the value specified in this
    * matcher.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the component to verify.
    * @return <code>true</code> if the value of the "isShowing" property of the given component matches the value
    * specified in this matcher, <code>false</code> otherwise.

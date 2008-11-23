@@ -45,6 +45,10 @@ public final class JScrollBarLocation {
   
   /**
    * Returns the location where to move the mouse pointer to scroll to the given position.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param scrollBar the target <code>JScrollBar</code>.
    * @param position the position to scroll to.
    * @return the location where to move the mouse pointer to scroll to the given position.
@@ -62,6 +66,10 @@ public final class JScrollBarLocation {
 
   /**
    * Returns the location where to move the mouse pointer to scroll one block up (or right.)
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param scrollBar the target <code>JScrollBar</code>.
    * @return the location where to move the mouse pointer to scroll one block up (or right.)
    */
@@ -74,6 +82,10 @@ public final class JScrollBarLocation {
 
   /**
    * Returns the location where to move the mouse pointer to scroll one block down (or left.)
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param scrollBar the target <code>JScrollBar</code>.
    * @return the location where to move the mouse pointer to scroll one block down (or left.)
    */
@@ -91,6 +103,10 @@ public final class JScrollBarLocation {
 
   /**
    * Returns the location where to move the mouse pointer to scroll one unit up (or right.)
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param scrollBar the target <code>JScrollBar</code>.
    * @return the location where to move the mouse pointer to scroll one unit up (or right.)
    */
@@ -101,6 +117,10 @@ public final class JScrollBarLocation {
 
   /**
    * Returns the location where to move the mouse pointer to scroll one unit down (or left.)
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param scrollBar the target <code>JScrollBar</code>.
    * @return the location where to move the mouse pointer to scroll one unit down (or left.)
    */

@@ -29,6 +29,10 @@ import org.fest.swing.util.Pair;
 /**
  * Understands an action that returns the point and parent to use as a reference when scrolling a
  * <code>{@link JTextField}</code> up or down.
+ * <p>
+ * <b>Note:</b> Methods in this class are <b>not</b> executed in the event dispatch thread (EDT.) Clients are
+ * responsible for invoking them in the EDT.
+ * </p>
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang

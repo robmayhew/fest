@@ -65,7 +65,7 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
   }
 
   @RunsInCurrentThread
-  protected static void scrollToCell(final JTable table, final int row, final int column, final JTableLocation location) {
+  static void scrollToCell(final JTable table, final int row, final int column, final JTableLocation location) {
     table.scrollRectToVisible(location.cellBounds(table, row, column));
   }
 
@@ -101,7 +101,7 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
   }
 
   @RunsInCurrentThread
-  protected static <T extends Component> T editor(JTable table, int row, int column, Class<T> supportedType) {
+  static <T extends Component> T editor(JTable table, int row, int column, Class<T> supportedType) {
     validateIndices(table, row, column);
     validateIsEnabledAndShowing(table);
     validateCellIsEditable(table, row, column);

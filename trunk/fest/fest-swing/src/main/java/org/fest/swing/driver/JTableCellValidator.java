@@ -33,6 +33,10 @@ public final class JTableCellValidator {
 
   /**
    * Validates that the table cell in the given coordinates is editable.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param table the target <code>JTable</code>.
    * @param row the row index of the cell to validate.
    * @param column the column index of the cell to validate.
@@ -47,6 +51,10 @@ public final class JTableCellValidator {
   
   /**
    * Validates that the given table cell is non <code>null</code> and its indices are not out of bounds.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param table the target <code>JTable</code>.
    * @param cell the cell to validate.
    * @throws NullPointerException if the cell is <code>null</code>.
@@ -69,6 +77,10 @@ public final class JTableCellValidator {
 
   /**
    * Validates the given indices regarding the given table.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param table the <code>JTable</code> to use to validate the given indices.
    * @param row the row index to validate.
    * @param column the column index to validate.
@@ -84,6 +96,10 @@ public final class JTableCellValidator {
 
   /**
    * Validates that the given row index exists in the given table.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param table the table the given table.
    * @param row the row to validate.
    * @throws IndexOutOfBoundsException if the row index is out of bounds.
@@ -95,6 +111,10 @@ public final class JTableCellValidator {
 
   /**
    * Validates that the given column index exists in the given table.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param table the table the given table.
    * @param column the column to validate.
    * @throws IndexOutOfBoundsException if the column index is out of bounds.

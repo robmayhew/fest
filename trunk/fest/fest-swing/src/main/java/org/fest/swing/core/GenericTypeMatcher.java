@@ -47,6 +47,10 @@ public abstract class GenericTypeMatcher<T extends Component> extends AbstractCo
    * <li>Is an instance of the generic type specified in this <code>{@link ComponentMatcher}</code></li> 
    * <li>Matches some search criteria</li>
    * </ol>
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the <code>Component</code> to verify. 
    * @return <code>true</code> if the given <code>Component</code> is an instance of the generic type of this matcher 
    * and matches some search criteria. Otherwise, <code>false</code>. 
@@ -66,8 +70,13 @@ public abstract class GenericTypeMatcher<T extends Component> extends AbstractCo
 
   /**
    * Verifies that the given component matches some search criteria.
+   * <p>
+   * <b>Note:</b> Implementations of this method should <b>not</b> use the event dispatch thread (EDT.) Clients are
+   * responsible for invoking this method in the EDT.
+   * </p>
    * @param component the <code>Component</code> to verify.
-   * @return <code>true</code> if the given component matches the defined search criteria; otherwise, <code>false</code>.
+   * @return <code>true</code> if the given component matches the defined search criteria; otherwise, 
+   * <code>false</code>.
    */
   @RunsInCurrentThread
   protected abstract boolean isMatching(T component);

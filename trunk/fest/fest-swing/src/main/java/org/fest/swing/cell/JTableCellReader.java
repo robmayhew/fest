@@ -23,6 +23,10 @@ import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
  * Understands reading the internal value of a cell in a <code>{@link JTable}</code> as expected in a test.
+ * <p>
+ * <b>Note:</b> methods in this interface are <b>not</b> executed in the event dispatch thread (EDT.) Clients are 
+ * responsible for invoking them in the EDT.
+ * </p>
  *
  * @author Alex Ruiz
  */
@@ -30,9 +34,11 @@ import org.fest.swing.annotation.RunsInCurrentThread;
 public interface JTableCellReader {
 
   /**
-   * Returns the internal value of a cell in a <code>{@link JTable}</code> as expected in a test. Implementations of
-   * this method should <b>not</b> use the event dispatch thread. Callers are responsible for calling this method in the
-   * event dispatch thread.
+   * Returns the internal value of a cell in a <code>{@link JTable}</code> as expected in a test.
+   * <p>
+   * <b>Note:</b> Implementations of this method should <b>not</b> use the event dispatch thread (EDT.) Clients are
+   * responsible for invoking this method in the EDT.
+   * </p>
    * @param table the given <code>JTable</code>.
    * @param row the row index of the cell.
    * @param column the column index of the cell.
@@ -41,8 +47,11 @@ public interface JTableCellReader {
   String valueAt(JTable table, int row, int column);
 
   /**
-   * Returns the font of the cell renderer for the given table cell. Implementations of this method should <b>not</b>
-   * use the event dispatch thread. Callers are responsible for calling this method in the event dispatch thread.
+   * Returns the font of the cell renderer for the given table cell.
+   * <p>
+   * <b>Note:</b> Implementations of this method should <b>not</b> use the event dispatch thread (EDT.) Clients are
+   * responsible for invoking this method in the EDT.
+   * </p>
    * @param table the given <code>JTable</code>.
    * @param row the row index of the cell.
    * @param column the column index of the cell.
@@ -51,9 +60,11 @@ public interface JTableCellReader {
   Font fontAt(JTable table, int row, int column);
 
   /**
-   * Returns the background color of the cell renderer for the given table cell. Implementations of this method should
-   * <b>not</b> use the event dispatch thread. Callers are responsible for calling this method in the event dispatch
-   * thread.
+   * Returns the background color of the cell renderer for the given table cell.
+   * <p>
+   * <b>Note:</b> Implementations of this method should <b>not</b> use the event dispatch thread (EDT.) Clients are
+   * responsible for invoking this method in the EDT.
+   * </p>
    * @param table the given <code>JTable</code>.
    * @param row the row index of the cell.
    * @param column the column index of the cell.
@@ -62,9 +73,11 @@ public interface JTableCellReader {
   Color backgroundAt(JTable table, int row, int column);
 
   /**
-   * Returns the foreground color of the cell renderer for the given table cell. Implementations of this method should
-   * <b>not</b> use the event dispatch thread. Callers are responsible for calling this method in the event dispatch
-   * thread.
+   * Returns the foreground color of the cell renderer for the given table cell.
+   * <p>
+   * <b>Note:</b> Implementations of this method should <b>not</b> use the event dispatch thread (EDT.) Clients are
+   * responsible for invoking this method in the EDT.
+   * </p>
    * @param table the given <code>JTable</code>.
    * @param row the row index of the cell.
    * @param column the column index of the cell.

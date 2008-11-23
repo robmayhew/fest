@@ -29,6 +29,10 @@ import static org.fest.util.Collections.list;
 
 /**
  * Understands how to find children components in a <code>{@link JMenu}</code>.
+ * <p>
+ * <b>Note:</b> Methods in this class are <b>not</b> executed in the event dispatch thread (EDT.) Clients are
+ * responsible for invoking them in the EDT.
+ * </p>
  *
  * @author Yvonne Wang
  */

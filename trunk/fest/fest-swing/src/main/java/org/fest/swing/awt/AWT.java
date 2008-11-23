@@ -62,7 +62,11 @@ public class AWT {
   }
 
   /**
-   * Returns a point at the center of the given <code>{@link Component}</code>.
+   * Returns a point at the center of the given <code>{@link Component}</code>.   
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the given <code>Component</code>.
    * @return a point at the center of the given <code>Component</code>.
    */
@@ -74,6 +78,10 @@ public class AWT {
 
   /**
    * Returns a point at the center of the visible rectangle of the given <code>{@link JComponent}</code>.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the given <code>JComponent</code>.
    * @return a point at the center of the visible rectangle of the given <code>JComponent</code>.
    */
@@ -139,11 +147,14 @@ public class AWT {
 
   /**
    * Returns the invoker, if any, of the given <code>{@link Component}</code>; or <code>null</code>, if the
-   * <code>Component</code> is not on a pop-up of any sort. <b>Note:</b> this method is <b>not</b> executed in the event
-   * dispatch thread. Callers are responsible for calling this method in the event dispatch thread.
+   * <code>Component</code> is not on a pop-up of any sort.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the given <code>Component</code>.
    * @return the invoker, if any, of the given <code>Component</code>; or <code>null</code>, if the
-   * <code>Component</code> is not on a pop-up of any sort.
+   *         <code>Component</code> is not on a pop-up of any sort.
    */
   @RunsInCurrentThread
   public static Component invokerOf(final Component c) {
@@ -154,11 +165,15 @@ public class AWT {
 
   /**
    * Safe version of <code>{@link Component#getLocationOnScreen}</code>, which avoids lockup if an AWT pop-up menu is
-   * showing. The AWT pop-up holds the AWT tree lock when showing, which lock is required by
-   * <code>{@link Component#getLocationOnScreen}.</code>
+   * showing. The AWT pop-up holds the AWT tree lock when showing, which lock is required by 
+   * <code>getLocationOnScreen</code>.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the given <code>Component</code>.
    * @return the a point specifying the <code>Component</code>'s top-left corner in the screen's coordinate space, or
-   *         <code>null</code>, if the <code>Component</code> is not showing on the screen.
+   * <code>null</code>, if the <code>Component</code> is not showing on the screen.
    */
   @RunsInCurrentThread
   public static Point locationOnScreenOf(Component c) {

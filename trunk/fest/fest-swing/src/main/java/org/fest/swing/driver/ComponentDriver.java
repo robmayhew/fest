@@ -392,6 +392,10 @@ public class ComponentDriver {
 
   /**
    * Performs the <code>{@link AccessibleAction}</code> in the given <code>{@link Component}</code>'s event queue.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the given <code>Component</code>.
    * @throws ActionFailedException if <code>action</code> is <code>null</code> or empty.
    */
@@ -404,6 +408,10 @@ public class ComponentDriver {
   /**
    * Wait the given number of milliseconds for the <code>{@link Component}</code> to be showing and ready. Returns
    * <code>false</code> if the operation times out.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the given <code>Component</code>.
    * @param timeout the time in milliseconds to wait for the <code>Component</code> to be showing and ready.
    * @return <code>true</code> if the <code>Component</code> is showing and ready, <code>false</code> otherwise.

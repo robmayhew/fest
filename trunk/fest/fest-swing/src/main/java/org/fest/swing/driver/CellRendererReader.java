@@ -20,6 +20,10 @@ import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
  * Understands reading the value of a <code>{@link Component}</code> that used as a cell renderer.
+ * <p>
+ * <b>Note:</b> methods in this interface are <b>not</b> executed in the event dispatch thread (EDT.) Clients are 
+ * responsible for invoking them in the EDT.
+ * </p>
  *
  * @author Alex Ruiz
  */
@@ -28,9 +32,11 @@ public interface CellRendererReader {
 
   /**
    * Reads the value in the given cell renderer component, or returns <code>null</code> if the component is not
-   * recognized by this reader. <b>Note:</b> implementations of this method should <b>not</b> be executed in the event
-   * dispatch thread. This is a helper method, callers of this method are responsible for calling it in the event
-   * dispatch thread.
+   * recognized by this reader.
+   * <p>
+   * <b>Note:</b> Implementations of this method should <b>not</b> use the event dispatch thread (EDT.) Clients are
+   * responsible for invoking this method in the EDT.
+   * </p>
    * @param c the given cell renderer component.
    * @return the value of the given <code>Component</code>, or <code>null</code> if the renderer belongs to an unknown
    * component type.

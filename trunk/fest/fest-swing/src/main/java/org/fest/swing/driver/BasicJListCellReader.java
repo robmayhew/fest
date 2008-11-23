@@ -56,9 +56,11 @@ public class BasicJListCellReader implements JListCellReader {
   }
 
   /**
-   * Returns the internal value of a cell in a <code>{@link JList}</code> as expected in a test. <b>Note:</b> this
-   * method is <b>not</b> executed in the event dispatch thread. Callers are responsible for calling this method in the
-   * event dispatch thread.
+   * Returns the internal value of a cell in a <code>{@link JList}</code> as expected in a test.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param list the given <code>JList</code>.
    * @param index the index of the cell.
    * @return the internal value of a cell in a <code>JList</code> as expected in a test.

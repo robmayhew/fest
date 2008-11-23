@@ -25,6 +25,10 @@ import static org.fest.swing.util.Strings.match;
 /**
  * Understands an action that returns the index of a tab (in a <code>{@link JTabbedPane}</code>) whose title matches the
  * given text. This action returns -1 if a matching tab could not be found.
+ * <p>
+ * <b>Note:</b> Methods in this class are <b>not</b> executed in the event dispatch thread (EDT.) Clients are
+ * responsible for invoking them in the EDT.
+ * </p>
  * 
  * @author Alex Ruiz
  * @author Yvonne Wang

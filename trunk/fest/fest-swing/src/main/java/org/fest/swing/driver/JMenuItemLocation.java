@@ -40,6 +40,10 @@ public final class JMenuItemLocation {
   
   /**
    * Creates a new </code>{@link JMenuItemLocation}</code>.
+   * <p>
+   * <b>Note:</b> This constructor is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible 
+   * for invoking this constructor in the EDT.
+   * </p>
    * @param menuItem the target <code>JMenuItem</code>.
    */
   @RunsInCurrentThread

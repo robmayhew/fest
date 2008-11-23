@@ -20,8 +20,11 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.annotation.RunsInCurrentThread;
 
 /**
- * Understands a task that selects text in a given <code>{@link JTextComponent}</code>. This task is <b>not</b> executed
- * in the event dispatch thread.
+ * Understands a task that selects text in a given <code>{@link JTextComponent}</code>.
+ * <p>
+ * <b>Note:</b> Methods in this class are <b>not</b> executed in the event dispatch thread (EDT.) Clients are
+ * responsible for invoking them in the EDT.
+ * </p>
  * 
  * @author Alex Ruiz
  */

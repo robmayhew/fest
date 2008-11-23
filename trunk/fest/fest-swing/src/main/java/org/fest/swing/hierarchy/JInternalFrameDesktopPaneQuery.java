@@ -9,6 +9,10 @@ import org.fest.swing.annotation.RunsInCurrentThread;
 /**
  * Understands an action, executed in the event dispatch thread, that returns the desktop the given
  * <code>{@link JInternalFrame}</code> belongs to when iconified.
+ * <p>
+ * <b>Note:</b> Methods in this class are <b>not</b> executed in the event dispatch thread (EDT.) Clients are
+ * responsible for invoking them in the EDT.
+ * </p>
  * @see JInternalFrame#getDesktopIcon()
  * @see JDesktopIcon#getDesktopPane()
  *
