@@ -15,14 +15,12 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
@@ -31,7 +29,6 @@ import org.fest.swing.util.Pair;
 
 import static java.lang.Boolean.parseBoolean;
 
-import static org.fest.swing.driver.JTableCellEditorQuery.cellEditorIn;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
@@ -67,17 +64,10 @@ public class JTableCheckBoxEditorCellWriter extends AbstractJTableCellWriter  {
       final JTableLocation location) {
     return execute(new GuiQuery<Pair<Boolean, Point>>() {
       protected Pair<Boolean, Point> executeInEDT() {
-        JCheckBox editor = editor(table, row, column);
+        JCheckBox editor = editor(table, row, column, JCheckBox.class);
         scrollToCell(table, row, column, location);
         return new Pair<Boolean, Point>(editor.isSelected(), location.pointAt(table, row, column));
       }
     });
-  }
-
-  @RunsInCurrentThread
-  private static JCheckBox editor(JTable table, int row, int column) {
-    Component editor = cellEditorIn(table, row, column);
-    if (editor instanceof JCheckBox) return (JCheckBox)editor;
-    throw cannotHandleEditor(editor);
   }
 }

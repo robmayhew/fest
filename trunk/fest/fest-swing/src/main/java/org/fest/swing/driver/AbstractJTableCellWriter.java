@@ -16,7 +16,6 @@
 package org.fest.swing.driver;
 
 import java.awt.Component;
-import java.awt.Point;
 
 import javax.swing.JTable;
 
@@ -27,7 +26,6 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 
-import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.JTableCancelCellEditingTask.cancelEditing;
 import static org.fest.swing.driver.JTableCellEditorQuery.cellEditorIn;
@@ -66,49 +64,6 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
     robot.waitForIdle();
   }
 
-
-  /**
-   * Simulates a user clicking the given table cell.
-   * @param table the target <code>JTable</code>.
-   * @param row the given row.
-   * @param column the given column.
-   * @throws IllegalStateException if the <code>JTable</code> is disabled.
-   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
-   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
-   */
-  @RunsInEDT
-  protected final void clickCell(JTable table, int row, int column) {
-    clickCell(table, row, column, 1);
-  }
-
-  /**
-   * Simulates a user clicking the given table cell, the given number of times.
-   * @param table the target <code>JTable</code>.
-   * @param row the given row.
-   * @param column the given column.
-   * @param times how many times the cell should click the cell.
-   * @throws IllegalStateException if the <code>JTable</code> is disabled.
-   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
-   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
-   */
-  @RunsInEDT
-  protected final void clickCell(JTable table, int row, int column, int times) {
-    // TODO validate times
-    Point pointAtCell = scrollToPointAtCell(table, row, column, location);
-    robot.click(table, pointAtCell, LEFT_BUTTON, times);
-  }
-
-  @RunsInEDT
-  private static Point scrollToPointAtCell(final JTable table, final int row, final int column, 
-      final JTableLocation location) {
-    return execute(new GuiQuery<Point>() {
-      protected Point executeInEDT() {
-        scrollToCell(table, row, column, location);
-        return location.pointAt(table, row, column);
-      }
-    });
-  }
-  
   @RunsInCurrentThread
   protected static void scrollToCell(final JTable table, final int row, final int column, final JTableLocation location) {
     validateIsEnabledAndShowing(table);
@@ -144,5 +99,12 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
         return cellEditorIn(table, row, column);
       }
     });
+  }
+
+  @RunsInCurrentThread
+  protected static <T extends Component> T editor(JTable table, int row, int column, Class<T> supportedType) {
+    Component editor = cellEditorIn(table, row, column);
+    if (supportedType.isInstance(editor)) return supportedType.cast(editor);
+    throw cannotHandleEditor(editor);
   }
 }

@@ -15,16 +15,20 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
+import java.awt.Point;
 
 import javax.swing.JTable;
 import javax.swing.text.JTextComponent;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.util.Pair;
 
-import static org.fest.swing.driver.WaitForComponentToShowCondition.untilIsShowing;
-import static org.fest.swing.timing.Pause.pause;
+import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
+import static org.fest.swing.driver.ComponentShownWaiter.waitTillShown;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands an implementation of <code>{@link JTableCellWriter}</code> that knows how to use
@@ -43,23 +47,37 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void enterValue(JTable table, int row, int column, String value) {
-    JTextComponent editor = editor(table, row, column);
-    startCellEditing(table, row, column);
+    JTextComponent editor = doStartCellEditing(table, row, column);
     driver.replaceText(editor, value);
     stopCellEditing(table, row, column);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void startCellEditing(JTable table, int row, int column) {
-    JTextComponent editor = editor(table, row, column);
-    clickCell(table, row, column, 2);
-    pause(untilIsShowing(editor));
+    doStartCellEditing(table, row, column);
   }
 
-  private JTextComponent editor(JTable table, int row, int column) {
-    Component editor = editorForCell(table, row, column);
-    if (editor instanceof JTextComponent) return (JTextComponent)editor;
-    throw cannotHandleEditor(editor);
+  @RunsInEDT
+  private JTextComponent doStartCellEditing(JTable table, int row, int column) {
+    Pair<Point, JTextComponent> info = startEditingCellInfo(table, row, column, location);
+    robot.click(table, info.i, LEFT_BUTTON, 2); // activate JTextComponent editor
+    JTextComponent editor = info.ii;
+    waitTillShown(editor);
+    return editor;
+  }
+
+  @RunsInEDT
+  private static Pair<Point, JTextComponent> startEditingCellInfo(final JTable table, final int row, final int column, 
+      final JTableLocation location) {
+    return execute(new GuiQuery<Pair<Point, JTextComponent>>() {
+      protected Pair<Point, JTextComponent> executeInEDT() {
+        JTextComponent editor = editor(table, row, column, JTextComponent.class);
+        scrollToCell(table, row, column, location);
+        return new Pair<Point, JTextComponent>(location.pointAt(table, row, column), editor);
+      }
+    });
   }
 }

@@ -15,13 +15,11 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 
-import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
@@ -29,7 +27,6 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.util.Pair;
 
 import static org.fest.swing.driver.ComponentShownWaiter.waitTillShown;
-import static org.fest.swing.driver.JTableCellEditorQuery.cellEditorIn;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
@@ -76,17 +73,10 @@ public class JTableComboBoxEditorCellWriter extends AbstractJTableCellWriter {
       final JTableLocation location) {
     return execute(new GuiQuery<Pair<Point, JComboBox>>() {
       protected Pair<Point, JComboBox> executeInEDT() {
-        JComboBox editor = editor(table, row, column);
+        JComboBox editor = editor(table, row, column, JComboBox.class);
         scrollToCell(table, row, column, location);
         return new Pair<Point, JComboBox>(location.pointAt(table, row, column), editor);
       }
     });
-  }
-
-  @RunsInCurrentThread
-  private static JComboBox editor(JTable table, int row, int column) {
-    Component editor = cellEditorIn(table, row, column);
-    if (editor instanceof JComboBox) return (JComboBox)editor;
-    throw cannotHandleEditor(editor);
   }
 }
