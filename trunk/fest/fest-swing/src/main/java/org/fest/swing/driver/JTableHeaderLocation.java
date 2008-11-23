@@ -19,6 +19,7 @@ import java.awt.Rectangle;
 
 import javax.swing.table.JTableHeader;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.exception.LocationUnavailableException;
 
 import static java.lang.String.valueOf;
@@ -27,8 +28,7 @@ import static org.fest.swing.util.Strings.match;
 import static org.fest.util.Strings.*;
 
 /**
- * Understands the location of a <code>{@link JTableHeader}</code> (a coordinate, column index or
- * value.)
+ * Understands the location of a <code>{@link JTableHeader}</code> (a coordinate, column index or value.)
  *
  * @author Yvonne Wang
  * @author Alex Ruiz
@@ -42,15 +42,17 @@ public class JTableHeaderLocation {
    * @return the coordinates of the column under the given index.
    * @throws LocationUnavailableException if a column with a matching name cannot be found.
    */
+  @RunsInCurrentThread
   public Point pointAt(JTableHeader tableHeader, String columnName) {
-    int validatedIndex = -1;
-    try {
-      validatedIndex = validatedIndex(tableHeader, indexOf(tableHeader, columnName));
-    } catch (IndexOutOfBoundsException e) {
-      throw new LocationUnavailableException(concat(
-          "Unable to find column with name ", quote(columnName)));
-    }
-    return point(tableHeader, validatedIndex);
+    int index = indexOf(tableHeader, columnName);
+    if (isValidIndex(tableHeader, index)) return point(tableHeader, index);
+    throw new LocationUnavailableException(concat("Unable to find column with name ", quote(columnName)));
+  }
+
+  @RunsInCurrentThread
+  private boolean isValidIndex(JTableHeader tableHeader, int index) {
+    int itemCount = columnCount(tableHeader);
+    return (index >= 0 && index < itemCount);
   }
 
   /**
@@ -60,15 +62,18 @@ public class JTableHeaderLocation {
    * @return the coordinates of the column under the given index.
    * @throws IndexOutOfBoundsException if the index is out of bounds.
    */
+  @RunsInCurrentThread
   public Point pointAt(JTableHeader tableHeader, int index) {
     return point(tableHeader, validatedIndex(tableHeader, index));
   }
 
-  private Point point(JTableHeader tableHeader, int index) {
+  @RunsInCurrentThread
+  private static Point point(JTableHeader tableHeader, int index) {
     Rectangle r = tableHeader.getHeaderRect(index);
     return new Point(r.x + r.width / 2, r.y + r.height / 2);
   }
 
+  @RunsInCurrentThread
   private int validatedIndex(JTableHeader tableHeader, int index) {
     int itemCount = columnCount(tableHeader);
     if (index >= 0 && index < itemCount) return index;
@@ -76,13 +81,14 @@ public class JTableHeaderLocation {
         "Item index (", valueOf(index), ") should be between [", valueOf(0), "] and [",  valueOf(itemCount - 1),
         "] (inclusive)"));
   }
-
+  
   /**
    * Returns the index of the column which name matches the given value or -1 if a matching column was not found.
    * @param tableHeader the target <code>JTableHeader</code>.
    * @param columnName the column name to match.
    * @return the index of the column which name matches the given value or -1 if a matching column was not found.
    */
+  @RunsInCurrentThread
   public int indexOf(JTableHeader tableHeader, String columnName) {
     int size = columnCount(tableHeader);
     for (int i = 0; i < size; i++)
@@ -90,10 +96,12 @@ public class JTableHeaderLocation {
     return -1;
   }
 
+  @RunsInCurrentThread
   private int columnCount(JTableHeader header) {
     return header.getColumnModel().getColumnCount();
   }
 
+  @RunsInCurrentThread
   private String columnName(JTableHeader tableHeader, int index) {
     return tableHeader.getTable().getModel().getColumnName(index);
   }

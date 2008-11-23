@@ -18,6 +18,10 @@ package org.fest.swing.factory;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
@@ -52,14 +56,19 @@ public final class JPopupMenus {
       name = newName;
       return this;
     }
-    
+
+    @RunsInEDT
     public JPopupMenu createNew() {
-      JPopupMenu popupMenu = new JPopupMenu();
-      popupMenu.setLabel(label);
-      popupMenu.setName(name);
-      if (!isEmpty(menuItems))
-        for (JMenuItem menuItem : menuItems) popupMenu.add(menuItem);
-      return popupMenu;
+      return execute(new GuiQuery<JPopupMenu>() {
+        protected JPopupMenu executeInEDT() {
+          JPopupMenu popupMenu = new JPopupMenu();
+          popupMenu.setLabel(label);
+          popupMenu.setName(name);
+          if (!isEmpty(menuItems))
+            for (JMenuItem menuItem : menuItems) popupMenu.add(menuItem);
+          return popupMenu;
+        }
+      });
     }
   }
 }

@@ -17,6 +17,11 @@ package org.fest.swing.factory;
 
 import javax.swing.JMenuItem;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
+
 /**
  * Understands creation of <code>{@link JMenuItem}</code>s.
  *
@@ -50,12 +55,17 @@ public final class JMenuItems {
       return this;
     }
     
+    @RunsInEDT
     public JMenuItem createNew() {
-      JMenuItem menuItem = new JMenuItem();
-      menuItem.setName(name);
-      menuItem.setSelected(selected);
-      menuItem.setText(text);
-      return menuItem;
+      return execute(new GuiQuery<JMenuItem>() {
+        protected JMenuItem executeInEDT() {
+          JMenuItem menuItem = new JMenuItem();
+          menuItem.setName(name);
+          menuItem.setSelected(selected);
+          menuItem.setText(text);
+          return menuItem;
+        }
+      });
     }
   }
 }
