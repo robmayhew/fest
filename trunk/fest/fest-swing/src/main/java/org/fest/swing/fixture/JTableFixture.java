@@ -21,9 +21,13 @@ import java.awt.Point;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 
+import org.fest.assertions.Description;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
 import org.fest.swing.data.TableCellByColumnName;
 import org.fest.swing.driver.BasicJTableCellReader;
@@ -35,6 +39,8 @@ import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.timing.Timeout;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.driver.ComponentDriver.propertyName;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands simulation of user events on a <code>{@link JTable}</code> and verification of the state of such
@@ -130,8 +136,8 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
     return new ColorFixture(foreground, cellProperty(cell, FOREGROUND_PROPERTY));
   }
 
-  private String cellProperty(TableCell cell, String propertyName) {
-    return JTableDriver.cellProperty(target, cell, propertyName);
+  private Description cellProperty(TableCell cell, String propertyName) {
+    return propertyName(target, concat(propertyName, " ", cell));
   }
 
   /**

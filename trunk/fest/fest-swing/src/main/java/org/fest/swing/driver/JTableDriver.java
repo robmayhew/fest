@@ -327,7 +327,7 @@ public class JTableDriver extends JComponentDriver {
   private void assertNoSelection(final JTable table) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        if (hasSelection(table)) return;
+        if (!hasSelection(table)) return;
         String message = concat("[", propertyName(table, SELECTION_PROPERTY).value(), 
             "] expected no selection but was:<rows=", format(table.getSelectedRows()), ", columns=", 
             format(table.getSelectedColumns()), ">");
@@ -514,22 +514,12 @@ public class JTableDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void requireCellValue(JTable table, TableCell cell, String value) {
-    assertThat(value(table, cell)).as(cellProperty(table, cell, VALUE_PROPERTY)).isEqualTo(value);
+    assertThat(value(table, cell)).as(cellProperty(table, concat(VALUE_PROPERTY, " ", cell))).isEqualTo(value);
   }
 
-  /**
-   * Formats the name of a table cell property by concatenating the value obtained from
-   * <code>{@link ComponentDriver#propertyName(java.awt.Component, String)}</code> with the coordinates of the given
-   * cell.
-   * @param table the target <code>JTable</code>.
-   * @param cell the given table cell.
-   * @param propertyName the name of a property.
-   * @return the formatted name of a property from the given table cell.
-   * @see ComponentDriver#propertyName(java.awt.Component, String)
-   */
   @RunsInEDT
-  public static String cellProperty(JTable table, TableCell cell, String propertyName) {
-    return concat(propertyName(table, propertyName), " - ", cell);
+  private static Description cellProperty(JTable table, String propertyName) {
+    return propertyName(table, propertyName);
   }
 
   /**
@@ -587,7 +577,7 @@ public class JTableDriver extends JComponentDriver {
         return isCellEditable(table, cell);
       }
     });
-    assertThat(cellEditable).as(cellProperty(table, cell, EDITABLE_PROPERTY)).isEqualTo(editable);
+    assertThat(cellEditable).as(cellProperty(table, concat(EDITABLE_PROPERTY, " ", cell))).isEqualTo(editable);
   }
   
   /**

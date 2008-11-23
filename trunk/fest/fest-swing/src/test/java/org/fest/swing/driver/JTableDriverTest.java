@@ -23,12 +23,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.EventMode;
@@ -36,6 +34,7 @@ import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
 import org.fest.swing.data.TableCellByColumnName;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
@@ -52,7 +51,6 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -65,8 +63,9 @@ import static org.fest.swing.driver.JTableSelectedRowCountQuery.selectedRowCount
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
-import static org.fest.swing.task.ComponentSetPopupMenuTask.setPopupMenu;
+import static org.fest.swing.task.ComponentSetVisibleTask.hide;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
+import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.testing.TestTable.*;
 
@@ -89,6 +88,10 @@ public class JTableDriverTest {
   private JTableDriver driver;
   private MyWindow window;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     cellReader = new JTableCellReaderStub();
@@ -133,13 +136,24 @@ public class JTableDriverTest {
     assertThat(driver.rowCountOf(dragTable)).isEqualTo(ROW_COUNT);
   }
   
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSelectCellIfTableIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableDragTable();
-    robot.waitForIdle();
-    driver.selectCell(dragTable, row(0).column(0));
-    assertDragTableHasNoSelection();
+  public void shouldThrowErrorWhenSelectingCellInDisabledJTable() {
+    disableDragTable();
+    try {
+      driver.selectCell(dragTable, row(0).column(0));
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenSelectingCellInNotShowingJTable() {
+    hideWindow();
+    try {
+      driver.selectCell(dragTable, row(0).column(0));
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
   @Test(groups = GUI, expectedExceptions = NullPointerException.class)
@@ -181,13 +195,14 @@ public class JTableDriverTest {
     });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSelectCellsIfTableIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableDragTable();
-    robot.waitForIdle();
-    driver.selectCells(dragTable, new TableCell[] { row(0).column(0), row(2).column(0) });
-    assertDragTableHasNoSelection();
+  public void shouldThrowErrorWhenSelectingCellsInDisabledJTable() {
+    disableDragTable();
+    try {
+      driver.selectCells(dragTable, new TableCell[] { row(0).column(0), row(2).column(0) });
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -245,7 +260,7 @@ public class JTableDriverTest {
   public void shouldThrowErrorIfCellCannotBeFoundWithGivenValue() {
     try {
       driver.cell(dragTable, "Hello World");
-      fail("Expecting an exception");
+      failWhenExpectingException();
     } catch (ActionFailedException expected) {
       assertThat(expected).message().contains("Unable to find cell with value 'Hello World'");
     }
@@ -261,7 +276,7 @@ public class JTableDriverTest {
   public void shouldThrowErrorWhenCreatingCellWithColumnNameIfGivenCellIsNull() {
     try {
       driver.cell(dragTable, (TableCellByColumnName)null);
-      fail("Expecting exception");
+      failWhenExpectingException();
     } catch (NullPointerException e) {
       assertThat(e).message().contains("The instance of TableCellByColumnName should not be null");
     }
@@ -289,7 +304,7 @@ public class JTableDriverTest {
   public void shouldThrowErrorIfColumnWithGivenNameNotFound() {
     try {
       driver.columnIndex(dragTable, "Hello World");
-      fail("Expecting exception");
+      failWhenExpectingException();
     } catch (ActionFailedException e) {
       assertThat(e).message().contains("Unable to find a column with name 'Hello World");
     }
@@ -306,7 +321,7 @@ public class JTableDriverTest {
     robot.waitForIdle();
     try {
       driver.requireNoSelection(dragTable);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selection'")
                              .contains("expected no selection but was:<rows=[0], columns=[0]>");
@@ -346,10 +361,9 @@ public class JTableDriverTest {
   public void shouldFailIfCellValueIsNotEqualToExpected() {
     try {
       driver.requireCellValue(dragTable, row(0).column(0), "0-1");
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("[row=0, column=0]")
-                             .contains("property:'value'")
+      assertThat(e).message().contains("property:'value [row=0, column=0]'")
                              .contains("expected:<'0-1'> but was:<'0-0'>");
     }
   }
@@ -357,9 +371,7 @@ public class JTableDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldShowPopupMenuAtCell(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
-    final JPopupMenu popupMenu = new JPopupMenu();
-    popupMenu.add(new JMenuItem("Leia"));
-    setPopupMenu(dragTable, popupMenu);
+    setJPopupMenuToJTable(dragTable);
     robot.waitForIdle();
     ClickRecorder recorder = attachTo(dragTable);
     driver.showPopupMenuAt(dragTable, row(0).column(1));
@@ -367,6 +379,16 @@ public class JTableDriverTest {
     Point pointClicked = recorder.pointClicked();
     Point pointAtCell = new JTableLocation().pointAt(dragTable, 0, 1);
     assertThat(pointClicked).isEqualTo(pointAtCell);
+  }
+
+  private static void setJPopupMenuToJTable(final JTable table) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu.add(new JMenuItem("Leia"));
+        table.setComponentPopupMenu(popupMenu);
+      }
+    });
   }
 
   public void shouldReturnCellFont() {
@@ -439,14 +461,27 @@ public class JTableDriverTest {
     }.run();
   }
 
-  @Test(groups = GUI, expectedExceptions = AssertionError.class)
-  public void shouldThrowErrorIfTableIsNotEnabledWhenEditingCell() {
-    disable(dragTable);
-    robot.waitForIdle();
-    driver.enterValueInCell(dragTable, row(0).column(0), "Hello");
+  public void shouldThrowErrorWhenEditingCellInDisabledJTable() {
+    disableDragTable();
+    try {
+      driver.enterValueInCell(dragTable, row(0).column(0), "Hello");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
   }
 
-  @Test(groups = GUI, expectedExceptions = AssertionError.class)
+  public void shouldThrowErrorWhenEditingCellInNotShowingJTable() {
+    hideWindow();
+    try {
+      driver.enterValueInCell(dragTable, row(0).column(0), "Hello");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
+  }
+
+  @Test(groups = GUI, expectedExceptions = IllegalStateException.class)
   public void shouldThrowErrorIfCellToEditIsNotEditable() {
     TableCell cell = row(0).column(0);
     assertThat(isCellEditable(dragTable, cell)).isFalse();
@@ -529,10 +564,9 @@ public class JTableDriverTest {
     robot.waitForIdle();
     try {
       driver.requireEditable(dragTable, row(0).column(0));
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("[row=0, column=0]")
-                             .contains("property:'editable'")
+      assertThat(e).message().contains("property:'editable [row=0, column=0]'")
                              .contains("expected:<true> but was:<false>");
     }
   }
@@ -548,33 +582,15 @@ public class JTableDriverTest {
     robot.waitForIdle();
     try {
       driver.requireNotEditable(dragTable, row(0).column(0));
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("[row=0, column=0]")
-                             .contains("property:'editable'")
+      assertThat(e).message().contains("property:'editable [row=0, column=0]'")
                              .contains("expected:<false> but was:<true>");
     }
   }
 
   private void assertCellReaderWasCalled() {
     cellReader.requireInvoked("valueAt");
-  }
-
-  private void clearAndDisableDragTable() {
-    clearAndDisable(dragTable);
-  }
-
-  private static void clearAndDisable(final JTable table) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        table.clearSelection();
-        table.setEnabled(false);
-      }
-    });
-  }
-
-  private void assertDragTableHasNoSelection() {
-    assertThat(selectedRowCountOf(dragTable)).isEqualTo(0);
   }
 
   @Test(groups = GUI, expectedExceptions = NullPointerException.class)
@@ -591,6 +607,18 @@ public class JTableDriverTest {
     assertThat(driver.tableHeaderOf(dragTable)).isSameAs(window.dragTableHeader);
   }
 
+  @RunsInEDT
+  private void disableDragTable() {
+    disable(dragTable);
+    robot.waitForIdle();
+  }
+
+  @RunsInEDT
+  private void hideWindow() {
+    hide(window);
+    robot.waitForIdle();
+  }
+
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
@@ -601,8 +629,13 @@ public class JTableDriverTest {
 
     final JTableHeader dragTableHeader;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private static Object[][] dropTableData(int rowCount, int columnCount) {

@@ -136,6 +136,7 @@ public class GuiActionRunner {
     Throwable catchedException = action.catchedException();
     action.clearCatchedException();
     if (catchedException instanceof RuntimeException) throw (RuntimeException)catchedException;
+    if (catchedException instanceof Error) throw (Error)catchedException;
     if (catchedException != null) throw unexpected(catchedException);
   }
 }
