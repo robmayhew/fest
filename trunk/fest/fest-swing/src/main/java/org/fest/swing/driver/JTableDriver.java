@@ -538,17 +538,18 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the given cell.
    * @param value the given value.
-   * @throws AssertionError if the given <code>JTable</code> is not enabled.
-   * @throws AssertionError if the given table cell is not editable.
    * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this driver's <code>JTableCellValueReader</code> is unable to enter the given
    * value.
    * @see #cellWriter(JTableCellWriter)
    */
+  @RunsInEDT
   public void enterValueInCell(JTable table, TableCell cell, String value) {
-    requireEditable(table, cell);
-    requireEnabled(table);
+    validateNotNull(cell);
     cellWriter.enterValue(table, cell.row, cell.column, value);
   }
 
@@ -596,11 +597,13 @@ public class JTableDriver extends JComponentDriver {
    * @param cell the given cell.
    * @return the editor in the given cell of the <code>JTable</code>.
    * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @see #cellWriter(JTableCellWriter)
    */
+  @RunsInEDT
   public Component cellEditor(JTable table, TableCell cell) {
-    validate(table, cell);
+    validateNotNull(cell);
     return cellWriter.editorForCell(table, cell.row, cell.column);
   }
 
@@ -611,12 +614,16 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the given cell.
    * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
    * @see #cellWriter(JTableCellWriter)
    */
+  @RunsInEDT
   public void startCellEditing(JTable table, TableCell cell) {
-    validate(table, cell);
+    validateNotNull(cell);
     cellWriter.startCellEditing(table, cell.row, cell.column);
   }
 
@@ -627,12 +634,16 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the given cell.
    * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
    * @see #cellWriter(JTableCellWriter)
    */
+  @RunsInEDT
   public void stopCellEditing(JTable table, TableCell cell) {
-    validate(table, cell);
+    validateNotNull(cell);
     cellWriter.stopCellEditing(table, cell.row, cell.column);
   }
 
@@ -643,12 +654,16 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the given cell.
    * @throws NullPointerException if the cell is <code>null</code>.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
    * @see #cellWriter(JTableCellWriter)
    */
+  @RunsInEDT
   public void cancelCellEditing(JTable table, TableCell cell) {
-    validate(table, cell);
+    validateNotNull(cell);
     cellWriter.cancelCellEditing(table, cell.row, cell.column);
   }
 
@@ -659,9 +674,17 @@ public class JTableDriver extends JComponentDriver {
    * @throws NullPointerException if the cell is <code>null</code>.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */
+  @RunsInEDT
   public void validate(JTable table, TableCell cell) {
-    validateNotNull(cell);
-    validateCellIndices(table, cell);
+    validateCellIndexBounds(table, cell);
+  }
+  
+  private static void validateCellIndexBounds(final JTable table, final TableCell cell) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        validateCellIndices(table, cell);
+      }
+    });
   }
   
   /**
@@ -692,6 +715,7 @@ public class JTableDriver extends JComponentDriver {
    * @return the number of rows shown in the given <code>JTable</code>.
    * @see JTable#getRowCount()
    */
+  @RunsInEDT
   public int rowCountOf(JTable table) {
     return JTableRowCountQuery.rowCountOf(table);
   }

@@ -28,6 +28,7 @@ import org.fest.swing.util.Pair;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.ComponentShownWaiter.waitTillShown;
+import static org.fest.swing.driver.JTableStopCellEditingTask.stopEditing;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
@@ -51,7 +52,7 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
   public void enterValue(JTable table, int row, int column, String value) {
     JTextComponent editor = doStartCellEditing(table, row, column);
     driver.replaceText(editor, value);
-    stopCellEditing(table, row, column);
+    stopEditing(table, row, column);
   }
 
   /** {@inheritDoc} */

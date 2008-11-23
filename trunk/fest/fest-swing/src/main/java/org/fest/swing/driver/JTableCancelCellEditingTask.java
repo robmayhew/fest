@@ -20,6 +20,7 @@ import javax.swing.table.TableCellEditor;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
+import static org.fest.swing.driver.JTableCellValidator.*;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
@@ -36,6 +37,8 @@ final class JTableCancelCellEditingTask {
     // TODO test
     execute(new GuiTask() {
       protected void executeInEDT() {
+        validateIndices(table, row, column);
+        validateCellIsEditable(table, row, column);
         TableCellEditor cellEditor = table.getCellEditor(row, column);
         if (cellEditor == null) return;
         cellEditor.cancelCellEditing();

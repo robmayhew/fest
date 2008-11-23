@@ -32,9 +32,23 @@ import static org.fest.util.Strings.*;
 public final class JTableCellValidator {
 
   /**
+   * Validates that the table cell in the given coordinates is editable.
+   * @param table the target <code>JTable</code>.
+   * @param row the row index of the cell to validate.
+   * @param column the column index of the cell to validate.
+   * @throws IllegalStateException if the table cell in the given coordinates is not editable.
+   */
+  @RunsInCurrentThread
+  public static void validateCellIsEditable(JTable table, int row, int column) {
+    if (!table.isCellEditable(row, column)) 
+      throw new IllegalStateException(
+          concat("Expecting the cell [", valueOf(row), ",", valueOf(column), "] to be editable"));
+  }
+  
+  /**
    * Validates that the given table cell is non <code>null</code> and its indices are not out of bounds.
    * @param table the target <code>JTable</code>.
-   * @param cell to validate.
+   * @param cell the cell to validate.
    * @throws NullPointerException if the cell is <code>null</code>.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    */

@@ -20,6 +20,7 @@ import javax.swing.table.TableCellEditor;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
+import static org.fest.swing.driver.JTableCellValidator.*;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
@@ -35,12 +36,27 @@ final class JTableStopCellEditingTask {
   static void stopEditing(final JTable table, final int row, final int column) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        TableCellEditor cellEditor = table.getCellEditor(row, column);
-        if (cellEditor == null) return;
-        cellEditor.stopCellEditing();
+        doStopCellEditing(table, row, column);
       }
     });
   }
-
+  
+  @RunsInEDT
+  static void validateAndStopEditing(final JTable table, final int row, final int column) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        validateIndices(table, row, column);
+        validateCellIsEditable(table, row, column);
+        doStopCellEditing(table, row, column);
+      }
+    });
+  }
+  
+  private static void doStopCellEditing(JTable table, int row, int column) {
+    TableCellEditor cellEditor = table.getCellEditor(row, column);
+    if (cellEditor == null) return;
+    cellEditor.stopCellEditing();
+  }
+  
   private JTableStopCellEditingTask() {}
 }

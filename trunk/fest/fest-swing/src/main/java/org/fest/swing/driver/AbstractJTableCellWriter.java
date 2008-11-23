@@ -29,8 +29,8 @@ import org.fest.swing.exception.ActionFailedException;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.JTableCancelCellEditingTask.cancelEditing;
 import static org.fest.swing.driver.JTableCellEditorQuery.cellEditorIn;
-import static org.fest.swing.driver.JTableCellValidator.validateIndices;
-import static org.fest.swing.driver.JTableStopCellEditingTask.stopEditing;
+import static org.fest.swing.driver.JTableCellValidator.*;
+import static org.fest.swing.driver.JTableStopCellEditingTask.validateAndStopEditing;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.util.Strings.concat;
@@ -60,14 +60,12 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
   /** {@inheritDoc} */
   @RunsInEDT
   public void stopCellEditing(JTable table, int row, int column) {
-    stopEditing(table, row, column);
+    validateAndStopEditing(table, row, column);
     robot.waitForIdle();
   }
 
   @RunsInCurrentThread
   protected static void scrollToCell(final JTable table, final int row, final int column, final JTableLocation location) {
-    validateIsEnabledAndShowing(table);
-    validateIndices(table, row, column);
     table.scrollRectToVisible(location.cellBounds(table, row, column));
   }
 
@@ -96,6 +94,7 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
   private static Component cellEditor(final JTable table, final int row, final int column) {
     return execute(new GuiQuery<Component>() {
       protected Component executeInEDT() {
+        validateIndices(table, row, column);
         return cellEditorIn(table, row, column);
       }
     });
@@ -103,6 +102,9 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
 
   @RunsInCurrentThread
   protected static <T extends Component> T editor(JTable table, int row, int column, Class<T> supportedType) {
+    validateIndices(table, row, column);
+    validateIsEnabledAndShowing(table);
+    validateCellIsEditable(table, row, column);
     Component editor = cellEditorIn(table, row, column);
     if (supportedType.isInstance(editor)) return supportedType.cast(editor);
     throw cannotHandleEditor(editor);

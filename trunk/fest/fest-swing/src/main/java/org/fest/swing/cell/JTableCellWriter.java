@@ -39,6 +39,10 @@ public interface JTableCellWriter {
    * @param row the row index of the cell.
    * @param column the column index of the cell.
    * @param value the value to enter.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
    */
   void enterValue(JTable table, int row, int column, String value);
@@ -49,6 +53,10 @@ public interface JTableCellWriter {
    * @param table the target <code>JTable</code>.
    * @param row the row index of the cell.
    * @param column the column index of the cell.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
    * @see #editorForCell(JTable, int, int)
    */
@@ -60,6 +68,10 @@ public interface JTableCellWriter {
    * @param table the target <code>JTable</code>.
    * @param row the row index of the cell.
    * @param column the column index of the cell.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
    * @see #editorForCell(JTable, int, int)
    */
@@ -71,6 +83,10 @@ public interface JTableCellWriter {
    * @param table the target <code>JTable</code>.
    * @param row the row index of the cell.
    * @param column the column index of the cell.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
+   * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
    * @see #editorForCell(JTable, int, int)
    */
@@ -96,6 +112,9 @@ public interface JTableCellWriter {
    * @param row the row index of the cell.
    * @param column the column index of the cell.
    * @return the <code>Component</code> used as editor of the given cell.
+   * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
+   * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
    */
   Component editorForCell(JTable table, int row, int column);
 }
