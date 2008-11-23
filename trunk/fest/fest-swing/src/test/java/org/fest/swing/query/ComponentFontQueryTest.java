@@ -18,7 +18,7 @@ package org.fest.swing.query;
 import static java.awt.Font.PLAIN;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.ACTION;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 import java.awt.Font;
@@ -36,7 +36,7 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class ComponentFontQueryTest {
 
   private static final Font FONT = new Font("SansSerif", PLAIN, 8);

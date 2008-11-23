@@ -31,7 +31,7 @@ import static org.fest.swing.timing.Pause.pause;
  *
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class WindowHideAndDisposeTaskTest {
 
   private MyWindow window;

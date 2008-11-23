@@ -32,7 +32,7 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JTableRowCountQueryTest {
 
   private static final int ROW_COUNT = 2;

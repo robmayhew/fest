@@ -41,7 +41,7 @@ import static org.fest.swing.testing.TestGroups.*;
  *
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JTextComponentSetTextTaskTest {
 
   static final String TEXTBOX_TEXT = "Hello World";

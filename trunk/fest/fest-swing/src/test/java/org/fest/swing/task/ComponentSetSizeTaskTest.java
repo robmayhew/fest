@@ -33,7 +33,7 @@ import static org.fest.swing.testing.TestGroups.*;
  *
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class ComponentSetSizeTaskTest {
 
   private Robot robot;

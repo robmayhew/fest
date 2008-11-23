@@ -37,7 +37,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JComboBoxEditableQueryTest {
 
   private Robot robot;
@@ -54,7 +54,7 @@ public class JComboBoxEditableQueryTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, ACTION })
   public void shouldIndicateIfJComboBoxIsEditable(final boolean editable) {
     setEditable(comboBox, editable);
     robot.waitForIdle();

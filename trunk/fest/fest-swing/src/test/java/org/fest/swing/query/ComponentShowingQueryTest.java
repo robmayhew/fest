@@ -16,7 +16,7 @@
 package org.fest.swing.query;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.ACTION;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 import org.fest.swing.core.ScreenLock;
@@ -32,7 +32,7 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class ComponentShowingQueryTest {
 
   private MyWindow window;

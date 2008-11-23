@@ -37,7 +37,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JComboBoxSelectedIndexQueryTest {
 
   private Robot robot;
@@ -54,7 +54,7 @@ public class JComboBoxSelectedIndexQueryTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "selectedIndices", groups = { GUI, EDT_ACTION })
+  @Test(dataProvider = "selectedIndices", groups = { GUI, ACTION })
   public void shouldReturnItemCountOfJComboBox(final int selectedIndex) {
     comboBox.startRecording();
     setSelectedIndex(comboBox, selectedIndex);

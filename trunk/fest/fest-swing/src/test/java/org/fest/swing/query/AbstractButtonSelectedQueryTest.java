@@ -36,7 +36,7 @@ import static org.fest.swing.testing.TestGroups.*;
  *
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class AbstractButtonSelectedQueryTest {
 
   private Robot robot;
@@ -53,7 +53,7 @@ public class AbstractButtonSelectedQueryTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, ACTION })
   public void shouldIndicateIfAbstractButtonIsSelected(final boolean selected) {
     setSelected(checkBox, selected);
     robot.waitForIdle();

@@ -32,7 +32,7 @@ import org.testng.annotations.Test;
  *
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JTableColumnCountQueryTest {
 
   private static final int COLUMN_COUNT = 6;

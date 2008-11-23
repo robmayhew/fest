@@ -21,9 +21,11 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.timing.Condition;
 import org.fest.util.Strings;
 
@@ -39,11 +41,15 @@ import static org.fest.swing.timing.Pause.pause;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class ActivateWindowTaskTest {
 
   private JFrame frameOne;
   private JFrame frameTwo;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);

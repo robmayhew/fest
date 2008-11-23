@@ -39,7 +39,7 @@ import static org.fest.util.Arrays.array;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JComboBoxSetPopupVisibleTaskTest {
 
   private Robot robot;

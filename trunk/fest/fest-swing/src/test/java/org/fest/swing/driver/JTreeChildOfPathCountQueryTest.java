@@ -38,7 +38,7 @@ import static org.fest.util.Strings.concat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JTreeChildOfPathCountQueryTest {
 
   private Robot robot;

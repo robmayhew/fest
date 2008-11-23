@@ -40,7 +40,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JTreeRowAtPointQueryTest {
 
   private Robot robot;

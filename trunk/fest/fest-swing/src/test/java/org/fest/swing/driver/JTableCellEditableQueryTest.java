@@ -38,7 +38,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JTableCellEditableQueryTest {
 
   private Robot robot;
@@ -59,7 +59,7 @@ public class JTableCellEditableQueryTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "cells", groups = { GUI, EDT_ACTION })
+  @Test(dataProvider = "cells", groups = { GUI, ACTION })
   public void shouldIndicateWhetherCellIsEditableOrNot(int column, boolean editable) {
     // TODO test validation of cell indices
     assertThat(isCellEditable(table, 0, column)).isEqualTo(editable);

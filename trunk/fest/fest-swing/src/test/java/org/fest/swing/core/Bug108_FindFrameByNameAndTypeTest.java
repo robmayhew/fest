@@ -16,14 +16,18 @@
 package org.fest.swing.core;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.finder.WindowFinder.findFrame;
 import static org.fest.swing.testing.TestGroups.*;
 
@@ -39,6 +43,10 @@ public class Bug108_FindFrameByNameAndTypeTest {
   private Robot robot;
   private MyWindow window;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     window = MyWindow.createNew();
@@ -60,7 +68,11 @@ public class Bug108_FindFrameByNameAndTypeTest {
     private static final long serialVersionUID = 1L;
 
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

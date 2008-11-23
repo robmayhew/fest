@@ -39,7 +39,7 @@ import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = TestGroups.EDT_ACTION)
+@Test(groups = TestGroups.ACTION)
 public class MenuElementComponentQueryTest {
 
   private Robot robot;

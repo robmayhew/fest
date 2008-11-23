@@ -36,7 +36,7 @@ import static org.fest.swing.timing.Pause.pause;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class ComponentRequestFocusTaskTest {
 
   private MyWindow window;

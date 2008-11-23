@@ -43,7 +43,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JTreeExpandedPathQueryTest {
 
   private Robot robot;
@@ -62,7 +62,7 @@ public class JTreeExpandedPathQueryTest {
     robot.cleanUp();
   }
 
-  @Test(groups = { GUI, EDT_ACTION }, dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
+  @Test(groups = { GUI, ACTION }, dataProvider = "booleans", dataProviderClass = BooleanProvider.class)
   public void shouldIndicateIfPathExpanded(final boolean expanded) {
     setPathExpanded(tree, rootPath, expanded);
     robot.waitForIdle();

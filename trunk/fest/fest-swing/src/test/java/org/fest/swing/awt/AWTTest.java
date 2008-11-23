@@ -15,19 +15,27 @@
  */
 package org.fest.swing.awt;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.Point;
 
 import javax.swing.JDialog;
 import javax.swing.JTextField;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.swing.awt.AWT;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.factory.JDialogs.dialog;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
@@ -44,8 +52,12 @@ public class AWTTest {
 
   private static final Insets EMPTY_INSETS = new Insets(0, 0, 0, 0);
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   public void shouldReturnCenterPosition() {
-    Component c = new JTextField();
+    Component c = textField().withColumns(20).createNew();
     Dimension size = new Dimension(80, 60);
     setComponentSize(c, size);
     assertThat(sizeOf(c)).isEqualTo(size);
@@ -81,8 +93,13 @@ public class AWTTest {
   private static class WindowWithNullInsets extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static WindowWithNullInsets createNew() {
-      return new WindowWithNullInsets();
+      return execute(new GuiQuery<WindowWithNullInsets>() {
+        protected WindowWithNullInsets executeInEDT() {
+          return new WindowWithNullInsets();
+        }
+      });
     }
 
     private WindowWithNullInsets() {
@@ -103,12 +120,12 @@ public class AWTTest {
   }
 
   public void shouldReturnTrueIfComponentIsSharedInvisibleFrame() {
-    JDialog dialog = new JDialog((Frame)null);
+    JDialog dialog = dialog().createNew();
     assertThat(AWT.isSharedInvisibleFrame(dialog.getOwner())).isTrue();
   }
 
   public void shouldReturnFalseIfComponentIsNotSharedInvisibleFrame() {
-    assertThat(AWT.isSharedInvisibleFrame(new JTextField())).isFalse();
+    assertThat(AWT.isSharedInvisibleFrame(textField().createNew())).isFalse();
   }
 
   public void shouldReturnFalseIfComponentIsNotSharedInvisibleFrameAndNull() {
@@ -120,8 +137,7 @@ public class AWTTest {
   }
 
   public void shouldReturnComponentNameInQuotes() {
-    JTextField textField = new JTextField();
-    textField.setName("firstName");
+    JTextField textField = textField().withName("firstName").createNew();
     assertThat(AWT.quoteNameOf(textField)).isEqualTo("'firstName'");
   }
 }

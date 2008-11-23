@@ -39,7 +39,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class DialogModalQueryTest {
 
   private Robot robot;
@@ -54,7 +54,7 @@ public class DialogModalQueryTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, ACTION })
   public void shouldIndicateWhetherDialogIsModal(final boolean modal) {
     execute(new GuiTask() {
       protected void executeInEDT() {

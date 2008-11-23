@@ -27,6 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestWindow;
 
@@ -35,6 +36,7 @@ import static java.awt.event.KeyEvent.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.MouseButton.*;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.JTextComponentTextQuery.textOf;
 import static org.fest.swing.task.ComponentHasFocusCondition.untilFocused;
 import static org.fest.swing.task.ComponentRequestFocusTask.giveFocusTo;
@@ -149,8 +151,12 @@ public abstract class InputEventGeneratorTestCase {
 
     final JTextField textBox = new JTextField(20);
 
-    static MyWindow createNew(Class<? extends InputEventGeneratorTestCase> testClass) {
-      return new MyWindow(testClass);
+    static MyWindow createNew(final Class<? extends InputEventGeneratorTestCase> testClass) {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow(testClass);
+        }
+      });
     }
 
     private MyWindow(Class<? extends InputEventGeneratorTestCase> testClass) {

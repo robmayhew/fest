@@ -41,7 +41,7 @@ import static org.fest.util.Files.*;
  *
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JFileChooserSelectFileTaskTest {
 
   private Robot robot;

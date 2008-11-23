@@ -18,7 +18,7 @@ package org.fest.swing.query;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.task.ComponentSetEnabledTask.setEnabled;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.ACTION;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 import org.fest.swing.core.Robot;
@@ -35,7 +35,7 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class ComponentEnabledQueryTest {
 
   private Robot robot;
@@ -51,7 +51,7 @@ public class ComponentEnabledQueryTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, ACTION })
   public void shouldIndicateIfComponentIsEnabled(final boolean enabled) {
     setEnabled(window, enabled);
     robot.waitForIdle();

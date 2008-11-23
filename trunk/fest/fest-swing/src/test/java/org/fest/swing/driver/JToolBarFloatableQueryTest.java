@@ -42,7 +42,7 @@ import static org.fest.swing.testing.TestGroups.*;
  *
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JToolBarFloatableQueryTest {
 
   private Robot robot;
@@ -59,7 +59,7 @@ public class JToolBarFloatableQueryTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = EDT_ACTION)
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = ACTION)
   public void shouldIndicateWhetherJToolBarIsFloatable(final boolean floatable) {
     setFloatable(toolBar, floatable);
     robot.waitForIdle();

@@ -41,7 +41,7 @@ import static org.fest.swing.testing.TestGroups.*;
  *
  * @author Alex Ruiz
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JTableColumnByIdentifierQueryTest {
   
   private Robot robot;
@@ -62,7 +62,7 @@ public class JTableColumnByIdentifierQueryTest {
     robot.cleanUp();
   }
   
-  @Test(dataProvider = "columnNames", groups = { GUI, EDT_ACTION })
+  @Test(dataProvider = "columnNames", groups = { GUI, ACTION })
   public void shouldReturnColumnIndexGivenIdentifier(String identifier) {
     table.startRecording();
     int index = parseInt(identifier);

@@ -51,7 +51,7 @@ public class JSliderSetValueTaskTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "values", groups = { EDT_ACTION, GUI })
+  @Test(dataProvider = "values", groups = { ACTION, GUI })
   public void shouldReturnValueOfJSlider(int value) {
     JSliderSetValueTask.setValue(slider, value);
     robot.waitForIdle();

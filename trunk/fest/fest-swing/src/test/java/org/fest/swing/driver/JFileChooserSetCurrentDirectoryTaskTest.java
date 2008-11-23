@@ -40,7 +40,7 @@ import static org.fest.util.Files.temporaryFolder;
  *
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JFileChooserSetCurrentDirectoryTaskTest {
 
   private Robot robot;

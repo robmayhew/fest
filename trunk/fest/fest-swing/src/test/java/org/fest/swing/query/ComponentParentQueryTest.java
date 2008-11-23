@@ -17,7 +17,7 @@ package org.fest.swing.query;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestGroups.EDT_ACTION;
+import static org.fest.swing.testing.TestGroups.ACTION;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 import java.awt.Container;
@@ -38,7 +38,7 @@ import org.testng.annotations.Test;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class ComponentParentQueryTest {
 
   private Robot robot;

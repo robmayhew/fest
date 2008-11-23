@@ -61,7 +61,7 @@ public class JTextComponentEditableQueryTest {
     robot.cleanUp();
   }
   
-  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, EDT_ACTION })
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, ACTION })
   public void shouldIndicateIfJTextComponentIsEditable(final boolean editable) {
     setTextFieldEditable(textField, editable);
     robot.waitForIdle();

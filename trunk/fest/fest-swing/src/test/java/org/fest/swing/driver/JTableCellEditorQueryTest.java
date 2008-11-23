@@ -42,7 +42,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JTableCellEditorQueryTest {
 
   private Robot robot;
@@ -63,7 +63,7 @@ public class JTableCellEditorQueryTest {
     robot.cleanUp();
   }
 
-  @Test(dataProvider = "editorTypes", groups = { GUI, EDT_ACTION })
+  @Test(dataProvider = "editorTypes", groups = { GUI, ACTION })
   public void shouldReturnEditorComponentOfJTableCell(int column, Class<?> editorType) {
     int row = 0;
     Component editor = cellEditorIn(table, row, column);

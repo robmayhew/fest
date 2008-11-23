@@ -39,7 +39,7 @@ import static org.fest.swing.testing.TestGroups.*;
  *
  * @author Yvonne Wang
  */
-@Test(groups = { GUI, EDT_ACTION })
+@Test(groups = { GUI, ACTION })
 public class JInternalFrameSetIconTaskTest {
 
   private Robot robot;
