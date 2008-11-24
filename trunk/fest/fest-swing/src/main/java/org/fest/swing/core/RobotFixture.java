@@ -195,6 +195,7 @@ public class RobotFixture implements Robot {
     Component applet = findAppletDescendent(w);
     EventQueue eventQueue = windowMonitor.eventQueueFor(applet != null ? applet : w);
     eventQueue.postEvent(event);
+    waitForIdle();
   }
 
   /**

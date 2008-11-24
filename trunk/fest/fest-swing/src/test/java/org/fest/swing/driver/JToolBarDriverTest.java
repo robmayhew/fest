@@ -20,29 +20,26 @@ import java.awt.*;
 import javax.swing.JLabel;
 import javax.swing.JToolBar;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
 
 import static java.awt.BorderLayout.*;
 import static javax.swing.SwingUtilities.getWindowAncestor;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.ComponentLocationQuery.locationOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -59,6 +56,10 @@ public class JToolBarDriverTest {
   private JToolBar toolBar;
   private JToolBarDriver driver;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JToolBarDriver(robot);
@@ -71,19 +72,18 @@ public class JToolBarDriverTest {
     robot.cleanUp();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenFloatingNotFloatableToolBar(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenFloatingNotFloatableToolBar() {
     setNotFloatable(toolBar);
     robot.waitForIdle();
     try {
       driver.makeFloat(toolBar);
-      fail();
-    } catch (ActionFailedException e) {
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
       assertThat(e).message().contains("is not floatable");
     }
   }
 
+  @RunsInEDT
   private static void setNotFloatable(final JToolBar toolBar) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -137,25 +137,22 @@ public class JToolBarDriverTest {
     driver.floatTo(toolBar, where.x, where.y);
     driver.unfloat(toolBar, constraint);
     assertThat(ancestorOf(toolBar)).isSameAs(originalAncestor);
-    assertThat(componentAt(constraint)).isSameAs(toolBar);
+    assertThat(window.componentAt(constraint)).isSameAs(toolBar);
   }
 
-  private Component componentAt(String constraint) {
-    return window.borderLayout.getLayoutComponent(constraint);
-  }
-
+  @RunsInEDT
   private Point whereToFloatTo() {
-    Rectangle bounds = boundsOf(ancestorOf(toolBar));
+    Rectangle bounds = boundsOfWindowAncestor(toolBar);
     int x = bounds.x + bounds.width + 10;
     int y = bounds.y + bounds.height + 10;
     return new Point(x, y);
   }
 
   @RunsInEDT
-  private static Rectangle boundsOf(final Component component) {
+  private static Rectangle boundsOfWindowAncestor(final JToolBar toolBar) {
     return execute(new GuiQuery<Rectangle>() {
       protected Rectangle executeInEDT() {
-        return component.getBounds();
+        return getWindowAncestor(toolBar).getBounds();
       }
     });
   }
@@ -173,8 +170,13 @@ public class JToolBarDriverTest {
       };
   }
 
-  private static Window ancestorOf(JToolBar toolBar) {
-    return getWindowAncestor(toolBar);
+  @RunsInEDT
+  private static Window ancestorOf(final JToolBar toolBar) {
+    return execute(new GuiQuery<Window>() {
+      protected Window executeInEDT() {
+        return getWindowAncestor(toolBar);
+      }
+    });
   }
 
   private static class MyWindow extends TestWindow {
@@ -183,8 +185,13 @@ public class JToolBarDriverTest {
     final BorderLayout borderLayout = new BorderLayout();
     final JToolBar toolBar = new JToolBar();
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {
@@ -194,6 +201,15 @@ public class JToolBarDriverTest {
       add(toolBar, NORTH);
       toolBar.add(new JLabel("Hello"));
       setPreferredSize(new Dimension(300, 200));
+    }
+
+    @RunsInEDT
+    Component componentAt(final String constraint) {
+      return execute(new GuiQuery<Component>() {
+        protected Component executeInEDT() {
+          return borderLayout.getLayoutComponent(constraint);
+        }
+      });
     }
   }
 }

@@ -18,6 +18,7 @@ package org.fest.swing.query;
 import java.awt.Container;
 import java.awt.Insets;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -39,6 +40,7 @@ public final class ContainerInsetsQuery {
    * @return the insets of the given <code>Container</code>.
    * @see Container#getInsets()
    */
+  @RunsInEDT
   public static Insets insetsOf(final Container container) {
     return execute(new GuiQuery<Insets>() {
       protected Insets executeInEDT() {

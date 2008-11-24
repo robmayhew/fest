@@ -33,7 +33,6 @@ import static javax.swing.SwingUtilities.convertPoint;
 import static org.fest.reflect.core.Reflection.method;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
-import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.swing.util.Platform.isWindows;
 import static org.fest.util.Strings.concat;
 
@@ -101,12 +100,17 @@ public class AWT {
 
   /**
    * Returns the insets of the given <code>{@link Container}</code>, or an empty one if no insets can be found.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param c the given <code>Container</code>.
    * @return the insets of the given <code>Container</code>, or an empty one if no insets can be found.
    */
+  @RunsInCurrentThread
   public static Insets insetsFrom(Container c) {
     try {
-      Insets insets = insetsOf(c);
+      Insets insets = c.getInsets();
       if (insets != null) return insets;
     } catch (Exception e) {}
     return new Insets(0, 0, 0, 0);

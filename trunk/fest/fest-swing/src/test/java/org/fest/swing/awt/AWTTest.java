@@ -15,10 +15,7 @@
  */
 package org.fest.swing.awt;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.Point;
+import java.awt.*;
 
 import javax.swing.JDialog;
 
@@ -71,7 +68,7 @@ public class AWTTest {
     TestWindow window = TestWindow.createNewWindow(getClass());
     try {
       robot.showWindow(window, new Dimension(500, 300));
-      Insets insets = AWT.insetsFrom(window);
+      Insets insets = insetsFrom(window);
       assertThat(insets).isEqualTo(insetsOf(window));
     } finally {
       robot.cleanUp();
@@ -79,16 +76,24 @@ public class AWTTest {
   }
 
   public void shouldReturnEmptyInsetsIfExceptionThrown() {
-    Insets insets = AWT.insetsFrom(null);
+    Insets insets = insetsFrom(null);
     assertThat(insets).isEqualTo(EMPTY_INSETS);
   }
 
   public void shouldReturnEmptyInsetsIfContainerInsetsIsNull() {
     TestWindow window = WindowWithNullInsets.createNew();
-    Insets insets = AWT.insetsFrom(window);
+    Insets insets = insetsFrom(window);
     assertThat(insets).isEqualTo(EMPTY_INSETS);
   }
 
+  private static Insets insetsFrom(final Container c) {
+    return execute(new GuiQuery<Insets>() {
+      protected Insets executeInEDT() {
+        return AWT.insetsFrom(c);
+      }
+    });
+  }
+  
   private static class WindowWithNullInsets extends TestWindow {
     private static final long serialVersionUID = 1L;
 

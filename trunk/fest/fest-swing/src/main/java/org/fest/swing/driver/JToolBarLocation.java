@@ -18,13 +18,12 @@ import java.awt.*;
 
 import javax.swing.JToolBar;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+
 import static java.awt.BorderLayout.*;
 import static java.lang.Math.max;
 import static javax.swing.SwingConstants.HORIZONTAL;
 
-import static org.fest.swing.driver.JToolBarOrientationQuery.orientationOf;
-import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
-import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.*;
 
@@ -40,19 +39,25 @@ public final class JToolBarLocation {
 
   /**
    * Returns the point where to grab the given <code>{@link JToolBar}</code>.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param toolBar the target <code>JToolBar</code>.
    * @return the point where to grab the given <code>JToolBar</code>.
    */
+  @RunsInCurrentThread
   public Point pointToGrab(JToolBar toolBar) {
-    Insets insets = insetsOf(toolBar);
-    Dimension size = sizeOf(toolBar);
+    Insets insets = toolBar.getInsets();
+    int width = toolBar.getWidth();
+    int height = toolBar.getHeight();
     if (max(max(max(insets.left, insets.top), insets.right), insets.bottom) == insets.left)
-      return new Point(insets.left / 2, size.height / 2);
+      return new Point(insets.left / 2, height / 2);
     if (max(max(insets.top, insets.right), insets.bottom) == insets.top)
-      return new Point(size.width / 2, insets.top / 2);
+      return new Point(width / 2, insets.top / 2);
     if (max(insets.right, insets.bottom) == insets.right)
-      return new Point(size.width - insets.right / 2, size.height / 2);
-    return new Point(size.width / 2, size.height - insets.bottom / 2);
+      return new Point(width - insets.right / 2, height / 2);
+    return new Point(width / 2, height - insets.bottom / 2);
   }
 
   /**
@@ -60,20 +65,24 @@ public final class JToolBarLocation {
    * The constraint position must be one of the constants <code>{@link BorderLayout#NORTH NORTH}</code>,
    * <code>{@link BorderLayout#EAST EAST}</code>, <code>{@link BorderLayout#SOUTH SOUTH}</code>, or
    * <code>{@link BorderLayout#WEST WEST}</code>.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
    * @param toolBar the target <code>JToolBar</code>.
    * @param dock the container where to dock the <code>JToolBar</code> to.
    * @param constraint the constraint position.
    * @return the location where to dock the given <code>JToolBar</code>.
    * @throws IllegalArgumentException if the constraint has an invalid value.
    */
+  @RunsInCurrentThread
   public Point dockLocation(JToolBar toolBar, Container dock, String constraint) {
     validate(constraint);
-    Insets insets = insetsOf(dock);
-    Dimension toolBarSize = sizeOf(toolBar);
+    Insets insets = dock.getInsets();
     // BasicToolBarUI prioritizes location N/E/W/S by proximity to the respective border. Close to top border is N, even
     // if close to the left or right border.
-    int offset = isHorizontal(toolBar) ? toolBarSize.height : toolBarSize.width;
-    Dimension dockSize = sizeOf(dock);
+    int offset = isHorizontal(toolBar) ? toolBar.getHeight() : toolBar.getWidth();
+    Dimension dockSize = dock.getSize();
     if (NORTH.equals(constraint))
       return new Point(dockSize.width / 2, insets.top);
     if (EAST.equals(constraint))
@@ -89,13 +98,18 @@ public final class JToolBarLocation {
     return new Point(x, dockSize.height - insets.bottom - 1);
   }
 
+  @RunsInCurrentThread
   private boolean isHorizontal(JToolBar toolBar) {
-    return orientationOf(toolBar) == HORIZONTAL;
+    return toolBar.getOrientation() == HORIZONTAL;
   }
   
   private void validate(String constraint) {
     for (String validConstraint : VALID_CONSTRAINTS)
       if (validConstraint.equals(constraint)) return;
+    throw invalidConstraint(constraint);
+  }
+
+  private IllegalArgumentException invalidConstraint(String constraint) {
     throw new IllegalArgumentException(
         concat(quote(constraint), " is not a valid constraint. Valid constraints are ", format(VALID_CONSTRAINTS)));
   }
