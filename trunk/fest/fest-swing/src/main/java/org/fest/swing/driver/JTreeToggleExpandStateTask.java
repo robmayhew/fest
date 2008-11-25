@@ -8,11 +8,10 @@ import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreePath;
 
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.core.Reflection.method;
-import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a task that uses reflection to toggle the "expand state" of a node in a given
@@ -22,15 +21,12 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JTreeToggleExpandStateTask {
 
+  @RunsInCurrentThread
   static void toggleExpandState(final JTree tree, final Point pathLocation) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        TreePath path = tree.getPathForLocation(pathLocation.x, pathLocation.y);
-        TreeUI treeUI = tree.getUI();
-        assertThat(treeUI).isInstanceOf(BasicTreeUI.class);
-        method("toggleExpandState").withParameterTypes(TreePath.class).in(treeUI).invoke(path);
-      }
-    });
+    TreePath path = tree.getPathForLocation(pathLocation.x, pathLocation.y);
+    TreeUI treeUI = tree.getUI();
+    assertThat(treeUI).isInstanceOf(BasicTreeUI.class);
+    method("toggleExpandState").withParameterTypes(TreePath.class).in(treeUI).invoke(path);
   }
 
   private JTreeToggleExpandStateTask() {}

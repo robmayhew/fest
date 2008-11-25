@@ -103,8 +103,12 @@ public class JListDriver extends JComponentDriver {
     if (values == null) throw new NullPointerException("Array of values should not be null");
     if (Arrays.isEmpty(values)) throw new IllegalArgumentException("Array of values should not be empty");
     new MultipleSelectionTemplate(robot) {
-      int elementCount() { return values.length; }
-      void selectElement(int index) { selectItem(list, values[index]); }
+      int elementCount() { 
+        return values.length; 
+      }
+      void selectElement(int index) { 
+        selectItem(list, values[index]); 
+      }
     }.multiSelect();
   }
 

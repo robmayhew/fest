@@ -25,16 +25,21 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTreeExpandedPathQuery.isExpanded;
-import static org.fest.swing.driver.JTreePathBoundsQuery.pathBoundsOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -49,6 +54,10 @@ public class JTreeToggleExpandStateTaskTest {
   private JTree tree;
   private TreePath rootPath;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
@@ -63,18 +72,25 @@ public class JTreeToggleExpandStateTaskTest {
 
   public void shouldToggleExpandState() {
     assertThat(isRootExpanded()).isFalse();
-    JTreeToggleExpandStateTask.toggleExpandState(tree, centerOfTreeRoot());
+    toggleExpandState(tree, rootPath);
     robot.waitForIdle();
     assertThat(isRootExpanded()).isTrue();
   }
 
+  @RunsInEDT
+  private static void toggleExpandState(final JTree tree, final TreePath rootPath) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        Rectangle pathBounds = tree.getPathBounds(rootPath);
+        Point p = new Point(pathBounds.x + pathBounds.width / 2, pathBounds.y + pathBounds.height / 2);
+        JTreeToggleExpandStateTask.toggleExpandState(tree, p);
+      }
+    });
+  }
+  
+  @RunsInEDT
   private boolean isRootExpanded() {
     return isExpanded(tree, rootPath);
-  }
-
-  private Point centerOfTreeRoot() {
-    Rectangle pathBounds = pathBoundsOf(tree, rootPath);
-    return new Point(pathBounds.x + pathBounds.width / 2, pathBounds.y + pathBounds.height / 2);
   }
 
   private static class MyWindow extends TestWindow {
@@ -83,8 +99,13 @@ public class JTreeToggleExpandStateTaskTest {
     final JTree tree;
     final TreeNode treeRoot;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

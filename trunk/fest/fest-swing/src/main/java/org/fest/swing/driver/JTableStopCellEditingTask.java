@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
@@ -52,6 +53,7 @@ final class JTableStopCellEditingTask {
     });
   }
   
+  @RunsInCurrentThread
   private static void doStopCellEditing(JTable table, int row, int column) {
     TableCellEditor cellEditor = table.getCellEditor(row, column);
     if (cellEditor == null) return;

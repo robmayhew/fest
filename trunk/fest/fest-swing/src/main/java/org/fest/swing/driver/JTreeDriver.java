@@ -25,34 +25,34 @@ import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.TreePath;
 
 import org.fest.assertions.Description;
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTreeCellReader;
 import org.fest.swing.core.Robot;
-import org.fest.swing.exception.*;
-import org.fest.util.Arrays;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
+import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.exception.LocationUnavailableException;
+import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.util.Pair;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.JTreeChildrenShowUpCondition.untilChildrenShowUp;
 import static org.fest.swing.driver.JTreeEditableQuery.isEditable;
 import static org.fest.swing.driver.JTreeExpandPathTask.expandPath;
-import static org.fest.swing.driver.JTreeExpandedPathQuery.isExpanded;
-import static org.fest.swing.driver.JTreeMatchingPathQuery.matchingPathFor;
-import static org.fest.swing.driver.JTreePathBoundsQuery.pathBoundsOf;
-import static org.fest.swing.driver.JTreePathsForRowsQuery.pathsForRows;
-import static org.fest.swing.driver.JTreeRowAtPointQuery.rowAtPoint;
-import static org.fest.swing.driver.JTreeRowBoundsQuery.rowBoundsOf;
+import static org.fest.swing.driver.JTreeMatchingPathQuery.*;
 import static org.fest.swing.driver.JTreeSelectionCountQuery.selectionCountOf;
 import static org.fest.swing.driver.JTreeSelectionPathsQuery.selectionPathsOf;
-import static org.fest.swing.driver.JTreeSingleRowSelectedQuery.isSingleRowSelected;
-import static org.fest.swing.driver.JTreeToggleClickCountQuery.toggleClickCountOf;
 import static org.fest.swing.driver.JTreeToggleExpandStateTask.toggleExpandState;
-import static org.fest.swing.driver.JTreeUIQuery.uiOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
-import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
 import static org.fest.swing.timing.Pause.pause;
-import static org.fest.util.Arrays.format;
+import static org.fest.util.Arrays.*;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -88,29 +88,48 @@ public class JTreeDriver extends JComponentDriver {
    * </p>
    * @param tree the target <code>JTree</code>.
    * @param row the given row.
+   * @throws IllegalStateException if the <code>JTree</code> is disabled.
+   * @throws IllegalStateException if the <code>JTree</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
+   * visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    * @throws ActionFailedException if is not possible to toggle row for the <code>JTree</code>'s <code>TreeUI</code>.
    */
+  @RunsInEDT
   public void toggleRow(JTree tree, int row) {
-    if (!isEnabled(tree)) return;
+    Pair<Point, Integer> toggleRowInfo = toggleRowInfo(tree, row, location);
     // Alternatively, we can reflect into the UI and do a single click on the appropriate expand location, but this is
     // safer.
-    Point p = location.pointAt(tree, row);
-    int toggleClickCount = toggleClickCountOf(tree);
-    if (toggleClickCount != 0) {
-      robot.click(tree, p, LEFT_BUTTON, toggleClickCount);
+    Point p = toggleRowInfo.i;
+    int toggleClickCount = toggleRowInfo.ii;
+    if (toggleClickCount == 0) {
+      toggleRowThroughTreeUI(tree, p);
+      robot.waitForIdle();
       return;
     }
-    toggleRowThroughTreeUI(tree, p);
+    robot.click(tree, p, LEFT_BUTTON, toggleClickCount);
   }
 
-  private void toggleRowThroughTreeUI(JTree tree, Point p) {
-    TreeUI treeUI = uiOf(tree);
-    if (!(treeUI instanceof BasicTreeUI)) throw actionFailure(concat("Can't toggle row for ", treeUI));
-    toggleExpandState(tree, p);
-    robot.waitForIdle();
+  @RunsInEDT
+  private static Pair<Point, Integer> toggleRowInfo(final JTree tree, final int row, final JTreeLocation location) {
+    return execute(new GuiQuery<Pair<Point, Integer>>() {
+      protected Pair<Point, Integer> executeInEDT() {
+        validateIsEnabledAndShowing(tree);
+        Point p = location.pointAt(tree, row);
+        return new Pair<Point, Integer>(p, tree.getToggleClickCount());
+      }
+    });
+  }
+  
+  @RunsInEDT
+  private static void toggleRowThroughTreeUI(final JTree tree, final Point p) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        TreeUI treeUI = tree.getUI();
+        if (!(treeUI instanceof BasicTreeUI)) throw actionFailure(concat("Can't toggle row for ", treeUI));
+        toggleExpandState(tree, p);
+      }
+    });
   }
 
   /**
@@ -119,55 +138,59 @@ public class JTreeDriver extends JComponentDriver {
    * @param rows the rows to select.
    * @throws NullPointerException if the array of rows is <code>null</code>.
    * @throws IllegalArgumentException if the array of rows is empty.
-   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
-   * visible rows in the <code>JTree</code>.
+   * @throws IllegalStateException if the <code>JTree</code> is disabled.
+   * @throws IllegalStateException if the <code>JTree</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if any of the given rows is less than zero or equal than or greater than the 
+   * number of visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for any of the given rows cannot be found.
    */
+  @RunsInEDT
   public void selectRows(final JTree tree, final int[] rows) {
     if (rows == null) throw new NullPointerException("The array of rows should not be null");
     if (isEmptyArray(rows)) throw new IllegalArgumentException("The array of rows should not be empty");
-    if (!isEnabled(tree)) return;
     new MultipleSelectionTemplate(robot) {
-      @Override int elementCount() {
+      int elementCount() {
         return rows.length;
       }
-
-      @Override void selectElement(int index) {
+      void selectElement(int index) {
         selectRow(tree, rows[index]);
       }
     }.multiSelect();
   }
 
-  private boolean isEmptyArray(int[] array) { return array == null || array.length == 0; }
-
   /**
    * Selects the given row.
    * @param tree the target <code>JTree</code>.
    * @param row the row to select.
+   * @throws IllegalStateException if the <code>JTree</code> is disabled.
+   * @throws IllegalStateException if the <code>JTree</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
-   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
+   * visible rows in the <code>JTree</code>.
    */
+  @RunsInEDT
   public void selectRow(JTree tree, int row) {
-    if (!isEnabled(tree)) return;
-    selectPath(tree, location.pathFor(tree, row));
+    // TODO: remove is new approach works: selectPath(tree, validateAndFindPathForRow(tree, row, location));
+    scrollAndSelectRow(tree, row);
   }
 
   /**
    * Selects the given paths, expanding parent nodes if necessary.
    * @param tree the target <code>JTree</code>.
    * @param paths the paths to select.
-   * @throws ActionFailedException if the array of paths is <code>null</code> or empty.
+   * @throws NullPointerException if the array of rows is <code>null</code>.
+   * @throws IllegalArgumentException if the array of rows is empty.
+   * @throws IllegalStateException if the <code>JTree</code> is disabled.
+   * @throws IllegalStateException if the <code>JTree</code> is not showing on the screen.
    * @throws LocationUnavailableException if any the given path cannot be found.
    */
+  @RunsInEDT
   public void selectPaths(final JTree tree, final String[] paths) {
-    if (Arrays.isEmpty(paths)) throw actionFailure("The array of paths should not be null or empty");
-    if (!isEnabled(tree)) return;
+    if (paths == null) throw new NullPointerException("The array of paths should not be null");
+    if (isEmpty(paths)) throw new IllegalArgumentException("The array of paths should not be empty");
     new MultipleSelectionTemplate(robot) {
       int elementCount() {
         return paths.length;
       }
-
       void selectElement(int index) {
         selectPath(tree, paths[index]);
       }
@@ -178,22 +201,194 @@ public class JTreeDriver extends JComponentDriver {
    * Selects the given path, expanding parent nodes if necessary.
    * @param tree the target <code>JTree</code>.
    * @param path the path to select.
+   * @throws IllegalStateException if the <code>JTree</code> is disabled.
+   * @throws IllegalStateException if the <code>JTree</code> is not showing on the screen.
    * @throws LocationUnavailableException if the given path cannot be found.
    */
+  @RunsInEDT
   public void selectPath(JTree tree, String path) {
-    if (!isEnabled(tree)) return;
-    TreePath treePath = findMatchingPath(tree, path);
-    selectPath(tree, treePath);
+    selectMatchingPath(tree, path);
   }
 
-  private void selectPath(JTree tree, TreePath path) {
-    makeVisible(tree, path, false);
-    int row = rowAtPoint(tree, location.pointAt(tree, path));
-    if (isSingleRowSelected(tree, row)) return;
-    // NOTE: the row bounds *do not* include the expansion handle
-    Rectangle rowBounds = rowBoundsOf(tree, row);
-    scrollToVisible(tree, rowBounds);
-    click(tree, new Point(rowBounds.x + 1, rowBounds.y + rowBounds.height / 2));
+  /**
+   * Shows a pop-up menu at the position of the node in the given row.
+   * @param tree the target <code>JTree</code>.
+   * @param row the given row.
+   * @return a driver that manages the displayed pop-up menu.
+   * @throws IllegalStateException if the <code>JTree</code> is disabled.
+   * @throws IllegalStateException if the <code>JTree</code> is not showing on the screen.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
+   * visible rows in the <code>JTree</code>.
+   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
+   */
+  @RunsInEDT
+  public JPopupMenu showPopupMenu(JTree tree, int row) {
+    return robot.showPopupMenu(tree, validateAndFindPointAtRow(tree, row, location));
+  }
+
+  @RunsInEDT
+  private static Point validateAndFindPointAtRow(final JTree tree, final int row, final JTreeLocation location) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        validateIsEnabledAndShowing(tree);
+        return location.pointAt(tree, row);
+      }
+    });
+  }
+
+  /**
+   * Shows a pop-up menu at the position of the last node in the given path. The last node in the given path will be
+   * made visible (by expanding the parent node(s)) if it is not visible.
+   * @param tree the target <code>JTree</code>.
+   * @param path the given path.
+   * @return a driver that manages the displayed pop-up menu.
+   * @throws IllegalStateException if the <code>JTree</code> is disabled.
+   * @throws IllegalStateException if the <code>JTree</code> is not showing on the screen.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   * @throws LocationUnavailableException if the given path cannot be found.
+   * @see #separator(String)
+   */
+  @RunsInEDT
+  public JPopupMenu showPopupMenu(JTree tree, String path) {
+    TreePath matchingPath = validateAndFindMatchingPath(tree, path, pathFinder);
+    makeVisible(tree, matchingPath, false);
+    return robot.showPopupMenu(tree, pointAtPath(tree, matchingPath, location));
+  }
+
+  @RunsInEDT
+  private static Point pointAtPath(final JTree tree, final TreePath path, final JTreeLocation location) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        return location.pointAt(tree, path);
+      }
+    });
+  }
+
+  /**
+   * Starts a drag operation at the location of the given row.
+   * @param tree the target <code>JTree</code>.
+   * @param row the given row.
+   * @throws IllegalStateException if the <code>JTree</code> is disabled.
+   * @throws IllegalStateException if the <code>JTree</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
+   * visible rows in the <code>JTree</code>.
+   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
+   */
+  @RunsInEDT
+  public void drag(JTree tree, int row) {
+    Point p = scrollAndSelectRow(tree, row);
+    drag(tree, p);
+  }
+
+  @RunsInEDT
+  private Point scrollAndSelectRow(JTree tree, int row) {
+    Point p = scrollToRowToSelect(tree, row, location); 
+    robot.click(tree, p);
+    return p;
+  }
+  
+  @RunsInEDT
+  private static Point scrollToRowToSelect(final JTree tree, final int row, final JTreeLocation location) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        validateIsEnabledAndShowing(tree);
+        Rectangle rowBounds = tree.getRowBounds(location.validIndex(tree, row));
+        tree.scrollRectToVisible(rowBounds);
+        return new Point(rowBounds.x + 1, rowBounds.y + rowBounds.height / 2);
+      }
+    });
+  }
+
+  /**
+   * Ends a drag operation at the location of the given row.
+   * @param tree the target <code>JTree</code>.
+   * @param row the given row.
+   * @throws IllegalStateException if the <code>JTree</code> is disabled.
+   * @throws IllegalStateException if the <code>JTree</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
+   * visible rows in the <code>JTree</code>.
+   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
+   * @throws ActionFailedException if there is no drag action in effect.
+   */
+  @RunsInEDT
+  public void drop(JTree tree, int row) {
+    drop(tree, scrollToRow(tree, row, location));
+  }
+  
+  @RunsInEDT
+  private static Point scrollToRow(final JTree tree, final int row, final JTreeLocation location) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        validateIsEnabledAndShowing(tree);
+        tree.scrollRectToVisible(tree.getRowBounds(row));
+        return location.pointAt(tree, row);
+      }
+    });
+  }
+
+  /**
+   * Starts a drag operation at the location of the given <code>{@link TreePath}</code>.
+   * @param tree the target <code>JTree</code>.
+   * @param path the given path.
+   * @throws IllegalStateException if the <code>JTree</code> is disabled.
+   * @throws IllegalStateException if the <code>JTree</code> is not showing on the screen.
+   * @throws LocationUnavailableException if the given path cannot be found.
+   * @see #separator(String)
+   */
+  @RunsInEDT
+  public void drag(JTree tree, String path) {
+    Point p = selectMatchingPath(tree, path);
+    drag(tree, p);
+  }
+
+  @RunsInEDT
+  private Point selectMatchingPath(JTree tree, String path) {
+    TreePath matchingPath = validateAndFindMatchingPath(tree, path, pathFinder);
+    makeVisible(tree, matchingPath, false);
+    Point p = scrollToPathToSelect(tree, matchingPath, location);
+    robot.click(tree, p);
+    return p;
+  }
+  
+  @RunsInEDT
+  private static Point scrollToPathToSelect(final JTree tree, final TreePath path, final JTreeLocation location) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        Rectangle pathBounds = tree.getPathBounds(path);
+        tree.scrollRectToVisible(pathBounds);
+        return new Point(pathBounds.x + 1, pathBounds.y + pathBounds.height / 2);
+      }
+    });
+  }
+
+  /**
+   * Ends a drag operation at the location of the given <code>{@link TreePath}</code>.
+   * @param tree the target <code>JTree</code>.
+   * @param path the given path.
+   * @throws IllegalStateException if the <code>JTree</code> is disabled.
+   * @throws IllegalStateException if the <code>JTree</code> is not showing on the screen.
+   * @throws LocationUnavailableException if the given path cannot be found.
+   * @throws ActionFailedException if there is no drag action in effect.
+   * @see #separator(String)
+   */
+  @RunsInEDT
+  public void drop(JTree tree, String path) {
+    Point p = scrollToMatchingPath(tree, path, pathFinder, location);
+    drop(tree, p);
+  }
+
+  @RunsInEDT
+  private static Point scrollToMatchingPath(final JTree tree, final String path, 
+      final JTreePathFinder pathFinder, final JTreeLocation location) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        validateIsEnabledAndShowing(tree);
+        TreePath matchingPath = pathFinder.findMatchingPath(tree, path);
+        tree.scrollRectToVisible(tree.getPathBounds(matchingPath));
+        return location.pointAt(tree, matchingPath);
+      }
+    });
   }
 
   /**
@@ -204,27 +399,24 @@ public class JTreeDriver extends JComponentDriver {
    * @param expandWhenFound indicates if nodes should be expanded or not when found.
    * @return if it was necessary to make visible and/or expand a node in the path.
    */
+  @RunsInEDT
   private boolean makeVisible(JTree tree, TreePath path, boolean expandWhenFound) {
     boolean changed = false;
     if (path.getPathCount() > 1) changed = makeParentVisible(tree, path);
     if (!expandWhenFound) return changed;
-    expand(tree, path);
+    expandPath(tree, path);
     waitForChildrenToShowUp(tree, path);
     return true;
   }
 
+  @RunsInEDT
   private boolean makeParentVisible(JTree tree, TreePath path) {
     boolean changed = makeVisible(tree, path.getParentPath(), true);
     if (changed) robot.waitForIdle();
     return changed;
   }
 
-  private void expand(JTree tree, TreePath path) {
-    if (isExpanded(tree, path)) return;
-    // Use this method instead of a toggle action to avoid any component visibility requirements
-    expandPath(tree, path);
-  }
-
+  @RunsInEDT
   private void waitForChildrenToShowUp(JTree tree, TreePath path) {
     int timeout = robot.settings().timeoutToBeVisible();
     try {
@@ -233,95 +425,7 @@ public class JTreeDriver extends JComponentDriver {
       throw new LocationUnavailableException(e.getMessage());
     }
   }
-
-  /**
-   * Shows a pop-up menu at the position of the node in the given row.
-   * @param tree the target <code>JTree</code>.
-   * @param row the given row.
-   * @return a driver that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
-   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
-   */
-  public JPopupMenu showPopupMenu(JTree tree, int row) {
-    return robot.showPopupMenu(tree, location.pointAt(tree, row));
-  }
-
-  /**
-   * Shows a pop-up menu at the position of the last node in the given path. The last node in the given path will be
-   * made visible (by expanding the parent node(s)) if it is not visible.
-   * @param tree the target <code>JTree</code>.
-   * @param path the given path.
-   * @return a driver that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   * @throws LocationUnavailableException if the given path cannot be found.
-   * @see #separator(String)
-   */
-  public JPopupMenu showPopupMenu(JTree tree, String path) {
-    TreePath matchingPath = findMatchingPath(tree, path);
-    makeVisible(tree, matchingPath, false);
-    return robot.showPopupMenu(tree, location.pointAt(tree, matchingPath));
-  }
-
-  /**
-   * Starts a drag operation at the location of the given row.
-   * @param tree the target <code>JTree</code>.
-   * @param row the given row.
-   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
-   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
-   */
-  public void drag(JTree tree, int row) {
-    drag(tree, location.pathFor(tree, row));
-  }
-
-  /**
-   * Ends a drag operation at the location of the given row.
-   * @param tree the target <code>JTree</code>.
-   * @param row the given row.
-   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
-   * @throws LocationUnavailableException if a tree path for the given row cannot be found.
-   * @throws ActionFailedException if there is no drag action in effect.
-   */
-  public void drop(JTree tree, int row) {
-    drop(tree, location.pathFor(tree, row));
-  }
-
-  /**
-   * Starts a drag operation at the location of the given <code>{@link TreePath}</code>.
-   * @param tree the target <code>JTree</code>.
-   * @param path the given path.
-   * @throws LocationUnavailableException if the given path cannot be found.
-   * @see #separator(String)
-   */
-  public void drag(JTree tree, String path) {
-    drag(tree, findMatchingPath(tree, path));
-  }
-
-  /**
-   * Ends a drag operation at the location of the given <code>{@link TreePath}</code>.
-   * @param tree the target <code>JTree</code>.
-   * @param path the given path.
-   * @throws LocationUnavailableException if the given path cannot be found.
-   * @throws ActionFailedException if there is no drag action in effect.
-   * @see #separator(String)
-   */
-  public void drop(JTree tree, String path) {
-    drop(tree, findMatchingPath(tree, path));
-  }
-
-  private void drag(JTree tree, TreePath path) {
-    selectPath(tree, path);
-    drag(tree, location.pointAt(tree, path));
-  }
-
-  private void drop(JTree tree, TreePath path) {
-    scrollToVisible(tree, pathBoundsOf(tree, path));
-    drop(tree, location.pointAt(tree, path));
-  }
-
+  
   /**
    * Asserts that the given <code>{@link JTree}</code>'s selected rows are equal to the given one.
    * @param tree the target <code>JTree</code>.
@@ -329,9 +433,37 @@ public class JTreeDriver extends JComponentDriver {
    * @throws NullPointerException if the array of row indices is <code>null</code>.
    * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given rows.
    */
+  @RunsInEDT
   public void requireSelection(JTree tree, int[] rows) {
     if (rows == null) throw new NullPointerException("The array of row indices should not be null");
-    requireSelection(tree, pathsForRows(tree, rows));
+    requireSelection(tree, rows, pathFinder, selectionProperty(tree));
+  }
+
+  @RunsInEDT
+  private static void requireSelection(final JTree tree, final int[] rows, final JTreePathFinder pathFinder, 
+      final Description errorMessage) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        assertHasSelection(tree, rows, pathFinder, errorMessage);
+      }
+    });
+  }
+
+  @RunsInCurrentThread
+  private static void assertHasSelection(final JTree tree, final int[] rows, final JTreePathFinder pathFinder,
+      final Description errorMessage) {
+    int[] selectionRows = tree.getSelectionRows();
+    if (isEmptyArray(selectionRows)) failNoSelection(errorMessage);
+    int rowCount = rows.length;
+    for (int i = 0; i < rowCount; i++)
+      assertHasSelection(rows[i], selectionRows, errorMessage);
+  }
+
+  private static boolean isEmptyArray(int[] array) { return array == null || array.length == 0; }
+
+  @RunsInEDT
+  private static void assertHasSelection(int row, int[] selectionRows, final Description errorMessage) {
+    assertThat(selectionRows).as(errorMessage).contains(row);
   }
 
   /**
@@ -343,33 +475,55 @@ public class JTreeDriver extends JComponentDriver {
    * @throws AssertionError if this fixture's <code>JTree</code> selection is not equal to the given paths.
    * @see #separator(String)
    */
+  @RunsInEDT
   public void requireSelection(JTree tree, String[] paths) {
     if (paths == null) throw new NullPointerException("The array of paths should not be null");
+    requireSelection(tree, paths, pathFinder, selectionProperty(tree));
+  }
+
+  @RunsInEDT
+  private static void requireSelection(final JTree tree, final String[] paths, final JTreePathFinder pathFinder, 
+      final Description errorMessage) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        assertHasSelection(tree, paths, pathFinder, errorMessage);
+      }
+    });
+  }
+  
+  @RunsInCurrentThread
+  private static void assertHasSelection(final JTree tree, final String[] paths, final JTreePathFinder pathFinder,
+      final Description errorMessage) {
+    TreePath[] selectionPaths = tree.getSelectionPaths();
+    if (isEmpty(selectionPaths)) failNoSelection(errorMessage);
     int pathCount = paths.length;
-    TreePath[] matchingPaths = new TreePath[pathCount];
     for (int i = 0; i < pathCount; i++)
-      matchingPaths[i] = findMatchingPath(tree, paths[i]);
-    requireSelection(tree, matchingPaths);
+      assertHasSelection(matchingPathFor(tree, paths[i], pathFinder), selectionPaths, errorMessage);
   }
 
-  private void requireSelection(JTree tree, TreePath[] paths) {
-    TreePath[] selectionPaths = selectionPathsOf(tree);
-    if (Arrays.isEmpty(selectionPaths)) fail(concat("[", selectionProperty(tree), "] No selection"));
-    assertThat(selectionPaths).as(selectionProperty(tree)).isEqualTo(paths);
+  private static void failNoSelection(final Description errorMessage) {
+    fail(concat("[", errorMessage.value(), "] No selection"));
   }
 
+  @RunsInEDT
+  private static void assertHasSelection(TreePath path, TreePath[] selectionPaths, final Description errorMessage) {
+    assertThat(selectionPaths).as(errorMessage).contains(path);
+  }
+  
   /**
    * Asserts that the given <code>{@link JTree}</code> does not have any selection.
    * @param tree the given <code>JTree</code>.
    * @throws AssertionError if the <code>JTree</code> has a selection.
    */
+  // TODO FIX
   public void requireNoSelection(JTree tree) {
     if (selectionCountOf(tree) == 0) return;
     String message = concat(
-        "[", selectionProperty(tree), "] expected no selection but was:<", format(selectionPathsOf(tree)), ">");
+        "[", selectionProperty(tree).value(), "] expected no selection but was:<", format(selectionPathsOf(tree)), ">");
     fail(message);
   }
 
+  @RunsInEDT
   private Description selectionProperty(JTree tree) {
     return propertyName(tree, SELECTION_PROPERTY);
   }
@@ -379,6 +533,7 @@ public class JTreeDriver extends JComponentDriver {
    * @param tree the given <code>JTree</code>.
    * @throws AssertionError if the <code>JTree</code> is not editable.
    */
+  @RunsInEDT
   public void requireEditable(JTree tree) {
     assertEditable(tree, true);
   }
@@ -388,26 +543,19 @@ public class JTreeDriver extends JComponentDriver {
    * @param tree the given <code>JTree</code>.
    * @throws AssertionError if the <code>JTree</code> is editable.
    */
+  @RunsInEDT
   public void requireNotEditable(JTree tree) {
     assertEditable(tree, false);
   }
 
+  @RunsInEDT
   private void assertEditable(JTree tree, boolean editable) {
     assertThat(isEditable(tree)).as(editableProperty(tree)).isEqualTo(editable);
   }
 
+  @RunsInEDT
   private static Description editableProperty(JTree tree) {
     return propertyName(tree, EDITABLE_PROPERTY);
-  }
-
-  private TreePath findMatchingPath(JTree tree, String path) {
-    try {
-      return matchingPathFor(tree, path, pathFinder);
-    } catch (UnexpectedException e) {
-      Throwable cause = e.getCause();
-      if (cause instanceof RuntimeException) throw (RuntimeException)cause;
-      throw e;
-    }
   }
 
   /**

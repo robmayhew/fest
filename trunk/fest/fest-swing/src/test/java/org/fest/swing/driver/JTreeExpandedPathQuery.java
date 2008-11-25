@@ -3,6 +3,7 @@ package org.fest.swing.driver;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -16,6 +17,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JTreeExpandedPathQuery {
 
+  @RunsInEDT
   static boolean isExpanded(final JTree tree, final TreePath path) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {

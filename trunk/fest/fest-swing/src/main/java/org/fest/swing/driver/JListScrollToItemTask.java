@@ -44,6 +44,7 @@ final class JListScrollToItemTask {
   static final Pair<Integer, Point> ITEM_NOT_FOUND = new Pair<Integer, Point>(-1, null);
   
   @RunsInEDT
+  // returns the point that the JList was scrolled to.
   static Point scrollToItem(final JList list, final int index) {
     return execute(new GuiQuery<Point>() {
       protected Point executeInEDT() {
@@ -55,6 +56,7 @@ final class JListScrollToItemTask {
   }
 
   @RunsInEDT
+  // returns the index of first matching element and the point that the JList was scrolled to.
   static Pair<Integer, Point> scrollToItem(final JList list, final String value, final JListCellReader cellReader) {
     return execute(new GuiQuery<Pair<Integer, Point>>() {
       protected Pair<Integer, Point> executeInEDT() {
@@ -67,6 +69,7 @@ final class JListScrollToItemTask {
   }
   
   @RunsInEDT
+  // returns the index of first matching element and the point that the JList was scrolled to.
   static Pair<Integer, Point> scrollToItemIfNotSelectedYet(final JList list, final String value,
       final JListCellReader cellReader) {
     return execute(new GuiQuery<Pair<Integer, Point>>() {
@@ -80,6 +83,7 @@ final class JListScrollToItemTask {
   }
 
   @RunsInEDT
+  // returns the point that the JList was scrolled to.
   static Point scrollToItemIfNotSelectedYet(final JList list, final int index) {
     return execute(new GuiQuery<Point>() {
       protected Point executeInEDT() {
@@ -91,6 +95,7 @@ final class JListScrollToItemTask {
   }
   
   @RunsInCurrentThread
+  // returns the point that the JList was scrolled to.
   private static Point scrollToItemWithIndexIfNotSelectedYet(final JList list, final int index) {
     if (list.getSelectedIndex() == index) return null;
     return scrollToItemWithIndex(list, index);

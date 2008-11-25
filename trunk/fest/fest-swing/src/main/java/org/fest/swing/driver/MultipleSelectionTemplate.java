@@ -15,6 +15,7 @@
  */
 package org.fest.swing.driver;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 
 import static org.fest.swing.util.Platform.controlOrCommandKey;
@@ -34,6 +35,7 @@ abstract class MultipleSelectionTemplate {
   
   abstract int elementCount();
 
+  @RunsInEDT
   final void multiSelect() {
     int elementCount = elementCount();
     selectElement(0);

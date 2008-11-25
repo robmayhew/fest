@@ -72,13 +72,21 @@ public final class JTreeLocation {
    */
   @RunsInCurrentThread
   public TreePath pathFor(JTree tree, int row) {
-    TreePath path = tree.getPathForRow(validated(tree, row));
+    TreePath path = tree.getPathForRow(validIndex(tree, row));
     if (path != null) return path;
     throw new LocationUnavailableException(concat("Unable to find tree path for row [", valueOf(row), "]"));
   }
 
+  /**
+   * Validates that the given row index is valid.
+   * @param tree the target <code>JTree</code>.
+   * @param row the row index to validate.
+   * @return the validated row index.
+   * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
+   * visible rows in the <code>JTree</code>.
+   */
   @RunsInCurrentThread
-  private int validated(JTree tree, int row) {
+  public int validIndex(JTree tree, int row) {
     int rowCount = tree.getRowCount();
     if (row >= 0 && row < rowCount) return row;
     throw new IndexOutOfBoundsException(concat(

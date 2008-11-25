@@ -29,13 +29,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.driver.JTreePathBoundsQuery.pathBoundsOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.timing.Pause.pause;
@@ -97,6 +98,15 @@ public class JTreeLocationTest {
     };
   }
 
+  @RunsInEDT
+  private static Rectangle pathBoundsOf(final JTree tree, final TreePath path) {
+    return execute(new GuiQuery<Rectangle>() {
+      protected Rectangle executeInEDT() {
+        return tree.getPathBounds(path);
+      }
+    });
+  }
+  
   private TreePath node11Path() {
     return childOf(node1Path(), 0);
   }
