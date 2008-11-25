@@ -24,13 +24,11 @@ import java.util.List;
 import javax.swing.JTree;
 import javax.swing.tree.*;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestWindow;
@@ -56,6 +54,10 @@ public class JTreeLocationTest {
   private JTreeLocation location;
   private List<TreePath> paths;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
@@ -66,6 +68,7 @@ public class JTreeLocationTest {
     populatePaths();
   }
 
+  @RunsInEDT
   private void populatePaths() {
     paths = new ArrayList<TreePath>();
     paths.add(rootPath());
@@ -85,10 +88,19 @@ public class JTreeLocationTest {
   public void shouldFindLocationOfTreePath(int pathIndex) {
     TreePath path = paths.get(pathIndex);
     pause(160);
-    Point actual = location.pointAt(tree, path);
+    Point actual = pointAt(tree, path, location);
     Rectangle pathBounds = pathBoundsOf(tree, path);
     Point expected = new Point(pathBounds.x + pathBounds.width / 2, pathBounds.y + pathBounds.height / 2);
     assertThat(actual).isEqualTo(expected);
+  }
+
+  @RunsInEDT
+  private static Point pointAt(final JTree tree, final TreePath path, final JTreeLocation location) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        return location.pointAt(tree, path);
+      }
+    });
   }
 
   @DataProvider(name = "pathIndices")
@@ -107,10 +119,12 @@ public class JTreeLocationTest {
     });
   }
   
+  @RunsInEDT
   private TreePath node11Path() {
     return childOf(node1Path(), 0);
   }
 
+  @RunsInEDT
   private TreePath node1Path() {
     return childOf(rootPath(), 0);
   }
@@ -119,6 +133,7 @@ public class JTreeLocationTest {
     return new TreePath(array(treeRoot));
   }
 
+  @RunsInEDT
   private TreePath childOf(TreePath parent, int index) {
     TreeNode child = childOf(parent.getLastPathComponent(), index);
     final TreePath childPath = parent.pathByAddingChild(child);
@@ -131,15 +146,25 @@ public class JTreeLocationTest {
     return childPath;
   }
 
-  private TreeNode childOf(Object parent, int index) {
-    return ((DefaultMutableTreeNode)parent).getChildAt(index);
+  @RunsInEDT
+  private static TreeNode childOf(final Object parent, final int index) {
+    return execute(new GuiQuery<TreeNode>() {
+      protected TreeNode executeInEDT() {
+        return ((DefaultMutableTreeNode)parent).getChildAt(index);
+      }
+    }) ;
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     final JTree tree = new JTree();
