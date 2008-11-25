@@ -46,8 +46,6 @@ import static org.fest.swing.driver.JTreeChildrenShowUpCondition.untilChildrenSh
 import static org.fest.swing.driver.JTreeEditableQuery.isEditable;
 import static org.fest.swing.driver.JTreeExpandPathTask.expandPath;
 import static org.fest.swing.driver.JTreeMatchingPathQuery.*;
-import static org.fest.swing.driver.JTreeSelectionCountQuery.selectionCountOf;
-import static org.fest.swing.driver.JTreeSelectionPathsQuery.selectionPathsOf;
 import static org.fest.swing.driver.JTreeToggleExpandStateTask.toggleExpandState;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
@@ -515,14 +513,23 @@ public class JTreeDriver extends JComponentDriver {
    * @param tree the given <code>JTree</code>.
    * @throws AssertionError if the <code>JTree</code> has a selection.
    */
-  // TODO FIX
+  @RunsInEDT
   public void requireNoSelection(JTree tree) {
-    if (selectionCountOf(tree) == 0) return;
-    String message = concat(
-        "[", selectionProperty(tree).value(), "] expected no selection but was:<", format(selectionPathsOf(tree)), ">");
-    fail(message);
+    assertNoSelection(tree, selectionProperty(tree));
   }
 
+  @RunsInEDT
+  private static void assertNoSelection(final JTree tree, final Description errorMessage) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        if (tree.getSelectionCount() == 0) return;
+        String message = concat(
+            "[", errorMessage.value(), "] expected no selection but was:<", format(tree.getSelectionPaths()), ">");
+        fail(message);
+      }
+    });
+  }
+  
   @RunsInEDT
   private Description selectionProperty(JTree tree) {
     return propertyName(tree, SELECTION_PROPERTY);
