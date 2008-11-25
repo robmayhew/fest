@@ -26,27 +26,28 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.*;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
-import org.fest.swing.core.*;
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.core.EventMode;
+import org.fest.swing.core.EventModeProvider;
+import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestTree;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTreeSetEditableTask.setEditable;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.task.ComponentSetVisibleTask.hide;
 import static org.fest.swing.task.JTreeSelectRowTask.selectRow;
+import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -67,6 +68,10 @@ public class JTreeDriverTest {
 
   private JTreeDriver driver;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     driver = new JTreeDriver(robot);
@@ -94,12 +99,24 @@ public class JTreeDriverTest {
     assertThat(selectionRowsOf(dragTree)).isEqualTo(new int[] { 0 });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSelectNodeByRowIfTreeIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableDragTree();
-    driver.selectRow(dragTree, 0);
-    assertThat(selectionCountOf(dragTree)).isZero();
+  public void shouldThrowErrorWhenSelectingNodeByRowInDisabledJTree() {
+    disableDragTree();
+    try {
+      driver.selectRow(dragTree, 0);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }    
+  }
+
+  public void shouldThrowErrorWhenSelectingNodeByRowInNotShowingJTree() {
+    hideWindow();
+    try {
+      driver.selectRow(dragTree, 0);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }    
   }
 
   @Test(groups = GUI, expectedExceptions = NullPointerException.class)
@@ -126,6 +143,7 @@ public class JTreeDriverTest {
     assertThat(selectionRowsOf(dragTree)).isEqualTo(rows);
   }
 
+  @RunsInEDT
   private static int[] selectionRowsOf(final JTree tree) {
     return execute(new GuiQuery<int[]>() {
       protected int[] executeInEDT() {
@@ -134,13 +152,26 @@ public class JTreeDriverTest {
     });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSelectNodesByRowIfTreeIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableDragTree();
+  public void shouldThrowErrorWhenSelectingNodesByRowInDisabledJTree() {
+    disableDragTree();
     int[] rows = { 0, 1, 2 };
-    driver.selectRows(dragTree, rows);
-    assertThat(selectionCountOf(dragTree)).isZero();
+    try {
+      driver.selectRows(dragTree, rows);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
+  }
+
+  public void shouldThrowErrorWhenSelectingNodesByRowInNotShowingJTree() {
+    hideWindow();
+    int[] rows = { 0, 1, 2 };
+    try {
+      driver.selectRows(dragTree, rows);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -153,6 +184,7 @@ public class JTreeDriverTest {
     assertThat(isRowExpanded(dragTree, 1)).isFalse();
   }
 
+  @RunsInEDT
   private static boolean isRowExpanded(final JTree tree, final int row) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
@@ -166,7 +198,7 @@ public class JTreeDriverTest {
     robot.settings().eventMode(eventMode);
     try {
       driver.selectPath(dragTree, "another");
-      fail();
+      failWhenExpectingException();
     } catch (LocationUnavailableException e) {
       assertThat(e.getMessage()).isEqualTo("Unable to find path 'another'");
     }
@@ -201,21 +233,33 @@ public class JTreeDriverTest {
     };
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSelectNodeByPathIfTreeIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableDragTree();
-    driver.selectPath(dragTree, "root/branch1");
-    assertThat(selectionCountOf(dragTree)).isZero();
+  public void shouldThrowErrorWhenSelectingNodeByPathInDisabledJTree() {
+    disableDragTree();
+    try {
+      driver.selectPath(dragTree, "root/branch1");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }    
   }
 
-  @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
+  public void shouldThrowErrorWhenSelectingNodeByPathInNotShowingJTree() {
+    hideWindow();
+    try {
+      driver.selectPath(dragTree, "root/branch1");
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }    
+  }
+
+  @Test(groups = GUI, expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfPathArrayIsNull() {
     String[] paths = null;
     driver.selectPaths(dragTree, paths);
   }
 
-  @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
+  @Test(groups = GUI, expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfPathArrayIsEmpty() {
     String[] paths = new String[0];
     driver.selectPaths(dragTree, paths);
@@ -235,6 +279,7 @@ public class JTreeDriverTest {
     assertThat(textOf(selectionPaths[1])).isEqualTo(paths[1]);
   }
 
+  @RunsInEDT
   private static void setDefaultSelectionModelTo(final JTree tree) {
     final DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel();
     execute(new GuiTask() {
@@ -244,6 +289,7 @@ public class JTreeDriverTest {
     });
   }
 
+  @RunsInEDT
   private static TreePath[] selectionPathsOf(final JTree tree) {
     return execute(new GuiQuery<TreePath[]>() {
       protected TreePath[] executeInEDT()  {
@@ -252,26 +298,37 @@ public class JTreeDriverTest {
     });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSelectNodesByPathsIfTreeIsNotEnabled(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
-    clearAndDisableDragTree();
+  public void shouldThrowErrorWhenSelectingNodesByPathsInDisabledJTree() {
+    disableDragTree();
     String[] paths = { "root/branch1/branch1.1", "root/branch1/branch1.2" };
-    driver.selectPaths(dragTree, paths);
-    assertThat(selectionCountOf(dragTree)).isZero();
+    try {
+      driver.selectPaths(dragTree, paths);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToDisabledComponent(e);
+    }
   }
 
-  private static int selectionCountOf(final JTree tree) {
-    return execute(new GuiQuery<Integer>() {
-      protected Integer executeInEDT() {
-        return tree.getSelectionCount();
-      }
-    });
+  public void shouldThrowErrorWhenSelectingNodesByPathsInNotShowingJTree() {
+    hideWindow();
+    String[] paths = { "root/branch1/branch1.1", "root/branch1/branch1.2" };
+    try {
+      driver.selectPaths(dragTree, paths);
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    }
   }
 
-  private void clearAndDisableDragTree() {
-    clearSelectionOf(dragTree);
+  @RunsInEDT
+  private void disableDragTree() {
     disable(dragTree);
+    robot.waitForIdle();
+  }
+  
+  @RunsInEDT
+  private void hideWindow() {
+    hide(window);
     robot.waitForIdle();
   }
 
@@ -300,10 +357,12 @@ public class JTreeDriverTest {
     assertThat(textOf(firstChildOf(destinationRoot))).isEqualTo("branch2");
   }
 
+  @RunsInEDT
   private String textOf(TreePath path) {
     return textOf(path, driver.separator());
   }
 
+  @RunsInEDT
   private static String textOf(final TreePath path, final String separator) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
@@ -321,6 +380,7 @@ public class JTreeDriverTest {
     });
   }
 
+  @RunsInEDT
   private static String textOf(final DefaultMutableTreeNode node) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
@@ -330,6 +390,7 @@ public class JTreeDriverTest {
   }
 
 
+  @RunsInEDT
   private static DefaultMutableTreeNode firstChildOfRootOf(final JTree tree) {
     return execute(new GuiQuery<DefaultMutableTreeNode>() {
       protected DefaultMutableTreeNode executeInEDT() {
@@ -339,6 +400,7 @@ public class JTreeDriverTest {
     });
   }
 
+  @RunsInEDT
   private static int childCountOf(final TreeNode node) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {
@@ -352,9 +414,7 @@ public class JTreeDriverTest {
     driver.requireSelection(dragTree, (int[])null);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldPassIfRowIsSelected(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldPassIfRowIsSelected() {
     DefaultMutableTreeNode root = rootOf(dragTree);
     TreePath path = new TreePath(array(root, firstChildOf(root)));
     setSelectionPath(dragTree, path);
@@ -362,9 +422,7 @@ public class JTreeDriverTest {
     driver.requireSelection(dragTree, intArray(1));
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldPassIfPathIsSelected(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldPassIfPathIsSelected() {
     DefaultMutableTreeNode root = rootOf(dragTree);
     TreePath path = new TreePath(array(root, firstChildOf(root)));
     setSelectionPath(dragTree, path);
@@ -372,9 +430,7 @@ public class JTreeDriverTest {
     driver.requireSelection(dragTree, array("root/branch1"));
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldPassIfPathsAreSelected(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldPassIfPathsAreSelected() {
     DefaultMutableTreeNode root = rootOf(dragTree);
     TreeNode branch1 = firstChildOf(root);
     TreePath rootBranch1 = new TreePath(array(root, branch1));
@@ -409,33 +465,28 @@ public class JTreeDriverTest {
     });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldFailIfExpectingSelectedRowAndTreeHasNoSelection(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldFailIfExpectingSelectedRowAndTreeHasNoSelection() {
     setSelectionPath(dragTree, null);
     robot.waitForIdle();
     try {
       driver.requireSelection(dragTree, intArray(1));
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selection'")
                              .contains("No selection");
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldFailIfSelectedRowIsNotEqualToExpectedSelection(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldFailIfSelectedRowIsNotEqualToExpectedSelection() {
     DefaultMutableTreeNode root = rootOf(dragTree);
     setSelectionPath(dragTree, new TreePath(array(root)));
     robot.waitForIdle();
     try {
       driver.requireSelection(dragTree, intArray(1));
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
-      System.out.println(e.getMessage());
       assertThat(e).message().contains("property:'selection'")
-                             .contains("expected:<[[root, branch1]]> but was:<[[root]]>");
+                             .contains("array:<[0]> does not contain element(s):<[1]>");
     }
   }
 
@@ -444,33 +495,28 @@ public class JTreeDriverTest {
     driver.requireSelection(dragTree, (String[])null);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldFailIfExpectingSelectedPathAndTreeHasNoSelection(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldFailIfExpectingSelectedPathAndTreeHasNoSelection() {
     setSelectionPath(dragTree, null);
     robot.waitForIdle();
     try {
       driver.requireSelection(dragTree, array("root/branch1"));
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selection'")
                              .contains("No selection");
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldFailIfSelectedPathIsNotEqualToExpectedSelection(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldFailIfSelectedPathIsNotEqualToExpectedSelection() {
     DefaultMutableTreeNode root = rootOf(dragTree);
     setSelectionPath(dragTree, new TreePath(array(root)));
     robot.waitForIdle();
     try {
       driver.requireSelection(dragTree, array("root/branch1"));
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
-      System.out.println(e.getMessage());
       assertThat(e).message().contains("property:'selection'")
-                             .contains("expected:<[[root, branch1]]> but was:<[[root]]>");
+                             .contains("array:<[[root]]> does not contain element(s):<[[root, branch1]]>");
     }
   }
 
@@ -486,9 +532,7 @@ public class JTreeDriverTest {
     return values;
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldPassIfDoesNotHaveSelectionAsAnticipated(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldPassIfDoesNotHaveSelectionAsAnticipated() {
     clearSelectionOf(dragTree);
     robot.waitForIdle();
     driver.requireNoSelection(dragTree);
@@ -502,14 +546,12 @@ public class JTreeDriverTest {
     });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldFailIfHasSelectionAndExpectingNoSelection(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldFailIfHasSelectionAndExpectingNoSelection() {
     selectFirstRowOf(dragTree);
     robot.waitForIdle();
     try {
       driver.requireNoSelection(dragTree);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'selection'")
                              .contains("expected no selection but was:<[[root]]>");
@@ -531,7 +573,7 @@ public class JTreeDriverTest {
     robot.waitForIdle();
     try {
       driver.requireEditable(dragTree);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'editable'").contains("expected:<true> but was:<false>");
     }
@@ -548,7 +590,7 @@ public class JTreeDriverTest {
     robot.waitForIdle();
     try {
       driver.requireNotEditable(dragTree);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'editable'").contains("expected:<false> but was:<true>");
     }
@@ -588,8 +630,13 @@ public class JTreeDriverTest {
 
     private static final Dimension TREE_SIZE = new Dimension(200, 100);
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     final TestTree dragTree = new TestTree(nodes());
