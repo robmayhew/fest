@@ -39,7 +39,6 @@ import static java.awt.BorderLayout.*;
 
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.query.DialogTitleQuery.titleOf;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Strings.*;
 
@@ -89,7 +88,7 @@ public class Bug195_MultipleDialogFixturesTest {
     }
 
     protected boolean isMatching(Dialog dialog) {
-      String title = titleOf(dialog);
+      String title = dialog.getTitle();
       return title != null && title.toUpperCase().startsWith(matchString) && isShowing(dialog);
     }
 

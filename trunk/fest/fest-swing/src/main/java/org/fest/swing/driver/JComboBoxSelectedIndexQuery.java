@@ -12,7 +12,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.query;
+package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
@@ -29,7 +29,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class JComboBoxSelectedIndexQuery {
+final class JComboBoxSelectedIndexQuery {
 
   /**
    * Returns the selected index in the given <code>{@link JComboBox}</code>. This action is executed in the event

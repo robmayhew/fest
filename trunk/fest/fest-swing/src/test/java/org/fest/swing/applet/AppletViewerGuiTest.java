@@ -35,10 +35,8 @@ import static javax.swing.SwingUtilities.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.query.FrameTitleQuery.titleOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.timing.Pause.pause;
-import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <code>{@link AppletViewer}</code>.
@@ -124,16 +122,11 @@ public class AppletViewerGuiTest {
 
   public void shouldLoadApplet() {
     assertThatIsShowingAndLoaded(applet, viewer);
-    assertThatAppletViewerHasCorrectTitle();
     Container ancestor = getAncestorOfClass(AppletViewer.class, applet);
     assertThat(ancestor).isSameAs(viewer);
     fixture.label("status").requireText("Applet loaded");
     assertThat(viewer.applet()).isSameAs(applet);
     assertThat(viewer.stub()).isInstanceOf(BasicAppletStub.class);
-  }
-
-  private void assertThatAppletViewerHasCorrectTitle() {
-    assertThat(titleOf(viewer)).isEqualTo(concat("Applet Viewer: ", MyApplet.class.getName()));
   }
 
   public void shouldReloadApplet() {

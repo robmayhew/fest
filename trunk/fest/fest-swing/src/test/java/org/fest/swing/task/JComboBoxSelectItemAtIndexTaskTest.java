@@ -31,7 +31,6 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.array;
 
@@ -71,6 +70,15 @@ public class JComboBoxSelectItemAtIndexTaskTest {
     assertThat(selectedIndexOf(comboBox)).isEqualTo(index);
   }
 
+  @RunsInEDT
+  private static int selectedIndexOf(final JComboBox comboBox) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return comboBox.getSelectedIndex();
+      }
+    });
+  }
+  
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 

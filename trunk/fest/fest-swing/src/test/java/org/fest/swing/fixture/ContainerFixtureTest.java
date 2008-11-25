@@ -67,7 +67,6 @@ import static org.fest.swing.factory.JToolBars.toolBar;
 import static org.fest.swing.factory.JTrees.tree;
 import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
-import static org.fest.swing.query.DialogTitleQuery.titleOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -199,7 +198,7 @@ public class ContainerFixtureTest {
     JDialog expectedDialog = addJDialog();
     GenericTypeMatcher<JDialog> titleMatcher = new GenericTypeMatcher<JDialog>() {
       protected boolean isMatching(JDialog dialog) {
-        return "A Dialog".equals(titleOf(dialog));
+        return "A Dialog".equals(dialog.getTitle());
       }
     };
     DialogFixture dialogFixture = fixture.dialog(titleMatcher);

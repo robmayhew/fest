@@ -42,9 +42,9 @@ import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.driver.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.driver.JComboBoxSetEditableTask.setEditable;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.query.JComboBoxSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.task.ComponentSetVisibleTask.hide;
 import static org.fest.swing.task.JComboBoxSetSelectedIndexTask.setSelectedIndex;
