@@ -25,8 +25,8 @@ import org.testng.annotations.Test;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.core.ComponentRequestFocusTask.giveFocusTo;
 import static org.fest.swing.task.ComponentHasFocusCondition.untilFocused;
-import static org.fest.swing.task.ComponentRequestFocusTask.giveFocusTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.timing.Pause.pause;
 

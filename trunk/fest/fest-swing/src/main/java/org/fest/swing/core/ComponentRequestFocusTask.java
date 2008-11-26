@@ -13,10 +13,11 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.core;
 
 import java.awt.Component;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -27,14 +28,10 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  * 
  * @author Alex Ruiz
  */
-public final class ComponentRequestFocusTask {
+final class ComponentRequestFocusTask {
   
-  /**
-   * Requests that the given <code>{@link Component}</code> get the input focus. This action is executed in the event
-   * dispatch thread.
-   * @param c the given <code>Component</code>.
-   */
-  public static void giveFocusTo(final Component c) {
+  @RunsInEDT
+  static void giveFocusTo(final Component c) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         c.requestFocusInWindow();

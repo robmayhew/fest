@@ -43,8 +43,8 @@ import static org.fest.swing.driver.JComboBoxItemIndexValidator.validateIndex;
 import static org.fest.swing.driver.JComboBoxMatchingItemQuery.matchingItemIndex;
 import static org.fest.swing.driver.JComboBoxSelectionValueQuery.*;
 import static org.fest.swing.driver.JComboBoxSetPopupVisibleTask.setPopupVisible;
+import static org.fest.swing.driver.JComboBoxSetSelectedIndexTask.setSelectedIndex;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.task.JComboBoxSetSelectedIndexTask.setSelectedIndex;
 import static org.fest.util.Arrays.format;
 import static org.fest.util.Strings.*;
 
