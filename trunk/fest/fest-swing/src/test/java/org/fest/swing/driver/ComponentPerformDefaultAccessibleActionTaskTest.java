@@ -22,13 +22,16 @@ import javax.accessibility.*;
 import javax.swing.JTextField;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.easymock.EasyMock.expect;
@@ -37,6 +40,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -53,6 +57,10 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
   private AccessibleContextStub accessibleContext;
   private Component component;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     accessibleAction = createMock(AccessibleAction.class);
@@ -92,7 +100,7 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
         }
       }.run();
       fail();
-    } catch (UnexpectedException e) {
+    } catch (ActionFailedException e) {
       assertActionFailedThrown(e);
     }
   }
@@ -110,14 +118,13 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
         }
       }.run();
       fail();
-    } catch (UnexpectedException e) {
+    } catch (ActionFailedException e) {
       assertActionFailedThrown(e);
     }
   }
 
-  private void assertActionFailedThrown(UnexpectedException e) {
-    assertThat(e.getCause()).isInstanceOf(ActionFailedException.class)
-                            .message().contains("Unable to perform accessible action for");
+  private void assertActionFailedThrown(ActionFailedException e) {
+    assertThat(e).message().contains("Unable to perform accessible action for");
   }
 
   private static class MyWindow extends TestWindow {
@@ -125,8 +132,13 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
 
     final MyComponent component;
 
-    static MyWindow createNew(AccessibleContext accessibleContext) {
-      return new MyWindow(accessibleContext);
+    @RunsInEDT
+    static MyWindow createNew(final AccessibleContext accessibleContext) {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow(accessibleContext);
+        }
+      });
     }
 
     private MyWindow(AccessibleContext accessibleContext) {

@@ -18,10 +18,14 @@ package org.fest.swing.driver;
 import java.awt.Dimension;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.BooleanProvider;
 import org.fest.swing.testing.MethodInvocations;
@@ -44,6 +48,10 @@ public class DialogModalQueryTest {
 
   private Robot robot;
   private MyDialog dialog;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
@@ -74,8 +82,13 @@ public class DialogModalQueryTest {
     private boolean recording;
     private final MethodInvocations methodInvocations = new MethodInvocations();
 
+    @RunsInEDT
     static MyDialog createNew() {
-      return new MyDialog();
+      return execute(new GuiQuery<MyDialog>() {
+        protected MyDialog executeInEDT() {
+          return new MyDialog();
+        }
+      });
     }
 
     private MyDialog() {
