@@ -31,6 +31,7 @@ import javax.swing.KeyStroke;
 import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -56,14 +57,12 @@ import static org.fest.swing.core.FocusOwnerFinder.*;
 import static org.fest.swing.core.InputModifiers.unify;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.WindowAncestorFinder.windowAncestorOf;
-import static org.fest.swing.core.WindowHideAndDisposeTask.hideAndDispose;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.*;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
 import static org.fest.swing.keystroke.KeyStrokeMap.keyStrokeFor;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
-import static org.fest.swing.query.JPopupMenuInvokerQuery.invokerOf;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.swing.util.Modifiers.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
@@ -146,6 +145,7 @@ public class RobotFixture implements Robot {
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void showWindow(Window w) {
     showWindow(w, null, true);
   }
@@ -202,7 +202,7 @@ public class RobotFixture implements Robot {
    * Returns the <code>{@link Applet}</code> descendant of the given <code>{@link Container}</code>, if any.
    * @param c the given <code>Container</code>.
    * @return the <code>Applet</code> descendant of the given <code>Container</code>, or <code>null</code> if none
-   *         is found.
+   * is found.
    */
   @RunsInEDT
   private Applet findAppletDescendent(Container c) {
@@ -280,49 +280,58 @@ public class RobotFixture implements Robot {
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void invokeAndWait(Runnable action) {
     invokeAndWait(null, action);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void invokeAndWait(Component c, Runnable action) {
     invokeLater(c, action);
     waitForIdle();
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void invokeLater(Component c, Runnable action) {
     EventQueue queue = eventQueueFor(c);
     queue.postEvent(new InvocationEvent(toolkit, action));
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void cleanUp() {
     cleanUp(true);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void cleanUpWithoutDisposingWindows() {
     cleanUp(false);
   }
 
+  @RunsInEDT
   private void cleanUp(boolean disposeWindows) {
-    if (disposeWindows) disposeWindows();
+    if (disposeWindows) disposeWindows(hierarchy);
     releaseMouseButtons();
     ScreenLock.instance().release(this);
   }
 
-  private void disposeWindows() {
-    for (Container c : roots()) {
-      if (!(c instanceof Window)) continue;
-      Window w = (Window)c;
-      hierarchy.dispose(w);
-      hideAndDispose(w);
-    }
+  @RunsInEDT
+  private static void disposeWindows(final ComponentHierarchy hierarchy) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        for (Container c : hierarchy.roots()) if (c instanceof Window) dispose(hierarchy, (Window)c);
+      }
+    });
   }
-
-  private Collection<? extends Container> roots() {
-    return hierarchy.roots();
+  
+  @RunsInCurrentThread
+  private static void dispose(final ComponentHierarchy hierarchy, Window w) {
+    hierarchy.dispose(w);
+    w.setVisible(false);
+    w.dispose();
   }
 
   /**
@@ -418,20 +427,14 @@ public class RobotFixture implements Robot {
     eventGenerator().pressMouse(c, where, button.mask);
   }
 
-  /**
-   * Makes the mouse pointer show small quick jumpy movements on the given <code>{@link Component}</code>.
-   * @param c the given <code>Component</code>.
-   * <p>
-   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
-   * invoking this method in the EDT.
-   * </p>
-   */
-  @RunsInCurrentThread
+  /** {@inheritDoc} */
+  @RunsInEDT
   public void jitter(Component c) {
-    jitter(c, centerOf(c));
+    jitter(c, visibleCenterOf(c));
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void jitter(Component c, Point where) {
     int x = where.x;
     int y = where.y;
@@ -439,16 +442,19 @@ public class RobotFixture implements Robot {
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void moveMouse(Component c) {
-    moveMouse(c, centerOf(c));
+    moveMouse(c, visibleCenterOf(c));
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void moveMouse(Component c, Point p) {
     moveMouse(c, p.x, p.y);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void moveMouse(Component c, int x, int y) {
     if (!waitForComponentToBeReady(c, settings.timeoutToBeVisible()))
       throw actionFailure(concat("Could not obtain position of component ", format(c)));
@@ -457,28 +463,42 @@ public class RobotFixture implements Robot {
   }
 
   // Wait the given number of milliseconds for the component to be showing and ready.
+  @RunsInEDT
   private boolean waitForComponentToBeReady(Component c, long timeout) {
     if (isReadyForInput(c)) return true;
     TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
     while (!isReadyForInput(c)) {
       if (c instanceof JPopupMenu) {
         // wiggle the mouse over the parent menu item to ensure the sub-menu shows
-        Component invoker = invokerOf((JPopupMenu)c);
-        if (invoker instanceof JMenu) jitter(invoker, centerOf(invoker));
+        Pair<Component, Point> invokerAndCenterOfInvoker = invokerAndCenterOfInvoker((JPopupMenu)c); 
+        Component invoker = invokerAndCenterOfInvoker.i;
+        if (invoker instanceof JMenu) jitter(invoker, invokerAndCenterOfInvoker.ii);
       }
       if (watch.isTimeOut()) return false;
       pause();
     }
     return true;
   }
+  
+  @RunsInEDT
+  private static Pair<Component, Point> invokerAndCenterOfInvoker(final JPopupMenu popupMenu) {
+    return execute(new GuiQuery<Pair<Component, Point>>() {
+      protected Pair<Component, Point> executeInEDT() {
+        Component invoker = popupMenu.getInvoker();
+        return new Pair<Component, Point>(invoker, centerOf(invoker));
+      }
+    });
+  }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void enterText(String text) {
     if (isEmpty(text)) return;
     for (char character : text.toCharArray()) type(character);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void type(char character) {
     KeyStroke keyStroke = keyStrokeFor(character);
     if (keyStroke == null) {
@@ -509,12 +529,14 @@ public class RobotFixture implements Robot {
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void pressAndReleaseKey(int keyCode, int... modifiers) {
     keyPressAndRelease(keyCode, unify(modifiers));
     waitForIdle();
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void pressAndReleaseKeys(int... keyCodes) {
     for (int keyCode : keyCodes) {
       keyPressAndRelease(keyCode, 0);
@@ -522,6 +544,7 @@ public class RobotFixture implements Robot {
     }
   }
 
+  @RunsInEDT
   private void keyPressAndRelease(int keyCode, int modifiers) {
     int updatedModifiers = updateModifierWithKeyCode(keyCode, modifiers);
     pressModifiers(updatedModifiers);
@@ -533,38 +556,45 @@ public class RobotFixture implements Robot {
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void pressKey(int keyCode) {
     keyPress(keyCode);
     waitForIdle();
   }
 
+  @RunsInEDT
   private void keyPress(int keyCode) {
     eventGenerator().pressKey(keyCode, CHAR_UNDEFINED);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void releaseKey(int keyCode) {
     eventGenerator().releaseKey(keyCode);
     waitForIdle();
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void releaseLeftMouseButton() {
     releaseMouseButton(LEFT_BUTTON);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void releaseMouseButton(MouseButton button) {
     mouseRelease(button.mask);
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void releaseMouseButtons() {
     int buttons = inputState.buttons();
     if (buttons == 0) return;
     mouseRelease(buttons);
   }
 
+  @RunsInEDT
   private void mouseRelease(int buttons) {
     eventGenerator().releaseMouse(buttons);
   }
@@ -574,6 +604,7 @@ public class RobotFixture implements Robot {
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void waitForIdle() {
     waitIfNecessary();
     Collection<EventQueue> queues = windowMonitor.allEventQueues();
@@ -587,7 +618,7 @@ public class RobotFixture implements Robot {
 
   private void waitIfNecessary() {
     int delayBetweenEvents = settings.delayBetweenEvents();
-    int eventPostingDelay = settings.eventPostingDelay();
+    int eventPostingDelay  = settings.eventPostingDelay();
     if (eventPostingDelay > delayBetweenEvents) pause(eventPostingDelay - delayBetweenEvents);
   }
 
@@ -616,6 +647,7 @@ public class RobotFixture implements Robot {
   }
 
   // Indicates whether we timed out waiting for the invocation to run
+  @RunsInEDT
   private boolean postInvocationEvent(EventQueue eventQueue, long timeout) {
     Object lock = new RobotIdleLock();
     synchronized (lock) {
@@ -711,6 +743,7 @@ public class RobotFixture implements Robot {
   }
 
   /** {@inheritDoc} */
+  @RunsInEDT
   public void requireNoJOptionPaneIsShowing() {
     List<Component> found = new ArrayList<Component>(finder().findAll(new TypeMatcher(JOptionPane.class, true)));
     if (found.isEmpty()) return;
