@@ -19,13 +19,18 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.ComponentRequestFocusTask.giveFocusTo;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.task.ComponentHasFocusCondition.untilFocused;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.timing.Pause.pause;
@@ -41,6 +46,10 @@ public class FocusMonitorTest {
   private FocusMonitor monitor;
   private MyWindow window;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
     window = MyWindow.createNew();
@@ -52,8 +61,11 @@ public class FocusMonitorTest {
   }
 
   @AfterMethod public void tearDown() {
-    window.destroy();
-    ScreenLock.instance().release(this);
+    try {
+      window.destroy();
+    } finally {
+      ScreenLock.instance().release(this);
+    }
   }
 
   public void shouldReturnFalseIfLosesFocus() {
@@ -75,8 +87,13 @@ public class FocusMonitorTest {
     final JButton button = new JButton("Click Me");
     final JTextField textBox = new JTextField(20);
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     private MyWindow() {

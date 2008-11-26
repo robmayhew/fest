@@ -17,12 +17,18 @@ package org.fest.swing.core.matcher;
 
 import javax.swing.JLabel;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.factory.JLabels.label;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -32,16 +38,20 @@ import static org.fest.swing.testing.TestGroups.GUI;
  */
 @Test public class JLabelByTextMatcherTest {
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   public void shouldReturnTrueIfTitleIsEqualToExpected() {
     String text = "Hello";
     JLabelByTextMatcher matcher = JLabelByTextMatcher.withText(text);
-    JLabel label = new JLabel(text);
+    JLabel label = label().withText(text).createNew();
     assertThat(matcher.matches(label)).isTrue();
   }
 
   public void shouldReturnFalseIfTitleIsNotEqualToExpected() {
     JLabelByTextMatcher matcher = JLabelByTextMatcher.withText("Hello");
-    JLabel label = new JLabel("Bye");
+    JLabel label = label().withText("Bye").createNew();
     assertThat(matcher.matches(label)).isFalse();
   }
 
@@ -61,7 +71,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsEqualToExpected() {
     String text = "Hello";
     JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing(text);
-    JLabel label = new JLabel(text);
+    JLabel label = label().withText(text).createNew();
     assertThat(matcher.matches(label)).isFalse();
   }
 
@@ -80,17 +90,22 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsNotEqualToExpected() {
     JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing("Hello");
-    JLabel label = new JLabel("Bye");
+    JLabel label = label().withText("Bye").createNew();
     assertThat(matcher.matches(label)).isFalse();
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static MyWindow createAndShow() {
-      MyWindow window = new MyWindow();
-      window.display();
-      return window;
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          MyWindow window = new MyWindow();
+          TestWindow.display(window);
+          return window;
+        }
+      });
     }
 
     final JLabel label = new JLabel("Hello");

@@ -17,12 +17,15 @@ package org.fest.swing.core.matcher;
 
 import javax.swing.JFrame;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JFrames.frame;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -33,16 +36,20 @@ import static org.fest.swing.testing.TestGroups.GUI;
  */
 @Test public class FrameByTitleMatcherTest {
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   public void shouldReturnTrueIfTitleIsEqualToExpected() {
     String title = "Hello";
     FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitle(title);
-    JFrame frame = new JFrame(title);
+    JFrame frame = frame().withTitle(title).createNew();
     assertThat(matcher.matches(frame)).isTrue();
   }
 
   public void shouldReturnFalseIfTitleIsNotEqualToExpected() {
     FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitle("Hello");
-    JFrame frame = new JFrame("Bye");
+    JFrame frame = frame().withTitle("Bye").createNew();
     assertThat(matcher.matches(frame)).isFalse();
   }
 
@@ -55,7 +62,9 @@ import static org.fest.swing.testing.TestGroups.GUI;
       FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing(testType.getSimpleName());
       assertThat(matcher.matches(frame)).isTrue();
     } finally {
-      frame.destroy();
+      try {
+        frame.destroy();
+      } catch (RuntimeException e) {}
       ScreenLock.instance().release(this);
     }
   }
@@ -63,7 +72,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsEqualToExpected() {
     String title = "Hello";
     FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing(title);
-    JFrame frame = new JFrame(title);
+    JFrame frame = frame().withTitle(title).createNew();
     assertThat(matcher.matches(frame)).isFalse();
   }
 
@@ -75,14 +84,16 @@ import static org.fest.swing.testing.TestGroups.GUI;
       FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing("Hello");
       assertThat(matcher.matches(frame)).isFalse();
     } finally {
-      frame.destroy();
+      try {
+        frame.destroy();
+      } catch (RuntimeException e) {}
       ScreenLock.instance().release(this);
     }
   }
 
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsNotEqualToExpected() {
     FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing("Hello");
-    JFrame frame = new JFrame("Bye");
+    JFrame frame = frame().withTitle("Bye").createNew();
     assertThat(matcher.matches(frame)).isFalse();
   }
 }

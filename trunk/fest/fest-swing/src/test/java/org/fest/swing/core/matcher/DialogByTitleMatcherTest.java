@@ -16,15 +16,17 @@
 package org.fest.swing.core.matcher;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.ScreenLock;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JDialogs.dialog;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -35,32 +37,32 @@ import static org.fest.swing.testing.TestGroups.GUI;
  */
 @Test public class DialogByTitleMatcherTest {
 
+  @BeforeMethod public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   public void shouldReturnTrueIfTitleIsEqualToExpected() {
     String title = "Hello";
     DialogByTitleMatcher matcher = DialogByTitleMatcher.withTitle(title);
-    JDialog dialog = new JDialog(new JFrame(), title);
+    JDialog dialog = dialog().withTitle(title).createNew();
     assertThat(matcher.matches(dialog)).isTrue();
   }
 
   public void shouldReturnFalseIfTitleIsNotEqualToExpected() {
     DialogByTitleMatcher matcher = DialogByTitleMatcher.withTitle("Hello");
-    JDialog dialog = new JDialog(new JFrame(), "Bye");
+    JDialog dialog = dialog().withTitle("Bye").createNew();
     assertThat(matcher.matches(dialog)).isFalse();
   }
 
   @Test(groups = GUI)
   public void shouldReturnTrueIfDialogIsShowingAndTitleIsEqualToExpected() {
     ScreenLock.instance().acquire(this);
-    TestWindow window = TestWindow.createAndShowNewWindow(DialogByTitleMatcher.class);
-    TestDialog dialog = TestDialog.createAndShowNewDialog(window);
     String title = "Hello";
-    dialog.setTitle(title);
+    JDialog dialog = dialog().withTitle(title).createAndShow();
     try {
       DialogByTitleMatcher matcher = DialogByTitleMatcher.withTitleAndShowing(title);
       assertThat(matcher.matches(dialog)).isTrue();
     } finally {
-      dialog.destroy();
-      window.destroy();
       ScreenLock.instance().release(this);
     }
   }
@@ -68,7 +70,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   public void shouldReturnFalseIfDialogIsNotShowingAndTitleIsEqualToExpected() {
     String title = "Hello";
     DialogByTitleMatcher matcher = DialogByTitleMatcher.withTitleAndShowing(title);
-    JDialog dialog = new JDialog(new JFrame(), title);
+    JDialog dialog = dialog().withTitle(title).createNew();
     assertThat(matcher.matches(dialog)).isFalse();
   }
 
@@ -89,7 +91,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   public void shouldReturnFalseIfDialogIsNotShowingAndTitleIsNotEqualToExpected() {
     DialogByTitleMatcher matcher = DialogByTitleMatcher.withTitleAndShowing("Hello");
-    JDialog dialog = new JDialog(new JFrame(), "Bye");
+    JDialog dialog = dialog().withTitle("Bye").createNew();
     assertThat(matcher.matches(dialog)).isFalse();
   }
 }

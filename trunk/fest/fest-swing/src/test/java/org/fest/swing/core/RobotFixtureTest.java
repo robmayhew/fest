@@ -27,11 +27,10 @@ import java.util.List;
 
 import javax.swing.*;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -71,6 +70,10 @@ public class RobotFixtureTest {
   private JTextField textFieldWithPopup;
   private JTextField textFieldWithoutPopup;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithCurrentAwtHierarchy();
     window = MyWindow.createAndShow();
@@ -87,16 +90,27 @@ public class RobotFixtureTest {
 
   public void shouldThrowErrorIfWindowNeverShown() {
     try {
-      robot.showWindow(new JFrame() {
-        private static final long serialVersionUID = 1L;
-
-        @Override public void setVisible(boolean b) {
-          super.setVisible(false);
-        }
-      });
+      robot.showWindow(AlwaysInvisibleFrame.createNew());
       fail();
     } catch (WaitTimedOutError e) {
       assertThat(e).message().contains("Timed out waiting for Window to open");
+    }
+  }
+  
+  private static class AlwaysInvisibleFrame extends JFrame {
+    private static final long serialVersionUID = 1L;
+
+    @RunsInEDT
+    static AlwaysInvisibleFrame createNew() {
+      return execute(new GuiQuery<AlwaysInvisibleFrame>() {
+        protected AlwaysInvisibleFrame executeInEDT() {
+          return new AlwaysInvisibleFrame();
+        }
+      });
+    }
+    
+    @Override public void setVisible(boolean b) {
+      super.setVisible(false);
     }
   }
 
@@ -380,10 +394,15 @@ public class RobotFixtureTest {
     final JButton button = new JButton("Click Me");
     final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
 
+    @RunsInEDT
     static MyWindow createAndShow() {
-      MyWindow window = new MyWindow();
-      window.display();
-      return window;
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          MyWindow window = new MyWindow();
+          TestWindow.display(window);
+          return window;
+        }
+      });
     }
 
     private MyWindow() {
