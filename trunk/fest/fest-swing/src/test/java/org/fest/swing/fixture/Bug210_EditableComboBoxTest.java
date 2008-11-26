@@ -18,11 +18,16 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
+
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.query.JComboBoxSelectedItemQuery.selectedItemOf;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.task.JComboBoxSetSelectedItemTask.setSelectedItem;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.array;
@@ -47,9 +52,13 @@ public class Bug210_EditableComboBoxTest {
   private String[] values;
   private DialogFixture dialog;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     values = array("hat", "son");
-    dialog = new DialogFixture(new MyDialog(values));
+    dialog = new DialogFixture(MyDialog.createNew(values));
     dialog.show();
   }
   
@@ -69,10 +78,28 @@ public class Bug210_EditableComboBoxTest {
     comboBox.requireSelection(ADDED_STRING);
   }
 
+  @RunsInEDT
+  private static Object selectedItemOf(final JComboBox comboBox) {
+    return execute(new GuiQuery<Object>() {
+      protected Object executeInEDT() {
+        return comboBox.getSelectedItem();
+      }
+    });
+  }
+
   private static class MyDialog extends JDialog {
     private static final long serialVersionUID = 1L;
 
-    public MyDialog(String[] items) {
+    @RunsInEDT
+    static MyDialog createNew(final String[] items) {
+      return execute(new GuiQuery<MyDialog>() {
+        protected MyDialog executeInEDT() {
+          return new MyDialog(items);
+        }
+      });
+    }
+    
+    private MyDialog(String[] items) {
       JComboBox comboBox = new JComboBox(items);
       comboBox.setEditable(true);
       comboBox.setSelectedIndex(INITIAL_INDEX);

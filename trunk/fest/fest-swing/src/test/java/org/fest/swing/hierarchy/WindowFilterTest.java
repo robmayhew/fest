@@ -86,7 +86,7 @@ public class WindowFilterTest {
     assertThat(implictlyIgnored.size()).isZero();
   }
 
-  private void ignore(final WindowFilter filter, final Component c) {
+  private static void ignore(final WindowFilter filter, final Component c) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         filter.ignore(c);

@@ -40,7 +40,6 @@ import static org.easymock.classextension.EasyMock.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.query.WindowOwnedWindowsQuery.ownedWindowsOf;
 
 /**
  * Tests for <code>{@link WindowMonitor}</code>.
@@ -111,6 +110,14 @@ public class WindowMonitorTest {
     reset(windowStatus);
   }
 
+  private static Window[] ownedWindowsOf(final Window w) {
+    return execute(new GuiQuery<Window[]>() {
+      protected Window[] executeInEDT() {
+        return w.getOwnedWindows();
+      }
+    });
+  }
+  
   @AfterMethod public void tearDown() {
     frame.destroy();
   }

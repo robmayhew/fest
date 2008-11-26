@@ -40,6 +40,7 @@ public final class JPopupMenuInvokerQuery {
    * @return the invoker of the given <code>JPopupMenu</code>.
    * @see JPopupMenu#getInvoker()
    */
+  // TODO remove after fixing EDT access in RobotFixture
   public static Component invokerOf(final JPopupMenu popupMenu) {
     return execute(new GuiQuery<Component>() {
       protected Component executeInEDT() {

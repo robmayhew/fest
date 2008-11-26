@@ -20,7 +20,6 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.core.GenericTypeMatcher;
 
-import static org.fest.swing.query.JTextComponentTextQuery.textOf;
 import static org.fest.util.Objects.areEqual;
 
 /**
@@ -75,6 +74,6 @@ public class JTextComponentByTextMatcher extends GenericTypeMatcher<JTextCompone
    */
   @RunsInCurrentThread
   protected boolean isMatching(JTextComponent textComponent) {
-    return areEqual(textOf(textComponent), text);
+    return areEqual(textComponent.getText(), text);
   }
 }

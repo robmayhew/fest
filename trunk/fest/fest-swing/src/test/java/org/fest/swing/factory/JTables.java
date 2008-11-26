@@ -17,6 +17,11 @@ package org.fest.swing.factory;
 
 import javax.swing.JTable;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
+
 /**
  * Understands creation of <code>{@link JTable}</code>s.
  *
@@ -56,11 +61,16 @@ public final class JTables {
       return this;
     }
     
+    @RunsInEDT
     public JTable createNew() {
-      JTable table = new JTable(rowCount, columnCount);
-      table.setName(name);
-      table.setSelectionMode(selectionMode);
-      return table;
+      return execute(new GuiQuery<JTable>() {
+        protected JTable executeInEDT() {
+          JTable table = new JTable(rowCount, columnCount);
+          table.setName(name);
+          table.setSelectionMode(selectionMode);
+          return table;
+        }
+      });
     }
   }
 }

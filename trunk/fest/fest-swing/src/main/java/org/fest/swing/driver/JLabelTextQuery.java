@@ -13,10 +13,11 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.query;
+package org.fest.swing.driver;
 
 import javax.swing.JLabel;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -28,15 +29,10 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class JLabelTextQuery {
+final class JLabelTextQuery {
 
-  /**
-   * Returns the text of the given <code>{@link JLabel}</code>. This action is executed in the event dispatch thread.
-   * @param label the given <code>JLabel</code>.
-   * @return the text of the given <code>JLabel</code>.
-   * @see JLabel#getText()
-   */
-  public static String textOf(final JLabel label) {
+  @RunsInEDT
+  static String textOf(final JLabel label) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
         return label.getText();

@@ -21,6 +21,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 
 import org.testng.annotations.*;
 
@@ -36,7 +37,6 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.query.JTextComponentTextQuery.textOf;
 import static org.fest.swing.task.ComponentHasFocusCondition.untilFocused;
 import static org.fest.swing.task.ComponentRequestFocusTask.giveFocusTo;
 import static org.fest.swing.testing.TestGroups.GUI;
@@ -127,9 +127,19 @@ public abstract class InputEventGeneratorTestCase {
     assertThatTextBoxTextIsEqualTo(expectedText);
   }
 
+  @RunsInEDT
   private void assertThatTextBoxTextIsEqualTo(String expectedText) {
     String text = textOf(window.textBox);
     assertThat(text).isEqualTo(expectedText);
+  }
+  
+  @RunsInEDT
+  private static String textOf(final JTextComponent textComponent) {
+    return execute(new GuiQuery<String>() {
+      protected String executeInEDT() {
+        return textComponent.getText();
+      }
+    });
   }
 
   @DataProvider(name = "keys") public Object[][] keys() {

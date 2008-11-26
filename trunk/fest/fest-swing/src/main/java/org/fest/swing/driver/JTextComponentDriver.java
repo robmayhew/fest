@@ -42,11 +42,11 @@ import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAnd
 import static org.fest.swing.driver.JTextComponentEditableQuery.isEditable;
 import static org.fest.swing.driver.JTextComponentSelectTextTask.selectTextInRange;
 import static org.fest.swing.driver.JTextComponentSetTextTask.setTextIn;
+import static org.fest.swing.driver.JTextComponentTextQuery.textOf;
 import static org.fest.swing.driver.PointAndParentForScrollingJTextFieldQuery.pointAndParentForScrolling;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.query.JTextComponentTextQuery.textOf;
 import static org.fest.util.Strings.*;
 
 /**

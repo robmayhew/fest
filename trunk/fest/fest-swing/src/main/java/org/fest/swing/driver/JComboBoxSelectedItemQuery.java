@@ -13,10 +13,11 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.query;
+package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -28,16 +29,10 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  *
  * @author Alex Ruiz
  */
-public final class JComboBoxSelectedItemQuery {
+final class JComboBoxSelectedItemQuery {
   
-  /**
-   * Returns the selected item in the given <code>{@link JComboBox}</code>. This action is executed in the event
-   * dispatch thread.
-   * @param comboBox the given <code>JComboBox</code>.
-   * @return the selected item in the given <code>JComboBox</code>.
-   * @see JComboBox#getSelectedItem()
-   */
-  public static Object selectedItemOf(final JComboBox comboBox) {
+  @RunsInEDT
+  static Object selectedItemOf(final JComboBox comboBox) {
     return execute(new GuiQuery<Object>() {
       protected Object executeInEDT() {
         return comboBox.getSelectedItem();

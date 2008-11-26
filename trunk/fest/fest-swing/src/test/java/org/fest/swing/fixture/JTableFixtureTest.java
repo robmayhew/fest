@@ -47,6 +47,7 @@ import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseClickInfo.leftButton;
 import static org.fest.swing.data.TableCell.row;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.factory.JPopupMenus.popupMenu;
 import static org.fest.swing.factory.JTables.table;
 
 /**
@@ -275,7 +276,7 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
   }
 
   public void shouldShowJPopupMenuAtCell() {
-    final JPopupMenu popup = new JPopupMenu();
+    final JPopupMenu popup = popupMenu().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.showPopupMenuAt(target, cell)).andReturn(popup);
@@ -289,6 +290,7 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
   }
 
   public void shouldReturnJTableHeaderFixture() {
+    // TODO create JTableHeader in EDT
     final JTableHeader header = new JTableHeader();
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -337,7 +339,6 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
 
   public void shouldReturnCellFont() {
     final Font font = new Font("SansSerif", PLAIN, 8);
-    final TableCell cell = row(6).column(8);
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.font(target, cell)).andReturn(font);
@@ -347,14 +348,13 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
         FontFixture fontFixture = fixture.fontAt(cell);
         assertThat(fontFixture.target()).isSameAs(font);
         assertThat(fontFixture.description()).contains(target.getClass().getName())
-                                             .contains("property:'font' - [row=6, column=8]");
+                                             .contains("property:'font [row=6, column=8]'");
       }
     }.run();
   }
 
   public void shouldReturnCellBackgroundColor() {
     final Color background = BLUE;
-    final TableCell cell = row(6).column(8);
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.background(target, cell)).andReturn(background);
@@ -364,14 +364,13 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
         ColorFixture colorFixture = fixture.backgroundAt(cell);
         assertThat(colorFixture.target()).isSameAs(background);
         assertThat(colorFixture.description()).contains(target.getClass().getName())
-                                              .contains("property:'background' - [row=6, column=8]");
+                                              .contains("property:'background [row=6, column=8]'");
       }
     }.run();
   }
 
   public void shouldReturnCellForegroundColor() {
     final Color foreground = BLUE;
-    final TableCell cell = row(6).column(8);
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.foreground(target, cell)).andReturn(foreground);
@@ -381,13 +380,12 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
         ColorFixture colorFixture = fixture.foregroundAt(cell);
         assertThat(colorFixture.target()).isSameAs(foreground);
         assertThat(colorFixture.description()).contains(target.getClass().getName())
-                                              .contains("property:'foreground' - [row=6, column=8]");
+                                              .contains("property:'foreground [row=6, column=8]'");
       }
     }.run();
   }
 
   public void shouldRequireCellValue() {
-    final TableCell cell = row(6).column(8);
     final String value = "Hello";
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -402,7 +400,6 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
   }
 
   public void shouldRequireEditableCell() {
-    final TableCell cell = row(0).column(0);
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireEditable(target, cell);
@@ -416,7 +413,6 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
   }
 
   public void shouldRequireNotEditableCell() {
-    final TableCell cell = row(0).column(0);
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireNotEditable(target, cell);
@@ -430,7 +426,6 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
   }
 
   public void shouldEnterValueInCell() {
-    final TableCell cell = row(0).column(0);
     final String value = "Hello";
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -445,7 +440,6 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
   }
 
   public void shouldReturnCell() {
-    final TableCell cell = row(0).column(0);
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.validate(target, cell);
@@ -461,7 +455,6 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
   }
 
   public void shouldFindCellByValue() {
-    final TableCell cell = row(6).column(8);
     final String value = "Hello";
     new EasyMockTemplate(driver) {
       protected void expectations() {

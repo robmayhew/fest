@@ -32,7 +32,6 @@ import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.query.AbstractButtonTextQuery;
-import org.fest.swing.query.JLabelTextQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static java.awt.Color.RED;
@@ -260,7 +259,7 @@ public class ContainerFixtureTest {
     JLabel expectedLabel = addJLabel();
     GenericTypeMatcher<JLabel> textMatcher = new GenericTypeMatcher<JLabel>() {
       protected boolean isMatching(JLabel label) {
-        return "A Label".equals(JLabelTextQuery.textOf(label));
+        return "A Label".equals(label.getText());
       }
     };
     JLabelFixture labelFixture = fixture.label(textMatcher);

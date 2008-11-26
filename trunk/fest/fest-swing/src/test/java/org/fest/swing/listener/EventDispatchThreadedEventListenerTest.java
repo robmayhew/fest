@@ -68,8 +68,8 @@ public class EventDispatchThreadedEventListenerTest {
     
     Listener() {}
     
-    protected void processEvent(AWTEvent event) {
-      this.event = event;
+    protected void processEvent(AWTEvent newEvent) {
+      this.event = newEvent;
       inEventDispatchThread = SwingUtilities.isEventDispatchThread();
     }
   }

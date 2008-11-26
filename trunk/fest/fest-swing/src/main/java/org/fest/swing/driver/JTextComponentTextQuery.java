@@ -12,10 +12,11 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.query;
+package org.fest.swing.driver;
 
 import javax.swing.text.JTextComponent;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -28,16 +29,10 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class JTextComponentTextQuery {
+final class JTextComponentTextQuery {
 
-  /**
-   * Returns the text of the given <code>{@link JTextComponent}</code>. This action is executed in the event dispatch
-   * thread.
-   * @param textComponent the given <code>JTextComponent</code>.
-   * @return the text of the given <code>JTextComponent</code>.
-   * @see JTextComponent#getText()
-   */
-  public static String textOf(final JTextComponent textComponent) {
+  @RunsInEDT
+  static String textOf(final JTextComponent textComponent) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
         return textComponent.getText();
