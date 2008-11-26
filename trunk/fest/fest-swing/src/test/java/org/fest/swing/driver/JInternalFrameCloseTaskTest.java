@@ -18,10 +18,12 @@ package org.fest.swing.driver;
 import javax.swing.JInternalFrame;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.testing.MDITestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -39,6 +41,10 @@ public class JInternalFrameCloseTaskTest {
   private Robot robot;
   private JInternalFrame internalFrame;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     MDITestWindow window = MDITestWindow.createNewWindow(getClass());

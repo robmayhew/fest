@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -62,7 +63,7 @@ public class JFileChooserDriverTest {
   private MyWindow window;
   private JFileChooser fileChooser;
 
-  @BeforeMethod public void setUpOnce() {
+  @BeforeClass public void setUpOnce() {
     CheckThreadViolationRepaintManager.install();
   }
   
