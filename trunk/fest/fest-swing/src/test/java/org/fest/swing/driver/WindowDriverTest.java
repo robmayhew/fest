@@ -19,14 +19,15 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
 
-import javax.swing.JFrame;
-
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.testing.FluentDimension;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -45,14 +46,18 @@ import static org.fest.swing.testing.TestGroups.GUI;
 public class WindowDriverTest {
 
   private Robot robot;
-  private Frame frame;
+  private Frame window;
   private WindowDriver driver;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    frame = new JFrame(getClass().getSimpleName());
+    window = TestWindow.createNewWindow(getClass());
     driver = new WindowDriver(robot);
-    robot.showWindow(frame, new Dimension(100, 100));
+    robot.showWindow(window, new Dimension(100, 100));
   }
 
   @AfterMethod public void tearDown() {
@@ -60,48 +65,48 @@ public class WindowDriverTest {
   }
 
   public void shouldResizeWindow() {
-    Dimension newSize = new FluentDimension(sizeOf(frame)).addToHeight(100).addToWidth(200);
-    driver.resize(frame, newSize.width, newSize.height);
-    assertThat(sizeOf(frame)).isEqualTo(newSize);
+    Dimension newSize = new FluentDimension(sizeOf(window)).addToHeight(100).addToWidth(200);
+    driver.resize(window, newSize.width, newSize.height);
+    assertThat(sizeOf(window)).isEqualTo(newSize);
   }
 
   public void shouldResizeWidthOnly() {
-    Dimension newSize = new FluentDimension(sizeOf(frame)).addToWidth(200);
-    driver.resizeWidthTo(frame, newSize.width);
-    assertThat(sizeOf(frame)).isEqualTo(newSize);
+    Dimension newSize = new FluentDimension(sizeOf(window)).addToWidth(200);
+    driver.resizeWidthTo(window, newSize.width);
+    assertThat(sizeOf(window)).isEqualTo(newSize);
   }
 
   public void shouldResizeHeightOnly() {
-    Dimension newSize = new FluentDimension(sizeOf(frame)).addToHeight(100);
-    driver.resizeHeightTo(frame, newSize.height);
-    assertThat(sizeOf(frame)).isEqualTo(newSize);
+    Dimension newSize = new FluentDimension(sizeOf(window)).addToHeight(100);
+    driver.resizeHeightTo(window, newSize.height);
+    assertThat(sizeOf(window)).isEqualTo(newSize);
   }
 
   public void shouldMoveWindow() {
     Point newPosition = new Point(200, 200);
-    driver.moveTo(frame, newPosition);
-    assertThat(locationOnScreen(frame)).isEqualTo(newPosition);
+    driver.moveTo(window, newPosition);
+    assertThat(locationOnScreen(window)).isEqualTo(newPosition);
   }
 
   public void shouldCloseWindow() {
-    driver.close(frame);
+    driver.close(window);
     robot.waitForIdle();
-    assertThat(isVisible(frame)).isFalse();
+    assertThat(isVisible(window)).isFalse();
   }
 
   public void shouldShowWindow() {
-    setVisible(frame, false);
+    setVisible(window, false);
     robot.waitForIdle();
-    driver.show(frame);
-    assertThat(isVisible(frame)).isTrue();
+    driver.show(window);
+    assertThat(isVisible(window)).isTrue();
   }
 
   public void shouldShowWindowUsingGivenSize() {
-    setVisible(frame, false);
+    setVisible(window, false);
     robot.waitForIdle();
     Dimension newSize = new Dimension(600, 300);
-    driver.show(frame, newSize);
-    assertThat(isVisible(frame)).isTrue();
-    assertThat(sizeOf(frame)).isEqualTo(newSize);
+    driver.show(window, newSize);
+    assertThat(isVisible(window)).isTrue();
+    assertThat(sizeOf(window)).isEqualTo(newSize);
   }
 }

@@ -22,16 +22,21 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MethodInvocations;
-import org.fest.swing.testing.TestGroups;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Tests for <code>{@link MenuElementComponentQuery}</code>.
@@ -39,11 +44,15 @@ import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test(groups = TestGroups.ACTION)
+@Test(groups = { GUI, ACTION })
 public class MenuElementComponentQueryTest {
 
   private Robot robot;
   private MyMenu menu;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
@@ -67,9 +76,14 @@ public class MenuElementComponentQueryTest {
 
     final MyMenu menu = new MyMenu();
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
-    }    
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+    }
     
     private MyWindow() {
       super(MenuElementComponentQueryTest.class);

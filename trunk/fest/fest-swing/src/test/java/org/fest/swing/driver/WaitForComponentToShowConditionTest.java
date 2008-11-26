@@ -17,10 +17,16 @@ package org.fest.swing.driver;
 
 import javax.swing.JTextField;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
+
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link WaitForComponentToShowCondition}</code>.
@@ -32,8 +38,12 @@ import static org.fest.assertions.Assertions.assertThat;
   private WaitForComponentToShowCondition condition;
   private ComponentStub c;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
-    c = new ComponentStub();
+    c = ComponentStub.createNew();
     condition = WaitForComponentToShowCondition.untilIsShowing(c);
   }
 
@@ -56,7 +66,16 @@ import static org.fest.assertions.Assertions.assertThat;
 
     private boolean showing;
 
-    public ComponentStub() {}
+    @RunsInEDT
+    static ComponentStub createNew() {
+      return execute(new GuiQuery<ComponentStub>() {
+        protected ComponentStub executeInEDT() {
+          return new ComponentStub();
+        }
+      });
+    }
+    
+    private ComponentStub() {}
 
     void showing(boolean isShowing) {
       this.showing = isShowing;

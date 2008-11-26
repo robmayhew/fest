@@ -23,14 +23,19 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ComponentFinder;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.BasicComponentFinder.finderWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -44,6 +49,10 @@ public class JMenuItemMatcherTest {
   private ComponentFinder finder;
   private MyWindow window;
   private JMenuItemMatcher matcher;
+  
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
   
   @BeforeMethod public void setUp() {
     finder = finderWithNewAwtHierarchy();
@@ -70,8 +79,13 @@ public class JMenuItemMatcherTest {
 
     final JMenuItem logoutMenuItem = new JMenuItem("Logout"); 
     
+    @RunsInEDT
     static MyWindow createNew() {
-     return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
     
     private MyWindow() {

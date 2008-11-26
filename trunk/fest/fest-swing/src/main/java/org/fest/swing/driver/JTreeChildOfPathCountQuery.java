@@ -3,6 +3,7 @@ package org.fest.swing.driver;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -15,6 +16,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JTreeChildOfPathCountQuery {
   
+  @RunsInEDT
   static int childCount(final JTree tree, final TreePath path) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {

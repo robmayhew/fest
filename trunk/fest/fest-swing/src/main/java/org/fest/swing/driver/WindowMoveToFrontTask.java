@@ -16,6 +16,7 @@ package org.fest.swing.driver;
 
 import java.awt.Window;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -29,6 +30,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class WindowMoveToFrontTask {
 
+  @RunsInEDT
   static void toFront(final Window w) {
     execute(new GuiTask() {
       protected void executeInEDT() {
