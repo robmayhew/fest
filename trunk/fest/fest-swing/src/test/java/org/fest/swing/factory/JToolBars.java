@@ -17,7 +17,12 @@ package org.fest.swing.factory;
 
 import javax.swing.JToolBar;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
 import static javax.swing.SwingConstants.HORIZONTAL;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands creation of <code>{@link JToolBar}</code>s.
@@ -46,11 +51,16 @@ public final class JToolBars {
       return this;
     }
     
+    @RunsInEDT
     public JToolBar createNew() {
-      JToolBar toolBar = new JToolBar();
-      toolBar.setOrientation(orientation);
-      toolBar.setName(name);
-      return toolBar;
+      return execute(new GuiQuery<JToolBar>() {
+        protected JToolBar executeInEDT() {
+          JToolBar toolBar = new JToolBar();
+          toolBar.setOrientation(orientation);
+          toolBar.setName(name);
+          return toolBar;
+        }
+      });
     }
   }
 }

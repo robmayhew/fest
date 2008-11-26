@@ -19,16 +19,19 @@ import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
-import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.CustomCellRenderer;
 import org.fest.swing.testing.TestWindow;
@@ -36,6 +39,8 @@ import org.fest.swing.testing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.factory.JLabels.label;
+import static org.fest.swing.factory.JToolBars.toolBar;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -52,9 +57,13 @@ public class BasicJTreeCellReaderTest {
   private BasicJTreeCellReader reader;
   private DefaultMutableTreeNode root;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    MyWindow window = new MyWindow();
+    MyWindow window = MyWindow.createNew();
     root = window.root;
     tree = window.tree;
     reader = new BasicJTreeCellReader();
@@ -66,7 +75,7 @@ public class BasicJTreeCellReaderTest {
   }
 
   public void shouldReturnTextFromCellRendererIfRendererIsJLabel() {
-    JLabel label = new JLabel("First");
+    JLabel label = label().withText("First").createNew();
     setCellRendererComponent(tree, label);
     robot.waitForIdle();
     Object value = reader.valueAt(tree, root);
@@ -90,6 +99,7 @@ public class BasicJTreeCellReaderTest {
     assertThat(value).isNull();
   }
 
+  @RunsInEDT
   private static void setRootInTree(final JTree tree, final DefaultMutableTreeNode root) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -98,6 +108,7 @@ public class BasicJTreeCellReaderTest {
     });
   }
 
+  @RunsInEDT
   private static void setCellRendererComponent(final JTree tree, final Component renderer) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -106,15 +117,21 @@ public class BasicJTreeCellReaderTest {
     });
   }
 
+  @RunsInEDT
   private static Component unrecognizedRenderer() {
-    return new JToolBar();
+    return toolBar().createNew();
   }
 
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     final JTree tree;
