@@ -16,10 +16,13 @@ import java.lang.ref.WeakReference;
 
 import javax.swing.JComponent;
 import javax.swing.RepaintManager;
+import javax.swing.SwingUtilities;
+
+import org.fest.swing.exception.EdtViolationException;
 
 import static javax.swing.SwingUtilities.isEventDispatchThread;
 
-import static org.fest.assertions.Fail.fail;
+import static org.fest.reflect.core.Reflection.staticMethod;
 
 /**
  * <p>
@@ -48,11 +51,28 @@ public class CheckThreadViolationRepaintManager extends RepaintManager {
    * @see RepaintManager#setCurrentManager(RepaintManager)
    */
   public static CheckThreadViolationRepaintManager install() {
-    CheckThreadViolationRepaintManager repaintManager = new CheckThreadViolationRepaintManager();
-    setCurrentManager(repaintManager);
-    return repaintManager;
+    Object m = currentRepaintManager();
+    if (m instanceof CheckThreadViolationRepaintManager) return (CheckThreadViolationRepaintManager)m;
+    return installNew();
   }
 
+  private static Object currentRepaintManager() {
+    try {
+      return staticMethod("appContextGet").withReturnType(Object.class)
+                                          .withParameterTypes(Object.class)
+                                          .in(SwingUtilities.class)
+                                          .invoke(RepaintManager.class);
+    } catch (RuntimeException e) {
+      return null;
+    }
+  }
+  
+  private static CheckThreadViolationRepaintManager installNew() {
+    CheckThreadViolationRepaintManager m = new CheckThreadViolationRepaintManager();
+    setCurrentManager(m);
+    return m;
+  }
+  
   // it is recommended to pass the complete check
   private boolean completeCheck = true;
   private WeakReference<JComponent> lastComponent;
@@ -105,7 +125,11 @@ public class CheckThreadViolationRepaintManager extends RepaintManager {
       // ignore the last processed component
       if (lastComponent != null && c == lastComponent.get()) { return; }
       lastComponent = new WeakReference<JComponent>(c);
-      fail("EDT violation detected");
+      edtViolationFound();
     }
+  }
+
+  private void edtViolationFound() {
+    throw new EdtViolationException("EDT violation detected");
   }
 }
