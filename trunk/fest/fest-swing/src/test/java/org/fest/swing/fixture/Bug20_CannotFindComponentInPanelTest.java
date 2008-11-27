@@ -25,17 +25,30 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.testing.TestGroups;
 import org.fest.swing.testing.TestWindow;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Fix for <a href="http://code.google.com/p/fest/issues/detail?id=20&can=2&q=" target="_blank">issue 20</a>.
  *
  * @author Alex Ruiz
  */
-public class FixCannotFindComponentInPanelTest {
+@Test(groups =  { GUI, BUG })
+public class Bug20_CannotFindComponentInPanelTest {
   
   private FrameFixture frame;
   
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @BeforeClass public void setUp() {
     frame = new FrameFixture(MyWindow.createNew());
     frame.show(new Dimension(400, 200));
@@ -45,7 +58,7 @@ public class FixCannotFindComponentInPanelTest {
     frame.cleanUp();
   }
   
-  @Test public void shouldFindList() {
+  public void shouldFindList() {
     frame.list("list").requireVisible();
   }
 
@@ -55,12 +68,17 @@ public class FixCannotFindComponentInPanelTest {
     private final JPanel panel = new JPanel();
     private final JList list = new JList();
     
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
-    
+     
     private MyWindow() {
-      super(FixCannotFindComponentInPanelTest.class);
+      super(Bug20_CannotFindComponentInPanelTest.class);
       add(panel);
       panel.add(new JScrollPane(list));
       list.setName("list");

@@ -23,12 +23,12 @@ import org.testng.annotations.Test;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ScreenLock;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
-import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -77,7 +77,7 @@ public class ComponentShowingQueryTest {
 
     @RunsInEDT
     static MyWindow createNew() {
-      return GuiActionRunner.execute(new GuiQuery<MyWindow>() {
+      return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {
           return new MyWindow();
         }

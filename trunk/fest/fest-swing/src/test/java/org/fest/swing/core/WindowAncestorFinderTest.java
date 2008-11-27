@@ -23,22 +23,33 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentParentQuery.parentOf;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link WindowAncestorFinder}</code>.
  *
  * @author Yvonne Wang
  */
+@Test(groups = GUI)
 public class WindowAncestorFinderTest {
 
   private MyWindow frame;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     frame = MyWindow.createNew();
@@ -48,21 +59,21 @@ public class WindowAncestorFinderTest {
     frame.destroy();
   }
 
-  @Test public void shouldFindWindowAncestor() {
+  public void shouldFindWindowAncestor() {
     Window ancestor = WindowAncestorFinder.windowAncestorOf(frame.button);
     assertThat(ancestor).isSameAs(frame);
   }
 
-  @Test public void shouldReturnNullIfComponentIsNull() {
+  public void shouldReturnNullIfComponentIsNull() {
     assertThat(WindowAncestorFinder.windowAncestorOf(null)).isSameAs(null);
   }
 
-  @Test public void shouldReturnWindowAsItsOwnAncestor() {
+  public void shouldReturnWindowAsItsOwnAncestor() {
     Window ancestor = WindowAncestorFinder.windowAncestorOf(frame);
     assertThat(ancestor).isSameAs(frame);
   }
 
-  @Test public void shouldReturnInvokerAncestorAsAncestorIfComponentIsMenuElement() {
+  public void shouldReturnInvokerAncestorAsAncestorIfComponentIsMenuElement() {
     Robot robot = RobotFixture.robotWithCurrentAwtHierarchy();
     robot.showWindow(frame);
     robot.showPopupMenu(frame.textField);
@@ -71,7 +82,7 @@ public class WindowAncestorFinderTest {
     robot.cleanUp();
   }
 
-  @Test public void shouldReturnParentAsAncestorIfComponentIsMenuElementAndInvokerIsNull() {
+  public void shouldReturnParentAsAncestorIfComponentIsMenuElementAndInvokerIsNull() {
     Window ancestor = WindowAncestorFinder.windowAncestorOf(frame.popupMenu);
     assertThat(ancestor).isSameAs(parentOf(frame.popupMenu));
   }
@@ -79,10 +90,15 @@ public class WindowAncestorFinderTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
-
+ 
     final JButton button = new JButton("Click Me");
     final JTextField textField = new JTextField(20);
     final JPopupMenu popupMenu = new JPopupMenu();

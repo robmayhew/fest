@@ -438,6 +438,7 @@ public class JScrollBarDriverTest {
 
     final JScrollBar scrollBar = new JScrollBar();
 
+    @RunsInEDT
     static MyWindow createNew() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {

@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 
 import org.testng.annotations.*;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.core.Robot;
@@ -639,6 +640,7 @@ public class ComponentDriverTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static MyWindow createNew() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {

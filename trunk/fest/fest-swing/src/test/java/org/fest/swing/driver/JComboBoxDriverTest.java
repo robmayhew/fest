@@ -592,6 +592,7 @@ public class JComboBoxDriverTest {
 
     final JComboBox comboBox = new JComboBox(array("first", "second", "third"));
 
+    @RunsInEDT
     static MyWindow createNew() {
       return GuiActionRunner.execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {

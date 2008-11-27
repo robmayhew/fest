@@ -22,16 +22,22 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiActionRunner;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.finder.WindowFinder.findDialog;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests lookup of a modal dialog. This test tries to reproduce the problem reported at
@@ -39,18 +45,23 @@ import static org.fest.swing.finder.WindowFinder.findDialog;
  *
  * @author Alex Ruiz
  */
+@Test(groups = GUI)
 public class ModalDialogLookupTest {
 
   private Robot robot;
   private MyWindow frame;
   
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     frame = MyWindow.createNew();
     robot.showWindow(frame);
   }
   
-  @Test public void shouldShowModalDialogAndNotBlock() {
+  public void shouldShowModalDialogAndNotBlock() {
     FrameFixture frameFixture = new FrameFixture(robot, frame);
     frameFixture.button("launch").click();
     DialogFixture dialogFixture = findDialog(TestDialog.class).using(robot);
@@ -64,10 +75,15 @@ public class ModalDialogLookupTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return GuiActionRunner.execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
-    
+     
     final JButton button = new JButton("Launch");
     final TestDialog dialog = TestDialog.createNewDialog(this);
     

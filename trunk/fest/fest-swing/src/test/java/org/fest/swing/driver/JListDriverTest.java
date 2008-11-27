@@ -816,6 +816,7 @@ public class JListDriverTest {
     final TestList dragList = new TestList("one", "two", "three");
     final TestList dropList = new TestList("four", "five", "six");
 
+    @RunsInEDT
     static MyWindow createNew() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {
