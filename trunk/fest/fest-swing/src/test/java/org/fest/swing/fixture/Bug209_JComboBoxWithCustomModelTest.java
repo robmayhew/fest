@@ -19,9 +19,15 @@ import java.awt.Component;
 import javax.swing.*;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.util.Arrays.array;
 
@@ -41,9 +47,13 @@ public class Bug209_JComboBoxWithCustomModelTest {
   private DialogFixture dialog;
   private NamedObject[] values;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     values = array(new NamedObject("hat"), new NamedObject("son"));
-    dialog = new DialogFixture(new MyDialog(values));
+    dialog = new DialogFixture(MyDialog.createNew(values));
     dialog.show();
   }
 
@@ -65,7 +75,16 @@ public class Bug209_JComboBoxWithCustomModelTest {
   private static class MyDialog extends JDialog {
     private static final long serialVersionUID = 1L;
 
-    public MyDialog(NamedObject[] items) {
+    @RunsInEDT
+    static MyDialog createNew(final NamedObject[] items) {
+      return execute(new GuiQuery<MyDialog>() {
+        protected MyDialog executeInEDT() {
+          return new MyDialog(items);
+        }
+      });
+    }
+ 
+    private MyDialog(NamedObject[] items) {
       JComboBox comboBox = new JComboBox();
       comboBox.setModel(new DefaultComboBoxModel(items));
       comboBox.setRenderer(new NamedObjectCellRenderer());

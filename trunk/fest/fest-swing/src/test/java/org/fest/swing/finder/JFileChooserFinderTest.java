@@ -22,12 +22,15 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.GenericTypeMatcher;
-import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.JFileChooserFixture;
 import org.fest.swing.testing.TestWindow;
@@ -35,8 +38,8 @@ import org.fest.swing.testing.TestWindow;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.timing.Pause.pause;
 
@@ -50,6 +53,10 @@ public class JFileChooserFinderTest {
 
   private Robot robot;
   private MyWindow window;
+  
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
@@ -101,15 +108,19 @@ public class JFileChooserFinderTest {
   }
   
   void clickBrowseButton() {
-    JButton button = window.browseButton;
-    robot.click(button, centerOf(button), MouseButton.LEFT_BUTTON, 1);
+    robot.click(window.browseButton);
   }
   
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
 
     final JButton browseButton = new JButton("Browse");

@@ -21,13 +21,18 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -41,6 +46,10 @@ public class Bug197_ClickVisibleComponentAreaTest {
   private FrameFixture fixture;
   private MyWindow window;
   
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @BeforeMethod public void setUp() {
     window = MyWindow.createNew();
     fixture = new FrameFixture(window);
@@ -67,10 +76,15 @@ public class Bug197_ClickVisibleComponentAreaTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
-
+ 
     final JButton button = new JButton("Click Me");
     final JScrollPane scrollPane;
 

@@ -24,9 +24,13 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestTable;
 import org.fest.swing.testing.TestWindow;
 
@@ -34,6 +38,7 @@ import static javax.swing.RowFilter.regexFilter;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.data.TableCell.row;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
@@ -46,6 +51,10 @@ public class Bug186_ReadSortedTableTest {
 
   private FrameFixture frame;
   
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @BeforeMethod public void setUp() {
     frame = new FrameFixture(MyWindow.createNew());
     frame.show();
@@ -55,7 +64,7 @@ public class Bug186_ReadSortedTableTest {
     frame.cleanUp();
   }
   
-  public void shouldReadFirstCellAfterReading() {
+  public void shouldReadFirstCell() {
     frame.textBox("textBox").enterText("2");
     assertThat(frame.table("table").valueAt(row(0).column(0))).isEqualTo("2-0");
   }
@@ -65,10 +74,15 @@ public class Bug186_ReadSortedTableTest {
     
     final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>();
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
-
+ 
     private MyWindow() {
       super(Bug186_ReadSortedTableTest.class);
       add(textBox());

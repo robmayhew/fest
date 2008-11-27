@@ -26,7 +26,12 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a <code>{@link JFrame}</code> that simulates a login window.
@@ -42,13 +47,23 @@ public class LauncherWindow extends TestWindow {
 
   private int windowLaunchDelay = DEFAULT_DELAY;
   private int dialogLaunchDelay = DEFAULT_DELAY;
+
+  @RunsInEDT
+  public static LauncherWindow createNew(final Class<?> testClass) {
+    return execute(new GuiQuery<LauncherWindow>() {
+      protected LauncherWindow executeInEDT() {
+        return new LauncherWindow(testClass);
+      }
+    });
+  }
   
-  public LauncherWindow(Class<?> testClass) {
+  private LauncherWindow(Class<?> testClass) {
     super(testClass);
     add(windowLaunchButton());
     add(dialogLaunchButton());
   }
 
+  @RunsInCurrentThread
   private JButton windowLaunchButton() {
     JButton button = new JButton("Launch Frame");
     button.setName("launchFrame");
@@ -61,6 +76,7 @@ public class LauncherWindow extends TestWindow {
     return button;
   }
   
+  @RunsInCurrentThread
   void launchWindow() {
     start(new Timer(windowLaunchDelay, new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -69,6 +85,7 @@ public class LauncherWindow extends TestWindow {
     }));
   }
 
+  @RunsInCurrentThread
   private JButton dialogLaunchButton() {
     JButton button = new JButton("Launch Dialog");
     button.setName("launchDialog");
@@ -81,7 +98,8 @@ public class LauncherWindow extends TestWindow {
     return button;
   }
   
-  void launchDialog() {
+  @RunsInCurrentThread
+  private void launchDialog() {
     start(new Timer(dialogLaunchDelay, new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         showWindow(new DialogToLaunch());
@@ -89,12 +107,14 @@ public class LauncherWindow extends TestWindow {
     }));
   }
   
+  @RunsInCurrentThread
   private void start(Timer timer) {
     timer.setRepeats(false);
     timer.start();
   }
 
-  void showWindow(Window window) {
+  @RunsInCurrentThread
+  private void showWindow(Window window) {
     window.pack();
     window.setVisible(true);
   }

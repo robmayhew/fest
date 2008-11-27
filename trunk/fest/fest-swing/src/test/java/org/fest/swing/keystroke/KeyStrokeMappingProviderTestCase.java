@@ -25,8 +25,12 @@ import javax.swing.text.JTextComponent;
 
 import org.testng.annotations.*;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JTextComponentDriver;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiActionRunner;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.KeyRecorder;
 import org.fest.swing.testing.TestWindow;
 
@@ -57,6 +61,7 @@ public abstract class KeyStrokeMappingProviderTestCase {
   private Collection<KeyStrokeMapping> keyStrokeMappings;
 
   @BeforeClass public final void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
     verifyTestCanRun();
     keyStrokeMappings = keyStrokeMappingsToTest();
   }
@@ -124,10 +129,15 @@ public abstract class KeyStrokeMappingProviderTestCase {
   static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return GuiActionRunner.execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
-
+ 
     final JTextArea textArea = new JTextArea(3, 8);
 
     private MyWindow() {

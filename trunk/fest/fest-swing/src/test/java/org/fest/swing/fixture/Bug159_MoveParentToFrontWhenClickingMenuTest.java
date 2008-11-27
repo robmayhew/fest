@@ -16,25 +16,32 @@
 package org.fest.swing.fixture;
 
 import java.awt.Dimension;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JFrames.frame;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.swing.timing.Pause.pause;
+import static org.fest.util.Strings.concat;
 
 /**
  * Tests for <a href="http://code.google.com/p/fest/issues/detail?id=159" target="_blank">Bug 159</a>.
@@ -45,9 +52,15 @@ public class Bug159_MoveParentToFrontWhenClickingMenuTest {
 
   private static final int DELAY_BEFORE_SHOWING_MENU = 2000;
 
+  private static Logger logger = Logger.getAnonymousLogger();
+  
   private Robot robot;
   private JFrame frameToFocus;
   private MyWindow window;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
@@ -67,7 +80,7 @@ public class Bug159_MoveParentToFrontWhenClickingMenuTest {
     robot.settings().eventMode(eventMode);
     JMenuItem menuItem = window.menuItemFromMenuBar;
     JMenuItemFixture fixture = fixtureFor(menuItem);
-    pause(DELAY_BEFORE_SHOWING_MENU);
+    pauseBeforeShowingMenu();
     ClickRecorder clickRecorder = attachTo(menuItem);
     fixture.click();
     assertThat(clickRecorder).wasClicked();
@@ -78,11 +91,17 @@ public class Bug159_MoveParentToFrontWhenClickingMenuTest {
     robot.settings().eventMode(eventMode);
     JMenuItem menuItem = window.menuItemFromPopupMenu;
     JMenuItemFixture fixture = fixtureFor(menuItem);
-    pause(DELAY_BEFORE_SHOWING_MENU);
+    pauseBeforeShowingMenu();
     robot.showPopupMenu(window.textField);
     ClickRecorder clickRecorder = attachTo(menuItem);
     fixture.click();
     assertThat(clickRecorder).wasClicked();
+  }
+  
+  private void pauseBeforeShowingMenu() {
+    int delay = DELAY_BEFORE_SHOWING_MENU;
+    logger.info(concat("Pausing for ", delay, " ms"));
+    pause(delay);
   }
 
   private JMenuItemFixture fixtureFor(JMenuItem menuItem) {
@@ -92,10 +111,15 @@ public class Bug159_MoveParentToFrontWhenClickingMenuTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    @RunsInEDT
     static MyWindow createNew() {
-      return new MyWindow();
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
-
+ 
     final JMenuItem menuItemFromMenuBar = new JMenuItem("New");
     final JMenuItem menuItemFromPopupMenu = new JMenuItem("Cut");
     final JTextField textField;

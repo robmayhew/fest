@@ -15,7 +15,6 @@
 package org.fest.swing.fixture;
 
 import java.awt.Container;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Logger;
@@ -23,12 +22,17 @@ import java.util.logging.Logger;
 import javax.swing.*;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 
 import static java.lang.String.valueOf;
 import static java.util.logging.Logger.getAnonymousLogger;
 
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.util.Strings.concat;
@@ -46,8 +50,12 @@ public class Bug80_JDialogTest {
 
   private DialogFixture starter;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @BeforeMethod public void setUp() {
-    JDialogStarter optionPaneStarter = new JDialogStarter(null);
+    JDialogStarter optionPaneStarter = JDialogStarter.createNew();
     starter = new DialogFixture(optionPaneStarter);
   }
 
@@ -78,8 +86,15 @@ public class Bug80_JDialogTest {
   static class JDialogStarter extends JDialog {
     private static final long serialVersionUID = 1L;
 
-    public JDialogStarter(Frame owner) {
-      super(owner);
+    static JDialogStarter createNew() {
+      return execute(new GuiQuery<JDialogStarter>() {
+        protected JDialogStarter executeInEDT() {
+          return new JDialogStarter();
+        }
+      });
+    }
+    
+    private JDialogStarter() {
       setTitle(Bug80_JDialogTest.class.getSimpleName());
       setContentPane(createContentPane());
     }

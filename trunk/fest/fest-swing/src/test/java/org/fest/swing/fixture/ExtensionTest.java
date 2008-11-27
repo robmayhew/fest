@@ -19,13 +19,16 @@ import java.awt.Container;
 import javax.swing.JTextField;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -38,6 +41,10 @@ import static org.fest.swing.testing.TestGroups.GUI;
 public class ExtensionTest {
 
   private FrameFixture fixture;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   @BeforeMethod public void setUp() {
     fixture = new FrameFixture(TestWindow.createNewWindow(ExtensionTest.class));
@@ -58,7 +65,7 @@ public class ExtensionTest {
     }
 
     public JTextFieldFixture createFixture(Robot robot, Container root) {
-      return new JTextFieldFixture(robot, new JTextField());
+      return new JTextFieldFixture(robot, textField().createNew());
     }
   }
 

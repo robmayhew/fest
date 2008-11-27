@@ -23,15 +23,21 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.finder.WindowFinder.findFrame;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Test for <a href="http://code.google.com/p/fest/issues/detail?id=157" target="_blank">issue 157</a>.
@@ -44,6 +50,10 @@ public class MacOsxMenuBarTest {
   private Robot robot;
   private JMenuItemFixture menuItemFixture;
   
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @BeforeMethod public void setUp() {
     System.setProperty("apple.laf.useScreenMenuBar", "true");
     robot = robotWithCurrentAwtHierarchy();
@@ -56,7 +66,7 @@ public class MacOsxMenuBarTest {
     robot.cleanUp();
   }
   
-  @Test public void shouldSelectMenu() {
+  @Test(groups = GUI) public void shouldSelectMenu() {
     final boolean[] selected = new boolean[1];
     JMenuItem menu = menuItemFixture.target;
     menu.addActionListener(new ActionListener() {
@@ -71,10 +81,15 @@ public class MacOsxMenuBarTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
     
-    public static MyWindow createNew() {
-      return new MyWindow();
+    @RunsInEDT
+    static MyWindow createNew() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
     }
-
+ 
     private MyWindow() {
       super(MacOsxMenuBarTest.class);
       setName("myWindow");

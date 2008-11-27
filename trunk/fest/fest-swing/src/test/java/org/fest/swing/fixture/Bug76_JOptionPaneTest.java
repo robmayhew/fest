@@ -22,13 +22,18 @@ import java.util.logging.Logger;
 import javax.swing.*;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.finder.JOptionPaneFinder;
 
 import static java.lang.String.valueOf;
 import static java.util.logging.Logger.getAnonymousLogger;
 
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.util.Strings.concat;
@@ -46,6 +51,10 @@ public class Bug76_JOptionPaneTest {
 
   private DialogFixture starter;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   public void shouldFindOptionPane() {
     JOptionPaneStarter optionPaneStarter = JOptionPaneStarter.createNew(null, "Message 1");
     starter = new DialogFixture(optionPaneStarter);
@@ -83,8 +92,13 @@ public class Bug76_JOptionPaneTest {
   private static class JOptionPaneStarter extends JDialog {
     private static final long serialVersionUID = 1L;
 
-    static JOptionPaneStarter createNew(Frame owner, String message) {
-      return new JOptionPaneStarter(owner, message);
+    @RunsInEDT
+    static JOptionPaneStarter createNew(final Frame owner, final String message) {
+      return execute(new GuiQuery<JOptionPaneStarter>() {
+        protected JOptionPaneStarter executeInEDT() {
+          return new JOptionPaneStarter(owner, message);
+        }
+      });
     }
 
     private JOptionPaneStarter(Frame owner, String message) {
