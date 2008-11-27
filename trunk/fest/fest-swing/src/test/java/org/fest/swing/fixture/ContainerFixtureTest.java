@@ -31,7 +31,6 @@ import org.testng.annotations.Test;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.query.AbstractButtonTextQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static java.awt.Color.RED;
@@ -64,7 +63,6 @@ import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.factory.JToggleButtons.toggleButton;
 import static org.fest.swing.factory.JToolBars.toolBar;
 import static org.fest.swing.factory.JTrees.tree;
-import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -104,7 +102,7 @@ public class ContainerFixtureTest {
     JButton expectedButton = addJButton();
     GenericTypeMatcher<JButton> textMatcher = new GenericTypeMatcher<JButton>() {
       protected boolean isMatching(JButton button) {
-        return "A Button".equals(textOf(button));
+        return "A Button".equals(button.getText());
       }
     };
     JButtonFixture buttonFixture = fixture.button(textMatcher);
@@ -135,7 +133,7 @@ public class ContainerFixtureTest {
     JCheckBox expectedCheckBox = addJCheckBox();
     GenericTypeMatcher<JCheckBox> textMatcher = new GenericTypeMatcher<JCheckBox>() {
       protected boolean isMatching(JCheckBox checkBox) {
-        return "A CheckBox".equals(textOf(checkBox));
+        return "A CheckBox".equals(checkBox.getText());
       }
     };
     JCheckBoxFixture checkboxFixture = fixture.checkBox(textMatcher);
@@ -313,7 +311,7 @@ public class ContainerFixtureTest {
     JMenuItem expectedMenuItem = addJMenuItem();
     GenericTypeMatcher<JMenuItem> textMatcher = new GenericTypeMatcher<JMenuItem>() {
       protected boolean isMatching(JMenuItem menuItem) {
-        return "A Submenu".equals(AbstractButtonTextQuery.textOf(menuItem));
+        return "A Submenu".equals(menuItem.getText());
       }
     };
     JMenuItemFixture menuItemFixture = fixture.menuItem(textMatcher);
@@ -422,7 +420,7 @@ public class ContainerFixtureTest {
     JRadioButton expectedRadioButton = addJRadioButton();
     GenericTypeMatcher<JRadioButton> textMatcher = new GenericTypeMatcher<JRadioButton>() {
       protected boolean isMatching(JRadioButton radioButton) {
-        return "A Radio Button".equals(AbstractButtonTextQuery.textOf(radioButton));
+        return "A Radio Button".equals(radioButton.getText());
       }
     };
     JRadioButtonFixture radioButtonFixture = fixture.radioButton(textMatcher);
@@ -708,7 +706,7 @@ public class ContainerFixtureTest {
     JToggleButton expectedToggleButton = addJToggleButton();
     GenericTypeMatcher<JToggleButton> textMatcher = new GenericTypeMatcher<JToggleButton>() {
       protected boolean isMatching(JToggleButton toggleButton) {
-        return "A ToggleButton".equals(AbstractButtonTextQuery.textOf(toggleButton));
+        return "A ToggleButton".equals(toggleButton.getText());
       }
     };
     JToggleButtonFixture toggleButtonFixture = fixture.toggleButton(textMatcher);

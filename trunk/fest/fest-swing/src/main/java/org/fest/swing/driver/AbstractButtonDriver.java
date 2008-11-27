@@ -20,10 +20,12 @@ import javax.swing.AbstractButton;
 import org.fest.assertions.Description;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
-import org.fest.swing.query.AbstractButtonTextQuery;
+import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.query.AbstractButtonSelectedQuery.isSelected;
+import static org.fest.swing.driver.AbstractButtonSelectedQuery.isSelected;
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands simulation of user input on an <code>{@link AbstractButton}</code>. This class is intended for internal
@@ -73,9 +75,9 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @throws IllegalStateException if the button is not showing on the screen.
    */
   @RunsInEDT
-  public void select(final AbstractButton button) {
-    if (isSelected(button)) return;
-    click(button);
+  public void select(AbstractButton button) {
+    if (validateAndFindIsSelected(button)) return;
+    robot.click(button);
   }
 
   /**
@@ -85,9 +87,19 @@ public class AbstractButtonDriver extends JComponentDriver {
    * @throws IllegalStateException if the button is not showing on the screen.
    */
   @RunsInEDT
-  public void unselect(final AbstractButton button) {
-    if (!isSelected(button)) return;
-    click(button);
+  public void unselect(AbstractButton button) {
+    if (!validateAndFindIsSelected(button)) return;
+    robot.click(button);
+  }
+  
+  @RunsInEDT
+  private static boolean validateAndFindIsSelected(final AbstractButton button) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        validateIsEnabledAndShowing(button);
+        return button.isSelected();
+      }
+    });
   }
 
   /**

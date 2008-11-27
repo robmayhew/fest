@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.query;
+package org.fest.swing.driver;
 
 import javax.swing.AbstractButton;
 
@@ -30,17 +30,10 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public final class AbstractButtonTextQuery {
+final class AbstractButtonTextQuery {
 
-  /**
-   * Returns the text of the given <code>{@link AbstractButton}</code>. This action is executed in the event dispatch
-   * thread.
-   * @param button the given <code>AbstractButton</code>.
-   * @return the text of the given <code>AbstractButton</code>.
-   * @see AbstractButton#getText()
-   */
   @RunsInEDT
-  public static String textOf(final AbstractButton button) {
+  static String textOf(final AbstractButton button) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
         return button.getText();

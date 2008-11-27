@@ -12,7 +12,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.query;
+package org.fest.swing.driver;
 
 import javax.swing.AbstractButton;
 
@@ -29,17 +29,10 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class AbstractButtonSelectedQuery {
+final class AbstractButtonSelectedQuery {
 
-  /**
-   * Indicates whether the given <code>{@link AbstractButton}</code> is selected or not. This action is executed in the
-   * event dispatch thread.
-   * @param button the given <code>AbstractButton</code>.
-   * @return <code>true</code> if the given <code>AbstractButton</code> is selected, <code>false</code> otherwise.
-   * @see AbstractButton#isSelected()
-   */
   @RunsInEDT
-  public static boolean isSelected(final AbstractButton button) {
+  static boolean isSelected(final AbstractButton button) {
     return execute(new GuiQuery<Boolean>() {
       protected Boolean executeInEDT() {
         return button.isSelected();

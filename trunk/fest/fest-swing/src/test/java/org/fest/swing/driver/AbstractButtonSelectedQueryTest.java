@@ -1,5 +1,5 @@
 /*
- * Created on Aug 6, 2008
+ * Created on Aug 9, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,9 +13,9 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.query;
+package org.fest.swing.driver;
 
-import javax.swing.JButton;
+import javax.swing.JCheckBox;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -24,26 +24,29 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.driver.AbstractButtonSelectedQuery;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.testing.BooleanProvider;
 import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.task.AbstractButtonSetSelectedTask.setSelected;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
- * Tests for <code>{@link AbstractButtonTextQuery}</code>.
+ * Tests for <code>{@link AbstractButtonSelectedQuery}</code>.
  *
  * @author Alex Ruiz
  */
 @Test(groups = { GUI, ACTION })
-public class AbstractButtonTextQueryTest {
+public class AbstractButtonSelectedQueryTest {
 
   private Robot robot;
-  private MyButton button;
+  private MyCheckBox checkBox;
 
   @BeforeClass public void setUpOnce() {
     CheckThreadViolationRepaintManager.install();
@@ -52,7 +55,7 @@ public class AbstractButtonTextQueryTest {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
-    button = window.button;
+    checkBox = window.checkBox;
     robot.showWindow(window);
   }
 
@@ -60,10 +63,14 @@ public class AbstractButtonTextQueryTest {
     robot.cleanUp();
   }
 
-  public void shouldReturnTextOfAbstractButton() {
-    button.startRecording();
-    assertThat(AbstractButtonTextQuery.textOf(button)).isEqualTo("A Button");
-    button.requireInvoked("getText");
+  @Test(dataProvider = "booleans", dataProviderClass = BooleanProvider.class, groups = { GUI, ACTION })
+  public void shouldIndicateIfAbstractButtonIsSelected(final boolean selected) {
+    setSelected(checkBox, selected);
+    robot.waitForIdle();
+    checkBox.startRecording();
+    boolean isSelected = AbstractButtonSelectedQuery.isSelected(checkBox);
+    assertThat(isSelected).isEqualTo(selected);
+    checkBox.requireInvoked("isSelected");
   }
 
   private static class MyWindow extends TestWindow {
@@ -71,35 +78,35 @@ public class AbstractButtonTextQueryTest {
 
     @RunsInEDT
     static MyWindow createNew() {
-      return execute(new GuiQuery<MyWindow>() {
+      return GuiActionRunner.execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {
           return new MyWindow();
         }
       });
     }
 
-    final MyButton button = new MyButton("A Button");
+    final MyCheckBox checkBox = new MyCheckBox("A Button");
 
     private MyWindow() {
-      super(AbstractButtonTextQueryTest.class);
-      addComponents(button);
+      super(AbstractButtonSelectedQueryTest.class);
+      addComponents(checkBox);
     }
   }
 
-  private static class MyButton extends JButton {
+  private static class MyCheckBox extends JCheckBox {
     private static final long serialVersionUID = 1L;
 
     private boolean recording;
     private final MethodInvocations methodInvocations = new MethodInvocations();
 
-    public MyButton(String text) { super(text); }
-
-    @Override public String getText() {
-      if (recording) methodInvocations.invoked("getText");
-      return super.getText();
-    }
+    MyCheckBox(String text) { super(text); }
 
     void startRecording() { recording = true; }
+
+    @Override public boolean isSelected() {
+      if (recording) methodInvocations.invoked("isSelected");
+      return super.isSelected();
+    }
 
     MethodInvocations requireInvoked(String methodName) {
       return methodInvocations.requireInvoked(methodName);

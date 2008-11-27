@@ -22,6 +22,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JButtons.button;
+import static org.fest.swing.factory.JLabels.label;
 
 /**
  * Tests for <code>{@link BasicCellRendererReader}</code>.
@@ -37,12 +39,12 @@ import static org.fest.assertions.Assertions.assertThat;
   }
 
   public void shouldReturnValueFromComponentIfItIsJLabel() {
-    JLabel label = new JLabel("Hello");
+    JLabel label = label().withText("Hello").createNew();
     assertThat(reader.valueFrom(label)).isEqualTo("Hello");
   }
 
   public void shouldReturnNullValueFromComponentIfItIsNotJLabel() {
-    JButton button = new JButton("Hello");
+    JButton button = button().withText("Hello").createNew();
     assertThat(reader.valueFrom(button)).isNull();
   }
 }

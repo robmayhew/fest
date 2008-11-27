@@ -440,7 +440,7 @@ public class ComponentDriverTest {
   }
 
   private void assertThatWaited(StopWatch stopWatch, long minimumWaitedTime) {
-    long ellapsedTimeInMs = stopWatch.ellapsedTime() / 1000;
+    long ellapsedTimeInMs = stopWatch.ellapsedTime();
     assertThat(ellapsedTimeInMs).isGreaterThanOrEqualTo(minimumWaitedTime);
   }
 

@@ -33,8 +33,8 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.driver.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.query.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
