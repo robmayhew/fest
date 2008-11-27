@@ -19,7 +19,10 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 
 import org.fest.swing.cell.JComboBoxCellReader;
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.BasicJComboBoxCellReader;
 import org.fest.swing.driver.JComboBoxDriver;
 import org.fest.swing.exception.ComponentLookupException;
@@ -79,6 +82,8 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   /**
    * Simulates a user clicking this fixture's <code>{@link JComboBox}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
    */
   public JComboBoxFixture click() {
     driver.click(target);
@@ -89,6 +94,9 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    * Simulates a user clicking this fixture's <code>{@link JComboBox}</code>.
    * @param button the button to click.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
    */
   public JComboBoxFixture click(MouseButton button) {
     driver.click(target, button);
@@ -100,6 +108,8 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
    */
   public JComboBoxFixture click(MouseClickInfo mouseClickInfo) {
     driver.click(target, mouseClickInfo);
@@ -109,6 +119,8 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JComboBox}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
    */
   public JComboBoxFixture doubleClick() {
     driver.doubleClick(target);
@@ -118,6 +130,8 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JComboBox}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
    */
   public JComboBoxFixture rightClick() {
     driver.rightClick(target);
@@ -139,6 +153,9 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    * is executed only if the <code>{@link JComboBox}</code> is editable.
    * @param text the text to enter.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not editable.
    */
   public JComboBoxFixture replaceText(String text) {
     driver.replaceText(target, text);
@@ -149,6 +166,9 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    * Simulates a user selecting the text in the <code>{@link JComboBox}</code>. This action is executed only if the
    * <code>{@link JComboBox}</code> is editable.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not editable.
    */
   public JComboBoxFixture selectAllText() {
     driver.selectAllText(target);
@@ -160,6 +180,9 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    * executed only if the <code>{@link JComboBox}</code> is editable.
    * @param text the text to enter.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not editable.
    */
   public JComboBoxFixture enterText(String text) {
     driver.enterText(target, text);
@@ -169,6 +192,8 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   /**
    * Gives input focus to this fixture's <code>{@link JComboBox}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
    */
   public JComboBoxFixture focus() {
     driver.focus(target);
@@ -178,6 +203,7 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   /**
    * Finds and returns the {@link JList} in the pop-up raised by this fixture's <code>{@link JComboBox}</code>.
    * @return the <code>JList</code> in the pop-up raised by this fixture's <code>JComboBox</code>.
+   * @throws ComponentLookupException if the <code>JList</code> in the pop-up could not be found.
    */
   public JList list() {
     return driver.dropDownList();
@@ -190,6 +216,8 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
    * @see KeyPressInfo
    */
   public JComboBoxFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -203,6 +231,8 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    * @return this fixture.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JComboBoxFixture pressAndReleaseKeys(int... keyCodes) {
@@ -215,6 +245,8 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JComboBoxFixture pressKey(int keyCode) {
@@ -227,11 +259,55 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JComboBoxFixture releaseKey(int keyCode) {
     driver.releaseKey(target, keyCode);
     return this;
+  }
+
+  /**
+   * Simulates a user selecting an item in this fixture's <code>{@link JComboBox}</code>.
+   * @param index the index of the item to select.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JComboBox</code>.
+   */
+  public JComboBoxFixture selectItem(int index) {
+    driver.selectItem(target, index);
+    return this;
+  }
+
+  /**
+   * Simulates a user selecting an item in this fixture's <code>{@link JComboBox}</code>. Value matching is performed
+   * by this fixture's <code>{@link JComboBoxCellReader}</code>.
+   * @param text the text of the item to select.
+   * @return this fixture.
+   * @throws LocationUnavailableException if an element matching the given text cannot be found.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JComboBox</code> is not showing on the screen.
+   * @see #cellReader(JComboBoxCellReader)
+   */
+  public JComboBoxFixture selectItem(String text) {
+    driver.selectItem(target, text);
+    return this;
+  }
+  
+  /**
+   * Returns the <code>String</code> representation of the value of an item in this fixture's 
+   * <code>{@link JComboBox}</code>, using this fixture's <code>{@link JComboBoxCellReader}</code>.
+   * @param index the index of the item to return.
+   * @return the <code>String</code> representation of the value of an item in this fixture's <code>JComboBox</code>.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JComboBox</code>.
+   * @see #cellReader(JComboBoxCellReader)
+   */
+  public String valueAt(int index) {
+    return driver.value(target, index);
   }
 
   /**
@@ -286,27 +362,22 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   }
 
   /**
-   * Simulates a user selecting an item in this fixture's <code>{@link JComboBox}</code>.
-   * @param index the index of the item to select.
+   * Asserts that this fixture's <code>{@link JComboBox}</code> is editable.
+   * @throws AssertionError if this fixture's <code>JComboBox</code> is not editable.
    * @return this fixture.
-   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
-   * <code>JComboBox</code>.
    */
-  public JComboBoxFixture selectItem(int index) {
-    driver.selectItem(target, index);
+  public JComboBoxFixture requireEditable() {
+    driver.requireEditable(target);
     return this;
   }
 
   /**
-   * Simulates a user selecting an item in this fixture's <code>{@link JComboBox}</code>. Value matching is performed
-   * by this fixture's <code>{@link JComboBoxCellReader}</code>.
-   * @param text the text of the item to select.
+   * Asserts that this fixture's <code>{@link JComboBox}</code> is not editable.
+   * @throws AssertionError if this fixture's <code>JComboBox</code> is editable.
    * @return this fixture.
-   * @throws LocationUnavailableException if an element matching the given text cannot be found.
-   * @see #cellReader(JComboBoxCellReader)
    */
-  public JComboBoxFixture selectItem(String text) {
-    driver.selectItem(target, text);
+  public JComboBoxFixture requireNotEditable() {
+    driver.requireNotEditable(target);
     return this;
   }
 
@@ -330,39 +401,6 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    */
   public JComboBoxFixture requireNoSelection() {
     driver.requireNoSelection(target);
-    return this;
-  }
-
-  /**
-   * Returns the <code>String</code> representation of the value of an item in this fixture's 
-   * <code>{@link JComboBox}</code>, using this fixture's <code>{@link JComboBoxCellReader}</code>.
-   * @param index the index of the item to return.
-   * @return the <code>String</code> representation of the value of an item in this fixture's <code>JComboBox</code>.
-   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
-   * <code>JComboBox</code>.
-   * @see #cellReader(JComboBoxCellReader)
-   */
-  public String valueAt(int index) {
-    return driver.value(target, index);
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JComboBox}</code> is editable.
-   * @throws AssertionError if this fixture's <code>JComboBox</code> is not editable.
-   * @return this fixture.
-   */
-  public JComboBoxFixture requireEditable() {
-    driver.requireEditable(target);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JComboBox}</code> is not editable.
-   * @throws AssertionError if this fixture's <code>JComboBox</code> is editable.
-   * @return this fixture.
-   */
-  public JComboBoxFixture requireNotEditable() {
-    driver.requireNotEditable(target);
     return this;
   }
 

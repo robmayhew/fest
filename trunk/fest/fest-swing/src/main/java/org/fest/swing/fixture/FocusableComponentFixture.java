@@ -25,6 +25,8 @@ public interface FocusableComponentFixture {
   /**
    * Gives input focus to this fixture's GUI component.
    * @return this fixture.
+   * @throws IllegalStateException if the component is disabled.
+   * @throws IllegalStateException if the component is not showing on the screen.
    */
   FocusableComponentFixture focus();
 }

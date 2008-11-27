@@ -28,6 +28,8 @@ public interface MouseInputSimulationFixture {
   /**
    * Simulates a user clicking this fixture's GUI component.
    * @return this fixture.
+   * @throws IllegalStateException if the component is disabled.
+   * @throws IllegalStateException if the component is not showing on the screen.
    */
   MouseInputSimulationFixture click();
 
@@ -35,6 +37,8 @@ public interface MouseInputSimulationFixture {
    * Simulates a user clicking this fixture's GUI component.
    * @param button the button to click.
    * @return this fixture.
+   * @throws IllegalStateException if the component is disabled.
+   * @throws IllegalStateException if the component is not showing on the screen.
    */
   MouseInputSimulationFixture click(MouseButton button);
 
@@ -43,18 +47,24 @@ public interface MouseInputSimulationFixture {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if the component is disabled.
+   * @throws IllegalStateException if the component is not showing on the screen.
    */
   MouseInputSimulationFixture click(MouseClickInfo mouseClickInfo);
 
   /**
    * Simulates a user double-clicking this fixture's GUI component.
    * @return this fixture.
+   * @throws IllegalStateException if the component is disabled.
+   * @throws IllegalStateException if the component is not showing on the screen.
    */
   MouseInputSimulationFixture doubleClick();
 
   /**
    * Simulates a user right-clicking this fixture's GUI component.
    * @return this fixture.
+   * @throws IllegalStateException if the component is disabled.
+   * @throws IllegalStateException if the component is not showing on the screen.
    */
   MouseInputSimulationFixture rightClick();
 }

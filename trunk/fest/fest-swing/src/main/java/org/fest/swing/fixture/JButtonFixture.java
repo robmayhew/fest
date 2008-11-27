@@ -17,7 +17,10 @@ package org.fest.swing.fixture;
 
 import javax.swing.JButton;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -71,6 +74,8 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
   /**
    * Simulates a user clicking this fixture's <code>{@link JButton}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is not showing on the screen.
    */
   public JButtonFixture click() {
     driver.click(target);
@@ -81,6 +86,9 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
    * Simulates a user clicking this fixture's <code>{@link JButton}</code>.
    * @param button the button to click.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is not showing on the screen.
    */
   public JButtonFixture click(MouseButton button) {
     driver.click(target, button);
@@ -92,6 +100,8 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is not showing on the screen.
    */
   public JButtonFixture click(MouseClickInfo mouseClickInfo) {
     driver.click(target, mouseClickInfo);
@@ -101,6 +111,8 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JButton}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is not showing on the screen.
    */
   public JButtonFixture doubleClick() {
     driver.doubleClick(target);
@@ -110,6 +122,8 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JButton}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is not showing on the screen.
    */
   public JButtonFixture rightClick() {
     driver.rightClick(target);
@@ -119,6 +133,8 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
   /**
    * Gives input focus to this fixture's <code>{@link JButton}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is not showing on the screen.
    */
   public JButtonFixture focus() {
     driver.focus(target);
@@ -132,6 +148,8 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is not showing on the screen.
    * @see KeyPressInfo
    */
   public JButtonFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -145,6 +163,8 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
    * @return this fixture.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JButtonFixture pressAndReleaseKeys(int... keyCodes) {
@@ -157,6 +177,8 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JButtonFixture pressKey(int keyCode) {
@@ -169,6 +191,8 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JButton</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JButtonFixture releaseKey(int keyCode) {

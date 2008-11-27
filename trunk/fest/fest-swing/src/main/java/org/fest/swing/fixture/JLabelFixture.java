@@ -17,7 +17,10 @@ package org.fest.swing.fixture;
 
 import javax.swing.JLabel;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JLabelDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.timing.Timeout;
@@ -69,6 +72,8 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
   /**
    * Simulates a user clicking this fixture's <code>{@link JLabel}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is not showing on the screen.
    */
   public JLabelFixture click() {
     driver.click(target);
@@ -79,6 +84,9 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
    * Simulates a user clicking this fixture's <code>{@link JLabel}</code>.
    * @param button the button to click.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is not showing on the screen.
    */
   public JLabelFixture click(MouseButton button) {
     driver.click(target, button);
@@ -90,6 +98,8 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is not showing on the screen.
    */
   public JLabelFixture click(MouseClickInfo mouseClickInfo) {
     driver.click(target, mouseClickInfo);
@@ -99,6 +109,8 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JLabel}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is not showing on the screen.
    */
   public JLabelFixture doubleClick() {
     driver.doubleClick(target);
@@ -108,6 +120,8 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JLabel}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is not showing on the screen.
    */
   public JLabelFixture rightClick() {
     driver.rightClick(target);
@@ -117,6 +131,8 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
   /**
    * Gives input focus to this fixture's <code>{@link JLabel}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is not showing on the screen.
    */
   public JLabelFixture focus() {
     driver.focus(target);
@@ -130,6 +146,8 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is not showing on the screen.
    * @see KeyPressInfo
    */
   public JLabelFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -143,6 +161,8 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
    * @return this fixture.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JLabelFixture pressAndReleaseKeys(int... keyCodes) {
@@ -155,6 +175,8 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JLabelFixture pressKey(int keyCode) {
@@ -167,6 +189,8 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JLabel</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JLabelFixture releaseKey(int keyCode) {

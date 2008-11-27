@@ -33,6 +33,8 @@ public interface KeyboardInputSimulationFixture {
    * @return this fixture.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if the component is disabled.
+   * @throws IllegalStateException if the component is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   KeyboardInputSimulationFixture pressAndReleaseKeys(int...keyCodes);
@@ -42,6 +44,8 @@ public interface KeyboardInputSimulationFixture {
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if the component is disabled.
+   * @throws IllegalStateException if the component is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   KeyboardInputSimulationFixture pressKey(int keyCode);
@@ -61,6 +65,8 @@ public interface KeyboardInputSimulationFixture {
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if the component is disabled.
+   * @throws IllegalStateException if the component is not showing on the screen.
    */
   KeyboardInputSimulationFixture pressAndReleaseKey(KeyPressInfo keyPressInfo);
   
@@ -69,6 +75,8 @@ public interface KeyboardInputSimulationFixture {
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if the component is disabled.
+   * @throws IllegalStateException if the component is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   KeyboardInputSimulationFixture releaseKey(int keyCode);

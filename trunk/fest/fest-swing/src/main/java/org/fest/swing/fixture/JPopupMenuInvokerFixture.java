@@ -23,6 +23,8 @@ import javax.swing.JPopupMenu;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 
+import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
+
 /**
  * Understands a fixture that can invoke a <code>{@link JPopupMenu}</code> on the target <code>{@link Component}</code>.
  * @param <T> the type of <code>Component</code> that this fixture can manage.
@@ -72,9 +74,12 @@ public abstract class JPopupMenuInvokerFixture<T extends Component> extends Comp
   /**
    * Shows a pop-up menu using this fixture's <code>{@link Component}</code> as the invoker of the pop-up menu.
    * @return a fixture that manages the displayed pop-up menu.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   public JPopupMenuFixture showPopupMenu() {
+    validateIsEnabledAndShowing(target);
     return new JPopupMenuFixture(robot, robot.showPopupMenu(target));
   }
 
@@ -83,9 +88,12 @@ public abstract class JPopupMenuInvokerFixture<T extends Component> extends Comp
    * pop-up menu.
    * @param p the given point where to show the pop-up menu.
    * @return a fixture that manages the displayed pop-up menu.
+   * @throws IllegalStateException if the <code>Component</code> is disabled.
+   * @throws IllegalStateException if the <code>Component</code> is not showing on the screen.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   public JPopupMenuFixture showPopupMenuAt(Point p) {
+    validateIsEnabledAndShowing(target);
     return new JPopupMenuFixture(robot, robot.showPopupMenu(target, p));
   }
 }

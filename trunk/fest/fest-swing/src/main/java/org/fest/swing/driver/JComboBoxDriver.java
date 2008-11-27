@@ -36,9 +36,9 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.driver.CommonValidations.validateCellReader;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
+import static org.fest.swing.driver.JComboBoxAccessibleEditorValidator.validateEditorIsAccessible;
 import static org.fest.swing.driver.JComboBoxContentQuery.contents;
 import static org.fest.swing.driver.JComboBoxEditableQuery.isEditable;
-import static org.fest.swing.driver.JComboBoxAccessibleEditorValidator.validateEditorIsAccessible;
 import static org.fest.swing.driver.JComboBoxItemIndexValidator.validateIndex;
 import static org.fest.swing.driver.JComboBoxMatchingItemQuery.matchingItemIndex;
 import static org.fest.swing.driver.JComboBoxSelectionValueQuery.*;
@@ -97,6 +97,8 @@ public class JComboBoxDriver extends JComponentDriver {
    * @param comboBox the target <code>JComboBox</code>.
    * @param value the value to match
    * @throws LocationUnavailableException if an element matching the given value cannot be found.
+   * @throws IllegalStateException if the <code>JComboBox</code> is disabled.
+   * @throws IllegalStateException if the <code>JComboBox</code> is not showing on the screen.
    * @see #cellReader(JComboBoxCellReader)
    */
   @RunsInEDT
