@@ -17,6 +17,11 @@ package org.fest.swing.factory;
 
 import javax.swing.JToggleButton;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
+
 /**
  * Understands creation of <code>{@link JToggleButton}</code>s.
  *
@@ -50,12 +55,17 @@ public final class JToggleButtons {
       return this;
     }
     
+    @RunsInEDT
     public JToggleButton createNew() {
-      JToggleButton toggleButton = new JToggleButton();
-      toggleButton.setName(name);
-      toggleButton.setSelected(selected);
-      toggleButton.setText(text);
-      return toggleButton;
+      return execute(new GuiQuery<JToggleButton>() {
+        protected JToggleButton executeInEDT() {
+          JToggleButton toggleButton = new JToggleButton();
+          toggleButton.setName(name);
+          toggleButton.setSelected(selected);
+          toggleButton.setText(text);
+          return toggleButton;
+        }
+      });
     }
   }
 }

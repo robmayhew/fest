@@ -18,6 +18,10 @@ package org.fest.swing.factory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
@@ -59,13 +63,18 @@ public final class JComboBoxes {
       return this;
     }
     
+    @RunsInEDT
     public JComboBox createNew() {
-      JComboBox comboBox = new JComboBox();
-      comboBox.setEditable(editable);
-      if (!isEmpty(items)) comboBox.setModel(new DefaultComboBoxModel(items));
-      comboBox.setName(name);
-      comboBox.setSelectedIndex(selectedIndex);
-      return comboBox;
+      return execute(new GuiQuery<JComboBox>() {
+        protected JComboBox executeInEDT() {
+          JComboBox comboBox = new JComboBox();
+          comboBox.setEditable(editable);
+          if (!isEmpty(items)) comboBox.setModel(new DefaultComboBoxModel(items));
+          comboBox.setName(name);
+          comboBox.setSelectedIndex(selectedIndex);
+          return comboBox;
+        }
+      });
     }
   }
 }

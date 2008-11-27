@@ -19,7 +19,12 @@ import java.awt.Component;
 
 import javax.swing.JSplitPane;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands creation of <code>{@link JSplitPane}</code>s.
@@ -60,15 +65,20 @@ public final class JSplitPanes {
       return this;
     }
     
+    @RunsInEDT
     public JSplitPane createNew() {
-      JSplitPane splitPane = new JSplitPane();
-      splitPane.setOrientation(orientation);
-      splitPane.setName(name);
-      if (leftComponent != null) 
-        splitPane.setLeftComponent(leftComponent);
-      if (rightComponent != null) 
-        splitPane.setRightComponent(rightComponent);
-      return splitPane;
+      return execute(new GuiQuery<JSplitPane>() {
+        protected JSplitPane executeInEDT() {
+          JSplitPane splitPane = new JSplitPane();
+          splitPane.setOrientation(orientation);
+          splitPane.setName(name);
+          if (leftComponent != null) 
+            splitPane.setLeftComponent(leftComponent);
+          if (rightComponent != null) 
+            splitPane.setRightComponent(rightComponent);
+          return splitPane;
+        }
+      });
     }
   }
 }

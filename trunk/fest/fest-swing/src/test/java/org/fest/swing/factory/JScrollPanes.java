@@ -20,7 +20,12 @@ import java.awt.Dimension;
 
 import javax.swing.JScrollPane;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
 import static javax.swing.ScrollPaneConstants.*;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands creation of <code>{@link JScrollPane}</code>s.
@@ -55,13 +60,18 @@ public final class JScrollPanes {
       return this;
     }
 
+    @RunsInEDT
     public JScrollPane createNew() {
-      JScrollPane scrollPane = view != null ? new JScrollPane(view) : new JScrollPane();
-      scrollPane.setName(name);
-      if (preferredSize != null) scrollPane.setPreferredSize(preferredSize);
-      scrollPane.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
-      scrollPane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_ALWAYS);
-      return scrollPane;
+      return execute(new GuiQuery<JScrollPane>() {
+        protected JScrollPane executeInEDT() {
+          JScrollPane scrollPane = view != null ? new JScrollPane(view) : new JScrollPane();
+          scrollPane.setName(name);
+          if (preferredSize != null) scrollPane.setPreferredSize(preferredSize);
+          scrollPane.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
+          scrollPane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_ALWAYS);
+          return scrollPane;
+        }
+      });
     }
   }
 }

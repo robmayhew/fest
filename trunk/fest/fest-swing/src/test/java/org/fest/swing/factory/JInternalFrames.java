@@ -17,6 +17,7 @@ package org.fest.swing.factory;
 
 import javax.swing.JInternalFrame;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -47,7 +48,8 @@ public final class JInternalFrames {
       resizable = shouldBeResizable;
       return this;
     }
-    
+  
+    @RunsInEDT
     public JInternalFrame createNew() {
       return execute(new GuiQuery<JInternalFrame>() {
         protected JInternalFrame executeInEDT() {

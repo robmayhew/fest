@@ -186,7 +186,7 @@ public class FontFixture {
   }
 
   private String property(String s) {
-    if (!isEmpty(description())) return concat(description, PROPERTY_SEPARATOR, s);
+    if (!isEmpty(description())) return concat(description.value(), PROPERTY_SEPARATOR, s);
     return s;
   }
 

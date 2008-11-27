@@ -17,6 +17,11 @@ package org.fest.swing.factory;
 
 import javax.swing.JSlider;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
+
 /**
  * Understands creation of <code>{@link JSlider}</code>s.
  *
@@ -56,13 +61,18 @@ public final class JSliders {
       return this;
     }
 
+    @RunsInEDT
     public JSlider createNew() {
-      JSlider slider = new JSlider();
-      slider.setMaximum(maximum);
-      slider.setMinimum(minimum);
-      slider.setName(name);
-      slider.setValue(value);
-      return slider;
+      return execute(new GuiQuery<JSlider>() {
+        protected JSlider executeInEDT() {
+          JSlider slider = new JSlider();
+          slider.setMaximum(maximum);
+          slider.setMinimum(minimum);
+          slider.setName(name);
+          slider.setValue(value);
+          return slider;
+        }
+      });
     }
   }
 }

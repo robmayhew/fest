@@ -17,6 +17,11 @@ package org.fest.swing.factory;
 
 import javax.swing.JRadioButton;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
+
 /**
  * Understands creation of <code>{@link JRadioButton}</code>s.
  *
@@ -50,12 +55,17 @@ public final class JRadioButtons {
       return this;
     }
     
+    @RunsInEDT
     public JRadioButton createNew() {
-      JRadioButton radioButton = new JRadioButton();
-      radioButton.setName(name);
-      radioButton.setSelected(selected);
-      radioButton.setText(text);
-      return radioButton;
+      return execute(new GuiQuery<JRadioButton>() {
+        protected JRadioButton executeInEDT() {
+          JRadioButton radioButton = new JRadioButton();
+          radioButton.setName(name);
+          radioButton.setSelected(selected);
+          radioButton.setText(text);
+          return radioButton;
+        }
+      });
     }
   }
 }

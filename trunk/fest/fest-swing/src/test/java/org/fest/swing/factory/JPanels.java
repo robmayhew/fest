@@ -19,6 +19,11 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
+
 /**
  * Understands creation of <code>{@link JPanel}</code>s.
  *
@@ -46,11 +51,16 @@ public final class JPanels {
       return this;
     }
     
+    @RunsInEDT
     public JPanel createNew() {
-      JPanel panel = new JPanel();
-      if (background != null) panel.setBackground(background);
-      panel.setName(name);
-      return panel;
+      return execute(new GuiQuery<JPanel>() {
+        protected JPanel executeInEDT() {
+          JPanel panel = new JPanel();
+          if (background != null) panel.setBackground(background);
+          panel.setName(name);
+          return panel;
+        }
+      });
     }
   }
 }

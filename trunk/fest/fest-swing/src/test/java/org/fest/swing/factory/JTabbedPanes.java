@@ -20,6 +20,10 @@ import java.awt.Component;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTabbedPanes.Tab.tab;
 import static org.fest.util.Arrays.isEmpty;
 
@@ -58,12 +62,17 @@ public final class JTabbedPanes {
       return this;
     }
     
+    @RunsInEDT
     public JTabbedPane createNew() {
-      JTabbedPane tabbedPane = new JTabbedPane();
-      tabbedPane.setName(name);
-      if (!isEmpty(tabs))
-        for (Tab tab : tabs) tabbedPane.addTab(tab.title, tab.component);
-      return tabbedPane;
+      return execute(new GuiQuery<JTabbedPane>() {
+        protected JTabbedPane executeInEDT() {
+          JTabbedPane tabbedPane = new JTabbedPane();
+          tabbedPane.setName(name);
+          if (!isEmpty(tabs))
+            for (Tab tab : tabs) tabbedPane.addTab(tab.title, tab.component);
+          return tabbedPane;
+        }
+      });
     }
   }
   

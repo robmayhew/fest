@@ -17,6 +17,10 @@ package org.fest.swing.factory;
 
 import javax.swing.JOptionPane;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiActionRunner;
+import org.fest.swing.edt.GuiQuery;
+
 /**
  * Understands creation of <code>{@link JOptionPane}</code>s.
  *
@@ -56,13 +60,18 @@ public final class JOptionPanes {
       return this;
     }
 
+    @RunsInEDT
     public JOptionPane createNew() {
-      JOptionPane optionPane = new JOptionPane();
-      optionPane.setMessage(message);
-      optionPane.setMessageType(messageType);
-      optionPane.setName(name);
-      optionPane.setOptionType(optionType);
-      return optionPane;
+      return GuiActionRunner.execute(new GuiQuery<JOptionPane>() {
+        protected JOptionPane executeInEDT() {
+          JOptionPane optionPane = new JOptionPane();
+          optionPane.setMessage(message);
+          optionPane.setMessageType(messageType);
+          optionPane.setName(name);
+          optionPane.setOptionType(optionType);
+          return optionPane;
+        }
+      });
     }
   }
 }

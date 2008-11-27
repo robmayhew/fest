@@ -19,6 +19,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListModel;
 
+import org.fest.swing.annotation.RunsInEDT;
+
 import static org.fest.util.Arrays.isEmpty;
 
 /**
@@ -60,6 +62,7 @@ public final class JLists {
       return this;
     }
 
+    @RunsInEDT
     public JList createNew() {
       JList list = new JList();
       if (!isEmpty(items)) list.setModel(modelWith(items));

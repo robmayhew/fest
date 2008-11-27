@@ -18,6 +18,10 @@ package org.fest.swing.factory;
 import javax.swing.JTree;
 import javax.swing.tree.TreeNode;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
@@ -53,15 +57,20 @@ public final class JTrees {
       return this;
     }
     
+    @RunsInEDT
     public JTree createNew() {
-      if (root != null && !isEmpty(values)) 
-        throw new IllegalStateException("Either set root or values, but not both");
-      JTree tree = null;
-      if (root != null) tree = new JTree(root);
-      else if (!isEmpty(values)) tree = new JTree(values);
-      else tree = new JTree();
-      tree.setName(name);
-      return tree;
+      return execute(new GuiQuery<JTree>() {
+        protected JTree executeInEDT() {
+          if (root != null && !isEmpty(values)) 
+            throw new IllegalStateException("Either set root or values, but not both");
+          JTree tree = null;
+          if (root != null) tree = new JTree(root);
+          else if (!isEmpty(values)) tree = new JTree(values);
+          else tree = new JTree();
+          tree.setName(name);
+          return tree;
+        }
+      });
     }
   }
 }

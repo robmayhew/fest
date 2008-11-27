@@ -17,6 +17,11 @@ package org.fest.swing.factory;
 
 import javax.swing.JFileChooser;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
+
 /**
  * Understands creation of <code>{@link JFileChooser}</code>s.
  *
@@ -38,10 +43,15 @@ public final class JFileChoosers {
       return this;
     }
     
+    @RunsInEDT
     public JFileChooser createNew() {
-      JFileChooser fileChooser = new JFileChooser();
-      fileChooser.setName(name);
-      return fileChooser;
+      return execute(new GuiQuery<JFileChooser>() {
+        protected JFileChooser executeInEDT() {
+          JFileChooser fileChooser = new JFileChooser();
+          fileChooser.setName(name);
+          return fileChooser;
+        }
+      });
     }
   }
 }

@@ -18,6 +18,10 @@ package org.fest.swing.factory;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
@@ -47,11 +51,16 @@ public final class JSpinners {
       return this;
     }
     
+    @RunsInEDT
     public JSpinner createNew() {
-      JSpinner spinner = new JSpinner();
-      if (!isEmpty(values)) spinner.setModel(new SpinnerListModel(values));
-      spinner.setName(name);
-      return spinner;
+      return execute(new GuiQuery<JSpinner>() {
+        protected JSpinner executeInEDT() {
+          JSpinner spinner = new JSpinner();
+          if (!isEmpty(values)) spinner.setModel(new SpinnerListModel(values));
+          spinner.setName(name);
+          return spinner;
+        }
+      });
     }
   }
 }

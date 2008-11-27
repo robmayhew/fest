@@ -17,6 +17,7 @@ package org.fest.swing.factory;
 
 import javax.swing.JLabel;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -48,6 +49,7 @@ public final class JLabels {
       return this;
     }
     
+    @RunsInEDT
     public JLabel createNew() {
       return execute(new GuiQuery<JLabel>() {
         protected JLabel executeInEDT() {
