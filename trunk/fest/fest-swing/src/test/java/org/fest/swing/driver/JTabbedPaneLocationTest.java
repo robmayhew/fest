@@ -29,7 +29,6 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestWindow;
 
@@ -89,7 +88,7 @@ public class JTabbedPaneLocationTest {
     try {
       location.validateIndex(tabbedPane, -1);
       fail();
-    } catch (ActionFailedException e) {
+    } catch (IndexOutOfBoundsException e) {
       assertThat(e).message().isEqualTo("Index <-1> is not within the JTabbedPane bounds of <0> and <1> (inclusive)");
     }
   }
@@ -98,7 +97,7 @@ public class JTabbedPaneLocationTest {
     try {
       location.validateIndex(tabbedPane, 2);
       fail();
-    } catch (ActionFailedException e) {
+    } catch (IndexOutOfBoundsException e) {
       assertThat(e).message().isEqualTo("Index <2> is not within the JTabbedPane bounds of <0> and <1> (inclusive)");
     }
   }

@@ -64,12 +64,21 @@ public class JMenuPopupMenuQueryTest {
   }
 
   public void shouldReturnJPopupMenuInJMenu() {
-    JPopupMenu expected = menu.getPopupMenu();
+    JPopupMenu expected = popupMenuOf(menu);
     menu.startRecording();
     JPopupMenu actual = JMenuPopupMenuQuery.popupMenuOf(menu);
     assertThat(actual).isNotNull()
                       .isSameAs(expected);
     menu.requireInvoked("getPopupMenu");
+  }
+
+  @RunsInEDT
+  private static JPopupMenu popupMenuOf(final MyMenu menu) {
+    return execute(new GuiQuery<JPopupMenu>() {
+      protected JPopupMenu executeInEDT() {
+        return menu.getPopupMenu();
+      }
+    });
   }
 
   private static class MyWindow extends TestWindow {

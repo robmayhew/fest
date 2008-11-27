@@ -15,11 +15,11 @@
  */
 package org.fest.swing.driver;
 
-import javax.swing.JTable;
-
 import org.testng.annotations.Test;
 
 import org.fest.swing.data.TableCell;
+
+import static org.fest.swing.factory.JTables.table;
 
 /**
  * Tests for <code>{@link JTableCellValidator}</code>.
@@ -31,30 +31,30 @@ public class JTableCellValidatorTest {
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfTableIsEmpty() {
     TableCell cell = TableCell.row(2).column(3);
-    JTableCellValidator.validateCellIndices(new JTable(), cell);
+    JTableCellValidator.validateCellIndices(table().createNew(), cell);
   }
 
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfRowIndexIsNegative() {
     TableCell cell = TableCell.row(-2).column(3);
-    JTableCellValidator.validateCellIndices(new JTable(4, 3), cell);
+    JTableCellValidator.validateCellIndices(table().withRowCount(4).withColumnCount(3).createNew(), cell);
   }
 
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfColumnIndexIsNegative() {
     TableCell cell = TableCell.row(2).column(-3);
-    JTableCellValidator.validateCellIndices(new JTable(4, 3), cell);
+    JTableCellValidator.validateCellIndices(table().withRowCount(4).withColumnCount(3).createNew(), cell);
   }
   
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfRowIsOutOfBounds() {
     TableCell cell = TableCell.row(4).column(2);
-    JTableCellValidator.validateCellIndices(new JTable(4, 3), cell);
+    JTableCellValidator.validateCellIndices(table().withRowCount(4).withColumnCount(3).createNew(), cell);
   }  
   
   @Test(expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorIfColumnIsOutOfBounds() {
     TableCell cell = TableCell.row(0).column(3);
-    JTableCellValidator.validateCellIndices(new JTable(4, 3), cell);
+    JTableCellValidator.validateCellIndices(table().withRowCount(4).withColumnCount(3).createNew(), cell);
   }  
 }

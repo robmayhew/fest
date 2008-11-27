@@ -28,12 +28,10 @@ import org.testng.annotations.Test;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.testing.TestGroups;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
-import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Fix for <a href="http://code.google.com/p/fest/issues/detail?id=20&can=2&q=" target="_blank">issue 20</a>.
