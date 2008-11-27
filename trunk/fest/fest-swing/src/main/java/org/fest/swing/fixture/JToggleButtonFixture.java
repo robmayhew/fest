@@ -17,7 +17,10 @@ package org.fest.swing.fixture;
 
 import javax.swing.JToggleButton;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.timing.Timeout;
@@ -64,10 +67,20 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   final void updateDriver(AbstractButtonDriver newDriver) {
     driver = newDriver;
   }
+
+  /**
+   * Returns the text of this fixture's <code>{@link JToggleButton}</code>.
+   * @return the text of this fixture's <code>JToggleButton</code>.
+   */
+  public String text() {
+    return driver.textOf(target);
+  }
   
   /**
    * Checks (or selects) this fixture's <code>{@link JToggleButton}</code> only it is not already checked.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is not showing on the screen.
    */
   public JToggleButtonFixture check() {
     driver.select(target);
@@ -77,6 +90,8 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   /**
    * Unchecks this fixture's <code>{@link JToggleButton}</code> only if it is checked.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is not showing on the screen.
    */
   public JToggleButtonFixture uncheck() {
     driver.unselect(target);
@@ -86,6 +101,8 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   /**
    * Simulates a user clicking this fixture's <code>{@link JToggleButton}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is not showing on the screen.
    */
   public JToggleButtonFixture click() {
     driver.click(target);
@@ -96,6 +113,9 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
    * Simulates a user clicking this fixture's <code>{@link JToggleButton}</code>.
    * @param button the button to click.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is not showing on the screen.
    */
   public JToggleButtonFixture click(MouseButton button) {
     driver.click(target, button);
@@ -107,6 +127,8 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is not showing on the screen.
    */
   public JToggleButtonFixture click(MouseClickInfo mouseClickInfo) {
     driver.click(target, mouseClickInfo);
@@ -116,6 +138,8 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JToggleButton}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is not showing on the screen.
    */
   public JToggleButtonFixture doubleClick() {
     driver.doubleClick(target);
@@ -125,6 +149,8 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JToggleButton}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is not showing on the screen.
    */
   public JToggleButtonFixture rightClick() {
     driver.rightClick(target);
@@ -134,6 +160,8 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   /**
    * Gives input focus to this fixture's <code>{@link JToggleButton}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is not showing on the screen.
    */
   public JToggleButtonFixture focus() {
     driver.focus(target);
@@ -147,6 +175,8 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is not showing on the screen.
    * @see KeyPressInfo
    */
   public JToggleButtonFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -160,6 +190,8 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
    * @return this fixture.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JToggleButtonFixture pressAndReleaseKeys(int... keyCodes) {
@@ -172,6 +204,8 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JToggleButtonFixture pressKey(int keyCode) {
@@ -184,6 +218,8 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JToggleButton</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JToggleButtonFixture releaseKey(int keyCode) {
@@ -224,16 +260,6 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JToggleButton}</code> is disabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JToggleButton</code> is enabled.
-   */
-  public JToggleButtonFixture requireDisabled() {
-    driver.requireDisabled(target);
-    return this;
-  }
-
-  /**
    * Asserts that this fixture's <code>{@link JToggleButton}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JToggleButton</code> is disabled.
@@ -255,12 +281,12 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JToggleButton}</code> is not visible.
+   * Asserts that this fixture's <code>{@link JToggleButton}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JToggleButton</code> is visible.
+   * @throws AssertionError if this fixture's <code>JToggleButton</code> is enabled.
    */
-  public JToggleButtonFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JToggleButtonFixture requireDisabled() {
+    driver.requireDisabled(target);
     return this;
   }
 
@@ -275,10 +301,12 @@ public class JToggleButtonFixture extends TwoStateButtonFixture<JToggleButton> {
   }
 
   /**
-   * Returns the text of this fixture's <code>{@link JToggleButton}</code>.
-   * @return the text of this fixture's <code>JToggleButton</code>.
+   * Asserts that this fixture's <code>{@link JToggleButton}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JToggleButton</code> is visible.
    */
-  public String text() {
-    return driver.textOf(target);
+  public JToggleButtonFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
   }
 }

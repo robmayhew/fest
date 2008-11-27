@@ -293,6 +293,8 @@ public class JTableDriver extends JComponentDriver {
    * @param cells the cells to select.
    * @throws NullPointerException if <code>cells</code> is <code>null</code> or empty.
    * @throws IllegalArgumentException if <code>cells</code> is <code>null</code> or empty.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
    * @throws NullPointerException if any element in <code>cells</code> is <code>null</code>.
    * @throws IndexOutOfBoundsException if any of the indices of any of the <code>cells</code> are out of bounds.
    */
@@ -420,6 +422,7 @@ public class JTableDriver extends JComponentDriver {
    * @param table the target <code>JTable</code>.
    * @param cell the table cell.
    * @return the displayed pop-up menu.
+   * @throws NullPointerException if the cell is <code>null</code>.
    * @throws IllegalStateException if the <code>JTable</code> is disabled.
    * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
    * @throws ComponentLookupException if a pop-up menu cannot be found.

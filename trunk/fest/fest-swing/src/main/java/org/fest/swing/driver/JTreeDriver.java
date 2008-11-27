@@ -167,7 +167,6 @@ public class JTreeDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void selectRow(JTree tree, int row) {
-    // TODO: remove is new approach works: selectPath(tree, validateAndFindPathForRow(tree, row, location));
     scrollAndSelectRow(tree, row);
   }
 

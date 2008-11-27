@@ -20,7 +20,10 @@ import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
 import org.fest.swing.cell.JTreeCellReader;
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.BasicJTreeCellReader;
 import org.fest.swing.driver.JTreeDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -104,6 +107,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
   /**
    * Simulates a user clicking this fixture's <code>{@link JTree}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    */
   public JTreeFixture click() {
     driver.click(target);
@@ -114,6 +119,9 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Simulates a user clicking this fixture's <code>{@link JTree}</code>.
    * @param button the button to click.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    */
   public JTreeFixture click(MouseButton button) {
     driver.click(target, button);
@@ -125,6 +133,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    */
   public JTreeFixture click(MouseClickInfo mouseClickInfo) {
     driver.click(target, mouseClickInfo);
@@ -134,6 +144,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JTree}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    */
   public JTreeFixture doubleClick() {
     driver.doubleClick(target);
@@ -143,6 +155,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JTree}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    */
   public JTreeFixture rightClick() {
     driver.rightClick(target);
@@ -153,8 +167,10 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Simulates a user dragging a row from this fixture's <code>{@link JTree}</code>.
    * @param row the index of the row to drag.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
+   * visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
   public JTreeFixture drag(int row) {
@@ -166,6 +182,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Simulates a user dragging an item from this fixture's <code>{@link JTree}</code>.
    * @param path the path corresponding to the item to drag.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @throws LocationUnavailableException if the given path cannot be found.
    */
   public JTreeFixture drag(String path) {
@@ -177,8 +195,10 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Simulates a user dropping an item into this fixture's <code>{@link JTree}</code>.
    * @param row the row to drop the item to.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
+   * visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.
    */
@@ -191,6 +211,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Simulates a user dropping an item to this fixture's <code>{@link JTree}</code>.
    * @param path the path corresponding to the item to drop.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @throws LocationUnavailableException if the given path cannot be found.
    * @throws ActionFailedException if there is no drag action in effect.
    */
@@ -203,6 +225,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Select the given path, expanding parent nodes if necessary.
    * @param path the path to select.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @throws LocationUnavailableException if the given path cannot be found.
    */
   public JTreeFixture selectPath(String path) {
@@ -214,7 +238,10 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Select the given paths, expanding parent nodes if necessary.
    * @param paths the paths to select.
    * @return this fixture.
-   * @throws ActionFailedException if the array of paths is <code>null</code> or empty.
+   * @throws NullPointerException if the array of rows is <code>null</code>.
+   * @throws IllegalArgumentException if the array of rows is empty.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @throws LocationUnavailableException if the any of the given paths cannot be found.
    */
   public JTreeFixture selectPaths(String... paths) {
@@ -226,8 +253,10 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Simulates a user selecting the tree node at the given row.
    * @param row the index of the row to select.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
+   * visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
   public JTreeFixture selectRow(int row) {
@@ -241,8 +270,10 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * @return this fixture.
    * @throws NullPointerException if the array of rows is <code>null</code>.
    * @throws IllegalArgumentException if the array of rows is empty.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
+   * visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for any of the given rows cannot be found.
    */
   public JTreeFixture selectRows(int... rows) {
@@ -254,9 +285,12 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Simulates a user toggling the open/closed state of the tree node at the given row.
    * @param row the index of the row to select.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
+   * visible rows in the <code>JTree</code>.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
+   * @throws ActionFailedException if is not possible to toggle row for the <code>JTree</code>'s <code>TreeUI</code>.
    */
   public JTreeFixture toggleRow(int row) {
     driver.toggleRow(target, row);
@@ -267,8 +301,11 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * Shows a pop-up menu at the position of the node in the given row.
    * @param row the index of the row invoking the pop-up menu.
    * @return a fixture that manages the displayed pop-up menu.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the given row is less than zero or equal than or greater than the number of
-   *         visible rows in the <code>JTree</code>.
+   * visible rows in the <code>JTree</code>.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
    * @throws LocationUnavailableException if a tree path for the given row cannot be found.
    */
   public JPopupMenuFixture showPopupMenuAt(int row) {
@@ -281,6 +318,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * made visible (by expanding the parent node(s)) if it is not visible.
    * @param path the path of the node invoking the pop-up menu.
    * @return a fixture that manages the displayed pop-up menu.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    * @throws LocationUnavailableException if the given path cannot be found.
    */
@@ -292,6 +331,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
   /**
    * Gives input focus to this fixture's <code>{@link JTree}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    */
   public JTreeFixture focus() {
     driver.focus(target);
@@ -305,6 +346,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @see KeyPressInfo
    */
   public JTreeFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -318,6 +361,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * @return this fixture.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JTreeFixture pressAndReleaseKeys(int...keyCodes) {
@@ -330,6 +375,8 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JTreeFixture pressKey(int keyCode) {
@@ -342,20 +389,12 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @see java.awt.event.KeyEvent
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTree</code> is not showing on the screen.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
    */
   public JTreeFixture releaseKey(int keyCode) {
     driver.releaseKey(target, keyCode);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JTree}</code> is disabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JTree</code> is enabled.
-   */
-  public JTreeFixture requireDisabled() {
-    driver.requireDisabled(target);
     return this;
   }
 
@@ -381,12 +420,12 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JTree}</code> is not visible.
+   * Asserts that this fixture's <code>{@link JTree}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JTree</code> is visible.
+   * @throws AssertionError if this fixture's <code>JTree</code> is enabled.
    */
-  public JTreeFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JTreeFixture requireDisabled() {
+    driver.requireDisabled(target);
     return this;
   }
 
@@ -397,6 +436,16 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
    */
   public JTreeFixture requireVisible() {
     driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JTree}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTree</code> is visible.
+   */
+  public JTreeFixture requireNotVisible() {
+    driver.requireNotVisible(target);
     return this;
   }
 

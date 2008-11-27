@@ -73,6 +73,8 @@ public class JTableCellFixture implements ItemFixture {
   /**
    * Simulates a user selecting this fixture's table cell.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is not showing on the screen.
    */
   public JTableCellFixture select() {
     return click();
@@ -81,6 +83,8 @@ public class JTableCellFixture implements ItemFixture {
   /**
    * Simulates a user clicking this fixture's table cell.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is not showing on the screen.
    */
   public JTableCellFixture click() {
     table.selectCell(cell);
@@ -91,6 +95,9 @@ public class JTableCellFixture implements ItemFixture {
    * Simulates a user clicking this fixture's table cell.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is not showing on the screen.
    */
   public JTableCellFixture click(MouseClickInfo mouseClickInfo) {
     table.click(cell, mouseClickInfo);
@@ -100,6 +107,8 @@ public class JTableCellFixture implements ItemFixture {
   /**
    * Simulates a user double-clicking this fixture's table cell.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is not showing on the screen.
    */
   public JTableCellFixture doubleClick() {
     return click(LEFT_BUTTON, 2);
@@ -108,6 +117,8 @@ public class JTableCellFixture implements ItemFixture {
   /**
    * Simulates a user right-clicking this fixture's table cell.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is not showing on the screen.
    */
   public JTableCellFixture rightClick() {
     return click(RIGHT_BUTTON);
@@ -117,6 +128,9 @@ public class JTableCellFixture implements ItemFixture {
    * Simulates a user clicking a cell in this fixture's table cell once, using the specified mouse button.
    * @param button the mouse button to use.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is not showing on the screen.
    */
   public JTableCellFixture click(MouseButton button) {
     table.click(cell, button);
@@ -136,8 +150,10 @@ public class JTableCellFixture implements ItemFixture {
    * created this fixture.
    * </p>
    * @return this fixture.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is not showing on the screen.
+   * @throws IllegalStateException if this cell is not editable.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
    * @see JTableFixture#cellWriter(JTableCellWriter)
    * @see JTableCellWriter
@@ -156,8 +172,10 @@ public class JTableCellFixture implements ItemFixture {
    * created this fixture.
    * </p>
    * @return this fixture.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is not showing on the screen.
+   * @throws IllegalStateException if this cell is not editable.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
    * @see JTableFixture#cellWriter(JTableCellWriter)
    * @see JTableCellWriter
@@ -190,8 +208,10 @@ public class JTableCellFixture implements ItemFixture {
    * created this fixture.
    * </p>
    * @return this fixture.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is not showing on the screen.
+   * @throws IllegalStateException if this cell is not editable.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
    * @see JTableFixture#cellWriter(JTableCellWriter)
    * @see JTableCellWriter
@@ -240,10 +260,10 @@ public class JTableCellFixture implements ItemFixture {
    * </p>
    * @param value the value to enter in the cell.
    * @return this fixture.
-   * @throws AssertionError if the given <code>JTable</code> is not enabled.
-   * @throws AssertionError if the given table cell is not editable.
-   * @throws ActionFailedException if the cell is <code>null</code>.
-   * @throws ActionFailedException if any of the indices (row and column) is out of bounds.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTable</code> is not showing on the screen.
+   * @throws IllegalStateException if this cell is not editable.
+   * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
    * @throws ActionFailedException if this driver's <code>JTableCellValueReader</code> is unable to enter the given
    * value.
    * @see JTableFixture#cellWriter(JTableCellWriter)

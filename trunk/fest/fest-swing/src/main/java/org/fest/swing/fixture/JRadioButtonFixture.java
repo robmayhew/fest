@@ -17,7 +17,10 @@ package org.fest.swing.fixture;
 
 import javax.swing.JRadioButton;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.timing.Timeout;
@@ -65,10 +68,20 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   void updateDriver(AbstractButtonDriver newDriver) {
     driver = newDriver;
   }
-  
+
+  /**
+   * Returns the text of this fixture's <code>{@link JRadioButton}</code>. 
+   * @return the text of this fixture's <code>JRadioButton</code>. 
+   */
+  public String text() {
+    return driver.textOf(target);
+  }
+
   /**
    * Simulates a user clicking this fixture's <code>{@link JRadioButton}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is not showing on the screen.
    */
   public JRadioButtonFixture click() {
     driver.click(target);
@@ -79,6 +92,9 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
    * Simulates a user clicking this fixture's <code>{@link JRadioButton}</code>.
    * @param button the button to click.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is not showing on the screen.
    */
   public JRadioButtonFixture click(MouseButton button) {
     driver.click(target, button);
@@ -90,6 +106,8 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is not showing on the screen.
    */
   public JRadioButtonFixture click(MouseClickInfo mouseClickInfo) {
     driver.click(target, mouseClickInfo);
@@ -99,6 +117,8 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JRadioButton}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is not showing on the screen.
    */
   public JRadioButtonFixture doubleClick() {
     driver.doubleClick(target);
@@ -108,6 +128,8 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JRadioButton}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is not showing on the screen.
    */
   public JRadioButtonFixture rightClick() {
     driver.rightClick(target);
@@ -117,6 +139,8 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   /**
    * Gives input focus to this fixture's <code>{@link JRadioButton}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is not showing on the screen.
    */
   public JRadioButtonFixture focus() {
     driver.focus(target);
@@ -130,6 +154,8 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is not showing on the screen.
    * @see KeyPressInfo
    */
   public JRadioButtonFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -143,6 +169,8 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
    * @return this fixture.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JRadioButtonFixture pressAndReleaseKeys(int... keyCodes) {
@@ -155,6 +183,8 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JRadioButtonFixture pressKey(int keyCode) {
@@ -167,20 +197,12 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JRadioButtonFixture releaseKey(int keyCode) {
     driver.releaseKey(target, keyCode);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JRadioButton}</code> is disabled.
-   * @return this fixture.
-   * @throws AssertionError is this fixture's <code>JRadioButton</code> is enabled.
-   */
-  public JRadioButtonFixture requireDisabled() {
-    driver.requireDisabled(target);
     return this;
   }
   
@@ -204,24 +226,14 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
     driver.requireEnabled(target, timeout);
     return this;
   }
-  
-  /**
-   * Verifies that this fixture's <code>{@link JRadioButton}</code> is not selected.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JRadioButton</code> is selected.
-   */
-  public JRadioButtonFixture requireNotSelected() {
-    driver.requireNotSelected(target);
-    return this;
-  }
 
   /**
-   * Asserts that this fixture's <code>{@link JRadioButton}</code> is not visible.
+   * Asserts that this fixture's <code>{@link JRadioButton}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JRadioButton</code> is visible.
+   * @throws AssertionError is this fixture's <code>JRadioButton</code> is enabled.
    */
-  public JRadioButtonFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JRadioButtonFixture requireDisabled() {
+    driver.requireDisabled(target);
     return this;
   }
 
@@ -236,12 +248,32 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
   
   /**
+   * Verifies that this fixture's <code>{@link JRadioButton}</code> is not selected.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JRadioButton</code> is selected.
+   */
+  public JRadioButtonFixture requireNotSelected() {
+    driver.requireNotSelected(target);
+    return this;
+  }
+  
+  /**
    * Asserts that this fixture's <code>{@link JRadioButton}</code> is visible.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JRadioButton</code> is not visible.
    */
   public JRadioButtonFixture requireVisible() {
     driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JRadioButton}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JRadioButton</code> is visible.
+   */
+  public JRadioButtonFixture requireNotVisible() {
+    driver.requireNotVisible(target);
     return this;
   }
   
@@ -255,13 +287,5 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   public JRadioButtonFixture requireText(String expected) {
     driver.requireText(target, expected);
     return this;
-  }
-
-  /**
-   * Returns the text of this fixture's <code>{@link JRadioButton}</code>. 
-   * @return the text of this fixture's <code>JRadioButton</code>. 
-   */
-  public String text() {
-    return driver.textOf(target);
   }
 }

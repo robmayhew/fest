@@ -17,7 +17,10 @@ package org.fest.swing.fixture;
 
 import javax.swing.JCheckBox;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.AbstractButtonDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.timing.Timeout;
@@ -66,8 +69,18 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
   }
   
   /**
+   * Returns the text of this fixture's <code>{@link JCheckBox}</code>. 
+   * @return the text of this fixture's <code>JCheckBox</code>. 
+   */
+  public String text() {
+    return driver.textOf(target);
+  }
+
+  /**
    * Checks (or selects) this fixture's <code>{@link JCheckBox}</code> only it is not already checked.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is not showing on the screen.
    */
   public JCheckBoxFixture check() {
     driver.select(target);
@@ -77,6 +90,8 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
   /**
    * Unchecks this fixture's <code>{@link JCheckBox}</code> only if it is checked.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is not showing on the screen.
    */
   public JCheckBoxFixture uncheck() {
     driver.unselect(target);
@@ -86,6 +101,8 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
   /**
    * Simulates a user clicking this fixture's <code>{@link JCheckBox}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is not showing on the screen.
    */
   public JCheckBoxFixture click() {
     driver.click(target);
@@ -96,6 +113,9 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * Simulates a user clicking this fixture's <code>{@link JCheckBox}</code>.
    * @param button the button to click.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is not showing on the screen.
    */
   public JCheckBoxFixture click(MouseButton button) {
     driver.click(target, button);
@@ -105,8 +125,10 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
   /**
    * Simulates a user clicking this fixture's <code>{@link JCheckBox}</code>.
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
-   * @throws IllegalArgumentException if the given <code>MouseClickInfo</code> is <code>null</code>.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is not showing on the screen.
    */
   public JCheckBoxFixture click(MouseClickInfo mouseClickInfo) {
     driver.click(target, mouseClickInfo);
@@ -116,6 +138,8 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JCheckBox}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is not showing on the screen.
    */
   public JCheckBoxFixture doubleClick() {
     driver.doubleClick(target);
@@ -125,6 +149,8 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JCheckBox}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is not showing on the screen.
    */
   public JCheckBoxFixture rightClick() {
     driver.rightClick(target);
@@ -134,6 +160,8 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
   /**
    * Gives input focus to this fixture's <code>{@link JCheckBox}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is not showing on the screen.
    */
   public JCheckBoxFixture focus() {
     driver.focus(target);
@@ -147,6 +175,8 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is not showing on the screen.
    * @see KeyPressInfo
    */
   public JCheckBoxFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -160,6 +190,8 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * @return this fixture.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JCheckBoxFixture pressAndReleaseKeys(int... keyCodes) {
@@ -172,6 +204,8 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JCheckBoxFixture pressKey(int keyCode) {
@@ -184,20 +218,12 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JCheckBox</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JCheckBoxFixture releaseKey(int keyCode) {
     driver.releaseKey(target, keyCode);
-    return this;
-  }
-  
-  /**
-   * Asserts that this fixture's <code>{@link JCheckBox}</code> is disabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JCheckBox</code> is enabled.
-   */
-  public JCheckBoxFixture requireDisabled() {
-    driver.requireDisabled(target);
     return this;
   }
   
@@ -221,14 +247,14 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
     driver.requireEnabled(target, timeout);
     return this;
   }
-
+  
   /**
-   * Verifies that this fixture's <code>{@link JCheckBox}</code> is not selected.
+   * Asserts that this fixture's <code>{@link JCheckBox}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if the <code>JCheckBox</code> managed by this fixture is selected.
+   * @throws AssertionError if this fixture's <code>JCheckBox</code> is enabled.
    */
-  public JCheckBoxFixture requireNotSelected() {
-    driver.requireNotSelected(target);
+  public JCheckBoxFixture requireDisabled() {
+    driver.requireDisabled(target);
     return this;
   }
 
@@ -243,12 +269,12 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JCheckBox}</code> is not visible.
+   * Verifies that this fixture's <code>{@link JCheckBox}</code> is not selected.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JCheckBox</code> is visible.
+   * @throws AssertionError if the <code>JCheckBox</code> managed by this fixture is selected.
    */
-  public JCheckBoxFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JCheckBoxFixture requireNotSelected() {
+    driver.requireNotSelected(target);
     return this;
   }
 
@@ -263,6 +289,16 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
   }
 
   /**
+   * Asserts that this fixture's <code>{@link JCheckBox}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JCheckBox</code> is visible.
+   */
+  public JCheckBoxFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
+  }
+
+  /**
    * Asserts that the text of this fixture's <code>{@link JCheckBox}</code> is equal to the specified 
    * <code>String</code>. 
    * @param expected the text to match.
@@ -272,13 +308,5 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
   public JCheckBoxFixture requireText(String expected) {
     driver.requireText(target, expected);
     return this;
-  }
-  
-  /**
-   * Returns the text of this fixture's <code>{@link JCheckBox}</code>. 
-   * @return the text of this fixture's <code>JCheckBox</code>. 
-   */
-  public String text() {
-    return driver.textOf(target);
   }
 }

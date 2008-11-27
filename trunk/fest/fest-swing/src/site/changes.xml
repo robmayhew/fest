@@ -20,8 +20,8 @@
       </action>
       <action dev="alruiz, wanghy" type="add" issue="216" 
           due-to="Simeon Fitch, Michael Hüttermann, Jean-Francois Poilpret, Tarjei Skorgenes">
-        Added org.fest.swing.timing.LazyLoadingDescription and org.fest.swing.edt.GuiLazyLoadingDescription to
-        lazy-load the description of a org.fest.swing.timing.Condition.
+        Added org.fest.swing.edt.GuiLazyLoadingDescription to lazy-load the description of a 
+        org.fest.swing.timing.Condition (which is executed in the event dispatch thread.)
       </action>
       <action dev="alruiz" type="add" issue="216" 
           due-to="Simeon Fitch, Michael Hüttermann, Jean-Francois Poilpret, Tarjei Skorgenes">
@@ -29,6 +29,14 @@
       </action>
       <action dev="alruiz" type="fix" issue="222" due-to="Daniel F. Surdyk, III">
         Fixed error message when the index of a JTable cell is out of bounds.
+      </action>
+      <action dev="alruiz" type="add" issue="237" due-to="Simeon Fitch, Michael Hüttermann, vnguyen.sqa">
+        All actions performed on GUI components (e.g. click) now throw IllegalStateException if the GUI component is
+        disabled.
+      </action>
+      <action dev="alruiz" type="add" issue="237" due-to="Simeon Fitch, Michael Hüttermann, vnguyen.sqa">
+        All actions performed on GUI components (e.g. click) now throw IllegalStateException if the GUI component is
+        not showing on the screen.
       </action>
     </release>
     <release version="1.0b2" date="2008-10-16" description="Subsequent release">

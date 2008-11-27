@@ -17,7 +17,10 @@ package org.fest.swing.fixture;
 
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JTextComponentDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -69,9 +72,21 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   }
 
   /**
+   * Returns the text of this fixture's <code>{@link JTextComponent}</code>.
+   * @return the text of this fixture's <code>JTextComponent</code>.
+   */
+  public String text() {
+    return target.getText();
+  }
+
+  /**
    * Simulates a user selecting the given text contained in this fixture's <code>{@link JTextComponent}</code>.
    * @param text the text to select.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
+   * @throws IllegalArgumentException if this fixture's <code>JTextComponent</code> does not contain the given text to 
+   * select.
    * @throws ActionFailedException if the selecting the text in the given range fails.
    */
   public JTextComponentFixture select(String text) {
@@ -84,6 +99,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
    * @param start index where selection should start.
    * @param end index where selection should end.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    * @throws ActionFailedException if the selecting the text in the given range fails.
    */
   public JTextComponentFixture selectText(int start, int end) {
@@ -94,7 +111,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   /**
    * Simulates a user selecting all the text contained in this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
-   * @throws ActionFailedException if the selecting the text in the given range fails.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    */
   public JTextComponentFixture selectAll() {
     driver.selectAll(target);
@@ -104,6 +122,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   /**
    * Simulates a user clicking this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    */
   public JTextComponentFixture click() {
     driver.click(target);
@@ -114,6 +134,9 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
    * Simulates a user clicking this fixture's <code>{@link JTextComponent}</code>.
    * @param button the button to click.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    */
   public JTextComponentFixture click(MouseButton button) {
     driver.click(target, button);
@@ -125,6 +148,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    */
   public JTextComponentFixture click(MouseClickInfo mouseClickInfo) {
     driver.click(target, mouseClickInfo);
@@ -134,6 +159,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    */
   public JTextComponentFixture doubleClick() {
     driver.doubleClick(target);
@@ -143,6 +170,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    */
   public JTextComponentFixture rightClick() {
     driver.rightClick(target);
@@ -152,6 +181,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   /**
    * Simulates a user deleting all the text in this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    */
   public JTextComponentFixture deleteText() {
     driver.deleteText(target);
@@ -162,6 +193,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
    * Simulates a user entering the given text in this fixture's <code>{@link JTextComponent}</code>.
    * @param text the text to enter.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    */
   public JTextComponentFixture enterText(String text) {
     driver.enterText(target, text);
@@ -177,6 +210,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
    * </p>
    * @param text the text to set.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    */
   public JTextComponentFixture setText(String text) {
     driver.setText(target, text);
@@ -186,6 +221,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   /**
    * Gives input focus to this fixture's <code>{@link JTextComponent}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    */
   public JTextComponentFixture focus() {
     driver.focus(target);
@@ -199,6 +236,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    * @see KeyPressInfo
    */
   public JTextComponentFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -213,6 +252,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
    * @return this fixture.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JTextComponentFixture pressAndReleaseKeys(int...keyCodes) {
@@ -225,6 +266,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JTextComponentFixture pressKey(int keyCode) {
@@ -237,6 +280,8 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTextComponent</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JTextComponentFixture releaseKey(int keyCode) {
@@ -267,16 +312,6 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JTextComponent}</code> is disabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JTextComponent</code> is enabled.
-   */
-  public JTextComponentFixture requireDisabled() {
-    driver.requireDisabled(target);
-    return this;
-  }
-
-  /**
    * Asserts that this fixture's <code>{@link JTextComponent}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JTextComponent</code> is disabled.
@@ -298,12 +333,12 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JTextComponent}</code> is not visible.
+   * Asserts that this fixture's <code>{@link JTextComponent}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JTextComponent</code> is visible.
+   * @throws AssertionError if this fixture's <code>JTextComponent</code> is enabled.
    */
-  public JTextComponentFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JTextComponentFixture requireDisabled() {
+    driver.requireDisabled(target);
     return this;
   }
 
@@ -318,11 +353,13 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   }
 
   /**
-   * Returns the text of this fixture's <code>{@link JTextComponent}</code>.
-   * @return the text of this fixture's <code>JTextComponent</code>.
+   * Asserts that this fixture's <code>{@link JTextComponent}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTextComponent</code> is visible.
    */
-  public String text() {
-    return target.getText();
+  public JTextComponentFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
   }
   
   /**
