@@ -36,6 +36,7 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.util.Arrays;
 import org.fest.swing.util.Pair;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -481,6 +482,7 @@ public class JTableDriver extends JComponentDriver {
   @RunsInEDT
   public void requireContents(JTable table, String[][] contents) {
     String[][] actual = contents(table);
+    
     if (!equal(actual, contents))
       failNotEqual(actual, contents, propertyName(table, CONTENTS_PROPERTY));
   }
@@ -488,7 +490,7 @@ public class JTableDriver extends JComponentDriver {
   private static void failNotEqual(String[][] actual, String[][] expected, Description description) {
     String descriptionValue = description != null ? description.value() : null;
     String message = descriptionValue == null ? "" : concat("[", descriptionValue, "]");
-    fail(concat(message, " expected:<", format(expected), "> but was:<", format(actual), ">"));
+    fail(concat(message, " expected:<", Arrays.format(expected), "> but was:<", Arrays.format(actual), ">"));
   }
 
   /**

@@ -17,9 +17,8 @@ package org.fest.swing.util;
 
 import java.lang.reflect.Array;
 
-import org.fest.util.Objects;
-
 import static org.fest.swing.util.System.LINE_SEPARATOR;
+import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.quote;
 
 /**
@@ -47,7 +46,7 @@ public final class Arrays {
     if (one[0].length != two[0].length) return false;
     for (int i = 0; i < one.length; i++)
       for (int j = 0; j < one[i].length; j++)
-        if (!Objects.areEqual(one[i][j], two[i][j])) return false;
+        if (!areEqual(one[i][j], two[i][j])) return false;
     return true;
   }
 
