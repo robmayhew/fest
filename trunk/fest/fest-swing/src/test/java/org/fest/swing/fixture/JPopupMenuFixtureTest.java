@@ -29,6 +29,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JMenuItems.menuItem;
 import static org.fest.swing.factory.JPopupMenus.popupMenu;
 import static org.fest.util.Arrays.array;
 
@@ -65,7 +66,7 @@ public class JPopupMenuFixtureTest extends CommonComponentFixtureTestCase<JPopup
   }
 
   @Test public void shouldReturnMenuItemByName() {
-    final JMenuItem menuItem = new JMenuItem();
+    final JMenuItem menuItem = menuItem().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.menuItem(target, "menuItem")).andReturn(menuItem);
@@ -81,7 +82,7 @@ public class JPopupMenuFixtureTest extends CommonComponentFixtureTestCase<JPopup
   @SuppressWarnings("unchecked") 
   @Test public void shouldReturnMenuItemUsingSearchCriteria() {
     final GenericTypeMatcher<? extends JMenuItem> matcher = createMock(GenericTypeMatcher.class);
-    final JMenuItem menuItem = new JMenuItem();
+    final JMenuItem menuItem = menuItem().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.menuItem(target, matcher)).andReturn(menuItem);

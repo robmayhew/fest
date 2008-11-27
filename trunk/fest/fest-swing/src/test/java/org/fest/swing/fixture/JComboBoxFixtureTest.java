@@ -31,6 +31,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.factory.JComboBoxes.comboBox;
+import static org.fest.swing.factory.JLists.list;
 import static org.fest.util.Arrays.array;
 
 /**
@@ -112,7 +113,7 @@ import static org.fest.util.Arrays.array;
   }
 
   public void shouldReturnList() {
-    final JList list = new JList();
+    final JList list = list().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.dropDownList()).andReturn(list);

@@ -15,7 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import javax.swing.Action;
 import javax.swing.JMenuItem;
 
 import org.fest.swing.core.KeyPressInfo;
@@ -48,23 +47,6 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> implements Key
     this(robot, robot.finder().findByName(menuItemName, JMenuItem.class, false));
   }
 
-  /**
-   * Creates a new <code>{@link JMenuItemFixture}</code>. It uses the given <code>{@link Action}</code> to create a new
-   * <code>{@link JMenuItem}</code> as the target menu item.
-   * @param robot performs simulation of user events on a <code>JMenuItem</code>.
-   * @param action the <code>Action</code> to assign to the created <code>JMenuItem</code>.
-   * @throws NullPointerException if <code>robot</code> is <code>null</code>.
-   * @throws NullPointerException if <code>action</code> is <code>null</code>.
-   */
-  public JMenuItemFixture(Robot robot, Action action) {
-    this(robot, new JMenuItem(validated(action)));
-  }
-
-  private static Action validated(Action action) {
-    if (action != null) return action;
-    throw new NullPointerException("The given action should not be null");
-  }
-  
   /**
    * Creates a new <code>{@link JMenuItemFixture}</code>.
    * @param robot performs simulation of user events on the given <code>JMenuItem</code>.

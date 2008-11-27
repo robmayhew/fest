@@ -20,7 +20,9 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 
 import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
 
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
@@ -64,12 +66,16 @@ public final class JLists {
 
     @RunsInEDT
     public JList createNew() {
-      JList list = new JList();
-      if (!isEmpty(items)) list.setModel(modelWith(items));
-      list.setName(name);
-      if (selectedIndices != null) list.setSelectedIndices(selectedIndices);
-      list.setSelectionMode(selectionMode);
-      return list;
+      return execute(new GuiQuery<JList>() {
+        protected JList executeInEDT() {
+          JList list = new JList();
+          if (!isEmpty(items)) list.setModel(modelWith(items));
+          list.setName(name);
+          if (selectedIndices != null) list.setSelectedIndices(selectedIndices);
+          list.setSelectionMode(selectionMode);
+          return list;
+        }
+      });
     }
 
     static ListModel modelWith(Object[] items) {

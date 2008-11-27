@@ -31,7 +31,9 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JButtons.button;
 import static org.fest.swing.factory.JOptionPanes.optionPane;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JOptionPaneFixture}</code>.
@@ -101,7 +103,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
   }
 
   @Test public void shouldReturnOkButton() {
-    final JButton button = new JButton();
+    final JButton button = button().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.okButton(target)).andReturn(button);
@@ -115,7 +117,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
   }
 
   @Test public void shouldReturnCancelButton() {
-    final JButton button = new JButton();
+    final JButton button = button().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.cancelButton(target)).andReturn(button);
@@ -129,7 +131,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
   }
 
   @Test public void shouldReturnYesButton() {
-    final JButton button = new JButton();
+    final JButton button = button().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.yesButton(target)).andReturn(button);
@@ -143,7 +145,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
   }
 
   @Test public void shouldReturnNoButton() {
-    final JButton button = new JButton();
+    final JButton button = button().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.noButton(target)).andReturn(button);
@@ -157,7 +159,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
   }
 
   @Test public void shouldReturnButtonWithText() {
-    final JButton button = new JButton();
+    final JButton button = button().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.buttonWithText(target, "A Button")).andReturn(button);
@@ -171,7 +173,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
   }
 
   @Test public void shouldReturnButton() {
-    final JButton button = new JButton();
+    final JButton button = button().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.button(target)).andReturn(button);
@@ -185,7 +187,7 @@ public class JOptionPaneFixtureTest extends CommonComponentFixtureTestCase<JOpti
   }
 
   @Test public void shouldReturnTextBox() {
-    final JTextField textBox = new JTextField();
+    final JTextField textBox = textField().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.textBox(target)).andReturn(textBox);

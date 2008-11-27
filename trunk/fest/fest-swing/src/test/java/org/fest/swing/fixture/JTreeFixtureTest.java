@@ -29,6 +29,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JPopupMenus.popupMenu;
 import static org.fest.swing.factory.JTrees.tree;
 import static org.fest.util.Arrays.array;
 
@@ -306,7 +307,7 @@ public class JTreeFixtureTest extends CommonComponentFixtureTestCase<JTree> {
 
   @Test public void shouldShowPopupMenuAtRow() {
     final int row = 0;
-    final JPopupMenu popupMenu = new JPopupMenu();
+    final JPopupMenu popupMenu = popupMenu().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.showPopupMenu(target, row)).andReturn(popupMenu);
@@ -321,7 +322,7 @@ public class JTreeFixtureTest extends CommonComponentFixtureTestCase<JTree> {
 
   @Test public void shouldShowPopupMenuAtPath() {
     final String path = "root";
-    final JPopupMenu popupMenu = new JPopupMenu();
+    final JPopupMenu popupMenu = popupMenu().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.showPopupMenu(target, path)).andReturn(popupMenu);

@@ -33,6 +33,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.factory.JLists.list;
+import static org.fest.swing.factory.JPopupMenus.popupMenu;
 import static org.fest.swing.util.Range.*;
 import static org.fest.util.Arrays.array;
 
@@ -322,7 +323,7 @@ public class JListFixtureTest extends CommonComponentFixtureTestCase<JList> {
   }
 
   @Test public void shouldShowJPopupMenuAtItemUnderIndex() {
-    final JPopupMenu popup = new JPopupMenu(); 
+    final JPopupMenu popup = popupMenu().createNew(); 
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.showPopupMenu(target, 6)).andReturn(popup);
@@ -336,7 +337,7 @@ public class JListFixtureTest extends CommonComponentFixtureTestCase<JList> {
   }
 
   @Test public void shouldShowJPopupMenuAtItemWithValue() {
-    final JPopupMenu popup = new JPopupMenu(); 
+    final JPopupMenu popup = popupMenu().createNew(); 
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.showPopupMenu(target, "Frodo")).andReturn(popup);

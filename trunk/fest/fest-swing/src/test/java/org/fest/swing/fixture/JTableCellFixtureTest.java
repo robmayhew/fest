@@ -18,9 +18,6 @@ package org.fest.swing.fixture;
 import java.awt.Component;
 import java.awt.Font;
 
-import javax.swing.JTable;
-import javax.swing.JTextField;
-
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -39,6 +36,8 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.MouseClickInfo.leftButton;
 import static org.fest.swing.data.TableCell.row;
+import static org.fest.swing.factory.JTables.table;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JTableCellFixture}</code>.
@@ -337,7 +336,7 @@ public class JTableCellFixtureTest {
     table = tableFixtureStub();
     fixture = new JTableCellFixture(table, cell);
     final JTableDriver driver = table.driver();
-    final Component editor = new JTextField();
+    final Component editor = textField().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.cellEditor(table.target, cell)).andReturn(editor);
@@ -368,7 +367,7 @@ public class JTableCellFixtureTest {
   }
 
   private JTableFixture tableFixtureStub() {
-    JTableFixture tableFixture = new JTableFixture(createMock(Robot.class), new JTable());
+    JTableFixture tableFixture = new JTableFixture(createMock(Robot.class), table().createNew());
     tableFixture.updateDriver(createMock(JTableDriver.class));
     return tableFixture;
   }

@@ -31,7 +31,9 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JButtons.button;
 import static org.fest.swing.factory.JFileChoosers.fileChooser;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JFileChooserFixture}</code>.
@@ -67,7 +69,7 @@ import static org.fest.swing.factory.JFileChoosers.fileChooser;
   }
 
   public void shouldReturnFileNameTextBox() {
-    final JTextField fileNameTextBox = new JTextField();
+    final JTextField fileNameTextBox = textField().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.fileNameTextBox(target)).andReturn(fileNameTextBox);
@@ -94,7 +96,7 @@ import static org.fest.swing.factory.JFileChoosers.fileChooser;
   }
   
   public void shouldReturnApproveButton() {
-    final JButton approveButton = new JButton();
+    final JButton approveButton = button().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.approveButton(target)).andReturn(approveButton);
@@ -121,7 +123,7 @@ import static org.fest.swing.factory.JFileChoosers.fileChooser;
   }
 
   public void shouldReturnCancelButton() {
-    final JButton cancelButton = new JButton();
+    final JButton cancelButton = button().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.cancelButton(target)).andReturn(cancelButton);

@@ -48,6 +48,7 @@ import static org.fest.swing.core.MouseClickInfo.leftButton;
 import static org.fest.swing.data.TableCell.row;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.factory.JPopupMenus.popupMenu;
+import static org.fest.swing.factory.JTableHeaders.tableHeader;
 import static org.fest.swing.factory.JTables.table;
 
 /**
@@ -290,8 +291,7 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
   }
 
   public void shouldReturnJTableHeaderFixture() {
-    // TODO create JTableHeader in EDT
-    final JTableHeader header = new JTableHeader();
+    final JTableHeader header = tableHeader().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.tableHeaderOf(target)).andReturn(header);

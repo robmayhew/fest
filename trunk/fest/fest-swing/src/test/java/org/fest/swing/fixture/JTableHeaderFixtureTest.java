@@ -31,6 +31,8 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseClickInfo.leftButton;
+import static org.fest.swing.factory.JPopupMenus.popupMenu;
+import static org.fest.swing.factory.JTableHeaders.tableHeader;
 
 /**
  * Tests for <code>{@link JTableHeaderFixture}</code>.
@@ -44,7 +46,7 @@ public class JTableHeaderFixtureTest extends ComponentFixtureTestCase<JTableHead
   private JTableHeaderFixture fixture;
 
   void onSetUp() {
-    target = new JTableHeader();
+    target = tableHeader().createNew();
     fixture = new JTableHeaderFixture(robot(), target);
     driver = createMock(JTableHeaderDriver.class);
     fixture.updateDriver(driver);
@@ -128,7 +130,7 @@ public class JTableHeaderFixtureTest extends ComponentFixtureTestCase<JTableHead
   }
 
   @Test public void shouldShowPopupMenuAtGivenColumnIndex() {
-    final JPopupMenu popupMenu = new JPopupMenu();
+    final JPopupMenu popupMenu = popupMenu().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.showPopupMenu(target, 1)).andReturn(popupMenu);
@@ -143,7 +145,7 @@ public class JTableHeaderFixtureTest extends ComponentFixtureTestCase<JTableHead
   }
 
   @Test public void shouldShowPopupMenuAtGivenColumnName() {
-    final JPopupMenu popupMenu = new JPopupMenu();
+    final JPopupMenu popupMenu = popupMenu().createNew();
     final String name = "1";
     new EasyMockTemplate(driver) {
       protected void expectations() {

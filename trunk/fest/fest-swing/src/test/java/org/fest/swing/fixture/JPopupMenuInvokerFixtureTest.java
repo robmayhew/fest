@@ -31,6 +31,7 @@ import org.fest.swing.core.Robot;
 import static org.easymock.EasyMock.expect;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JPopupMenus.popupMenu;
 import static org.fest.swing.factory.JTextFields.textField;
 
 /**
@@ -52,7 +53,7 @@ public class JPopupMenuInvokerFixtureTest {
   }
   
   @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = new JPopupMenu(); 
+    final JPopupMenu popup = popupMenu().createNew(); 
     new EasyMockTemplate(robot) {
       protected void expectations() {
         expect(robot.showPopupMenu(target)).andReturn(popup);
@@ -67,7 +68,7 @@ public class JPopupMenuInvokerFixtureTest {
   
   @Test public void shouldShowJPopupMenuAtPoint() {
     final Point p = new Point(8, 6);
-    final JPopupMenu popup = new JPopupMenu(); 
+    final JPopupMenu popup = popupMenu().createNew(); 
     new EasyMockTemplate(robot) {
       protected void expectations() {
         expect(robot.showPopupMenu(target, p)).andReturn(popup);

@@ -15,10 +15,6 @@
  */
 package org.fest.swing.fixture;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JMenuItem;
 
 import org.testng.annotations.Test;
@@ -60,12 +56,6 @@ import static org.fest.swing.timing.Timeout.timeout;
     fixture.updateDriver(driver);
   }
 
-  @Test(expectedExceptions = NullPointerException.class)
-  public void shouldThrowErrorIfGivenActionIsNull() {
-    Action action = null;
-    new JMenuItemFixture(robot(), action);
-  }
-
   @Test public void shouldCreateFixtureWithGivenComponentName() {
     String name = "menuItem";
     Robot robot = robot();
@@ -74,15 +64,6 @@ import static org.fest.swing.timing.Timeout.timeout;
     expect(finder.findByName(name, JMenuItem.class, false)).andReturn(target());
     replay(robot, finder);
     verifyLookup(new JMenuItemFixture(robot, name));
-  }
-
-  @Test public void shouldCreateFixtureWithGivenAction() {
-    Action action = new AbstractAction("action") {
-      private static final long serialVersionUID = 1L;
-      public void actionPerformed(ActionEvent e) {}
-    };
-    fixture = new JMenuItemFixture(robot(), action);
-    assertThat(fixture.component().getAction()).isSameAs(action);
   }
 
   @Test public void shouldClickMenuItem() {
