@@ -95,15 +95,12 @@ public class JFileChooserDriver extends JComponentDriver {
   /**
    * Finds and clicks the "Cancel" button in the given <code>{@link JFileChooser}</code>.
    * @param fileChooser the target <code>JFileChooser</code>.
-   * @throws IllegalStateException if the <code>JFileChooser</code> is disabled.
-   * @throws IllegalStateException if the <code>JFileChooser</code> is not showing on the screen.
    * @throws ComponentLookupException if the "Cancel" button cannot be found.
    * @throws IllegalStateException if the "Cancel" button is disabled.
    * @throws IllegalStateException if the "Cancel" button is not showing on the screen.
    */
   @RunsInEDT
   public void clickCancelButton(JFileChooser fileChooser) {
-    assertIsEnabledAndShowing(fileChooser);
     click(cancelButton(fileChooser));
   }
 
@@ -122,6 +119,8 @@ public class JFileChooserDriver extends JComponentDriver {
    * Finds and clicks the "Approve" button in the given <code>{@link JFileChooser}</code>.
    * @param fileChooser the target <code>JFileChooser</code>.
    * @throws ComponentLookupException if the "Approve" button cannot be found.
+   * @throws IllegalStateException if the "Approve" button is disabled.
+   * @throws IllegalStateException if the "Approve" button is not showing on the screen.
    */
   @RunsInEDT
   public void clickApproveButton(JFileChooser fileChooser) {

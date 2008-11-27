@@ -19,9 +19,11 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JFileChooserDriver;
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.timing.Timeout;
@@ -84,7 +86,8 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
   /**
    * Simulates a user pressing the "Approve" button in this fixture's <code>{@link JFileChooser}</code>.
    * @throws ComponentLookupException if the "Approve" button cannot be found.
-   * @throws AssertionError if the "Approve" button is disabled.
+   * @throws IllegalStateException if the "Approve" button is disabled.
+   * @throws IllegalStateException if the "Approve" button is not showing on the screen.
    */
   public void approve() {
     driver.clickApproveButton(target);
@@ -102,7 +105,8 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
   /**
    * Simulates a user pressing the "Cancel" button in this fixture's <code>{@link JFileChooser}</code>.
    * @throws ComponentLookupException if the "Cancel" button cannot be found.
-   * @throws AssertionError if the "Cancel" button is disabled.
+   * @throws IllegalStateException if the "Cancel" button is disabled.
+   * @throws IllegalStateException if the "Cancel" button is not showing on the screen.
    */
   public void cancel() {
     driver.clickCancelButton(target);
@@ -116,10 +120,51 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
   public JButtonFixture cancelButton() {
     return new JButtonFixture(robot, driver.cancelButton(target));
   }
+  
+  /**
+   * Returns a fixture that manages the field where the user can enter the name of the file to select in this fixture's 
+   * <code>{@link JFileChooser}</code>.
+   * @return the created fixture.
+   * @throws ComponentLookupException if a matching textToMatch field could not be found.
+   */
+  public JTextComponentFixture fileNameTextBox() {
+    return new JTextComponentFixture(robot, driver.fileNameTextBox(target));
+  }
+
+
+  /**
+   * Selects the given file in this fixture's <code>{@link JFileChooser}</code>.
+   * @param file the file to select.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
+   * @throws IllegalArgumentException if this fixture's <code>JFileChooser</code> can select directories only and the
+   * file to select is not a directory.
+   * @throws IllegalArgumentException if this fixture's <code>JFileChooser</code> cannot select directories and the file
+   * to select is a directory.
+   */
+  public JFileChooserFixture selectFile(final File file) {
+    driver.selectFile(target, file);
+    return this;
+  }
+  
+  /**
+   * Sets the current directory of this fixture's <code>{@link JFileChooser}</code> to the given one.
+   * @param dir the directory to set as current.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
+   * @return this fixture.
+   */
+  public JFileChooserFixture setCurrentDirectory(final File dir) {
+    driver.setCurrentDirectory(target, dir);
+    return this;
+  }
 
   /**
    * Simulates a user clicking this fixture's <code>{@link JFileChooser}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
    */
   public JFileChooserFixture click() {
     driver.click(target);
@@ -130,6 +175,9 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
    * Simulates a user clicking this fixture's <code>{@link JFileChooser}</code>.
    * @param button the button to click.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
    */
   public JFileChooserFixture click(MouseButton button) {
     driver.click(target, button);
@@ -141,6 +189,8 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
    */
   public JFileChooserFixture click(MouseClickInfo mouseClickInfo) {
     driver.click(target, mouseClickInfo);
@@ -150,6 +200,8 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JFileChooser}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
    */
   public JFileChooserFixture doubleClick() {
     driver.doubleClick(target);
@@ -159,6 +211,8 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JFileChooser}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
    */
   public JFileChooserFixture rightClick() {
     driver.rightClick(target);
@@ -166,18 +220,10 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
   }
   
   /**
-   * Returns a fixture that manages the field where the user can enter the name of the file to select in this fixture's 
-   * <code>{@link JFileChooser}</code>.
-   * @return the created fixture.
-   * @throws ComponentLookupException if a matching textToMatch field could not be found.
-   */
-  public JTextComponentFixture fileNameTextBox() {
-    return new JTextComponentFixture(robot, driver.fileNameTextBox(target));
-  }
-  
-  /**
    * Gives input focus to this fixture's <code>{@link JFileChooser}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
    */
   public JFileChooserFixture focus() {
     driver.focus(target);
@@ -191,6 +237,8 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
    * @see KeyPressInfo
    */
   public JFileChooserFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -205,6 +253,8 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
    * @return this fixture.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JFileChooserFixture pressAndReleaseKeys(int... keyCodes) {
@@ -217,6 +267,8 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JFileChooserFixture pressKey(int keyCode) {
@@ -229,20 +281,12 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JFileChooserFixture releaseKey(int keyCode) {
     driver.releaseKey(target, keyCode);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JFileChooser}</code> is disabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JFileChooser</code> is enabled.
-   */
-  public JFileChooserFixture requireDisabled() {
-    driver.requireDisabled(target);
     return this;
   }
 
@@ -266,14 +310,14 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
     driver.requireEnabled(target, timeout);
     return this;
   }
-  
+
   /**
-   * Asserts that this fixture's <code>{@link JFileChooser}</code> is not visible.
+   * Asserts that this fixture's <code>{@link JFileChooser}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JFileChooser</code> is visible.
+   * @throws AssertionError if this fixture's <code>JFileChooser</code> is enabled.
    */
-  public JFileChooserFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JFileChooserFixture requireDisabled() {
+    driver.requireDisabled(target);
     return this;
   }
 
@@ -286,28 +330,14 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
     driver.requireVisible(target);
     return this;
   }
-
-  /**
-   * Selects the given file in this fixture's <code>{@link JFileChooser}</code>.
-   * @param file the file to select.
-   * @return this fixture.
-   * @throws ActionFailedException if this fixture's <code>JFileChooser</code> can select directories only and the
-   *         file to select is not a directory.
-   * @throws ActionFailedException if this fixture's <code>JFileChooser</code> cannot select directories and the file
-   *         to select is a directory.
-   */
-  public JFileChooserFixture selectFile(final File file) {
-    driver.selectFile(target, file);
-    return this;
-  }
   
   /**
-   * Sets the current directory of this fixture's <code>{@link JFileChooser}</code> to the given one.
-   * @param dir the directory to set as current.
+   * Asserts that this fixture's <code>{@link JFileChooser}</code> is not visible.
    * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JFileChooser</code> is visible.
    */
-  public JFileChooserFixture setCurrentDirectory(final File dir) {
-    driver.setCurrentDirectory(target, dir);
+  public JFileChooserFixture requireNotVisible() {
+    driver.requireNotVisible(target);
     return this;
   }
 }

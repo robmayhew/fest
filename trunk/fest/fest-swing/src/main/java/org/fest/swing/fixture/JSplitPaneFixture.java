@@ -17,7 +17,10 @@ package org.fest.swing.fixture;
 
 import javax.swing.JSplitPane;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JSplitPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -69,6 +72,8 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> impl
    * Simulates a user moving the divider of this fixture's <code>{@link JSplitPane}</code>.
    * @param location the location to move the divider to.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is not showing on the screen.
    */
   public JSplitPaneFixture moveDividerTo(int location) {
     driver.moveDividerTo(target, location);
@@ -78,6 +83,8 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> impl
   /**
    * Simulates a user clicking this fixture's <code>{@link JSplitPane}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is not showing on the screen.
    */
   public JSplitPaneFixture click() {
     driver.click(target);
@@ -88,6 +95,9 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> impl
    * Simulates a user clicking this fixture's <code>{@link JSplitPane}</code>.
    * @param button the button to click.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is not showing on the screen.
    */
   public JSplitPaneFixture click(MouseButton button) {
     driver.click(target, button);
@@ -99,6 +109,8 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> impl
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is not showing on the screen.
    */
   public JSplitPaneFixture click(MouseClickInfo mouseClickInfo) {
     driver.click(target, mouseClickInfo);
@@ -108,6 +120,8 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> impl
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JSplitPane}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is not showing on the screen.
    */
   public JSplitPaneFixture doubleClick() {
     driver.doubleClick(target);
@@ -117,6 +131,8 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> impl
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JSplitPane}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is not showing on the screen.
    */
   public JSplitPaneFixture rightClick() {
     driver.rightClick(target);
@@ -126,6 +142,8 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> impl
   /**
    * Gives input focus to this fixture's <code>{@link JSplitPane}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is not showing on the screen.
    */
   public JSplitPaneFixture focus() {
     driver.focus(target);
@@ -139,6 +157,8 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> impl
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is not showing on the screen.
    * @see KeyPressInfo
    */
   public JSplitPaneFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -153,6 +173,8 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> impl
    * @return this fixture.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JSplitPaneFixture pressAndReleaseKeys(int... keyCodes) {
@@ -165,6 +187,8 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> impl
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JSplitPaneFixture pressKey(int keyCode) {
@@ -177,20 +201,12 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> impl
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSplitPane</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JSplitPaneFixture releaseKey(int keyCode) {
     driver.releaseKey(target, keyCode);
-    return this;
-  }
-  
-  /**
-   * Asserts that this fixture's <code>{@link JSplitPane}</code> is disabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JSplitPane</code> is enabled.
-   */
-  public JSplitPaneFixture requireDisabled() {
-    driver.requireDisabled(target);
     return this;
   }
   
@@ -214,14 +230,14 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> impl
     driver.requireEnabled(target, timeout);
     return this;
   }
-
+  
   /**
-   * Asserts that this fixture's <code>{@link JSplitPane}</code> is not visible.
+   * Asserts that this fixture's <code>{@link JSplitPane}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JSplitPane</code> is visible.
+   * @throws AssertionError if this fixture's <code>JSplitPane</code> is enabled.
    */
-  public JSplitPaneFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JSplitPaneFixture requireDisabled() {
+    driver.requireDisabled(target);
     return this;
   }
   
@@ -232,6 +248,16 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> impl
    */
   public JSplitPaneFixture requireVisible() {
     driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JSplitPane}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JSplitPane</code> is visible.
+   */
+  public JSplitPaneFixture requireNotVisible() {
+    driver.requireNotVisible(target);
     return this;
   }
 }

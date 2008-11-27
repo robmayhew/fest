@@ -116,6 +116,7 @@ public class JTableHeaderDriver extends JComponentDriver {
    * @return the displayed pop-up menu.
    * @throws IllegalStateException if the <code>JTableHeader</code> is disabled.
    * @throws IllegalStateException if the <code>JTableHeader</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if the index is out of bounds.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   @RunsInEDT

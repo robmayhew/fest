@@ -311,16 +311,6 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JComboBox}</code> is disabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JComboBox</code> is enabled.
-   */
-  public JComboBoxFixture requireDisabled() {
-    driver.requireDisabled(target);
-    return this;
-  }
-
-  /**
    * Asserts that this fixture's <code>{@link JComboBox}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JComboBox</code> is disabled.
@@ -342,12 +332,12 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JComboBox}</code> is not visible.
+   * Asserts that this fixture's <code>{@link JComboBox}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JComboBox</code> is visible.
+   * @throws AssertionError if this fixture's <code>JComboBox</code> is enabled.
    */
-  public JComboBoxFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JComboBoxFixture requireDisabled() {
+    driver.requireDisabled(target);
     return this;
   }
 
@@ -358,6 +348,16 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
    */
   public JComboBoxFixture requireVisible() {
     driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JComboBox}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JComboBox</code> is visible.
+   */
+  public JComboBoxFixture requireNotVisible() {
+    driver.requireNotVisible(target);
     return this;
   }
 

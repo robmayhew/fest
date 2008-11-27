@@ -72,6 +72,14 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
   }
 
   /**
+   * Returns the text of this fixture's <code>{@link JButton}</code>. 
+   * @return the text of this fixture's <code>JButton</code>. 
+   */
+  public String text() {
+    return driver.textOf(target);
+  }
+
+  /**
    * Simulates a user clicking this fixture's <code>{@link JButton}</code>.
    * @return this fixture.
    * @throws IllegalStateException if this fixture's <code>JButton</code> is disabled.
@@ -199,16 +207,6 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
     driver.releaseKey(target, keyCode);
     return this;
   }
-
-  /**
-   * Asserts that this fixture's <code>{@link JButton}</code> is disabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JButton</code> is enabled.
-   */
-  public JButtonFixture requireDisabled() {
-    driver.requireDisabled(target);
-    return this;
-  }
   
   /**
    * Asserts that this fixture's <code>{@link JButton}</code> is enabled.
@@ -230,14 +228,14 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
     driver.requireEnabled(target, timeout);
     return this;
   }
-  
+
   /**
-   * Asserts that this fixture's <code>{@link JButton}</code> is not visible.
+   * Asserts that this fixture's <code>{@link JButton}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JButton</code> is visible.
+   * @throws AssertionError if this fixture's <code>JButton</code> is enabled.
    */
-  public JButtonFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JButtonFixture requireDisabled() {
+    driver.requireDisabled(target);
     return this;
   }
 
@@ -252,6 +250,16 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
   }
   
   /**
+   * Asserts that this fixture's <code>{@link JButton}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JButton</code> is visible.
+   */
+  public JButtonFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
+  }
+  
+  /**
    * Asserts that the text of this fixture's <code>{@link JButton}</code> is equal to the specified <code>String</code>.
    * @param expected the text to match.
    * @return this fixture.
@@ -260,14 +268,6 @@ public class JButtonFixture extends JPopupMenuInvokerFixture<JButton> implements
   public JButtonFixture requireText(String expected) {
     driver.requireText(target, expected);
     return this;
-  }
-
-  /**
-   * Returns the text of this fixture's <code>{@link JButton}</code>. 
-   * @return the text of this fixture's <code>JButton</code>. 
-   */
-  public String text() {
-    return driver.textOf(target);
   }
 }
 

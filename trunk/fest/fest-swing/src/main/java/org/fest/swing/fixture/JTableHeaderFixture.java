@@ -53,7 +53,9 @@ public class JTableHeaderFixture extends ComponentFixture<JTableHeader> {
    * Simulates a user clicking the column under the given index, in this fixture's <code>{@link JTableHeader}</code>.
    * @param index the index of the column to click.
    * @return this fixture.
-   * @throws LocationUnavailableException if the index is out of bounds.
+   * @throws IllegalStateException if this fixture's <code>JTableHeader</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTableHeader</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if the index is out of bounds.
    */
   public JTableHeaderFixture clickColumn(int index) {
     driver.clickColumn(target, index);
@@ -64,6 +66,9 @@ public class JTableHeaderFixture extends ComponentFixture<JTableHeader> {
    * Shows a pop-up menu using this fixture's <code>{@link JTableHeader}</code> as the invoker of the pop-up menu.
    * @param columnIndex the index of the column where the pop-up menu will be displayed.
    * @return a fixture that manages the displayed pop-up menu.
+   * @throws IllegalStateException if this fixture's <code>JTableHeader</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTableHeader</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if the index is out of bounds.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   public JPopupMenuFixture showPopupMenuAt(int columnIndex) {
@@ -75,6 +80,8 @@ public class JTableHeaderFixture extends ComponentFixture<JTableHeader> {
    * Shows a pop-up menu using this fixture's <code>{@link JTableHeader}</code> as the invoker of the pop-up menu.
    * @param columnName the name of the column where the pop-up menu will be displayed.
    * @return a fixture that manages the displayed pop-up menu.
+   * @throws IllegalStateException if this fixture's <code>JTableHeader</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTableHeader</code> is not showing on the screen.
    * @throws ComponentLookupException if a pop-up menu cannot be found.
    */
   public JPopupMenuFixture showPopupMenuAt(String columnName) {
@@ -88,19 +95,22 @@ public class JTableHeaderFixture extends ComponentFixture<JTableHeader> {
    * @param index the index of the column to click.
    * @param mouseClickInfo specifies the mouse button to use and the number of times to click.
    * @return this fixture.
-   * @throws LocationUnavailableException if the index is out of bounds.
+   * @throws IllegalStateException if this fixture's <code>JTableHeader</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTableHeader</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if the index is out of bounds.
    */
   public JTableHeaderFixture clickColumn(int index, MouseClickInfo mouseClickInfo) {
     driver.clickColumn(target, index, mouseClickInfo.button(), mouseClickInfo.times());
     return this;
   }
 
-
   /**
    * Simulates a user clicking the column which name matches the given one, in this fixture's
    * <code>{@link JTableHeader}</code>.
    * @param columnName the column name to match.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JTableHeader</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTableHeader</code> is not showing on the screen.
    * @throws LocationUnavailableException if a column with a matching name cannot be found.
    */
   public JTableHeaderFixture clickColumn(String columnName) {
@@ -114,9 +124,13 @@ public class JTableHeaderFixture extends ComponentFixture<JTableHeader> {
    * @param columnName the column name to match
    * @param mouseClickInfo specifies the mouse button to use and the number of times to click.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JTableHeader</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JTableHeader</code> is not showing on the screen.
    * @throws LocationUnavailableException if a column with a matching name cannot be found.
    */
   public JTableHeaderFixture clickColumn(String columnName, MouseClickInfo mouseClickInfo) {
+    if (mouseClickInfo == null) throw new NullPointerException("The given MouseClickInfo should not be null");
     driver.clickColumn(target, columnName, mouseClickInfo.button(), mouseClickInfo.times());
     return this;
   }

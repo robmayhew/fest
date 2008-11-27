@@ -17,9 +17,11 @@ package org.fest.swing.fixture;
 
 import javax.swing.JSlider;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JSliderDriver;
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.timing.Timeout;
@@ -71,7 +73,9 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
    * Simulates a user sliding this fixture's <code>{@link JSlider}</code> to the given value.
    * @param value the value to slide the <code>JSlider</code> to.
    * @return this fixture.
-   * @throws ActionFailedException if the given position is not within the <code>JSlider</code> bounds.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is not showing on the screen.
+   * @throws IllegalArgumentException if the given position is not within the <code>JSlider</code> bounds.
    */
   public JSliderFixture slideTo(int value) {
     driver.slide(target, value);
@@ -81,6 +85,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
   /**
    * Simulates a user sliding this fixture's <code>{@link JSlider}</code> to its maximum value.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is not showing on the screen.
    */
   public JSliderFixture slideToMaximum() {
     driver.slideToMaximum(target);
@@ -90,6 +96,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
   /**
    * Simulates a user sliding this fixture's <code>{@link JSlider}</code> to its minimum value.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is not showing on the screen.
    */
   public JSliderFixture slideToMinimum() {
     driver.slideToMinimum(target);
@@ -99,6 +107,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
   /**
    * Simulates a user clicking this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is not showing on the screen.
    */
   public JSliderFixture click() {
     driver.click(target);
@@ -109,6 +119,9 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
    * Simulates a user clicking this fixture's <code>{@link JSlider}</code>.
    * @param button the button to click.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is not showing on the screen.
    */
   public JSliderFixture click(MouseButton button) {
     driver.click(target, button);
@@ -120,6 +133,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is not showing on the screen.
    */
   public JSliderFixture click(MouseClickInfo mouseClickInfo) {
     driver.click(target, mouseClickInfo);
@@ -129,6 +144,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is not showing on the screen.
    */
   public JSliderFixture doubleClick() {
     driver.doubleClick(target);
@@ -138,6 +155,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is not showing on the screen.
    */
   public JSliderFixture rightClick() {
     driver.rightClick(target);
@@ -147,6 +166,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
   /**
    * Gives input focus to this fixture's <code>{@link JSlider}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is not showing on the screen.
    */
   public JSliderFixture focus() {
     driver.focus(target);
@@ -160,6 +181,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is not showing on the screen.
    * @see KeyPressInfo
    */
   public JSliderFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -174,6 +197,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
    * @return this fixture.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JSliderFixture pressAndReleaseKeys(int... keyCodes) {
@@ -186,6 +211,8 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JSliderFixture pressKey(int keyCode) {
@@ -198,20 +225,12 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSlider</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JSliderFixture releaseKey(int keyCode) {
     driver.releaseKey(target, keyCode);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JSlider}</code> is disabled.
-   * @return this fixture.
-   * @throws AssertionError is this fixture's <code>JSlider</code> is enabled.
-   */
-  public JSliderFixture requireDisabled() {
-    driver.requireDisabled(target);
     return this;
   }
 
@@ -235,6 +254,26 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
     driver.requireEnabled(target, timeout);
     return this;
   }
+  
+  /**
+   * Asserts that this fixture's <code>{@link JSlider}</code> is disabled.
+   * @return this fixture.
+   * @throws AssertionError is this fixture's <code>JSlider</code> is enabled.
+   */
+  public JSliderFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
+  }
+  
+  /**
+   * Asserts that this fixture's <code>{@link JSlider}</code>.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JSlider</code> is not visible.
+   */
+  public JSliderFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
 
   /**
    * Asserts that this fixture's <code>{@link JSlider}</code> is not visible.
@@ -243,16 +282,6 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
    */
   public JSliderFixture requireNotVisible() {
     driver.requireNotVisible(target);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JSlider}</code>.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JSlider</code> is not visible.
-   */
-  public JSliderFixture requireVisible() {
-    driver.requireVisible(target);
     return this;
   }
 }

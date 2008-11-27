@@ -18,7 +18,10 @@ package org.fest.swing.fixture;
 import javax.swing.JSpinner;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JSpinnerDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -70,21 +73,12 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
   }
 
   /**
-   * Verifies that the value of this fixture's <code>{@link JSpinner}</code> is equal to the given one.
-   * @param value the expected value of this fixture's <code>JSpinner</code>.
-   * @return this fixture.
-   * @throws AssertionError if the value of this fixture's <code>JSpinner</code> is not equal to the given one.
-   */
-  public JSpinnerFixture requireValue(Object value) {
-    driver.requireValue(target, value);
-    return this;
-  }
-
-  /**
    * Simulates a user incrementing the value of this fixture's <code>{@link JSpinner}</code> the given number of times.
    * @param times how many times the value of this fixture's <code>JSpinner</code> should be incremented.
    * @return this fixture.
-   * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
+   * @throws IllegalArgumentException if <code>times</code> is less than or equal to zero.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    */
   public JSpinnerFixture increment(int times) {
     driver.increment(target, times);
@@ -94,6 +88,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
   /**
    * Simulates a user incrementing the value of this fixture's <code>{@link JSpinner}</code> one time.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    */
   public JSpinnerFixture increment() {
     driver.increment(target);
@@ -104,7 +100,9 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
    * Simulates a user decrementing the value of this fixture's <code>{@link JSpinner}</code> the given number of times.
    * @param times how many times the value of this fixture's <code>JSpinner</code> should be decremented.
    * @return this fixture.
-   * @throws ActionFailedException if <code>times</code> is less than or equal to zero.
+   * @throws IllegalArgumentException if <code>times</code> is less than or equal to zero.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    */
   public JSpinnerFixture decrement(int times) {
     driver.decrement(target, times);
@@ -114,6 +112,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
   /**
    * Simulates a user decrementing the value of this fixture's <code>{@link JSpinner}</code> one time.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    */
   public JSpinnerFixture decrement() {
     driver.decrement(target);
@@ -125,6 +125,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
    * <code>{@link JTextComponent}</code> under it.) This method does not commit the value to the <code>JSpinner</code>.
    * @param text the text to enter.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    * @throws ActionFailedException if the editor of the <code>JSpinner</code> is not a <code>JTextComponent</code> or
    * cannot be found.
    * @throws UnexpectedException if the entering the text in the <code>JSpinner</code>'s editor fails.
@@ -139,6 +141,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
    * its editor has a <code>{@link JTextComponent}</code> under it.)
    * @param text the text to enter.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    * @throws ActionFailedException if the editor of the <code>JSpinner</code> is not a <code>JTextComponent</code> or
    * cannot be found.
    * @throws UnexpectedException if the entering the text in the <code>JSpinner</code>'s editor fails.
@@ -152,6 +156,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
    * Selects the given value in this fixture's <code>{@link JSpinner}</code>.
    * @param value the value to select.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    * @throws IllegalArgumentException if the <code>JSpinner</code> does not support the specified <code>value</code>.
    */
   public Object select(Object value) {
@@ -162,6 +168,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
   /**
    * Simulates a user clicking this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    */
   public JSpinnerFixture click() {
     driver.click(target);
@@ -172,6 +180,9 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
    * Simulates a user clicking this fixture's <code>{@link JSpinner}</code>.
    * @param button the button to click.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    */
   public JSpinnerFixture click(MouseButton button) {
     driver.click(target, button);
@@ -183,6 +194,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    */
   public JSpinnerFixture click(MouseClickInfo mouseClickInfo) {
     driver.click(target, mouseClickInfo);
@@ -192,6 +205,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    */
   public JSpinnerFixture rightClick() {
     driver.rightClick(target);
@@ -201,6 +216,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    */
   public JSpinnerFixture doubleClick() {
     driver.doubleClick(target);
@@ -210,6 +227,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
   /**
    * Gives input focus to this fixture's <code>{@link JSpinner}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    */
   public JSpinnerFixture focus() {
     driver.focus(target);
@@ -223,6 +242,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    * @see KeyPressInfo
    */
   public JSpinnerFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -237,6 +258,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
    * @return this fixture.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JSpinnerFixture pressAndReleaseKeys(int... keyCodes) {
@@ -249,6 +272,8 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JSpinnerFixture pressKey(int keyCode) {
@@ -261,30 +286,12 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JSpinner</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JSpinnerFixture releaseKey(int keyCode) {
     driver.releaseKey(target, keyCode);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JSpinner}</code> is visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JSpinner</code> is not visible.
-   */
-  public JSpinnerFixture requireVisible() {
-    driver.requireVisible(target);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JSpinner}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JSpinner</code> is visible.
-   */
-  public JSpinnerFixture requireNotVisible() {
-    driver.requireNotVisible(target);
     return this;
   }
 
@@ -316,6 +323,37 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
    */
   public JSpinnerFixture requireDisabled() {
     driver.requireDisabled(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JSpinner}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JSpinner</code> is not visible.
+   */
+  public JSpinnerFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JSpinner}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JSpinner</code> is visible.
+   */
+  public JSpinnerFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
+  }
+
+  /**
+   * Verifies that the value of this fixture's <code>{@link JSpinner}</code> is equal to the given one.
+   * @param value the expected value of this fixture's <code>JSpinner</code>.
+   * @return this fixture.
+   * @throws AssertionError if the value of this fixture's <code>JSpinner</code> is not equal to the given one.
+   */
+  public JSpinnerFixture requireValue(Object value) {
+    driver.requireValue(target, value);
     return this;
   }
 }

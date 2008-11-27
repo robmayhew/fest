@@ -17,7 +17,10 @@ package org.fest.swing.fixture;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JScrollPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -91,6 +94,8 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
   /**
    * Simulates a user clicking this fixture's <code>{@link JScrollPane}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is not showing on the screen.
    */
   public JScrollPaneFixture click() {
     driver.click(target);
@@ -101,6 +106,9 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
    * Simulates a user clicking this fixture's <code>{@link JScrollPane}</code>.
    * @param button the button to click.
    * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is not showing on the screen.
    */
   public JScrollPaneFixture click(MouseButton button) {
     driver.click(target, button);
@@ -112,6 +120,8 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
    * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
    * @return this fixture.
    * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is not showing on the screen.
    */
   public JScrollPaneFixture click(MouseClickInfo mouseClickInfo) {
     driver.click(target, mouseClickInfo);
@@ -121,6 +131,8 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
   /**
    * Simulates a user double-clicking this fixture's <code>{@link JScrollPane}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is not showing on the screen.
    */
   public JScrollPaneFixture doubleClick() {
     driver.doubleClick(target);
@@ -130,6 +142,8 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
   /**
    * Simulates a user right-clicking this fixture's <code>{@link JScrollPane}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is not showing on the screen.
    */
   public JScrollPaneFixture rightClick() {
     driver.rightClick(target);
@@ -139,6 +153,8 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
   /**
    * Gives input focus to this fixture's <code>{@link JScrollPane}</code>.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is not showing on the screen.
    */
   public JScrollPaneFixture focus() {
     driver.focus(target);
@@ -152,6 +168,8 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is not showing on the screen.
    * @see KeyPressInfo
    */
   public JScrollPaneFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -166,6 +184,8 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
    * @return this fixture.
    * @throws NullPointerException if the given array of codes is <code>null</code>.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JScrollPaneFixture pressAndReleaseKeys(int... keyCodes) {
@@ -178,6 +198,8 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
    * @param keyCode the code of the key to press.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JScrollPaneFixture pressKey(int keyCode) {
@@ -190,20 +212,12 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
    * @param keyCode the code of the key to release.
    * @return this fixture.
    * @throws IllegalArgumentException if any of the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JScrollPane</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JScrollPaneFixture releaseKey(int keyCode) {
     driver.releaseKey(target, keyCode);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JScrollPane}</code> is disabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JScrollPane</code> is enabled.
-   */
-  public JScrollPaneFixture requireDisabled() {
-    driver.requireDisabled(target);
     return this;
   }
 
@@ -229,12 +243,12 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JScrollPane}</code> is not visible.
+   * Asserts that this fixture's <code>{@link JScrollPane}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JScrollPane</code> is visible.
+   * @throws AssertionError if this fixture's <code>JScrollPane</code> is enabled.
    */
-  public JScrollPaneFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JScrollPaneFixture requireDisabled() {
+    driver.requireDisabled(target);
     return this;
   }
 
@@ -245,6 +259,16 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
    */
   public JScrollPaneFixture requireVisible() {
     driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JScrollPane}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JScrollPane</code> is visible.
+   */
+  public JScrollPaneFixture requireNotVisible() {
+    driver.requireNotVisible(target);
     return this;
   }
 }

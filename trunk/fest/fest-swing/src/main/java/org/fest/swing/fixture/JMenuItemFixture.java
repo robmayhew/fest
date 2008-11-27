@@ -66,7 +66,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> implements Key
   /**
    * Simulates a user selecting this fixture's <code>{@link JMenuItem}</code>.
    * @return this fixture.
-   * @throws ActionFailedException if the menu to select is disabled.
+   * @throws IllegalStateException if this fixture's <code>JMenuItem</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JMenuItem</code> is not showing on the screen.
    * @throws ActionFailedException if the menu has a pop-up and it fails to show up.
    */
   public JMenuItemFixture click() {
@@ -76,6 +77,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> implements Key
 
   /**
    * Gives input focus to this fixture's <code>{@link JMenuItem}</code>.
+   * @throws IllegalStateException if this fixture's <code>JMenuItem</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JMenuItem</code> is not showing on the screen.
    * @return this fixture.
    */
   public JMenuItemFixture focus() {
@@ -90,6 +93,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> implements Key
    * @return this fixture.
    * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
    * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JMenuItem</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JMenuItem</code> is not showing on the screen.
    * @see KeyPressInfo
    */
   public JMenuItemFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
@@ -101,6 +106,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> implements Key
    * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JMenuItem}</code>.
    * @param keyCodes one or more codes of the keys to press.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JMenuItem</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JMenuItem</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JMenuItemFixture pressAndReleaseKeys(int... keyCodes) {
@@ -112,6 +119,8 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> implements Key
    * Simulates a user pressing the given key on this fixture's <code>{@link JMenuItem}</code>.
    * @param keyCode the code of the key to press.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JMenuItem</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JMenuItem</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JMenuItemFixture pressKey(int keyCode) {
@@ -123,30 +132,12 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> implements Key
    * Simulates a user releasing the given key on this fixture's <code>{@link JMenuItem}</code>.
    * @param keyCode the code of the key to release.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JMenuItem</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JMenuItem</code> is not showing on the screen.
    * @see java.awt.event.KeyEvent
    */
   public JMenuItemFixture releaseKey(int keyCode) {
     driver.releaseKey(target, keyCode);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JMenuItem}</code> is visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JMenuItem</code> is not visible.
-   */
-  public JMenuItemFixture requireVisible() {
-    driver.requireVisible(target);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JMenuItem}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JMenuItem</code> is visible.
-   */
-  public JMenuItemFixture requireNotVisible() {
-    driver.requireNotVisible(target);
     return this;
   }
 
@@ -178,6 +169,26 @@ public class JMenuItemFixture extends ComponentFixture<JMenuItem> implements Key
    */
   public JMenuItemFixture requireDisabled() {
     driver.requireDisabled(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JMenuItem}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JMenuItem</code> is not visible.
+   */
+  public JMenuItemFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JMenuItem}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JMenuItem</code> is visible.
+   */
+  public JMenuItemFixture requireNotVisible() {
+    driver.requireNotVisible(target);
     return this;
   }
 }

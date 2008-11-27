@@ -19,7 +19,10 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JOptionPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.timing.Timeout;
@@ -66,96 +69,6 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> implements
 
   final void updateDriver(JOptionPaneDriver newDriver) {
     driver = newDriver;
-  }
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link JOptionPane}</code>.
-   * @return this fixture.
-   */
-  public JOptionPaneFixture click() {
-    driver.click(target);
-    return this;
-  }
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link JOptionPane}</code>.
-   * @param button the button to click.
-   * @return this fixture.
-   */
-  public JOptionPaneFixture click(MouseButton button) {
-    driver.click(target, button);
-    return this;
-  }
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link JOptionPane}</code>.
-   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
-   * @return this fixture.
-   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
-   */
-  public JOptionPaneFixture click(MouseClickInfo mouseClickInfo) {
-    driver.click(target, mouseClickInfo);
-    return this;
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link JOptionPane}</code>.
-   * @return this fixture.
-   */
-  public JOptionPaneFixture rightClick() {
-    driver.rightClick(target);
-    return this;
-  }
-
-  /**
-   * Simulates a user double-clicking this fixture's <code>{@link JOptionPane}</code>.
-   * @return this fixture.
-   */
-  public JOptionPaneFixture doubleClick() {
-    driver.doubleClick(target);
-    return this;
-  }
-
-  /**
-   * Gives input focus to this fixture's <code>{@link JOptionPane}</code>.
-   * @return this fixture.
-   */
-  public JOptionPaneFixture focus() {
-    driver.focus(target);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JOptionPane}</code> has the given title.
-   * @param title the title to match.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's </code>JOptionPaneFixture</code> does not have the given title.
-   */
-  public JOptionPaneFixture requireTitle(String title) {
-    driver.requireTitle(target, title);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JOptionPane}</code> shows the given message.
-   * @param message the message to verify.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's </code>JOptionPaneFixture</code> does not show the given message.
-   */
-  public JOptionPaneFixture requireMessage(Object message) {
-    driver.requireMessage(target, message);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JOptionPane}</code> has the given options.
-   * @param options the options to verify.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's </code>JOptionPaneFixture</code> does not have the given options.
-   */
-  public JOptionPaneFixture requireOptions(Object[] options) {
-    driver.requireOptions(target, options);
-    return this;
   }
 
   /**
@@ -222,8 +135,78 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> implements
    * @return the text component in the given message.
    * @throws ComponentLookupException if the message type is not input and therefore it does not contain a text component.
    */
-  public JTextComponentFixture textBox() throws ComponentLookupException {
+  public JTextComponentFixture textBox() {
     return new JTextComponentFixture(robot, driver.textBox(target));
+  }
+
+  /**
+   * Simulates a user clicking this fixture's <code>{@link JOptionPane}</code>.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JOptionPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JOptionPane</code> is not showing on the screen.
+   */
+  public JOptionPaneFixture click() {
+    driver.click(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user clicking this fixture's <code>{@link JOptionPane}</code>.
+   * @param button the button to click.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JOptionPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JOptionPane</code> is not showing on the screen.
+   * @return this fixture.
+   */
+  public JOptionPaneFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
+  }
+
+  /**
+   * Simulates a user clicking this fixture's <code>{@link JOptionPane}</code>.
+   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JOptionPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JOptionPane</code> is not showing on the screen.
+   */
+  public JOptionPaneFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo);
+    return this;
+  }
+
+  /**
+   * Simulates a user right-clicking this fixture's <code>{@link JOptionPane}</code>.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JOptionPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JOptionPane</code> is not showing on the screen.
+   */
+  public JOptionPaneFixture rightClick() {
+    driver.rightClick(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user double-clicking this fixture's <code>{@link JOptionPane}</code>.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JOptionPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JOptionPane</code> is not showing on the screen.
+   */
+  public JOptionPaneFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
+  }
+
+  /**
+   * Gives input focus to this fixture's <code>{@link JOptionPane}</code>.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JOptionPane</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JOptionPane</code> is not showing on the screen.
+   */
+  public JOptionPaneFixture focus() {
+    driver.focus(target);
+    return this;
   }
 
   /**
@@ -325,22 +308,35 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> implements
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JOptionPane}</code> is visible.
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> has the given title.
+   * @param title the title to match.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JOptionPane</code> is not visible.
+   * @throws AssertionError if this fixture's </code>JOptionPaneFixture</code> does not have the given title.
    */
-  public JOptionPaneFixture requireVisible() {
-    driver.requireVisible(target);
+  public JOptionPaneFixture requireTitle(String title) {
+    driver.requireTitle(target, title);
     return this;
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JOptionPane}</code> is not visible.
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> shows the given message.
+   * @param message the message to verify.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JOptionPane</code> is visible.
+   * @throws AssertionError if this fixture's </code>JOptionPaneFixture</code> does not show the given message.
    */
-  public JOptionPaneFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JOptionPaneFixture requireMessage(Object message) {
+    driver.requireMessage(target, message);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> has the given options.
+   * @param options the options to verify.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's </code>JOptionPaneFixture</code> does not have the given options.
+   */
+  public JOptionPaneFixture requireOptions(Object[] options) {
+    driver.requireOptions(target, options);
     return this;
   }
 
@@ -372,6 +368,26 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> implements
    */
   public JOptionPaneFixture requireDisabled() {
     driver.requireDisabled(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JOptionPane</code> is not visible.
+   */
+  public JOptionPaneFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JOptionPane</code> is visible.
+   */
+  public JOptionPaneFixture requireNotVisible() {
+    driver.requireNotVisible(target);
     return this;
   }
 }

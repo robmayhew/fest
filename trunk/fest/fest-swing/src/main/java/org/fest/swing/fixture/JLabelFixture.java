@@ -70,6 +70,14 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
   }
   
   /**
+   * Returns the text of this fixture's <code>{@link JLabel}</code>.
+   * @return the text of this fixture's <code>JLabel</code>.
+   */
+  public String text() {
+    return driver.textOf(target);
+  }
+  
+  /**
    * Simulates a user clicking this fixture's <code>{@link JLabel}</code>.
    * @return this fixture.
    * @throws IllegalStateException if this fixture's <code>JLabel</code> is disabled.
@@ -199,12 +207,13 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JLabel}</code> is disabled.
+   * Asserts that the text of this fixture's <code>{@link JLabel}</code> is equal to the specified <code>String</code>. 
+   * @param expected the text to match.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JLabel</code> is enabled.
+   * @throws AssertionError if the text of the target component is not equal to the given one.
    */
-  public JLabelFixture requireDisabled() {
-    driver.requireDisabled(target);
+  public JLabelFixture requireText(String expected) {
+    driver.requireText(target, expected);
     return this;
   }
 
@@ -228,14 +237,14 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
     driver.requireEnabled(target, timeout);
     return this;
   }
-  
+
   /**
-   * Asserts that this fixture's <code>{@link JLabel}</code> is not visible.
+   * Asserts that this fixture's <code>{@link JLabel}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JLabel</code> is visible.
+   * @throws AssertionError if this fixture's <code>JLabel</code> is enabled.
    */
-  public JLabelFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JLabelFixture requireDisabled() {
+    driver.requireDisabled(target);
     return this;
   }
 
@@ -250,21 +259,12 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
   }
   
   /**
-   * Returns the text of this fixture's <code>{@link JLabel}</code>.
-   * @return the text of this fixture's <code>JLabel</code>.
-   */
-  public String text() {
-    return driver.textOf(target);
-  }
-
-  /**
-   * Asserts that the text of this fixture's <code>{@link JLabel}</code> is equal to the specified <code>String</code>. 
-   * @param expected the text to match.
+   * Asserts that this fixture's <code>{@link JLabel}</code> is not visible.
    * @return this fixture.
-   * @throws AssertionError if the text of the target component is not equal to the given one.
+   * @throws AssertionError if this fixture's <code>JLabel</code> is visible.
    */
-  public JLabelFixture requireText(String expected) {
-    driver.requireText(target, expected);
+  public JLabelFixture requireNotVisible() {
+    driver.requireNotVisible(target);
     return this;
   }
 }

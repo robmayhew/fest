@@ -342,8 +342,8 @@ public class JListDriver extends JComponentDriver {
    * @param index the given index.
    * @throws IllegalStateException if the <code>JList</code> is disabled.
    * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   * the <code>JList</code>.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JList</code>.
    */
   @RunsInEDT
   public void drag(JList list, int index) {
@@ -358,8 +358,8 @@ public class JListDriver extends JComponentDriver {
    * @param index the given index.
    * @throws IllegalStateException if the <code>JList</code> is disabled.
    * @throws IllegalStateException if the <code>JList</code> is not showing on the screen.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   * the <code>JList</code>.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JList</code>.
    * @throws ActionFailedException if there is no drag action in effect.
    */
   @RunsInEDT

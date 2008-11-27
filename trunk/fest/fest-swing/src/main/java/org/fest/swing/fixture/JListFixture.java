@@ -18,7 +18,10 @@ package org.fest.swing.fixture;
 import javax.swing.JList;
 
 import org.fest.swing.cell.JListCellReader;
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.BasicJListCellReader;
 import org.fest.swing.driver.JListDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -81,6 +84,19 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
   }
 
   /**
+   * Returns the <code>String</code> representation of the value of an item in this fixture's 
+   * <code>{@link JList}</code>, using this fixture's <code>{@link JListCellReader}</code>.
+   * @param index the index of the item to return.
+   * @return the <code>String</code> representation of the value of an item in this fixture's <code>JList</code>.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in
+   * the <code>JList</code>.
+   * @see #cellReader(JListCellReader)
+   */
+  public String valueAt(int index) {
+    return driver.value(target, index);
+  }
+
+  /**
    * Returns the <code>String</code> representation of the elements in this fixture's <code>{@link JList}</code>,
    * using this fixture's <code>{@link JListCellReader}</code>.
    * @return the <code>String</code> representation of the elements in this fixture's <code>JList</code>.
@@ -99,12 +115,34 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
   public String[] selection() {
     return driver.selectionOf(target);
   }
+
+  /**
+   * Returns a fixture that manages the list item specified by the given index.
+   * @param index of the item.
+   * @return a fixture that manages the list item specified by the given index.
+   * @throws IndexOutOfBoundsException if the index is out of bounds.
+   */
+  public JListItemFixture item(int index) {
+    return new JListItemFixture(this, index);
+  }
+
+  /**
+   * Returns a fixture that manages the list item specified by the given text.
+   * @param text the text of the item.
+   * @return a fixture that manages the list item specified by the given text.
+   * @throws LocationUnavailableException if an element matching the given text cannot be found.
+   */
+  public JListItemFixture item(String text) {
+    return new JListItemFixture(this, driver.indexOf(target, text));
+  }
   
   /**
    * Simulates a user selecting the items (in the specified range) in this fixture's <code>{@link JList}</code>.
    * @param from the starting point of the selection.
    * @param to the last item to select (inclusive.)
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the any index is negative or greater than the index of the last item in the 
    * <code>JList</code>.
    */
@@ -121,6 +159,8 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
    * @throws IllegalArgumentException if the given array is empty.
    * @throws IndexOutOfBoundsException if any of the indices is negative or greater than the index of the last item in 
    * the <code>JList</code>.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
    */
   public JListFixture selectItems(int...indices) {
     driver.selectItems(target, indices);
@@ -131,6 +171,8 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
    * Simulates a user selecting an item in this fixture's <code>{@link JList}</code>.
    * @param index the index of the item to select.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
    * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
    * <code>JList</code>.
    */
@@ -145,6 +187,8 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
    * @return this fixture.
    * @throws NullPointerException if the given array is <code>null</code>.
    * @throws IllegalArgumentException if the given array is empty.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
    * @throws LocationUnavailableException if an element matching the any of the given <code>String</code>s cannot be
    * found.
    * @see #cellReader(JListCellReader)
@@ -158,6 +202,8 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
    * Simulates a user selecting an item in this fixture's <code>{@link JList}</code>.
    * @param text the text of the item to select.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
    * @throws LocationUnavailableException if an element matching the given text cannot be found.
    * @see #cellReader(JListCellReader)
    */
@@ -170,8 +216,10 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
    * Simulates a user double-clicking an item in this fixture's <code>{@link JList}</code>.
    * @param index the index of the item to double-click.
    * @return this fixture.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in
+   * the <code>JList</code>.
    */
   public JListFixture doubleClickItem(int index) {
     clickItem(index, LEFT_BUTTON, 2);
@@ -182,6 +230,9 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
    * Simulates a user double-clicking an item in this fixture's <code>{@link JList}</code>.
    * @param text the text of the item to double-click.
    * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   * @throws LocationUnavailableException if an element matching the given <code>String</code> cannot be found.
    */
   public JListFixture doubleClickItem(String text) {
     driver.clickItem(target, text, LEFT_BUTTON, 2);
@@ -190,6 +241,278 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
 
   void clickItem(int index, MouseButton button, int times) {
     driver.clickItem(target, index, button, times);
+  }
+
+  /**
+   * Simulates a user clicking this fixture's <code>{@link JList}</code>.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   */
+  public JListFixture click() {
+    driver.click(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user clicking this fixture's <code>{@link JList}</code>.
+   * @param button the button to click.
+   * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseButton</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   */
+  public JListFixture click(MouseButton button) {
+    driver.click(target, button);
+    return this;
+  }
+
+  /**
+   * Simulates a user clicking this fixture's <code>{@link JList}</code>.
+   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
+   * @return this fixture.
+   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   */
+  public JListFixture click(MouseClickInfo mouseClickInfo) {
+    driver.click(target, mouseClickInfo);
+    return this;
+  }
+  
+  /**
+   * Simulates a user double-clicking this fixture's <code>{@link JList}</code>.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   */
+  public JListFixture doubleClick() {
+    driver.doubleClick(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user right-clicking this fixture's <code>{@link JList}</code>.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   */
+  public JListFixture rightClick() {
+    driver.rightClick(target);
+    return this;
+  }
+
+  /**
+   * Gives input focus to this fixture's <code>{@link JList}</code>.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   */
+  public JListFixture focus() {
+    driver.focus(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user pressing given key with the given modifiers on this fixture's <code>{@link JList}</code>.
+   * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
+   * @param keyPressInfo specifies the key and modifiers to press.
+   * @return this fixture.
+   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
+   * @throws IllegalArgumentException if the given code is not a valid key code.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   * @see KeyPressInfo
+   */
+  public JListFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
+    driver.pressAndReleaseKey(target, keyPressInfo);
+    return this;
+  }
+
+  /**
+   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JList}</code>.
+   * @param keyCodes one or more codes of the keys to press.
+   * @return this fixture.
+   * @throws NullPointerException if the given array of codes is <code>null</code>.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   * @see java.awt.event.KeyEvent
+   */
+  public JListFixture pressAndReleaseKeys(int... keyCodes) {
+    driver.pressAndReleaseKeys(target, keyCodes);
+    return this;
+  }
+
+  /**
+   * Simulates a user pressing the given key on this fixture's <code>{@link JList}</code>.
+   * @param keyCode the code of the key to press.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   * @see java.awt.event.KeyEvent
+   */
+  public JListFixture pressKey(int keyCode) {
+    driver.pressKey(target, keyCode);
+    return this;
+  }
+
+  /**
+   * Simulates a user releasing the given key on this fixture's <code>{@link JList}</code>.
+   * @param keyCode the code of the key to release.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   * @see java.awt.event.KeyEvent
+   */
+  public JListFixture releaseKey(int keyCode) {
+    driver.releaseKey(target, keyCode);
+    return this;
+  }
+
+  /**
+   * Simulates a user dragging an item from this fixture's <code>{@link JList}</code>.
+   * @param text the text of the item to drag.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   * @throws LocationUnavailableException if an element matching the given text cannot be found.
+   * @return this fixture.
+   */
+  public JListFixture drag(String text) {
+    driver.drag(target, text);
+    return this;
+  }
+
+  /**
+   * Simulates a user dropping an item to this fixture's <code>{@link JList}</code>.
+   * @param text the text of the item to drop.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   * @throws LocationUnavailableException if an element matching the given text cannot be found.
+   * @throws ActionFailedException if there is no drag action in effect.
+   */
+  public JListFixture drop(String text) {
+    driver.drop(target, text);
+    return this;
+  }
+
+  /**
+   * Simulates a user dropping an item at the center of this fixture's <code>{@link JList}</code>.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   * @throws ActionFailedException if there is no drag action in effect.
+   */
+  public JListFixture drop() {
+    driver.drop(target);
+    return this;
+  }
+
+  /**
+   * Simulates a user dragging an item from this fixture's <code>{@link JList}</code>.
+   * @param index the index of the item to drag.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JList</code>.
+   */
+  public JListFixture drag(int index) {
+    driver.drag(target, index);
+    return this;
+  }
+
+  /**
+   * Simulates a user dropping an item to this fixture's <code>{@link JList}</code>.
+   * @param index the index of the item to drop.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JList</code>.
+   * @throws ActionFailedException if there is no drag action in effect.
+   */
+  public JListFixture drop(int index) {
+    driver.drop(target, index);
+    return this;
+  }
+
+  /**
+   * Shows a pop-up menu at the location of the specified item in this fixture's <code>{@link JList}</code>.
+   * @param index the index of the item.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   * @throws IndexOutOfBoundsException if the given index is negative or greater than the index of the last item in the 
+   * <code>JList</code>.
+   */
+  public JPopupMenuFixture showPopupMenuAt(int index) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, index));
+  }
+
+  /**
+   * Shows a pop-up menu at the location of the specified item in this fixture's <code>{@link JList}</code>.
+   * @param text the text of the item.
+   * @return a fixture that manages the displayed pop-up menu.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JList</code> is not showing on the screen.
+   * @throws ComponentLookupException if a pop-up menu cannot be found.
+   * @throws LocationUnavailableException if an element matching the given value cannot be found.
+   */
+  public JPopupMenuFixture showPopupMenuAt(String text) {
+    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, text));
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JList}</code> is enabled.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JList</code> is disabled.
+   */
+  public JListFixture requireEnabled() {
+    driver.requireEnabled(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JList}</code> is enabled.
+   * @param timeout the time this fixture will wait for the component to be enabled.
+   * @return this fixture.
+   * @throws WaitTimedOutError if this fixture's <code>JList</code> is never enabled.
+   */
+  public JListFixture requireEnabled(Timeout timeout) {
+    driver.requireEnabled(target, timeout);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JList}</code> is not enabled.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JList</code> is enabled.
+   */
+  public JListFixture requireDisabled() {
+    driver.requireDisabled(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JList}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JList</code> is not visible.
+   */
+  public JListFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JList}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JList</code> is visible.
+   */
+  public JListFixture requireNotVisible() {
+    driver.requireNotVisible(target);
+    return this;
   }
 
   /**
@@ -227,276 +550,6 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
   public JListFixture requireNoSelection() {
     driver.requireNoSelection(target);
     return this;
-  }
-
-  /**
-   * Returns the <code>String</code> representation of the value of an item in this fixture's 
-   * <code>{@link JList}</code>, using this fixture's <code>{@link JListCellReader}</code>.
-   * @param index the index of the item to return.
-   * @return the <code>String</code> representation of the value of an item in this fixture's <code>JList</code>.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
-   * @see #cellReader(JListCellReader)
-   */
-  public String valueAt(int index) {
-    return driver.value(target, index);
-  }
-
-  /**
-   * Returns a fixture that manages the list item specified by the given index.
-   * @param index of the item.
-   * @return a fixture that manages the list item specified by the given index.
-   * @throws IndexOutOfBoundsException if the index is out of bounds.
-   */
-  public JListItemFixture item(int index) {
-    return new JListItemFixture(this, index);
-  }
-
-  /**
-   * Returns a fixture that manages the list item specified by the given text.
-   * @param text the text of the item.
-   * @return a fixture that manages the list item specified by the given text.
-   * @throws LocationUnavailableException if an element matching the given text cannot be found.
-   */
-  public JListItemFixture item(String text) {
-    return new JListItemFixture(this, driver.indexOf(target, text));
-  }
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link JList}</code>.
-   * @return this fixture.
-   */
-  public JListFixture click() {
-    driver.click(target);
-    return this;
-  }
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link JList}</code>.
-   * @param button the button to click.
-   * @return this fixture.
-   */
-  public JListFixture click(MouseButton button) {
-    driver.click(target, button);
-    return this;
-  }
-
-  /**
-   * Simulates a user clicking this fixture's <code>{@link JList}</code>.
-   * @param mouseClickInfo specifies the button to click and the times the button should be clicked.
-   * @return this fixture.
-   * @throws NullPointerException if the given <code>MouseClickInfo</code> is <code>null</code>.
-   */
-  public JListFixture click(MouseClickInfo mouseClickInfo) {
-    driver.click(target, mouseClickInfo);
-    return this;
-  }
-
-  /**
-   * Simulates a user right-clicking this fixture's <code>{@link JList}</code>.
-   * @return this fixture.
-   */
-  public JListFixture rightClick() {
-    driver.rightClick(target);
-    return this;
-  }
-
-  /**
-   * Simulates a user double-clicking this fixture's <code>{@link JList}</code>.
-   * @return this fixture.
-   */
-  public JListFixture doubleClick() {
-    driver.doubleClick(target);
-    return this;
-  }
-
-  /**
-   * Gives input focus to this fixture's <code>{@link JList}</code>.
-   * @return this fixture.
-   */
-  public JListFixture focus() {
-    driver.focus(target);
-    return this;
-  }
-
-  /**
-   * Simulates a user pressing given key with the given modifiers on this fixture's <code>{@link JList}</code>.
-   * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
-   * @param keyPressInfo specifies the key and modifiers to press.
-   * @return this fixture.
-   * @throws NullPointerException if the given <code>KeyPressInfo</code> is <code>null</code>.
-   * @throws IllegalArgumentException if the given code is not a valid key code.
-   * @see KeyPressInfo
-   */
-  public JListFixture pressAndReleaseKey(KeyPressInfo keyPressInfo) {
-    driver.pressAndReleaseKey(target, keyPressInfo);
-    return this;
-  }
-
-  /**
-   * Simulates a user pressing and releasing the given keys on this fixture's <code>{@link JList}</code>.
-   * @param keyCodes one or more codes of the keys to press.
-   * @return this fixture.
-   * @throws NullPointerException if the given array of codes is <code>null</code>.
-   * @see java.awt.event.KeyEvent
-   */
-  public JListFixture pressAndReleaseKeys(int... keyCodes) {
-    driver.pressAndReleaseKeys(target, keyCodes);
-    return this;
-  }
-
-  /**
-   * Simulates a user pressing the given key on this fixture's <code>{@link JList}</code>.
-   * @param keyCode the code of the key to press.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  public JListFixture pressKey(int keyCode) {
-    driver.pressKey(target, keyCode);
-    return this;
-  }
-
-  /**
-   * Simulates a user releasing the given key on this fixture's <code>{@link JList}</code>.
-   * @param keyCode the code of the key to release.
-   * @return this fixture.
-   * @see java.awt.event.KeyEvent
-   */
-  public JListFixture releaseKey(int keyCode) {
-    driver.releaseKey(target, keyCode);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JList}</code> is visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JList</code> is not visible.
-   */
-  public JListFixture requireVisible() {
-    driver.requireVisible(target);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JList}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JList</code> is visible.
-   */
-  public JListFixture requireNotVisible() {
-    driver.requireNotVisible(target);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JList}</code> is enabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JList</code> is disabled.
-   */
-  public JListFixture requireEnabled() {
-    driver.requireEnabled(target);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JList}</code> is enabled.
-   * @param timeout the time this fixture will wait for the component to be enabled.
-   * @return this fixture.
-   * @throws WaitTimedOutError if this fixture's <code>JList</code> is never enabled.
-   */
-  public JListFixture requireEnabled(Timeout timeout) {
-    driver.requireEnabled(target, timeout);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JList}</code> is not enabled.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JList</code> is enabled.
-   */
-  public JListFixture requireDisabled() {
-    driver.requireDisabled(target);
-    return this;
-  }
-
-  /**
-   * Simulates a user dragging an item from this fixture's <code>{@link JList}</code>.
-   * @param text the text of the item to drag.
-   * @throws LocationUnavailableException if an element matching the given text cannot be found.
-   * @return this fixture.
-   */
-  public JListFixture drag(String text) {
-    driver.drag(target, text);
-    return this;
-  }
-
-  /**
-   * Simulates a user dropping an item to this fixture's <code>{@link JList}</code>.
-   * @param text the text of the item to drop.
-   * @return this fixture.
-   * @throws LocationUnavailableException if an element matching the given text cannot be found.
-   * @throws ActionFailedException if there is no drag action in effect.
-   */
-  public JListFixture drop(String text) {
-    driver.drop(target, text);
-    return this;
-  }
-
-  /**
-   * Simulates a user dropping an item at the center of this fixture's <code>{@link JList}</code>.
-   * @return this fixture.
-   * @throws ActionFailedException if there is no drag action in effect.
-   */
-  public JListFixture drop() {
-    driver.drop(target);
-    return this;
-  }
-
-  /**
-   * Simulates a user dragging an item from this fixture's <code>{@link JList}</code>.
-   * @param index the index of the item to drag.
-   * @return this fixture.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
-   */
-  public JListFixture drag(int index) {
-    driver.drag(target, index);
-    return this;
-  }
-
-  /**
-   * Simulates a user dropping an item to this fixture's <code>{@link JList}</code>.
-   * @param index the index of the item to drop.
-   * @return this fixture.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
-   * @throws ActionFailedException if there is no drag action in effect.
-   */
-  public JListFixture drop(int index) {
-    driver.drop(target, index);
-    return this;
-  }
-
-  /**
-   * Shows a pop-up menu at the location of the specified item in this fixture's <code>{@link JList}</code>.
-   * @param index the index of the item.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   * @throws LocationUnavailableException if the given index is negative or greater than the index of the last item in
-   *         the <code>JList</code>.
-   */
-  public JPopupMenuFixture showPopupMenuAt(int index) {
-    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, index));
-  }
-
-  /**
-   * Shows a pop-up menu at the location of the specified item in this fixture's <code>{@link JList}</code>.
-   * @param text the text of the item.
-   * @return a fixture that manages the displayed pop-up menu.
-   * @throws ComponentLookupException if a pop-up menu cannot be found.
-   * @throws LocationUnavailableException if an element matching the given value cannot be found.
-   */
-  public JPopupMenuFixture showPopupMenuAt(String text) {
-    return new JPopupMenuFixture(robot, driver.showPopupMenu(target, text));
   }
 
   /**
