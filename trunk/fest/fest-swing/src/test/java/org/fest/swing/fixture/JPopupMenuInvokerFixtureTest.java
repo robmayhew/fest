@@ -17,22 +17,25 @@ package org.fest.swing.fixture;
 
 import java.awt.Point;
 
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
-import org.easymock.EasyMock;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
-
-import static org.easymock.EasyMock.expect;
+import org.fest.swing.core.RobotFixture;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JPopupMenus.popupMenu;
-import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link JPopupMenuInvokerFixture}</code>.
@@ -44,40 +47,54 @@ public class JPopupMenuInvokerFixtureTest {
 
   private Robot robot;
   private JPopupMenuInvokerFixture<JTextComponent> fixture;
-  private JTextField target;
+  private MyWindow window;
+
+  @BeforeClass public final void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
   
   @BeforeMethod public void setUp() {
-    robot = EasyMock.createMock(Robot.class);
-    target = textField().createNew();
-    fixture = new JPopupMenuInvokerFixture<JTextComponent>(robot, target) {};
+    robot = RobotFixture.robotWithNewAwtHierarchy();
+    window = MyWindow.createNew();
+    fixture = new JPopupMenuInvokerFixture<JTextComponent>(robot, window.textField) {};
+    robot.showWindow(window);
+  }
+  
+  @AfterMethod public void tearDown() {
+    robot.cleanUp();
   }
   
   @Test public void shouldShowJPopupMenu() {
-    final JPopupMenu popup = popupMenu().createNew(); 
-    new EasyMockTemplate(robot) {
-      protected void expectations() {
-        expect(robot.showPopupMenu(target)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenu();
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
+    JPopupMenuFixture popupMenu = fixture.showPopupMenu();
+    assertThat(popupMenu.target).isSameAs(window.popupMenu);
   }
   
   @Test public void shouldShowJPopupMenuAtPoint() {
-    final Point p = new Point(8, 6);
-    final JPopupMenu popup = popupMenu().createNew(); 
-    new EasyMockTemplate(robot) {
-      protected void expectations() {
-        expect(robot.showPopupMenu(target, p)).andReturn(popup);
-      }
-      
-      protected void codeToTest() {
-        JPopupMenuFixture result = fixture.showPopupMenuAt(p);
-        assertThat(result.target).isSameAs(popup);
-      }
-    }.run();
+    Point p = new Point(8, 6);
+    JPopupMenuFixture popupMenu = fixture.showPopupMenuAt(p);
+    assertThat(popupMenu.target).isSameAs(window.popupMenu);
+  }
+  
+  private static class MyWindow extends TestWindow {
+    private static final long serialVersionUID = 1L;
+
+    @RunsInEDT
+    static MyWindow createNew() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
+        }
+      });
+    }
+
+    private final JTextField textField = new JTextField(20);
+    private final JPopupMenu popupMenu = new JPopupMenu();
+    
+    private MyWindow() {
+      super(JPopupMenuInvokerFixtureTest.class);
+      addComponents(textField);
+      popupMenu.add(new JMenuItem("Hello"));
+      textField.setComponentPopupMenu(popupMenu);
+    }
   }
 }
