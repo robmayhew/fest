@@ -16,10 +16,14 @@
 package org.fest.swing.testing;
 
 import java.awt.FlowLayout;
-import java.awt.HeadlessException;
 
 import javax.swing.JApplet;
 import javax.swing.JButton;
+
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands a simple applet.
@@ -35,11 +39,16 @@ public class MyApplet extends JApplet {
   private boolean started;
   private boolean stopped;
 
-  /**
-   * Creates a new </code>{@link MyApplet}</code>.
-   * @throws HeadlessException
-   */
-  public MyApplet() throws HeadlessException {
+  @RunsInEDT
+  public static MyApplet createNew() {
+    return execute(new GuiQuery<MyApplet>() {
+      protected MyApplet executeInEDT() {
+        return new MyApplet();
+      }
+    });
+  }
+
+  public MyApplet() {
     setLayout(new FlowLayout());
     JButton button = new JButton("Click Me");
     button.setName("clickMe");

@@ -19,7 +19,7 @@ import java.applet.AppletStub;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.fest.swing.annotation.RunsInCurrentThread;
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.applet.AppletViewer;
 import org.fest.swing.applet.BasicAppletContext;
 import org.fest.swing.applet.BasicAppletStub;
@@ -99,7 +99,7 @@ public class AppletLauncher {
    * @throws UnexpectedException if the given type cannot be loaded.
    * @throws UnexpectedException if a new instance of the given type cannot be instantiated.
    */
-  @RunsInCurrentThread
+  @RunsInEDT
   public static AppletLauncher applet(String appletType) {
     if (appletType == null) throw new NullPointerException("The name of the applet type should not be null");
     if (isEmpty(appletType)) throw new IllegalArgumentException("The name of the applet type should not be empty");
@@ -109,7 +109,7 @@ public class AppletLauncher {
     return applet((Applet)o);
   }
 
-  @RunsInCurrentThread
+  @RunsInEDT
   private static Object load(String typeName) {
     try {
       Class<?> type = Class.forName(typeName);
@@ -129,6 +129,7 @@ public class AppletLauncher {
    * @throws NullPointerException if the given type is <code>null</code>.
    * @throws UnexpectedException if a new instance of the given type cannot be instantiated.
    */
+  @RunsInEDT
   public static AppletLauncher applet(Class<? extends Applet> appletType) {
     if (appletType == null) throw new NullPointerException("The applet type should not be null");
     try {
@@ -138,7 +139,8 @@ public class AppletLauncher {
       throw cannotInstantiateApplet(appletType.getName(), e);
     }
   }
-  @RunsInCurrentThread
+  
+  @RunsInEDT
   private static Object loadInEDT(final Class<?> type) {
     return execute(new GuiQuery<Object>() {
       protected Object executeInEDT() throws Exception {

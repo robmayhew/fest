@@ -16,9 +16,6 @@
 package org.fest.swing.testing;
 
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
 
 /**
  * Understands setting the look and feel of the windows used in the test suite in this project.
@@ -27,13 +24,13 @@ import org.jvnet.substance.skin.SubstanceBusinessLookAndFeel;
  */
 public class LookAndFeel {
 
- public static void applySubstanceBusinessLookAndFeel() {
-    try {
-      UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());
-    } catch (UnsupportedLookAndFeelException e) {
-      e.printStackTrace();
-    }
-  }
+// public static void applySubstanceBusinessLookAndFeel() {
+//    try {
+//      UIManager.setLookAndFeel(new SubstanceBusinessLookAndFeel());
+//    } catch (UnsupportedLookAndFeelException e) {
+//      e.printStackTrace();
+//    }
+//  }
 
  public static void applySystemLookAndFeel() {
    try {

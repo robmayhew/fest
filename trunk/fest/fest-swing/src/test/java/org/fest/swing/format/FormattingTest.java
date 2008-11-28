@@ -20,11 +20,17 @@ import java.util.logging.Logger;
 
 import javax.swing.*;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 
 import static java.awt.Adjustable.VERTICAL;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JButtons.button;
 import static org.fest.swing.factory.JDialogs.dialog;
 import static org.fest.swing.factory.JFrames.frame;
@@ -50,6 +56,10 @@ import static org.fest.util.Strings.concat;
 @Test public class FormattingTest {
 
   private static Logger logger = Logger.getAnonymousLogger();
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
 
   public void shouldReplaceExistingFormatter() {
     final Class<JComboBox> type = JComboBox.class;
@@ -186,8 +196,13 @@ import static org.fest.util.Strings.concat;
     assertThat(formatted(pane)).isEqualTo(concat(classNameOf(pane), "[]"));
   }
 
+  @RunsInEDT
   private static JRootPane newJRootPane() {
-    return new JRootPane();
+    return execute(new GuiQuery<JRootPane>() {
+      protected JRootPane executeInEDT() {
+        return new JRootPane();
+      }
+    });
   }
 
   public void shouldFormatJScrollBar() {
@@ -263,10 +278,15 @@ import static org.fest.util.Strings.concat;
                                         .contains("showing=false");
   }
 
+  @RunsInEDT
   private static JPasswordField newJPasswordField() {
-    JPasswordField passwordField = new JPasswordField();
-    passwordField.setName("passwordField");
-    return passwordField;
+    return execute(new GuiQuery<JPasswordField>() {
+      protected JPasswordField executeInEDT() {
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setName("passwordField");
+        return passwordField;
+      }
+    });
   }
 
   public void shouldFormatJTextComponent() {

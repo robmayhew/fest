@@ -25,17 +25,14 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.applet.AppletViewer;
 import org.fest.swing.core.ScreenLock;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
-import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.testing.MyApplet;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -77,7 +74,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @Test(groups = GUI) public void shouldLaunchGivenApplet() {
     ScreenLock.instance().acquire(this);
-    applet = createNewApplet();
+    applet = MyApplet.createNew();
     viewer = AppletLauncher.applet(applet).start();
     assertAppletWasLaunched();
     assertThat(viewer.applet()).isSameAs(applet);
@@ -158,7 +155,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfParameterMapIsNull() {
     Map<String, String> parameters = null;
-    AppletLauncher.applet(createNewApplet()).withParameters(parameters);
+    AppletLauncher.applet(MyApplet.createNew()).withParameters(parameters);
   }
 
   @Test(groups = GUI) public void shouldSetParametersInMap() {
@@ -166,7 +163,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
     Map<String, String> parameters = new HashMap<String, String>();
     parameters.put("bgcolor", "blue");
     parameters.put("color", "red");
-    applet = createNewApplet();
+    applet = MyApplet.createNew();
     viewer = AppletLauncher.applet(applet).withParameters(parameters).start();
     assertAppletWasLaunched();
     assertThat(applet.getParameter("bgcolor")).isEqualTo("blue");
@@ -176,7 +173,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfParameterArrayIsNull() {
     AppletParameter[] parameters = null;
-    AppletLauncher.applet(createNewApplet()).withParameters(parameters);
+    AppletLauncher.applet(MyApplet.createNew()).withParameters(parameters);
   }
 
   @Test(expectedExceptions = NullPointerException.class)
@@ -184,12 +181,12 @@ import static org.fest.swing.testing.TestGroups.GUI;
     AppletParameter[] parameters = new AppletParameter[2];
     parameters[0] = AppletParameter.name("bgcolor").value("blue");
     parameters[1] = null;
-    AppletLauncher.applet(createNewApplet()).withParameters(parameters);
+    AppletLauncher.applet(MyApplet.createNew()).withParameters(parameters);
   }
 
   @Test(groups = GUI) public void shouldSetParametersInArray() {
     ScreenLock.instance().acquire(this);
-    applet = createNewApplet();
+    applet = MyApplet.createNew();
     viewer = AppletLauncher.applet(applet).withParameters(
         AppletParameter.name("bgcolor").value("blue"),
         AppletParameter.name("color").value("red")
@@ -197,15 +194,6 @@ import static org.fest.swing.testing.TestGroups.GUI;
     assertAppletWasLaunched();
     assertThat(applet.getParameter("bgcolor")).isEqualTo("blue");
     assertThat(applet.getParameter("color")).isEqualTo("red");
-  }
-
-  @RunsInEDT
-  private static MyApplet createNewApplet() {
-    return execute(new GuiQuery<MyApplet>() {
-      protected MyApplet executeInEDT() {
-        return new MyApplet();
-      }
-    });
   }
 
   private void assertAppletWasLaunched() {

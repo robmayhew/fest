@@ -16,13 +16,18 @@
 package org.fest.swing.format;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiActionRunner;
+import org.fest.swing.edt.GuiQuery;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.factory.JButtons.button;
+import static org.fest.swing.factory.JComboBoxes.comboBox;
 import static org.fest.util.Arrays.array;
 import static org.fest.util.Strings.concat;
 
@@ -36,6 +41,10 @@ import static org.fest.util.Strings.concat;
   private JButton button;
   private IntrospectionComponentFormatter formatter;
   
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @BeforeMethod public void setUp() {
     button = button().withName("button")
                      .withText("Click Me")
@@ -67,7 +76,11 @@ import static org.fest.util.Strings.concat;
     private static final long serialVersionUID = 1L;
 
     static MyButton newButton(final String[] names) {
-      return new MyButton(names);
+      return GuiActionRunner.execute(new GuiQuery<MyButton>() {
+        protected MyButton executeInEDT() {
+          return new MyButton(names);
+        }
+      });
     }
     
     final String[] names;
@@ -94,7 +107,7 @@ import static org.fest.util.Strings.concat;
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfComponentHasUnsupportedType() {
-    formatter.format(new JComboBox());
+    formatter.format(comboBox().createNew());
   }
 
   @Test(expectedExceptions = NullPointerException.class)

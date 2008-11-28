@@ -20,12 +20,12 @@ import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JButton;
-
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 
 import static java.awt.AWTEvent.KEY_EVENT_MASK;
 import static java.awt.event.InputEvent.*;
@@ -35,6 +35,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.InputModifiers.*;
+import static org.fest.swing.factory.JButtons.button;
 
 /**
  * Tests for <code>{@link EmergencyAbortListener}</code>.
@@ -46,6 +47,10 @@ import static org.fest.swing.core.InputModifiers.*;
   private Toolkit toolkit;
   private TestTerminator terminator;
   private EmergencyAbortListener listener;
+
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
   
   @BeforeMethod public void setUp() {
     toolkit = createMock(Toolkit.class);
@@ -138,7 +143,7 @@ import static org.fest.swing.core.InputModifiers.*;
   }
 
   public void shouldNotTerminateTestsIfKeyCodeNotMatching() {
-    final KeyEvent event = new KeyEvent(new JButton(), KEY_PRESSED, 0, 0, VK_Z, 'Z');
+    final KeyEvent event = new KeyEvent(button().createNew(), KEY_PRESSED, 0, 0, VK_Z, 'Z');
     new EasyMockTemplate(terminator) {
       protected void expectations() {}
 
@@ -149,7 +154,7 @@ import static org.fest.swing.core.InputModifiers.*;
   }
 
   public void shouldNotTerminateTestsIfModifiersNotMatching() {
-    final KeyEvent event = new KeyEvent(new JButton(), KEY_PRESSED, 0, 0, VK_A, 'A');
+    final KeyEvent event = new KeyEvent(button().createNew(), KEY_PRESSED, 0, 0, VK_A, 'A');
     new EasyMockTemplate(terminator) {
       protected void expectations() {}
 
@@ -160,7 +165,7 @@ import static org.fest.swing.core.InputModifiers.*;
   }
 
   public void shouldTerminateTestsIfKeyCombinationMatches() {
-    final KeyEvent event = new KeyEvent(new JButton(), KEY_PRESSED, 0, CTRL_MASK | SHIFT_MASK, VK_A, 'A');
+    final KeyEvent event = new KeyEvent(button().createNew(), KEY_PRESSED, 0, CTRL_MASK | SHIFT_MASK, VK_A, 'A');
     new EasyMockTemplate(terminator) {
       protected void expectations() {
         terminator.terminateTests();

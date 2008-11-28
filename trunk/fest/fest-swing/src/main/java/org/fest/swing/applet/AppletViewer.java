@@ -24,6 +24,8 @@ import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
+
 import static java.awt.BorderLayout.*;
 import static javax.swing.BorderFactory.*;
 import static javax.swing.border.BevelBorder.LOWERED;
@@ -61,13 +63,18 @@ public class AppletViewer extends JFrame implements StatusDisplay {
   private Applet applet;
   private transient AppletStub stub;
   private boolean loaded;
-
+ 
   /**
    * Creates a new </code>{@link AppletViewer}</code>. This constructor creates new instances of
    * <code>{@link BasicAppletStub}</code> and <code>{@link BasicAppletContext}</code>.
+   * <p>
+   * <b>Note:</b> This constructor is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible 
+   * for invoking this constructor in the EDT.
+   * </p>
    * @param applet the applet to view.
    * @throws NullPointerException if <code>applet</code> is <code>null</code>.
    */
+  @RunsInCurrentThread
   public AppletViewer(Applet applet) {
     load(applet, new BasicAppletStub(this, new BasicAppletContext(this)));
   }
@@ -75,22 +82,32 @@ public class AppletViewer extends JFrame implements StatusDisplay {
   /**
    * Creates a new </code>{@link AppletViewer}</code>. This constructor creates new instances of
    * <code>{@link BasicAppletStub}</code> and <code>{@link BasicAppletContext}</code>.
+   * <p>
+   * <b>Note:</b> This constructor is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible 
+   * for invoking this constructor in the EDT.
+   * </p>
    * @param applet the applet to view.
    * @param parameters the parameters included in an applet HTML tag.
    * @throws NullPointerException if <code>applet</code> is <code>null</code>.
    * @throws NullPointerException if <code>parameters</code> is <code>null</code>.
    */
+  @RunsInCurrentThread
   public AppletViewer(Applet applet, Map<String, String> parameters) {
     load(applet, new BasicAppletStub(this, new BasicAppletContext(this), parameters));
   }
 
   /**
    * Creates a new </code>{@link AppletViewer}</code>.
+   * <p>
+   * <b>Note:</b> This constructor is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible 
+   * for invoking this constructor in the EDT.
+   * </p>
    * @param applet the applet to view.
    * @param stub the applet's stub.
    * @throws NullPointerException if <code>applet</code> is <code>null</code>.
    * @throws NullPointerException if <code>stub</code> is <code>null</code>.
    */
+  @RunsInCurrentThread
   public AppletViewer(Applet applet, AppletStub stub) {
     load(applet, stub);
   }

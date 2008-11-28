@@ -15,11 +15,19 @@
  */
 package org.fest.swing.applet;
 
+import java.applet.Applet;
 import java.applet.AppletStub;
 import java.util.Map;
 
-import org.fest.swing.testing.MyApplet;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.testing.MyApplet;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Tests for <code>{@link AppletViewer}</code>.
@@ -29,19 +37,50 @@ import org.testng.annotations.Test;
  */
 @Test public class AppletViewerTest {
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfAppletIsNull() {
-    new AppletViewer(null);
+    newAppletViewer(null);
   }
   
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfAppletStubIsNull() {
-    new AppletViewer(new MyApplet(), (AppletStub)null);
+    newAppletViewer(MyApplet.createNew(), (AppletStub)null);
   }
   
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfParameterMapIsNull() {
     Map<String, String> parameters = null;
-    new AppletViewer(new MyApplet(), parameters);
+    newAppletViewer(MyApplet.createNew(), parameters);
+  }
+
+  @RunsInEDT
+  private static AppletViewer newAppletViewer(final Applet applet) {
+    return execute(new GuiQuery<AppletViewer>() {
+      protected AppletViewer executeInEDT() {
+        return new AppletViewer(applet);
+      }
+    });
+  }
+
+  @RunsInEDT
+  private static AppletViewer newAppletViewer(final Applet applet, final Map<String, String> parameters) {
+    return execute(new GuiQuery<AppletViewer>() {
+      protected AppletViewer executeInEDT() {
+        return new AppletViewer(applet, parameters);
+      }
+    });
+  }
+
+  @RunsInEDT
+  private static AppletViewer newAppletViewer(final Applet applet, final AppletStub appletStub) {
+    return execute(new GuiQuery<AppletViewer>() {
+      protected AppletViewer executeInEDT() {
+        return new AppletViewer(applet, appletStub);
+      }
+    });
   }
 }

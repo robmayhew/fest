@@ -26,6 +26,7 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -33,9 +34,7 @@ import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JDialogs.dialog;
 import static org.fest.swing.factory.JTextFields.textField;
-import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
-import static org.fest.swing.task.ComponentSetSizeTask.setComponentSize;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -54,12 +53,19 @@ public class AWTTest {
   
   public void shouldReturnCenterPosition() {
     Component c = textField().withColumns(20).createNew();
-    Dimension size = new Dimension(80, 60);
-    setComponentSize(c, size);
-    assertThat(sizeOf(c)).isEqualTo(size);
+    setComponentSize(c, 80, 60);
     Point center = AWT.centerOf(c);
     assertThat(center.x).isEqualTo(40);
     assertThat(center.y).isEqualTo(30);
+  }
+
+  @RunsInEDT
+  private static void setComponentSize(final Component c, final int width, final int height) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        c.setSize(width, height);
+      }
+    });
   }
 
   @Test(groups = GUI)

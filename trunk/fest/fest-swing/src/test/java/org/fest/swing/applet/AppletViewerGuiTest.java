@@ -15,7 +15,6 @@
  */
 package org.fest.swing.applet;
 
-import java.applet.Applet;
 import java.awt.Container;
 
 import org.testng.annotations.AfterMethod;
@@ -30,6 +29,7 @@ import org.fest.swing.edt.GuiTask;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.testing.MyApplet;
 import org.fest.swing.timing.Condition;
+import org.fest.swing.util.Pair;
 
 import static javax.swing.SwingUtilities.*;
 
@@ -56,27 +56,20 @@ public class AppletViewerGuiTest {
   }
   
   @BeforeMethod public void setUp() {
-    applet = newMyApplet();
-    viewer = newAppletViewer(applet);
+    Pair<MyApplet, AppletViewer> appletAndViewer = appletAndViewer();
+    applet = appletAndViewer.i;
+    viewer = appletAndViewer.ii;
     fixture = new FrameFixture(viewer);
     fixture.show();
     assertThatIsInitializedAndStarted(applet);
   }
 
   @RunsInEDT
-  private static MyApplet newMyApplet() {
-    return execute(new GuiQuery<MyApplet>() {
-      protected MyApplet executeInEDT() {
-        return new MyApplet();
-      }
-    });
-  }
-
-  @RunsInEDT
-  private static AppletViewer newAppletViewer(final Applet applet) {
-    return execute(new GuiQuery<AppletViewer>() {
-      protected AppletViewer executeInEDT() {
-        return new AppletViewer(applet);
+  private static Pair<MyApplet, AppletViewer> appletAndViewer() {
+    return execute(new GuiQuery<Pair<MyApplet, AppletViewer>>() {
+      protected Pair<MyApplet, AppletViewer> executeInEDT() {
+        MyApplet applet = new MyApplet();
+        return new Pair<MyApplet, AppletViewer>(applet, new AppletViewer(applet));
       }
     });
   }

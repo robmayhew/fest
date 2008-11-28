@@ -25,11 +25,11 @@ import org.fest.swing.util.Triple;
 
 import static org.fest.swing.driver.ComponentMovableQuery.isUserMovable;
 import static org.fest.swing.driver.ComponentMoveTask.moveComponent;
+import static org.fest.swing.driver.ComponentSetSizeTask.setComponentSize;
 import static org.fest.swing.driver.ComponentStateValidator.*;
 import static org.fest.swing.driver.ContainerStateValidator.validateCanResize;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.task.ComponentSetSizeTask.setComponentSize;
 import static org.fest.util.Strings.concat;
 
 /**

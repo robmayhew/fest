@@ -13,11 +13,11 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.driver;
 
 import java.awt.Component;
-import java.awt.Dimension;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -28,24 +28,10 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  *
  * @author Alex Ruiz
  */
-public final class ComponentSetSizeTask {
+final class ComponentSetSizeTask {
 
-  /**
-   * Sets the size of a <code>{@link Component}</code>. This action is executed in the event dispatch thread.
-   * @param c the <code>Component</code> to set the size to.
-   * @param size the new size for the given <code>Component</code>.
-   */
-  public static void setComponentSize(final Component c, final Dimension size) {
-    setComponentSize(c, size.width, size.height);
-  }
-
-  /**
-   * Sets the size of a <code>{@link Component}</code>. This action is executed in the event dispatch thread.
-   * @param c the <code>Component</code> to set the size to.
-   * @param width the new width for the given <code>Component</code>.
-   * @param height the new height for the given <code>Component</code>.
-   */
-  public static void setComponentSize(final Component c, final int width, final int height) {
+  @RunsInEDT
+  static void setComponentSize(final Component c, final int width, final int height) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         c.setSize(width, height);

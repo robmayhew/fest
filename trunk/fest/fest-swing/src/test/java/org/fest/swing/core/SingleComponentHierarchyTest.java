@@ -24,10 +24,13 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 import org.fest.swing.testing.TestWindow;
 
@@ -35,6 +38,9 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.factory.JButtons.button;
+import static org.fest.swing.factory.JFrames.frame;
 
 /**
  * Tests for <code>{@link SingleComponentHierarchy}</code>.
@@ -47,6 +53,10 @@ public class SingleComponentHierarchyTest {
   private TestWindow root;
   private SingleComponentHierarchy hierarchy;
   
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     delegate = createMock(ComponentHierarchy.class);
     root = TestWindow.createNewWindow(SingleComponentHierarchyTest.class);
@@ -58,8 +68,8 @@ public class SingleComponentHierarchyTest {
   }
   
   @Test public void shouldReturnParentOfComponent() {
-    final JFrame parent = new JFrame();
-    final JButton child = new JButton();
+    final JFrame parent = frame().createNew();
+    final JButton child = button().createNew();
     new EasyMockTemplate(delegate) {
       protected void expectations() {
         expect(delegate.parentOf(child)).andReturn(parent);
@@ -77,9 +87,9 @@ public class SingleComponentHierarchyTest {
   }
   
   @Test public void shouldReturnChildrenOfComponent() {
-    final JFrame parent = new JFrame();
+    final FrameWithButton parent = FrameWithButton.createNew();
     final List<Component> children = new ArrayList<Component>();
-    children.add(new JButton());
+    children.add(parent.button);
     new EasyMockTemplate(delegate) {
       protected void expectations() {
         expect(delegate.childrenOf(parent)).andReturn(children);
@@ -92,8 +102,26 @@ public class SingleComponentHierarchyTest {
     }.run();
   }
   
-  @Test public void shouldReturnTrueIfDelegateContainsComponentAndComponentIsInRoot() {
+  private static class FrameWithButton extends JFrame {
+    private static final long serialVersionUID = 1L;
+
     final JButton button = new JButton();
+    
+    static FrameWithButton createNew() {
+      return execute(new GuiQuery<FrameWithButton>() {
+        protected FrameWithButton executeInEDT() {
+          return new FrameWithButton();
+        }
+      });
+    }
+    
+    private FrameWithButton() {
+      add(button);
+    }
+  }
+  
+  @Test public void shouldReturnTrueIfDelegateContainsComponentAndComponentIsInRoot() {
+    final JButton button = button().createNew();
     root.add(button);
     new EasyMockTemplate(delegate) {
       protected void expectations() {
@@ -107,7 +135,7 @@ public class SingleComponentHierarchyTest {
   }
 
   @Test public void shouldReturnFalseIfDelegateContainsComponentAndComponentIsNotInRoot() {
-    final JButton button = new JButton();
+    final JButton button = button().createNew();
     new EasyMockTemplate(delegate) {
       protected void expectations() {
         expect(delegate.contains(button)).andReturn(true);
@@ -120,7 +148,7 @@ public class SingleComponentHierarchyTest {
   }
 
   @Test public void shouldReturnFalseIfDelegateDoesNotContainComponentAndComponentIsInRoot() {
-    final JButton button = new JButton();
+    final JButton button = button().createNew();
     root.add(button);
     new EasyMockTemplate(delegate) {
       protected void expectations() {
@@ -134,7 +162,7 @@ public class SingleComponentHierarchyTest {
   }
 
   @Test public void shouldReturnFalseIfDelegateDoesNotContainComponentAndComponentIsNotInRoot() {
-    final JButton button = new JButton();
+    final JButton button = button().createNew();
     new EasyMockTemplate(delegate) {
       protected void expectations() {
         expect(delegate.contains(button)).andReturn(false);
@@ -147,7 +175,7 @@ public class SingleComponentHierarchyTest {
   }
 
   @Test public void shouldDisposeWindow() {
-    final JFrame window = new JFrame();
+    final JFrame window = frame().createNew();
     new EasyMockTemplate(delegate) {
       protected void expectations() {
         delegate.dispose(window);

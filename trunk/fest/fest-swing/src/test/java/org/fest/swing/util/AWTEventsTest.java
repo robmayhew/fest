@@ -19,18 +19,19 @@ import java.awt.AWTEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JLabel;
-
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.testing.TestWindow;
 
 import static java.awt.event.ComponentEvent.*;
 import static java.awt.event.WindowEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JLabels.label;
 
 /**
  * Tests for <code>{@link AWTEvents}</code>.
@@ -41,6 +42,10 @@ public class AWTEventsTest {
 
   private TestWindow source;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     source = TestWindow.createNewWindow(getClass());
   }
@@ -65,7 +70,7 @@ public class AWTEventsTest {
   }
 
   @Test public void shouldReturnFalseIfComponentShownIsNotWindow() {
-    AWTEvent event = new ComponentEvent(new JLabel(), COMPONENT_SHOWN);
+    AWTEvent event = new ComponentEvent(label().createNew(), COMPONENT_SHOWN);
     assertThat(AWTEvents.windowShown(event)).isFalse();
   }
 

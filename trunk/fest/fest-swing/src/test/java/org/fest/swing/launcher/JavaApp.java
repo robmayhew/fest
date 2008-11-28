@@ -21,6 +21,8 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import static javax.swing.SwingUtilities.invokeLater;
+
 /**
  * An application with a "main" method that shows a <code>{@link JFrame}</code>.
  *
@@ -32,10 +34,14 @@ public class JavaApp {
 
   public static void main(String[] args) {
     for (ArgumentObserver observer : argumentObservers) observer.arguments(args);
-    JFrame frame = new JFrame("Java Application");
-    frame.setPreferredSize(new Dimension(200, 200));
-    frame.pack();
-    frame.setVisible(true);
+    invokeLater(new Runnable() {
+      public void run() {
+        JFrame frame = new JFrame("Java Application");
+        frame.setPreferredSize(new Dimension(200, 200));
+        frame.pack();
+        frame.setVisible(true);
+      }
+    });
   }
 
   public static void add(ArgumentObserver observer) {
