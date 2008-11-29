@@ -19,7 +19,12 @@
       <version>1.0b2</version>
       <version>1.0b2.1</version>
       <version>1.0b3-SNAPSHOT</version>
+      <version>1.0b3-SNAPSHOT-2</version>
     </versions>
+<<<<<<< .mine
+    <lastUpdated>20081129233644</lastUpdated>
+=======
     <lastUpdated>20081023210940</lastUpdated>
+>>>>>>> .theirs
   </versioning>
 </metadata>
