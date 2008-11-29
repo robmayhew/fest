@@ -38,6 +38,10 @@
         All actions performed on GUI components (e.g. click) now throw IllegalStateException if the GUI component is
         not showing on the screen.
       </action>
+      <action dev="alruiz" type="add" issue="239">
+        All Matchers in package org.fest.swing.core.matcher now implement 'toString' to make troubleshooting of failing
+        component lookups easier.
+      </action>
     </release>
     <release version="1.0b2" date="2008-10-16" description="Subsequent release">
       <action dev="alruiz" type="add" issue="109">
