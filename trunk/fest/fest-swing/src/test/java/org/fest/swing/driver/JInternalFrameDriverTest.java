@@ -38,6 +38,7 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.testing.FluentDimension;
 import org.fest.swing.testing.FluentPoint;
+import org.fest.swing.testing.StopWatch;
 import org.fest.swing.testing.TestWindow;
 
 import static java.lang.String.valueOf;
@@ -162,8 +163,14 @@ public class JInternalFrameDriverTest {
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
   public void shouldMaximizeIconifiedJInternalFrame(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
+    StopWatch stopWatch = StopWatch.startNewStopWatch();
     iconifyJInternalFrame();
+    stopWatch.stop();
+    System.out.println("iconified in " + stopWatch.ellapsedTime() + " ms");
+    stopWatch = StopWatch.startNewStopWatch();
     driver.maximize(internalFrame);
+    stopWatch.stop();
+    System.out.println("maximized in " + stopWatch.ellapsedTime() + " ms");
     assertThat(isMaximized(internalFrame)).isTrue();
   }
   

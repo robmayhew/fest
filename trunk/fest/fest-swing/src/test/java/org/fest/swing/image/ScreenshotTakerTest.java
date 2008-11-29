@@ -116,7 +116,6 @@ import static org.fest.util.Strings.concat;
     try {
       frame.display();
       String imagePath = concat(temporaryFolderPath(), imageFileName());
-      System.out.println(imagePath);
       taker.saveComponentAsPng(frame, imagePath);
       assertThat(read(imagePath)).hasSize(sizeOf(frame));
     } finally {

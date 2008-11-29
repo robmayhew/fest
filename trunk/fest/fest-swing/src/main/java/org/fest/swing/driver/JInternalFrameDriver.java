@@ -20,6 +20,7 @@ import java.awt.Point;
 import java.beans.PropertyVetoException;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JInternalFrame.JDesktopIcon;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
@@ -29,6 +30,7 @@ import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.util.Pair;
+import org.fest.swing.util.Triple;
 
 import static org.fest.swing.driver.ComponentStateValidator.validateIsShowing;
 import static org.fest.swing.driver.JInternalFrameAction.*;
@@ -106,14 +108,14 @@ public class JInternalFrameDriver extends ContainerDriver {
    */
   @RunsInEDT
   public void maximize(JInternalFrame internalFrame) {
-    Point maximizeLocation = validateAndFindMaximizeLocation(internalFrame);
+    Pair<Container, Point> maximizeLocation = validateAndFindMaximizeLocation(internalFrame);
     maximizeOrNormalize(internalFrame, MAXIMIZE, maximizeLocation);
   }
   
   @RunsInEDT
-  private static Point validateAndFindMaximizeLocation(final JInternalFrame internalFrame) {
-    return execute(new GuiQuery<Point>() {
-      protected Point executeInEDT() {
+  private static Pair<Container, Point> validateAndFindMaximizeLocation(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Pair<Container, Point>>() {
+      protected Pair<Container, Point> executeInEDT() {
         validateCanMaximize(internalFrame);
         return findMaximizeLocation(internalFrame);
       }
@@ -135,14 +137,14 @@ public class JInternalFrameDriver extends ContainerDriver {
    */
   @RunsInEDT
   public void normalize(JInternalFrame internalFrame) {
-    Point normalizeLocation = validateAndFindNormalizeLocation(internalFrame);
+    Pair<Container, Point> normalizeLocation = validateAndFindNormalizeLocation(internalFrame);
     maximizeOrNormalize(internalFrame, NORMALIZE, normalizeLocation);
   }
 
   @RunsInEDT
-  private static Point validateAndFindNormalizeLocation(final JInternalFrame internalFrame) {
-    return execute(new GuiQuery<Point>() {
-      protected Point executeInEDT() {
+  private static Pair<Container, Point> validateAndFindNormalizeLocation(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Pair<Container, Point>>() {
+      protected Pair<Container, Point> executeInEDT() {
         validateIsShowingOrIconified(internalFrame);
         return findMaximizeLocation(internalFrame);
       }
@@ -155,14 +157,16 @@ public class JInternalFrameDriver extends ContainerDriver {
   }
   
   @RunsInCurrentThread
-  private static Point findMaximizeLocation(JInternalFrame internalFrame) {
+  private static Pair<Container, Point> findMaximizeLocation(JInternalFrame internalFrame) {
     Container clickTarget = internalFrame.isIcon() ? internalFrame.getDesktopIcon() : internalFrame;
-    return maximizeLocationOf(clickTarget);
+    Point location = maximizeLocationOf(clickTarget);
+    return new Pair<Container, Point>(clickTarget, location);
   }
 
   @RunsInEDT
-  private void maximizeOrNormalize(JInternalFrame internalFrame, JInternalFrameAction action, Point toMoveMouseTo) {
-    moveMouseIgnoringAnyError(internalFrame, toMoveMouseTo);
+  private void maximizeOrNormalize(JInternalFrame internalFrame, JInternalFrameAction action, 
+      Pair<Container, Point> toMoveMouseTo) {
+    moveMouseIgnoringAnyError(toMoveMouseTo.i, toMoveMouseTo.ii);
     setMaximumProperty(internalFrame, action);
   }
 
@@ -218,16 +222,16 @@ public class JInternalFrameDriver extends ContainerDriver {
    */
   @RunsInEDT
   public void deiconify(JInternalFrame internalFrame) {
-    Pair<Boolean, Point> deiconifyInfo = validateAndfindDeiconifyInfo(internalFrame);
+    Triple<Boolean, Container, Point> deiconifyInfo = validateAndfindDeiconifyInfo(internalFrame);
     if (deiconifyInfo.i) return; // internal frame is already de-iconified
-    moveMouseIgnoringAnyError(internalFrame, deiconifyInfo.ii);
+    moveMouseIgnoringAnyError(deiconifyInfo.ii, deiconifyInfo.iii);
     setIconProperty(internalFrame, DEICONIFY);
   }
   
   @RunsInEDT
-  private static Pair<Boolean, Point> validateAndfindDeiconifyInfo(final JInternalFrame internalFrame) {
-    return execute(new GuiQuery<Pair<Boolean, Point>>() {
-      protected Pair<Boolean, Point> executeInEDT() throws Throwable {
+  private static Triple<Boolean, Container, Point> validateAndfindDeiconifyInfo(final JInternalFrame internalFrame) {
+    return execute(new GuiQuery<Triple<Boolean, Container, Point>>() {
+      protected Triple<Boolean, Container, Point> executeInEDT() throws Throwable {
         validateIsShowingOrIconified(internalFrame);
         return deiconifyInfo(internalFrame);
       }
@@ -235,10 +239,11 @@ public class JInternalFrameDriver extends ContainerDriver {
   }
 
   @RunsInCurrentThread
-  private static Pair<Boolean, Point> deiconifyInfo(JInternalFrame internalFrame) {
+  private static Triple<Boolean, Container, Point> deiconifyInfo(JInternalFrame internalFrame) {
     boolean deiconified = !isIconified(internalFrame);
-    if (deiconified) return new Pair<Boolean, Point>(true, null);
-    return new Pair<Boolean, Point>(deiconified, findIconifyLocation(internalFrame));
+    if (deiconified) return new Triple<Boolean, Container, Point>(true, null, null);
+    JDesktopIcon desktopIcon = internalFrame.getDesktopIcon();
+    return new Triple<Boolean, Container, Point>(deiconified, desktopIcon, iconifyLocationOf(desktopIcon));
   }
 
   @RunsInCurrentThread
