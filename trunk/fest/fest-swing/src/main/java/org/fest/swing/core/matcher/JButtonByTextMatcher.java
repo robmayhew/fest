@@ -20,7 +20,10 @@ import javax.swing.JButton;
 import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.core.GenericTypeMatcher;
 
+import static java.lang.String.valueOf;
+
 import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands matching a <code>{@link JButton}</code> whose text is equal to the provided one.
@@ -73,5 +76,14 @@ public class JButtonByTextMatcher extends GenericTypeMatcher<JButton> {
   @RunsInCurrentThread
   protected boolean isMatching(JButton button) {
     return areEqual(button.getText(), text);
+  }
+
+  @Override public String toString() {
+    return concat(
+        getClass().getName(), "[",
+        "text=", quote(text), ", ",
+        "requireShowing=", valueOf(requireShowing()), 
+        "]"
+    );
   }
 }

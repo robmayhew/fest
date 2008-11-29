@@ -20,7 +20,10 @@ import java.awt.Dialog;
 import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.core.GenericTypeMatcher;
 
+import static java.lang.String.valueOf;
+
 import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands matching a <code>{@link Dialog}</code> whose title is equal to the provided one.
@@ -73,5 +76,14 @@ public class DialogByTitleMatcher extends GenericTypeMatcher<Dialog> {
   @RunsInCurrentThread
   protected boolean isMatching(Dialog dialog) {
     return areEqual(dialog.getTitle(), title);
+  }
+
+  @Override public String toString() {
+    return concat(
+        getClass().getName(), "[",
+        "title=", quote(title), ", ",
+        "requireShowing=", valueOf(requireShowing()), 
+        "]"
+    );
   }
 }

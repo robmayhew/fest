@@ -19,15 +19,19 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JComboBox;
-import javax.swing.JTextField;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+
 import static java.awt.event.MouseEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.factory.JComboBoxes.comboBox;
+import static org.fest.swing.factory.JTextFields.textField;
 
 /**
  * Tests for <code>{@link DragDropInfo}</code>.
@@ -41,9 +45,13 @@ public class DragDropInfoTest {
   private Point origin;
   private long when;
 
+  @BeforeClass public void setUpOnce() {
+    CheckThreadViolationRepaintManager.install();
+  }
+  
   @BeforeMethod public void setUp() {
     info = new DragDropInfo();
-    source = new JTextField();
+    source = textField().createNew();
     origin = new Point(6, 8);
     when = System.currentTimeMillis();
   }
@@ -59,7 +67,7 @@ public class DragDropInfoTest {
   public void shouldNotUpdateForUnrecognizedEvents(int eventId) {
     info.source(source);
     info.origin(origin);
-    JComboBox c = new JComboBox();
+    JComboBox c = comboBox().createNew();
     MouseEvent event = new MouseEvent(c, eventId, when, 0, 0, 0, 1, false, BUTTON1);
     info.update(event);
     assertThat(info.source()).isSameAs(source);
@@ -75,7 +83,7 @@ public class DragDropInfoTest {
   public void shouldClearOnMouseReleasedOrMoved(int eventId) {
     info.source(source);
     info.origin(origin);
-    JComboBox c = new JComboBox();
+    JComboBox c = comboBox().createNew();
     MouseEvent event = new MouseEvent(c, eventId, when, 0, 7, 9, 1, false, BUTTON1);
     info.update(event);
     assertThat(info.source()).isNull();

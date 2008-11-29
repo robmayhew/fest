@@ -20,7 +20,10 @@ import javax.swing.JLabel;
 import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.core.GenericTypeMatcher;
 
+import static java.lang.String.valueOf;
+
 import static org.fest.util.Objects.areEqual;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands matching a <code>{@link JLabel}</code> whose text is equal to the provided one.
@@ -73,5 +76,14 @@ public class JLabelByTextMatcher extends GenericTypeMatcher<JLabel> {
   @RunsInCurrentThread
   protected boolean isMatching(JLabel label) {
     return areEqual(label.getText(), text);
+  }
+
+  @Override public String toString() {
+    return concat(
+        getClass().getName(), "[",
+        "text=", quote(text), ", ",
+        "requireShowing=", valueOf(requireShowing()), 
+        "]"
+    );
   }
 }
