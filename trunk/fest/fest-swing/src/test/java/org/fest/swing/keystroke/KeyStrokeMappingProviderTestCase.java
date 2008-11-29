@@ -97,7 +97,7 @@ public abstract class KeyStrokeMappingProviderTestCase {
   }
 
   final void assertKeyWasPressedWithoutModifiers(KeyStroke keyStroke, int expectedKey) {
-    assertThat(keyStroke.getModifiers()).isEqualTo(0);
+    assertThat(keyStroke.getModifiers()).as("no modifiers should have been pressed").isEqualTo(0);
     KeyRecorder recorder = KeyRecorder.attachTo(textArea);
     pressInTextArea(keyStroke);
     recorder.keysPressed(expectedKey);

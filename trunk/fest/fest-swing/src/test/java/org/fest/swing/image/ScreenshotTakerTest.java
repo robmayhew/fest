@@ -20,6 +20,7 @@ import java.awt.image.BufferedImage;
 import java.util.UUID;
 
 import javax.swing.JButton;
+import javax.swing.JTextField;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -108,6 +109,21 @@ import static org.fest.util.Strings.concat;
     }
   }
 
+  @Test(groups = GUI)
+  public void shouldTakeScreenshotOfFrameAndSaveItInGivenPath() throws Exception {
+    ScreenLock.instance().acquire(this);
+    MyWindow frame = MyWindow.createNew();
+    try {
+      frame.display();
+      String imagePath = concat(temporaryFolderPath(), imageFileName());
+      System.out.println(imagePath);
+      taker.saveComponentAsPng(frame, imagePath);
+      assertThat(read(imagePath)).hasSize(sizeOf(frame));
+    } finally {
+      frame.destroy();
+    }
+  }
+
   private String imageFileName() {
     UUID uuid = UUID.randomUUID();
     return concat(uuid.toString(), ".png");
@@ -125,10 +141,12 @@ import static org.fest.util.Strings.concat;
       });
     }
 
+    final JTextField textField = new JTextField(20);
     final JButton button = new JButton("Hello");
 
     private MyWindow() {
       super(ScreenshotTakerTest.class);
+      add(textField);
       add(button);
     }
   }

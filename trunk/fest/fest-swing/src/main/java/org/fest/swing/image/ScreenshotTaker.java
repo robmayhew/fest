@@ -21,7 +21,15 @@ import java.io.IOException;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
+import javax.swing.text.Caret;
+import javax.swing.text.JTextComponent;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
+
+import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.util.Files.newFile;
@@ -71,7 +79,12 @@ public final class ScreenshotTaker {
    */
   public BufferedImage takeDesktopScreenshot() {
     Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-    return robot.createScreenCapture(screen);
+    JTextComponent textComponent = findFocusOwnerAndHideItsCaret();
+    try {
+      return robot.createScreenCapture(screen);
+    } finally {
+      if (textComponent != null) showCaretOf(textComponent);
+    }
   }
 
   /**
@@ -97,7 +110,37 @@ public final class ScreenshotTaker {
     Point locationOnScreen = locationOnScreen(c);
     Dimension size = sizeOf(c);
     Rectangle r = new Rectangle(locationOnScreen.x,  locationOnScreen.y, size.width, size.height);
-    return robot.createScreenCapture(r);
+    JTextComponent textComponent = findFocusOwnerAndHideItsCaret();
+    try {
+      return robot.createScreenCapture(r);
+    } finally {
+      if (textComponent != null) showCaretOf(textComponent);
+    }
+  }
+
+  @RunsInEDT
+  private static JTextComponent findFocusOwnerAndHideItsCaret() {
+    return execute(new GuiQuery<JTextComponent>() {
+      protected JTextComponent executeInEDT() {
+        Component focusOwner = focusOwner();
+        if (!(focusOwner instanceof JTextComponent)) return null;
+        JTextComponent textComponent = (JTextComponent)focusOwner;
+        Caret caret = textComponent.getCaret();
+        if (caret == null || !caret.isVisible()) return null;
+        caret.setVisible(false);
+        return textComponent;
+      }
+    });
+  }
+  
+  @RunsInEDT
+  private static void showCaretOf(final JTextComponent textComponent) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        Caret caret = textComponent.getCaret();
+        if (caret != null) caret.setVisible(true);
+      }
+    });
   }
 
   /**

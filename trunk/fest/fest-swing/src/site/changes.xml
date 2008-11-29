@@ -6,6 +6,10 @@
   </properties>
   <body>
     <release version="1.0b3" date="TBD" description="Subsequent release">
+      <action dev="alruiz" type="add" issue="213" due-to="Jean-Francois Poilpret">
+        org.fest.swing.image.ScreenshotTaker now hides the cursor of the focused JTextComponent when taking a 
+        screenshot.
+      </action>
       <action dev="alruiz" type="fix" issue="214" due-to="Michael Hüttermann">
         Fixed code snippet in Javadoc for class org.fest.swing.data.TableCell. 
       </action>
