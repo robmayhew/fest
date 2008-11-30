@@ -47,7 +47,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 public abstract class JTableCellWriterTestCase {
 
   private Robot robot;
-  private TableDialogEditDemoWindow frame;
+  private TableDialogEditDemoWindow window;
   private JTableCellWriter writer;
 
   @BeforeClass public void setUpOnce() {
@@ -57,8 +57,8 @@ public abstract class JTableCellWriterTestCase {
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     writer = createWriter();
-    frame = TableDialogEditDemoWindow.createNew(getClass());
-    robot.showWindow(frame, new Dimension(500, 100));
+    window = TableDialogEditDemoWindow.createNew(getClass());
+    robot.showWindow(window, new Dimension(500, 100));
   }
 
   protected abstract JTableCellWriter createWriter();
@@ -71,7 +71,7 @@ public abstract class JTableCellWriterTestCase {
   public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenEnteringValue(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     try {
-      writer.enterValue(frame.table, 0, 1, "hello");
+      writer.enterValue(window.table, 0, 1, "hello");
       fail();
     } catch (ActionFailedException e) {
       assertMessageIncludesComponentNotHandled(e);
@@ -82,7 +82,7 @@ public abstract class JTableCellWriterTestCase {
   public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenStartingEditing(EventMode eventMode) {
     robot.settings().eventMode(eventMode);
     try {
-      writer.startCellEditing(frame.table, 0, 1);
+      writer.startCellEditing(window.table, 0, 1);
       fail();
     } catch (ActionFailedException e) {
       assertMessageIncludesComponentNotHandled(e);
@@ -94,10 +94,10 @@ public abstract class JTableCellWriterTestCase {
   }
 
   protected final Robot robot() { return robot; }
-  protected final JTable table() { return frame.table; }
+  protected final JTable table() { return window.table; }
   protected final JTableCellWriter writer() { return writer; }
 
   protected final Object valueAt(int row, int column) {
-    return cellValueOf(frame.table, row, column);
+    return cellValueOf(window.table, row, column);
   }
 }

@@ -24,7 +24,10 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.util.Pair;
+
+import static java.awt.event.KeyEvent.VK_F2;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.driver.ComponentShownWaiter.waitTillShown;
@@ -64,10 +67,12 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
   @RunsInEDT
   private JTextComponent doStartCellEditing(JTable table, int row, int column) {
     Pair<Point, JTextComponent> info = startEditingCellInfo(table, row, column, location);
-    robot.click(table, info.i, LEFT_BUTTON, 2); // activate JTextComponent editor
-    JTextComponent editor = info.ii;
-    waitTillShown(editor);
-    return editor;
+    try {
+      activateEditorWithF2Key(table, info);
+    } catch (WaitTimedOutError e) {
+      activateEditorWithDoubleClick(table, info);
+    }
+    return info.ii;
   }
 
   @RunsInEDT
@@ -80,5 +85,23 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
         return new Pair<Point, JTextComponent>(location.pointAt(table, row, column), editor);
       }
     });
+  }
+
+  @RunsInEDT
+  private void activateEditorWithF2Key(JTable table, Pair<Point, JTextComponent> editingCellInfo) {
+    robot.click(table, editingCellInfo.i);
+    robot.pressAndReleaseKeys(VK_F2);
+    waitForEditorActivation(editingCellInfo);
+  }
+  
+  @RunsInEDT
+  private void activateEditorWithDoubleClick(JTable table, Pair<Point, JTextComponent> editingCellInfo) {
+    robot.click(table, editingCellInfo.i, LEFT_BUTTON, 2);
+    waitForEditorActivation(editingCellInfo);
+  }
+
+  @RunsInEDT
+  private void waitForEditorActivation(Pair<Point, JTextComponent> editingCellInfo) {
+    waitTillShown(editingCellInfo.ii);
   }
 }
