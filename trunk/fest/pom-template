@@ -142,6 +142,10 @@
       <name>Konstantin Scheglov</name>
     </contributor>
     <contributor>
+      <name>Michael Schnell</name>
+      <url>http://www.future-invent.de/</url>
+    </contributor>
+    <contributor>
       <name>Lorenzo Sicilia</name>
     </contributor>
     <contributor>
@@ -149,6 +153,9 @@
     </contributor>
     <contributor>
       <name>J. Simmons</name>
+    </contributor>
+    <contributor>
+      <name>Tarjei Skorgenes</name>
     </contributor>
     <contributor>
       <name>John Stephi</name>
@@ -183,6 +190,9 @@
       <name>Ted Young</name>
       <organization>Guidewire Software</organization>
       <organizationUrl>http://www.guidewire.com</organizationUrl>
+    </contributor>
+    <contributor>
+      <name>Jan Zuchhold</name>
     </contributor>
   </contributors>
   <build>
