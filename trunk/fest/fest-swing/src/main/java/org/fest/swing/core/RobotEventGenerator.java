@@ -21,7 +21,7 @@ import java.awt.Robot;
 import static java.lang.String.valueOf;
 
 import static org.fest.swing.awt.AWT.locationOnScreenOf;
-import static org.fest.swing.exception.UnexpectedException.unexpected;
+import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.util.Strings.concat;
@@ -49,10 +49,18 @@ class RobotEventGenerator implements InputEventGenerator {
 
   /** {@inheritDoc} */
   public void pressMouse(Component c, Point where, int buttons) {
-    moveMouse(c, where.x, where.y);
+    Point p = pointToMoveMouseTo(c, where.x, where.y);
+    if (!isPointInScreenBoundaries(p)) 
+      throw actionFailure("The component to click is out of the boundaries of the screeen");
+    robot.mouseMove(p.x, p.y);
     pressMouse(buttons);
   }
 
+  private boolean isPointInScreenBoundaries(Point p) {
+    Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+    return screen.contains(p);
+  }
+  
   /** {@inheritDoc} */
   public void pressMouse(int buttons) {
     robot.mousePress(buttons);
@@ -65,16 +73,17 @@ class RobotEventGenerator implements InputEventGenerator {
 
   /** {@inheritDoc} */
   public void moveMouse(Component c, int x, int y) {
-    try {
-      Point point = locationOnScreenOf(c);
-      if (point == null) return;
-      point.translate(x, y);
-      robot.mouseMove(point.x, point.y);
-    } catch (IllegalComponentStateException e) {
-      throw unexpected(e);
-    }
+    Point p = pointToMoveMouseTo(c, x, y);
+    robot.mouseMove(p.x, p.y);
   }
 
+  private Point pointToMoveMouseTo(Component c, int x, int y) {
+    Point p = locationOnScreenOf(c);
+    if (p == null) return null;
+    p.translate(x, y);
+    return p;
+  }
+  
   /** {@inheritDoc} */
   public void pressKey(int keyCode, char keyChar) {
     try {

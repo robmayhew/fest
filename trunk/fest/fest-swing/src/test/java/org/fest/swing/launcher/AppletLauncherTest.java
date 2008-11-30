@@ -32,8 +32,8 @@ import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.testing.MyApplet;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -106,7 +106,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   public void shouldThrowErrorIfAppletCannotBeInstantiated() {
     try {
       AppletLauncher.applet(AnApplet.class);
-      fail();
+      failWhenExpectingException();
     } catch (UnexpectedException e) {
       assertThat(e).message().contains("Unable to create a new instance");
     }
@@ -131,7 +131,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   public void shouldThrowErrorIfAppletTypeIsNotType() {
     try {
       AppletLauncher.applet("Hello");
-      fail();
+      failWhenExpectingException();
     } catch (UnexpectedException e) {
       assertThat(e).message().contains("Unable to load class Hello");
     }
@@ -140,7 +140,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   public void shouldThrowErrorIfAppletCannotBeInstantiatedFromTypeName() {
     try {
       AppletLauncher.applet(AnApplet.class.getName());
-      fail();
+      failWhenExpectingException();
     } catch (UnexpectedException e) {
       assertThat(e).message().contains("Unable to create a new instance");
     }

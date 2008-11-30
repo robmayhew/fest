@@ -32,9 +32,9 @@ import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -72,7 +72,7 @@ public abstract class JTableCellWriterTestCase {
     robot.settings().eventMode(eventMode);
     try {
       writer.enterValue(window.table, 0, 1, "hello");
-      fail();
+      failWhenExpectingException();
     } catch (ActionFailedException e) {
       assertMessageIncludesComponentNotHandled(e);
     }
@@ -83,7 +83,7 @@ public abstract class JTableCellWriterTestCase {
     robot.settings().eventMode(eventMode);
     try {
       writer.startCellEditing(window.table, 0, 1);
-      fail();
+      failWhenExpectingException();
     } catch (ActionFailedException e) {
       assertMessageIncludesComponentNotHandled(e);
     }

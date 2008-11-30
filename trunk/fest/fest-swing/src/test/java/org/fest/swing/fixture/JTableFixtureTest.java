@@ -42,7 +42,6 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.MouseClickInfo.leftButton;
 import static org.fest.swing.data.TableCell.row;
@@ -50,6 +49,7 @@ import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.factory.JPopupMenus.popupMenu;
 import static org.fest.swing.factory.JTableHeaders.tableHeader;
 import static org.fest.swing.factory.JTables.table;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 
 /**
  * Tests for <code>{@link JTableFixture}</code>.
@@ -104,7 +104,7 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
       protected void codeToTest() {
         try {
           fixture.columnIndexFor(columnName);
-          fail("Expeting exception");
+          failWhenExpectingException();
         } catch (ActionFailedException e) {
           assertThat(e).isSameAs(expected);
         }
@@ -479,7 +479,7 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
       protected void codeToTest() {
         try {
           fixture.cell(value);
-          fail("Expecting an exception");
+          failWhenExpectingException();
         } catch (ActionFailedException e) {
           assertThat(e).isSameAs(expected);
         }

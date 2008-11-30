@@ -128,12 +128,14 @@ public interface Robot {
   /**
    * Simulates a user clicking once the given <code>{@link Component}</code> using the left mouse button.
    * @param c the <code>Component</code> to click on.
+   * @throws ActionFailedException if the component to click is out of the boundaries of the screen.
    */
   void click(Component c);
 
   /**
    * Simulates a user right-clicking the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
+   * @throws ActionFailedException if the component to click is out of the boundaries of the screen.
    */
   void rightClick(Component c);
 
@@ -141,12 +143,14 @@ public interface Robot {
    * Simulates a user clicking once the given <code>{@link Component}</code> using the given mouse button.
    * @param c the <code>Component</code> to click on.
    * @param button the mouse button to use.
+   * @throws ActionFailedException if the component to click is out of the boundaries of the screen.
    */
   void click(Component c, MouseButton button);
 
   /**
    * Simulates a user double-clicking the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
+   * @throws ActionFailedException if the component to click is out of the boundaries of the screen.
    */
   void doubleClick(Component c);
 
@@ -155,6 +159,7 @@ public interface Robot {
    * @param c the <code>Component</code> to click on.
    * @param button the mouse button to click.
    * @param times the number of times to click the given mouse button.
+   * @throws ActionFailedException if the component to click is out of the boundaries of the screen.
    */
   void click(Component c, MouseButton button, int times);
 
@@ -162,6 +167,7 @@ public interface Robot {
    * Simulates a user clicking at the given position on the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
    * @param where the position where to click.
+   * @throws ActionFailedException if the component to click is out of the boundaries of the screen.
    */
   void click(Component c, Point where);
 
@@ -172,6 +178,7 @@ public interface Robot {
    * @param where the position where to click.
    * @param button the mouse button to click.
    * @param times the number of times to click the given mouse button.
+   * @throws ActionFailedException if the component to click is out of the boundaries of the screen.
    */
   void click(Component c, Point where, MouseButton button, int times);
 

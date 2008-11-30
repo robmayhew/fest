@@ -26,7 +26,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 
 /**
  * Tests for <code>{@link GuiActionRunner}</code>.
@@ -60,7 +60,7 @@ import static org.fest.assertions.Fail.fail;
         try {
           GuiActionRunner.executeInEDT(false);
           GuiActionRunner.execute(task);
-          fail("Expecting exception");
+          failWhenExpectingException();
         } catch (UnexpectedException e) {
           assertThat(e.getCause()).isSameAs(error);
         }
@@ -90,7 +90,7 @@ import static org.fest.assertions.Fail.fail;
         try {
           GuiActionRunner.executeInEDT(false);
           GuiActionRunner.execute(query);
-          fail("Expecting exception");
+          failWhenExpectingException();
         } catch (UnexpectedException e) {
           assertThat(e.getCause()).isSameAs(error);
         }

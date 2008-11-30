@@ -334,10 +334,7 @@ public class RobotFixture implements Robot {
     w.dispose();
   }
 
-  /**
-   * Simulates a user clicking once the given <code>{@link Component}</code> using the left mouse button.
-   * @param c the <code>Component</code> to click on.
-   */
+  /** {@inheritDoc} */
   @RunsInEDT
   public void click(Component c) {
     click(c, LEFT_BUTTON);

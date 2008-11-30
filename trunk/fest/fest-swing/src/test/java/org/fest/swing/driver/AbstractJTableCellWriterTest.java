@@ -29,8 +29,8 @@ import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -64,7 +64,7 @@ public class AbstractJTableCellWriterTest {
   public void shouldThrowErrorIfEditorToHandleIsNull() {
     try {
       AbstractJTableCellWriter.cannotHandleEditor(null);
-      fail();
+      failWhenExpectingException();
     } catch (ActionFailedException e) {
       assertThat(e).message().contains("Unable to handle editor component of type <null>");
     }

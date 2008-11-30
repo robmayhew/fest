@@ -28,7 +28,7 @@ import static javax.swing.Action.NAME;
 import static org.easymock.EasyMock.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 
 /**
  * Tests for <code>{@link Actions}</code>.
@@ -76,7 +76,7 @@ public class ActionsTest {
           assertThat(found).isEqualTo("key");
         }
       }.run();
-      fail();
+      failWhenExpectingException();
     } catch (ActionFailedException expected) {
       assertThat(expected).message().isEqualTo("The action 'someName' is not available, available actions:['key']");
     }

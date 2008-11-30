@@ -33,8 +33,8 @@ import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.launcher.JavaApp.ArgumentObserver;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.util.Collections.list;
 
 /**
@@ -62,7 +62,7 @@ public class ApplicationLauncherTest {
   public void shouldThrowErrorIfApplicationClassNameIsInvalid() {
     try {
       ApplicationLauncher.application("Hello").start();
-      fail();
+      failWhenExpectingException();
     } catch (UnexpectedException e) {
       assertThat(e).message().contains("Unable to load class 'Hello'");
     }

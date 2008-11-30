@@ -43,7 +43,6 @@ import static java.awt.event.InputEvent.*;
 import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.RobotFixtureTest.KeyAction.action;
@@ -54,6 +53,7 @@ import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
 import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.testing.ClickRecorder.attachTo;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.timing.Pause.pause;
 
@@ -91,7 +91,7 @@ public class RobotFixtureTest {
   public void shouldThrowErrorIfWindowNeverShown() {
     try {
       robot.showWindow(AlwaysInvisibleFrame.createNew());
-      fail();
+      failWhenExpectingException();
     } catch (WaitTimedOutError e) {
       assertThat(e).message().contains("Timed out waiting for Window to open");
     }
@@ -253,7 +253,7 @@ public class RobotFixtureTest {
   public void shouldThrowErrorIfPopupNotFound() {
     try {
       robot.showPopupMenu(textFieldWithoutPopup);
-      fail();
+      failWhenExpectingException();
     } catch (ComponentLookupException expected) {
       assertThat(expected).message().contains("Unable to show popup")
                                     .contains("on javax.swing.JTextField")
@@ -324,7 +324,7 @@ public class RobotFixtureTest {
     pause(500);
     try {
       robot.requireNoJOptionPaneIsShowing();
-      fail("Expecting AssertionError");
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("Expecting no JOptionPane to be showing");
     }

@@ -15,13 +15,14 @@
  */
 package org.fest.swing.core;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
-import static org.fest.swing.timing.Pause.pause;
-
-import org.fest.swing.exception.ScreenLockException;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import org.fest.swing.exception.ScreenLockException;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Tests for <code>{@link ScreenLock}</code>.
@@ -67,7 +68,7 @@ public class ScreenLockTest {
     lock.acquire(owner);
     try {
       lock.release(new Object());
-      fail();
+      failWhenExpectingException();
     } catch (ScreenLockException expected) {}
     lock.release(owner);
   }

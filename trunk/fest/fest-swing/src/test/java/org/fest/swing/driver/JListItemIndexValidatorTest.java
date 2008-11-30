@@ -23,7 +23,6 @@ import javax.swing.JScrollPane;
 import org.testng.annotations.*;
 
 import org.fest.assertions.Assertions;
-import org.fest.assertions.Fail;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
@@ -32,6 +31,7 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
@@ -75,7 +75,7 @@ public class JListItemIndexValidatorTest {
   public void shouldThrowErrorIfIndexIsNegative() {
     try {
       JListItemIndexValidator.validateIndex(list, -1);
-      Fail.fail("Expecting exception");
+      failWhenExpectingException();
     } catch (IndexOutOfBoundsException e) {
       Assertions.assertThat(e).message().isEqualTo("Item index (-1) should be between [0] and [2] (inclusive)");
     }
@@ -84,7 +84,7 @@ public class JListItemIndexValidatorTest {
   public void shouldThrowErrorIfIndexIsGreaterThanLastItemIndex() {
     try {
       JListItemIndexValidator.validateIndex(list, 3);
-      Fail.fail("Expecting exception");
+      failWhenExpectingException();
     } catch (IndexOutOfBoundsException e) {
       Assertions.assertThat(e).message().isEqualTo("Item index (3) should be between [0] and [2] (inclusive)");
     }

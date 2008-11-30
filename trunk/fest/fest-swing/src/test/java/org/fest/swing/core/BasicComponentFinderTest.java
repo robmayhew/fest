@@ -32,9 +32,9 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -77,7 +77,7 @@ public class BasicComponentFinderTest {
   public void shouldThrowExceptionIfComponentNotFoundByType() {
     try {
       finder.findByType(JTree.class);
-      fail();
+      failWhenExpectingException();
     } catch (ComponentLookupException e) {
       assertThat(e).message().contains("type=javax.swing.JTree").contains(format(windowOne));
     }
@@ -92,7 +92,7 @@ public class BasicComponentFinderTest {
   public void shouldThrowExceptionIfComponentNotFoundByTypeAndContainer() {
     try {
       finder.findByType(windowOne, JList.class);
-      fail();
+      failWhenExpectingException();
     } catch (ComponentLookupException e) {
       assertThat(e).message().contains("type=javax.swing.JList").contains(format(windowOne));
     }
@@ -106,7 +106,7 @@ public class BasicComponentFinderTest {
   public void shouldThrowExceptionIfComponentNotFoundByName() {
     try {
       finder.findByName("list");
-      fail();
+      failWhenExpectingException();
     } catch (ComponentLookupException e) {
       assertThat(e).message().contains("name='list'").contains(format(windowOne));
     }
@@ -122,7 +122,7 @@ public class BasicComponentFinderTest {
   public void shouldThrowExceptionIfComponentNotFoundByNameAndContainer() {
     try {
       finder.findByName(windowOne, "label");
-      fail();
+      failWhenExpectingException();
     } catch (ComponentLookupException e) {
       assertThat(e).message().contains("name='label'").contains(format(windowOne));
     }
@@ -136,7 +136,7 @@ public class BasicComponentFinderTest {
   public void shouldThrowExceptionIfComponentNotFoundByNameAndType() {
     try {
       finder.findByName("list", JLabel.class);
-      fail();
+      failWhenExpectingException();
     } catch (ComponentLookupException e) {
       assertThat(e).message().contains("name='list'").contains("type=javax.swing.JLabel")
                              .contains(format(windowOne));
@@ -146,7 +146,7 @@ public class BasicComponentFinderTest {
   public void shouldThrowExceptionIfComponentFoundByNameAndNotByType() {
     try {
       finder.findByName("button", JLabel.class);
-      fail();
+      failWhenExpectingException();
     } catch (ComponentLookupException e) {
       assertThat(e).message().contains("name='button'").contains("type=javax.swing.JLabel")
                              .contains(format(windowOne));
@@ -162,7 +162,7 @@ public class BasicComponentFinderTest {
   public void shouldThrowExceptionIfComponentNotFoundByNameAndTypeAndContainer() {
     try {
       finder.findByName(windowOne, "list", JLabel.class);
-      fail();
+      failWhenExpectingException();
     } catch (ComponentLookupException e) {
       assertThat(e).message().contains("name='list'").contains("type=javax.swing.JLabel")
                              .contains(format(windowOne));
@@ -172,7 +172,7 @@ public class BasicComponentFinderTest {
   public void shouldThrowExceptionIfComponentFoundByNameAndContainerAndNotByType() {
     try {
       finder.findByName(windowOne, "button", JLabel.class);
-      fail();
+      failWhenExpectingException();
     } catch (ComponentLookupException e) {
       assertThat(e).message().contains("name='button'").contains("type=javax.swing.JLabel")
                              .contains(format(windowOne));
@@ -236,7 +236,7 @@ public class BasicComponentFinderTest {
   public void shouldThrowErrorIfMoreThanOneComponentMatch() {
     try {
       finder.find(new TypeMatcher(JTextField.class));
-      fail();
+      failWhenExpectingException();
     } catch (ComponentLookupException e) {
       assertThat(e).message().contains("type=javax.swing.JTextField")
                              .contains(format(windowOne.textField))
@@ -248,7 +248,7 @@ public class BasicComponentFinderTest {
     finder.includeHierarchyIfComponentNotFound(false);
     try {
       finder.findByName(windowOne, "button", JLabel.class);
-      fail();
+      failWhenExpectingException();
     } catch (ComponentLookupException e) {
       assertThat(e).message().contains("name='button'").contains("type=javax.swing.JLabel")
                              .excludes(format(windowOne));

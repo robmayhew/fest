@@ -18,7 +18,7 @@ package org.fest.swing.driver;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 
 /**
  * Tests for <code>{@link CommonValidations}</code>.
@@ -35,7 +35,7 @@ public class CommonValidationsTest {
   @Test public void shouldThrowErrorIfCellReaderIsNull() {
     try {
       CommonValidations.validateCellReader(null);
-      fail();
+      failWhenExpectingException();
     } catch (NullPointerException e) {
       assertThat(e).message().isEqualTo("Cell reader should not be null");
     }
@@ -48,7 +48,7 @@ public class CommonValidationsTest {
   @Test public void shouldThrowErrorIfCellWriterIsNull() {
     try {
       CommonValidations.validateCellWriter(null);
-      fail();
+      failWhenExpectingException();
     } catch (NullPointerException e) {
       assertThat(e).message().isEqualTo("Cell writer should not be null");
     }

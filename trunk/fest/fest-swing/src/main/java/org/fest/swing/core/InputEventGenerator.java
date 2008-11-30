@@ -39,6 +39,7 @@ interface InputEventGenerator {
    * @param c the <code>Component</code> to click on.
    * @param where the position where to press the given mouse button.
    * @param buttons the mouse buttons to press.
+   * @throws ActionFailedException if the component to click is out of the boundaries of the screen.
    */
   void pressMouse(Component c, Point where, int buttons);
 
@@ -48,7 +49,6 @@ interface InputEventGenerator {
    * @param c the given <code>Component</code>.
    * @param x horizontal coordinate relative to the given <code>Component</code>.
    * @param y vertical coordinate relative to the given <code>Component</code>.
-   * @throws ActionFailedException if the given component is not showing and ready for input.
    */
   void moveMouse(Component c, int x, int y);
   

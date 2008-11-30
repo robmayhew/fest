@@ -23,7 +23,7 @@ import org.testng.annotations.Test;
 import static java.awt.Color.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 
 /**
  * Tests for <code>{@link ColorFixture}</code>.
@@ -62,7 +62,7 @@ public class ColorFixtureTest {
     fixture = new ColorFixture(color, "test");
     try {
       fixture.requireEqualTo(RED);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("test");
     }
@@ -81,7 +81,7 @@ public class ColorFixtureTest {
     fixture = new ColorFixture(color, "test");
     try {
       fixture.requireNotEqualTo(BLUE);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("test");
     }
@@ -100,7 +100,7 @@ public class ColorFixtureTest {
     fixture = new ColorFixture(color, "test");
     try {
       fixture.requireEqualTo(BLACK_HEX_CODE);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("test");
     }
@@ -119,7 +119,7 @@ public class ColorFixtureTest {
     fixture = new ColorFixture(color, "test");
     try {
       fixture.requireNotEqualTo(BLUE_HEX_CODE);
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("test");
     }

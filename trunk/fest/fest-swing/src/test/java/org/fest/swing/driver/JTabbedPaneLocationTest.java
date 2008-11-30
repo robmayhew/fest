@@ -33,9 +33,9 @@ import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -74,7 +74,7 @@ public class JTabbedPaneLocationTest {
   public void shouldThrowErrorIfCannotFindTabWithGivenTitle() {
     try {
       location.indexOf(tabbedPane, "three");
-      fail();
+      failWhenExpectingException();
     } catch (LocationUnavailableException e) {
       assertThat(e).message().isEqualTo("Unable to find a tab with title 'three'");
     }
@@ -87,7 +87,7 @@ public class JTabbedPaneLocationTest {
   public void shouldFailIfIndexIsNegative() {
     try {
       location.validateIndex(tabbedPane, -1);
-      fail();
+      failWhenExpectingException();
     } catch (IndexOutOfBoundsException e) {
       assertThat(e).message().isEqualTo("Index <-1> is not within the JTabbedPane bounds of <0> and <1> (inclusive)");
     }
@@ -96,7 +96,7 @@ public class JTabbedPaneLocationTest {
   public void shouldFailIfIndexIsGreaterThanLastTabIndex() {
     try {
       location.validateIndex(tabbedPane, 2);
-      fail();
+      failWhenExpectingException();
     } catch (IndexOutOfBoundsException e) {
       assertThat(e).message().isEqualTo("Index <2> is not within the JTabbedPane bounds of <0> and <1> (inclusive)");
     }

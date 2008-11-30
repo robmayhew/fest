@@ -30,9 +30,9 @@ import org.fest.swing.testing.TableRenderDemo;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.Arrays.format;
 import static org.fest.util.Strings.concat;
@@ -111,7 +111,7 @@ public class TableContentsTest {
   public void shouldFailIfContentNotEqualToExpected() {
     try {
       fixture.requireContents(new String[][] { { "hello" } });
-      fail();
+      failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e).message().contains("property:'contents'")
                              .contains("expected:<[['hello']]>")

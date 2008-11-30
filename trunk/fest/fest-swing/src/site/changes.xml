@@ -6,7 +6,11 @@
   </properties>
   <body>
     <release version="1.0b3" date="TBD" description="Subsequent release">
-      <action dev="alruiz" type="add" issue="213" due-to="Jean-Francois Poilpret">
+      <action dev="alruiz" type="fix" issue="134" due-to="Woody Folsom">
+        org.fest.swing.core.RobotFixture now throws ActionFailedException if the component to click is out of the 
+        boundaries of the screen.
+      </action>
+      <action dev="alruiz" type="fix" issue="213" due-to="Jean-Francois Poilpret">
         org.fest.swing.image.ScreenshotTaker now hides the cursor of the focused JTextComponent when taking a 
         screenshot.
       </action>
