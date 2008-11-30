@@ -46,6 +46,9 @@
         org.fest.swing.driver.JTableTextComponentEditorCellWriter now presses the 'F2' key to start editing a table cell
         that uses a JTextComponent as editor.
       </action>
+      <action dev="alruiz" type="fix" issue="228" due-to="Ken Geis">
+        Modal dialogs do not blocks tests anymore (as long as tests use the event dispatch thread correctly.)
+      </action>
       <action dev="alruiz" type="fix" issue="229" due-to="Michael Schnell">
         Fixed implementation of method 'click' in org.fest.swing.fixture.JTableCellFixture.
       </action>
