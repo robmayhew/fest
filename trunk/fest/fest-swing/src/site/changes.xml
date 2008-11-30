@@ -13,35 +13,35 @@
       <action dev="alruiz" type="fix" issue="214" due-to="Michael Hüttermann">
         Fixed code snippet in Javadoc for class org.fest.swing.data.TableCell. 
       </action>
-      <action dev="alruiz, wanghy" type="fix" issue="216" 
-          due-to="Simeon Fitch, Michael Hüttermann, Jean-Francois Poilpret, Tarjei Skorgenes">
+      <action dev="alruiz, wanghy" type="fix" issue="216" due-to="Tarjei Skorgenes">
         Replaced condition to verify a GuiAction is executed in the event dispatch thread with a 
         java.util.concurrent.CountDownLatch in org.fest.swing.edt.GuiActionRunner
       </action>
-      <action dev="alruiz" type="remove" issue="216" 
-          due-to="Simeon Fitch, Michael Hüttermann, Jean-Francois Poilpret, Tarjei Skorgenes">
+      <action dev="alruiz" type="fix" issue="216" due-to="Simeon Fitch, Michael Hüttermann, Jean-Francois Poilpret">
+        Consolidated fine-grained GUI tasks into new coarsed-grained ones.
+      </action>
+      <action dev="alruiz" type="remove" issue="216">
         Removed org.fest.swing.driver.JListLocation.
       </action>
       <action dev="alruiz, wanghy" type="add" issue="216" 
-          due-to="Simeon Fitch, Michael Hüttermann, Jean-Francois Poilpret, Tarjei Skorgenes">
+        due-to="Simeon Fitch, Michael Hüttermann, Jean-Francois Poilpret">
         Added org.fest.swing.edt.GuiLazyLoadingDescription to lazy-load the description of a 
         org.fest.swing.timing.Condition (which is executed in the event dispatch thread.)
       </action>
-      <action dev="alruiz" type="add" issue="216" 
-          due-to="Simeon Fitch, Michael Hüttermann, Jean-Francois Poilpret, Tarjei Skorgenes">
+      <action dev="alruiz" type="add" issue="216">
         Added annotations RunsInCurrentThread and RunsInEDT in package org.fest.swing.annotations.
       </action>
       <action dev="alruiz" type="fix" issue="222" due-to="Daniel F. Surdyk, III">
         Fixed error message when the index of a JTable cell is out of bounds.
       </action>
-      <action dev="alruiz" type="fix" issue="222" due-to="Daniel F. Surdyk, III">
-        Fixed error message when the index of a JTable cell is out of bounds.
-      </action>
-      <action dev="alruiz" type="add" issue="225" due-to="Jan Zuchhold">
+      <action dev="alruiz" type="fix" issue="225" due-to="Jan Zuchhold">
         org.fest.swing.driver.JTableTextComponentEditorCellWriter now presses the 'F2' key to start editing a table cell
         that uses a JTextComponent as editor.
       </action>
-      <action dev="alruiz" type="add" issue="237" due-to="Simeon Fitch, Michael Hüttermann, vnguyen.sqa">
+      <action dev="alruiz" type="fix" issue="229" due-to="Michael Schnell">
+        Fixed implementation of method 'click' in org.fest.swing.fixture.JTableCellFixture.
+      </action>
+      <action dev="alruiz" type="fix" issue="237" due-to="Simeon Fitch, Michael Hüttermann, vnguyen.sqa">
         All actions performed on GUI components (e.g. click) now throw IllegalStateException if the GUI component is
         not showing on the screen.
       </action>

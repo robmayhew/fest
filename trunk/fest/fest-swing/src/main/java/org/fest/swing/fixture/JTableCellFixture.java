@@ -77,6 +77,7 @@ public class JTableCellFixture implements ItemFixture {
    * @throws IllegalStateException if this fixture's <code>JTable</code> is not showing on the screen.
    */
   public JTableCellFixture select() {
+    table.selectCell(cell);
     return click();
   }
 
@@ -87,7 +88,7 @@ public class JTableCellFixture implements ItemFixture {
    * @throws IllegalStateException if this fixture's <code>JTable</code> is not showing on the screen.
    */
   public JTableCellFixture click() {
-    table.selectCell(cell);
+    table.click(cell, LEFT_BUTTON);
     return this;
   }
 
