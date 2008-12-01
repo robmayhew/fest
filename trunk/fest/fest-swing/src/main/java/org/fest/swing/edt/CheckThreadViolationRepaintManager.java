@@ -47,6 +47,11 @@ public class CheckThreadViolationRepaintManager extends RepaintManager {
 
   /**
    * Creates a new <code>{@link CheckThreadViolationRepaintManager}</code> and sets it as the current repaint manager.
+   * <p>
+   * On Sun JVMs, this method will install the new repaint manager the first time only. Once installed, subsequent calls
+   * to this method will not install new repaint managers. This optimization may not work on non-Sun JVMs, since we use 
+   * reflection to check if a {@code CheckThreadViolationRepaintManager} is already installed.
+   * </p>
    * @return the created (and installed) repaint manager.
    * @see RepaintManager#setCurrentManager(RepaintManager)
    */
@@ -76,13 +81,13 @@ public class CheckThreadViolationRepaintManager extends RepaintManager {
   // it is recommended to pass the complete check
   private boolean completeCheck = true;
   private WeakReference<JComponent> lastComponent;
+  
+  public CheckThreadViolationRepaintManager() {
+    this(true);
+  }
 
   public CheckThreadViolationRepaintManager(boolean completeCheck) {
     this.completeCheck = completeCheck;
-  }
-
-  public CheckThreadViolationRepaintManager() {
-    this(true);
   }
 
   public boolean isCompleteCheck() {
