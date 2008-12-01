@@ -28,6 +28,7 @@ import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.hierarchy.ExistingHierarchy;
+import org.fest.swing.lock.ScreenLock;
 import org.fest.swing.testing.PrintStreamStub;
 import org.fest.swing.testing.TestWindow;
 

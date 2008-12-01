@@ -26,9 +26,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import org.fest.swing.applet.AppletViewer;
-import org.fest.swing.core.ScreenLock;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.exception.UnexpectedException;
+import org.fest.swing.lock.ScreenLock;
 import org.fest.swing.testing.MyApplet;
 
 import static org.fest.assertions.Assertions.assertThat;

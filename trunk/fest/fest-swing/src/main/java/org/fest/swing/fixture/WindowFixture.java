@@ -20,8 +20,8 @@ import java.awt.Window;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
-import org.fest.swing.core.ScreenLock;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.lock.ScreenLock;
 
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
 

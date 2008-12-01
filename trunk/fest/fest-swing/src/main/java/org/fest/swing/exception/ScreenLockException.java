@@ -16,7 +16,7 @@
 package org.fest.swing.exception;
 
 /**
- * Understands an error thrown when acquiring or releasing a <code>{@link org.fest.swing.core.ScreenLock}</code>.
+ * Understands an error thrown when acquiring or releasing a <code>{@link org.fest.swing.lock.ScreenLock}</code>.
  *
  * @author Alex Ruiz
  */

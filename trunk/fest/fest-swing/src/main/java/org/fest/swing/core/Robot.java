@@ -10,6 +10,7 @@ import javax.swing.JPopupMenu;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.hierarchy.ComponentHierarchy;
+import org.fest.swing.lock.ScreenLock;
 
 /**
  * Understands simulation of user events on a GUI <code>{@link Component}</code>.

@@ -26,10 +26,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.ScreenLock;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.listener.WeakEventListener;
+import org.fest.swing.lock.ScreenLock;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
 

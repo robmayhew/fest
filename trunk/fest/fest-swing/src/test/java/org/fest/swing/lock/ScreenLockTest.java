@@ -13,12 +13,13 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core;
+package org.fest.swing.lock;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.exception.ScreenLockException;
+import org.fest.swing.lock.ScreenLock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;

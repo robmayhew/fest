@@ -38,6 +38,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 import org.fest.swing.hierarchy.ExistingHierarchy;
 import org.fest.swing.input.InputState;
+import org.fest.swing.lock.ScreenLock;
 import org.fest.swing.monitor.WindowMonitor;
 import org.fest.swing.util.Pair;
 import org.fest.swing.util.TimeoutWatch;

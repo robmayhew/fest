@@ -26,8 +26,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.ScreenLock;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.lock.ScreenLock;
 import org.fest.swing.testing.TestWindow;
 
 import static org.easymock.EasyMock.expect;

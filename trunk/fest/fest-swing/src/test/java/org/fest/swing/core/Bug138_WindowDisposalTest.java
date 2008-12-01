@@ -29,6 +29,7 @@ import org.testng.annotations.Test;
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.hierarchy.ComponentHierarchy;
+import org.fest.swing.lock.ScreenLock;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;

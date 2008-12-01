@@ -26,6 +26,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.lock.ScreenLock;
 import org.fest.swing.timing.Condition;
 import org.fest.util.Strings;
 
