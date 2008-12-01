@@ -58,7 +58,7 @@
       <action dev="alruiz" type="fix" issue="232" due-to="Ken Geis">
         JTableFixture now correctly finds the index of a column given its identifier.
       </action>
-      <action dev="alruiz" type="fix" issue="235" due-to="RJ">
+      <action dev="alruiz" type="fix" issue="235" due-to="Rick Juneson">
         Method 'findAll' in org.fest.swing.core.BasicComponentMatcher now returns the found components in the same order
         every time it is called.
       </action>
