@@ -10,6 +10,9 @@
         org.fest.swing.core.RobotFixture now throws ActionFailedException if the component to click is out of the 
         boundaries of the screen.
       </action>
+      <action dev="alruiz" type="fix" issue="177" due-to="Juhos Csaba-Zsolt">
+        Fixed JTable cell-editing actions.
+      </action>
       <action dev="alruiz" type="fix" issue="213" due-to="Jean-Francois Poilpret">
         org.fest.swing.image.ScreenshotTaker now hides the cursor of the focused JTextComponent when taking a 
         screenshot.
