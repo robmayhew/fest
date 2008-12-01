@@ -29,7 +29,7 @@ import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
-import org.fest.swing.data.TableCellByColumnName;
+import org.fest.swing.data.TableCellByColumnId;
 import org.fest.swing.driver.BasicJTableCellReader;
 import org.fest.swing.driver.BasicJTableCellWriter;
 import org.fest.swing.driver.JTableDriver;
@@ -158,7 +158,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
    * @throws IndexOutOfBoundsException if the row index in the given cell is out of bounds.
    * @throws ActionFailedException if a column with a matching name could not be found.
    */
-  public JTableCellFixture cell(TableCellByColumnName cell) {
+  public JTableCellFixture cell(TableCellByColumnId cell) {
     return new JTableCellFixture(this, driver.cell(target, cell));
   }
 

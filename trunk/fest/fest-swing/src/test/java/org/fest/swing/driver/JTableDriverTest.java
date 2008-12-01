@@ -33,7 +33,7 @@ import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
-import org.fest.swing.data.TableCellByColumnName;
+import org.fest.swing.data.TableCellByColumnId;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
@@ -268,28 +268,28 @@ public class JTableDriverTest {
 
   @Test(groups = GUI, dataProvider = "columnNames")
   public void shouldReturnCellHavingGivenColumnName(String columnName) {
-    TableCell cell = driver.cell(dragTable, TableCellByColumnName.row(0).columnName(columnName));
+    TableCell cell = driver.cell(dragTable, TableCellByColumnId.row(0).columnId(columnName));
     assertThat(cell.row).isEqualTo(0);
     assertThat(cell.column).isEqualTo(parseInt(columnName));
   }
   
   public void shouldThrowErrorWhenCreatingCellWithColumnNameIfGivenCellIsNull() {
     try {
-      driver.cell(dragTable, (TableCellByColumnName)null);
+      driver.cell(dragTable, (TableCellByColumnId)null);
       failWhenExpectingException();
     } catch (NullPointerException e) {
-      assertThat(e).message().contains("The instance of TableCellByColumnName should not be null");
+      assertThat(e).message().contains("The instance of TableCellByColumnId should not be null");
     }
   }
   
   @Test(groups = GUI, expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorWhenCreatingCellWithColumnNameIfRowIndexIsOutOfBounds() {
-    driver.cell(dragTable, TableCellByColumnName.row(-1).columnName("Hello"));
+    driver.cell(dragTable, TableCellByColumnId.row(-1).columnId("Hello"));
   }
   
   @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorWhenCreatingCellWithColumnNameIfColumnWithMatchingNameNotFound() {
-    driver.cell(dragTable, TableCellByColumnName.row(0).columnName("Hello"));
+    driver.cell(dragTable, TableCellByColumnId.row(0).columnId("Hello"));
   }
 
   @Test(groups = GUI, dataProvider = "columnNames")

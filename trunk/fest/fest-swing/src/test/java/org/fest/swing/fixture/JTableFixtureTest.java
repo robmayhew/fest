@@ -31,7 +31,7 @@ import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.data.TableCell;
-import org.fest.swing.data.TableCellByColumnName;
+import org.fest.swing.data.TableCellByColumnId;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.JTableDriver;
 import org.fest.swing.exception.ActionFailedException;
@@ -115,7 +115,7 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
   public void shouldReturnCellHavingGivenColumnName() {
     final int row = 6;
     final int column = 8;
-    final TableCellByColumnName cellByColumnName = TableCellByColumnName.row(row).columnName("column0");
+    final TableCellByColumnId cellByColumnName = TableCellByColumnId.row(row).columnId("column0");
     new EasyMockTemplate(driver) {
       protected void expectations() {
         expect(driver.cell(target, cellByColumnName)).andReturn(row(row).column(column));

@@ -26,7 +26,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
-import org.fest.swing.data.TableCellByColumnName;
+import org.fest.swing.data.TableCellByColumnId;
 import org.fest.swing.edt.CheckThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
@@ -64,7 +64,7 @@ public class Bug232_WrongColumnIndex {
     removeFirstColumn(window.table);
     robot.waitForIdle();
     JTableFixture table = new JTableFixture(robot, window.table);
-    table.cell(TableCellByColumnName.row(0).columnName("2")).enterValue("foo");
+    table.cell(TableCellByColumnId.row(0).columnId("2")).enterValue("foo");
   }
   
   private static void removeFirstColumn(final JTable table) {

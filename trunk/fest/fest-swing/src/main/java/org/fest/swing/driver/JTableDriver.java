@@ -31,7 +31,7 @@ import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
-import org.fest.swing.data.TableCellByColumnName;
+import org.fest.swing.data.TableCellByColumnId;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
@@ -121,30 +121,30 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
-   * Returns a cell from the given <code>{@link JTable}</code> whose row index matches the given one and column name
+   * Returns a cell from the given <code>{@link JTable}</code> whose row index matches the given one and column id
    * matches the given one.
    * @param table the target <code>JTable</code>.
-   * @param cell contains the given row index and column name to match.
-   * @return a cell from the given <code>JTable</code> whose row index matches the given one and column name
+   * @param cell contains the given row index and column id to match.
+   * @return a cell from the given <code>JTable</code> whose row index matches the given one and column id
    * matches the given one.
-   * @throws NullPointerException if <code>cellByColumnName</code> is <code>null</code>.
+   * @throws NullPointerException if <code>cell</code> is <code>null</code>.
    * @throws IndexOutOfBoundsException if the row index in the given cell is out of bounds.
-   * @throws ActionFailedException if a column with a matching name could not be found.
+   * @throws ActionFailedException if a column with a matching id could not be found.
    */
   @RunsInEDT
-  public TableCell cell(JTable table, TableCellByColumnName cell) {
+  public TableCell cell(JTable table, TableCellByColumnId cell) {
     if (cell == null)
-      throw new NullPointerException("The instance of TableCellByColumnName should not be null");
-    return findCell(table, cell.row, cell.columnName);
+      throw new NullPointerException("The instance of TableCellByColumnId should not be null");
+    return findCell(table, cell.row, cell.columnId);
   }
 
   @RunsInEDT
-  private static TableCell findCell(final JTable table, final int row, final Object columnName) {
+  private static TableCell findCell(final JTable table, final int row, final Object columnId) {
     return execute(new GuiQuery<TableCell>() {
       protected TableCell executeInEDT() {
         validateRowIndex(table, row);
-        int column = columnIndexByIdentifier(table, columnName);
-        if (column < 0) failColumnIndexNotFound(columnName);
+        int column = columnIndexByIdentifier(table, columnId);
+        if (column < 0) failColumnIndexNotFound(columnId);
         return row(row).column(column);
       }
     });
@@ -716,29 +716,29 @@ public class JTableDriver extends JComponentDriver {
   }
 
   /**
-   * Returns the index of the column in the given <code>{@link JTable}</code> whose name matches the given one.
+   * Returns the index of the column in the given <code>{@link JTable}</code> whose id matches the given one.
    * @param table the target <code>JTable</code>.
-   * @param columnName the name of the column to look for.
-   * @return the index of the column whose name matches the given one.
-   * @throws ActionFailedException if a column with a matching name could not be found.
+   * @param columnId the id of the column to look for.
+   * @return the index of the column whose id matches the given one.
+   * @throws ActionFailedException if a column with a matching id could not be found.
    */
   @RunsInEDT
-  public int columnIndex(JTable table, Object columnName) {
-    return findColumnIndex(table, columnName);
+  public int columnIndex(JTable table, Object columnId) {
+    return findColumnIndex(table, columnId);
   }
 
   @RunsInEDT
-  private static int findColumnIndex(final JTable table, final Object columnName) {
+  private static int findColumnIndex(final JTable table, final Object columnId) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {
-        int index = columnIndexByIdentifier(table, columnName);
-        if (index < 0) failColumnIndexNotFound(columnName);
+        int index = columnIndexByIdentifier(table, columnId);
+        if (index < 0) failColumnIndexNotFound(columnId);
         return index;
       }
     });
   }
 
-  private static ActionFailedException failColumnIndexNotFound(Object columnName) {
-    throw actionFailure(concat("Unable to find a column with name ", quote(columnName)));
+  private static ActionFailedException failColumnIndexNotFound(Object columnId) {
+    throw actionFailure(concat("Unable to find a column with id ", quote(columnId)));
   }
 }

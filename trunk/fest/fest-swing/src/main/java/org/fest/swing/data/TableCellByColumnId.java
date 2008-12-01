@@ -29,25 +29,25 @@ import static org.fest.util.Strings.*;
  * <p>
  * Example:
  * <pre>
- * // import static org.fest.swing.fixture.TableCellByColumnName.row;
- * JTableCellFixture cell = dialog.table("records").cell({@link TableCellByColumnName#row(int) row}(3).columnName("firstColumn"));
+ * // import static org.fest.swing.fixture.TableCellByColumnId.row;
+ * JTableCellFixture cell = dialog.table("records").cell({@link TableCellByColumnId#row(int) row}(3).columnId("firstColumn"));
  * </pre>
  * </p>
  * 
  * @author Alex Ruiz
  */
-public class TableCellByColumnName {
+public class TableCellByColumnId {
 
   public final int row;
-  public final Object columnName;
+  public final Object columnId;
 
   /**
-   * Starting point for the creation of a <code>{@link TableCellByColumnName}</code>.
+   * Starting point for the creation of a <code>{@link TableCellByColumnId}</code>.
    * <p>
    * Example:
    * <pre>
-   * // import static org.fest.swing.fixture.TableCellByColumnName.row;
-   * TableCellByColumnName cell = row(5).columnName("hobbyColumn");
+   * // import static org.fest.swing.fixture.TableCellByColumnId.row;
+   * TableCellByColumnId cell = row(5).columnId("hobbyColumn");
    * </pre>
    * </p>
    * @param row the row index of the table cell to create.
@@ -56,7 +56,7 @@ public class TableCellByColumnName {
   public static TableCellBuilder row(int row) { return new TableCellBuilder(row); }
 
   /**
-   * Understands creation of <code>{@link TableCellByColumnName}</code>s.
+   * Understands creation of <code>{@link TableCellByColumnId}</code>s.
    *
    * @author Alex Ruiz
    */
@@ -68,24 +68,24 @@ public class TableCellByColumnName {
     /**
      * Creates a new table cell using the row index specified in <code>{@link TableCellBuilder#row(int)}</code> and the 
      * column index specified as the argument in this method. 
-     * @param columnName the name of the column in the table cell to create.
+     * @param columnId the name of the column in the table cell to create.
      * @return the created table cell.
      */
-    public TableCellByColumnName columnName(Object columnName) { 
-      return new TableCellByColumnName(row, columnName); 
+    public TableCellByColumnId columnId(Object columnId) { 
+      return new TableCellByColumnId(row, columnId); 
     }
   }
   
-  protected TableCellByColumnName(int row, Object columnName) {
+  protected TableCellByColumnId(int row, Object columnId) {
     this.row = row;
-    this.columnName = columnName;
+    this.columnId = columnId;
   }
 
   /** ${@inheritDoc} */
   @Override public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + hashCodeFor(columnName);
+    result = prime * result + hashCodeFor(columnId);
     result = prime * result + row;
     return result;
   }
@@ -94,13 +94,13 @@ public class TableCellByColumnName {
   @Override public boolean equals(Object obj) {
     if (this == obj) return true;
     if (obj == null) return false;
-    if (!(obj instanceof TableCellByColumnName)) return false;
-    TableCellByColumnName other = (TableCellByColumnName) obj;
-    if (!Objects.areEqual(columnName, other.columnName)) return false;
+    if (!(obj instanceof TableCellByColumnId)) return false;
+    TableCellByColumnId other = (TableCellByColumnId) obj;
+    if (!Objects.areEqual(columnId, other.columnId)) return false;
     return row == other.row;
   }
 
   @Override public String toString() {
-    return concat("[row=", valueOf(row), ", columnName=", quote(columnName), "]");
+    return concat("[row=", valueOf(row), ", columnId=", quote(columnId), "]");
   }
 }

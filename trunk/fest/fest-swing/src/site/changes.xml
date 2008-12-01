@@ -70,6 +70,9 @@
       <action dev="alruiz" type="fix" issue="240">
         Moved class ScreenLock from package org.fest.swing.core to org.fest.swing.lock to remove circular dependency.
       </action>
+      <action dev="alruiz" type="fix" issue="241">
+        Renamed class TableCellByColumnName (in package org.fest.swing.data) to TableCellByColumnId.
+      </action>
     </release>
     <release version="1.0b2" date="2008-10-16" description="Subsequent release">
       <action dev="alruiz" type="add" issue="109">
