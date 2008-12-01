@@ -17,7 +17,7 @@ package org.fest.swing.core;
 
 import java.awt.Component;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.fest.swing.annotation.RunsInEDT;
@@ -36,7 +36,7 @@ final class FinderDelegate {
 
   @RunsInEDT
   Collection<Component> find(ComponentHierarchy h, ComponentMatcher m)  {
-    Set<Component> found = new HashSet<Component>();
+    Set<Component> found = new LinkedHashSet<Component>();
     for (Object o : rootsOf(h)) find(h, m, (Component)o, found);
     return found;
   }

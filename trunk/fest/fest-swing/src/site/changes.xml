@@ -52,6 +52,10 @@
       <action dev="alruiz" type="fix" issue="229" due-to="Michael Schnell">
         Fixed implementation of method 'click' in org.fest.swing.fixture.JTableCellFixture.
       </action>
+      <action dev="alruiz" type="fix" issue="235" due-to="RJ">
+        Method 'findAll' in org.fest.swing.core.BasicComponentMatcher now returns the found components in the same order
+        every time it is called.
+      </action>
       <action dev="alruiz" type="fix" issue="237" due-to="Simeon Fitch, Michael Hüttermann, vnguyen.sqa">
         All actions performed on GUI components (e.g. click) now throw IllegalStateException if the GUI component is
         not showing on the screen.
