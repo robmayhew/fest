@@ -37,7 +37,7 @@ final class JTableColumnByIdentifierQuery {
   static int columnIndexByIdentifier(final JTable table, final Object identifier) {
     try {
       TableColumn column = table.getColumn(identifier);
-      return column.getModelIndex();
+      return table.convertColumnIndexToView(column.getModelIndex());
     } catch (IllegalArgumentException e) {
       return -1;
     }
