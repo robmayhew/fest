@@ -27,7 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
@@ -49,7 +49,7 @@ public class WindowEventQueueMappingTest {
   private Map<EventQueue, Map<Window, Boolean>> queueMap;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
 
   @BeforeMethod public void setUp() {

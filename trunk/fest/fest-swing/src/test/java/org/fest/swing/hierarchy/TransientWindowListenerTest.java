@@ -25,7 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.testing.TestDialog;
 import org.fest.swing.testing.TestWindow;
 
@@ -49,7 +49,7 @@ public class TransientWindowListenerTest {
   private TestWindow parent;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
 
   @BeforeMethod public void setUp() {

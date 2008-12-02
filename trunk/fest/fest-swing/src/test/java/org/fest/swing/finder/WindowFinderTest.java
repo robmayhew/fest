@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.finder.LauncherWindow.DialogToLaunch;
 import org.fest.swing.finder.LauncherWindow.WindowToLaunch;
@@ -57,7 +57,7 @@ public class WindowFinderTest {
   private LauncherWindow launcherWindow;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
   
   @BeforeMethod public void setUp() {

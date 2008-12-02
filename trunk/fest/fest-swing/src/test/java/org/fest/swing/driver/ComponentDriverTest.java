@@ -29,7 +29,7 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.core.Robot;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.ClickRecorder;
@@ -75,7 +75,7 @@ public class ComponentDriverTest {
   private JTextField textField;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
 
   @BeforeMethod public void setUp() {

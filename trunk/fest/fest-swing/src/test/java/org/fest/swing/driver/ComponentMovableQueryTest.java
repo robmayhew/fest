@@ -18,7 +18,7 @@ package org.fest.swing.driver;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.factory.JButtons.button;
@@ -35,7 +35,7 @@ import static org.fest.swing.factory.JInternalFrames.internalFrame;
 @Test public class ComponentMovableQueryTest {
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
   
   public void shouldReturnIsMovableIfComponentIsFrame() {

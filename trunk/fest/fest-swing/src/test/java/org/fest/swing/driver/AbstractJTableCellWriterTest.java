@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 import org.testng.annotations.*;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -47,7 +47,7 @@ public class AbstractJTableCellWriterTest {
   private AbstractJTableCellWriter writer;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
   
   @BeforeMethod public void setUp() {

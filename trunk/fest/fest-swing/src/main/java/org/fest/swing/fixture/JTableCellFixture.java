@@ -78,7 +78,7 @@ public class JTableCellFixture implements ItemFixture {
    */
   public JTableCellFixture select() {
     table.selectCell(cell);
-    return click();
+    return this;
   }
 
   /**

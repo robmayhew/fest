@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.MethodInvocations;
 import org.fest.swing.testing.TestWindow;
@@ -53,7 +53,7 @@ public class JSpinnerSetValueTaskTest {
   private MySpinner spinner;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
   
   @BeforeMethod public void setUp() {

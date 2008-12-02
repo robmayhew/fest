@@ -26,7 +26,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import org.fest.swing.applet.AppletViewer;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.lock.ScreenLock;
 import org.fest.swing.testing.MyApplet;
@@ -47,7 +47,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   private AppletViewer viewer;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
 
   @AfterMethod public void tearDown() {

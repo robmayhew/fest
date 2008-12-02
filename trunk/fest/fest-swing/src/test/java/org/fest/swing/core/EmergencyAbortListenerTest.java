@@ -25,7 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 
 import static java.awt.AWTEvent.KEY_EVENT_MASK;
 import static java.awt.event.InputEvent.*;
@@ -49,7 +49,7 @@ import static org.fest.swing.factory.JButtons.button;
   private EmergencyAbortListener listener;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
   
   @BeforeMethod public void setUp() {

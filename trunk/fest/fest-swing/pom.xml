@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fest</groupId>
   <artifactId>fest-swing</artifactId>
-  <version>1.0b3-SNAPSHOT-2</version>
+  <version>1.0rc</version>
   <name>FEST Swing</name>
   <description>Fluent interface for functional GUI testing
   </description>
@@ -104,6 +104,12 @@
       <groupId>net.jcip</groupId>
       <artifactId>jcip-annotations</artifactId>
       <version>1.0</version>    
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>swinghelper</groupId>
+      <artifactId>debug</artifactId>
+      <version>1.0</version>   
       <scope>compile</scope>
     </dependency>
   </dependencies>

@@ -20,7 +20,7 @@ import javax.swing.JButton;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.factory.JButtons.button;
@@ -34,7 +34,7 @@ import static org.fest.swing.factory.JLabels.label;
 public class GenericTypeMatcherTest {
   
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
 
   @Test public void shouldReturnTrueIfTypeAndSearchCriteriaMatch() {

@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.FluentDimension;
 import org.fest.swing.testing.FluentPoint;
@@ -56,7 +56,7 @@ public class FrameDriverTest {
   private FrameDriver driver;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
 
   @BeforeMethod public void setUp() {

@@ -28,7 +28,7 @@ import org.testng.annotations.*;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JTextComponentDriver;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.testing.KeyRecorder;
@@ -61,7 +61,7 @@ public abstract class KeyStrokeMappingProviderTestCase {
   private Collection<KeyStrokeMapping> keyStrokeMappings;
 
   @BeforeClass public final void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
     verifyTestCanRun();
     keyStrokeMappings = keyStrokeMappingsToTest();
   }

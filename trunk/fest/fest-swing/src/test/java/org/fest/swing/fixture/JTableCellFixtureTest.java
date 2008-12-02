@@ -81,7 +81,7 @@ public class JTableCellFixtureTest {
   @Test public void shouldClick() {
     new EasyMockTemplate(table) {
       protected void expectations() {
-        expect(table.selectCell(cell)).andReturn(table);
+        expect(table.click(cell, LEFT_BUTTON)).andReturn(table);
       }
 
       protected void codeToTest() {

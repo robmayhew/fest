@@ -30,7 +30,7 @@ import javax.swing.*;
 import org.testng.annotations.*;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -71,7 +71,7 @@ public class RobotFixtureTest {
   private JTextField textFieldWithoutPopup;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
   
   @BeforeMethod public void setUp() {

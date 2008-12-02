@@ -28,7 +28,7 @@ import java.util.List;
 import org.testng.annotations.*;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.listener.WeakEventListener;
 import org.fest.swing.testing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
@@ -57,7 +57,7 @@ public class ContextMonitorTest {
   private TestWindow window;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
 
   @BeforeMethod public void setUp() throws Exception {

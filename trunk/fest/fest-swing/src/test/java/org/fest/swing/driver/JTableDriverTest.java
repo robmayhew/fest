@@ -34,7 +34,7 @@ import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
 import org.fest.swing.data.TableCellByColumnId;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
@@ -89,7 +89,7 @@ public class JTableDriverTest {
   private MyWindow window;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
   
   @BeforeMethod public void setUp() {
@@ -306,7 +306,7 @@ public class JTableDriverTest {
       driver.columnIndex(dragTable, "Hello World");
       failWhenExpectingException();
     } catch (ActionFailedException e) {
-      assertThat(e).message().contains("Unable to find a column with name 'Hello World");
+      assertThat(e).message().contains("Unable to find a column with id 'Hello World");
     }
   }
 

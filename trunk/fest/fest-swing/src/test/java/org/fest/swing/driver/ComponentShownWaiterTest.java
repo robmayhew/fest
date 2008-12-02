@@ -22,7 +22,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.testing.StopWatch;
 import org.fest.swing.testing.TestWindow;
@@ -45,7 +45,7 @@ public class ComponentShownWaiterTest {
   private TestWindow window;
   
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
   
   @BeforeMethod public void setUp() {

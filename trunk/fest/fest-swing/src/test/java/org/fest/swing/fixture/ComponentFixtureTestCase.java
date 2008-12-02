@@ -23,7 +23,7 @@ import org.fest.swing.core.ComponentFinder;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Settings;
 import org.fest.swing.driver.ComponentDriver;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
@@ -44,7 +44,7 @@ public abstract class ComponentFixtureTestCase<T extends Component> {
   private Settings settings;
   
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
   
   @BeforeMethod public final void setUp() {

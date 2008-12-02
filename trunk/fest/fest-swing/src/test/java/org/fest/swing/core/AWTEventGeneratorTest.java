@@ -19,7 +19,7 @@ import java.awt.Toolkit;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.input.InputState;
 import org.fest.swing.monitor.WindowMonitor;
 
@@ -38,7 +38,7 @@ public class AWTEventGeneratorTest extends InputEventGeneratorTestCase {
   private AWTEventGenerator generator;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
 
   @Override void onSetUp() throws Exception {

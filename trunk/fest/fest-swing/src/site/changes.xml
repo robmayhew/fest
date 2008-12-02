@@ -38,6 +38,9 @@
       <action dev="alruiz" type="add" issue="216">
         Added annotations RunsInCurrentThread and RunsInEDT in package org.fest.swing.annotations.
       </action>
+      <action dev="alruiz" type="add" issue="216">
+        Added annotations from "Java Concurrency in Practice" as dependency.
+      </action>
       <action dev="alruiz" type="fix" issue="219" due-to="Matthias Otterbach">
         Fixed implementation of method 'enterValue(JTable, int, int, String)' in
         org.fest.swing.driver.JTableTextComponentEditorCellWriter.
@@ -75,6 +78,15 @@
       </action>
       <action dev="alruiz" type="fix" issue="241">
         Renamed class TableCellByColumnName (in package org.fest.swing.data) to TableCellByColumnId.
+      </action>
+      <action dev="alruiz" type="fix" issue="241">
+        Renamed class TableCellByColumnName (in package org.fest.swing.data) to TableCellByColumnId.
+      </action>
+      <action dev="alruiz" type="add" issue="242">
+        Added SwingHelper project as a dependency.
+      </action>
+      <action dev="alruiz" type="add" issue="242">
+        Added org.fest.swing.edt.FailOnThreadViolationRepaintManager to force tests that violate EDT access to fail.
       </action>
     </release>
     <release version="1.0b2" date="2008-10-16" description="Subsequent release">

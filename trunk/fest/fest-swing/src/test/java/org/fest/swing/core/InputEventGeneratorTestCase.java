@@ -26,7 +26,7 @@ import javax.swing.text.JTextComponent;
 import org.testng.annotations.*;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.lock.ScreenLock;
 import org.fest.swing.testing.ClickRecorder;
@@ -57,7 +57,7 @@ public abstract class InputEventGeneratorTestCase {
   protected static final String MOVE_MOUSE_TEST = "Move Mouse Test";
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
   
   @BeforeMethod public void setUp() throws Exception {

@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 import org.fest.assertions.Assertions;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -48,7 +48,7 @@ public class JOptionPaneTitleQueryTest {
   private MyOptionPane optionPane;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
   
   @BeforeMethod public void setUp() {

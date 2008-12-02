@@ -30,7 +30,7 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.ComponentFinder;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Settings;
-import org.fest.swing.edt.CheckThreadViolationRepaintManager;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.easymock.EasyMock.expect;
@@ -55,7 +55,7 @@ public class ComponentFixtureTest {
   private JTextField target;
 
   @BeforeClass public void setUpOnce() {
-    CheckThreadViolationRepaintManager.install();
+    FailOnThreadViolationRepaintManager.install();
   }
   
   @BeforeMethod public void setUp() {
