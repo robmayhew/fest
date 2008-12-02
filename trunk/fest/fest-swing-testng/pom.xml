@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fest</groupId>
   <artifactId>fest-swing-testng</artifactId>
-  <version>1.0b2</version>
+  <version>1.0rc</version>
   <name>FEST Swing - TestNG Extension</name>
   <description>TestNG-specific extension for FEST-Swing</description>
   <inceptionYear>2007</inceptionYear>
@@ -44,6 +44,12 @@
       <groupId>fest</groupId>
       <artifactId>fest-swing</artifactId>
       <version>1.0b2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>swinghelper</groupId>
+      <artifactId>debug</artifactId>
+      <version>1.0</version>   
       <scope>compile</scope>
     </dependency>
     <dependency>

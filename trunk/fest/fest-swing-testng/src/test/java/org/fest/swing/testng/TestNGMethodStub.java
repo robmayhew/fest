@@ -34,7 +34,7 @@ public class TestNGMethodStub implements ITestNGMethod {
   private Method method;
 
   /** @see org.testng.ITestNGMethod#addMethodDependedUpon(java.lang.String) */
-  public void addMethodDependedUpon(String methodName) {}
+  public void addMethodDependedUpon(String newMethodName) {}
 
   /** @see org.testng.ITestNGMethod#canRunFromClass(org.testng.IClass) */
   public boolean canRunFromClass(IClass testClass) {
