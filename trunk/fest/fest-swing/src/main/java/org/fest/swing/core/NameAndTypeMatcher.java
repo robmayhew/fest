@@ -29,11 +29,31 @@ import static org.fest.util.Strings.*;
  *
  * @author Alex Ruiz
  */
-public final class NameAndTypeMatcher implements ComponentMatcher {
+public final class NameAndTypeMatcher extends AbstractComponentMatcher {
 
   private final String name;
   private final Class<? extends Component> type;
-  private final boolean requireShowing;
+
+  /**
+   * Creates a new <code>{@link NameAndTypeMatcher}</code>. The component to match does not have to be showing.
+   * @param name the name of the component we are looking for.
+   * @throws NullPointerException if the given name is <code>null</code>.
+   * @throws IllegalArgumentException if the given name is empty.
+   */
+  public NameAndTypeMatcher(String name) {
+    this(name, false);
+  }
+
+  /**
+   * Creates a new <code>{@link NameAndTypeMatcher}</code>.
+   * @param name the name of the component we are looking for.
+   * @param requireShowing indicates if the component to match should be showing or not.
+   * @throws NullPointerException if the given name is <code>null</code>.
+   * @throws IllegalArgumentException if the given name is empty.
+   */
+  public NameAndTypeMatcher(String name, boolean requireShowing) {
+    this(name, Component.class, requireShowing);
+  }
 
   /**
    * Creates a new <code>{@link NameAndTypeMatcher}</code>. The component to match does not have to be showing.
@@ -57,12 +77,12 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
    * @throws NullPointerException if the given type is <code>null</code>.
    */
   public NameAndTypeMatcher(String name, Class<? extends Component> type, boolean requireShowing) {
+    super(requireShowing);
     if (name == null) throw new NullPointerException("The name of the component to find should not be null");
     if (isEmpty(name)) throw new IllegalArgumentException("The name of the component to find should not be empty");
     if (type == null) throw new NullPointerException("The type of component to find should not be null");
     this.name = name;
     this.type = type;
-    this.requireShowing = requireShowing;
   }
   
   /** 
@@ -77,7 +97,7 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
    */
   @RunsInCurrentThread
   public boolean matches(Component c) {
-    return areEqual(name, c.getName()) && type.isAssignableFrom(c.getClass()) && (!requireShowing || c.isShowing());
+    return areEqual(name, c.getName()) && type.isInstance(c) && requireShowingMatches(c);
   }
   
   @Override public String toString() {
@@ -85,7 +105,7 @@ public final class NameAndTypeMatcher implements ComponentMatcher {
         getClass().getName(), "[",
         "name=", quote(name), ", ",
         "type=", type.getName(), ", ",
-        "requireShowing=", valueOf(requireShowing), 
+        "requireShowing=", valueOf(requireShowing()), 
         "]"
     );
   }

@@ -88,6 +88,9 @@
       <action dev="alruiz" type="add" issue="242">
         Added org.fest.swing.edt.FailOnThreadViolationRepaintManager to force tests that violate EDT access to fail.
       </action>
+      <action dev="alruiz" type="remove">
+        Consolidated org.fest.swing.core.NameMatcher and org.fest.swing.core.NameAndTypeMatcher into one matcher.
+      </action>
     </release>
     <release version="1.0b2" date="2008-10-16" description="Subsequent release">
       <action dev="alruiz" type="add" issue="109">

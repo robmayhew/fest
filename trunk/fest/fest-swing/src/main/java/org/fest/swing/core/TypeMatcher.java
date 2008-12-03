@@ -66,7 +66,7 @@ public final class TypeMatcher extends AbstractComponentMatcher {
    */
   @RunsInCurrentThread
   public boolean matches(Component c) {
-    return type.isAssignableFrom(c.getClass()) && isShowingMatches(c);
+    return type.isAssignableFrom(c.getClass()) && requireShowingMatches(c);
   }
 
   @Override public String toString() {

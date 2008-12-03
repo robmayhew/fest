@@ -59,7 +59,7 @@ public abstract class GenericTypeMatcher<T extends Component> extends AbstractCo
   public final boolean matches(Component c) {
     if (c == null) return false;
     try {
-      return (isShowingMatches(c)) && isMatching(cast(c));
+      return (requireShowingMatches(c)) && isMatching(cast(c));
     } catch(ClassCastException ignored) {
       return false;
     }

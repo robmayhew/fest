@@ -51,7 +51,7 @@ public abstract class AbstractComponentMatcher implements ComponentMatcher {
   public final boolean requireShowing() { return requireShowing; }
 
   /**
-   * Indicates if the value of the "isShowing" property of the given component matches the value specified in this
+   * Indicates if the value of the "showing" property of the given component matches the value specified in this
    * matcher.
    * <p>
    * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
@@ -62,7 +62,7 @@ public abstract class AbstractComponentMatcher implements ComponentMatcher {
    * specified in this matcher, <code>false</code> otherwise.
    */
   @RunsInCurrentThread
-  protected final boolean isShowingMatches(Component c) {
+  protected final boolean requireShowingMatches(Component c) {
     return !requireShowing || c.isShowing();
   }
 }

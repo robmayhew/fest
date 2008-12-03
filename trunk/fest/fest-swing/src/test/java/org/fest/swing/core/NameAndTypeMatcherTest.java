@@ -15,9 +15,10 @@
  */
 package org.fest.swing.core;
 
+import javax.swing.JButton;
 import javax.swing.JTextField;
-import javax.swing.text.JTextComponent;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -25,84 +26,136 @@ import org.testng.annotations.Test;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.lock.ScreenLock;
+import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link NameAndTypeMatcher}</code>.
  *
  * @author Alex Ruiz
  */
+@Test(groups = GUI)
 public class NameAndTypeMatcherTest {
   
-  private MyTextField textField;
-  
+  private static final String NAME = "my button";
+
+  private MyWindow window;
+
   @BeforeClass public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
   }
 
   @BeforeMethod public void setUp() {
-    textField = MyTextField.createNew("myTextField");
+    ScreenLock.instance().acquire(this);
+    window = MyWindow.createNew();
   }
-  
-  @Test(expectedExceptions = NullPointerException.class) 
+
+  @AfterMethod public void tearDown() {
+    try {
+      window.destroy();
+    } finally {
+       ScreenLock.instance().release(this);
+    }
+  }
+
+  @Test public void shouldReturnTrueIfNameMatches() {
+    NameAndTypeMatcher matcher = new NameAndTypeMatcher(NAME);
+    assertThat(matcher.matches(window.button)).isTrue();
+  }
+
+  @Test public void shouldReturnFalseIsNameDoesNotMatch() {
+    NameAndTypeMatcher matcher = new NameAndTypeMatcher("Hello");
+    assertThat(matcher.matches(window.button)).isFalse();
+  }
+
+  @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfNameIsNull() {
-    new NameAndTypeMatcher(null, JTextComponent.class);
+    new NameAndTypeMatcher(null);
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void shouldThrowErrorIfNameIsEmpty() {
+    new NameAndTypeMatcher("");
+  }
+
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfTypeIsNull() {
+    new NameAndTypeMatcher(NAME, null);
+  }
+
+  public void shouldReturnTrueIfNameMatchesWhenNotRequiringShowing() {
+    window.display();
+    NameAndTypeMatcher matcher = new NameAndTypeMatcher(NAME);
+    assertThat(matcher.matches(window.button)).isTrue();
+  }
+
+  public void shouldReturnFalseIfNameDoesNotMatchAndWhenRequiringShowing() {
+    window.display();
+    NameAndTypeMatcher matcher = new NameAndTypeMatcher("b", true);
+    assertThat(matcher.matches(window.button)).isFalse();
+  }
+
+  public void shouldReturnFalseIfNameMatchesAndIsShowingDoesNotMatch() {
+    NameAndTypeMatcher matcher = new NameAndTypeMatcher(NAME, true);
+    assertThat(matcher.matches(window.button)).isFalse();
+  }
+
+  public void shouldReturnFalseIfNameAndIsShowingDoNotMatch() {
+    NameAndTypeMatcher matcher = new NameAndTypeMatcher("b", true);
+    assertThat(matcher.matches(window.button)).isFalse();
+  }
+
+  public void shouldReturnTrueIfNameAndTypeMatchWhenNotRequiringShowing() {
+    window.display();
+    NameAndTypeMatcher matcher = new NameAndTypeMatcher(NAME, JButton.class);
+    assertThat(matcher.matches(window.button)).isTrue();
+  }
+
+  public void shouldReturnFalseIfTypeDoesNotMatchAndWhenRequiringShowing() {
+    window.display();
+    NameAndTypeMatcher matcher = new NameAndTypeMatcher("b", JTextField.class, true);
+    assertThat(matcher.matches(window.button)).isFalse();
+  }
+
+  public void shouldReturnFalseIfNameAndTypeMatchAndIsShowingDoesNotMatch() {
+    NameAndTypeMatcher matcher = new NameAndTypeMatcher(NAME, JButton.class, true);
+    assertThat(matcher.matches(window.button)).isFalse();
+  }
+
+  public void shouldReturnFalseIfNothingMatches() {
+    NameAndTypeMatcher matcher = new NameAndTypeMatcher("b", JTextField.class, true);
+    assertThat(matcher.matches(window.button)).isFalse();
   }
   
-  @Test(expectedExceptions = IllegalArgumentException.class) 
-  public void shouldThrowErrorIfNameIsEmpty() {
-    new NameAndTypeMatcher("", JTextComponent.class);
+  public void shouldImplementToString() {
+    NameAndTypeMatcher matcher = new NameAndTypeMatcher(NAME);
+    assertThat(matcher.toString()).contains("name='my button'")
+                                  .contains("type=java.awt.Component")
+                                  .contains("requireShowing=false");
   }
 
-  @Test(expectedExceptions = NullPointerException.class) 
-  public void shouldThrowErrorIfTypeIsNull() {
-    new NameAndTypeMatcher("myTextField", null);
-  }
-
-  @Test public void shouldFindComponentWithIfNameTypeAndShowingMatch() {
-    NameAndTypeMatcher matcher = new NameAndTypeMatcher("myTextField", JTextComponent.class, true);
-    textField.setShowing(true);
-    assertThat(matcher.matches(textField)).isTrue();
-  }  
-
-  @Test public void shouldNotFindShowingComponentIfNameAndTypeMatchButNotShowing() {
-    NameAndTypeMatcher matcher = new NameAndTypeMatcher("myTextField", JTextComponent.class, true);
-    textField.setShowing(false);
-    assertThat(matcher.matches(textField)).isFalse();
-  }  
-
-  @Test public void shouldFindShowingComponentIfNameAndTypeMatch() {
-    NameAndTypeMatcher matcher = new NameAndTypeMatcher("myTextField", JTextComponent.class);
-    textField.setShowing(false);
-    assertThat(matcher.matches(textField)).isTrue();
-  }  
-
-  private static class MyTextField extends JTextField {
+  protected static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    private boolean showing;
+    final JButton button = new JButton("A Button");
 
     @RunsInEDT
-    static MyTextField createNew(final String name) {
-      return execute(new GuiQuery<MyTextField>() {
-        protected MyTextField executeInEDT() {
-          MyTextField textField = new MyTextField();
-          textField.setName(name);
-          return textField;
+    static MyWindow createNew() {
+      return execute(new GuiQuery<MyWindow>() {
+        protected MyWindow executeInEDT() {
+          return new MyWindow();
         }
       });
     }
-    
-    private MyTextField() {}
-    
-    public synchronized void setShowing(boolean showing) {
-      this.showing = showing;
-    }
-    
-    @Override public boolean isShowing() {
-      return showing;
+
+    private MyWindow() {
+      super(NameAndTypeMatcherTest.class);
+      addComponents(button);
+      button.setName(NAME);
     }
   }
 }
