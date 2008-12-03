@@ -110,7 +110,7 @@ public final class BasicComponentFinder implements ComponentFinder {
   /** {@inheritDoc} */
   @RunsInEDT
   public <T extends Component> T findByName(String name, Class<T> type, boolean showing) {
-    Component found = find(new NameAndTypeMatcher(name, type, showing));
+    Component found = find(new NameMatcher(name, type, showing));
     return type.cast(found);
   }
 
@@ -123,7 +123,7 @@ public final class BasicComponentFinder implements ComponentFinder {
   /** {@inheritDoc} */
   @RunsInEDT
   public Component findByName(String name, boolean showing) {
-    return find(new NameAndTypeMatcher(name, showing));
+    return find(new NameMatcher(name, showing));
   }
 
   /** {@inheritDoc} */
@@ -149,7 +149,7 @@ public final class BasicComponentFinder implements ComponentFinder {
   /** {@inheritDoc} */
   @RunsInEDT
   public <T extends Component> T findByName(Container root, String name, Class<T> type, boolean showing) {
-    Component found = find(root, new NameAndTypeMatcher(name, type, showing));
+    Component found = find(root, new NameMatcher(name, type, showing));
     return type.cast(found);
   }
 
@@ -162,7 +162,7 @@ public final class BasicComponentFinder implements ComponentFinder {
   /** {@inheritDoc} */
   @RunsInEDT
   public Component findByName(Container root, String name, boolean showing) {
-    return find(root, new NameAndTypeMatcher(name, showing));
+    return find(root, new NameMatcher(name, showing));
   }
 
   /** {@inheritDoc} */

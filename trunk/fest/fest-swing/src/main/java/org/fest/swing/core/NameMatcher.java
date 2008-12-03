@@ -25,45 +25,45 @@ import static org.fest.util.Objects.areEqual;
 import static org.fest.util.Strings.*;
 
 /**
- * Understands <code>{@link java.awt.Component}</code> matching by name and type.
+ * Understands <code>{@link java.awt.Component}</code> matching by name and (optionally) by type.
  *
  * @author Alex Ruiz
  */
-public final class NameAndTypeMatcher extends AbstractComponentMatcher {
+public final class NameMatcher extends AbstractComponentMatcher {
 
   private final String name;
   private final Class<? extends Component> type;
 
   /**
-   * Creates a new <code>{@link NameAndTypeMatcher}</code>. The component to match does not have to be showing.
+   * Creates a new <code>{@link NameMatcher}</code>. The component to match does not have to be showing.
    * @param name the name of the component we are looking for.
    * @throws NullPointerException if the given name is <code>null</code>.
    * @throws IllegalArgumentException if the given name is empty.
    */
-  public NameAndTypeMatcher(String name) {
+  public NameMatcher(String name) {
     this(name, false);
   }
 
   /**
-   * Creates a new <code>{@link NameAndTypeMatcher}</code>.
+   * Creates a new <code>{@link NameMatcher}</code>.
    * @param name the name of the component we are looking for.
    * @param requireShowing indicates if the component to match should be showing or not.
    * @throws NullPointerException if the given name is <code>null</code>.
    * @throws IllegalArgumentException if the given name is empty.
    */
-  public NameAndTypeMatcher(String name, boolean requireShowing) {
+  public NameMatcher(String name, boolean requireShowing) {
     this(name, Component.class, requireShowing);
   }
 
   /**
-   * Creates a new <code>{@link NameAndTypeMatcher}</code>. The component to match does not have to be showing.
+   * Creates a new <code>{@link NameMatcher}</code>. The component to match does not have to be showing.
    * @param name the name of the component we are looking for.
    * @param type the type of the component we are looking for.
    * @throws NullPointerException if the given name is empty.
    * @throws IllegalArgumentException if the given name is empty.
    * @throws NullPointerException if the given type is <code>null</code>.
    */
-  public NameAndTypeMatcher(String name, Class<? extends Component> type) {
+  public NameMatcher(String name, Class<? extends Component> type) {
     this(name, type, false);
   }
 
@@ -76,7 +76,7 @@ public final class NameAndTypeMatcher extends AbstractComponentMatcher {
    * @throws IllegalArgumentException if the given name is empty.
    * @throws NullPointerException if the given type is <code>null</code>.
    */
-  public NameAndTypeMatcher(String name, Class<? extends Component> type, boolean requireShowing) {
+  public NameMatcher(String name, Class<? extends Component> type, boolean requireShowing) {
     super(requireShowing);
     if (name == null) throw new NullPointerException("The name of the component to find should not be null");
     if (isEmpty(name)) throw new IllegalArgumentException("The name of the component to find should not be empty");

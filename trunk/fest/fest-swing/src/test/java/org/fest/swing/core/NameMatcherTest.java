@@ -34,12 +34,12 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
- * Tests for <code>{@link NameAndTypeMatcher}</code>.
+ * Tests for <code>{@link NameMatcher}</code>.
  *
  * @author Alex Ruiz
  */
 @Test(groups = GUI)
-public class NameAndTypeMatcherTest {
+public class NameMatcherTest {
   
   private static final String NAME = "my button";
 
@@ -63,76 +63,76 @@ public class NameAndTypeMatcherTest {
   }
 
   @Test public void shouldReturnTrueIfNameMatches() {
-    NameAndTypeMatcher matcher = new NameAndTypeMatcher(NAME);
+    NameMatcher matcher = new NameMatcher(NAME);
     assertThat(matcher.matches(window.button)).isTrue();
   }
 
   @Test public void shouldReturnFalseIsNameDoesNotMatch() {
-    NameAndTypeMatcher matcher = new NameAndTypeMatcher("Hello");
+    NameMatcher matcher = new NameMatcher("Hello");
     assertThat(matcher.matches(window.button)).isFalse();
   }
 
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfNameIsNull() {
-    new NameAndTypeMatcher(null);
+    new NameMatcher(null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowErrorIfNameIsEmpty() {
-    new NameAndTypeMatcher("");
+    new NameMatcher("");
   }
 
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfTypeIsNull() {
-    new NameAndTypeMatcher(NAME, null);
+    new NameMatcher(NAME, null);
   }
 
   public void shouldReturnTrueIfNameMatchesWhenNotRequiringShowing() {
     window.display();
-    NameAndTypeMatcher matcher = new NameAndTypeMatcher(NAME);
+    NameMatcher matcher = new NameMatcher(NAME);
     assertThat(matcher.matches(window.button)).isTrue();
   }
 
   public void shouldReturnFalseIfNameDoesNotMatchAndWhenRequiringShowing() {
     window.display();
-    NameAndTypeMatcher matcher = new NameAndTypeMatcher("b", true);
+    NameMatcher matcher = new NameMatcher("b", true);
     assertThat(matcher.matches(window.button)).isFalse();
   }
 
   public void shouldReturnFalseIfNameMatchesAndIsShowingDoesNotMatch() {
-    NameAndTypeMatcher matcher = new NameAndTypeMatcher(NAME, true);
+    NameMatcher matcher = new NameMatcher(NAME, true);
     assertThat(matcher.matches(window.button)).isFalse();
   }
 
   public void shouldReturnFalseIfNameAndIsShowingDoNotMatch() {
-    NameAndTypeMatcher matcher = new NameAndTypeMatcher("b", true);
+    NameMatcher matcher = new NameMatcher("b", true);
     assertThat(matcher.matches(window.button)).isFalse();
   }
 
   public void shouldReturnTrueIfNameAndTypeMatchWhenNotRequiringShowing() {
     window.display();
-    NameAndTypeMatcher matcher = new NameAndTypeMatcher(NAME, JButton.class);
+    NameMatcher matcher = new NameMatcher(NAME, JButton.class);
     assertThat(matcher.matches(window.button)).isTrue();
   }
 
   public void shouldReturnFalseIfTypeDoesNotMatchAndWhenRequiringShowing() {
     window.display();
-    NameAndTypeMatcher matcher = new NameAndTypeMatcher("b", JTextField.class, true);
+    NameMatcher matcher = new NameMatcher("b", JTextField.class, true);
     assertThat(matcher.matches(window.button)).isFalse();
   }
 
   public void shouldReturnFalseIfNameAndTypeMatchAndIsShowingDoesNotMatch() {
-    NameAndTypeMatcher matcher = new NameAndTypeMatcher(NAME, JButton.class, true);
+    NameMatcher matcher = new NameMatcher(NAME, JButton.class, true);
     assertThat(matcher.matches(window.button)).isFalse();
   }
 
   public void shouldReturnFalseIfNothingMatches() {
-    NameAndTypeMatcher matcher = new NameAndTypeMatcher("b", JTextField.class, true);
+    NameMatcher matcher = new NameMatcher("b", JTextField.class, true);
     assertThat(matcher.matches(window.button)).isFalse();
   }
   
   public void shouldImplementToString() {
-    NameAndTypeMatcher matcher = new NameAndTypeMatcher(NAME);
+    NameMatcher matcher = new NameMatcher(NAME);
     assertThat(matcher.toString()).contains("name='my button'")
                                   .contains("type=java.awt.Component")
                                   .contains("requireShowing=false");
@@ -153,7 +153,7 @@ public class NameAndTypeMatcherTest {
     }
 
     private MyWindow() {
-      super(NameAndTypeMatcherTest.class);
+      super(NameMatcherTest.class);
       addComponents(button);
       button.setName(NAME);
     }

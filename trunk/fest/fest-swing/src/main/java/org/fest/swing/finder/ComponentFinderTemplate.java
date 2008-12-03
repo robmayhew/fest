@@ -42,7 +42,7 @@ abstract class ComponentFinderTemplate<T extends Component> {
   private final String searchDescription;
   
   ComponentFinderTemplate(String componentName, Class<? extends T> componentType) {
-    this(new NameAndTypeMatcher(componentName, componentType, true));
+    this(new NameMatcher(componentName, componentType, true));
   }
 
   ComponentFinderTemplate(GenericTypeMatcher<? extends T> matcher) {
