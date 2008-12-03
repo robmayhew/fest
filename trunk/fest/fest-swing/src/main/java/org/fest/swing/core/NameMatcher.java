@@ -68,7 +68,7 @@ public final class NameMatcher extends AbstractComponentMatcher {
   }
 
   /**
-   * Creates a new <code>{@link TypeMatcher}</code>.
+   * Creates a new <code>{@link NameMatcher}</code>.
    * @param name the name of the component we are looking for.
    * @param type the type of the component we are looking for.
    * @param requireShowing indicates if the component to match should be showing or not.
@@ -86,7 +86,7 @@ public final class NameMatcher extends AbstractComponentMatcher {
   }
   
   /** 
-   * Indicates whether the name and visibility of the given <code>{@link java.awt.Component}</code> matches the values
+   * Indicates whether the name and visibility of the given <code>{@link java.awt.Component}</code> matches the value
    * specified in this matcher.
    * <p>
    * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 

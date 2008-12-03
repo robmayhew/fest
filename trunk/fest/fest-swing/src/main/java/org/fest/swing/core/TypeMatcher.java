@@ -55,7 +55,7 @@ public final class TypeMatcher extends AbstractComponentMatcher {
   }
 
   /**
-   * Indicates whether the type and visibility of the given <code>{@link java.awt.Component}</code> matches the values
+   * Indicates whether the type and visibility of the given <code>{@link java.awt.Component}</code> matches the value
    * specified in this matcher.
    * <p>
    * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
