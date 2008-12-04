@@ -119,6 +119,9 @@
       <name>Manuel Kueblboeck</name>
     </contributor>
     <contributor>
+      <name>Michel Lohr</name>
+    </contributor>
+    <contributor>
       <name>Frederik Martens</name>
     </contributor>
     <contributor>
@@ -132,6 +135,12 @@
     </contributor>
     <contributor>
       <name>Matthias Otterbach</name>
+    </contributor>
+    <contributor>
+      <name>Alexander Potochkin</name>
+      <organization>Sun Microsystems</organization>
+      <organizationUrl>http://www.sun.com/</organizationUrl>
+      <url>http://weblogs.java.net/blog/alexfromsun/</url>
     </contributor>
     <contributor>
       <name>Javier Sandino</name>
