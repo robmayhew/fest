@@ -34,7 +34,6 @@ import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.GUI;
 
@@ -47,6 +46,8 @@ import static org.fest.swing.testing.TestGroups.GUI;
 @Test(groups = GUI)
 public class BasicComponentFinderTest {
 
+  private static final String LABEL = "Label";
+  
   private BasicComponentFinder finder;
   private MyWindow windowOne;
   private MyWindow windowTwo;
@@ -80,7 +81,7 @@ public class BasicComponentFinderTest {
       finder.findByType(JTree.class);
       failWhenExpectingException();
     } catch (ComponentLookupException e) {
-      assertThat(e).message().contains("type=javax.swing.JTree").contains(format(windowOne));
+      assertThat(e).message().contains("type=javax.swing.JTree");
     }
   }
 
@@ -95,7 +96,7 @@ public class BasicComponentFinderTest {
       finder.findByType(windowOne, JList.class);
       failWhenExpectingException();
     } catch (ComponentLookupException e) {
-      assertThat(e).message().contains("type=javax.swing.JList").contains(format(windowOne));
+      assertThat(e).message().contains("type=javax.swing.JList");
     }
   }
 
@@ -109,7 +110,7 @@ public class BasicComponentFinderTest {
       finder.findByName("list");
       failWhenExpectingException();
     } catch (ComponentLookupException e) {
-      assertThat(e).message().contains("name='list'").contains(format(windowOne));
+      assertThat(e).message().contains("name='list'");
     }
   }
 
@@ -125,7 +126,7 @@ public class BasicComponentFinderTest {
       finder.findByName(windowOne, "label");
       failWhenExpectingException();
     } catch (ComponentLookupException e) {
-      assertThat(e).message().contains("name='label'").contains(format(windowOne));
+      assertThat(e).message().contains("name='label'");
     }
   }
 
@@ -139,8 +140,8 @@ public class BasicComponentFinderTest {
       finder.findByName("list", JLabel.class);
       failWhenExpectingException();
     } catch (ComponentLookupException e) {
-      assertThat(e).message().contains("name='list'").contains("type=javax.swing.JLabel")
-                             .contains(format(windowOne));
+      assertThat(e).message().contains("name='list'")
+                             .contains("type=javax.swing.JLabel");
     }
   }
 
@@ -149,8 +150,8 @@ public class BasicComponentFinderTest {
       finder.findByName("button", JLabel.class);
       failWhenExpectingException();
     } catch (ComponentLookupException e) {
-      assertThat(e).message().contains("name='button'").contains("type=javax.swing.JLabel")
-                             .contains(format(windowOne));
+      assertThat(e).message().contains("name='button'")
+                             .contains("type=javax.swing.JLabel");
     }
   }
 
@@ -165,8 +166,8 @@ public class BasicComponentFinderTest {
       finder.findByName(windowOne, "list", JLabel.class);
       failWhenExpectingException();
     } catch (ComponentLookupException e) {
-      assertThat(e).message().contains("name='list'").contains("type=javax.swing.JLabel")
-                             .contains(format(windowOne));
+      assertThat(e).message().contains("name='list'")
+                             .contains("type=javax.swing.JLabel");
     }
   }
 
@@ -175,11 +176,83 @@ public class BasicComponentFinderTest {
       finder.findByName(windowOne, "button", JLabel.class);
       failWhenExpectingException();
     } catch (ComponentLookupException e) {
-      assertThat(e).message().contains("name='button'").contains("type=javax.swing.JLabel")
-                             .contains(format(windowOne));
+      assertThat(e).message().contains("name='button'")
+                             .contains("type=javax.swing.JLabel");
     }
   }
 
+  ////
+  
+  public void shouldFindComponentByLabel() {
+    Component button = finder.findByLabel(LABEL);
+    assertThat(button).isSameAs(windowOne.button);
+  }
+
+  public void shouldThrowExceptionIfComponentNotFoundByLabel() {
+    try {
+      finder.findByLabel("list");
+      failWhenExpectingException();
+    } catch (ComponentLookupException e) {
+      assertThat(e).message().contains("label='list'");
+    }
+  }
+
+  public void shouldFindComponentByLabelAndContainer() {
+    Component button = finder.findByLabel(windowOne, LABEL);
+    assertThat(button).isSameAs(windowOne.button);
+  }
+
+  public void shouldThrowExceptionIfComponentNotFoundByLabelAndContainer() {
+    try {
+      finder.findByLabel(windowOne, "list");
+      failWhenExpectingException();
+    } catch (ComponentLookupException e) {
+      assertThat(e).message().contains("label='list'");
+    }
+  }
+
+  public void shouldFindComponentByLabelAndType() {
+    JButton button = finder.findByLabel(LABEL, JButton.class);
+    assertThat(button).isSameAs(windowOne.button);
+  }
+
+  public void shouldThrowExceptionIfComponentNotFoundByLabelAndType() {
+    try {
+      finder.findByLabel("list", JLabel.class);
+      failWhenExpectingException();
+    } catch (ComponentLookupException e) {
+      assertThat(e).message().contains("label='list'")
+                             .contains("type=javax.swing.JLabel");
+    }
+  }
+
+  public void shouldFindComponentByLabelAndTypeAndContainer() {
+    JButton button = finder.findByLabel(windowOne, LABEL, JButton.class);
+    assertThat(button).isSameAs(windowOne.button);
+  }
+
+  public void shouldThrowExceptionIfComponentNotFoundByLabelAndTypeAndContainer() {
+    try {
+      finder.findByLabel(windowOne, "list", JLabel.class);
+      failWhenExpectingException();
+    } catch (ComponentLookupException e) {
+      assertThat(e).message().contains("label='list'")
+                             .contains("type=javax.swing.JLabel");
+    }
+  }
+
+  public void shouldThrowExceptionIfComponentFoundByLabelAndContainerAndNotByType() {
+    try {
+      finder.findByLabel(windowOne, "button", JLabel.class);
+      failWhenExpectingException();
+    } catch (ComponentLookupException e) {
+      assertThat(e).message().contains("label='button'")
+                             .contains("type=javax.swing.JLabel");
+    }
+  }
+  
+  ////
+  
   public void shouldFindComponentUsingGenericTypeMatcher() {
     JButton foundButton = finder.find(new GenericTypeMatcher<JButton>() {
       protected boolean isMatching(JButton button) {
@@ -200,8 +273,8 @@ public class BasicComponentFinderTest {
 
   @Test(groups = GUI, expectedExceptions = ComponentLookupException.class)
   public void shouldThrowExceptionIfGenericMatcherMatchesWrongType() {
-    finder.find(windowOne, new GenericTypeMatcher<JLabel>() {
-      @Override protected boolean isMatching(JLabel component) {
+    finder.find(windowOne, new GenericTypeMatcher<JTree>() {
+      @Override protected boolean isMatching(JTree component) {
         return true;
       }
     });
@@ -239,9 +312,7 @@ public class BasicComponentFinderTest {
       finder.find(new TypeMatcher(JTextField.class));
       failWhenExpectingException();
     } catch (ComponentLookupException e) {
-      assertThat(e).message().contains("type=javax.swing.JTextField")
-                             .contains(format(windowOne.textField))
-                             .contains(format(windowOne.anotherTextField));
+      assertThat(e).message().contains("type=javax.swing.JTextField");
     }
   }
 
@@ -251,8 +322,8 @@ public class BasicComponentFinderTest {
       finder.findByName(windowOne, "button", JLabel.class);
       failWhenExpectingException();
     } catch (ComponentLookupException e) {
-      assertThat(e).message().contains("name='button'").contains("type=javax.swing.JLabel")
-                             .excludes(format(windowOne));
+      assertThat(e).message().contains("name='button'")
+                             .contains("type=javax.swing.JLabel");
     }
   }
 
@@ -279,6 +350,7 @@ public class BasicComponentFinderTest {
     private static final long serialVersionUID = 1L;
 
     final JButton button = new JButton("A Button");
+    final JLabel label = new JLabel(LABEL);
     final JTextField textField = new JTextField("A TextField");
     final JTextField anotherTextField = new JTextField("Another TextField");
 
@@ -299,7 +371,8 @@ public class BasicComponentFinderTest {
 
     private MyWindow() {
       super(BasicComponentFinderTest.class);
-      addComponents(button, textField, anotherTextField);
+      addComponents(label, button, textField, anotherTextField);
+      label.setLabelFor(button);
       button.setName("button");
     }
   }

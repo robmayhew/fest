@@ -20,12 +20,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
 
+import javax.swing.JLabel;
+
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 import org.fest.swing.hierarchy.ExistingHierarchy;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.hierarchy.NewHierarchy.ignoreExistingComponents;
@@ -128,6 +131,32 @@ public final class BasicComponentFinder implements ComponentFinder {
 
   /** {@inheritDoc} */
   @RunsInEDT
+  public <T extends Component> T findByLabel(String label, Class<T> type) {
+    return findByLabel(label, type, false);
+  }
+
+  /** {@inheritDoc} */
+  @RunsInEDT
+  public <T extends Component> T findByLabel(String label, Class<T> type, boolean showing) {
+    Component found = find(new LabelMatcher(label, type, showing));
+    return labelFor(found, type);
+  }
+
+  /** {@inheritDoc} */
+  @RunsInEDT
+  public Component findByLabel(String label) {
+    return findByLabel(label, false);
+  }
+
+  /** {@inheritDoc} */
+  @RunsInEDT
+  public Component findByLabel(String label, boolean showing) {
+    Component found = find(new LabelMatcher(label, showing));
+    return labelFor(found, Component.class);
+  }
+
+  /** {@inheritDoc} */
+  @RunsInEDT
   @SuppressWarnings("unchecked")
   public <T extends Component> T find(GenericTypeMatcher<T> m) {
     Component found = find((ComponentMatcher)m);
@@ -163,6 +192,39 @@ public final class BasicComponentFinder implements ComponentFinder {
   @RunsInEDT
   public Component findByName(Container root, String name, boolean showing) {
     return find(root, new NameMatcher(name, showing));
+  }
+
+  /** {@inheritDoc} */
+  @RunsInEDT
+  public <T extends Component> T findByLabel(Container root, String label, Class<T> type) {
+    return findByLabel(root, label, type, false);
+  }
+
+  /** {@inheritDoc} */
+  @RunsInEDT
+  public <T extends Component> T findByLabel(Container root, String label, Class<T> type, boolean showing) {
+    Component found = find(root, new LabelMatcher(label, type, showing));
+    return labelFor(found, type);
+  }
+
+  /** {@inheritDoc} */
+  @RunsInEDT
+  public Component findByLabel(Container root, String label) {
+    return findByLabel(root, label, false);
+  }
+
+  /** {@inheritDoc} */
+  @RunsInEDT
+  public Component findByLabel(Container root, String label, boolean showing) {
+    Component found = find(root, new LabelMatcher(label, showing));
+    return labelFor(found, Component.class);
+  }
+
+  private <T> T labelFor(Component label, Class<T> type) {
+    assertThat(label).isInstanceOf(JLabel.class);
+    Component target = ((JLabel)label).getLabelFor();
+    assertThat(target).isInstanceOf(type);
+    return type.cast(target);
   }
 
   /** {@inheritDoc} */

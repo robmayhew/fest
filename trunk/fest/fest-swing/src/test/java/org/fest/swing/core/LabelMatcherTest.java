@@ -16,6 +16,7 @@
 package org.fest.swing.core;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import org.testng.annotations.AfterMethod;
@@ -34,14 +35,14 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
- * Tests for <code>{@link NameMatcher}</code>.
+ * Tests for <code>{@link LabelMatcher}</code>.
  *
  * @author Alex Ruiz
  */
 @Test(groups = GUI)
-public class NameMatcherTest {
+public class LabelMatcherTest {
   
-  private static final String LABEL_TEXT = "my button";
+  private static final String LABEL_TEXT = "Hello";
 
   private MyWindow window;
 
@@ -62,78 +63,88 @@ public class NameMatcherTest {
     }
   }
 
-  public void shouldReturnTrueIfNameMatches() {
-    NameMatcher matcher = new NameMatcher(LABEL_TEXT);
-    assertThat(matcher.matches(window.button)).isTrue();
+  public void shouldReturnTrueIfJLabelTextMatches() {
+    LabelMatcher matcher = new LabelMatcher(LABEL_TEXT);
+    assertThat(matcher.matches(window.buttonLabel)).isTrue();
   }
 
-  public void shouldReturnFalseIsNameDoesNotMatch() {
-    NameMatcher matcher = new NameMatcher("Hello");
+  public void shouldReturnFalseIfJLabelTextMatchesButJLabelDoesNotHaveComponentFor() {
+    LabelMatcher matcher = new LabelMatcher(LABEL_TEXT);
+    assertThat(matcher.matches(window.label)).isFalse();
+  }
+
+  public void shouldReturnFalseIsJLabelTextDoesNotMatch() {
+    LabelMatcher matcher = new LabelMatcher("Bye");
+    assertThat(matcher.matches(window.buttonLabel)).isFalse();
+  }
+
+  public void shouldReturnFalseIsComponentIsNotJLabel() {
+    LabelMatcher matcher = new LabelMatcher("Hello");
     assertThat(matcher.matches(window.button)).isFalse();
   }
 
   @Test(expectedExceptions = NullPointerException.class)
-  public void shouldThrowErrorIfNameIsNull() {
-    new NameMatcher(null);
+  public void shouldThrowErrorIfLabelIsNull() {
+    new LabelMatcher(null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void shouldThrowErrorIfNameIsEmpty() {
-    new NameMatcher("");
+  public void shouldThrowErrorIfLabelIsEmpty() {
+    new LabelMatcher("");
   }
 
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfTypeIsNull() {
-    new NameMatcher(LABEL_TEXT, null);
+    new LabelMatcher(LABEL_TEXT, null);
   }
 
-  public void shouldReturnTrueIfNameMatchesWhenNotRequiringShowing() {
+  public void shouldReturnTrueIfLabelMatchesWhenNotRequiringShowing() {
     window.display();
-    NameMatcher matcher = new NameMatcher(LABEL_TEXT);
-    assertThat(matcher.matches(window.button)).isTrue();
+    LabelMatcher matcher = new LabelMatcher(LABEL_TEXT);
+    assertThat(matcher.matches(window.buttonLabel)).isTrue();
   }
 
-  public void shouldReturnFalseIfNameDoesNotMatchAndWhenRequiringShowing() {
+  public void shouldReturnFalseIfLabelDoesNotMatchAndWhenRequiringShowing() {
     window.display();
-    NameMatcher matcher = new NameMatcher("b", true);
-    assertThat(matcher.matches(window.button)).isFalse();
+    LabelMatcher matcher = new LabelMatcher("b", true);
+    assertThat(matcher.matches(window.buttonLabel)).isFalse();
   }
 
-  public void shouldReturnFalseIfNameMatchesAndIsShowingDoesNotMatch() {
-    NameMatcher matcher = new NameMatcher(LABEL_TEXT, true);
-    assertThat(matcher.matches(window.button)).isFalse();
+  public void shouldReturnFalseIfLabelMatchesAndIsShowingDoesNotMatch() {
+    LabelMatcher matcher = new LabelMatcher(LABEL_TEXT, true);
+    assertThat(matcher.matches(window.buttonLabel)).isFalse();
   }
 
-  public void shouldReturnFalseIfNameAndIsShowingDoNotMatch() {
-    NameMatcher matcher = new NameMatcher("b", true);
-    assertThat(matcher.matches(window.button)).isFalse();
+  public void shouldReturnFalseIfLabelAndIsShowingDoNotMatch() {
+    LabelMatcher matcher = new LabelMatcher("b", true);
+    assertThat(matcher.matches(window.buttonLabel)).isFalse();
   }
 
-  public void shouldReturnTrueIfNameAndTypeMatchWhenNotRequiringShowing() {
+  public void shouldReturnTrueIfLabelAndTypeMatchWhenNotRequiringShowing() {
     window.display();
-    NameMatcher matcher = new NameMatcher(LABEL_TEXT, JButton.class);
-    assertThat(matcher.matches(window.button)).isTrue();
+    LabelMatcher matcher = new LabelMatcher(LABEL_TEXT, JButton.class);
+    assertThat(matcher.matches(window.buttonLabel)).isTrue();
   }
 
   public void shouldReturnFalseIfTypeDoesNotMatchAndWhenRequiringShowing() {
     window.display();
-    NameMatcher matcher = new NameMatcher("b", JTextField.class, true);
-    assertThat(matcher.matches(window.button)).isFalse();
+    LabelMatcher matcher = new LabelMatcher("b", JTextField.class, true);
+    assertThat(matcher.matches(window.buttonLabel)).isFalse();
   }
 
-  public void shouldReturnFalseIfNameAndTypeMatchAndIsShowingDoesNotMatch() {
-    NameMatcher matcher = new NameMatcher(LABEL_TEXT, JButton.class, true);
-    assertThat(matcher.matches(window.button)).isFalse();
+  public void shouldReturnFalseIfLabelAndTypeMatchAndIsShowingDoesNotMatch() {
+    LabelMatcher matcher = new LabelMatcher(LABEL_TEXT, JButton.class, true);
+    assertThat(matcher.matches(window.buttonLabel)).isFalse();
   }
 
   public void shouldReturnFalseIfNothingMatches() {
-    NameMatcher matcher = new NameMatcher("b", JTextField.class, true);
-    assertThat(matcher.matches(window.button)).isFalse();
+    LabelMatcher matcher = new LabelMatcher("b", JTextField.class, true);
+    assertThat(matcher.matches(window.buttonLabel)).isFalse();
   }
   
   public void shouldImplementToString() {
-    NameMatcher matcher = new NameMatcher(LABEL_TEXT);
-    assertThat(matcher.toString()).contains("name='my button'")
+    LabelMatcher matcher = new LabelMatcher(LABEL_TEXT);
+    assertThat(matcher.toString()).contains("label='Hello'")
                                   .contains("type=java.awt.Component")
                                   .contains("requireShowing=false");
   }
@@ -141,7 +152,9 @@ public class NameMatcherTest {
   protected static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
+    final JLabel buttonLabel= new JLabel(LABEL_TEXT);
     final JButton button = new JButton("A Button");
+    final JLabel label = new JLabel(LABEL_TEXT);
 
     @RunsInEDT
     static MyWindow createNew() {
@@ -153,9 +166,9 @@ public class NameMatcherTest {
     }
 
     private MyWindow() {
-      super(NameMatcherTest.class);
-      addComponents(button);
-      button.setName(LABEL_TEXT);
+      super(LabelMatcherTest.class);
+      addComponents(buttonLabel, button, label);
+      buttonLabel.setLabelFor(button);
     }
   }
 }

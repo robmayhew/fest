@@ -88,7 +88,11 @@
       <action dev="alruiz" type="add" issue="242">
         Added org.fest.swing.edt.FailOnThreadViolationRepaintManager to force tests that violate EDT access to fail.
       </action>
-      <action dev="alruiz" type="remove">
+      <action dev="alruiz" type="add" issue="244" due-to="Michel Lohr">
+        Added method 'findByLabel' (and overloaded versions) to ComponentFinder to look up components by the text of
+        thier associated JLabel.
+      </action>
+      <action dev="alruiz" type="add" issue="244">
         Consolidated org.fest.swing.core.NameMatcher and org.fest.swing.core.NameAndTypeMatcher into one matcher.
       </action>
     </release>

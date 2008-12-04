@@ -21,8 +21,10 @@ import javax.swing.JLabel;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
 
+import static java.lang.String.valueOf;
+
 import static org.fest.util.Objects.areEqual;
-import static org.fest.util.Strings.isEmpty;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands <code>{@link java.awt.Component}</code> matching by the text of the associated
@@ -114,5 +116,15 @@ public class LabelMatcher extends AbstractComponentMatcher {
     if (!areEqual(labelForComponent.getText(), label)) return false;
     Component labeled = labelForComponent.getLabelFor();
     return type.isInstance(labeled) && requireShowingMatches(labeled);
+  }
+
+  @Override public String toString() {
+    return concat(
+        getClass().getName(), "[",
+        "label=", quote(label), ", ",
+        "type=", type.getName(), ", ",
+        "requireShowing=", valueOf(requireShowing()), 
+        "]"
+    );
   }
 }
