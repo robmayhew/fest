@@ -125,6 +125,7 @@ public class JListDriver extends JComponentDriver {
     Pair<Integer, Point> scrollInfo = scrollToItemIfNotSelectedYet(list, value, cellReader);
     robot.waitForIdle();
     verify(scrollInfo, value);
+    if (scrollInfo.ii == null) return; // already selected cell.
     robot.click(list, cellCenterIn(scrollInfo));
   }
 
@@ -213,7 +214,7 @@ public class JListDriver extends JComponentDriver {
   public void selectItem(JList list, int index) {
     Point cellCenter = scrollToItemIfNotSelectedYet(list, index);
     robot.waitForIdle();
-    if (cellCenter == null) return;
+    if (cellCenter == null) return; // cell already selected
     robot.click(list, cellCenter);
   }
 
