@@ -98,6 +98,9 @@
       <action dev="alruiz" type="fix" issue="246" due-to="Juhos Csaba-Zsolt">
         Fixed NullPointerException thrown in org.fest.swing.driver.JListDriver when selecting an already selected item.
       </action>
+      <action dev="alruiz" type="fix" issue="246" due-to="Marc Johen">
+        By default org.fest.swing.keystroke.KeyStrokeMap uses an English keyboard mapping.
+      </action>
     </release>
     <release version="1.0b2" date="2008-10-16" description="Subsequent release">
       <action dev="alruiz" type="add" issue="109">

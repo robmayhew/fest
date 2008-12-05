@@ -15,7 +15,6 @@
 package org.fest.swing.keystroke;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.KeyStroke;
@@ -31,8 +30,6 @@ import static java.awt.event.KeyEvent.CHAR_UNDEFINED;
  */
 public class KeyStrokeMap {
 
-  private static final String ENGLISH = "en";
-
   private static final Map<Character, KeyStroke> CHAR_TO_KEY_STROKE = new HashMap<Character, KeyStroke>();
   private static final Map<KeyStroke, Character> KEY_STROKE_TO_CHAR = new HashMap<KeyStroke, Character>();
 
@@ -41,12 +38,9 @@ public class KeyStrokeMap {
   }
 
   private static void initialize() {
-    Locale locale = Locale.getDefault();
-    if (locale.getLanguage().equals(ENGLISH)) {
-      addKeyStrokesFrom(new KeyStrokeMappingProvider_en());
-      return;
-    }
-    addKeyStrokesFrom(new DefaultKeyStrokeMappingProvider());
+    // for now by default is the "English" keyboard mapping.
+    // we'll support for other languages when users request it.
+    addKeyStrokesFrom(new KeyStrokeMappingProvider_en());
   }
   
   /**
