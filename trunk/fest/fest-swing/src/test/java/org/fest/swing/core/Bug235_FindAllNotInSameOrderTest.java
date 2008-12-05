@@ -13,38 +13,38 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.fixture;
+package org.fest.swing.core;
 
-import javax.swing.JTable;
-import javax.swing.table.TableColumnModel;
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JTextField;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.data.TableCellByColumnId;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.edt.GuiTask;
 import org.fest.swing.testing.TestWindow;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
- * Fix for <a href="http://code.google.com/p/fest/issues/detail?id=232" target="_blank">issue 232</a>.
+ * Test case for <a href="http://code.google.com/p/fest/issues/detail?id=235">Bug 235</a>.
  *
  * @author Alex Ruiz
  */
-@Test(groups =  { GUI, BUG })
-public class Bug232_WrongColumnIndex {
-  
+@Test(groups = { BUG, GUI })
+public class Bug235_FindAllNotInSameOrderTest {
+
   private Robot robot;
-  private MyWindow window;
   
   @BeforeClass public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
@@ -52,28 +52,30 @@ public class Bug232_WrongColumnIndex {
   
   @BeforeMethod public void setUp() {
     robot = RobotFixture.robotWithNewAwtHierarchy();
-    window = MyWindow.createNew();
-    robot.showWindow(window);
   }
-  
+
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
   
-  public void shouldEnterValueAfterRemovingColumn() {
-    removeFirstColumn(window.table);
-    robot.waitForIdle();
-    JTableFixture table = new JTableFixture(robot, window.table);
-    table.cell(TableCellByColumnId.row(0).columnId("2")).enterValue("foo");
+  public void shouldAlwaysReturnAllFoundComponentsInSameOrder() {
+    MyWindow window = MyWindow.createNew();
+    TypeMatcher matcher = new TypeMatcher(JTextField.class);
+    List<Component> firstFound = findAll(window, matcher);
+    assertThat(firstFound).hasSize(3);
+    window.destroy();
+    for (int i = 0; i < 20; i++) {
+      window = MyWindow.createNew();
+      List<Component> found = findAll(window, matcher);
+      assertThat(found.get(0).getName()).isSameAs(firstFound.get(0).getName());
+      assertThat(found.get(1).getName()).isSameAs(firstFound.get(1).getName());
+      assertThat(found.get(2).getName()).isSameAs(firstFound.get(2).getName());
+      window.destroy();
+    }
   }
-  
-  private static void removeFirstColumn(final JTable table) {
-    execute(new GuiTask() {
-      protected void executeInEDT() {
-        TableColumnModel columnModel = table.getColumnModel();
-        columnModel.removeColumn(columnModel.getColumn(0));
-      }
-    });
+
+  private List<Component> findAll(MyWindow window, TypeMatcher matcher) {
+    return new ArrayList<Component>(robot.finder().findAll(window, matcher));
   }
   
   private static class MyWindow extends TestWindow {
@@ -87,15 +89,17 @@ public class Bug232_WrongColumnIndex {
         }
       });
     }
-
-    final JTable table = new JTable(2, 2);
     
     private MyWindow() {
-      super(Bug232_WrongColumnIndex.class);
-      addComponents(table);
-      TableColumnModel columnModel = table.getColumnModel();
-      columnModel.getColumn(0).setIdentifier("1");
-      columnModel.getColumn(1).setIdentifier("2");
+      super(Bug235_FindAllNotInSameOrderTest.class);
+      addComponents(textFieldWithName("one"), textFieldWithName("two"), textFieldWithName("three"));
+    }
+    
+    @RunsInCurrentThread
+    private static JTextField textFieldWithName(String name) {
+      JTextField textField = new JTextField(20);
+      textField.setName(name);
+      return textField;
     }
   }
 }

@@ -50,7 +50,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Alex Ruiz 
  */
 @Test(groups = { GUI, BUG })
-public class Bug219_EditTableCellWithEditorHavingCustomDocument {
+public class Bug219_EditTableCellWithEditorHavingCustomDocumentTest {
 
   private static final int COLUMN = 1;
   private static final int ROW = 0;
@@ -99,7 +99,7 @@ public class Bug219_EditTableCellWithEditorHavingCustomDocument {
     final TestTable table = new TestTable(3, 3);
     
     private MyWindow() {
-      super(Bug219_EditTableCellWithEditorHavingCustomDocument.class);
+      super(Bug219_EditTableCellWithEditorHavingCustomDocumentTest.class);
       addComponents(table);
       DefaultCellEditor cellEditor = new DefaultCellEditor(new JTextField(new ExampleDocument(this), "", 10));
       table.getColumnModel().getColumn(COLUMN).setCellEditor(cellEditor);

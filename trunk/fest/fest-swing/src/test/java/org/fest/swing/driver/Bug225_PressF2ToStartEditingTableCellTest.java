@@ -1,5 +1,5 @@
 /*
- * Created on Nov 30, 2008
+ * Created on Nov 29, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,11 +13,9 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.finder;
+package org.fest.swing.driver;
 
-import java.awt.Frame;
-
-import javax.swing.JDialog;
+import java.awt.Dimension;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -26,65 +24,49 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
-import org.fest.swing.fixture.DialogFixture;
-import org.fest.swing.testing.TestDialog;
-import org.fest.swing.testing.TestWindow;
-
-import static javax.swing.SwingUtilities.invokeLater;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.finder.WindowFinder.findDialog;
+import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
- * Test case for <a href="http://code.google.com/p/fest/issues/detail?id=228">Bug 228</a>.
+ * Tests for <a href="http://code.google.com/p/fest/issues/detail?id=225" target="_blank">Bug 225</a>.
  *
- * @author Ken Geis
  * @author Alex Ruiz
  */
 @Test(groups = { GUI, BUG })
-public class Bug228_ModalWindowBlocks {
+public class Bug225_PressF2ToStartEditingTableCellTest {
 
   private Robot robot;
-  
+  private JTableTextComponentEditorCellWriter writer;
+  private TableDialogEditDemoWindow window;
+
   @BeforeClass public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
   }
   
   @BeforeMethod public void setUp() {
-    robot = RobotFixture.robotWithNewAwtHierarchy();
+    robot = robotWithNewAwtHierarchy();
+    writer = new JTableTextComponentEditorCellWriter(robot);
+    window = TableDialogEditDemoWindow.createNew(getClass());
+    robot.showWindow(window, new Dimension(500, 100));
   }
-
+  
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
-  
-  public void testModalDialog()
-  {
-    TestWindow window = TestWindow.createNewWindow(getClass());
-    robot.showWindow(window);
-    MyDialog.createAndShowNew(window);
-    DialogFixture found = findDialog(JDialog.class).using(robot);
-    assertThat(found.target).isInstanceOf(MyDialog.class);
-  }
-  
-  private static class MyDialog extends TestDialog {
-    private static final long serialVersionUID = 1L;
 
-    @RunsInEDT
-    static void createAndShowNew(final Frame owner) {
-      invokeLater(new Runnable() {
-        public void run() {
-          TestDialog.display(new MyDialog(owner));
-        }
-      });
-    }
-    
-    MyDialog(Frame owner) {
-      super(owner);
-      setModal(true);
-    }
+  public void shouldEditCellWithTextFieldAsEditor() {
+    int row = 4;
+    int col = 3;
+    writer.enterValue(window.table, row, col, "8");
+    assertThat(valueAt(row, col)).isEqualTo(8);
+  }
+
+  @RunsInEDT
+  private Object valueAt(int row, int column) {
+    return cellValueOf(window.table, row, column);
   }
 }

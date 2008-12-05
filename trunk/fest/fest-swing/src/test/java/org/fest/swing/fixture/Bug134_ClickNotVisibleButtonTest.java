@@ -1,5 +1,5 @@
 /*
- * Created on Nov 30, 2008
+ * Created on Nov 29, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,12 +13,13 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.core;
+package org.fest.swing.fixture;
 
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 
+import javax.swing.JButton;
 import javax.swing.JTextField;
 
 import org.testng.annotations.AfterMethod;
@@ -26,61 +27,62 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**
- * Test case for <a href="http://code.google.com/p/fest/issues/detail?id=235">Bug 235</a>.
+ * Test case for <a href="http://code.google.com/p/fest/issues/detail?id=134">Bug 134</a>.
  *
  * @author Alex Ruiz
  */
-@Test(groups = { BUG, GUI })
-public class Bug235_FindAllNotInSameOrder {
+@Test(groups = { GUI, BUG })
+public class Bug134_ClickNotVisibleButtonTest {
 
-  private Robot robot;
+  private FrameFixture fixture;
+  private MyWindow window;
   
   @BeforeClass public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
   }
   
   @BeforeMethod public void setUp() {
-    robot = RobotFixture.robotWithNewAwtHierarchy();
-  }
-
-  @AfterMethod public void tearDown() {
-    robot.cleanUp();
+    window = MyWindow.createNew();
+    fixture = new FrameFixture(window);
+    fixture.show();
   }
   
-  public void shouldAlwaysReturnAllFoundComponentsInSameOrder() {
-    MyWindow window = MyWindow.createNew();
-    TypeMatcher matcher = new TypeMatcher(JTextField.class);
-    List<Component> firstFound = findAll(window, matcher);
-    assertThat(firstFound).hasSize(3);
-    window.destroy();
-    for (int i = 0; i < 20; i++) {
-      window = MyWindow.createNew();
-      List<Component> found = findAll(window, matcher);
-      assertThat(found.get(0).getName()).isSameAs(firstFound.get(0).getName());
-      assertThat(found.get(1).getName()).isSameAs(firstFound.get(1).getName());
-      assertThat(found.get(2).getName()).isSameAs(firstFound.get(2).getName());
-      window.destroy();
+  @AfterMethod public void tearDown() {
+    fixture.cleanUp();
+  }
+
+  public void shouldThrowErrorWhenClickingButtonOutOfScreen() {
+    moveButtonOutOfScreen();
+    try {
+      fixture.button().click();
+      failWhenExpectingException();
+    } catch (ActionFailedException e) {
+      assertThat(e.getMessage()).isEqualTo("The component to click is out of the boundaries of the screeen");
     }
   }
 
-  private List<Component> findAll(MyWindow window, TypeMatcher matcher) {
-    return new ArrayList<Component>(robot.finder().findAll(window, matcher));
+  private void moveButtonOutOfScreen() {
+    Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+    int x = screen.width - (window.getWidth() / 3);
+    int y = screen.height / 2;
+    fixture.moveTo(new Point(x, y));
   }
   
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
-
+    
     @RunsInEDT
     static MyWindow createNew() {
       return execute(new GuiQuery<MyWindow>() {
@@ -90,16 +92,12 @@ public class Bug235_FindAllNotInSameOrder {
       });
     }
     
-    private MyWindow() {
-      super(Bug235_FindAllNotInSameOrder.class);
-      addComponents(textFieldWithName("one"), textFieldWithName("two"), textFieldWithName("three"));
-    }
+    final JTextField textField = new JTextField(20);
+    final JButton button = new JButton("Click Me");
     
-    @RunsInCurrentThread
-    private static JTextField textFieldWithName(String name) {
-      JTextField textField = new JTextField(20);
-      textField.setName(name);
-      return textField;
+    private MyWindow() {
+      super(Bug134_ClickNotVisibleButtonTest.class);
+      addComponents(textField, button);
     }
   }
 }

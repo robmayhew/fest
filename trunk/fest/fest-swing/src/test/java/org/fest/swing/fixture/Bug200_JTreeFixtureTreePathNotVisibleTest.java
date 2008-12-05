@@ -45,7 +45,7 @@ import static org.fest.swing.testing.TestGroups.*;
  * @author Alex Ruiz
  */
 @Test(groups = { BUG, GUI })
-public class Bug200_JTreeFixtureTreePathNotVisible {
+public class Bug200_JTreeFixtureTreePathNotVisibleTest {
 
   private FrameFixture frame;
   
@@ -80,7 +80,7 @@ public class Bug200_JTreeFixtureTreePathNotVisible {
     }
      
     private MyWindow() {
-      super(Bug200_JTreeFixtureTreePathNotVisible.class);
+      super(Bug200_JTreeFixtureTreePathNotVisibleTest.class);
       JScrollPane scrollPane = new JScrollPane(tree());
       scrollPane.setPreferredSize(new Dimension(300, 200));
       addComponents(scrollPane);

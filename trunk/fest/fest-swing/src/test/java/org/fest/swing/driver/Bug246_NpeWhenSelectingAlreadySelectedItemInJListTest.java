@@ -1,5 +1,5 @@
 /*
- * Created on Nov 29, 2008
+ * Created on Dec 4, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,14 +13,9 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.fixture;
+package org.fest.swing.driver;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-
-import javax.swing.JButton;
-import javax.swing.JTextField;
+import javax.swing.JList;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -28,61 +23,53 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.core.Robot;
+import org.fest.swing.core.RobotFixture;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.testing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.util.Arrays.array;
 
 /**
- * Understands SOMETHING DUMMY.
+ * Tests for <a href="http://code.google.com/p/fest/issues/detail?id=246" target="_blank">Bug 246</a>.
  *
  * @author Alex Ruiz
  */
 @Test(groups = { GUI, BUG })
-public class Bug134_ClickNotVisibleButton {
+public class Bug246_NpeWhenSelectingAlreadySelectedItemInJListTest {
 
-  private FrameFixture fixture;
-  private MyWindow window;
+  private Robot robot;
+  private JListDriver driver;
+  private JList list;
   
   @BeforeClass public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
   }
   
   @BeforeMethod public void setUp() {
-    window = MyWindow.createNew();
-    fixture = new FrameFixture(window);
-    fixture.show();
+    robot = RobotFixture.robotWithNewAwtHierarchy();
+    driver = new JListDriver(robot);
+    MyWindow window = MyWindow.createNew();
+    list = window.list;
+    robot.showWindow(window);
   }
   
   @AfterMethod public void tearDown() {
-    fixture.cleanUp();
+    robot.cleanUp();
   }
-
-  public void shouldThrowErrorWhenClickingButtonOutOfScreen() {
-    moveButtonOutOfScreen();
-    try {
-      fixture.button().click();
-      failWhenExpectingException();
-    } catch (ActionFailedException e) {
-      assertThat(e.getMessage()).isEqualTo("The component to click is out of the boundaries of the screeen");
-    }
-  }
-
-  private void moveButtonOutOfScreen() {
-    Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-    int x = screen.width - (window.getWidth() / 3);
-    int y = screen.height / 2;
-    fixture.moveTo(new Point(x, y));
+  
+  public void shouldNotSelectItemIfAlreadySelected() {
+    driver.selectItem(list, "One");
+    assertThat(list.getSelectedIndex()).isEqualTo(0);
   }
   
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
-    
+
     @RunsInEDT
     static MyWindow createNew() {
       return execute(new GuiQuery<MyWindow>() {
@@ -91,13 +78,13 @@ public class Bug134_ClickNotVisibleButton {
         }
       });
     }
-    
-    final JTextField textField = new JTextField(20);
-    final JButton button = new JButton("Click Me");
+
+    final JList list = new JList(array("One", "Two"));
     
     private MyWindow() {
-      super(Bug134_ClickNotVisibleButton.class);
-      addComponents(textField, button);
+      super(Bug246_NpeWhenSelectingAlreadySelectedItemInJListTest.class);
+      addComponents(list);
+      list.setSelectedIndex(0);
     }
   }
 }
