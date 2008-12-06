@@ -39,6 +39,7 @@ import static java.lang.String.valueOf;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.timing.Pause.pause;
 
 /**
  * Test case for implementations of <code>{@link KeyStrokeMappingProvider}</code>.
@@ -97,6 +98,7 @@ public abstract class KeyStrokeMappingProviderTestCase {
 
   private void pressInTextArea(KeyStroke keyStroke) {
     driver.pressAndReleaseKey(textArea, keyStroke.getKeyCode(), new int[] { keyStroke.getModifiers() });
+    pause(100);
   }
 
   static class KeyStrokeMappingIterator implements Iterator<Object[]> {
