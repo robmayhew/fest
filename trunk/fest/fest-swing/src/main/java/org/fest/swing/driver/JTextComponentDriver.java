@@ -239,7 +239,6 @@ public class JTextComponentDriver extends JComponentDriver {
   @RunsInCurrentThread
   private static boolean isRectangleVisible(JTextComponent textBox, Rectangle r) {
     Rectangle visible = textBox.getVisibleRect();
-    if (visible == null) return false;
     return visible.contains(r.x, r.y);
   }
 

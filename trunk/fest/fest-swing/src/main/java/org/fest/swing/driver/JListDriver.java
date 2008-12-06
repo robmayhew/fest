@@ -244,7 +244,7 @@ public class JListDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void requireSelection(final JList list, String value) {
-    String selection = singleSelectionValue(list, cellReader);
+    Object selection = singleSelectionValue(list, cellReader);
     if (NO_SELECTION_VALUE == selection) failNoSelection(list);
     assertThat(selection).as(selectedIndexProperty(list)).isEqualTo(value);
   }

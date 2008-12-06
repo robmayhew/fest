@@ -33,12 +33,12 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JComboBoxSelectionValueQuery {
 
-  static final String NO_SELECTION_VALUE = "";
+  static final Object NO_SELECTION_VALUE = new Object();
 
   @RunsInEDT
-  static String selection(final JComboBox comboBox, final JComboBoxCellReader cellReader) {
-    return execute(new GuiQuery<String>() {
-      protected String executeInEDT() {
+  static Object selection(final JComboBox comboBox, final JComboBoxCellReader cellReader) {
+    return execute(new GuiQuery<Object>() {
+      protected Object executeInEDT() {
         if (comboBox.isEditable()) return selectionInEditableComboBox(comboBox);
         int selectedIndex = comboBox.getSelectedIndex();
         if (selectedIndex == -1) return NO_SELECTION_VALUE;
@@ -48,7 +48,7 @@ final class JComboBoxSelectionValueQuery {
   }
 
   @RunsInCurrentThread
-  private static String selectionInEditableComboBox(JComboBox comboBox) {
+  private static Object selectionInEditableComboBox(JComboBox comboBox) {
     Object selectedItem = selectedItemOf(comboBox);
     if (selectedItem == null) return NO_SELECTION_VALUE;
     return selectedItem.toString();

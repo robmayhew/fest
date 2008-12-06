@@ -327,7 +327,7 @@ public class JTableDriver extends JComponentDriver {
   }
 
   @RunsInEDT
-  private void assertNoSelection(final JTable table) {
+  private static void assertNoSelection(final JTable table) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         if (!hasSelection(table)) return;

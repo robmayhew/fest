@@ -63,11 +63,6 @@ public final class JSliderLocation {
     }
 
     @RunsInCurrentThread
-    int coordinateOf(Point center) {
-      return center.x;
-    }
-
-    @RunsInCurrentThread
     Point update(Point center, int coordinate) {
       return new Point(coordinate, center.y);
     }
@@ -77,11 +72,6 @@ public final class JSliderLocation {
     @RunsInCurrentThread
     int max(JSlider slider, Insets insets) {
       return slider.getHeight() - insets.top - insets.bottom - 1;
-    }
-
-    @RunsInCurrentThread
-    int coordinateOf(Point center) {
-      return center.y;
     }
 
     @RunsInCurrentThread
@@ -95,17 +85,13 @@ public final class JSliderLocation {
     final Point locationForValue(JSlider slider, int value) {
       Point center = new Point(slider.getWidth() / 2, slider.getHeight() / 2);
       int max = max(slider, slider.getInsets());
-      int coordinate = coordinateOf(center);
-      coordinate = (int)(percent(slider, value) * max);
-      if (slider.getInverted()) coordinate = max - coordinate;
+      int coordinate = (int)(percent(slider, value) * max);
+      if (!slider.getInverted()) coordinate = max - coordinate;
       return update(center, coordinate);
     }
 
     @RunsInCurrentThread
     abstract int max(JSlider slider, Insets insets);
-
-    @RunsInCurrentThread
-    abstract int coordinateOf(Point center);
 
     @RunsInCurrentThread
     abstract Point update(Point center, int coordinate);

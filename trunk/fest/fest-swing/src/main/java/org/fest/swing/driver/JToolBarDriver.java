@@ -217,7 +217,7 @@ public class JToolBarDriver extends JComponentDriver {
   }
 
   @RunsInEDT
-  private Window windowAncestorOf(final JToolBar toolBar) {
+  private static Window windowAncestorOf(final JToolBar toolBar) {
     return execute(new GuiQuery<Window>() {
       protected Window executeInEDT() {
         validateIsEnabledAndShowing(toolBar);

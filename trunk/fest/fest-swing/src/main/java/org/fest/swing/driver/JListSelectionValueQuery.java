@@ -31,12 +31,12 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 final class JListSelectionValueQuery {
 
-  static final String NO_SELECTION_VALUE = "";
+  static final Object NO_SELECTION_VALUE = new Object();
   
   @RunsInEDT
-  static String singleSelectionValue(final JList list, final JListCellReader cellReader) {
-    return execute(new GuiQuery<String>() {
-      protected String executeInEDT() {
+  static Object singleSelectionValue(final JList list, final JListCellReader cellReader) {
+    return execute(new GuiQuery<Object>() {
+      protected Object executeInEDT() {
         int selectedIndex = list.getSelectedIndex();
         return (selectedIndex >= 0) ? cellReader.valueAt(list, selectedIndex): NO_SELECTION_VALUE;
       }

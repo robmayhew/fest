@@ -21,6 +21,7 @@ import org.fest.util.Objects;
 
 import static java.lang.String.valueOf;
 
+import static org.fest.swing.util.Objects.HASH_CODE_PRIME;
 import static org.fest.util.Objects.hashCodeFor;
 import static org.fest.util.Strings.*;
 
@@ -83,10 +84,9 @@ public class TableCellByColumnId {
 
   /** ${@inheritDoc} */
   @Override public int hashCode() {
-    final int prime = 31;
     int result = 1;
-    result = prime * result + hashCodeFor(columnId);
-    result = prime * result + row;
+    result = HASH_CODE_PRIME * result + hashCodeFor(columnId);
+    result = HASH_CODE_PRIME * result + row;
     return result;
   }
 

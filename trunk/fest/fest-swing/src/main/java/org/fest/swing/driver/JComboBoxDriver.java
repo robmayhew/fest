@@ -119,7 +119,7 @@ public class JComboBoxDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void requireSelection(JComboBox comboBox, String value) {
-    String selection = selection(comboBox, cellReader);
+    Object selection = selection(comboBox, cellReader);
     if (NO_SELECTION_VALUE == selection)
       fail(concat("[", selectedIndexProperty(comboBox).value(), "] No selection"));
     assertThat(selection).as(selectedIndexProperty(comboBox)).isEqualTo(value);
@@ -132,7 +132,7 @@ public class JComboBoxDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void requireNoSelection(JComboBox comboBox) {
-    String selection = selection(comboBox, cellReader);
+    Object selection = selection(comboBox, cellReader);
     if (NO_SELECTION_VALUE == selection) return;
     fail(concat(
         "[", selectedIndexProperty(comboBox).value(), "] Expecting no selection, but found:<", quote(selection), ">"));

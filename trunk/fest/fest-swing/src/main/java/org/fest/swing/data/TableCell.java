@@ -19,6 +19,7 @@ import javax.swing.JTable;
 
 import static java.lang.String.valueOf;
 
+import static org.fest.swing.util.Objects.HASH_CODE_PRIME;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -89,10 +90,9 @@ public class TableCell {
   
   /** ${@inheritDoc} */
   @Override public int hashCode() {
-    final int prime = 31;
     int result = 1;
-    result = prime * result + column;
-    result = prime * result + row;
+    result = HASH_CODE_PRIME * result + column;
+    result = HASH_CODE_PRIME * result + row;
     return result;
   }
 

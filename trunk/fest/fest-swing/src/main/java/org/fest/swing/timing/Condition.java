@@ -25,6 +25,8 @@ import org.fest.assertions.Description;
  */
 public abstract class Condition {
 
+  private static final String NO_DESCRIPTION = "";
+  
   private final Description description;
 
   /**
@@ -54,7 +56,7 @@ public abstract class Condition {
    * @return the description of this condition.
    */
   @Override public final String toString() {
-    return description != null ? description.value() : null;
+    return description != null ? description.value() : NO_DESCRIPTION;
   }
 
   /**
