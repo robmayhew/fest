@@ -5,7 +5,7 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="1.0b3" date="TBD" description="Subsequent release">
+    <release version="1.0rc" date="2008-12-08" description="Subsequent release">
       <action dev="alruiz" type="fix" issue="134" due-to="Woody Folsom">
         org.fest.swing.core.RobotFixture now throws ActionFailedException if the component to click is out of the 
         boundaries of the screen.
