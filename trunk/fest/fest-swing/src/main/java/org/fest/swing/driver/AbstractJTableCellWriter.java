@@ -64,8 +64,19 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
     robot.waitForIdle();
   }
 
+  /**
+   * Scrolls the given <code>{@link JTable}</code> to the given cell.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
+   * @param table the target <code>JTable</code>.
+   * @param row the row index of the cell.
+   * @param column the column index of the cell.
+   * @param location understands how to get the bounds of the given cell.
+   */
   @RunsInCurrentThread
-  static void scrollToCell(final JTable table, final int row, final int column, final JTableLocation location) {
+  protected static void scrollToCell(JTable table, int row, int column, JTableLocation location) {
     table.scrollRectToVisible(location.cellBounds(table, row, column));
   }
 
@@ -100,8 +111,27 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
     });
   }
 
+  /**
+   * Finds the component used as editor for the given <code>{@link JTable}</code>.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
+   * @param <T> the generic type of the supported editor type.
+   * @param table the target <code>JTable</code>.
+   * @param row the row index of the cell.
+   * @param column the column index of the cell.
+   * @param supportedType the type of component we expect as editor.
+   * @return the component used as editor for the given table cell.
+   * @throws IndexOutOfBoundsException if any of the indices is out of bounds or if the <code>JTable</code> does not
+   * have any rows.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
+   * @throws IllegalStateException if the table cell in the given coordinates is not editable.
+   * @throws ActionFailedException if an editor for the given cell cannot be found.
+   */
   @RunsInCurrentThread
-  static <T extends Component> T editor(JTable table, int row, int column, Class<T> supportedType) {
+  protected static <T extends Component> T editor(JTable table, int row, int column, Class<T> supportedType) {
     validateIndices(table, row, column);
     validateIsEnabledAndShowing(table);
     validateCellIsEditable(table, row, column);

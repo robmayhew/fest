@@ -43,7 +43,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWriter {
 
-  private final JTextComponentDriver driver;
+  protected final JTextComponentDriver driver;
 
   public JTableTextComponentEditorCellWriter(Robot robot) {
     super(robot);
@@ -55,6 +55,19 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
   public void enterValue(JTable table, int row, int column, String value) {
     JTextComponent editor = doStartCellEditing(table, row, column);
     driver.replaceText(editor, value);
+    doStopEditing(table, row, column);
+  }
+  
+  /**
+   * Stops editing the given cell of the <code>{@link JTable}</code>. Unlike 
+   * <code>{@link JTableCellWriter#stopCellEditing(JTable, int, int)}</code>, this method does <b>not</b> perform any
+   * validation on the given table or indices.
+   * @param table the target <code>JTable</code>.
+   * @param row the row index of the cell.
+   * @param column the column index of the cell.
+   */
+  @RunsInEDT
+  protected void doStopEditing(JTable table, int row, int column) {
     stopEditing(table, row, column);
   }
 

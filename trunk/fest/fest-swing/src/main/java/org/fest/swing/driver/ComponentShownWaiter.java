@@ -32,7 +32,7 @@ import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
  *
  * @author Alex Ruiz
  */
-final class ComponentShownWaiter extends ComponentAdapter {
+public final class ComponentShownWaiter extends ComponentAdapter {
 
   private static final int DEFAULT_TIMEOUT = 5000;
   private static final int DEFAULT_SLEEP_TIME = 10;
@@ -40,11 +40,22 @@ final class ComponentShownWaiter extends ComponentAdapter {
   private Component toWaitFor;
   private volatile boolean shown;
   
-  static void waitTillShown(Component toWaitFor) {
+  /**
+   * Waits until the given component is shown on the screen, using a timeout of 5 seconds.
+   * @param toWaitFor the component to wait for.
+   * @throws WaitTimedOutError if the component is not shown before the default timeout of 5 seconds.
+   */
+  public static void waitTillShown(Component toWaitFor) {
     new ComponentShownWaiter(toWaitFor).startWaiting(DEFAULT_TIMEOUT);
   }
 
-  static void waitTillShown(Component toWaitFor, long timeout) {
+  /**
+   * Waits until the given component is shown on the screen.
+   * @param toWaitFor the component to wait for.
+   * @param timeout the amount to time (in milliseconds) to wait for the component to be shown. 
+   * @throws WaitTimedOutError if the component is not shown before the given timeout expires.
+   */
+  public static void waitTillShown(Component toWaitFor, long timeout) {
     new ComponentShownWaiter(toWaitFor).startWaiting(timeout);
   }
   
@@ -53,7 +64,7 @@ final class ComponentShownWaiter extends ComponentAdapter {
     toWaitFor.addComponentListener(this);
   }
 
-  void startWaiting(long timeout) {
+  private void startWaiting(long timeout) {
     if (alreadyVisible()) return;
     TimeoutWatch watch = startWatchWithTimeoutOf(timeout);
     while (!shown) {
@@ -71,6 +82,10 @@ final class ComponentShownWaiter extends ComponentAdapter {
     return true;
   }
   
+  /**
+   * Notification that the component to wait for is finally shown on the screen.
+   * @param e the event raised when the component has been made visible.
+   */
   @RunsInEDT
   @Override public void componentShown(ComponentEvent e) {
     shown = true;

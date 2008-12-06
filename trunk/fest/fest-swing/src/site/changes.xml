@@ -101,6 +101,9 @@
       <action dev="alruiz" type="fix" issue="246" due-to="Marc Johen">
         By default org.fest.swing.keystroke.KeyStrokeMap uses an English keyboard mapping.
       </action>
+      <action dev="alruiz" type="fix" issue="248" due-to="Juhos Csaba-Zsolt">
+        Made methods/classes related to JTableCellWriter accessible for better code reuse.
+      </action>
     </release>
     <release version="1.0b2" date="2008-10-16" description="Subsequent release">
       <action dev="alruiz" type="add" issue="109">
