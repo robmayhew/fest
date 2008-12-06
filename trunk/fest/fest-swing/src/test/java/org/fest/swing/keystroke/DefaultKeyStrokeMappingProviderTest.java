@@ -16,7 +16,6 @@
 package org.fest.swing.keystroke;
 
 import java.util.Collection;
-import java.util.Locale;
 
 import javax.swing.KeyStroke;
 
@@ -24,7 +23,6 @@ import org.testng.annotations.Test;
 
 import static java.awt.event.KeyEvent.*;
 
-import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -35,32 +33,27 @@ import static org.fest.swing.testing.TestGroups.GUI;
 public class DefaultKeyStrokeMappingProviderTest extends KeyStrokeMappingProviderTestCase {
 
   @Test(groups = GUI, dataProvider = "keyStrokeMappings")
-  public void shouldProvideKeyStrokesForEnglishKeyboard(char character, KeyStroke keyStroke) {
-    focusTextArea();
+  public void shouldProvideKeyStrokesForDefaultKeyboard(char character, KeyStroke keyStroke) {
     if (character == BACKSPACE) {
-      assertKeyWasPressedWithoutModifiers(keyStroke, VK_BACK_SPACE);
+      pressKeyStrokeAndVerify(keyStroke, VK_BACK_SPACE);
       return;
     }
     if (character == CR) {
-      assertKeyWasPressedWithoutModifiers(keyStroke, VK_ENTER);
+      pressKeyStrokeAndVerify(keyStroke, VK_ENTER);
       return;
     }
     if (character == DELETE) {
-      assertKeyWasPressedWithoutModifiers(keyStroke, VK_DELETE);
+      pressKeyStrokeAndVerify(keyStroke, VK_DELETE);
       return;
     }
     if (character == ESCAPE) {
-      assertKeyWasPressedWithoutModifiers(keyStroke, VK_ESCAPE);
+      pressKeyStrokeAndVerify(keyStroke, VK_ESCAPE);
       return;
     }
     if (character == LF) {
-      assertKeyWasPressedWithoutModifiers(keyStroke, VK_ENTER);
+      pressKeyStrokeAndVerify(keyStroke, VK_ENTER);
       return;
     }
-  }
-  
-  void verifyTestCanRun() {
-    if (!Locale.getDefault().getLanguage().equals("en")) fail("To run this test, your language should be English");
   }
 
   Collection<KeyStrokeMapping> keyStrokeMappingsToTest() {

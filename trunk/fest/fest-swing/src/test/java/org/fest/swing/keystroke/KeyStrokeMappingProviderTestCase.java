@@ -62,17 +62,14 @@ public abstract class KeyStrokeMappingProviderTestCase {
 
   @BeforeClass public final void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
-    verifyTestCanRun();
     keyStrokeMappings = keyStrokeMappingsToTest();
   }
-
-  abstract void verifyTestCanRun();
 
   abstract Collection<KeyStrokeMapping> keyStrokeMappingsToTest();
 
   @BeforeMethod public final void setUp() {
     robot = robotWithNewAwtHierarchy();
-    MyWindow window = MyWindow.createNew();
+    MyWindow window = MyWindow.createNew(getClass());
     textArea = window.textArea;
     robot.showWindow(window);
     driver = new JTextComponentDriver(robot);
@@ -86,18 +83,13 @@ public abstract class KeyStrokeMappingProviderTestCase {
     return new KeyStrokeMappingIterator(keyStrokeMappings);
   }
 
-  final void focusTextArea() {
-    driver.focus(textArea);
-  }
-
-  final void assertCorrectTextEntered(char character, KeyStroke keyStroke) {
-    driver.deleteText(textArea);
+  final void pressKeyStrokeAndVerify(KeyStroke keyStroke, char expectedChar) {
     pressInTextArea(keyStroke);
-    driver.requireText(textArea, valueOf(character));
+    driver.requireText(textArea, valueOf(expectedChar));
   }
 
-  final void assertKeyWasPressedWithoutModifiers(KeyStroke keyStroke, int expectedKey) {
-    assertThat(keyStroke.getModifiers()).as("no modifiers should have been pressed").isEqualTo(0);
+  final void pressKeyStrokeAndVerify(KeyStroke keyStroke, int expectedKey) {
+    assertThat(keyStroke.getModifiers()).as("no modifiers should be specified").isEqualTo(0);
     KeyRecorder recorder = KeyRecorder.attachTo(textArea);
     pressInTextArea(keyStroke);
     recorder.keysPressed(expectedKey);
@@ -130,18 +122,18 @@ public abstract class KeyStrokeMappingProviderTestCase {
     private static final long serialVersionUID = 1L;
 
     @RunsInEDT
-    static MyWindow createNew() {
+    static MyWindow createNew(final Class<?> testClass) {
       return GuiActionRunner.execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {
-          return new MyWindow();
+          return new MyWindow(testClass);
         }
       });
     }
  
     final JTextArea textArea = new JTextArea(3, 8);
 
-    private MyWindow() {
-      super(KeyStrokeMappingProvider_enTest.class);
+    private MyWindow(Class<?> testClass) {
+      super(testClass);
       add(textArea);
       setPreferredSize(new Dimension(200, 200));
     }
