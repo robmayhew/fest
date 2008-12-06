@@ -38,6 +38,16 @@ public final class BasicComponentPrinter implements ComponentPrinter {
 
   private static final String INDENTATION = "  ";
   
+  private static final ComponentMatcher ALWAYS_MATCHES = alwaysMatches();
+  
+  private static ComponentMatcher alwaysMatches() {
+    return new ComponentMatcher() {
+      public boolean matches(Component c) {
+        return true;
+      }
+    };
+  }
+  
   private final ComponentHierarchy hierarchy;
 
   /**
@@ -72,14 +82,13 @@ public final class BasicComponentPrinter implements ComponentPrinter {
   /** {@inheritDoc} */
   @RunsInEDT
   public void printComponents(PrintStream out) {
-    printComponents(out, (Container)null);
+    printComponents(out, ALWAYS_MATCHES);
   }
 
   /** {@inheritDoc} */
   @RunsInEDT
   public void printComponents(PrintStream out, Container root) {
-    Class<? extends Component> type = null;
-    printComponents(out, type, root);
+    printComponents(out, ALWAYS_MATCHES, root);
   }
 
   /** {@inheritDoc} */
@@ -91,11 +100,9 @@ public final class BasicComponentPrinter implements ComponentPrinter {
   /** {@inheritDoc} */
   @RunsInEDT
   public void printComponents(PrintStream out, Class<? extends Component> type, Container root) {
-    print(hierarchy(root), matcherFor(type), out);
-  }
-
-  private ComponentMatcher matcherFor(Class<? extends Component> type) {
-    return type == null ? null : new TypeMatcher(type);
+    validateNotNull(out);
+    if (type == null) throw new NullPointerException("The type to match should not be null");
+    print(hierarchy(root), new TypeMatcher(type), out);
   }
 
   /** ${@inheritDoc} */
@@ -105,7 +112,13 @@ public final class BasicComponentPrinter implements ComponentPrinter {
 
   /** ${@inheritDoc} */
   public void printComponents(PrintStream out, ComponentMatcher matcher, Container root) {
+    validateNotNull(out);
+    if (matcher == null) throw new NullPointerException("The matcher to use as filter should not be null");
     print(hierarchy(root), matcher, out);
+  }
+
+  private void validateNotNull(PrintStream out) {
+    if (out == null) throw new NullPointerException("The output stream should not be null");
   }
   
   private ComponentHierarchy hierarchy(Container root) {
@@ -124,7 +137,7 @@ public final class BasicComponentPrinter implements ComponentPrinter {
   @RunsInCurrentThread
   private static void print(Component c, ComponentHierarchy h, ComponentMatcher matcher, int level,
       PrintStream out) {
-    if (matcher == null || matcher.matches(c)) print(c, level, out);
+    if (matcher.matches(c)) print(c, level, out);
     for (Component child : h.childrenOf(c))
       print(child, h, matcher, level + 1, out);
   }

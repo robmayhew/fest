@@ -33,6 +33,7 @@ public interface ComponentPrinter {
    * Prints all the components in the hierarchy.
    * @param out the output stream where to print the components to.
    * @see Formatting#format(Component)
+   * @throws NullPointerException if the output stream is <code>null</code>.
    */
   void printComponents(PrintStream out);
 
@@ -41,6 +42,7 @@ public interface ComponentPrinter {
    * @param out the output stream where to print the components to.
    * @param root the root used as the starting point of the search.
    * @see Formatting#format(Component)
+   * @throws NullPointerException if the output stream is <code>null</code>.
    */
   void printComponents(PrintStream out, Container root);
 
@@ -49,6 +51,8 @@ public interface ComponentPrinter {
    * @param out the output stream where to print the components to.
    * @param type the type of components to print.
    * @see Formatting#format(Component)
+   * @throws NullPointerException if the output stream is <code>null</code>.
+   * @throws NullPointerException if <code>type</code> is <code>null</code>.
    */
   void printComponents(PrintStream out, Class<? extends Component> type);
 
@@ -58,6 +62,8 @@ public interface ComponentPrinter {
    * @param type the type of components to print.
    * @param root the root used as the starting point of the search.
    * @see Formatting#format(Component)
+   * @throws NullPointerException if the output stream is <code>null</code>.
+   * @throws NullPointerException if <code>type</code> is <code>null</code>.
    */
   void printComponents(PrintStream out, Class<? extends Component> type, Container root);
 
@@ -66,6 +72,8 @@ public interface ComponentPrinter {
    * @param out the output stream where to print the components to.
    * @param matcher specifies the search criteria to use filter the components to print.
    * @see Formatting#format(Component)
+   * @throws NullPointerException if the output stream is <code>null</code>.
+   * @throws NullPointerException if <code>matcher</code> is <code>null</code>.
    */
   void printComponents(PrintStream out, ComponentMatcher matcher);
 
@@ -75,6 +83,8 @@ public interface ComponentPrinter {
    * @param matcher specifies the search criteria to use filter the components to print.
    * @param root the root used as the starting point of the search.
    * @see Formatting#format(Component)
+   * @throws NullPointerException if the output stream is <code>null</code>.
+   * @throws NullPointerException if <code>matcher</code> is <code>null</code>.
    */
   void printComponents(PrintStream out,  ComponentMatcher matcher, Container root);
 }

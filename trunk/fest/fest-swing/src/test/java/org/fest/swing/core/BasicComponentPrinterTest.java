@@ -15,6 +15,8 @@
  */
 package org.fest.swing.core;
 
+import java.awt.Component;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
@@ -47,9 +49,9 @@ import static org.fest.swing.testing.TestGroups.GUI;
 public class BasicComponentPrinterTest {
 
   private BasicComponentPrinter printer;
-
   private MyWindow windowOne;
   private MyWindow windowTwo;
+  private PrintStreamStub out;
 
   @BeforeClass public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
@@ -62,6 +64,7 @@ public class BasicComponentPrinterTest {
     windowOne.buttonName("button1");
     windowTwo = MyWindow.createAndShow();
     windowTwo.buttonName("button2");
+    out = new PrintStreamStub();
   }
 
   @AfterMethod public void tearDown() {
@@ -78,8 +81,17 @@ public class BasicComponentPrinterTest {
     assertThat(printer.hierarchy()).isInstanceOf(ExistingHierarchy.class);
   }
 
+  @Test(expectedExceptions = NullPointerException.class, groups = GUI)
+  public void shouldThrowErrorIfOutputStreamIsNull() {
+    printer.printComponents(null);
+  }
+
+  @Test(expectedExceptions = NullPointerException.class, groups = GUI)
+  public void shouldThrowErrorIfOutputStreamIsNullWhenPrintingFromRoot() {
+    printer.printComponents(null, windowOne);
+  }
+
   public void shouldPrintAllComponents() {
-    PrintStreamStub out = new PrintStreamStub();
     printer.printComponents(out);
     assertThat(out.printed()).contains(format(windowOne),
                                        format(windowOne.button),
@@ -87,21 +99,7 @@ public class BasicComponentPrinterTest {
                                        format(windowTwo.button));
   }
 
-  public void shouldPrintAllComponentsOfGivenType() {
-    PrintStreamStub out = new PrintStreamStub();
-    printer.printComponents(out, JButton.class);
-    assertThat(out.printed()).containsOnly(format(windowOne.button),
-                                           format(windowTwo.button));
-  }
-
-  public void shouldNotPrintComponentsOfNonMatchingType() {
-    PrintStreamStub out = new PrintStreamStub();
-    printer.printComponents(out, JComboBox.class);
-    assertThat(out.printed()).isEmpty();
-  }
-
   public void shouldPrintComponentsUnderGivenRootOnly() {
-    PrintStreamStub out = new PrintStreamStub();
     printer.printComponents(out, windowOne);
     assertThat(out.printed()).contains(format(windowOne),
                                        format(windowOne.button))
@@ -109,14 +107,67 @@ public class BasicComponentPrinterTest {
                                        format(windowTwo.button));
   }
 
+  @Test(expectedExceptions = NullPointerException.class, groups = GUI)
+  public void shouldThrowErrorIfOutputStreamIsNullWhenMatchingByType() {
+    printer.printComponents(null, JButton.class);
+  }
+
+  @Test(expectedExceptions = NullPointerException.class, groups = GUI)
+  public void shouldThrowErrorIfOutputStreamIsNullWhenMatchingByTypeAndPrintingFromRoot() {
+    printer.printComponents(null, JButton.class, windowOne);
+  }
+  
+  @Test(expectedExceptions = NullPointerException.class, groups = GUI)
+  public void shouldThrowErrorIfTypeToMatchIsNull() {
+    Class<? extends Component> type = null;
+    printer.printComponents(out, type);
+  }
+  
+  @Test(expectedExceptions = NullPointerException.class, groups = GUI)
+  public void shouldThrowErrorIfTypeToMatchIsNullWhenPrintingFromRoot() {
+    Class<? extends Component> type = null;
+    printer.printComponents(out, type, windowOne);
+  }
+
+  public void shouldPrintAllComponentsOfGivenType() {
+    printer.printComponents(out, JButton.class);
+    assertThat(out.printed()).containsOnly(format(windowOne.button),
+                                           format(windowTwo.button));
+  }
+
+  public void shouldNotPrintComponentsIfTypeDoesNotMatch() {
+    printer.printComponents(out, JComboBox.class);
+    assertThat(out.printed()).isEmpty();
+  }
+
   public void shouldPrintAllComponentsOfGivenTypeUnderGivenRootOnly() {
-    PrintStreamStub out = new PrintStreamStub();
     printer.printComponents(out, JButton.class, windowOne);
     assertThat(out.printed()).containsOnly(format(windowOne.button));
   }
 
+  @Test(expectedExceptions = NullPointerException.class, groups = GUI)
+  public void shouldThrowErrorIfOutputStreamIsNullWhenUsingMatcher() {
+    printer.printComponents(null, new NameMatcher("button1"));
+  }
+
+  @Test(expectedExceptions = NullPointerException.class, groups = GUI)
+  public void shouldThrowErrorIfOutputStreamIsNullWhenUsingMatcherAndPrintingFromRoot() {
+    printer.printComponents(null, new NameMatcher("button1"), windowOne);
+  }
+
+  @Test(expectedExceptions = NullPointerException.class, groups = GUI)
+  public void shouldThrowErrorIfMatcherIsNull() {
+    ComponentMatcher matcher = null;
+    printer.printComponents(out, matcher);
+  }
+  
+  @Test(expectedExceptions = NullPointerException.class, groups = GUI)
+  public void shouldThrowErrorIfMatcherIsNullWhenPrintingFromRoot() {
+    ComponentMatcher matcher = null;
+    printer.printComponents(out, matcher, windowOne);
+  }
+
   public void shouldPrintAllComponentsThatMatchMatcher() {
-    PrintStreamStub out = new PrintStreamStub();
     printer.printComponents(out, new NameMatcher("button1"));
     assertThat(out.printed()).containsOnly(format(windowOne.button));
   }
