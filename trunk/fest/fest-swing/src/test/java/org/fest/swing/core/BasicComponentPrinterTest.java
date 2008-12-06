@@ -115,6 +115,12 @@ public class BasicComponentPrinterTest {
     assertThat(out.printed()).containsOnly(format(windowOne.button));
   }
 
+  public void shouldPrintAllComponentsThatMatchMatcher() {
+    PrintStreamStub out = new PrintStreamStub();
+    printer.printComponents(out, new NameMatcher("button1"));
+    assertThat(out.printed()).containsOnly(format(windowOne.button));
+  }
+
   static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 

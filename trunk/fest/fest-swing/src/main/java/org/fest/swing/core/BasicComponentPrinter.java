@@ -18,6 +18,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.io.PrintStream;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.hierarchy.ComponentHierarchy;
@@ -77,7 +78,8 @@ public final class BasicComponentPrinter implements ComponentPrinter {
   /** {@inheritDoc} */
   @RunsInEDT
   public void printComponents(PrintStream out, Container root) {
-    printComponents(out, null, root);
+    Class<? extends Component> type = null;
+    printComponents(out, type, root);
   }
 
   /** {@inheritDoc} */
@@ -89,30 +91,45 @@ public final class BasicComponentPrinter implements ComponentPrinter {
   /** {@inheritDoc} */
   @RunsInEDT
   public void printComponents(PrintStream out, Class<? extends Component> type, Container root) {
-    print(hierarchy(root), type, out);
+    print(hierarchy(root), matcherFor(type), out);
   }
 
+  private ComponentMatcher matcherFor(Class<? extends Component> type) {
+    return type == null ? null : new TypeMatcher(type);
+  }
+
+  /** ${@inheritDoc} */
+  public void printComponents(PrintStream out, ComponentMatcher matcher) {
+    printComponents(out, matcher, null);
+  }
+
+  /** ${@inheritDoc} */
+  public void printComponents(PrintStream out, ComponentMatcher matcher, Container root) {
+    print(hierarchy(root), matcher, out);
+  }
+  
   private ComponentHierarchy hierarchy(Container root) {
     return root != null ? new SingleComponentHierarchy(root, hierarchy) : hierarchy;
   }
   
   @RunsInEDT
-  private static void print(final ComponentHierarchy hierarchy, final Class<? extends Component> type,
-      final PrintStream out) {
+  private static void print(final ComponentHierarchy hierarchy, final ComponentMatcher matcher, final PrintStream out) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        for (Component c : hierarchy.roots()) print(c, hierarchy, type, 0, out);
+        for (Component c : hierarchy.roots()) print(c, hierarchy, matcher, 0, out);
       }
     });
   }
   
-  private static void print(Component c, ComponentHierarchy h, Class<? extends Component> type, int level,
+  @RunsInCurrentThread
+  private static void print(Component c, ComponentHierarchy h, ComponentMatcher matcher, int level,
       PrintStream out) {
-    if (type == null || type.isAssignableFrom(c.getClass())) print(c, level, out);
+    if (matcher == null || matcher.matches(c)) print(c, level, out);
     for (Component child : h.childrenOf(c))
-      print(child, h, type, level + 1, out);
+      print(child, h, matcher, level + 1, out);
   }
 
+  @RunsInCurrentThread
   private static void print(Component c, int level, PrintStream out) {
     for (int i = 0; i < level; i++) out.print(INDENTATION);
     out.println(format(c));

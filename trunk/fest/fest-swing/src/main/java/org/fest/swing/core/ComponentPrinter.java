@@ -30,14 +30,14 @@ import org.fest.swing.format.Formatting;
 public interface ComponentPrinter {
 
   /**
-   * Prints all the components (as <code>String</code>s) in the hierarchy.
+   * Prints all the components in the hierarchy.
    * @param out the output stream where to print the components to.
    * @see Formatting#format(Component)
    */
   void printComponents(PrintStream out);
 
   /**
-   * Prints all the components (as <code>String</code>s) in the hierarchy under the given root.
+   * Prints all the components in the hierarchy under the given root.
    * @param out the output stream where to print the components to.
    * @param root the root used as the starting point of the search.
    * @see Formatting#format(Component)
@@ -45,7 +45,7 @@ public interface ComponentPrinter {
   void printComponents(PrintStream out, Container root);
 
   /**
-   * Prints only the components of the given type (as <code>String</code>s) in the hierarchy.
+   * Prints only the components of the given type in the hierarchy.
    * @param out the output stream where to print the components to.
    * @param type the type of components to print.
    * @see Formatting#format(Component)
@@ -53,7 +53,7 @@ public interface ComponentPrinter {
   void printComponents(PrintStream out, Class<? extends Component> type);
 
   /**
-   * Prints all the components of the given type (as <code>String</code>s) in the hierarchy under the given root.
+   * Prints all the components of the given type in the hierarchy under the given root.
    * @param out the output stream where to print the components to.
    * @param type the type of components to print.
    * @param root the root used as the starting point of the search.
@@ -61,4 +61,20 @@ public interface ComponentPrinter {
    */
   void printComponents(PrintStream out, Class<? extends Component> type, Container root);
 
+  /**
+   * Prints only the components that match the given search criteria in the hierarchy.
+   * @param out the output stream where to print the components to.
+   * @param matcher specifies the search criteria to use filter the components to print.
+   * @see Formatting#format(Component)
+   */
+  void printComponents(PrintStream out, ComponentMatcher matcher);
+
+  /**
+   * Prints all the components that match the given search criteria under the given root.
+   * @param out the output stream where to print the components to.
+   * @param matcher specifies the search criteria to use filter the components to print.
+   * @param root the root used as the starting point of the search.
+   * @see Formatting#format(Component)
+   */
+  void printComponents(PrintStream out,  ComponentMatcher matcher, Container root);
 }

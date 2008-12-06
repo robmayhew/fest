@@ -58,6 +58,10 @@
       <action dev="alruiz" type="fix" issue="229" due-to="Michael Schnell">
         Fixed implementation of method 'click' in org.fest.swing.fixture.JTableCellFixture.
       </action>
+      <action dev="alruiz" type="fix" issue="231" due-to="Ken Geis">
+        Added method 'print(PrintStream, ComponentMatcher)' (and overloaded version) to 
+        org.fest.swing.core.ComponentPrinter.
+      </action>
       <action dev="alruiz" type="fix" issue="232" due-to="Ken Geis">
         JTableFixture now correctly finds the index of a column given its identifier.
       </action>
