@@ -18,6 +18,7 @@ package org.fest.swing.testng;
 import java.lang.reflect.Method;
 
 import org.testng.IClass;
+import org.testng.IRetryAnalyzer;
 import org.testng.ITestClass;
 import org.testng.ITestNGMethod;
 
@@ -245,5 +246,21 @@ public class TestNGMethodStub implements ITestNGMethod {
 
   @Override public ITestNGMethod clone() {
     return null;
+  }
+
+  /** @see org.testng.ITestNGMethod#getRetryAnalyzer() */
+  public IRetryAnalyzer getRetryAnalyzer() {
+    return null;
+  }
+
+  /** @see org.testng.ITestNGMethod#setRetryAnalyzer(org.testng.IRetryAnalyzer) */
+  public void setRetryAnalyzer(IRetryAnalyzer arg0) {}
+
+  /** @see org.testng.ITestNGMethod#setSkipFailedInvocations(boolean) */
+  public void setSkipFailedInvocations(boolean arg0) {}
+
+  /** @see org.testng.ITestNGMethod#skipFailedInvocations() */
+  public boolean skipFailedInvocations() {
+    return false;
   }
 }

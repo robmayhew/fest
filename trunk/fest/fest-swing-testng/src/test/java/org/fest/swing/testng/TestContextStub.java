@@ -122,4 +122,12 @@ public class TestContextStub implements ITestContext {
   public ISuite getSuite() {
     return null;
   }
+
+  /** @see org.testng.ITestContext#getAttribute(java.lang.String) */
+  public Object getAttribute(String arg0) {
+    return null;
+  }
+
+  /** @see org.testng.ITestContext#setAttribute(java.lang.String, java.lang.Object) */
+  public void setAttribute(String arg0, Object arg1) {}
 }

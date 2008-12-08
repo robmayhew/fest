@@ -36,14 +36,14 @@
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>5.5</version>
+      <version>5.7</version>
       <classifier>jdk15</classifier>
-      <scope>compile</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>fest</groupId>
       <artifactId>fest-swing</artifactId>
-      <version>1.0b2</version>
+      <version>1.0rc</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
