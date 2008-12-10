@@ -15,18 +15,22 @@
  */
 package org.fest.mocks;
 
+import java.util.List;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import static java.util.Arrays.asList;
 import static org.easymock.EasyMock.createMock;
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 
 /**
  * Unit tests for <code>{@link EasyMockTemplate}</code>.
  *
  * @author Alex Ruiz
  */
+@Test
 public class EasyMockTemplateTest {
 
   private static interface Server {
@@ -55,35 +59,23 @@ public class EasyMockTemplateTest {
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfArrayOfMocksIsNull() {
-    new EasyMockTemplate(new Object[0]) {
-      @Override protected void codeToTest() {}
-      @Override protected void expectations() {}
-    };
+    new BasicEasyMockTemplate(new Object[0]);
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfArrayOfMocksContainsNull() {
     Object[] mocks = new Object[] { mockServer, null };
-    new EasyMockTemplate(mocks) {
-      @Override protected void codeToTest() {}
-      @Override protected void expectations() {}
-    };
+    new BasicEasyMockTemplate(mocks);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void shouldThrowExceptionIfArrayOfMocksIsEmpty() {
-    new EasyMockTemplate((Object[])null) {
-      @Override protected void codeToTest() {}
-      @Override protected void expectations() {}
-    };    
+    new BasicEasyMockTemplate((Object[])null);
   }
   
   @Test(expectedExceptions = IllegalArgumentException.class, dataProvider = "notMocksProvider")
   public void shouldThrowExceptionIfGivenObjectIsNotMock(Object[] mocks) {
-    new EasyMockTemplate(mocks) {
-      @Override protected void codeToTest() {}
-      @Override protected void expectations() {}
-    };    
+    new BasicEasyMockTemplate(mocks);
   }
 
   @DataProvider(name = "notMocksProvider")
@@ -96,9 +88,148 @@ public class EasyMockTemplateTest {
    };
   }
 
-  @Test public void shouldCompleteMockUsageCycle() {
+  public void shouldReturnMocksInTemplate() {
+    BasicEasyMockTemplate template = new BasicEasyMockTemplate(mockServer);
+    List<Object> actualMocks = template.mocks();
+    assertEquals(actualMocks, asList(mockServer));
+  }
+  
+  public void shouldWrapCatchedExceptionThrownBySetup() {
+    final Throwable expected = new Throwable();
+    BasicEasyMockTemplate template = new BasicEasyMockTemplate(mockServer) {
+      @Override protected void setUp() throws Throwable {
+        throw expected;
+      }
+    };
+    try {
+      template.run();
+      failWhenExpectingException();
+    } catch (UnexpectedError e) {
+      assertSame(e.getCause(), expected);
+    }
+  }
+
+  public void shouldRethrowRuntimeExceptionThrownBySetup() {
+    final RuntimeException expected = new RuntimeException();
+    BasicEasyMockTemplate template = new BasicEasyMockTemplate(mockServer) {
+      @Override protected void setUp() {
+        throw expected;
+      }
+    };
+    try {
+      template.run();
+      failWhenExpectingException();
+    } catch (RuntimeException e) {
+      assertSame(e, expected);
+    }
+  }
+
+  public void shouldWrapCatchedExceptionThrownByExpectations() {
+    final Throwable expected = new Throwable();
+    BasicEasyMockTemplate template = new BasicEasyMockTemplate(mockServer) {
+      @Override protected void expectations() throws Throwable {
+        throw expected;
+      }
+    };
+    try {
+      template.run();
+      failWhenExpectingException();
+    } catch (UnexpectedError e) {
+      assertSame(e.getCause(), expected);
+    }
+  }
+
+  public void shouldRethrowRuntimeExceptionThrownByExpectations() {
+    final RuntimeException expected = new RuntimeException();
+    BasicEasyMockTemplate template = new BasicEasyMockTemplate(mockServer) {
+      @Override protected void expectations() {
+        throw expected;
+      }
+    };
+    try {
+      template.run();
+      failWhenExpectingException();
+    } catch (RuntimeException e) {
+      assertSame(e, expected);
+    }
+  }
+
+  public void shouldWrapCatchedExceptionThrownByCodeToTest() {
+    final Throwable expected = new Throwable();
+    BasicEasyMockTemplate template = new BasicEasyMockTemplate(mockServer) {
+      @Override protected void codeToTest() throws Throwable {
+        throw expected;
+      }
+    };
+    try {
+      template.run();
+      failWhenExpectingException();
+    } catch (UnexpectedError e) {
+      assertSame(e.getCause(), expected);
+    }
+  }
+
+  public void shouldRethrowRuntimeExceptionThrownByCodeToTest() {
+    final RuntimeException expected = new RuntimeException();
+    BasicEasyMockTemplate template = new BasicEasyMockTemplate(mockServer) {
+      @Override protected void codeToTest() {
+        throw expected;
+      }
+    };
+    try {
+      template.run();
+      failWhenExpectingException();
+    } catch (RuntimeException e) {
+      assertSame(e, expected);
+    }
+  }
+
+  public void shouldWrapCatchedExceptionThrownByCleanUp() {
+    final Throwable expected = new Throwable();
+    BasicEasyMockTemplate template = new BasicEasyMockTemplate(mockServer) {
+      @Override protected void cleanUp() throws Throwable {
+        throw expected;
+      }
+    };
+    try {
+      template.run();
+      failWhenExpectingException();
+    } catch (UnexpectedError e) {
+      assertSame(e.getCause(), expected);
+    }
+  }
+  
+  public void shouldRethrowRuntimeExceptionThrownByCleanUp() {
+    final RuntimeException expected = new RuntimeException();
+    BasicEasyMockTemplate template = new BasicEasyMockTemplate(mockServer) {
+      @Override protected void cleanUp() {
+        throw expected;
+      }
+    };
+    try {
+      template.run();
+      failWhenExpectingException();
+    } catch (RuntimeException e) {
+      assertSame(e, expected);
+    }
+  }
+
+  private static class BasicEasyMockTemplate extends EasyMockTemplate {
+    BasicEasyMockTemplate(Object... mocks) {
+      super(mocks);
+    }
+
+    protected void expectations() throws Throwable {}
+    protected void codeToTest() throws Throwable {}
+  }
+
+  private void failWhenExpectingException() {
+    fail("Expecting exception");
+  }
+  
+  public void shouldCompleteMockUsageCycle() {
     final String arg = "name";
-    EasyMockTemplateStub template = new EasyMockTemplateStub(mockServer) {
+    MethodOrderCheckerEasyMockTemplate template = new MethodOrderCheckerEasyMockTemplate(mockServer) {
       
       @Override protected void expectations() {
         super.expectations();
@@ -111,23 +242,24 @@ public class EasyMockTemplateTest {
       }
     };
     template.run();
-    assertMethodCallOrder(template.setUp, template.expectations, template.codeToTest);
+    assertMethodCallOrder(template.setUp, template.expectations, template.codeToTest, template.cleanUp);
   }
-
+  
   private void assertMethodCallOrder(int... callOrders) {
     int expected = 0;
     for (int callOrder : callOrders) assertEquals(callOrder, ++expected);
   }
   
   /** <code>{@link EasyMockTemplate}</code> that tracks the order in which its methods are called. */
-  private static class EasyMockTemplateStub extends EasyMockTemplate {
+  private static class MethodOrderCheckerEasyMockTemplate extends EasyMockTemplate {
     int setUp;
     int expectations;
     int codeToTest;
+    int cleanUp;
 
     int methodCallOrder;
     
-    public EasyMockTemplateStub(Object... mocks) {
+    public MethodOrderCheckerEasyMockTemplate(Object... mocks) {
       super(mocks);
     }
 
@@ -135,12 +267,16 @@ public class EasyMockTemplateTest {
       setUp = ++methodCallOrder;
     }
 
-    @Override protected void expectations() {
+    protected void expectations() {
       expectations = ++methodCallOrder;
     }
     
-    @Override protected void codeToTest() {
+    protected void codeToTest() {
       codeToTest = ++methodCallOrder;     
+    }
+
+    @Override protected void cleanUp() throws Throwable {
+      cleanUp = ++methodCallOrder;
     }
   }
 }

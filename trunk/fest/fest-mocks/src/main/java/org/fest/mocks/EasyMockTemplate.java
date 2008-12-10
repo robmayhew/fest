@@ -126,7 +126,7 @@ public abstract class EasyMockTemplate {
    * Returns all the mocks managed by this template.
    * @return all the mocks managed by this template.
    */
-  protected List<Object> mocks() {
+  protected final List<Object> mocks() {
     return new ArrayList<Object>(mocks);
   }
   
