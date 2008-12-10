@@ -6,9 +6,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fest</groupId>
   <artifactId>fest-test</artifactId>
-  <version>0.1</version>
+  <version>1.0</version>
   <name>FEST Testing</name>
-  <description>Utility methods for software testing</description>
+  <description>Utility methods for testing FEST modules</description>
   <inceptionYear>2008</inceptionYear>
   <url>http://code.google.com/p/fest/</url>
   <mailingLists>
@@ -38,13 +38,13 @@
     <dependency>
       <groupId>fest</groupId>
       <artifactId>fest-util</artifactId>
-      <version>0.3</version>
+      <version>1.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>5.5</version>
+      <version>5.7</version>
       <classifier>jdk15</classifier>
       <scope>test</scope>
     </dependency>
