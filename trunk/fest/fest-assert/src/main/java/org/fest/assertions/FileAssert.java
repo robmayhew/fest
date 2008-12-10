@@ -160,16 +160,6 @@ public final class FileAssert extends GenericAssert<File> {
   }
 
   /**
-   * Returns an <code>{@link LongAssert}</code> for verification of the size of the actual file.
-   * @return assertion methods for verification of the size of the actual <code>File</code>.
-   * @throws AssertionError if the the actual <code>File</code> is <code>null</code>.
-   */
-  public LongAssert size() {
-    isNotNull();
-    return new LongAssert(actual.length());
-  }
-
-  /**
    * Verifies that the actual <code>File</code> is a directory.
    * @return this assertion object.
    * @throws AssertionError if the the actual <code>File</code> is <code>null</code>.

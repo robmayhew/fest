@@ -14,12 +14,10 @@
  */
 package org.fest.assertions;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.testng.annotations.Test;
 
-import org.fest.assertions.ThrowableAssert.CauseHierarchyAssert;
 import org.fest.test.CodeToTest;
 
 import static org.fest.assertions.CommonFailures.*;
@@ -200,49 +198,6 @@ public class ThrowableAssertTest {
     expectAssertionError("[A Test] expected:<'Hi'> but was:<'An exception'>").on(new CodeToTest() {
       public void run() {
         new ThrowableAssert(new Exception("An exception")).as("A Test").hasMessage("Hi");
-      }
-    });
-  }
-
-  @Test public void shouldReturnStringAssertWithActualMessage() {
-    StringAssert message = new ThrowableAssert(new Exception("Hi")).message();
-    message.isEqualTo("Hi");
-  }
-
-  @Test public void shouldFailIfActualIsNullWhenReturningMessage() {
-    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
-      public void run() {
-        new ThrowableAssert(null).message();
-      }
-    });
-  }
-
-  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenReturningMessage() {
-    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
-      public void run() {
-        new ThrowableAssert(null).as("A Test").message();
-      }
-    });
-  }
-
-  @Test public void shouldReturnCauseInThrowableAssert() {
-    Exception cause = new Exception();
-    ThrowableAssert root = new ThrowableAssert(new Exception(cause));
-    assertSame(root.cause().actual, cause);
-  }
-
-  @Test public void shouldFailIfActualIsNullWhenGettingCause() {
-    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
-      public void run() {
-        new ThrowableAssert(null).cause();
-      }
-    });
-  }
-
-  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenGettingCause() {
-    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
-      public void run() {
-        new ThrowableAssert(null).as("A Test").cause();
       }
     });
   }
@@ -481,91 +436,6 @@ public class ThrowableAssertTest {
           public void run() {
             Exception e = new Exception();
             new ThrowableAssert(e).as("A Test").isNotEqualTo(e);
-          }
-        });
-  }
-
-  @Test public void shouldReturnCauseHierarchy() {
-    CauseHierarchyAssert causeHierarchy = new ThrowableAssert(new Exception()).causeHierarchy();
-    assertNotNull(causeHierarchy);
-  }
-
-  @Test public void shouldFailIfActualIsNullWhenGettingCauseHierarchy() {
-    expectAssertionErrorIfObjectIsNull(new CodeToTest() {
-      public void run() {
-        new ThrowableAssert(null).causeHierarchy();
-      }
-    });
-  }
-
-  @Test public void shouldFailShowingDescriptionIfActualIsNullWhenGettingCauseHierarchy() {
-    expectAssertionErrorWithDescriptionIfObjectIsNull(new CodeToTest() {
-      public void run() {
-        new ThrowableAssert(null).as("A Test").causeHierarchy();
-      }
-    });
-  }
-
-  @Test public void shouldPassIsCauseHierarchyHasCauseOfType() {
-    Exception e = new Exception(new IllegalArgumentException(new FileNotFoundException()));
-    new ThrowableAssert(e).causeHierarchy().hasCauseOfType(IOException.class);
-  }
-
-  @Test public void shouldFailIfActualDoesNotHaveCauseWhenCheckingForCauseOfType() {
-    expectAssertionError("expected a cause of type:<java.lang.Exception>, but found none").on(new CodeToTest() {
-      public void run() {
-        new ThrowableAssert(new Exception()).causeHierarchy().hasCauseOfType(Exception.class);
-      }
-    });
-  }
-
-  @Test public void shouldFailShowingDescriptionIfActualDoesNotHaveCauseWhenCheckingForCauseOfType() {
-    expectAssertionError("[A Test] expected a cause of type:<java.lang.Exception>, but found none").on(
-        new CodeToTest() {
-          public void run() {
-            new ThrowableAssert(new Exception()).as("A Test").causeHierarchy().hasCauseOfType(Exception.class);
-          }
-        });
-  }
-
-  @Test public void shouldFailIfActualDoesNotHaveCauseOfGivenType() {
-    expectAssertionError("expected a cause of type:<java.lang.NullPointerException>, but found none").on(
-        new CodeToTest() {
-          public void run() {
-            new ThrowableAssert(new Exception(new Exception())).causeHierarchy().hasCauseOfType(
-                NullPointerException.class);
-          }
-        });
-  }
-
-  @Test public void shouldPassIsCauseHierarchyHasCauseOfExactType() {
-    Exception e = new Exception(new IllegalArgumentException(new NullPointerException()));
-    new ThrowableAssert(e).causeHierarchy().hasCauseOfExactType(NullPointerException.class);
-  }
-
-  @Test public void shouldFailIfActualDoesNotHaveCauseWhenCheckingForCauseOfExactType() {
-    expectAssertionError("expected a cause of exact type:<java.lang.Exception>, but found none").on(new CodeToTest() {
-      public void run() {
-        new ThrowableAssert(new Exception()).causeHierarchy().hasCauseOfExactType(Exception.class);
-      }
-    });
-  }
-
-  @Test public void shouldFailShowingDescriptionIfActualDoesNotHaveCauseWhenCheckingForCauseOfExactType() {
-    expectAssertionError("[A Test] expected a cause of exact type:<java.lang.Exception>, but found none").on(
-        new CodeToTest() {
-          public void run() {
-            new ThrowableAssert(new Exception()).as("A Test").causeHierarchy().hasCauseOfExactType(Exception.class);
-          }
-        });
-  }
-
-  @Test public void shouldFailIfActualDoesNotHaveCauseOfExactGivenType() {
-    expectAssertionError("expected a cause of exact type:<java.lang.NullPointerException>, but found none").on(
-        new CodeToTest() {
-          public void run() {
-            new ThrowableAssert(new Exception(new Exception())).causeHierarchy().hasCauseOfExactType(
-                NullPointerException.class);
           }
         });
   }

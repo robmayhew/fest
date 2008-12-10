@@ -44,7 +44,7 @@ public final class ObjectAssert extends GenericAssert<Object> {
    */
   public ObjectAssert isInstanceOf(Class<?> type) {
     isNotNull();
-    validateTypeToCheckAgainst(type);
+    validateNotNull(type);
     Class<?> current = actual.getClass();
     if (!type.isAssignableFrom(current))
       fail(concat("expected instance of:", inBrackets(type), " but was instance of:", inBrackets(current)));
@@ -72,13 +72,13 @@ public final class ObjectAssert extends GenericAssert<Object> {
   private boolean foundInstanceOfAny(Class<?>...types) {
     Class<?> current = actual.getClass();
     for (Class<?> type : types) {
-      validateTypeToCheckAgainst(type);
+      validateNotNull(type);
       if (type.isAssignableFrom(current)) return true;
     }
     return false;
   }
 
-  void validateTypeToCheckAgainst(Class<?> type) {
+  void validateNotNull(Class<?> type) {
     if (type == null) throw new IllegalArgumentException("The given type to check against should not be null");
   }
 

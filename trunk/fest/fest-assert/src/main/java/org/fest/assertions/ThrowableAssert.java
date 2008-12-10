@@ -134,7 +134,7 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
    */
   public ThrowableAssert isExactlyInstanceOf(Class<?> type) {
     isNotNull();
-    objectAssert.validateTypeToCheckAgainst(type);
+    objectAssert.validateNotNull(type);
     Class<?> current = actual.getClass();
     if (!type.equals(current))
       fail(concat("expected exactly the same type:", inBrackets(type), " but was:", inBrackets(current)));
@@ -155,38 +155,6 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
   }
 
   /**
-   * Returns a <code>{@link StringAssert}</code> wrapping the message of the actual <code>Throwable</code>.
-   * @return a <code>StringAssert</code> wrapping the message of the actual <code>Throwable</code>.
-   * @throws AssertionError if the actual <code>Throwable</code> is <code>null</code>.
-   */
-  public StringAssert message() {
-    isNotNull();
-    return new StringAssert(actual.getMessage());
-  }
-
-  /**
-   * Returns the cause of the actual <code>Throwable</code>, wrapped in a <code>{@link ThrowableAssert}</code>.
-   * @return a <code>ThrowableAssert</code> containing the cause of the actual <code>Throwable</code>.
-   * @throws AssertionError if the actual <code>Throwable</code> is <code>null</code>.
-   */
-  public ThrowableAssert cause() {
-    isNotNull();
-    return new ThrowableAssert(actual.getCause());
-  }
-
-  /**
-   * Returns the hierarchy of causes of the the actual <code>Throwable</code>, wrapped in a
-   * <code>{@link CauseHierarchyAssert}</code>.
-   * @return a <code>CauseHierarchyAssert</code> containing the hierarchy of causes of the actual
-   *          <code>Throwable</code>.
-   * @throws AssertionError if the actual <code>Throwable</code> is <code>null</code>.
-   */
-  public CauseHierarchyAssert causeHierarchy() {
-    isNotNull();
-    return new CauseHierarchyAssert(this);
-  }
-
-  /**
    * Verifies that the actual <code>Throwable</code> does not have a cause.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>Throwable</code> is <code>null</code>.
@@ -198,76 +166,6 @@ public final class ThrowableAssert extends GenericAssert<Throwable> {
     if (actualCause != null)
       fail(concat("expected exception without cause, but cause was:", inBrackets(actualCause.getClass())));
     return this;
-  }
-
-  /**
-   * Understands assertion methods for the hierarchy of causes in a <code>{@link Throwable}</code>.
-   *
-   * @author Alex Ruiz
-   * @author David DIDIER
-   */
-  public static class CauseHierarchyAssert {
-    private final ThrowableAssert throwableAssert;
-
-    CauseHierarchyAssert(ThrowableAssert throwableAssert) {
-      this.throwableAssert = throwableAssert;
-    }
-
-    /**
-     * Verifies that the actual <code>Throwable</code> has a cause of the given type anywhere in its cause hierarchy.
-     * The test is <code>true</code> if <code>type</code> is a subclass of one of the causes of the actual
-     * <code>Throwable</code>.
-     * @param type the type to check the hierarchy of causes in the actual <code>Throwable</code> against.
-     * @return this assertion object.
-     * @throws AssertionError if the actual <code>Throwable</code> is <code>null</code>.
-     * @throws AssertionError if the actual <code>Throwable</code> does not have a cause of the given type somewhere in
-     *          its cause hierarchy.
-     * @throws IllegalArgumentException if the type to check against is <code>null</code>.
-     */
-    public CauseHierarchyAssert hasCauseOfType(Class<? extends Throwable> type) {
-      throwableAssert.isNotNull();
-      throwableAssert.objectAssert.validateTypeToCheckAgainst(type);
-      if (!causeOfTypeFound(type))
-        throwableAssert.fail(concat("expected a cause of type:", inBrackets(type), ", but found none"));
-      return this;
-    }
-
-    private boolean causeOfTypeFound(Class<? extends Throwable> type) {
-      Throwable cause = throwableAssert.actual.getCause();
-      while (cause != null) {
-        if (type.isAssignableFrom(cause.getClass())) return true;
-        cause = cause.getCause();
-      }
-      return false;
-    }
-
-    /**
-     * Verifies that the actual <code>Throwable</code> has a cause of the given type anywhere in its cause hierarchy.
-     * The test is <code>true</code> if <code>type</code> is strictly equal of one of the causes of the actual
-     * <code>Throwable</code>.
-     * @param type the type to check the hierarchy of causes in the actual <code>Throwable</code> against.
-     * @return this assertion object.
-     * @throws AssertionError if the actual <code>Throwable</code> is <code>null</code>.
-     * @throws AssertionError if the actual <code>Throwable</code> does not have a cause of the given type somewhere in
-     *          its cause hierarchy.
-     * @throws IllegalArgumentException if the type to check against is <code>null</code>.
-     */
-    public CauseHierarchyAssert hasCauseOfExactType(Class<? extends Throwable> type) {
-      throwableAssert.isNotNull();
-      throwableAssert.objectAssert.validateTypeToCheckAgainst(type);
-      if (!causeOfExactTypeFound(type))
-        throwableAssert.fail(concat("expected a cause of exact type:", inBrackets(type), ", but found none"));
-      return this;
-    }
-
-    private boolean causeOfExactTypeFound(Class<? extends Throwable> type) {
-      Throwable cause = throwableAssert.actual.getCause();
-      while (cause != null) {
-        if (cause.getClass().equals(type)) return true;
-        cause = cause.getCause();
-      }
-      return false;
-    }
   }
 
   /**

@@ -5,7 +5,7 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="1.0rc1" date="2008-10-30" description="Subsequent release">
+    <release version="1.0" date="TBD" description="Subsequent release">
       <action dev="wanghy" type="add" issue="112" due-to="Ted Young">
         Added method 'doesNotHaveDuplicates(Object...)' to ObjectArrayAssert.
       </action>
@@ -24,6 +24,22 @@
       </action>
       <action dev="alruiz, wanghy" type="add" issue="227">
         Added methods 'as(Description)' and 'describedAs(Description)' to all assertions.
+      </action>
+      <action dev="alruiz" type="remove" issue="256">
+        Removed method 'size' from GroupAssert.
+      </action>
+      <action dev="alruiz" type="remove" issue="256">
+        Removed methods 'keys', 'values', 'keySetIncludes', 'keySetExcludes', 'valuesInclude' and 'valuesExclude' from 
+        MapAssert.
+      </action>
+      <action dev="alruiz" type="remove" issue="256">
+        Removed class ThrowableAssert.CauseHierarchyAssert.
+      </action>
+      <action dev="alruiz" type="remove" issue="256">
+        Removed methods 'message', 'causeHierarchy' and 'cause' from ThrowableAssert.
+      </action>
+      <action dev="alruiz" type="remove" issue="256">
+        Removed method 'size' from FileAssert.
       </action>
     </release>
     <release version="1.0a1" date="2008-02-18" description="Subsequent release">
