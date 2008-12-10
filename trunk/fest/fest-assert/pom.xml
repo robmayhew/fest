@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fest</groupId>
   <artifactId>fest-assert</artifactId>
-  <version>1.0rc1</version>
+  <version>1.0</version>
   <name>FEST Fluent Assertions</name>
   <description>'Flexible' or 'fluent' assertions for testing</description>
   <inceptionYear>2007</inceptionYear>
@@ -44,19 +44,19 @@
     <dependency>
       <groupId>fest</groupId>
       <artifactId>fest-util</artifactId>
-      <version>0.4</version>
+      <version>1.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>fest</groupId>
       <artifactId>fest-test</artifactId>
-      <version>0.1</version>
+      <version>1.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>fest</groupId>
       <artifactId>fest-mocks</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>1.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
