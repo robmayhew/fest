@@ -6,6 +6,6 @@
 	<classpathentry kind="lib" path="lib/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="lib" path="lib/easymock-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/easymockclassextension-2.2.jar"/>
-	<classpathentry kind="lib" path="lib/testng-5.5-jdk15.jar"/>
+	<classpathentry kind="lib" path="lib/testng-5.7-jdk15.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

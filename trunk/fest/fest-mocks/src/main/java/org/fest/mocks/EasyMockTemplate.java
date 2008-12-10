@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.cglib.proxy.Enhancer;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
+import static org.easymock.classextension.EasyMock.*;
 
 /**
  * Understands a template for usage of <a href="http://www.easymock.org/" target="_blank">EasyMock</a> mocks.
@@ -107,22 +106,51 @@ public abstract class EasyMockTemplate {
    * </ol>
    * Steps 2 and 4 are considered invariant behavior while steps 1 and 3 should be implemented by subclasses of this 
    * template.
+   * @throws UnexpectedError wrapping any checked exception thrown during the execution of this method.
    */
   public final void run() {
-    setUp();
-    expectations();
-    for (Object mock : mocks) replay(mock);
-    codeToTest();
-    for (Object mock : mocks) verify(mock);
+    try {
+      setUp();
+      expectations();
+      for (Object mock : mocks) replay(mock);
+      codeToTest();
+      for (Object mock : mocks) verify(mock);
+      cleanUp();
+    } catch (Throwable t) {
+      if (t instanceof RuntimeException) throw (RuntimeException)t;
+      throw new UnexpectedError(t);
+    }
   }
 
-  /** Sets the expectations on the mock objects. */
-  protected abstract void expectations();
+  /**
+   * Returns all the mocks managed by this template.
+   * @return all the mocks managed by this template.
+   */
+  protected List<Object> mocks() {
+    return new ArrayList<Object>(mocks);
+  }
+  
+  /** 
+   * Sets the expectations on the mock objects. 
+   * @throws Throwable any error thrown by the implementation of this method.
+   */
+  protected abstract void expectations() throws Throwable;
 
-  /** Executes the code that is under test. */
-  protected abstract void codeToTest();
+  /** 
+   * Executes the code that is under test. 
+   * @throws Throwable any error thrown by the implementation of this method.
+   */
+  protected abstract void codeToTest() throws Throwable;
 
-  /** Sets up the test fixture if necessary. */
-  protected void setUp() {}
+  /** 
+   * Sets up the test fixture if necessary. 
+   * @throws Throwable any error thrown by the implementation of this method.
+   */
+  protected void setUp() throws Throwable {}
 
+  /** 
+   * Cleans up any resources if necessary. 
+   * @throws Throwable any error thrown by the implementation of this method.
+   */
+  protected void cleanUp() throws Throwable {}
 }
