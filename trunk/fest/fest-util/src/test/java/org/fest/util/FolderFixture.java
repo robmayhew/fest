@@ -68,14 +68,14 @@ public final class FolderFixture {
     logger.info(concat("The directory ", quote(path), " already exists"));
   }
   
-  public FolderFixture addFolder(String name) {
-    FolderFixture child = new FolderFixture(name, this);
+  public FolderFixture addFolder(String folderName) {
+    FolderFixture child = new FolderFixture(folderName, this);
     folders.add(child);
     return child;
   }
   
   public FolderFixture addFiles(String... names) throws IOException {
-    for (String name : names) files.add(new FileFixture(name, this));
+    for (String file : names) files.add(new FileFixture(file, this));
     return this;
   }
   
@@ -104,9 +104,9 @@ public final class FolderFixture {
     return current;
   }
   
-  private FolderFixture childFolder(String name) {
+  private FolderFixture childFolder(String folderName) {
     for (FolderFixture folder : folders)
-      if (folder.name.equals(name)) return folder;
+      if (folder.name.equals(folderName)) return folder;
     return null;
   }
   
