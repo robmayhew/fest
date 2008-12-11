@@ -173,7 +173,8 @@ public final class FileAssert extends GenericAssert<File> {
   }
 
   /**
-   * Verifies that the actual <code>File</code> is equal to the given one.
+   * Verifies that the actual <code>File</code> is equal to the given one. To verify that the actual <code>File</code>
+   * has the same content as another <code>File</code>, use <code>{@link #hasSameContentAs(File)}</code>.
    * @param expected the given <code>File</code> to compare the actual <code>File</code> to.
    * @return this assertion object.
    * @throws AssertionError if the actual <code>File</code> is not equal to the given one.

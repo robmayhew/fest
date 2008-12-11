@@ -66,11 +66,5 @@
       <classifier>jdk15</classifier>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.uncommons</groupId>
-      <artifactId>reportng</artifactId>
-      <version>0.9.8</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 </project>
