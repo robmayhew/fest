@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fest</groupId>
 	<artifactId>fest-reflect</artifactId>
-	<version>0.4</version>
+	<version>1.0</version>
   <name>FEST Reflection</name>
   <description>Fluent Interface that simplifies usage of Java Reflection</description>
   <inceptionYear>2007</inceptionYear>
@@ -28,35 +28,35 @@
     <system>Google Code</system>
     <url>http://code.google.com/p/fest/issues</url>
   </issueManagement>
-  <parent>
+  <!--parent>
     <groupId>fest</groupId>
     <artifactId>pom-template</artifactId>
     <version>1.0</version>
     <relativePath>../pom-template</relativePath>
-  </parent>
+  </parent-->
 	<dependencies>
 		<dependency>
 			<groupId>fest</groupId>
 			<artifactId>fest-util</artifactId>
-			<version>0.4</version>
+			<version>1.0</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>fest</groupId>
 			<artifactId>fest-assert</artifactId>
-			<version>1.0a1</version>
+			<version>1.0</version>
 			<scope>test</scope>
 		</dependency>
     <dependency>
       <groupId>fest</groupId>
       <artifactId>fest-test</artifactId>
-      <version>0.1</version>
+      <version>1.0</version>
       <scope>test</scope>
     </dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>5.5</version>
+			<version>5.7</version>
 			<classifier>jdk15</classifier>
 			<scope>test</scope>
 		</dependency>
