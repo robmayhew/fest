@@ -37,7 +37,7 @@ public class CommonValidationsTest {
       CommonValidations.validateCellReader(null);
       failWhenExpectingException();
     } catch (NullPointerException e) {
-      assertThat(e).message().isEqualTo("Cell reader should not be null");
+      assertThat(e.getMessage()).isEqualTo("Cell reader should not be null");
     }
   }
 
@@ -50,7 +50,7 @@ public class CommonValidationsTest {
       CommonValidations.validateCellWriter(null);
       failWhenExpectingException();
     } catch (NullPointerException e) {
-      assertThat(e).message().isEqualTo("Cell writer should not be null");
+      assertThat(e.getMessage()).isEqualTo("Cell writer should not be null");
     }
   }
 }

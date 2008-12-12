@@ -77,7 +77,7 @@ public class JListItemIndexValidatorTest {
       JListItemIndexValidator.validateIndex(list, -1);
       failWhenExpectingException();
     } catch (IndexOutOfBoundsException e) {
-      Assertions.assertThat(e).message().isEqualTo("Item index (-1) should be between [0] and [2] (inclusive)");
+      Assertions.assertThat(e.getMessage()).isEqualTo("Item index (-1) should be between [0] and [2] (inclusive)");
     }
   }
 
@@ -86,7 +86,7 @@ public class JListItemIndexValidatorTest {
       JListItemIndexValidator.validateIndex(list, 3);
       failWhenExpectingException();
     } catch (IndexOutOfBoundsException e) {
-      Assertions.assertThat(e).message().isEqualTo("Item index (3) should be between [0] and [2] (inclusive)");
+      Assertions.assertThat(e.getMessage()).isEqualTo("Item index (3) should be between [0] and [2] (inclusive)");
     }
   }
 

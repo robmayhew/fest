@@ -472,8 +472,8 @@ public class JTreeDriverTest {
       driver.requireSelection(dragTree, intArray(1));
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selection'")
-                             .contains("No selection");
+      assertThat(e.getMessage()).contains("property:'selection'")
+                                .contains("No selection");
     }
   }
 
@@ -485,8 +485,8 @@ public class JTreeDriverTest {
       driver.requireSelection(dragTree, intArray(1));
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selection'")
-                             .contains("array:<[0]> does not contain element(s):<[1]>");
+      assertThat(e.getMessage()).contains("property:'selection'")
+                                .contains("array:<[0]> does not contain element(s):<[1]>");
     }
   }
 
@@ -502,8 +502,8 @@ public class JTreeDriverTest {
       driver.requireSelection(dragTree, array("root/branch1"));
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selection'")
-                             .contains("No selection");
+      assertThat(e.getMessage()).contains("property:'selection'")
+                                .contains("No selection");
     }
   }
 
@@ -515,8 +515,8 @@ public class JTreeDriverTest {
       driver.requireSelection(dragTree, array("root/branch1"));
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selection'")
-                             .contains("array:<[[root]]> does not contain element(s):<[[root, branch1]]>");
+      assertThat(e.getMessage()).contains("property:'selection'")
+                                .contains("array:<[[root]]> does not contain element(s):<[[root, branch1]]>");
     }
   }
 
@@ -553,8 +553,8 @@ public class JTreeDriverTest {
       driver.requireNoSelection(dragTree);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selection'")
-                             .contains("expected no selection but was:<[[root]]>");
+      assertThat(e.getMessage()).contains("property:'selection'")
+                                .contains("expected no selection but was:<[[root]]>");
     }
   }
 
@@ -575,7 +575,7 @@ public class JTreeDriverTest {
       driver.requireEditable(dragTree);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'editable'").contains("expected:<true> but was:<false>");
+      assertThat(e.getMessage()).contains("property:'editable'").contains("expected:<true> but was:<false>");
     }
   }
 
@@ -592,7 +592,7 @@ public class JTreeDriverTest {
       driver.requireNotEditable(dragTree);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'editable'").contains("expected:<false> but was:<true>");
+      assertThat(e.getMessage()).contains("property:'editable'").contains("expected:<false> but was:<true>");
     }
   }
 

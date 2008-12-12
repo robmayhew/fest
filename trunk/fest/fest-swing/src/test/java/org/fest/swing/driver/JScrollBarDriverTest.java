@@ -89,8 +89,8 @@ public class JScrollBarDriverTest {
       driver.requireValue(scrollBar, 20);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'value'")
-                             .contains("expected:<20> but was:<30>");
+      assertThat(e.getMessage()).contains("property:'value'")
+                                .contains("expected:<20> but was:<30>");
     }
   }
 
@@ -102,7 +102,7 @@ public class JScrollBarDriverTest {
     } catch (IllegalArgumentException expected) {
       String message = concat(
           "The number of times to scroll up one unit should be greater than zero, but was <", times, ">");
-      assertThat(expected).message().isEqualTo(message);
+      assertThat(expected.getMessage()).isEqualTo(message);
     }
   }
 
@@ -168,7 +168,7 @@ public class JScrollBarDriverTest {
     } catch (IllegalArgumentException expected) {
       String message = concat(
           "The number of times to scroll down one unit should be greater than zero, but was <", times, ">");
-      assertThat(expected).message().isEqualTo(message);
+      assertThat(expected.getMessage()).isEqualTo(message);
     }
   }
 
@@ -234,7 +234,7 @@ public class JScrollBarDriverTest {
     } catch (IllegalArgumentException expected) {
       String message = concat(
           "The number of times to scroll up one block should be greater than zero, but was <", times, ">");
-      assertThat(expected).message().isEqualTo(message);
+      assertThat(expected.getMessage()).isEqualTo(message);
     }
   }
 
@@ -300,7 +300,7 @@ public class JScrollBarDriverTest {
     } catch (IllegalArgumentException expected) {
       String message = concat(
           "The number of times to scroll down one block should be greater than zero, but was <", times, ">");
-      assertThat(expected).message().isEqualTo(message);
+      assertThat(expected.getMessage()).isEqualTo(message);
     }
   }
 
@@ -408,7 +408,7 @@ public class JScrollBarDriverTest {
       driver.scrollTo(scrollBar, 0);
       failWhenExpectingException();
     } catch (IllegalArgumentException expected) {
-      assertThat(expected).message().isEqualTo("Position <0> is not within the JScrollBar bounds of <10> and <80>");
+      assertThat(expected.getMessage()).isEqualTo("Position <0> is not within the JScrollBar bounds of <10> and <80>");
     }
   }
 
@@ -417,7 +417,7 @@ public class JScrollBarDriverTest {
       driver.scrollTo(scrollBar, 90);
       failWhenExpectingException();
     } catch (IllegalArgumentException expected) {
-      assertThat(expected).message().isEqualTo("Position <90> is not within the JScrollBar bounds of <10> and <80>");
+      assertThat(expected.getMessage()).isEqualTo("Position <90> is not within the JScrollBar bounds of <10> and <80>");
     }
   }
 

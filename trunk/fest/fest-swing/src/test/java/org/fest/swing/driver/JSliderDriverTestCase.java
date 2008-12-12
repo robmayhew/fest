@@ -189,7 +189,7 @@ public abstract class JSliderDriverTestCase {
       driver.slide(slider, -1);
       failWhenExpectingException();
     } catch (IllegalArgumentException expected) {
-      assertThat(expected).message().isEqualTo("Value <-1> is not within the JSlider bounds of <0> and <30>");
+      assertThat(expected.getMessage()).isEqualTo("Value <-1> is not within the JSlider bounds of <0> and <30>");
     }
   }
 
@@ -198,7 +198,7 @@ public abstract class JSliderDriverTestCase {
       driver.slide(slider, 31);
       failWhenExpectingException();
     } catch (IllegalArgumentException expected) {
-      assertThat(expected).message().isEqualTo("Value <31> is not within the JSlider bounds of <0> and <30>");
+      assertThat(expected.getMessage()).isEqualTo("Value <31> is not within the JSlider bounds of <0> and <30>");
     }
   }
 

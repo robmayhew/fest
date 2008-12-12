@@ -90,7 +90,7 @@ public abstract class JTableCellWriterTestCase {
   }
 
   private void assertMessageIncludesComponentNotHandled(ActionFailedException e) {
-    assertThat(e).message().contains("Unable to handle editor component of type javax.swing.JButton");
+    assertThat(e.getMessage()).contains("Unable to handle editor component of type javax.swing.JButton");
   }
 
   protected final Robot robot() { return robot; }

@@ -158,7 +158,7 @@ public class JTabbedPaneDriverTest {
       driver.selectTab(tabbedPane, index);
       failWhenExpectingException();
     } catch (IndexOutOfBoundsException expected) {
-      assertThat(expected).message().isEqualTo(concat(
+      assertThat(expected.getMessage()).isEqualTo(concat(
         "Index <", index, "> is not within the JTabbedPane bounds of <0> and <1> (inclusive)"));
     }
   }

@@ -108,7 +108,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
       AppletLauncher.applet(AnApplet.class);
       failWhenExpectingException();
     } catch (UnexpectedException e) {
-      assertThat(e).message().contains("Unable to create a new instance");
+      assertThat(e.getMessage()).contains("Unable to create a new instance");
     }
   }
 
@@ -133,7 +133,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
       AppletLauncher.applet("Hello");
       failWhenExpectingException();
     } catch (UnexpectedException e) {
-      assertThat(e).message().contains("Unable to load class Hello");
+      assertThat(e.getMessage()).contains("Unable to load class Hello");
     }
   }
 
@@ -142,7 +142,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
       AppletLauncher.applet(AnApplet.class.getName());
       failWhenExpectingException();
     } catch (UnexpectedException e) {
-      assertThat(e).message().contains("Unable to create a new instance");
+      assertThat(e.getMessage()).contains("Unable to create a new instance");
     }
   }
 

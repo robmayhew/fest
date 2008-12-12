@@ -110,7 +110,7 @@ public class JListDriverTest {
       driver.indexOf(dragList, "four");
       failWhenExpectingException();
     } catch (LocationUnavailableException expected) {
-      assertThat(expected).message().isEqualTo("Unable to find an element matching the value 'four'");
+      assertThat(expected.getMessage()).isEqualTo("Unable to find an element matching the value 'four'");
     }
   }
 
@@ -125,7 +125,7 @@ public class JListDriverTest {
       driver.value(dragList, 6);
       failWhenExpectingException();
     } catch (IndexOutOfBoundsException expected) {
-      assertThat(expected).message().isEqualTo("Item index (6) should be between [0] and [2] (inclusive)");
+      assertThat(expected.getMessage()).isEqualTo("Item index (6) should be between [0] and [2] (inclusive)");
     }
   }
 
@@ -445,7 +445,7 @@ public class JListDriverTest {
       driver.requireSelection(dragList, "one");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("No selection");
+      assertThat(e.getMessage()).contains("No selection");
     }
   }
 
@@ -456,7 +456,7 @@ public class JListDriverTest {
       driver.requireSelection(dragList, "one");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("expected:<'one'> but was:<'two'>");
+      assertThat(e.getMessage()).contains("expected:<'one'> but was:<'two'>");
     }
   }
 
@@ -488,7 +488,7 @@ public class JListDriverTest {
       driver.requireSelectedItems(dragList, "one", "two");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("No selection");
+      assertThat(e.getMessage()).contains("No selection");
     }
   }
 
@@ -499,7 +499,7 @@ public class JListDriverTest {
       driver.requireSelectedItems(dragList, "one", "two");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selectedIndices#length'] expected:<2> but was:<1>");
+      assertThat(e.getMessage()).contains("property:'selectedIndices#length'] expected:<2> but was:<1>");
     }
   }
 
@@ -510,7 +510,7 @@ public class JListDriverTest {
       driver.requireSelectedItems(dragList, "one");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("expected:<'one'> but was:<'three'>");
+      assertThat(e.getMessage()).contains("expected:<'one'> but was:<'three'>");
     }
   }
 
@@ -527,8 +527,8 @@ public class JListDriverTest {
       driver.requireNoSelection(dragList);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selectedIndex'")
-                             .contains("expected:<-1> but was:<0>");
+      assertThat(e.getMessage()).contains("property:'selectedIndex'")
+                                .contains("expected:<-1> but was:<0>");
     }
   }
 

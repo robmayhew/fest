@@ -96,8 +96,8 @@ public class JInternalFrameDriverTest {
       driver.failIfVetoed(internalFrame, action, new UnexpectedException(vetoed));
       failWhenExpectingException();
     } catch (ActionFailedException e) {
-      assertThat(e).message().contains(action.name)
-                             .contains("was vetoed: <Test>");
+      assertThat(e.getMessage()).contains(action.name)
+                                .contains("was vetoed: <Test>");
     }
   }
 
@@ -140,8 +140,8 @@ public class JInternalFrameDriverTest {
       driver.iconify(internalFrame);
       failWhenExpectingException();
     } catch (IllegalStateException e) {
-      assertThat(e).message().contains("The JInternalFrame <")
-                             .contains("> is not iconifiable");
+      assertThat(e.getMessage()).contains("The JInternalFrame <")
+                                .contains("> is not iconifiable");
     }
   }
 
@@ -223,8 +223,8 @@ public class JInternalFrameDriverTest {
       driver.maximize(internalFrame);
       failWhenExpectingException();
     } catch (IllegalStateException e) {
-      assertThat(e).message().contains("The JInternalFrame <")
-                             .contains("> is not maximizable");
+      assertThat(e.getMessage()).contains("The JInternalFrame <")
+                                .contains("> is not maximizable");
     }
   }
 
@@ -331,8 +331,8 @@ public class JInternalFrameDriverTest {
       driver.close(internalFrame);
       failWhenExpectingException();
     } catch (IllegalStateException e) {
-      assertThat(e).message().contains("The JInternalFrame <")
-                             .contains("> is not closable");
+      assertThat(e.getMessage()).contains("The JInternalFrame <")
+                                .contains("> is not closable");
     }
   }
 

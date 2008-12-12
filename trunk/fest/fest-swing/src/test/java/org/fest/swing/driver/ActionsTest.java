@@ -78,7 +78,7 @@ public class ActionsTest {
       }.run();
       failWhenExpectingException();
     } catch (ActionFailedException expected) {
-      assertThat(expected).message().isEqualTo("The action 'someName' is not available, available actions:['key']");
+      assertThat(expected.getMessage()).isEqualTo("The action 'someName' is not available, available actions:['key']");
     }
   }
 }

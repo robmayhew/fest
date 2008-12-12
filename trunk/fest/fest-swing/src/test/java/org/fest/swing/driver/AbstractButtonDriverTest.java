@@ -120,8 +120,8 @@ public class AbstractButtonDriverTest {
       driver.requireText(checkBox, "Bye");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'text'")
-                             .contains("expected:<'Bye'> but was:<'Hello'>");
+      assertThat(e.getMessage()).contains("property:'text'")
+                                .contains("expected:<'Bye'> but was:<'Hello'>");
     }
   }
 
@@ -229,8 +229,8 @@ public class AbstractButtonDriverTest {
       driver.requireSelected(checkBox);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selected'")
-                             .contains("expected:<true> but was:<false>");
+      assertThat(e.getMessage()).contains("property:'selected'")
+                                .contains("expected:<true> but was:<false>");
     }
   }
 
@@ -251,8 +251,8 @@ public class AbstractButtonDriverTest {
       driver.requireNotSelected(checkBox);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selected'")
-                             .contains("expected:<false> but was:<true>");
+      assertThat(e.getMessage()).contains("property:'selected'")
+                                .contains("expected:<false> but was:<true>");
     }
   }
 

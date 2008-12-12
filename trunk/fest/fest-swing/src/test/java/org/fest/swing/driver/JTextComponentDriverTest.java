@@ -264,7 +264,7 @@ public class JTextComponentDriverTest {
       driver.selectText(textField, 20, 22);
       failWhenExpectingException();
     } catch (ActionFailedException expected) {
-      assertThat(expected).message().contains("Unable to get location for index '20' in javax.swing.JTextField");
+      assertThat(expected.getMessage()).contains("Unable to get location for index '20' in javax.swing.JTextField");
     }
   }
 
@@ -307,7 +307,7 @@ public class JTextComponentDriverTest {
       driver.requireEditable(textField);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'editable'").contains("expected:<true> but was:<false>");
+      assertThat(e.getMessage()).contains("property:'editable'").contains("expected:<true> but was:<false>");
     }
   }
 
@@ -327,7 +327,7 @@ public class JTextComponentDriverTest {
       driver.requireNotEditable(textField);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'editable'").contains("expected:<false> but was:<true>");
+      assertThat(e.getMessage()).contains("property:'editable'").contains("expected:<false> but was:<true>");
     }
   }
 
@@ -347,7 +347,7 @@ public class JTextComponentDriverTest {
       driver.requireText(textField, "Bye");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'text'").contains("expected:<'Bye'> but was:<'Hi'>");
+      assertThat(e.getMessage()).contains("property:'text'").contains("expected:<'Bye'> but was:<'Hi'>");
     }
   }
 
@@ -367,7 +367,7 @@ public class JTextComponentDriverTest {
       driver.requireEmpty(textField);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'text'").contains("expecting empty String but was:<'Hi'>");
+      assertThat(e.getMessage()).contains("property:'text'").contains("expecting empty String but was:<'Hi'>");
     }
   }
 

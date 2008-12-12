@@ -62,27 +62,27 @@ public class WindowEventQueueMappingTest {
 
   @Test public void shouldAddQueueForToolkit() {
     mapping.addQueueFor(toolkit);
-    assertThat(queueMap).hasSize(1)
-                        .keySetIncludes(eventQueue);
+    assertThat(queueMap).hasSize(1);
+    assertThat(queueMap.keySet()).contains(eventQueue);
     Map<Window, Boolean> windowMapping = queueMap.get(eventQueue);
     assertThat(windowMapping).isEmpty();
   }
 
   @Test public void shouldAddQueueForWindow() {
     mapping.addQueueFor(window);
-    assertThat(queueMap).hasSize(1)
-                        .keySetIncludes(eventQueue);
+    assertThat(queueMap).hasSize(1);
+    assertThat(queueMap.keySet()).contains(eventQueue);
     Map<Window, Boolean> windowMapping = queueMap.get(eventQueue);
-    assertThat(windowMapping).hasSize(1)
-                             .keySetIncludes(window);
+    assertThat(windowMapping).hasSize(1);
+    assertThat(windowMapping.keySet()).contains(window);
   }
 
   @Test(dependsOnMethods = "shouldAddQueueForWindow")
   public void shouldNotAddQueueForComponentThatIsNotWindow() {
     ComponentWithCustomEventQueue c = new ComponentWithCustomEventQueue(toolkit);
     mapping.addQueueFor(c);
-    assertThat(queueMap).hasSize(1)
-                        .keySetIncludes(eventQueue);
+    assertThat(queueMap).hasSize(1);
+    assertThat(queueMap.keySet()).contains(eventQueue);
     Map<Window, Boolean> windowMapping = queueMap.get(eventQueue);
     assertThat(windowMapping).isEmpty();
   }
@@ -91,8 +91,8 @@ public class WindowEventQueueMappingTest {
   public void shouldRemoveComponentFromMapping() {
     mapping.addQueueFor(window);
     mapping.removeMappingFor(window);
-    assertThat(queueMap).hasSize(1)
-                        .keySetIncludes(eventQueue);
+    assertThat(queueMap).hasSize(1);
+    assertThat(queueMap.keySet()).contains(eventQueue);
     Map<Window, Boolean> windowMapping = queueMap.get(eventQueue);
     assertThat(windowMapping).isEmpty();
   }

@@ -66,7 +66,7 @@ public class AbstractJTableCellWriterTest {
       AbstractJTableCellWriter.cannotHandleEditor(null);
       failWhenExpectingException();
     } catch (ActionFailedException e) {
-      assertThat(e).message().contains("Unable to handle editor component of type <null>");
+      assertThat(e.getMessage()).contains("Unable to handle editor component of type <null>");
     }
   }
 

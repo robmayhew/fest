@@ -158,8 +158,8 @@ public class JOptionPaneDriverTest {
       driver.requireTitle(optionPane, "Yoda");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'title'")
-                             .contains(concat("expected:<'Yoda'> but was:<'", TITLE, "'>"));
+      assertThat(e.getMessage()).contains("property:'title'")
+                               .contains(concat("expected:<'Yoda'> but was:<'", TITLE, "'>"));
     }
   }
 
@@ -176,8 +176,8 @@ public class JOptionPaneDriverTest {
       driver.requireOptions(optionPane, array("Third"));
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'options'")
-                             .contains("expected:<['Third']> but was:<['First', 'Second']>");
+      assertThat(e.getMessage()).contains("property:'options'")
+                                .contains("expected:<['Third']> but was:<['First', 'Second']>");
     }
   }
   
@@ -206,7 +206,7 @@ public class JOptionPaneDriverTest {
       driver.requireMessage(optionPane, "Anakin");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'message'").contains("expected:<'Anakin'> but was:<'Palpatine'>");
+      assertThat(e.getMessage()).contains("property:'message'").contains("expected:<'Anakin'> but was:<'Palpatine'>");
     }
   }
 
@@ -232,8 +232,8 @@ public class JOptionPaneDriverTest {
       driver.requireErrorMessage(optionPane);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'messageType'")
-                             .contains("expected:<'Error Message'> but was:<'Information Message'>");
+      assertThat(e.getMessage()).contains("property:'messageType'")
+                                .contains("expected:<'Error Message'> but was:<'Information Message'>");
     }
   }
 
@@ -255,8 +255,8 @@ public class JOptionPaneDriverTest {
       driver.requireInformationMessage(optionPane);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'messageType'")
-                             .contains("expected:<'Information Message'> but was:<'Error Message'>");
+      assertThat(e.getMessage()).contains("property:'messageType'")
+                                .contains("expected:<'Information Message'> but was:<'Error Message'>");
     }
   }
 
@@ -278,8 +278,8 @@ public class JOptionPaneDriverTest {
       driver.requireWarningMessage(optionPane);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'messageType'")
-                             .contains("expected:<'Warning Message'> but was:<'Error Message'>");
+      assertThat(e.getMessage()).contains("property:'messageType'")
+                                .contains("expected:<'Warning Message'> but was:<'Error Message'>");
     }
   }
 
@@ -301,8 +301,8 @@ public class JOptionPaneDriverTest {
       driver.requireQuestionMessage(optionPane);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'messageType'")
-                             .contains("expected:<'Question Message'> but was:<'Error Message'>");
+      assertThat(e.getMessage()).contains("property:'messageType'")
+                                .contains("expected:<'Question Message'> but was:<'Error Message'>");
     }
   }
 
@@ -324,8 +324,8 @@ public class JOptionPaneDriverTest {
       driver.requirePlainMessage(optionPane);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'messageType'")
-                             .contains("expected:<'Plain Message'> but was:<'Error Message'>");
+      assertThat(e.getMessage()).contains("property:'messageType'")
+                                .contains("expected:<'Plain Message'> but was:<'Error Message'>");
     }
   }
 

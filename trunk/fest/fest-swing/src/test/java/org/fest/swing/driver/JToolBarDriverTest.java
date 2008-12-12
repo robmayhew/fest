@@ -79,7 +79,7 @@ public class JToolBarDriverTest {
       driver.makeFloat(toolBar);
       failWhenExpectingException();
     } catch (IllegalStateException e) {
-      assertThat(e).message().contains("is not floatable");
+      assertThat(e.getMessage()).contains("is not floatable");
     }
   }
 

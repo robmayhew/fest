@@ -139,7 +139,7 @@ public class JFileChooserDriverTest {
       driver.selectFile(fileChooser, temporaryFile);
       failWhenExpectingException();
     } catch (IllegalArgumentException e) {
-      assertThat(e).message().contains("the file chooser can only open directories");
+      assertThat(e.getMessage()).contains("the file chooser can only open directories");
     } finally {
       temporaryFile.delete();
     }
@@ -152,7 +152,7 @@ public class JFileChooserDriverTest {
       driver.selectFile(fileChooser, temporaryFolder);
       failWhenExpectingException();
     } catch (IllegalArgumentException e) {
-      assertThat(e).message().contains("the file chooser cannot open directories");
+      assertThat(e.getMessage()).contains("the file chooser cannot open directories");
     } finally {
       temporaryFolder.delete();
     }

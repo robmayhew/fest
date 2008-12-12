@@ -220,8 +220,8 @@ public class JComboBoxDriverTest {
       driver.requireSelection(comboBox, "second");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selectedIndex'")
-                             .contains("expected:<'second'> but was:<'first'>");
+      assertThat(e.getMessage()).contains("property:'selectedIndex'")
+                                .contains("expected:<'second'> but was:<'first'>");
     }
   }
 
@@ -231,8 +231,8 @@ public class JComboBoxDriverTest {
       driver.requireSelection(comboBox, "second");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selectedIndex'")
-                             .contains("No selection");
+      assertThat(e.getMessage()).contains("property:'selectedIndex'")
+                                .contains("No selection");
     }
   }
 
@@ -247,8 +247,8 @@ public class JComboBoxDriverTest {
       driver.requireSelection(comboBox, "second");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selectedIndex'")
-                             .contains("expected:<'second'> but was:<'Hello World'>");
+      assertThat(e.getMessage()).contains("property:'selectedIndex'")
+                                .contains("expected:<'second'> but was:<'Hello World'>");
     }
   }
   
@@ -275,8 +275,8 @@ public class JComboBoxDriverTest {
       driver.requireSelection(comboBox, "second");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selectedIndex'")
-                             .contains("No selection");
+      assertThat(e.getMessage()).contains("property:'selectedIndex'")
+                                .contains("No selection");
     }
   }
   
@@ -307,8 +307,8 @@ public class JComboBoxDriverTest {
       driver.requireNoSelection(comboBox);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selectedIndex'")
-                             .contains("Expecting no selection, but found:<'first'>");
+      assertThat(e.getMessage()).contains("property:'selectedIndex'")
+                                .contains("Expecting no selection, but found:<'first'>");
     }
   }
 
@@ -323,7 +323,7 @@ public class JComboBoxDriverTest {
       driver.requireEditable(comboBox);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'editable'").contains("expected:<true> but was:<false>");
+      assertThat(e.getMessage()).contains("property:'editable'").contains("expected:<true> but was:<false>");
     }
   }
 
@@ -426,7 +426,7 @@ public class JComboBoxDriverTest {
   }
 
   private void assertActionFailureDueToNotEditableComboBox(IllegalStateException e) {
-    assertThat(e).message().contains("Expecting component").contains("to be editable");
+    assertThat(e.getMessage()).contains("Expecting component").contains("to be editable");
   }
 
   @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
@@ -510,7 +510,7 @@ public class JComboBoxDriverTest {
       driver.requireNotEditable(comboBox);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'editable'").contains("expected:<false> but was:<true>");
+      assertThat(e.getMessage()).contains("property:'editable'").contains("expected:<false> but was:<true>");
     }
   }
 

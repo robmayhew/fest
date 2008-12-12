@@ -113,9 +113,9 @@ public class TableContentsTest {
       fixture.requireContents(new String[][] { { "hello" } });
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'contents'")
-                             .contains("expected:<[['hello']]>")
-                             .contains(concat("but was:<", format(fixture.contents()), ">"));
+      assertThat(e.getMessage()).contains("property:'contents'")
+                                .contains("expected:<[['hello']]>")
+                                .contains(concat("but was:<", format(fixture.contents()), ">"));
     }
   }
 

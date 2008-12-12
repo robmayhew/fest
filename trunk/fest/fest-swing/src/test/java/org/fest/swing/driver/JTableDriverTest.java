@@ -262,7 +262,7 @@ public class JTableDriverTest {
       driver.cell(dragTable, "Hello World");
       failWhenExpectingException();
     } catch (ActionFailedException expected) {
-      assertThat(expected).message().contains("Unable to find cell with value 'Hello World'");
+      assertThat(expected.getMessage()).contains("Unable to find cell with value 'Hello World'");
     }
   }
 
@@ -278,7 +278,7 @@ public class JTableDriverTest {
       driver.cell(dragTable, (TableCellByColumnId)null);
       failWhenExpectingException();
     } catch (NullPointerException e) {
-      assertThat(e).message().contains("The instance of TableCellByColumnId should not be null");
+      assertThat(e.getMessage()).contains("The instance of TableCellByColumnId should not be null");
     }
   }
   
@@ -306,7 +306,7 @@ public class JTableDriverTest {
       driver.columnIndex(dragTable, "Hello World");
       failWhenExpectingException();
     } catch (ActionFailedException e) {
-      assertThat(e).message().contains("Unable to find a column with id 'Hello World");
+      assertThat(e.getMessage()).contains("Unable to find a column with id 'Hello World");
     }
   }
 
@@ -323,8 +323,8 @@ public class JTableDriverTest {
       driver.requireNoSelection(dragTable);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'selection'")
-                             .contains("expected no selection but was:<rows=[0], columns=[0]>");
+      assertThat(e.getMessage()).contains("property:'selection'")
+                                .contains("expected no selection but was:<rows=[0], columns=[0]>");
     }
   }
 
@@ -363,8 +363,8 @@ public class JTableDriverTest {
       driver.requireCellValue(dragTable, row(0).column(0), "0-1");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'value [row=0, column=0]'")
-                             .contains("expected:<'0-1'> but was:<'0-0'>");
+      assertThat(e.getMessage()).contains("property:'value [row=0, column=0]'")
+                                .contains("expected:<'0-1'> but was:<'0-0'>");
     }
   }
 
@@ -566,8 +566,8 @@ public class JTableDriverTest {
       driver.requireEditable(dragTable, row(0).column(0));
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'editable [row=0, column=0]'")
-                             .contains("expected:<true> but was:<false>");
+      assertThat(e.getMessage()).contains("property:'editable [row=0, column=0]'")
+                                .contains("expected:<true> but was:<false>");
     }
   }
 
@@ -584,8 +584,8 @@ public class JTableDriverTest {
       driver.requireNotEditable(dragTable, row(0).column(0));
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'editable [row=0, column=0]'")
-                             .contains("expected:<false> but was:<true>");
+      assertThat(e.getMessage()).contains("property:'editable [row=0, column=0]'")
+                                .contains("expected:<false> but was:<true>");
     }
   }
 

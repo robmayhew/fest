@@ -144,7 +144,7 @@ public class JSpinnerDriverTest {
     } catch (IllegalArgumentException expected) {
       String message = concat(
           "The number of times to increment the value should be greater than zero, but was <", times, ">");
-      assertThat(expected).message().isEqualTo(message);
+      assertThat(expected.getMessage()).isEqualTo(message);
     }
   }
 
@@ -216,7 +216,7 @@ public class JSpinnerDriverTest {
     } catch (IllegalArgumentException expected) {
       String message = concat(
           "The number of times to decrement the value should be greater than zero, but was <", times, ">");
-      assertThat(expected).message().isEqualTo(message);
+      assertThat(expected.getMessage()).isEqualTo(message);
     }
   }
 
@@ -314,7 +314,7 @@ public class JSpinnerDriverTest {
       driver.selectValue(spinner, "Yoda");
       failWhenExpectingException();
     } catch (IllegalArgumentException e) {
-      assertThat(e).message().contains("Value 'Yoda' is not valid");
+      assertThat(e.getMessage()).contains("Value 'Yoda' is not valid");
     }
   }
 
@@ -333,8 +333,8 @@ public class JSpinnerDriverTest {
       driver.requireValue(spinner, "Frodo");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'value'")
-                             .contains("expected:<'Frodo'> but was:<'Gandalf'>");
+      assertThat(e.getMessage()).contains("property:'value'")
+                                .contains("expected:<'Frodo'> but was:<'Gandalf'>");
     }
   }
 

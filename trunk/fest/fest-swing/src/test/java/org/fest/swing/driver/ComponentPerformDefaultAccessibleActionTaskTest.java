@@ -124,7 +124,7 @@ public class ComponentPerformDefaultAccessibleActionTaskTest {
   }
 
   private void assertActionFailedThrown(ActionFailedException e) {
-    assertThat(e).message().contains("Unable to perform accessible action for");
+    assertThat(e.getMessage()).contains("Unable to perform accessible action for");
   }
 
   private static class MyWindow extends TestWindow {

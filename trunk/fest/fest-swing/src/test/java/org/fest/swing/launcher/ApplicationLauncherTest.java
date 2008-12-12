@@ -64,7 +64,7 @@ public class ApplicationLauncherTest {
       ApplicationLauncher.application("Hello").start();
       failWhenExpectingException();
     } catch (UnexpectedException e) {
-      assertThat(e).message().contains("Unable to load class 'Hello'");
+      assertThat(e.getMessage()).contains("Unable to load class 'Hello'");
     }
   }
 

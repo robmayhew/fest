@@ -73,7 +73,7 @@ public class JLabelDriverTest {
       driver.requireText(label, "Bye");
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'text'").contains("expected:<'Bye'> but was:<'Hi'>");
+      assertThat(e.getMessage()).contains("property:'text'").contains("expected:<'Bye'> but was:<'Hi'>");
     }
   }
 

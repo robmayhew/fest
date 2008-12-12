@@ -368,9 +368,9 @@ public class ComponentDriverTest {
       driver.requireSize(button, new Dimension(0, 0));
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'size'")
-                             .contains("expected:<(0, 0)>")
-                             .contains("but was:<");
+      assertThat(e.getMessage()).contains("property:'size'")
+                                .contains("expected:<(0, 0)>")
+                                .contains("but was:<");
     }
   }
 
@@ -384,8 +384,8 @@ public class ComponentDriverTest {
       driver.requireVisible(window);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'visible'")
-                             .contains("expected:<true> but was:<false>");
+      assertThat(e.getMessage()).contains("property:'visible'")
+                                .contains("expected:<true> but was:<false>");
     }
   }
 
@@ -399,8 +399,8 @@ public class ComponentDriverTest {
       driver.requireNotVisible(button);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'visible'")
-                             .contains("expected:<false> but was:<true>");
+      assertThat(e.getMessage()).contains("property:'visible'")
+                                .contains("expected:<false> but was:<true>");
     }
   }
 
@@ -414,8 +414,8 @@ public class ComponentDriverTest {
       driver.requireEnabled(button);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'enabled'")
-                             .contains("expected:<true> but was:<false>");
+      assertThat(e.getMessage()).contains("property:'enabled'")
+                                .contains("expected:<true> but was:<false>");
     }
   }
 
@@ -431,9 +431,9 @@ public class ComponentDriverTest {
       driver.requireEnabled(button, timeout(timeout));
       failWhenExpectingException();
     } catch (WaitTimedOutError e) {
-      assertThat(e).message().contains("Timed out waiting for")
-                             .contains(button.getClass().getName())
-                             .contains("to be enabled");
+      assertThat(e.getMessage()).contains("Timed out waiting for")
+                                .contains(button.getClass().getName())
+                                .contains("to be enabled");
     }
     stopWatch.stop();
     assertThatWaited(stopWatch, timeout);
@@ -454,8 +454,8 @@ public class ComponentDriverTest {
       driver.requireDisabled(button);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("property:'enabled'")
-                             .contains("expected:<false> but was:<true>");
+      assertThat(e.getMessage()).contains("property:'enabled'")
+                                .contains("expected:<false> but was:<true>");
     }
   }
 

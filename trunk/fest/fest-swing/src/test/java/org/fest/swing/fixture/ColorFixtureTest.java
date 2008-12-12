@@ -64,7 +64,7 @@ public class ColorFixtureTest {
       fixture.requireEqualTo(RED);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("test");
+      assertThat(e.getMessage()).contains("test");
     }
   }
 
@@ -83,7 +83,7 @@ public class ColorFixtureTest {
       fixture.requireNotEqualTo(BLUE);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("test");
+      assertThat(e.getMessage()).contains("test");
     }
   }
 
@@ -102,7 +102,7 @@ public class ColorFixtureTest {
       fixture.requireEqualTo(BLACK_HEX_CODE);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("test");
+      assertThat(e.getMessage()).contains("test");
     }
   }
 
@@ -121,7 +121,7 @@ public class ColorFixtureTest {
       fixture.requireNotEqualTo(BLUE_HEX_CODE);
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("test");
+      assertThat(e.getMessage()).contains("test");
     }
   }
 }

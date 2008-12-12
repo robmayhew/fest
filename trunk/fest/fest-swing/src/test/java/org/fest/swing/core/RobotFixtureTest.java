@@ -93,7 +93,7 @@ public class RobotFixtureTest {
       robot.showWindow(AlwaysInvisibleFrame.createNew());
       failWhenExpectingException();
     } catch (WaitTimedOutError e) {
-      assertThat(e).message().contains("Timed out waiting for Window to open");
+      assertThat(e.getMessage()).contains("Timed out waiting for Window to open");
     }
   }
   
@@ -255,7 +255,7 @@ public class RobotFixtureTest {
       robot.showPopupMenu(textFieldWithoutPopup);
       failWhenExpectingException();
     } catch (ComponentLookupException expected) {
-      assertThat(expected).message().contains("Unable to show popup")
+      assertThat(expected.getMessage()).contains("Unable to show popup")
                                     .contains("on javax.swing.JTextField")
                                     .contains("name='withoutPopup'");
     }
@@ -326,7 +326,7 @@ public class RobotFixtureTest {
       robot.requireNoJOptionPaneIsShowing();
       failWhenExpectingException();
     } catch (AssertionError e) {
-      assertThat(e).message().contains("Expecting no JOptionPane to be showing");
+      assertThat(e.getMessage()).contains("Expecting no JOptionPane to be showing");
     }
   }
 

@@ -76,7 +76,7 @@ public class JTabbedPaneLocationTest {
       location.indexOf(tabbedPane, "three");
       failWhenExpectingException();
     } catch (LocationUnavailableException e) {
-      assertThat(e).message().isEqualTo("Unable to find a tab with title 'three'");
+      assertThat(e.getMessage()).isEqualTo("Unable to find a tab with title 'three'");
     }
   }
 
@@ -89,7 +89,7 @@ public class JTabbedPaneLocationTest {
       location.validateIndex(tabbedPane, -1);
       failWhenExpectingException();
     } catch (IndexOutOfBoundsException e) {
-      assertThat(e).message().isEqualTo("Index <-1> is not within the JTabbedPane bounds of <0> and <1> (inclusive)");
+      assertThat(e.getMessage()).isEqualTo("Index <-1> is not within the JTabbedPane bounds of <0> and <1> (inclusive)");
     }
   }
 
@@ -98,7 +98,7 @@ public class JTabbedPaneLocationTest {
       location.validateIndex(tabbedPane, 2);
       failWhenExpectingException();
     } catch (IndexOutOfBoundsException e) {
-      assertThat(e).message().isEqualTo("Index <2> is not within the JTabbedPane bounds of <0> and <1> (inclusive)");
+      assertThat(e.getMessage()).isEqualTo("Index <2> is not within the JTabbedPane bounds of <0> and <1> (inclusive)");
     }
   }
 
