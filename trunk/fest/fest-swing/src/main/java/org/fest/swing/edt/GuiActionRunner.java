@@ -24,6 +24,7 @@ import org.fest.swing.exception.UnexpectedException;
 
 import static javax.swing.SwingUtilities.*;
 
+import static org.fest.swing.edt.StackTraces.appendCurrentThreadStackTraceToThrowable;
 import static org.fest.swing.exception.UnexpectedException.unexpected;
 
 /**
@@ -135,8 +136,15 @@ public class GuiActionRunner {
   private static void rethrowCatchedExceptionIn(GuiAction action) {
     Throwable catchedException = action.catchedException();
     action.clearCatchedException();
-    if (catchedException instanceof RuntimeException) throw (RuntimeException)catchedException;
-    if (catchedException instanceof Error) throw (Error)catchedException;
-    if (catchedException != null) throw unexpected(catchedException);
+    if (catchedException == null) return;
+    if (catchedException instanceof RuntimeException) {
+      appendCurrentThreadStackTraceToThrowable(catchedException, "execute");
+      throw (RuntimeException)catchedException;
+    }
+    if (catchedException instanceof Error) {
+      catchedException.fillInStackTrace();
+      throw (Error)catchedException;
+    }
+    throw unexpected(catchedException);
   }
 }
