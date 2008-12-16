@@ -5,13 +5,9 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="1.0" date="TBD" description="Subsequent release">
+    <release version="1.0" date="2008-12-16" description="Subsequent release">
       <action dev="wanghy" type="add" issue="112" due-to="Ted Young">
         Added method 'doesNotHaveDuplicates(Object...)' to ObjectArrayAssert.
-      </action>
-      <action dev="alruiz, wanghy" type="add">
-        Added method 'keySetExcludes(Object...)', 'valuesExclude(Object...)', 'excludes(Entry...)', 'keys' and 'values' 
-        to MapAssert.
       </action>
       <action dev="alruiz" type="add">
         Renamed method 'contains(Entry...)' to 'includes(Entry...)' to MapAssert.
@@ -27,10 +23,6 @@
       </action>
       <action dev="alruiz" type="remove" issue="256">
         Removed method 'size' from GroupAssert.
-      </action>
-      <action dev="alruiz" type="remove" issue="256">
-        Removed methods 'keys', 'values', 'keySetIncludes', 'keySetExcludes', 'valuesInclude' and 'valuesExclude' from 
-        MapAssert.
       </action>
       <action dev="alruiz" type="remove" issue="256">
         Removed class ThrowableAssert.CauseHierarchyAssert.

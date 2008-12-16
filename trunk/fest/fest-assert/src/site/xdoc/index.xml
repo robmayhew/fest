@@ -1,94 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
 
-	<properties>
-		<title>Welcome</title>
-	</properties>
+  <properties>
+    <title>Welcome</title>
+    <!--meta HTTP-EQUIV="REFRESH" content="0; url=http://fest.easytesting.org/assert/index.php" /-->
+  </properties>
 
-	<body>
-		<section name="Welcome to the FEST Fluent Assertions Module">
-			<p>
-			  <a href="http://code.google.com/p/fest" target="_blank">FEST-Assert</a> is a Java library that provides a 
-			  <a href="http://martinfowler.com/bliki/FluentInterface.html" target="_blank">fluent interface</a> for
-			  writing assertions. Its main goal is to improve test code readability and make maintenance of tests easier.
-			</p>
-			<p>
-				FEST-Assert requires 
-				<a href="http://java.sun.com/javase/downloads/index_jdk5.jsp" target="_blank">Java SE 5.0</a> or later
-				and can be used with either 
-			  <a href="http://www.junit.org" target="_blank">JUnit</a> or 
-			  <a href="http://testng.org" target="_blank">TestNG</a>.
-			</p>
-			<p>
-         Currently, this module provides assertions for the following data types:
-         <ol>
-           <li>
-             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Object.html">Object</a></code>
-           </li>
-           <li>
-             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/String.html">String</a></code>
-           </li>
-           <li>
-             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Collection.html">Collection</a></code>
-           </li>
-           <li>
-             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Map.html">Map</a></code>
-           </li>
-           <li>Primitives (<code class="code">boolean</code>, <code class="code">int</code>, <code class="code">char</code>, etc.)</li>
-           <li>
-             Arrays of 
-             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Object.html">Object</a></code>
-           </li>
-           <li>Arrays of primitives</li>
-           <li>
-             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/image/BufferedImage.html">BufferedImage</a></code>
-           </li>
-           <li>
-             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Throwable.html">Throwable</a></code>
-           </li>
-           <li>
-             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/io/File.html">File</a></code>
-           </li>
-           <li>
-             <code class="code"><a href="http://java.sun.com/j2se/1.5.0/docs/api/java/math/BigDecimal.html">BigDecimal</a></code>
-           </li>
-         </ol>					
-			</p>
-			<p>
-			  It can be downloaded 
-			  <a href="http://code.google.com/p/fest/downloads/list" target="_blank">here</a>. For
-			  <a href="http://maven.apache.org/" target="_blank">Maven 2</a> users, the project's repository can be found at 
-			  <a href="http://fest.googlecode.com/svn/trunk/fest/m2/repository/" target="_blank">http://fest.googlecode.com/svn/trunk/fest/m2/repository/</a>
-			  (groupId: fest, artifactId: fest-assert).
-			</p>
-			<subsection name="Examples">
-				<p>
-					<pre class="prettyprint">
-<span class="kwd">int</span> removed = employees.<span class="fnc">removeFired</span>();
-<span class="fnc">assertThat</span>(removed).<span class="fnc">isZero</span>();
- 
-<span class="typ">List</span>&lt;Employee&gt; newEmployees = employees.<span class="fnc">hired</span>(TODAY);
-<span class="fnc">assertThat</span>(newEmployees).<span class="fnc">hasSize</span>(6)
-                        .<span class="fnc">contains</span>(frodo, sam);
- 
-<span class="typ">String</span>[] newHires = employees.<span class="fnc">newHiresNames</span>();
-<span class="fnc">assertThat</span>(newHires).<span class="fnc">containsOnly</span>(<span class="str">&quot;Gandalf&quot;</span>, <span class="str">&quot;Arwen&quot;</span>, <span class="str">&quot;Gimli&quot;</span>); 
- 
-<span class="fnc">assertThat</span>(yoda).<span class="fnc">isInstanceOf</span>(Jedi.<span class="kwd">class</span>)
-                .<span class="fnc">isEqualTo</span>(foundJedi)
-                .<span class="fnc">isNotEqualTo</span>(foundSith);</pre>
-				</p>
-			</subsection>
-			<subsection name="Links">
-			  <p>
-  			  <ul>
-	  		    <li><a href="extending.html">Extending FEST-Assert</a></li>
-		  	    <li><a href="hamcrest.html">Comparing FEST-Assert to Hamcrest</a></li>
-			      <li><a href="junit.html">Support for JUnit's <code class="code">ComparisonFailure</code></a></li>
-			      <li><a href="changes-report.html">Changelog</a></li>
-			    </ul>
-			  </p>
-			</subsection>
-		</section>
+  <body>
+    <p>
+    You are being redirected to the <a href="index.php">wiki page</a>.
+    </p>
 	</body>
 </document>

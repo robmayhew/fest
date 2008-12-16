@@ -8,35 +8,19 @@
 	<bannerLeft>
 		<name>FEST-Assert</name>
 		<src>/images/fest-assert.png</src>
-		<href>index.html</href>
+		<href>index.php</href>
 	</bannerLeft>
-	<poweredBy>
-		<logo name="Build with Maven 2" href="http://maven.apache.org"
-			img="images/logos/maven-feather.png" />
-	</poweredBy>
+  <poweredBy>
+    <logo name="Built with Maven 2" href="http://maven.apache.org"
+      img="images/logos/maven-feather.png" />
+  </poweredBy>
 
-	<body>
-		<breadcrumbs>
-			<item name="FEST" href="../index.html" />
-      <item name="Assert" href="index.html"/>
+  <body>
+    <breadcrumbs>
+      <item name="FEST" href="../index.php" />
+      <item name="Assert" href="index.php"/>
     </breadcrumbs>
 
-		<menu name="Overview">
-			<item name="Introduction" href="index.html" />
-			<item name="Extending" href="extending.html" />
-			<item name="Comparing to Hamcrest" href="hamcrest.html" />
-			<item name="JUnit Specific" href="junit.html" />
-      <item name="Changelog" href="changes-report.html" />
-			<item name="Javadocs" href="./apidocs/index.html" />
-		</menu>
-
-		<menu name="FEST Modules">
-			<item name="FEST-Swing" href="../swing/index.html" />
-			<item name="FEST-Assert" href="../assert/index.html" />
-			<item name="FEST-Reflect" href="../reflect/index.html" />
-			<item name="FEST-Mocks" href="../mocks/index.html" />
-		</menu>
-
-		<menu ref="reports"/>		
+    <menu ref="reports" />
 	</body>
 </project>
