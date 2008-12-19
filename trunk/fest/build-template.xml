@@ -128,7 +128,7 @@
   </target>
 
   <target name="test-report" depends="compile">
-    <testng outputDir="${target.test.results.dir}" haltOnFailure="true" verbose="10" 
+    <testng outputDir="${target.test.results.dir}" haltOnFailure="true" verbose="2" 
       listeners="org.uncommons.reportng.HTMLReporter">
       <classpath location="${target.test.classes.dir}" />
       <classpath location="${target.classes.dir}" />
