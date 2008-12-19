@@ -13,7 +13,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.edt;
+package org.fest.swing.image;
 
 import java.awt.image.BufferedImage;
 
@@ -26,6 +26,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.image.ScreenshotTaker;
 import org.fest.swing.lock.ScreenLock;
 import org.fest.swing.testing.TestWindow;
