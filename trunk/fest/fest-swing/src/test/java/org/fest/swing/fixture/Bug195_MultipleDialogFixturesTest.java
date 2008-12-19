@@ -83,7 +83,7 @@ public class Bug195_MultipleDialogFixturesTest {
     private final String matchString;
 
     public DialogTitleStartsWithMatcher(String s) {
-      super(false);
+      super(Dialog.class, false);
       this.matchString = s != null ? s.toUpperCase() : null;
     }
 

@@ -250,7 +250,7 @@ public class BasicComponentFinderTest {
   }
   
   public void shouldFindComponentUsingGenericTypeMatcher() {
-    JButton foundButton = finder.find(new GenericTypeMatcher<JButton>() {
+    JButton foundButton = finder.find(new GenericTypeMatcher<JButton>(JButton.class) {
       protected boolean isMatching(JButton button) {
         return "A Button".equals(button.getText());
       }
@@ -260,7 +260,7 @@ public class BasicComponentFinderTest {
 
   @Test(groups = GUI, expectedExceptions = ComponentLookupException.class)
   public void shouldThrowExceptionIfGenericMatcherNeverMatchesComponent() {
-    finder.find(new GenericTypeMatcher<JButton>() {
+    finder.find(new GenericTypeMatcher<JButton>(JButton.class) {
       @Override protected boolean isMatching(JButton component) {
         return false;
       }
@@ -269,7 +269,7 @@ public class BasicComponentFinderTest {
 
   @Test(groups = GUI, expectedExceptions = ComponentLookupException.class)
   public void shouldThrowExceptionIfGenericMatcherMatchesWrongType() {
-    finder.find(windowOne, new GenericTypeMatcher<JTree>() {
+    finder.find(windowOne, new GenericTypeMatcher<JTree>(JTree.class) {
       @Override protected boolean isMatching(JTree component) {
         return true;
       }
@@ -277,7 +277,7 @@ public class BasicComponentFinderTest {
   }
 
   public void shouldFindComponentByContainerUsingGenericTypeMatcher() {
-    JButton foundButton = finder.find(windowOne, new GenericTypeMatcher<JButton>() {
+    JButton foundButton = finder.find(windowOne, new GenericTypeMatcher<JButton>(JButton.class) {
       protected boolean isMatching(JButton button) {
         return "A Button".equals(button.getText());
       }
@@ -287,7 +287,7 @@ public class BasicComponentFinderTest {
 
   @Test(groups = GUI, expectedExceptions = ComponentLookupException.class)
   public void shouldThrowExceptionIfGenericMatcherNeverMatchesComponentInContainer() {
-    finder.find(windowOne, new GenericTypeMatcher<JButton>() {
+    finder.find(windowOne, new GenericTypeMatcher<JButton>(JButton.class) {
       @Override protected boolean isMatching(JButton component) {
         return false;
       }
@@ -296,7 +296,7 @@ public class BasicComponentFinderTest {
 
   @Test(groups = GUI, expectedExceptions = ComponentLookupException.class)
   public void shouldThrowExceptionIfGenericMatcherMatchesWrongTypeInContainer() {
-    finder.find(windowOne, new GenericTypeMatcher<JList>() {
+    finder.find(windowOne, new GenericTypeMatcher<JList>(JList.class) {
       @Override protected boolean isMatching(JList component) {
         return true;
       }

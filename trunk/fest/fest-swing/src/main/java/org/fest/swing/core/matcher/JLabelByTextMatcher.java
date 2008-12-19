@@ -59,7 +59,7 @@ public class JLabelByTextMatcher extends GenericTypeMatcher<JLabel> {
   }
 
   private JLabelByTextMatcher(String text, boolean requireShowing) {
-    super(requireShowing);
+    super(JLabel.class, requireShowing);
     this.text = text;
   }
 

@@ -30,15 +30,25 @@ import static org.fest.swing.factory.JLabels.label;
  * Tests for <code>{@link GenericTypeMatcher}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-public class GenericTypeMatcherTest {
+@Test public class GenericTypeMatcherTest {
   
   @BeforeClass public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
   }
 
-  @Test public void shouldReturnTrueIfTypeAndSearchCriteriaMatch() {
-    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>() {
+  @Test(expectedExceptions = NullPointerException.class)
+  public void shouldThrowErrorIfSupportedTypeIsNull() {
+    new GenericTypeMatcher<JButton>(null) {
+      @Override protected boolean isMatching(JButton component) {
+        return true;
+      }
+    };
+  }
+  
+  public void shouldReturnTrueIfTypeAndSearchCriteriaMatch() {
+    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>(JButton.class) {
       @Override protected boolean isMatching(JButton component) {
         return true;
       }
@@ -46,8 +56,8 @@ public class GenericTypeMatcherTest {
     assertThat(matcher.matches(button().createNew())).isTrue();
   }
   
-  @Test public void shouldReturnFalseIfTypeMatchesButNotSearchCriteria() {
-    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>() {
+  public void shouldReturnFalseIfTypeMatchesButNotSearchCriteria() {
+    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>(JButton.class) {
       @Override protected boolean isMatching(JButton component) {
         return false;
       }
@@ -55,8 +65,8 @@ public class GenericTypeMatcherTest {
     assertThat(matcher.matches(button().createNew())).isFalse();
   }
 
-  @Test public void shouldReturnFalseIfSearchCriteriaMatchesButNotType() {
-    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>() {
+  public void shouldReturnFalseIfSearchCriteriaMatchesButNotType() {
+    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>(JButton.class) {
       @Override protected boolean isMatching(JButton component) {
         return true;
       }
@@ -64,8 +74,8 @@ public class GenericTypeMatcherTest {
     assertThat(matcher.matches(label().createNew())).isFalse();
   }
 
-  @Test public void shouldReturnFalseIfSearchCriteriaAndTypeNotMatching() {
-    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>() {
+  public void shouldReturnFalseIfSearchCriteriaAndTypeNotMatching() {
+    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>(JButton.class) {
       @Override protected boolean isMatching(JButton component) {
         return false;
       }
@@ -73,8 +83,8 @@ public class GenericTypeMatcherTest {
     assertThat(matcher.matches(label().createNew())).isFalse();
   }
 
-  @Test public void shouldReturnFalseIfComponentIsNull() {
-    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>() {
+  public void shouldReturnFalseIfComponentIsNull() {
+    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>(JButton.class) {
       @Override protected boolean isMatching(JButton component) {
         return true;
       }
@@ -82,8 +92,8 @@ public class GenericTypeMatcherTest {
     assertThat(matcher.matches(null)).isFalse();
   }
 
-  @Test public void shouldReturnFalseIfComponentIsNotShowing() {
-    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>(true) {
+  public void shouldReturnFalseIfComponentIsNotShowing() {
+    GenericTypeMatcher<JButton> matcher = new GenericTypeMatcher<JButton>(JButton.class, true) {
       @Override protected boolean isMatching(JButton component) {
         return true;
       }

@@ -59,7 +59,7 @@ public class JButtonByTextMatcher extends GenericTypeMatcher<JButton> {
   }
 
   private JButtonByTextMatcher(String text, boolean requireShowing) {
-    super(requireShowing);
+    super(JButton.class, requireShowing);
     this.text = text;
   }
 

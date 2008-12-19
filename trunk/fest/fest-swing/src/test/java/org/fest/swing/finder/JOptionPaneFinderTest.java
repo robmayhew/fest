@@ -80,7 +80,7 @@ public class JOptionPaneFinderTest {
 
   public void shouldFindJOptionPaneUsingGivenMatcher() {
     clickMessageButton();
-    GenericTypeMatcher<JOptionPane> matcher = new GenericTypeMatcher<JOptionPane>() {
+    GenericTypeMatcher<JOptionPane> matcher = new GenericTypeMatcher<JOptionPane>(JOptionPane.class) {
       protected boolean isMatching(JOptionPane optionPane) {
         return optionPane.isShowing();
       }

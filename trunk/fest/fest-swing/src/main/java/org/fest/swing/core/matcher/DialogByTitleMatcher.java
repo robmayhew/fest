@@ -59,7 +59,7 @@ public class DialogByTitleMatcher extends GenericTypeMatcher<Dialog> {
   }
 
   private DialogByTitleMatcher(String title, boolean requireShowing) {
-    super(requireShowing);
+    super(Dialog.class, requireShowing);
     this.title = title;
   }
 

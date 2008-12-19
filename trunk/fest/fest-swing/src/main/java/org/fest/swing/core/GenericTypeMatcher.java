@@ -25,20 +25,31 @@ import org.fest.swing.annotation.RunsInCurrentThread;
  * @param <T> the type of <code>Component</code> supported by this matcher. 
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public abstract class GenericTypeMatcher<T extends Component> extends AbstractComponentMatcher {
 
-  /** Creates a new </code>{@link GenericTypeMatcher}</code>. The component to match does not have to be showing. */
-  public GenericTypeMatcher() {
-    
+  private final Class<T> supportedType;
+
+  /** 
+   * Creates a new </code>{@link GenericTypeMatcher}</code>. The component to match does not have to be showing. 
+   * @param supportedType the type supported by this matcher.
+   * @throws NullPointerException if the given type is <code>null</code>.
+   */
+  public GenericTypeMatcher(Class<T> supportedType) {
+    this(supportedType, false);
   }
 
   /**
    * Creates a new </code>{@link GenericTypeMatcher}</code>.
+   * @param supportedType the type supported by this matcher.
    * @param requireShowing indicates if the component to match should be showing or not.
+   * @throws NullPointerException if the given type is <code>null</code>.
    */
-  public GenericTypeMatcher(boolean requireShowing) {
+  public GenericTypeMatcher(Class<T> supportedType, boolean requireShowing) {
     super(requireShowing);
+    if (supportedType == null) throw new NullPointerException("The supported type should not be null");
+    this.supportedType = supportedType;
   }
   
   /**
@@ -58,15 +69,13 @@ public abstract class GenericTypeMatcher<T extends Component> extends AbstractCo
   @RunsInCurrentThread
   public final boolean matches(Component c) {
     if (c == null) return false;
+    if (!supportedType.isInstance(c)) return false;
     try {
-      return (requireShowingMatches(c)) && isMatching(cast(c));
+      return (requireShowingMatches(c)) && isMatching(supportedType.cast(c));
     } catch(ClassCastException ignored) {
       return false;
     }
   }
-
-  @SuppressWarnings("unchecked") 
-  private T cast(Component c) { return (T)c; }
 
   /**
    * Verifies that the given component matches some search criteria.

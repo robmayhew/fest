@@ -98,7 +98,7 @@ public class ApplicationLauncherTest {
   }
 
   private void assertFrameIsShowing() {
-    FrameFixture frameFixture = WindowFinder.findFrame(new GenericTypeMatcher<Frame>() {
+    FrameFixture frameFixture = WindowFinder.findFrame(new GenericTypeMatcher<Frame>(Frame.class) {
       protected boolean isMatching(Frame frame) {
         return "Java Application".equals(frame.getTitle()) && frame.isShowing();
       }

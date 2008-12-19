@@ -14,6 +14,10 @@
         org.fest.swing.edt.GuiActionRunner appends stack trace of current thread to an exception thrown in the event
         dispatch thread.
       </action>
+      <action dev="alruiz" type="fix" issue="257" due-to="Juhos Csaba-Zsolt">
+        Constructors in org.fest.swing.core.GenericTypeMatcher now take the supported type as parameter to guarantee
+        correct casting in the 'isMatching' method.
+      </action>
     </release>
     <release version="1.0rc" date="2008-12-08" description="Subsequent release">
       <action dev="alruiz" type="fix" issue="134" due-to="Woody Folsom">

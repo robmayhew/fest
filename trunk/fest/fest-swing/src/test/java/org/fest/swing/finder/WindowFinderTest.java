@@ -126,7 +126,7 @@ public class WindowFinderTest {
 
   public void shouldFindFrameUsingMatcherAfterLogin() {
     launchFrame();
-    GenericTypeMatcher<JFrame> matcher = new GenericTypeMatcher<JFrame>() {
+    GenericTypeMatcher<JFrame> matcher = new GenericTypeMatcher<JFrame>(JFrame.class) {
       protected boolean isMatching(JFrame frame) {
         return "frame".equals(frame.getName()) && isShowing(frame);
       }
@@ -205,7 +205,7 @@ public class WindowFinderTest {
 
   public void shouldFindDialogUsingMatcherAfterLoadingSettings() {
     launchDialog();
-    GenericTypeMatcher<JDialog> matcher = new GenericTypeMatcher<JDialog>() {
+    GenericTypeMatcher<JDialog> matcher = new GenericTypeMatcher<JDialog>(JDialog.class) {
       protected boolean isMatching(JDialog dialog) {
         return "dialog".equals(dialog.getName()) && isShowing(dialog);
       }

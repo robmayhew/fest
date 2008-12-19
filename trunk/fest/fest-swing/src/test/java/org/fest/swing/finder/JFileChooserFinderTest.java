@@ -98,7 +98,7 @@ public class JFileChooserFinderTest {
   
   public void shouldFindFileChooserUsingMatcher() {
     clickBrowseButton();
-    GenericTypeMatcher<JFileChooser> matcher = new GenericTypeMatcher<JFileChooser>( ) {
+    GenericTypeMatcher<JFileChooser> matcher = new GenericTypeMatcher<JFileChooser>(JFileChooser.class) {
       protected boolean isMatching(JFileChooser fileChooser) {
         return "fileChooser".equals(fileChooser.getName());
       }

@@ -77,7 +77,7 @@ public class JPopupMenuDriverTest {
   }
 
   public void shouldFindMenuItemWithGivenMatcher() {
-    JMenuItem found = driver.menuItem(popupMenu(), new GenericTypeMatcher<JMenuItem>() {
+    JMenuItem found = driver.menuItem(popupMenu(), new GenericTypeMatcher<JMenuItem>(JMenuItem.class) {
       protected boolean isMatching(JMenuItem menuItem) {
         return "Second".equals(textOf(menuItem));
       }

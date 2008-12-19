@@ -61,7 +61,7 @@ public class JTextComponentByTextMatcher extends GenericTypeMatcher<JTextCompone
   }
 
   private JTextComponentByTextMatcher(String text, boolean requireShowing) {
-    super(requireShowing);
+    super(JTextComponent.class, requireShowing);
     this.text = text;
   }
 

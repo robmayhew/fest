@@ -59,7 +59,7 @@ public class FrameByTitleMatcher extends GenericTypeMatcher<Frame> {
   }
 
   private FrameByTitleMatcher(String title, boolean requireShowing) {
-    super(requireShowing);
+    super(Frame.class, requireShowing);
     this.title = title;
   }
 
