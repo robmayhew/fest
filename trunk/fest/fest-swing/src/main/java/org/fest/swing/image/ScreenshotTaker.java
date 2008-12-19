@@ -27,6 +27,7 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
+import org.fest.swing.util.Pair;
 
 import static org.fest.swing.core.FocusOwnerFinder.focusOwner;
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -79,11 +80,11 @@ public final class ScreenshotTaker {
    */
   public BufferedImage takeDesktopScreenshot() {
     Rectangle screen = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-    JTextComponent textComponent = findFocusOwnerAndHideItsCaret();
+    Pair<JTextComponent, Integer> caretInfo = findFocusOwnerAndMakeCaretStatic();
     try {
       return robot.createScreenCapture(screen);
     } finally {
-      if (textComponent != null) showCaretOf(textComponent);
+      if (caretInfo != null) restoreCaret(caretInfo);
     }
   }
 
@@ -110,35 +111,36 @@ public final class ScreenshotTaker {
     Point locationOnScreen = locationOnScreen(c);
     Dimension size = sizeOf(c);
     Rectangle r = new Rectangle(locationOnScreen.x,  locationOnScreen.y, size.width, size.height);
-    JTextComponent textComponent = findFocusOwnerAndHideItsCaret();
+    Pair<JTextComponent, Integer> caretInfo = findFocusOwnerAndMakeCaretStatic();
     try {
       return robot.createScreenCapture(r);
     } finally {
-      if (textComponent != null) showCaretOf(textComponent);
+      if (caretInfo != null) restoreCaret(caretInfo);
     }
   }
 
   @RunsInEDT
-  private static JTextComponent findFocusOwnerAndHideItsCaret() {
-    return execute(new GuiQuery<JTextComponent>() {
-      protected JTextComponent executeInEDT() {
+  private static Pair<JTextComponent, Integer> findFocusOwnerAndMakeCaretStatic() {
+    return execute(new GuiQuery<Pair<JTextComponent, Integer>>() {
+      protected Pair<JTextComponent, Integer> executeInEDT() {
         Component focusOwner = focusOwner();
         if (!(focusOwner instanceof JTextComponent)) return null;
         JTextComponent textComponent = (JTextComponent)focusOwner;
         Caret caret = textComponent.getCaret();
-        if (caret == null || !caret.isVisible()) return null;
-        caret.setVisible(false);
-        return textComponent;
+        if (caret == null) return null;
+        int blinkRate = caret.getBlinkRate();
+        caret.setBlinkRate(0);
+        return new Pair<JTextComponent, Integer>(textComponent, blinkRate);
       }
     });
   }
   
   @RunsInEDT
-  private static void showCaretOf(final JTextComponent textComponent) {
+  private static void restoreCaret(final Pair<JTextComponent, Integer> caretInfo) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        Caret caret = textComponent.getCaret();
-        if (caret != null) caret.setVisible(true);
+        Caret caret = caretInfo.i.getCaret();
+        if (caret != null) caret.setBlinkRate(caretInfo.ii);
       }
     });
   }
