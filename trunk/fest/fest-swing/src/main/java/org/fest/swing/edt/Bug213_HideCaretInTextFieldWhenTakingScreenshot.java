@@ -1,24 +1,3 @@
-import java.awt.image.BufferedImage;
-
-import javax.swing.JButton;
-import javax.swing.JTextField;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
-import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.image.ScreenshotTaker;
-import org.fest.swing.lock.ScreenLock;
-import org.fest.swing.testing.TestWindow;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.testing.TestGroups.*;
-
 /*
  * Created on Dec 18, 2008
  * 
@@ -34,6 +13,26 @@ import static org.fest.swing.testing.TestGroups.*;
  * 
  * Copyright @2008 the original author or authors.
  */
+package org.fest.swing.edt;
+
+import java.awt.image.BufferedImage;
+
+import javax.swing.JButton;
+import javax.swing.JTextField;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.image.ScreenshotTaker;
+import org.fest.swing.lock.ScreenLock;
+import org.fest.swing.testing.TestWindow;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.testing.TestGroups.*;
 
 /**
  * Test case for <a href="http://code.google.com/p/fest/issues/detail?id=213">Bug 213</a>.
@@ -91,8 +90,7 @@ public class Bug213_HideCaretInTextFieldWhenTakingScreenshot {
 
     private MyWindow() {
       super(Bug213_HideCaretInTextFieldWhenTakingScreenshot.class);
-      add(textField);
-      add(button);
+      addComponents(textField, button);
     }
   }
 }
