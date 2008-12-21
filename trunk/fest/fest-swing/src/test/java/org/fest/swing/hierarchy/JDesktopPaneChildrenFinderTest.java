@@ -26,13 +26,13 @@ import org.testng.annotations.Test;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.lock.ScreenLock;
-import org.fest.swing.test.swing.MDITestWindow;
+import org.fest.swing.test.swing.MyMdiTestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.hierarchy.JInternalFrameIconifyTask.iconify;
-import static org.fest.swing.test.swing.MDITestWindow.createAndShowNewWindow;
+import static org.fest.swing.test.swing.MyMdiTestWindow.createAndShowNewWindow;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -64,7 +64,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @Test(groups = GUI)
   public void shouldReturnIconifiedInternalFramesIfComponentIsJDesktopPane() {
     ScreenLock.instance().acquire(this);
-    final MDITestWindow window = createAndShowNewWindow(getClass());
+    final MyMdiTestWindow window = createAndShowNewWindow(getClass());
     iconify(window.internalFrame());
     Collection<Component> children = execute(new GuiQuery<Collection<Component>>() {
       protected Collection<Component> executeInEDT() {

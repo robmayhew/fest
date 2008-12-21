@@ -20,6 +20,7 @@ import java.awt.FlowLayout;
 import javax.swing.JApplet;
 import javax.swing.JButton;
 
+import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
@@ -30,7 +31,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  *
  * @author Alex Ruiz
  */
-public class MyApplet extends JApplet {
+public class TestApplet extends JApplet {
 
   private static final long serialVersionUID = 1L;
   
@@ -40,15 +41,16 @@ public class MyApplet extends JApplet {
   private boolean stopped;
 
   @RunsInEDT
-  public static MyApplet createNew() {
-    return execute(new GuiQuery<MyApplet>() {
-      protected MyApplet executeInEDT() {
-        return new MyApplet();
+  public static TestApplet createNew() {
+    return execute(new GuiQuery<TestApplet>() {
+      protected TestApplet executeInEDT() {
+        return new TestApplet();
       }
     });
   }
 
-  public MyApplet() {
+  @RunsInCurrentThread
+  public TestApplet() {
     setLayout(new FlowLayout());
     JButton button = new JButton("Click Me");
     button.setName("clickMe");

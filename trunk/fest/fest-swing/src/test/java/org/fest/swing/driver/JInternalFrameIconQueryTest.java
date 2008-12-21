@@ -29,7 +29,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
-import org.fest.swing.test.swing.MDITestWindow;
+import org.fest.swing.test.swing.MyMdiTestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -54,7 +54,7 @@ public class JInternalFrameIconQueryTest {
 
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    MDITestWindow window = MDITestWindow.createNewWindow(getClass());
+    MyMdiTestWindow window = MyMdiTestWindow.createNewWindow(getClass());
     internalFrame = window.internalFrame();
     robot.showWindow(window);
   }

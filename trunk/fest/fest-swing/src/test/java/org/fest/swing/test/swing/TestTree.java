@@ -55,7 +55,9 @@ public final class TestTree extends JTree {
   private static class TreeTransferHandler extends StringTransferHandler<JTree> {
     private static final long serialVersionUID = 1L;
 
-    TreeTransferHandler() {}
+    TreeTransferHandler() {
+      super(JTree.class);
+    }
     
     protected String exportString(JTree tree) {
       rows = tree.getSelectionRows();

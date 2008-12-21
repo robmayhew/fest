@@ -27,7 +27,7 @@ import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.fixture.FrameFixture;
-import org.fest.swing.test.swing.MyApplet;
+import org.fest.swing.test.swing.TestApplet;
 import org.fest.swing.timing.Condition;
 import org.fest.swing.util.Pair;
 
@@ -47,7 +47,7 @@ import static org.fest.swing.timing.Pause.pause;
 @Test(groups = GUI)
 public class AppletViewerGuiTest {
 
-  private MyApplet applet;
+  private TestApplet applet;
   private FrameFixture fixture;
   private AppletViewer viewer;
 
@@ -56,7 +56,7 @@ public class AppletViewerGuiTest {
   }
   
   @BeforeMethod public void setUp() {
-    Pair<MyApplet, AppletViewer> appletAndViewer = appletAndViewer();
+    Pair<TestApplet, AppletViewer> appletAndViewer = appletAndViewer();
     applet = appletAndViewer.i;
     viewer = appletAndViewer.ii;
     fixture = new FrameFixture(viewer);
@@ -65,17 +65,17 @@ public class AppletViewerGuiTest {
   }
 
   @RunsInEDT
-  private static Pair<MyApplet, AppletViewer> appletAndViewer() {
-    return execute(new GuiQuery<Pair<MyApplet, AppletViewer>>() {
-      protected Pair<MyApplet, AppletViewer> executeInEDT() {
-        MyApplet applet = new MyApplet();
-        return new Pair<MyApplet, AppletViewer>(applet, new AppletViewer(applet));
+  private static Pair<TestApplet, AppletViewer> appletAndViewer() {
+    return execute(new GuiQuery<Pair<TestApplet, AppletViewer>>() {
+      protected Pair<TestApplet, AppletViewer> executeInEDT() {
+        TestApplet applet = new TestApplet();
+        return new Pair<TestApplet, AppletViewer>(applet, new AppletViewer(applet));
       }
     });
   }
 
   @RunsInEDT
-  private static void assertThatIsInitializedAndStarted(final MyApplet applet) {
+  private static void assertThatIsInitializedAndStarted(final TestApplet applet) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         assertThat(applet.initialized()).isTrue();
@@ -104,7 +104,7 @@ public class AppletViewerGuiTest {
     });
   }
 
-  private static void assertThatIsStoppedAndDestroyed(final MyApplet applet) {
+  private static void assertThatIsStoppedAndDestroyed(final TestApplet applet) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         assertThat(applet.stopped()).isTrue();
@@ -127,7 +127,7 @@ public class AppletViewerGuiTest {
     assertThatIsShowingAndLoaded(applet, viewer);
   }
 
-  private static void assertThatIsShowingAndLoaded(final MyApplet applet, final AppletViewer viewer) {
+  private static void assertThatIsShowingAndLoaded(final TestApplet applet, final AppletViewer viewer) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         assertThat(applet.isShowing()).isTrue();

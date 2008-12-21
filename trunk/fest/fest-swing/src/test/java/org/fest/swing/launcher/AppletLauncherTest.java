@@ -29,7 +29,7 @@ import org.fest.swing.applet.AppletViewer;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.lock.ScreenLock;
-import org.fest.swing.test.swing.MyApplet;
+import org.fest.swing.test.swing.TestApplet;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
@@ -43,7 +43,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
  */
 @Test public class AppletLauncherTest {
 
-  private MyApplet applet;
+  private TestApplet applet;
   private AppletViewer viewer;
 
   @BeforeClass public void setUpOnce() {
@@ -74,7 +74,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @Test(groups = GUI) public void shouldLaunchGivenApplet() {
     ScreenLock.instance().acquire(this);
-    applet = MyApplet.createNew();
+    applet = TestApplet.createNew();
     viewer = AppletLauncher.applet(applet).start();
     assertAppletWasLaunched();
     assertThat(viewer.applet()).isSameAs(applet);
@@ -82,13 +82,13 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   @Test(groups = GUI) public void shouldInstantiateAndLaunchApplet() {
     ScreenLock.instance().acquire(this);
-    viewer = AppletLauncher.applet(MyApplet.class).start();
+    viewer = AppletLauncher.applet(TestApplet.class).start();
     assertAppletWasLaunched();
   }
 
   @Test(groups = GUI) public void shouldLoadAndLaunchApplet() {
     ScreenLock.instance().acquire(this);
-    viewer = AppletLauncher.applet(MyApplet.class.getName()).start();
+    viewer = AppletLauncher.applet(TestApplet.class.getName()).start();
     assertAppletWasLaunched();
   }
 
@@ -155,7 +155,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfParameterMapIsNull() {
     Map<String, String> parameters = null;
-    AppletLauncher.applet(MyApplet.createNew()).withParameters(parameters);
+    AppletLauncher.applet(TestApplet.createNew()).withParameters(parameters);
   }
 
   @Test(groups = GUI) public void shouldSetParametersInMap() {
@@ -163,7 +163,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
     Map<String, String> parameters = new HashMap<String, String>();
     parameters.put("bgcolor", "blue");
     parameters.put("color", "red");
-    applet = MyApplet.createNew();
+    applet = TestApplet.createNew();
     viewer = AppletLauncher.applet(applet).withParameters(parameters).start();
     assertAppletWasLaunched();
     assertThat(applet.getParameter("bgcolor")).isEqualTo("blue");
@@ -173,7 +173,7 @@ import static org.fest.swing.testing.TestGroups.GUI;
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfParameterArrayIsNull() {
     AppletParameter[] parameters = null;
-    AppletLauncher.applet(MyApplet.createNew()).withParameters(parameters);
+    AppletLauncher.applet(TestApplet.createNew()).withParameters(parameters);
   }
 
   @Test(expectedExceptions = NullPointerException.class)
@@ -181,12 +181,12 @@ import static org.fest.swing.testing.TestGroups.GUI;
     AppletParameter[] parameters = new AppletParameter[2];
     parameters[0] = AppletParameter.name("bgcolor").value("blue");
     parameters[1] = null;
-    AppletLauncher.applet(MyApplet.createNew()).withParameters(parameters);
+    AppletLauncher.applet(TestApplet.createNew()).withParameters(parameters);
   }
 
   @Test(groups = GUI) public void shouldSetParametersInArray() {
     ScreenLock.instance().acquire(this);
-    applet = MyApplet.createNew();
+    applet = TestApplet.createNew();
     viewer = AppletLauncher.applet(applet).withParameters(
         AppletParameter.name("bgcolor").value("blue"),
         AppletParameter.name("color").value("red")
@@ -198,6 +198,6 @@ import static org.fest.swing.testing.TestGroups.GUI;
 
   private void assertAppletWasLaunched() {
     assertThat(isShowing(viewer)).isTrue();
-    assertThat(viewer.applet()).isInstanceOf(MyApplet.class);
+    assertThat(viewer.applet()).isInstanceOf(TestApplet.class);
   }
 }

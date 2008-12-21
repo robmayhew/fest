@@ -31,13 +31,13 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.lock.ScreenLock;
-import org.fest.swing.test.swing.MDITestWindow;
+import org.fest.swing.test.swing.MyMdiTestWindow;
 import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.hierarchy.JFrameContentPaneQuery.contentPaneOf;
-import static org.fest.swing.test.swing.MDITestWindow.createAndShowNewWindow;
+import static org.fest.swing.test.swing.MyMdiTestWindow.createAndShowNewWindow;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
@@ -101,7 +101,7 @@ public class ParentFinderTest {
   }
 
   public void shouldReturnParentOfInternalFrame() {
-    MDITestWindow window = createAndShowNewWindow(getClass());
+    MyMdiTestWindow window = createAndShowNewWindow(getClass());
     JInternalFrame internalFrame = window.internalFrame();
     try {
       assertThat(findParent(finder, internalFrame)).isNotNull()

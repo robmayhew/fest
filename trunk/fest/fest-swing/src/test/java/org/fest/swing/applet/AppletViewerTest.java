@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.test.swing.MyApplet;
+import org.fest.swing.test.swing.TestApplet;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
@@ -48,13 +48,13 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
   
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfAppletStubIsNull() {
-    newAppletViewer(MyApplet.createNew(), (AppletStub)null);
+    newAppletViewer(TestApplet.createNew(), (AppletStub)null);
   }
   
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfParameterMapIsNull() {
     Map<String, String> parameters = null;
-    newAppletViewer(MyApplet.createNew(), parameters);
+    newAppletViewer(TestApplet.createNew(), parameters);
   }
 
   @RunsInEDT

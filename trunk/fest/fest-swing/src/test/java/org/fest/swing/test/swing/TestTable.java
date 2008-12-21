@@ -15,15 +15,15 @@
  */
 package org.fest.swing.test.swing;
 
-import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
-
-import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.util.Strings.concat;
-
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import org.fest.swing.edt.GuiTask;
+
+import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
+
+import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.util.Strings.concat;
 
 
 /**
@@ -118,7 +118,9 @@ public class TestTable extends JTable {
   private static class TableTransferHandler extends StringTransferHandler<JTable> {
     private static final long serialVersionUID = 1L;
 
-    TableTransferHandler() {}
+    TableTransferHandler() {
+      super(JTable.class);
+    }
 
     protected String exportString(JTable table) {
       rows = table.getSelectedRows();

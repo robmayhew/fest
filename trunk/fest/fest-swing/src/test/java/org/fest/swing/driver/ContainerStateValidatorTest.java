@@ -32,7 +32,7 @@ import org.fest.swing.core.RobotFixture;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.task.ComponentSetEnabledTask;
-import org.fest.swing.test.swing.MDITestWindow;
+import org.fest.swing.test.swing.MyMdiTestWindow;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JButtons.button;
@@ -147,20 +147,20 @@ public class ContainerStateValidatorTest {
   }
   
   public void shouldPassIfJInternalFrameIsResizable() {
-    MDITestWindow window = MDITestWindow.createNewWindow(getClass());
+    MyMdiTestWindow window = MyMdiTestWindow.createNewWindow(getClass());
     robot.showWindow(window);
     validateCanResize(window.internalFrame());
   }
 
   public void shouldPassIfJInternalFrameIsResizableAndDisabled() {
-    MDITestWindow window = MDITestWindow.createNewWindow(getClass());
+    MyMdiTestWindow window = MyMdiTestWindow.createNewWindow(getClass());
     robot.showWindow(window);
     disable(window.internalFrame());
     validateCanResize(window.internalFrame());
   }
 
   public void shouldFailIfJInternalFrameIsNotResizable() {
-    MDITestWindow window = MDITestWindow.createNewWindow(getClass());
+    MyMdiTestWindow window = MyMdiTestWindow.createNewWindow(getClass());
     robot.showWindow(window);
     JInternalFrame internalFrame = window.internalFrame();
     makeNotResizable(internalFrame);
@@ -183,7 +183,7 @@ public class ContainerStateValidatorTest {
   }
   
   public void shouldFailIfJInternalFrameIsResizableButNotShowing() {
-    MDITestWindow window = MDITestWindow.createNewWindow(getClass());
+    MyMdiTestWindow window = MyMdiTestWindow.createNewWindow(getClass());
     try {
       validateCanResize(window.internalFrame());
       failWhenExpectingException();

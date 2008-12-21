@@ -33,7 +33,7 @@ import static java.awt.datatransfer.DataFlavor.stringFlavor;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public abstract class StringTransferHandler<T extends JComponent> extends TransferHandler {
+abstract class StringTransferHandler<T extends JComponent> extends TransferHandler {
 
   private static final long serialVersionUID = 1L;
 
@@ -45,37 +45,33 @@ public abstract class StringTransferHandler<T extends JComponent> extends Transf
   protected int addIndex; // Location where items were added
   protected int addCount; // Number of items added.
 
-  protected abstract void importString(T c, String s);
-  protected abstract String exportString(T c);
-  protected abstract void cleanup(T c, boolean remove);
+  private final Class<T> type;
 
-  public StringTransferHandler() {
+  public StringTransferHandler(Class<T> type) {
+    this.type = type;
     reset();
   }
 
-  @SuppressWarnings("unchecked")
   @Override protected Transferable createTransferable(JComponent c) {
-    return new StringSelection(exportString((T)c));
+    return new StringSelection(exportString(type.cast(c)));
   }
 
   @Override public int getSourceActions(JComponent c) {
     return COPY_OR_MOVE;
   }
 
-  @SuppressWarnings("unchecked")
   @Override public boolean importData(JComponent c, Transferable t) {
     if (!canImport(c, t.getTransferDataFlavors())) return false;
     try {
       String str = (String) t.getTransferData(stringFlavor);
-      importString((T)c, str);
+      importString(type.cast(c), str);
       return true;
     } catch (Exception ignored) {}
     return false;
   }
 
-  @SuppressWarnings("unchecked")
   @Override protected void exportDone(JComponent c, Transferable data, int action) {
-    cleanup((T)c, action == MOVE);
+    cleanup(type.cast(c), action == MOVE);
     reset();
   }
 
@@ -89,4 +85,8 @@ public abstract class StringTransferHandler<T extends JComponent> extends Transf
     for (DataFlavor flavor : flavors) if (stringFlavor.equals(flavor)) return true;
     return false;
   }
+
+  protected abstract void importString(T c, String s);
+  protected abstract String exportString(T c);
+  protected abstract void cleanup(T c, boolean remove);
 }
