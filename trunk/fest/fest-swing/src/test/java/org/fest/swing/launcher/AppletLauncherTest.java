@@ -29,7 +29,7 @@ import org.fest.swing.applet.AppletViewer;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.lock.ScreenLock;
-import org.fest.swing.testing.MyApplet;
+import org.fest.swing.test.swing.MyApplet;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;

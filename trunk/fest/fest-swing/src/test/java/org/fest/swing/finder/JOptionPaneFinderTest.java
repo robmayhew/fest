@@ -33,7 +33,7 @@ import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.JOptionPaneFixture;
-import org.fest.swing.testing.TestWindow;
+import org.fest.swing.test.swing.TestWindow;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.swing.JOptionPane.*;

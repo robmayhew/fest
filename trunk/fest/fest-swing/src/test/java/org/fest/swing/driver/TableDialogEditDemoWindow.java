@@ -19,8 +19,8 @@ import javax.swing.JTable;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.testing.TableDialogEditDemo;
-import org.fest.swing.testing.TestWindow;
+import org.fest.swing.test.swing.TableDialogEditDemo;
+import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 

@@ -32,7 +32,7 @@ import org.fest.swing.core.RobotFixture;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.task.ComponentSetEnabledTask;
-import org.fest.swing.testing.MDITestWindow;
+import org.fest.swing.test.swing.MDITestWindow;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JButtons.button;

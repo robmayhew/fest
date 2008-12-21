@@ -13,7 +13,7 @@
  *
  * Copyright @2007-2008 the original author or authors.
  */
-package org.fest.swing.testing;
+package org.fest.swing.test.swing;
 
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 

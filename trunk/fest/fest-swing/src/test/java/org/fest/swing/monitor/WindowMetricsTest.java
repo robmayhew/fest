@@ -28,12 +28,12 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.lock.ScreenLock;
-import org.fest.swing.testing.TestWindow;
+import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ContainerInsetsQuery.insetsOf;
-import static org.fest.swing.testing.TestWindow.createAndShowNewWindow;
+import static org.fest.swing.test.swing.TestWindow.createAndShowNewWindow;
 
 /**
  * Tests for <code>{@link WindowMetrics}</code>.

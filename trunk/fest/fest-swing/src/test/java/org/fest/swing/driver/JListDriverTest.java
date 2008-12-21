@@ -36,10 +36,10 @@ import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.LocationUnavailableException;
+import org.fest.swing.test.swing.TestList;
+import org.fest.swing.test.swing.TestWindow;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.MethodInvocations;
-import org.fest.swing.testing.TestList;
-import org.fest.swing.testing.TestWindow;
 
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 

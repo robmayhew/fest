@@ -27,9 +27,9 @@ import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiTask;
+import org.fest.swing.test.swing.TestWindow;
 import org.fest.swing.testing.FluentDimension;
 import org.fest.swing.testing.FluentPoint;
-import org.fest.swing.testing.TestWindow;
 
 import static java.awt.Frame.*;
 

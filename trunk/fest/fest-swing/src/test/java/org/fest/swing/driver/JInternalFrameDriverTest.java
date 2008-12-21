@@ -36,10 +36,10 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.UnexpectedException;
+import org.fest.swing.test.swing.TestWindow;
 import org.fest.swing.testing.FluentDimension;
 import org.fest.swing.testing.FluentPoint;
 import org.fest.swing.testing.StopWatch;
-import org.fest.swing.testing.TestWindow;
 
 import static java.lang.String.valueOf;
 

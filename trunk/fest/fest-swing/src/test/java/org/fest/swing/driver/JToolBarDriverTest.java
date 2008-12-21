@@ -29,7 +29,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
-import org.fest.swing.testing.TestWindow;
+import org.fest.swing.test.swing.TestWindow;
 
 import static java.awt.BorderLayout.*;
 import static javax.swing.SwingUtilities.getWindowAncestor;

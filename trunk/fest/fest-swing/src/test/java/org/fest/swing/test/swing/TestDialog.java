@@ -13,7 +13,7 @@
  *
  * Copyright @2007-2008 the original author or authors.
  */
-package org.fest.swing.testing;
+package org.fest.swing.test.swing;
 
 import java.awt.*;
 
@@ -28,7 +28,7 @@ import org.fest.swing.task.FrameShowTask;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.task.DialogShowTask.packAndShow;
 import static org.fest.swing.task.WindowDestroyTask.hideAndDispose;
-import static org.fest.swing.testing.TestWindow.DEFAULT_WINDOW_LOCATION;
+import static org.fest.swing.test.swing.TestWindow.DEFAULT_WINDOW_LOCATION;
 
 /**
  * Understands the base dialog for all GUI tests.

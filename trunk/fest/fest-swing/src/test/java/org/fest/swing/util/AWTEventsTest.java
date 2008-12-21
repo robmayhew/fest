@@ -25,7 +25,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
-import org.fest.swing.testing.TestWindow;
+import org.fest.swing.test.swing.TestWindow;
 
 import static java.awt.event.ComponentEvent.*;
 import static java.awt.event.WindowEvent.*;

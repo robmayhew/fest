@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.lock.ScreenLock;
-import org.fest.swing.testing.TestWindow;
+import org.fest.swing.test.swing.TestWindow;
 
 import static java.lang.String.valueOf;
 import static java.util.logging.Logger.getAnonymousLogger;

@@ -32,9 +32,9 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.test.swing.TestWindow;
 import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.StopWatch;
-import org.fest.swing.testing.TestWindow;
 import org.fest.swing.timing.Condition;
 
 import static java.awt.Event.SHIFT_MASK;

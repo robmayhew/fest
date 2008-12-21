@@ -27,7 +27,7 @@ import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.fixture.FrameFixture;
-import org.fest.swing.testing.MyApplet;
+import org.fest.swing.test.swing.MyApplet;
 import org.fest.swing.timing.Condition;
 import org.fest.swing.util.Pair;
 

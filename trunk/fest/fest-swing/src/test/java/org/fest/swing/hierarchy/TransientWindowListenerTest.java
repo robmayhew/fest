@@ -26,8 +26,8 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
-import org.fest.swing.testing.TestDialog;
-import org.fest.swing.testing.TestWindow;
+import org.fest.swing.test.swing.TestDialog;
+import org.fest.swing.test.swing.TestWindow;
 
 import static java.awt.event.ComponentEvent.COMPONENT_SHOWN;
 import static java.awt.event.WindowEvent.*;

@@ -25,12 +25,12 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.Robot;
-import org.fest.swing.testing.TestWindow;
+import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.BasicComponentFinder.finderWithNewAwtHierarchy;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.TestWindow.createNewWindow;
+import static org.fest.swing.test.swing.TestWindow.createNewWindow;
 
 /**
  * Tests for <code>{@link ComponentFoundCondition}</code>.

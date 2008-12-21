@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
-import org.fest.swing.testing.TestWindow;
+import org.fest.swing.test.swing.TestWindow;
 import org.fest.swing.testing.ToolkitStub;
 
 import static org.easymock.EasyMock.*;

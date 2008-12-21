@@ -30,7 +30,7 @@ import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.testing.JOptionPaneLauncher.launch;
+import static org.fest.swing.test.swing.JOptionPaneLauncher.launch;
 import static org.fest.swing.testing.TestGroups.*;
 
 /**

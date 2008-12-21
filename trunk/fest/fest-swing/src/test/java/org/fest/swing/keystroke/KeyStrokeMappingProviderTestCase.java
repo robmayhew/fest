@@ -31,8 +31,8 @@ import org.fest.swing.driver.JTextComponentDriver;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.test.swing.TestWindow;
 import org.fest.swing.testing.KeyRecorder;
-import org.fest.swing.testing.TestWindow;
 
 import static java.lang.String.valueOf;
 
