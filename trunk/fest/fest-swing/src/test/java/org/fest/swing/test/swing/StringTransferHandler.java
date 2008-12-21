@@ -47,7 +47,7 @@ abstract class StringTransferHandler<T extends JComponent> extends TransferHandl
 
   private final Class<T> type;
 
-  public StringTransferHandler(Class<T> type) {
+  StringTransferHandler(Class<T> type) {
     this.type = type;
     reset();
   }
