@@ -21,7 +21,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.exception.EdtViolationException;
 
-import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
+import static org.fest.swing.test.core.CommonAssertions.failWhenExpectingException;
 
 /**
  * Tests for <code>{@link FailOnThreadViolationRepaintManager}</code>.

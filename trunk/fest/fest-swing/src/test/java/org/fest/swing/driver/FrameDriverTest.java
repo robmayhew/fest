@@ -40,7 +40,7 @@ import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScre
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.task.ComponentSetVisibleTask.hide;
-import static org.fest.swing.testing.CommonAssertions.*;
+import static org.fest.swing.test.core.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

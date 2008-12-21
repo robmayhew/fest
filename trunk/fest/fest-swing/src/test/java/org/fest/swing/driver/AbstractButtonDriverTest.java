@@ -42,7 +42,7 @@ import static org.fest.swing.driver.AbstractButtonSelectedQuery.isSelected;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.task.AbstractButtonSetSelectedTask.setSelected;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
-import static org.fest.swing.testing.CommonAssertions.*;
+import static org.fest.swing.test.core.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

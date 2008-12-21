@@ -39,7 +39,7 @@ import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.ComponentLocationQuery.locationOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
+import static org.fest.swing.test.core.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

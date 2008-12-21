@@ -38,7 +38,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JButtons.button;
 import static org.fest.swing.factory.JDialogs.dialog;
 import static org.fest.swing.factory.JFrames.frame;
-import static org.fest.swing.testing.CommonAssertions.*;
+import static org.fest.swing.test.core.CommonAssertions.*;
 
 /**
  * Tests for <code>{@link ContainerStateValidator}</code>.

@@ -34,7 +34,7 @@ import org.fest.swing.launcher.JavaApp.ArgumentObserver;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
-import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
+import static org.fest.swing.test.core.CommonAssertions.failWhenExpectingException;
 import static org.fest.util.Collections.list;
 
 /**

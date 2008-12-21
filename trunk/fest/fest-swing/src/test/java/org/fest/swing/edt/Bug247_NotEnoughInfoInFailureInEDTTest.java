@@ -19,7 +19,7 @@ import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
+import static org.fest.swing.test.core.CommonAssertions.failWhenExpectingException;
 import static org.fest.util.Strings.concat;
 
 /**

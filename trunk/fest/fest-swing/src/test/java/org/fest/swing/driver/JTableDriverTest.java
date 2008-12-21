@@ -64,9 +64,9 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.task.ComponentSetVisibleTask.hide;
+import static org.fest.swing.test.core.CommonAssertions.*;
 import static org.fest.swing.test.recorder.ClickRecorder.attachTo;
 import static org.fest.swing.test.swing.TestTable.*;
-import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

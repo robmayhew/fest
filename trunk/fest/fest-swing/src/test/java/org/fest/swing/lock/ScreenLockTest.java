@@ -22,7 +22,7 @@ import org.fest.swing.exception.ScreenLockException;
 import org.fest.swing.lock.ScreenLock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
+import static org.fest.swing.test.core.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.timing.Pause.pause;
 
 /**

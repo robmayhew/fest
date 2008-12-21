@@ -52,8 +52,8 @@ import static org.fest.swing.query.ComponentShowingQuery.isShowing;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
 import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
+import static org.fest.swing.test.core.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.test.recorder.ClickRecorder.attachTo;
-import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.timing.Pause.pause;
 

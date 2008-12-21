@@ -49,7 +49,7 @@ import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.factory.JPopupMenus.popupMenu;
 import static org.fest.swing.factory.JTableHeaders.tableHeader;
 import static org.fest.swing.factory.JTables.table;
-import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
+import static org.fest.swing.test.core.CommonAssertions.failWhenExpectingException;
 
 /**
  * Tests for <code>{@link JTableFixture}</code>.

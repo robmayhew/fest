@@ -36,7 +36,7 @@ import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
-import static org.fest.swing.testing.CommonAssertions.*;
+import static org.fest.swing.test.core.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

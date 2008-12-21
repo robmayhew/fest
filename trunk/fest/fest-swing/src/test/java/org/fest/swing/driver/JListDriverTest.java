@@ -52,7 +52,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.task.ComponentSetVisibleTask.hide;
-import static org.fest.swing.testing.CommonAssertions.*;
+import static org.fest.swing.test.core.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.util.Range.*;
 import static org.fest.util.Arrays.array;

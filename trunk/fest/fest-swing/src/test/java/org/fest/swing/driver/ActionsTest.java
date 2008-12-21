@@ -28,7 +28,7 @@ import static javax.swing.Action.NAME;
 import static org.easymock.EasyMock.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.CommonAssertions.failWhenExpectingException;
+import static org.fest.swing.test.core.CommonAssertions.failWhenExpectingException;
 
 /**
  * Tests for <code>{@link Actions}</code>.
