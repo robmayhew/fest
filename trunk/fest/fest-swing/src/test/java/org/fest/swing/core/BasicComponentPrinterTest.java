@@ -31,8 +31,8 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.hierarchy.ExistingHierarchy;
 import org.fest.swing.lock.ScreenLock;
+import org.fest.swing.test.io.PrintStreamStub;
 import org.fest.swing.test.swing.TestWindow;
-import org.fest.swing.test.util.PrintStreamStub;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;

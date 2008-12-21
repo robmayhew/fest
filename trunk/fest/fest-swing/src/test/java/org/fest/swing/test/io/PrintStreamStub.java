@@ -13,7 +13,7 @@
  * 
  * Copyright @2007-2008 the original author or authors.
  */
-package org.fest.swing.test.util;
+package org.fest.swing.test.io;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
