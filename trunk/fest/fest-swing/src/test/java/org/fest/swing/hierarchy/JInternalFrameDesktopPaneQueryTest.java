@@ -27,7 +27,7 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.lock.ScreenLock;
-import org.fest.swing.test.swing.MyMdiTestWindow;
+import org.fest.swing.test.swing.MdiTestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -42,7 +42,7 @@ import static org.fest.swing.testing.TestGroups.*;
 @Test(groups = { GUI, ACTION })
 public class JInternalFrameDesktopPaneQueryTest {
 
-  private MyMdiTestWindow window;
+  private MdiTestWindow window;
   private JInternalFrame internalFrame;
 
   @BeforeClass public void setUpOnce() {
@@ -51,7 +51,7 @@ public class JInternalFrameDesktopPaneQueryTest {
 
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
-    window = MyMdiTestWindow.createAndShowNewWindow(getClass());
+    window = MdiTestWindow.createAndShowNewWindow(getClass());
     internalFrame = window.internalFrame();
   }
 

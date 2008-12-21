@@ -24,7 +24,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
-import org.fest.swing.test.swing.MyMdiTestWindow;
+import org.fest.swing.test.swing.MdiTestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -47,7 +47,7 @@ public class JInternalFrameCloseTaskTest {
   
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
-    MyMdiTestWindow window = MyMdiTestWindow.createNewWindow(getClass());
+    MdiTestWindow window = MdiTestWindow.createNewWindow(getClass());
     internalFrame = window.internalFrame();
     robot.showWindow(window);
     assertThat(window.internalFrame().isVisible()).isTrue();

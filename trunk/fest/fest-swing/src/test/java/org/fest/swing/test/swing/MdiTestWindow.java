@@ -32,24 +32,24 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz
  */
-public class MyMdiTestWindow extends TestWindow {
+public class MdiTestWindow extends TestWindow {
 
   private static final long serialVersionUID = 1L;
 
   private static int internalFrameCounter;
 
   /**
-   * Creates a new <code>{@link MyMdiTestWindow}</code> and displays it on the screen. The default size of the created
+   * Creates a new <code>{@link MdiTestWindow}</code> and displays it on the screen. The default size of the created
    * window is 500 x 300. This method is executed in the event dispatch thread.
    * @param testClass the class of the test where the window to create will be used. The simple name of the given class
    * will be used as the title of the created window.
    * @return the created window.
    */
   @RunsInEDT
-  public static MyMdiTestWindow createAndShowNewWindow(final Class<?> testClass) {
-    return execute(new GuiQuery<MyMdiTestWindow>() {
-      protected MyMdiTestWindow executeInEDT() {
-        MyMdiTestWindow window = createInCurrentThread(testClass);
+  public static MdiTestWindow createAndShowNewWindow(final Class<?> testClass) {
+    return execute(new GuiQuery<MdiTestWindow>() {
+      protected MdiTestWindow executeInEDT() {
+        MdiTestWindow window = createInCurrentThread(testClass);
         TestWindow.display(window, new Dimension(500, 300));
         return window;
       }
@@ -57,15 +57,15 @@ public class MyMdiTestWindow extends TestWindow {
   }
 
   /**
-   * Creates a new <code>{@link MyMdiTestWindow}</code>. This method is executed in the event dispatch thread.
+   * Creates a new <code>{@link MdiTestWindow}</code>. This method is executed in the event dispatch thread.
    * @param testClass the class of the test where the window to create will be used. The simple name of the given class
    * will be used as the title of the created window.
    * @return the created window.
    */
   @RunsInEDT
-  public static MyMdiTestWindow createNewWindow(final Class<?> testClass) {
-    return execute(new GuiQuery<MyMdiTestWindow>() {
-      protected MyMdiTestWindow executeInEDT() {
+  public static MdiTestWindow createNewWindow(final Class<?> testClass) {
+    return execute(new GuiQuery<MdiTestWindow>() {
+      protected MdiTestWindow executeInEDT() {
         return createInCurrentThread(testClass);
       }
     });
@@ -75,17 +75,17 @@ public class MyMdiTestWindow extends TestWindow {
   private final JInternalFrame internalFrame;
 
   @RunsInCurrentThread
-  private static MyMdiTestWindow createInCurrentThread(Class<?> testClass) {
-    return new MyMdiTestWindow(testClass);
+  private static MdiTestWindow createInCurrentThread(Class<?> testClass) {
+    return new MdiTestWindow(testClass);
   }
 
   /**
-   * Creates a new </code>{@link MyMdiTestWindow}</code>.
+   * Creates a new </code>{@link MdiTestWindow}</code>.
    * @param testClass the class of the test where the window to create will be used. The simple name of the given class
    * will be used as the title of the created window.
    */
   @RunsInCurrentThread
-  protected MyMdiTestWindow(Class<?> testClass) {
+  protected MdiTestWindow(Class<?> testClass) {
     super(testClass);
     desktop = new JDesktopPane();
     internalFrame = createInternalFrame();
