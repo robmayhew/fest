@@ -32,6 +32,7 @@ import javax.swing.tree.TreeCellRenderer;
  * @author Yvonne Wang
  */
 public class CustomCellRenderer implements ListCellRenderer, TableCellRenderer, TreeCellRenderer {
+  
   private static final long serialVersionUID = 1L;
   private final Component rendererComponent;
   

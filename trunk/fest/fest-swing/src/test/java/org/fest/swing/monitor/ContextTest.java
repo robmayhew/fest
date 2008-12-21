@@ -28,8 +28,8 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
+import org.fest.swing.test.awt.ToolkitStub;
 import org.fest.swing.test.swing.TestWindow;
-import org.fest.swing.testing.ToolkitStub;
 
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.*;

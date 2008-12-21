@@ -24,7 +24,8 @@ import java.awt.EventQueue;
 import java.awt.event.AWTEventListener;
 import java.util.EmptyStackException;
 
-import org.fest.swing.testing.ToolkitStub;
+import org.fest.swing.test.awt.ToolkitStub;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

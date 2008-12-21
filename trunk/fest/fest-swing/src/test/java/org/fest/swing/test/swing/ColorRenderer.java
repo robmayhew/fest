@@ -32,14 +32,14 @@ import javax.swing.table.TableCellRenderer;
 /**
  * Adapted from the <a href="http://java.sun.com/docs/books/tutorial/uiswing/" target="_blank">Swing Tutorial</a>.
  */
-public class ColorRenderer extends JLabel implements TableCellRenderer {
+class ColorRenderer extends JLabel implements TableCellRenderer {
   private static final long serialVersionUID = 1L;
   
   Border unselectedBorder = null;
   Border selectedBorder = null;
   boolean isBordered = true;
 
-  public ColorRenderer(boolean isBordered) {
+  ColorRenderer(boolean isBordered) {
     this.isBordered = isBordered;
     setOpaque(true); // MUST do this for background to show up.
   }

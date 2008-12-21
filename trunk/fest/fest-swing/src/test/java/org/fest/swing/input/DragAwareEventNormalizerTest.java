@@ -22,7 +22,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.testing.ToolkitStub;
+import org.fest.swing.test.awt.ToolkitStub;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;

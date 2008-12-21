@@ -12,7 +12,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.testing;
+package org.fest.swing.test.awt;
 
 import java.awt.*;
 import java.awt.event.AWTEventListener;

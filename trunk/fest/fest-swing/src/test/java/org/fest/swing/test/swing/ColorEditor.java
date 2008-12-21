@@ -31,7 +31,7 @@ import javax.swing.table.TableCellEditor;
 /**
  * Adapted from the <a href="http://java.sun.com/docs/books/tutorial/uiswing/" target="_blank">Swing Tutorial</a>.
  */
-public class ColorEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
+class ColorEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
   private static final long serialVersionUID = 1L;
 
   Color currentColor;
@@ -40,7 +40,7 @@ public class ColorEditor extends AbstractCellEditor implements TableCellEditor, 
   JDialog dialog;
   protected static final String EDIT = "edit";
 
-  public ColorEditor() {
+  ColorEditor() {
     // Set up the editor (from the table's point of view),
     // which is a button.
     // This button brings up the color chooser dialog,

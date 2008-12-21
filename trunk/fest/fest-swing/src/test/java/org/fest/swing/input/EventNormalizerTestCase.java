@@ -21,7 +21,7 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import org.fest.swing.listener.WeakEventListener;
-import org.fest.swing.testing.ToolkitStub;
+import org.fest.swing.test.awt.ToolkitStub;
 
 import static org.easymock.classextension.EasyMock.createMock;
 

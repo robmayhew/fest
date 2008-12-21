@@ -21,7 +21,7 @@ import java.awt.event.AWTEventListener;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import org.fest.swing.testing.ToolkitStub;
+import org.fest.swing.test.awt.ToolkitStub;
 
 import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
 

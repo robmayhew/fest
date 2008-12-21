@@ -31,8 +31,8 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.listener.WeakEventListener;
+import org.fest.swing.test.awt.ToolkitStub;
 import org.fest.swing.test.swing.TestWindow;
-import org.fest.swing.testing.ToolkitStub;
 
 import static java.awt.AWTEvent.*;
 import static org.easymock.EasyMock.*;

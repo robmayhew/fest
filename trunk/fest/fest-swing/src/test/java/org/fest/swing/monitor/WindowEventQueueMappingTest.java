@@ -29,8 +29,8 @@ import org.testng.annotations.Test;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.test.awt.ToolkitStub;
 import org.fest.swing.test.swing.TestWindow;
-import org.fest.swing.testing.ToolkitStub;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
