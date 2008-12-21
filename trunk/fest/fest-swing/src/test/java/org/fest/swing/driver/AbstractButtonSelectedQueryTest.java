@@ -28,8 +28,8 @@ import org.fest.swing.driver.AbstractButtonSelectedQuery;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.test.data.BooleanProvider;
 import org.fest.swing.test.swing.TestWindow;
-import org.fest.swing.testing.BooleanProvider;
 import org.fest.swing.testing.MethodInvocations;
 
 import static org.fest.assertions.Assertions.assertThat;
