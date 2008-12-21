@@ -39,7 +39,7 @@ import org.fest.swing.exception.UnexpectedException;
 import org.fest.swing.test.awt.FluentDimension;
 import org.fest.swing.test.awt.FluentPoint;
 import org.fest.swing.test.swing.TestWindow;
-import org.fest.swing.testing.StopWatch;
+import org.fest.swing.test.util.StopWatch;
 
 import static java.lang.String.valueOf;
 

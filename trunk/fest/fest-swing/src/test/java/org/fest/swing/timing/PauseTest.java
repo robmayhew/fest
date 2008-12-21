@@ -20,12 +20,12 @@ import java.util.concurrent.TimeUnit;
 import org.testng.annotations.Test;
 
 import org.fest.swing.exception.WaitTimedOutError;
-import org.fest.swing.testing.StopWatch;
+import org.fest.swing.test.util.StopWatch;
 import org.fest.swing.timing.Condition;
 import org.fest.swing.timing.Pause;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.StopWatch.startNewStopWatch;
+import static org.fest.swing.test.util.StopWatch.startNewStopWatch;
 import static org.fest.swing.timing.Timeout.timeout;
 
 /**

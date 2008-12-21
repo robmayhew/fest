@@ -34,7 +34,7 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.test.recorder.ClickRecorder;
 import org.fest.swing.test.swing.TestWindow;
-import org.fest.swing.testing.StopWatch;
+import org.fest.swing.test.util.StopWatch;
 import org.fest.swing.timing.Condition;
 
 import static java.awt.Event.SHIFT_MASK;
@@ -51,8 +51,8 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
+import static org.fest.swing.test.util.StopWatch.startNewStopWatch;
 import static org.fest.swing.testing.CommonAssertions.*;
-import static org.fest.swing.testing.StopWatch.startNewStopWatch;
 import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.swing.timing.Timeout.timeout;
