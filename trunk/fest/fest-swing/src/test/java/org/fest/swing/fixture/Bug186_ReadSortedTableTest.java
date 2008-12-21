@@ -39,7 +39,7 @@ import static javax.swing.RowFilter.regexFilter;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.data.TableCell.row;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.test.core.TestGroups.*;
 
 /**
  * Tests for <a href="http://code.google.com/p/fest/issues/detail?id=186" target="_blank">Bug 186</a>.

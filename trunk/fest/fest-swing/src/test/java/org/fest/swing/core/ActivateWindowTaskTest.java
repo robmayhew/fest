@@ -33,7 +33,7 @@ import org.fest.util.Strings;
 import static org.fest.swing.factory.JFrames.frame;
 import static org.fest.swing.task.FrameShowTask.packAndShow;
 import static org.fest.swing.task.WindowDestroyTask.hideAndDispose;
-import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.test.core.TestGroups.*;
 import static org.fest.swing.timing.Pause.pause;
 
 /**

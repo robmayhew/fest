@@ -33,7 +33,7 @@ import org.fest.swing.edt.GuiTask;
 import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.test.core.TestGroups.*;
 
 /**
  * Fix for <a href="http://code.google.com/p/fest/issues/detail?id=232" target="_blank">issue 232</a>.

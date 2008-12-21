@@ -38,7 +38,7 @@ import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.task.ComponentSetVisibleTask.hide;
 import static org.fest.swing.test.core.CommonAssertions.*;
 import static org.fest.swing.test.core.MethodInvocations.Args.args;
-import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.test.core.TestGroups.*;
 
 /**
  * Tests for <code>{@link JSpinnerSetValueTask}</code>

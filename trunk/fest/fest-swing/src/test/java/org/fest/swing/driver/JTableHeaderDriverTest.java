@@ -44,8 +44,8 @@ import static org.fest.swing.factory.JMenuItems.menuItem;
 import static org.fest.swing.factory.JPopupMenus.popupMenu;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
 import static org.fest.swing.task.ComponentSetPopupMenuTask.setPopupMenu;
+import static org.fest.swing.test.core.TestGroups.GUI;
 import static org.fest.swing.test.recorder.ClickRecorder.attachTo;
-import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JTableHeaderDriver}</code>.

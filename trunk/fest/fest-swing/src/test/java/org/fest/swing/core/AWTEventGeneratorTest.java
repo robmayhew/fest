@@ -24,7 +24,7 @@ import org.fest.swing.input.InputState;
 import org.fest.swing.monitor.WindowMonitor;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link AWTEventGenerator}</code>.

@@ -18,7 +18,7 @@ package org.fest.swing.core;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link RobotEventGenerator}</code>.

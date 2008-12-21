@@ -23,7 +23,7 @@ import org.testng.annotations.Test;
 
 import static java.awt.event.KeyEvent.*;
 
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link KeyStrokeMappingProvider_en}</code>.

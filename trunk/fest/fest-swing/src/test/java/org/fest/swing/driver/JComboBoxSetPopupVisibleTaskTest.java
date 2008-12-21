@@ -35,7 +35,7 @@ import org.fest.swing.test.swing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.test.core.TestGroups.*;
 import static org.fest.util.Arrays.array;
 
 /**

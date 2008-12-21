@@ -43,7 +43,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentBackgroundQuery.backgroundOf;
 import static org.fest.swing.query.ComponentFontQuery.fontOf;
 import static org.fest.swing.query.ComponentForegroundQuery.foregroundOf;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.test.core.TestGroups.GUI;
 import static org.fest.util.Arrays.array;
 
 /**

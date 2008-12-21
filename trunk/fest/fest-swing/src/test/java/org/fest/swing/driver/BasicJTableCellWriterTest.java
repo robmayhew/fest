@@ -22,7 +22,7 @@ import org.fest.swing.core.EventMode;
 import org.fest.swing.core.EventModeProvider;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link BasicJTableCellWriter}</code>.

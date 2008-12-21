@@ -36,7 +36,7 @@ import static javax.swing.SwingUtilities.invokeLater;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.finder.WindowFinder.findDialog;
-import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.test.core.TestGroups.*;
 
 /**
  * Test case for <a href="http://code.google.com/p/fest/issues/detail?id=228">Bug 228</a>.

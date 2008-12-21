@@ -37,8 +37,8 @@ import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.test.core.TestGroups.GUI;
 import static org.fest.swing.test.recorder.ClickRecorder.attachTo;
-import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JMenuItemDriver}</code>.

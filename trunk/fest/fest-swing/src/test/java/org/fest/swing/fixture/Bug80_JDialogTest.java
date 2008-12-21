@@ -33,7 +33,7 @@ import static java.lang.String.valueOf;
 import static java.util.logging.Logger.getAnonymousLogger;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.test.core.TestGroups.*;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.util.Strings.concat;
 

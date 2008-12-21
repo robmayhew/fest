@@ -35,7 +35,7 @@ import org.fest.swing.test.swing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.task.AbstractButtonSetSelectedTask.setSelected;
-import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.test.core.TestGroups.*;
 
 /**
  * Tests for <code>{@link AbstractButtonSelectedQuery}</code>.

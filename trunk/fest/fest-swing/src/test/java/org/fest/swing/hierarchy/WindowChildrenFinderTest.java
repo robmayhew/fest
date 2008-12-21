@@ -37,7 +37,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JFrames.frame;
 import static org.fest.swing.factory.JTextFields.textField;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link WindowChildrenFinder}</code>.

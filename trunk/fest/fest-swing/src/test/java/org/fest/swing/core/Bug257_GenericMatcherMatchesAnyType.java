@@ -27,7 +27,7 @@ import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.factory.JDialogs.dialog;
 import static org.fest.swing.factory.JTextFields.textField;
-import static org.fest.swing.testing.TestGroups.*;
+import static org.fest.swing.test.core.TestGroups.*;
 
 /**
  * Test case for <a href="http://code.google.com/p/fest/issues/detail?id=257">Bug 257</a>.

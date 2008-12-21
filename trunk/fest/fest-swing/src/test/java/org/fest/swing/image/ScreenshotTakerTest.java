@@ -37,8 +37,8 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.ImageAssert.read;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
+import static org.fest.swing.test.core.TestGroups.GUI;
 import static org.fest.swing.test.swing.TestWindow.createAndShowNewWindow;
-import static org.fest.swing.testing.TestGroups.GUI;
 import static org.fest.util.Files.temporaryFolderPath;
 import static org.fest.util.Strings.concat;
 

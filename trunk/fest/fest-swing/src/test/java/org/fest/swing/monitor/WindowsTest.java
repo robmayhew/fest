@@ -35,7 +35,7 @@ import static java.util.logging.Logger.getAnonymousLogger;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.testing.TestGroups.GUI;
+import static org.fest.swing.test.core.TestGroups.GUI;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.util.Strings.concat;
 
