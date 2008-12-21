@@ -26,7 +26,7 @@ import org.fest.swing.driver.JScrollBarDriver;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
-import static org.fest.swing.factory.JScrollBars.scrollBar;
+import static org.fest.swing.test.builder.JScrollBars.scrollBar;
 
 /**
  * Tests for <code>{@link JScrollBarFixture}</code>.

@@ -31,20 +31,20 @@ import static java.awt.Adjustable.VERTICAL;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.factory.JButtons.button;
-import static org.fest.swing.factory.JDialogs.dialog;
-import static org.fest.swing.factory.JFrames.frame;
-import static org.fest.swing.factory.JLabels.label;
-import static org.fest.swing.factory.JMenuBars.menuBar;
-import static org.fest.swing.factory.JMenuItems.menuItem;
-import static org.fest.swing.factory.JPanels.panel;
-import static org.fest.swing.factory.JPopupMenus.popupMenu;
-import static org.fest.swing.factory.JScrollBars.scrollBar;
-import static org.fest.swing.factory.JScrollPanes.scrollPane;
-import static org.fest.swing.factory.JSliders.slider;
-import static org.fest.swing.factory.JSpinners.spinner;
-import static org.fest.swing.factory.JTextFields.textField;
-import static org.fest.swing.factory.JToggleButtons.toggleButton;
+import static org.fest.swing.test.builder.JButtons.button;
+import static org.fest.swing.test.builder.JDialogs.dialog;
+import static org.fest.swing.test.builder.JFrames.frame;
+import static org.fest.swing.test.builder.JLabels.label;
+import static org.fest.swing.test.builder.JMenuBars.menuBar;
+import static org.fest.swing.test.builder.JMenuItems.menuItem;
+import static org.fest.swing.test.builder.JPanels.panel;
+import static org.fest.swing.test.builder.JPopupMenus.popupMenu;
+import static org.fest.swing.test.builder.JScrollBars.scrollBar;
+import static org.fest.swing.test.builder.JScrollPanes.scrollPane;
+import static org.fest.swing.test.builder.JSliders.slider;
+import static org.fest.swing.test.builder.JSpinners.spinner;
+import static org.fest.swing.test.builder.JTextFields.textField;
+import static org.fest.swing.test.builder.JToggleButtons.toggleButton;
 import static org.fest.util.Strings.concat;
 
 /**

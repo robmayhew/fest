@@ -32,8 +32,8 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.factory.JLists.list;
-import static org.fest.swing.factory.JPopupMenus.popupMenu;
+import static org.fest.swing.test.builder.JLists.list;
+import static org.fest.swing.test.builder.JPopupMenus.popupMenu;
 import static org.fest.swing.util.Range.*;
 import static org.fest.util.Arrays.array;
 

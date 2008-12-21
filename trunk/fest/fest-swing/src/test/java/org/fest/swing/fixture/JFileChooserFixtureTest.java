@@ -31,9 +31,9 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JButtons.button;
-import static org.fest.swing.factory.JFileChoosers.fileChooser;
-import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.test.builder.JButtons.button;
+import static org.fest.swing.test.builder.JFileChoosers.fileChooser;
+import static org.fest.swing.test.builder.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JFileChooserFixture}</code>.

@@ -13,9 +13,9 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
-import javax.swing.JMenuItem;
+import javax.swing.JToggleButton;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
@@ -23,47 +23,47 @@ import org.fest.swing.edt.GuiQuery;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands creation of <code>{@link JMenuItem}</code>s.
+ * Understands creation of <code>{@link JToggleButton}</code>s.
  *
  * @author Alex Ruiz
  */
-public final class JMenuItems {
+public final class JToggleButtons {
 
-  private JMenuItems() {}
-
-  public static JMenuItemFactory menuItem() {
-    return new JMenuItemFactory();
+  private JToggleButtons() {}
+  
+  public static JToggleButtonFactory toggleButton() {
+    return new JToggleButtonFactory();
   }
   
-  public static class JMenuItemFactory {
+  public static class JToggleButtonFactory {
     String name;
     boolean selected;
     String text;
     
-    public JMenuItemFactory withName(String newName) {
+    public JToggleButtonFactory withName(String newName) {
       name = newName;
       return this;
     }
     
-    public JMenuItemFactory selected(boolean isSelected) {
+    public JToggleButtonFactory selected(boolean isSelected) {
       selected = isSelected;
       return this;
     }
-
-    public JMenuItemFactory withText(String newText) {
+    
+    public JToggleButtonFactory withText(String newText) {
       text = newText;
       return this;
     }
     
     @RunsInEDT
-    public JMenuItem createNew() {
-      return execute(new GuiQuery<JMenuItem>() {
-        protected JMenuItem executeInEDT() {
-          JMenuItem menuItem = new JMenuItem();
-          menuItem.setName(name);
-          menuItem.setSelected(selected);
-          menuItem.setText(text);
-          return menuItem;
+    public JToggleButton createNew() {
+      return execute(new GuiQuery<JToggleButton>() {
+        protected JToggleButton executeInEDT() {
+          JToggleButton toggleButton = new JToggleButton();
+          toggleButton.setName(name);
+          toggleButton.setSelected(selected);
+          toggleButton.setText(text);
+          return toggleButton;
         }
       });
     }

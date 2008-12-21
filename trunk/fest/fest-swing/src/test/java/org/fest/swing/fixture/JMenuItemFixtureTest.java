@@ -34,7 +34,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.KeyPressInfo.keyCode;
-import static org.fest.swing.factory.JMenuItems.menuItem;
+import static org.fest.swing.test.builder.JMenuItems.menuItem;
 import static org.fest.swing.timing.Timeout.timeout;
 
 /**

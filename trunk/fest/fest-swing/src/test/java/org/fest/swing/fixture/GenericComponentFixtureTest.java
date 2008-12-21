@@ -24,7 +24,7 @@ import org.fest.swing.driver.ComponentDriver;
 
 import static org.easymock.classextension.EasyMock.createMock;
 
-import static org.fest.swing.factory.JButtons.button;
+import static org.fest.swing.test.builder.JButtons.button;
 
 /**
  * Tests for <code>{@link GenericComponentFixture}</code>.

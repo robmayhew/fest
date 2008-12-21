@@ -30,8 +30,8 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JComboBoxes.comboBox;
-import static org.fest.swing.factory.JLists.list;
+import static org.fest.swing.test.builder.JComboBoxes.comboBox;
+import static org.fest.swing.test.builder.JLists.list;
 import static org.fest.util.Arrays.array;
 
 /**

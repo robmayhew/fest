@@ -19,7 +19,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.data.TableCell;
 
-import static org.fest.swing.factory.JTables.table;
+import static org.fest.swing.test.builder.JTables.table;
 
 /**
  * Tests for <code>{@link JTableCellValidator}</code>.

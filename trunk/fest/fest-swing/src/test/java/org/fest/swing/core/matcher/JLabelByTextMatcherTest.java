@@ -28,7 +28,7 @@ import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.factory.JLabels.label;
+import static org.fest.swing.test.builder.JLabels.label;
 import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**

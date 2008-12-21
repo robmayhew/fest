@@ -25,7 +25,7 @@ import org.fest.swing.lock.ScreenLock;
 import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JFrames.frame;
+import static org.fest.swing.test.builder.JFrames.frame;
 import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**

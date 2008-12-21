@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;

@@ -37,7 +37,7 @@ import org.fest.swing.test.swing.TestWindow;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.factory.JFrames.frame;
+import static org.fest.swing.test.builder.JFrames.frame;
 import static org.fest.swing.test.core.TestGroups.*;
 import static org.fest.swing.test.recorder.ClickRecorder.attachTo;
 import static org.fest.swing.timing.Pause.pause;

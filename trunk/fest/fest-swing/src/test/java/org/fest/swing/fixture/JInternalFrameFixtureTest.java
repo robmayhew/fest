@@ -30,7 +30,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JInternalFrames.internalFrame;
+import static org.fest.swing.test.builder.JInternalFrames.internalFrame;
 
 /**
  * Tests for <code>{@link JInternalFrameFixture}</code>.

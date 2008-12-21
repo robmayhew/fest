@@ -13,7 +13,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
 import java.awt.Component;
 
@@ -24,7 +24,7 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.factory.JTabbedPanes.Tab.tab;
+import static org.fest.swing.test.builder.JTabbedPanes.Tab.tab;
 import static org.fest.util.Arrays.isEmpty;
 
 /**

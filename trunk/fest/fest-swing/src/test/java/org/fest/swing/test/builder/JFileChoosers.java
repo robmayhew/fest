@@ -1,5 +1,5 @@
 /*
- * Created on Nov 26, 2008
+ * Created on Aug 28, 2008
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,9 +13,9 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
-import javax.swing.table.JTableHeader;
+import javax.swing.JFileChooser;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
@@ -23,27 +23,35 @@ import org.fest.swing.edt.GuiQuery;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands creation of <code>{@link JTableHeader}</code>.
+ * Understands creation of <code>{@link JFileChooser}</code>s.
  *
  * @author Alex Ruiz
  */
-public final class JTableHeaders {
+public final class JFileChoosers {
 
-  private JTableHeaders() {}
+  private JFileChoosers() {}
 
-  public static JTableHeaderFactory tableHeader() {
-    return new JTableHeaderFactory();
+  public static JFileChooserFactory fileChooser() {
+    return new JFileChooserFactory();
   }
   
-  public static class JTableHeaderFactory {
+  public static class JFileChooserFactory {
+    String name;
+
+    public JFileChooserFactory withName(String newName) {
+      name = newName;
+      return this;
+    }
+    
     @RunsInEDT
-    public JTableHeader createNew() {
-      return execute(new GuiQuery<JTableHeader>() {
-        protected JTableHeader executeInEDT() {
-         return new JTableHeader();
+    public JFileChooser createNew() {
+      return execute(new GuiQuery<JFileChooser>() {
+        protected JFileChooser executeInEDT() {
+          JFileChooser fileChooser = new JFileChooser();
+          fileChooser.setName(name);
+          return fileChooser;
         }
       });
     }
   }
-
 }

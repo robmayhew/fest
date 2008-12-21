@@ -23,8 +23,8 @@ import org.testng.annotations.Test;
 import static javax.swing.JOptionPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JOptionPanes.optionPane;
-import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.test.builder.JOptionPanes.optionPane;
+import static org.fest.swing.test.builder.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JOptionPaneFormatter}</code>.

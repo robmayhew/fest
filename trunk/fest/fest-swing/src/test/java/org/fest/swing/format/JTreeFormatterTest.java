@@ -22,14 +22,14 @@ import javax.swing.tree.TreeSelectionModel;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.factory.JTrees;
+import org.fest.swing.test.builder.JTrees;
 
 import static javax.swing.tree.TreeSelectionModel.CONTIGUOUS_TREE_SELECTION;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.task.JTreeSelectRowTask.selectRow;
 import static org.fest.swing.task.JTreeSetSelectionModelTask.setSelectionModel;
+import static org.fest.swing.test.builder.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JTreeFormatter}</code>.

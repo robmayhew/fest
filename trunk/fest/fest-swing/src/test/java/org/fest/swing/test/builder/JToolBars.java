@@ -13,50 +13,52 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
-import javax.swing.JLabel;
+import javax.swing.JToolBar;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
+import static javax.swing.SwingConstants.HORIZONTAL;
+
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands creation of <code>{@link JLabel}</code>s.
+ * Understands creation of <code>{@link JToolBar}</code>s.
  *
  * @author Alex Ruiz
  */
-public final class JLabels {
+public final class JToolBars {
 
-  private JLabels() {}
+  private JToolBars() {}
 
-  public static JLabelFactory label() {
-    return new JLabelFactory();
+  public static JToolBarFactory toolBar() {
+    return new JToolBarFactory();
   }
   
-  public static class JLabelFactory {
+  public static class JToolBarFactory {
+    int orientation = HORIZONTAL;
     String name;
-    String text;
+
+    public JToolBarFactory withOrientation(int newOrientation) {
+      orientation = newOrientation;
+      return this;
+    }
     
-    public JLabelFactory withName(String newName) {
+    public JToolBarFactory withName(String newName) {
       name = newName;
       return this;
     }
     
-    public JLabelFactory withText(String newText) {
-      text = newText;
-      return this;
-    }
-    
     @RunsInEDT
-    public JLabel createNew() {
-      return execute(new GuiQuery<JLabel>() {
-        protected JLabel executeInEDT() {
-          JLabel label = new JLabel();
-          label.setName(name);
-          label.setText(text);
-          return label;
+    public JToolBar createNew() {
+      return execute(new GuiQuery<JToolBar>() {
+        protected JToolBar executeInEDT() {
+          JToolBar toolBar = new JToolBar();
+          toolBar.setOrientation(orientation);
+          toolBar.setName(name);
+          return toolBar;
         }
       });
     }

@@ -13,52 +13,53 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
-import javax.swing.JToolBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
-import static javax.swing.SwingConstants.HORIZONTAL;
-
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.util.Arrays.isEmpty;
 
 /**
- * Understands creation of <code>{@link JToolBar}</code>s.
+ * Understands creation of <code>{@link JMenuBar}</code>s.
  *
  * @author Alex Ruiz
  */
-public final class JToolBars {
+public final class JMenuBars {
 
-  private JToolBars() {}
+  private JMenuBars() {}
 
-  public static JToolBarFactory toolBar() {
-    return new JToolBarFactory();
+  public static JMenuBarFactory menuBar() {
+    return new JMenuBarFactory();
   }
   
-  public static class JToolBarFactory {
-    int orientation = HORIZONTAL;
+  public static class JMenuBarFactory {
+    JMenu[] menus;
     String name;
-
-    public JToolBarFactory withOrientation(int newOrientation) {
-      orientation = newOrientation;
+    
+    public JMenuBarFactory withMenus(JMenu... newMenus) {
+      menus = newMenus;
       return this;
     }
-    
-    public JToolBarFactory withName(String newName) {
+
+    public JMenuBarFactory withName(String newName) {
       name = newName;
       return this;
     }
     
     @RunsInEDT
-    public JToolBar createNew() {
-      return execute(new GuiQuery<JToolBar>() {
-        protected JToolBar executeInEDT() {
-          JToolBar toolBar = new JToolBar();
-          toolBar.setOrientation(orientation);
-          toolBar.setName(name);
-          return toolBar;
+    public JMenuBar createNew() {
+      return execute(new GuiQuery<JMenuBar>() {
+        protected JMenuBar executeInEDT() {
+          JMenuBar menuBar = new JMenuBar();
+          menuBar.setName(name);
+          if (!isEmpty(menus))
+            for (JMenu menu : menus) menuBar.add(menu);
+          return menuBar;
         }
       });
     }

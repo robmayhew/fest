@@ -31,8 +31,8 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JToolBars.toolBar;
 import static org.fest.swing.fixture.JToolBarFixture.UnfloatConstraint.*;
+import static org.fest.swing.test.builder.JToolBars.toolBar;
 
 /**
  * Tests for <code>{@link JToolBarFixture}</code>.

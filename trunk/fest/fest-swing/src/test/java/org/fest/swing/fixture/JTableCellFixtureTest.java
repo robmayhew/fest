@@ -36,8 +36,8 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.MouseClickInfo.leftButton;
 import static org.fest.swing.data.TableCell.row;
-import static org.fest.swing.factory.JTables.table;
-import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.test.builder.JTables.table;
+import static org.fest.swing.test.builder.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JTableCellFixture}</code>.

@@ -28,9 +28,9 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JLists.list;
-import static org.fest.swing.factory.JScrollBars.scrollBar;
-import static org.fest.swing.factory.JScrollPanes.scrollPane;
+import static org.fest.swing.test.builder.JLists.list;
+import static org.fest.swing.test.builder.JScrollBars.scrollBar;
+import static org.fest.swing.test.builder.JScrollPanes.scrollPane;
 
 /**
  * Tests for <code>{@link JScrollPaneFixture}</code>.

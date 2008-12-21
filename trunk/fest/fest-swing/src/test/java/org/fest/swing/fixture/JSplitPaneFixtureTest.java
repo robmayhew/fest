@@ -26,7 +26,7 @@ import org.fest.swing.driver.JSplitPaneDriver;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
-import static org.fest.swing.factory.JSplitPanes.splitPane;
+import static org.fest.swing.test.builder.JSplitPanes.splitPane;
 
 /**
  * Tests for <code>{@link JSplitPaneFixture}</code>.

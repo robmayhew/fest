@@ -27,7 +27,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.test.builder.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JTextComponentFixture}</code>.

@@ -13,10 +13,10 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
-import javax.swing.JTree;
-import javax.swing.tree.TreeNode;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerListModel;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
@@ -25,50 +25,40 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Arrays.isEmpty;
 
 /**
- * Understands creation of <code>{@link JTree}</code>s.
+ * Understands creation of <code>{@link JSpinner}</code>s.
  *
  * @author Alex Ruiz
  */
-public final class JTrees {
+public final class JSpinners {
 
-  private JTrees() {}
+  private JSpinners() {}
 
-  public static JTreeFactory tree() {
-    return new JTreeFactory();
+  public static JSpinnerFactory spinner() {
+    return new JSpinnerFactory();
   }
   
-  public static class JTreeFactory {
+  public static class JSpinnerFactory {
     String name;
-    TreeNode root;
-    Object[] values;
+    Object values[];
     
-    public JTreeFactory withRoot(TreeNode newRoot) {
-      root = newRoot;
-      return this;
-    }
-    
-    public JTreeFactory withName(String newName) {
+    public JSpinnerFactory withName(String newName) {
       name = newName;
       return this;
     }
-    
-    public JTreeFactory withValues(Object... newValues) {
+
+    public JSpinnerFactory withValues(Object... newValues) {
       values = newValues;
       return this;
     }
     
     @RunsInEDT
-    public JTree createNew() {
-      return execute(new GuiQuery<JTree>() {
-        protected JTree executeInEDT() {
-          if (root != null && !isEmpty(values)) 
-            throw new IllegalStateException("Either set root or values, but not both");
-          JTree tree = null;
-          if (root != null) tree = new JTree(root);
-          else if (!isEmpty(values)) tree = new JTree(values);
-          else tree = new JTree();
-          tree.setName(name);
-          return tree;
+    public JSpinner createNew() {
+      return execute(new GuiQuery<JSpinner>() {
+        protected JSpinner executeInEDT() {
+          JSpinner spinner = new JSpinner();
+          if (!isEmpty(values)) spinner.setModel(new SpinnerListModel(values));
+          spinner.setName(name);
+          return spinner;
         }
       });
     }

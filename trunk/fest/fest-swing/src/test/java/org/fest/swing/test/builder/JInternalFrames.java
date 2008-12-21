@@ -13,9 +13,9 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
-import javax.swing.JCheckBox;
+import javax.swing.JInternalFrame;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
@@ -23,47 +23,40 @@ import org.fest.swing.edt.GuiQuery;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands creation of <code>{@link JCheckBox}</code>s.
+ * Understands creation of <code>{@link JInternalFrame}</code>s.
  *
  * @author Alex Ruiz
  */
-public final class JCheckBoxes {
+public final class JInternalFrames {
 
-  private JCheckBoxes() {}
+  private JInternalFrames() {}
 
-  public static JCheckBoxFactory checkBox() {
-    return new JCheckBoxFactory();
+  public static JInternalFrameFactory internalFrame() {
+    return new JInternalFrameFactory();
   }
   
-  public static class JCheckBoxFactory {
-    String name;
-    boolean selected;
-    String text;
-    
-    public JCheckBoxFactory withName(String newName) {
+  public static class JInternalFrameFactory {
+    private String name;
+    private boolean resizable;
+
+    public JInternalFrameFactory withName(String newName) {
       name = newName;
       return this;
     }
     
-    public JCheckBoxFactory selected(boolean isSelected) {
-      selected = isSelected;
+    public JInternalFrameFactory resizable(boolean shouldBeResizable) {
+      resizable = shouldBeResizable;
       return this;
     }
-
-    public JCheckBoxFactory withText(String newText) {
-      text = newText;
-      return this;
-    }
-    
+  
     @RunsInEDT
-    public JCheckBox createNew() {
-      return execute(new GuiQuery<JCheckBox>() {
-        protected JCheckBox executeInEDT() {
-          JCheckBox checkBox = new JCheckBox();
-          checkBox.setName(name);
-          checkBox.setSelected(selected);
-          checkBox.setText(text);
-          return checkBox;
+    public JInternalFrame createNew() {
+      return execute(new GuiQuery<JInternalFrame>() {
+        protected JInternalFrame executeInEDT() {
+          JInternalFrame internalFrame = new JInternalFrame();
+          internalFrame.setName(name);
+          internalFrame.setResizable(resizable);
+          return internalFrame;
         }
       });
     }

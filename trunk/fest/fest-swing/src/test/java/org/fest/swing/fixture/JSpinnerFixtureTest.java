@@ -26,7 +26,7 @@ import org.fest.swing.driver.JSpinnerDriver;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
-import static org.fest.swing.factory.JSpinners.spinner;
+import static org.fest.swing.test.builder.JSpinners.spinner;
 
 /**
  * Tests for <code>{@link JSpinnerFixture}</code>.

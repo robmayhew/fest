@@ -21,10 +21,10 @@ import org.testng.annotations.Test;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JButtons.button;
-import static org.fest.swing.factory.JDialogs.dialog;
-import static org.fest.swing.factory.JFrames.frame;
-import static org.fest.swing.factory.JInternalFrames.internalFrame;
+import static org.fest.swing.test.builder.JButtons.button;
+import static org.fest.swing.test.builder.JDialogs.dialog;
+import static org.fest.swing.test.builder.JFrames.frame;
+import static org.fest.swing.test.builder.JInternalFrames.internalFrame;
 
 
 /**

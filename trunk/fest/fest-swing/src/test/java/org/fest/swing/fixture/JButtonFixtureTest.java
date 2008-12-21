@@ -27,7 +27,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JButtons.button;
+import static org.fest.swing.test.builder.JButtons.button;
 
 /**
  * Tests for <code>{@link JButtonFixture}</code>.

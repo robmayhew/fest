@@ -24,7 +24,7 @@ import org.fest.swing.core.Robot;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.test.builder.JTextFields.textField;
 
 /**
  * Tests for <code>{@link ComponentFixtureValidator}</code>.

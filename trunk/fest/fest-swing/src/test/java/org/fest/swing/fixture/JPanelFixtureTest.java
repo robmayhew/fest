@@ -25,7 +25,7 @@ import org.fest.swing.driver.JComponentDriver;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JPanels.panel;
+import static org.fest.swing.test.builder.JPanels.panel;
 
 /**
  * Tests for <code>{@link JPanelFixture}</code>.

@@ -13,9 +13,9 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
-import javax.swing.JTable;
+import javax.swing.JMenuItem;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
@@ -23,52 +23,47 @@ import org.fest.swing.edt.GuiQuery;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands creation of <code>{@link JTable}</code>s.
+ * Understands creation of <code>{@link JMenuItem}</code>s.
  *
  * @author Alex Ruiz
  */
-public final class JTables {
+public final class JMenuItems {
 
-  private JTables() {}
+  private JMenuItems() {}
 
-  public static JTableFactory table() {
-    return new JTableFactory();
+  public static JMenuItemFactory menuItem() {
+    return new JMenuItemFactory();
   }
   
-  public static class JTableFactory {
-    int columnCount;
+  public static class JMenuItemFactory {
     String name;
-    int rowCount;
-    int selectionMode;
-
-    public JTableFactory withColumnCount(int newColumnCount) {
-      columnCount = newColumnCount;
-      return this;
-    }
+    boolean selected;
+    String text;
     
-    public JTableFactory withName(String newName) {
+    public JMenuItemFactory withName(String newName) {
       name = newName;
       return this;
     }
-
-    public JTableFactory withRowCount(int newRowCount) {
-      rowCount = newRowCount;
+    
+    public JMenuItemFactory selected(boolean isSelected) {
+      selected = isSelected;
       return this;
     }
-    
-    public JTableFactory withSelectionMode(int newSelectionMode) {
-      selectionMode = newSelectionMode;
+
+    public JMenuItemFactory withText(String newText) {
+      text = newText;
       return this;
     }
     
     @RunsInEDT
-    public JTable createNew() {
-      return execute(new GuiQuery<JTable>() {
-        protected JTable executeInEDT() {
-          JTable table = new JTable(rowCount, columnCount);
-          table.setName(name);
-          table.setSelectionMode(selectionMode);
-          return table;
+    public JMenuItem createNew() {
+      return execute(new GuiQuery<JMenuItem>() {
+        protected JMenuItem executeInEDT() {
+          JMenuItem menuItem = new JMenuItem();
+          menuItem.setName(name);
+          menuItem.setSelected(selected);
+          menuItem.setText(text);
+          return menuItem;
         }
       });
     }

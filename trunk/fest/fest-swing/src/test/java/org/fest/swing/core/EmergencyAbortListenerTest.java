@@ -35,7 +35,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.InputModifiers.*;
-import static org.fest.swing.factory.JButtons.button;
+import static org.fest.swing.test.builder.JButtons.button;
 
 /**
  * Tests for <code>{@link EmergencyAbortListener}</code>.

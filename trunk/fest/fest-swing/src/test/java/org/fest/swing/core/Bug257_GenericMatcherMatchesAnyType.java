@@ -25,8 +25,8 @@ import org.testng.annotations.Test;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JDialogs.dialog;
-import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.test.builder.JDialogs.dialog;
+import static org.fest.swing.test.builder.JTextFields.textField;
 import static org.fest.swing.test.core.TestGroups.*;
 
 /**

@@ -22,8 +22,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JButtons.button;
-import static org.fest.swing.factory.JLabels.label;
+import static org.fest.swing.test.builder.JButtons.button;
+import static org.fest.swing.test.builder.JLabels.label;
 
 /**
  * Tests for <code>{@link BasicCellRendererReader}</code>.

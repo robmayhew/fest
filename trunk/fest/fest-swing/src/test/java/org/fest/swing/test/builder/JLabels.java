@@ -13,9 +13,9 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
-import javax.swing.JRadioButton;
+import javax.swing.JLabel;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
@@ -23,47 +23,40 @@ import org.fest.swing.edt.GuiQuery;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands creation of <code>{@link JRadioButton}</code>s.
+ * Understands creation of <code>{@link JLabel}</code>s.
  *
  * @author Alex Ruiz
  */
-public final class JRadioButtons {
+public final class JLabels {
 
-  private JRadioButtons() {}
+  private JLabels() {}
 
-  public static JRadioButtonFactory radioButton() {
-    return new JRadioButtonFactory();
+  public static JLabelFactory label() {
+    return new JLabelFactory();
   }
   
-  public static class JRadioButtonFactory {
+  public static class JLabelFactory {
     String name;
-    boolean selected;
     String text;
     
-    public JRadioButtonFactory withName(String newName) {
+    public JLabelFactory withName(String newName) {
       name = newName;
       return this;
     }
     
-    public JRadioButtonFactory selected(boolean isSelected) {
-      selected = isSelected;
-      return this;
-    }
-
-    public JRadioButtonFactory withText(String newText) {
+    public JLabelFactory withText(String newText) {
       text = newText;
       return this;
     }
     
     @RunsInEDT
-    public JRadioButton createNew() {
-      return execute(new GuiQuery<JRadioButton>() {
-        protected JRadioButton executeInEDT() {
-          JRadioButton radioButton = new JRadioButton();
-          radioButton.setName(name);
-          radioButton.setSelected(selected);
-          radioButton.setText(text);
-          return radioButton;
+    public JLabel createNew() {
+      return execute(new GuiQuery<JLabel>() {
+        protected JLabel executeInEDT() {
+          JLabel label = new JLabel();
+          label.setName(name);
+          label.setText(text);
+          return label;
         }
       });
     }

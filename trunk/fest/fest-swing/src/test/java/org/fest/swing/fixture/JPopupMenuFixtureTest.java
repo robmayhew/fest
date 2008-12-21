@@ -29,8 +29,8 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JMenuItems.menuItem;
-import static org.fest.swing.factory.JPopupMenus.popupMenu;
+import static org.fest.swing.test.builder.JMenuItems.menuItem;
+import static org.fest.swing.test.builder.JPopupMenus.popupMenu;
 import static org.fest.util.Arrays.array;
 
 /**

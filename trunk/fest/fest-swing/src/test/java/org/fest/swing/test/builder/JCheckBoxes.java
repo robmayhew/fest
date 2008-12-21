@@ -13,53 +13,57 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
+import javax.swing.JCheckBox;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.util.Arrays.isEmpty;
 
 /**
- * Understands creation of <code>{@link JMenuBar}</code>s.
+ * Understands creation of <code>{@link JCheckBox}</code>s.
  *
  * @author Alex Ruiz
  */
-public final class JMenuBars {
+public final class JCheckBoxes {
 
-  private JMenuBars() {}
+  private JCheckBoxes() {}
 
-  public static JMenuBarFactory menuBar() {
-    return new JMenuBarFactory();
+  public static JCheckBoxFactory checkBox() {
+    return new JCheckBoxFactory();
   }
   
-  public static class JMenuBarFactory {
-    JMenu[] menus;
+  public static class JCheckBoxFactory {
     String name;
+    boolean selected;
+    String text;
     
-    public JMenuBarFactory withMenus(JMenu... newMenus) {
-      menus = newMenus;
-      return this;
-    }
-
-    public JMenuBarFactory withName(String newName) {
+    public JCheckBoxFactory withName(String newName) {
       name = newName;
       return this;
     }
     
+    public JCheckBoxFactory selected(boolean isSelected) {
+      selected = isSelected;
+      return this;
+    }
+
+    public JCheckBoxFactory withText(String newText) {
+      text = newText;
+      return this;
+    }
+    
     @RunsInEDT
-    public JMenuBar createNew() {
-      return execute(new GuiQuery<JMenuBar>() {
-        protected JMenuBar executeInEDT() {
-          JMenuBar menuBar = new JMenuBar();
-          menuBar.setName(name);
-          if (!isEmpty(menus))
-            for (JMenu menu : menus) menuBar.add(menu);
-          return menuBar;
+    public JCheckBox createNew() {
+      return execute(new GuiQuery<JCheckBox>() {
+        protected JCheckBox executeInEDT() {
+          JCheckBox checkBox = new JCheckBox();
+          checkBox.setName(name);
+          checkBox.setSelected(selected);
+          checkBox.setText(text);
+          return checkBox;
         }
       });
     }

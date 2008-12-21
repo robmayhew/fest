@@ -13,9 +13,9 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
-import javax.swing.JSlider;
+import javax.swing.JTable;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
@@ -23,54 +23,52 @@ import org.fest.swing.edt.GuiQuery;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands creation of <code>{@link JSlider}</code>s.
+ * Understands creation of <code>{@link JTable}</code>s.
  *
  * @author Alex Ruiz
  */
-public final class JSliders {
+public final class JTables {
 
-  private JSliders() {}
+  private JTables() {}
 
-  public static JSliderFactory slider() {
-    return new JSliderFactory();
+  public static JTableFactory table() {
+    return new JTableFactory();
   }
   
-  public static class JSliderFactory {
-    int maximum;
-    int minimum;
+  public static class JTableFactory {
+    int columnCount;
     String name;
-    int value;
+    int rowCount;
+    int selectionMode;
 
-    public JSliderFactory withMaximum(int newMaximum) {
-      maximum = newMaximum;
-      return this;
-    }
-
-    public JSliderFactory withMinimum(int newMinimum) {
-      minimum = newMinimum;
+    public JTableFactory withColumnCount(int newColumnCount) {
+      columnCount = newColumnCount;
       return this;
     }
     
-    public JSliderFactory withName(String newName) {
+    public JTableFactory withName(String newName) {
       name = newName;
       return this;
     }
-    
-    public JSliderFactory withValue(int newValue) {
-      value = newValue;
+
+    public JTableFactory withRowCount(int newRowCount) {
+      rowCount = newRowCount;
       return this;
     }
-
+    
+    public JTableFactory withSelectionMode(int newSelectionMode) {
+      selectionMode = newSelectionMode;
+      return this;
+    }
+    
     @RunsInEDT
-    public JSlider createNew() {
-      return execute(new GuiQuery<JSlider>() {
-        protected JSlider executeInEDT() {
-          JSlider slider = new JSlider();
-          slider.setMaximum(maximum);
-          slider.setMinimum(minimum);
-          slider.setName(name);
-          slider.setValue(value);
-          return slider;
+    public JTable createNew() {
+      return execute(new GuiQuery<JTable>() {
+        protected JTable executeInEDT() {
+          JTable table = new JTable(rowCount, columnCount);
+          table.setName(name);
+          table.setSelectionMode(selectionMode);
+          return table;
         }
       });
     }

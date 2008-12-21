@@ -23,8 +23,8 @@ import org.testng.annotations.Test;
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JLists.list;
-import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.test.builder.JLists.list;
+import static org.fest.swing.test.builder.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JListFormatter}</code>.

@@ -27,7 +27,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JCheckBoxes.checkBox;
+import static org.fest.swing.test.builder.JCheckBoxes.checkBox;
 
 /**
  * Tests for <code>{@link JCheckBoxFixture}</code>.

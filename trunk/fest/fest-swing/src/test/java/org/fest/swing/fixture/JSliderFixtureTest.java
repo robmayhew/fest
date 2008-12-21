@@ -26,7 +26,7 @@ import org.fest.swing.driver.JSliderDriver;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
-import static org.fest.swing.factory.JSliders.slider;
+import static org.fest.swing.test.builder.JSliders.slider;
 
 /**
  * Tests for <code>{@link JSliderFixture}</code>.

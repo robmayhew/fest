@@ -13,9 +13,11 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
-import javax.swing.JFileChooser;
+import java.awt.Color;
+
+import javax.swing.JPanel;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
@@ -23,33 +25,40 @@ import org.fest.swing.edt.GuiQuery;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands creation of <code>{@link JFileChooser}</code>s.
+ * Understands creation of <code>{@link JPanel}</code>s.
  *
  * @author Alex Ruiz
  */
-public final class JFileChoosers {
+public final class JPanels {
 
-  private JFileChoosers() {}
+  private JPanels() {}
 
-  public static JFileChooserFactory fileChooser() {
-    return new JFileChooserFactory();
+  public static JPanelFactory panel() {
+    return new JPanelFactory();
   }
   
-  public static class JFileChooserFactory {
+  public static class JPanelFactory {
+    Color background;
     String name;
 
-    public JFileChooserFactory withName(String newName) {
+    public JPanelFactory withBackground(Color newBackground) {
+      background = newBackground;
+      return this;
+    }
+    
+    public JPanelFactory withName(String newName) {
       name = newName;
       return this;
     }
     
     @RunsInEDT
-    public JFileChooser createNew() {
-      return execute(new GuiQuery<JFileChooser>() {
-        protected JFileChooser executeInEDT() {
-          JFileChooser fileChooser = new JFileChooser();
-          fileChooser.setName(name);
-          return fileChooser;
+    public JPanel createNew() {
+      return execute(new GuiQuery<JPanel>() {
+        protected JPanel executeInEDT() {
+          JPanel panel = new JPanel();
+          if (background != null) panel.setBackground(background);
+          panel.setName(name);
+          return panel;
         }
       });
     }

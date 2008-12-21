@@ -13,9 +13,9 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
-import javax.swing.JFrame;
+import javax.swing.JTextField;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
@@ -23,47 +23,47 @@ import org.fest.swing.edt.GuiQuery;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands creation of <code>{@link JFrame}</code>s.
+ * Understands creation of <code>{@link JTextField}</code>s.
  *
  * @author Alex Ruiz
  */
-public final class JFrames {
+public final class JTextFields {
 
-  private JFrames() {}
+  private JTextFields() {}
 
-  public static JFrameFactory frame() {
-    return new JFrameFactory();
+  public static JTextFieldFactory textField() {
+    return new JTextFieldFactory();
   }
 
-  public static class JFrameFactory {
-    private String name;
-    private boolean resizable = true;
-    private String title;
-    
-    public JFrameFactory withName(String newName) {
+  public static class JTextFieldFactory {
+    int columns;
+    String name;
+    String text;
+
+    public JTextFieldFactory withColumns(int newColumns) {
+      columns = newColumns;
+      return this;
+    }
+
+    public JTextFieldFactory withName(String newName) {
       name = newName;
       return this;
     }
 
-    public JFrameFactory withTitle(String newTitle) {
-      title = newTitle;
-      return this;
-    }
-    
-    public JFrameFactory resizable(boolean shouldBeResizable) {
-      resizable = shouldBeResizable;
+    public JTextFieldFactory withText(String newText) {
+      text = newText;
       return this;
     }
 
     @RunsInEDT
-    public JFrame createNew() {
-      return execute(new GuiQuery<JFrame>() {
-        protected JFrame executeInEDT() {
-          JFrame frame = new JFrame();
-          frame.setName(name);
-          frame.setTitle(title);
-          frame.setResizable(resizable);
-          return frame;
+    public JTextField createNew() {
+      return execute(new GuiQuery<JTextField>() {
+        protected JTextField executeInEDT() {
+          JTextField textField = new JTextField();
+          textField.setColumns(columns);
+          textField.setName(name);
+          textField.setText(text);
+          return textField;
         }
       });
     }

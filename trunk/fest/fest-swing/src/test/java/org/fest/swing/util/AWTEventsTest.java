@@ -31,7 +31,7 @@ import static java.awt.event.ComponentEvent.*;
 import static java.awt.event.WindowEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JLabels.label;
+import static org.fest.swing.test.builder.JLabels.label;
 
 /**
  * Tests for <code>{@link AWTEvents}</code>.

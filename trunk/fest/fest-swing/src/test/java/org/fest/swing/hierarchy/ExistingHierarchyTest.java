@@ -39,7 +39,7 @@ import static org.easymock.EasyMock.expect;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.test.builder.JTextFields.textField;
 import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**

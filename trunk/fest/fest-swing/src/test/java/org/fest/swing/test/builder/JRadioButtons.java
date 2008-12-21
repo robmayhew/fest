@@ -13,9 +13,9 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.factory;
+package org.fest.swing.test.builder;
 
-import javax.swing.JToggleButton;
+import javax.swing.JRadioButton;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
@@ -23,47 +23,47 @@ import org.fest.swing.edt.GuiQuery;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands creation of <code>{@link JToggleButton}</code>s.
+ * Understands creation of <code>{@link JRadioButton}</code>s.
  *
  * @author Alex Ruiz
  */
-public final class JToggleButtons {
+public final class JRadioButtons {
 
-  private JToggleButtons() {}
-  
-  public static JToggleButtonFactory toggleButton() {
-    return new JToggleButtonFactory();
+  private JRadioButtons() {}
+
+  public static JRadioButtonFactory radioButton() {
+    return new JRadioButtonFactory();
   }
   
-  public static class JToggleButtonFactory {
+  public static class JRadioButtonFactory {
     String name;
     boolean selected;
     String text;
     
-    public JToggleButtonFactory withName(String newName) {
+    public JRadioButtonFactory withName(String newName) {
       name = newName;
       return this;
     }
     
-    public JToggleButtonFactory selected(boolean isSelected) {
+    public JRadioButtonFactory selected(boolean isSelected) {
       selected = isSelected;
       return this;
     }
-    
-    public JToggleButtonFactory withText(String newText) {
+
+    public JRadioButtonFactory withText(String newText) {
       text = newText;
       return this;
     }
     
     @RunsInEDT
-    public JToggleButton createNew() {
-      return execute(new GuiQuery<JToggleButton>() {
-        protected JToggleButton executeInEDT() {
-          JToggleButton toggleButton = new JToggleButton();
-          toggleButton.setName(name);
-          toggleButton.setSelected(selected);
-          toggleButton.setText(text);
-          return toggleButton;
+    public JRadioButton createNew() {
+      return execute(new GuiQuery<JRadioButton>() {
+        protected JRadioButton executeInEDT() {
+          JRadioButton radioButton = new JRadioButton();
+          radioButton.setName(name);
+          radioButton.setSelected(selected);
+          radioButton.setText(text);
+          return radioButton;
         }
       });
     }

@@ -21,8 +21,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.factory.JComboBoxes.comboBox;
-import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.test.builder.JComboBoxes.comboBox;
+import static org.fest.swing.test.builder.JTextFields.textField;
 
 /**
  * Tests for <code>{@link JComboBoxFormatter}</code>.

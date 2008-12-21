@@ -26,8 +26,8 @@ import org.fest.swing.timing.Condition;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.factory.JTabbedPanes.tabbedPane;
-import static org.fest.swing.factory.JTextFields.textField;
+import static org.fest.swing.test.builder.JTabbedPanes.tabbedPane;
+import static org.fest.swing.test.builder.JTextFields.textField;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.util.Strings.concat;
 

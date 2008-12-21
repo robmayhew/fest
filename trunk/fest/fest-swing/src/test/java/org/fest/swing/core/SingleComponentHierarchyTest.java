@@ -39,8 +39,8 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.factory.JButtons.button;
-import static org.fest.swing.factory.JFrames.frame;
+import static org.fest.swing.test.builder.JButtons.button;
+import static org.fest.swing.test.builder.JFrames.frame;
 
 /**
  * Tests for <code>{@link SingleComponentHierarchy}</code>.

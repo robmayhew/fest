@@ -35,9 +35,9 @@ import org.fest.swing.task.ComponentSetEnabledTask;
 import org.fest.swing.test.swing.TestMdiWindow;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.factory.JButtons.button;
-import static org.fest.swing.factory.JDialogs.dialog;
-import static org.fest.swing.factory.JFrames.frame;
+import static org.fest.swing.test.builder.JButtons.button;
+import static org.fest.swing.test.builder.JDialogs.dialog;
+import static org.fest.swing.test.builder.JFrames.frame;
 import static org.fest.swing.test.core.CommonAssertions.*;
 
 /**
