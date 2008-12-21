@@ -32,9 +32,9 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.LocationUnavailableException;
+import org.fest.swing.test.recorder.ClickRecorder;
 import org.fest.swing.test.swing.TestTable;
 import org.fest.swing.test.swing.TestWindow;
-import org.fest.swing.testing.ClickRecorder;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
@@ -44,7 +44,7 @@ import static org.fest.swing.factory.JMenuItems.menuItem;
 import static org.fest.swing.factory.JPopupMenus.popupMenu;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
 import static org.fest.swing.task.ComponentSetPopupMenuTask.setPopupMenu;
-import static org.fest.swing.testing.ClickRecorder.attachTo;
+import static org.fest.swing.test.recorder.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**

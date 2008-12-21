@@ -38,9 +38,9 @@ import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.test.recorder.ClickRecorder;
 import org.fest.swing.test.swing.TestTable;
 import org.fest.swing.test.swing.TestWindow;
-import org.fest.swing.testing.ClickRecorder;
 import org.fest.swing.testing.MethodInvocations;
 
 import static java.awt.Color.BLUE;
@@ -64,8 +64,8 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTextFields.textField;
 import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.task.ComponentSetVisibleTask.hide;
+import static org.fest.swing.test.recorder.ClickRecorder.attachTo;
 import static org.fest.swing.test.swing.TestTable.*;
-import static org.fest.swing.testing.ClickRecorder.attachTo;
 import static org.fest.swing.testing.CommonAssertions.*;
 import static org.fest.swing.testing.TestGroups.GUI;
 

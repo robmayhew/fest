@@ -31,14 +31,14 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.test.recorder.ClickRecorder;
 import org.fest.swing.test.swing.TestWindow;
-import org.fest.swing.testing.ClickRecorder;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.testing.ClickRecorder.attachTo;
+import static org.fest.swing.test.recorder.ClickRecorder.attachTo;
 import static org.fest.swing.testing.TestGroups.GUI;
 
 /**
