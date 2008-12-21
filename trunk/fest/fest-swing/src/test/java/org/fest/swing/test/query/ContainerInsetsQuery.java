@@ -13,7 +13,7 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.query;
+package org.fest.swing.test.query;
 
 import java.awt.Container;
 import java.awt.Insets;
