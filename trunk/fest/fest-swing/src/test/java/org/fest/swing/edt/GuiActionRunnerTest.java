@@ -20,7 +20,7 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.exception.UnexpectedException;
-import org.fest.swing.testing.MethodInvocations;
+import org.fest.swing.test.core.MethodInvocations;
 
 import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;

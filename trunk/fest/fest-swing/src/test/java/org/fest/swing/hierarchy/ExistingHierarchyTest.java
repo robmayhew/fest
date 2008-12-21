@@ -31,8 +31,8 @@ import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.lock.ScreenLock;
 import org.fest.swing.monitor.WindowMonitor;
+import org.fest.swing.test.core.MethodInvocations;
 import org.fest.swing.test.swing.TestWindow;
-import org.fest.swing.testing.MethodInvocations;
 
 import static java.util.Collections.emptyList;
 import static org.easymock.EasyMock.expect;

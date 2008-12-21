@@ -30,16 +30,16 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.test.core.MethodInvocations;
+import org.fest.swing.test.core.MethodInvocations.Args;
 import org.fest.swing.test.swing.TestWindow;
-import org.fest.swing.testing.MethodInvocations;
-import org.fest.swing.testing.MethodInvocations.Args;
 
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.factory.JTextFields.textField;
-import static org.fest.swing.testing.MethodInvocations.Args.args;
+import static org.fest.swing.test.core.MethodInvocations.Args.args;
 
 /**
  * Tests for <code>{@link WindowVisibilityMonitor}</code>.

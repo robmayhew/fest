@@ -38,8 +38,8 @@ import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.LocationUnavailableException;
+import org.fest.swing.test.core.MethodInvocations;
 import org.fest.swing.test.swing.TestWindow;
-import org.fest.swing.testing.MethodInvocations;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.JComboBoxSelectedIndexQuery.selectedIndexOf;
