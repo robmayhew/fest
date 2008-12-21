@@ -34,8 +34,8 @@ import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
-import static org.fest.swing.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.test.core.TestGroups.GUI;
+import static org.fest.swing.test.task.ComponentSetVisibleTask.setVisible;
 
 /**
  * Tests for <code>{@link WindowDriver}</code>.

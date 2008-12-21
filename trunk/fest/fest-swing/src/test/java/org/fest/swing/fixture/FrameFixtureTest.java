@@ -30,9 +30,9 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.task.FrameShowTask.packAndShow;
 import static org.fest.swing.test.builder.JFrames.frame;
 import static org.fest.swing.test.core.TestGroups.GUI;
+import static org.fest.swing.test.task.FrameShowTask.packAndShow;
 
 /**
  * Tests for <code>{@link FrameFixture}</code>.

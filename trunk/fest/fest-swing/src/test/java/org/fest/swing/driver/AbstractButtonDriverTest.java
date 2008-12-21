@@ -33,17 +33,17 @@ import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.task.ComponentSetVisibleTask;
 import org.fest.swing.test.swing.TestWindow;
+import org.fest.swing.test.task.ComponentSetVisibleTask;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.AbstractButtonSelectedQuery.isSelected;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.task.AbstractButtonSetSelectedTask.setSelected;
-import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.test.core.CommonAssertions.*;
 import static org.fest.swing.test.core.TestGroups.GUI;
+import static org.fest.swing.test.task.AbstractButtonSetSelectedTask.setSelected;
+import static org.fest.swing.test.task.ComponentSetEnabledTask.disable;
 
 /**
  * Tests for <code>{@link AbstractButtonDriver}</code>.

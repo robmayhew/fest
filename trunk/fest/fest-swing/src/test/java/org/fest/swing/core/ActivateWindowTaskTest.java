@@ -30,10 +30,10 @@ import org.fest.swing.lock.ScreenLock;
 import org.fest.swing.timing.Condition;
 import org.fest.util.Strings;
 
-import static org.fest.swing.task.FrameShowTask.packAndShow;
-import static org.fest.swing.task.WindowDestroyTask.hideAndDispose;
 import static org.fest.swing.test.builder.JFrames.frame;
 import static org.fest.swing.test.core.TestGroups.*;
+import static org.fest.swing.test.task.FrameShowTask.packAndShow;
+import static org.fest.swing.test.task.WindowDestroyTask.hideAndDispose;
 import static org.fest.swing.timing.Pause.pause;
 
 /**

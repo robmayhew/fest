@@ -35,9 +35,9 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.test.core.CommonAssertions.*;
 import static org.fest.swing.test.core.TestGroups.GUI;
+import static org.fest.swing.test.task.ComponentSetEnabledTask.disable;
 
 /**
  * Tests for <code>{@link JSplitPaneDriver}</code>.

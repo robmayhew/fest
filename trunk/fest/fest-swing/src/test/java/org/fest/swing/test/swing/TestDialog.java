@@ -23,12 +23,12 @@ import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
-import org.fest.swing.task.FrameShowTask;
+import org.fest.swing.test.task.FrameShowTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.task.DialogShowTask.packAndShow;
-import static org.fest.swing.task.WindowDestroyTask.hideAndDispose;
 import static org.fest.swing.test.swing.TestWindow.DEFAULT_WINDOW_LOCATION;
+import static org.fest.swing.test.task.DialogShowTask.packAndShow;
+import static org.fest.swing.test.task.WindowDestroyTask.hideAndDispose;
 
 /**
  * Understands the base dialog for all GUI tests.

@@ -30,8 +30,8 @@ import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
-import org.fest.swing.task.ComponentSetVisibleTask;
 import org.fest.swing.test.swing.TestWindow;
+import org.fest.swing.test.task.ComponentSetVisibleTask;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
@@ -39,9 +39,9 @@ import static org.fest.swing.driver.JTextComponentSelectedTextQuery.selectedText
 import static org.fest.swing.driver.JTextComponentSetEditableTask.setTextFieldEditable;
 import static org.fest.swing.driver.JTextComponentTextQuery.textOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.test.core.CommonAssertions.*;
 import static org.fest.swing.test.core.TestGroups.GUI;
+import static org.fest.swing.test.task.ComponentSetEnabledTask.disable;
 
 /**
  * Tests for <code>{@link JTextComponentDriver}</code>.

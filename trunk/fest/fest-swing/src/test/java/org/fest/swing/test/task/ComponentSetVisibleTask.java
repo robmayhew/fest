@@ -1,5 +1,5 @@
 /*
- * Created on Sep 8, 2008
+ * Created on Aug 14, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,29 +13,40 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.test.task;
 
-import javax.swing.JTree;
+import java.awt.Component;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands a task that selects a single row in a <code>{@link JTree}</code>. This task is executed in the event
- * dispatch thread.
+ * Understands a task that makes a <code>{@link Component}</code> visible or invisible.
  *
  * @author Alex Ruiz
  */
-public final class JTreeSelectRowTask {
+public final class ComponentSetVisibleTask {
 
-  public static void selectRow(final JTree tree, final int row) {
+  @RunsInEDT
+  public static void show(Component c) {
+    setVisible(c, true);
+  }
+  
+  @RunsInEDT
+  public static void hide(Component c) {
+    setVisible(c, false);
+  }
+  
+  @RunsInEDT
+  public static void setVisible(final Component c, final boolean visible) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        tree.setSelectionRow(row);
+        c.setVisible(visible);
       }
     });
   }
 
-  private JTreeSelectRowTask() {}
+  private ComponentSetVisibleTask() {}
 }

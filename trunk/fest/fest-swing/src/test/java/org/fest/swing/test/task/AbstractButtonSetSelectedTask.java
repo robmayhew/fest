@@ -13,9 +13,9 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.test.task;
 
-import java.awt.Component;
+import javax.swing.AbstractButton;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
@@ -23,30 +23,21 @@ import org.fest.swing.edt.GuiTask;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands a task that makes a <code>{@link Component}</code> visible or invisible.
+ * Understands a task that selects/deselects a <code>{@link AbstractButton}</code>. This task is executed in the event
+ * dispatch thread.
  *
  * @author Alex Ruiz
  */
-public final class ComponentSetVisibleTask {
+public final class AbstractButtonSetSelectedTask {
 
   @RunsInEDT
-  public static void show(Component c) {
-    setVisible(c, true);
-  }
-  
-  @RunsInEDT
-  public static void hide(Component c) {
-    setVisible(c, false);
-  }
-  
-  @RunsInEDT
-  public static void setVisible(final Component c, final boolean visible) {
+  public static void setSelected(final AbstractButton button, final boolean selected) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        c.setVisible(visible);
+        button.setSelected(selected);
       }
     });
   }
 
-  private ComponentSetVisibleTask() {}
+  private AbstractButtonSetSelectedTask() {}
 }

@@ -1,5 +1,5 @@
 /*
- * Created on Sep 8, 2008
+ * Created on Aug 10, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,30 +13,37 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.test.task;
 
-import javax.swing.JTree;
-import javax.swing.tree.TreeSelectionModel;
+import java.awt.Component;
 
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands a task that sets a <code>{@link TreeSelectionModel}</code> in a <code>{@link JTree}</code>. This task is
- * executed in the event dispatch thread.
+ * Understands a task that enables or disables a <code>{@link Component}</code>. This task is executed in the event
+ * dispatch thread.
  *
  * @author Alex Ruiz
  */
-public final class JTreeSetSelectionModelTask {
+public final class ComponentSetEnabledTask {
 
-  public static void setSelectionModel(final JTree tree, final TreeSelectionModel selectionModel) {
+  public static void enable(Component component) {
+    setEnabled(component, true);
+  }
+
+  public static void disable(Component component) {
+    setEnabled(component, false);
+  }
+
+  public static void setEnabled(final Component component, final boolean enabled) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        tree.setSelectionModel(selectionModel);
+        component.setEnabled(enabled);
       }
     });
   }
 
-  private JTreeSetSelectionModelTask() {}
+  private ComponentSetEnabledTask() {}
 }

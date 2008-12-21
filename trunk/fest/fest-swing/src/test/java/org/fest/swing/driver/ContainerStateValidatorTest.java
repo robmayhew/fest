@@ -31,8 +31,8 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.core.RobotFixture;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiTask;
-import org.fest.swing.task.ComponentSetEnabledTask;
 import org.fest.swing.test.swing.TestMdiWindow;
+import org.fest.swing.test.task.ComponentSetEnabledTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.test.builder.JButtons.button;

@@ -41,11 +41,11 @@ import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
-import static org.fest.swing.task.ComponentSetPopupMenuTask.setPopupMenu;
 import static org.fest.swing.test.builder.JMenuItems.menuItem;
 import static org.fest.swing.test.builder.JPopupMenus.popupMenu;
 import static org.fest.swing.test.core.TestGroups.GUI;
 import static org.fest.swing.test.recorder.ClickRecorder.attachTo;
+import static org.fest.swing.test.task.ComponentSetPopupMenuTask.setPopupMenu;
 
 /**
  * Tests for <code>{@link JTableHeaderDriver}</code>.

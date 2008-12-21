@@ -1,5 +1,5 @@
 /*
- * Created on Aug 10, 2008
+ * Created on Sep 8, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,37 +13,29 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.test.task;
 
-import java.awt.Component;
+import javax.swing.JTree;
 
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands a task that enables or disables a <code>{@link Component}</code>. This task is executed in the event
+ * Understands a task that selects a single row in a <code>{@link JTree}</code>. This task is executed in the event
  * dispatch thread.
  *
  * @author Alex Ruiz
  */
-public final class ComponentSetEnabledTask {
+public final class JTreeSelectRowTask {
 
-  public static void enable(Component component) {
-    setEnabled(component, true);
-  }
-
-  public static void disable(Component component) {
-    setEnabled(component, false);
-  }
-
-  public static void setEnabled(final Component component, final boolean enabled) {
+  public static void selectRow(final JTree tree, final int row) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        component.setEnabled(enabled);
+        tree.setSelectionRow(row);
       }
     });
   }
 
-  private ComponentSetEnabledTask() {}
+  private JTreeSelectRowTask() {}
 }

@@ -12,7 +12,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.test.task;
 
 import java.awt.Dialog;
 import java.awt.Dimension;

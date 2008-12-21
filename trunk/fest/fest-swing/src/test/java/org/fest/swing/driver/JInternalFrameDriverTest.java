@@ -51,10 +51,10 @@ import static org.fest.swing.driver.JInternalFrameIconQuery.isIconified;
 import static org.fest.swing.driver.JInternalFrameSetIconTask.setIcon;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
-import static org.fest.swing.task.ComponentSetEnabledTask.disable;
-import static org.fest.swing.task.ComponentSetVisibleTask.hide;
 import static org.fest.swing.test.core.CommonAssertions.*;
 import static org.fest.swing.test.core.TestGroups.GUI;
+import static org.fest.swing.test.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.test.task.ComponentSetVisibleTask.hide;
 import static org.fest.util.Strings.concat;
 
 /**

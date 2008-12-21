@@ -1,5 +1,5 @@
 /*
- * Created on Aug 14, 2008
+ * Created on Sep 8, 2008
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -13,31 +13,30 @@
  *
  * Copyright @2008 the original author or authors.
  */
-package org.fest.swing.task;
+package org.fest.swing.test.task;
 
-import javax.swing.AbstractButton;
+import javax.swing.JTree;
+import javax.swing.tree.TreeSelectionModel;
 
-import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
- * Understands a task that selects/deselects a <code>{@link AbstractButton}</code>. This task is executed in the event
- * dispatch thread.
+ * Understands a task that sets a <code>{@link TreeSelectionModel}</code> in a <code>{@link JTree}</code>. This task is
+ * executed in the event dispatch thread.
  *
  * @author Alex Ruiz
  */
-public final class AbstractButtonSetSelectedTask {
+public final class JTreeSetSelectionModelTask {
 
-  @RunsInEDT
-  public static void setSelected(final AbstractButton button, final boolean selected) {
+  public static void setSelectionModel(final JTree tree, final TreeSelectionModel selectionModel) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        button.setSelected(selected);
+        tree.setSelectionModel(selectionModel);
       }
     });
   }
 
-  private AbstractButtonSetSelectedTask() {}
+  private JTreeSetSelectionModelTask() {}
 }

@@ -27,9 +27,9 @@ import org.fest.swing.test.builder.JTrees;
 import static javax.swing.tree.TreeSelectionModel.CONTIGUOUS_TREE_SELECTION;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.task.JTreeSelectRowTask.selectRow;
-import static org.fest.swing.task.JTreeSetSelectionModelTask.setSelectionModel;
 import static org.fest.swing.test.builder.JTextFields.textField;
+import static org.fest.swing.test.task.JTreeSelectRowTask.selectRow;
+import static org.fest.swing.test.task.JTreeSetSelectionModelTask.setSelectionModel;
 
 /**
  * Tests for <code>{@link JTreeFormatter}</code>.

@@ -61,13 +61,13 @@ import static org.fest.swing.driver.JTableClearSelectionTask.clearSelectionOf;
 import static org.fest.swing.driver.JTableRowCountQuery.rowCountOf;
 import static org.fest.swing.driver.JTableSelectedRowCountQuery.selectedRowCountOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.task.ComponentSetEnabledTask.disable;
-import static org.fest.swing.task.ComponentSetVisibleTask.hide;
 import static org.fest.swing.test.builder.JTextFields.textField;
 import static org.fest.swing.test.core.CommonAssertions.*;
 import static org.fest.swing.test.core.TestGroups.GUI;
 import static org.fest.swing.test.recorder.ClickRecorder.attachTo;
 import static org.fest.swing.test.swing.TestTable.*;
+import static org.fest.swing.test.task.ComponentSetEnabledTask.disable;
+import static org.fest.swing.test.task.ComponentSetVisibleTask.hide;
 
 /**
  * Tests for <code>{@link JTableDriver}</code>.

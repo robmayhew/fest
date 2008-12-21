@@ -28,8 +28,8 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
-import static org.fest.swing.task.FrameShowTask.*;
-import static org.fest.swing.task.WindowDestroyTask.hideAndDispose;
+import static org.fest.swing.test.task.FrameShowTask.*;
+import static org.fest.swing.test.task.WindowDestroyTask.hideAndDispose;
 
 /**
  * Understands the base window for all GUI tests.
