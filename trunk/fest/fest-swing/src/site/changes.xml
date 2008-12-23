@@ -18,6 +18,9 @@
         Constructors in org.fest.swing.core.GenericTypeMatcher now take the supported type as parameter to guarantee
         correct casting in the 'isMatching' method.
       </action>
+      <action dev="alruiz" type="fix" issue="268" due-to="Jean-Francois Poilpret">
+        TestNG is a compile-scoped dependency of the fest-swing-testng module.
+      </action>
     </release>
     <release version="1.0rc" date="2008-12-08" description="Subsequent release">
       <action dev="alruiz" type="fix" issue="134" due-to="Woody Folsom">
