@@ -115,7 +115,10 @@ public final class ScreenshotTaker {
     try {
       return robot.createScreenCapture(r);
     } finally {
-      if (textComponent != null) showCaretOf(textComponent);
+      if (textComponent != null) {
+        showCaretOf(textComponent);
+        robot.waitForIdle();
+      }
     }
   }
 
