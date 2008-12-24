@@ -70,9 +70,9 @@ public final class BasicComponentFinder implements ComponentFinder {
 
   /**
    * Creates a new <code>{@link BasicComponentFinder}</code>.
-   * @param hierarchy provides access to the components in the AWT hierarchy.
+   * @param hierarchy the component hierarchy to use.
    */
-  BasicComponentFinder(ComponentHierarchy hierarchy) {
+  protected BasicComponentFinder(ComponentHierarchy hierarchy) {
     this.hierarchy = hierarchy;
     printer = new BasicComponentPrinter(hierarchy);
     includeHierarchyIfComponentNotFound(true);

@@ -21,6 +21,13 @@
       <action dev="alruiz" type="fix" issue="268" due-to="Jean-Francois Poilpret">
         TestNG is a compile-scoped dependency of the fest-swing-testng module.
       </action>
+      <action dev="alruiz" type="fix">
+        Factory methods in org.fest.swing.core.RobotFixture now return Robot instead of RobotFixture.
+      </action>
+      <action dev="alruiz" type="fix">
+        Constructors in RobotFixture, BasicComponentFinder and BasicComponentPrinter are now protected, instead of
+        package-protected.
+      </action>
     </release>
     <release version="1.0rc" date="2008-12-08" description="Subsequent release">
       <action dev="alruiz" type="fix" issue="134" due-to="Woody Folsom">

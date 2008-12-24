@@ -105,28 +105,27 @@ public class RobotFixture implements Robot {
   private final InputEventGenerators eventGenerators;
 
   /**
-   * Creates a new <code>{@link RobotFixture}</code> with a new AWT hierarchy. <code>{@link Component}</code>s
-   * created before the created <code>{@link RobotFixture}</code> cannot be accessed by such
-   * <code>{@link RobotFixture}</code>.
-   * @return the created robot fixture.
+   * Creates a new <code>{@link Robot}</code> with a new AWT hierarchy. The created <code>Robot</code> will not be able
+   * to access any components that were created before it. 
+   * @return the created <code>Robot</code>.
    */
-  public static RobotFixture robotWithNewAwtHierarchy() {
+  public static Robot robotWithNewAwtHierarchy() {
     return new RobotFixture(ignoreExistingComponents());
   }
 
   /**
-   * Creates a new <code>{@link RobotFixture}</code> that has access to all the GUI components in the AWT hierarchy.
-   * @return the created robot fixture.
+   * Creates a new <code>{@link Robot}</code> that has access to all the GUI components in the AWT hierarchy.
+   * @return the created <code>Robot</code>.
    */
-  public static RobotFixture robotWithCurrentAwtHierarchy() {
+  public static Robot robotWithCurrentAwtHierarchy() {
     return new RobotFixture(new ExistingHierarchy());
   }
 
   /**
    * Creates a new <code>{@link RobotFixture}</code>.
-   * @param hierarchy the AWT component hierarchy to use.
+   * @param hierarchy the component hierarchy to use.
    */
-  RobotFixture(ComponentHierarchy hierarchy) {
+  protected RobotFixture(ComponentHierarchy hierarchy) {
     ScreenLock.instance().acquire(this);
     this.hierarchy = hierarchy;
     settings = new Settings();
@@ -171,7 +170,7 @@ public class RobotFixture implements Robot {
   }
 
   @RunsInCurrentThread
-  void packAndEnsureSafePosition(Window w) {
+  private void packAndEnsureSafePosition(Window w) {
     w.pack();
     w.setLocation(100, 100);
   }

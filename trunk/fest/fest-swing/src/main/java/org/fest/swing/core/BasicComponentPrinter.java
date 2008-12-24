@@ -71,13 +71,17 @@ public final class BasicComponentPrinter implements ComponentPrinter {
 
   /**
    * Creates a new <code>{@link BasicComponentPrinter}</code>.
-   * @param hierarchy provides access to the components in the AWT hierarchy.
+   * @param hierarchy the component hierarchy to use.
    */
-  BasicComponentPrinter(ComponentHierarchy hierarchy) {
+  protected BasicComponentPrinter(ComponentHierarchy hierarchy) {
     this.hierarchy = hierarchy;
   }
   
-  ComponentHierarchy hierarchy() { return hierarchy; }
+  /**
+   * Returns the component hierarchy used by this printer.
+   * @return the component hierarchy used by this printer.
+   */
+  protected final ComponentHierarchy hierarchy() { return hierarchy; }
   
   /** {@inheritDoc} */
   @RunsInEDT
