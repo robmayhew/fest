@@ -28,7 +28,6 @@ import org.testng.annotations.Test;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.image.ScreenshotTaker;
 import org.fest.swing.lock.ScreenLock;
 import org.fest.swing.test.swing.TestWindow;
 
@@ -67,7 +66,7 @@ public class Bug213_HideCaretInTextFieldWhenTakingScreenshot {
   
   public void shouldHideCaretInTextFieldWhenTakingScreenshot() {
     BufferedImage currentImage = screenshotTaker.takeScreenshotOf(window);
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 100; i++) {
       BufferedImage newImage = screenshotTaker.takeScreenshotOf(window);
       assertThat(newImage).isEqualTo(currentImage);
     }

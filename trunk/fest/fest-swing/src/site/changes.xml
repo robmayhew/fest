@@ -7,8 +7,7 @@
   <body>
     <release version="1.0" date="TBD" description="Subsequent release">
       <action dev="alruiz" type="fix" issue="213" due-to="Jean-Francois Poilpret">
-        org.fest.swing.image.ScreenshotTaker now makes the cursor of the focused JTextComponent static when taking a 
-        screenshot.
+        org.fest.swing.image.ScreenshotTaker hides the caret of a focused text component before taking a screenshot.
       </action>
       <action dev="alruiz" type="fix" issue="247" due-to="Juhos Csaba-Zsolt">
         org.fest.swing.edt.GuiActionRunner appends stack trace of current thread to an exception thrown in the event
