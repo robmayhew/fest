@@ -573,12 +573,6 @@ public class RobotFixture implements Robot {
 
   /** {@inheritDoc} */
   @RunsInEDT
-  public void releaseLeftMouseButton() {
-    releaseMouseButton(LEFT_BUTTON);
-  }
-
-  /** {@inheritDoc} */
-  @RunsInEDT
   public void releaseMouseButton(MouseButton button) {
     mouseRelease(button.mask);
   }

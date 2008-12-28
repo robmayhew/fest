@@ -27,6 +27,9 @@
         Constructors in RobotFixture, BasicComponentFinder and BasicComponentPrinter are now protected, instead of
         package-protected.
       </action>
+      <action dev="alruiz" type="remove">
+        Removed method 'releaseLeftMouseButton' in org.fest.swing.core.Robot.
+      </action>
     </release>
     <release version="1.0rc" date="2008-12-08" description="Subsequent release">
       <action dev="alruiz" type="fix" issue="134" due-to="Woody Folsom">

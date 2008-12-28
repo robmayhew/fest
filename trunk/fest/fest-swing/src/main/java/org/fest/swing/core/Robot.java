@@ -290,11 +290,6 @@ public interface Robot {
   void releaseKey(int keyCode);
 
   /**
-   * Releases the left mouse button.
-   */
-  void releaseLeftMouseButton();
-
-  /**
    * Releases the given mouse button.
    * @param button the mouse button to release.
    */

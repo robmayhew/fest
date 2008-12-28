@@ -125,7 +125,7 @@ public class JSplitPaneDriver extends JComponentDriver {
       robot.moveMouse(splitPane, range.from);
       robot.pressMouse(LEFT_BUTTON);
       robot.moveMouse(splitPane, range.to);
-      robot.releaseLeftMouseButton();
+      robot.releaseMouseButton(LEFT_BUTTON);
     } catch (RuntimeException ignored) {}
   }
 }
