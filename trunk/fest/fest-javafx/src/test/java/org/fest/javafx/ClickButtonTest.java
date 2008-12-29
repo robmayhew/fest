@@ -15,6 +15,12 @@
  */
 package org.fest.javafx;
 
+import static java.awt.event.InputEvent.BUTTON1_MASK;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.javafx.launcher.ScriptLauncher.launch;
+import static org.fest.swing.core.matcher.FrameByTitleMatcher.withTitle;
+import static org.fest.swing.finder.WindowFinder.findFrame;
+
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
@@ -22,6 +28,11 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import org.fest.swing.core.BasicRobot;
+import org.fest.swing.core.Robot;
+import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
+import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.timing.Pause;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -33,19 +44,6 @@ import com.sun.scenario.scenegraph.SGNode;
 import com.sun.scenario.scenegraph.SGParent;
 import com.sun.scenario.scenegraph.SGText;
 import com.sun.scenario.scenegraph.fx.FXNode;
-
-import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
-import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
-import org.fest.swing.fixture.FrameFixture;
-import org.fest.swing.timing.Pause;
-
-import static java.awt.event.InputEvent.BUTTON1_MASK;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.javafx.launcher.ScriptLauncher.launch;
-import static org.fest.swing.core.matcher.FrameByTitleMatcher.withTitle;
-import static org.fest.swing.finder.WindowFinder.findFrame;
 
 /**
  * Understands testing button clicks in a JavaFX UI.
@@ -64,7 +62,7 @@ public class ClickButtonTest {
   }
 
   @BeforeMethod public void setUp() throws Exception {
-    robot = RobotFixture.robotWithNewAwtHierarchy();
+    robot = BasicRobot.robotWithNewAwtHierarchy();
     realRobot = new java.awt.Robot();
     launch("/org/fest/javafx/Calculator.fx");
     calculator = findFrame(withTitle("Calculator")).using(robot);
