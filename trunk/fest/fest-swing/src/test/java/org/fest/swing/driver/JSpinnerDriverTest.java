@@ -28,14 +28,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
+import org.fest.swing.test.data.ZeroAndNegativeProvider;
 import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -80,9 +79,7 @@ public class JSpinnerDriverTest {
     robot.cleanUp();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldIncrementValue(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldIncrementValue() {
     assertFirstValueIsSelected();
     driver.increment(spinner);
     assertThatSpinnerValueIsEqualTo("Sam");
@@ -108,9 +105,7 @@ public class JSpinnerDriverTest {
     }
   }
   
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldIncrementValueTheGivenTimes(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldIncrementValueTheGivenTimes() {
     assertFirstValueIsSelected();
     driver.increment(spinner, 2);
     assertLastValueIsSelected();
@@ -148,9 +143,7 @@ public class JSpinnerDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldDecrementValue(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldDecrementValue() {
     driver.increment(spinner);
     driver.decrement(spinner);
     assertFirstValueIsSelected();
@@ -180,9 +173,7 @@ public class JSpinnerDriverTest {
     assertThatSpinnerValueIsEqualTo("Frodo");
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldDecrementValueTheGivenTimes(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldDecrementValueTheGivenTimes() {
     selectLastValue();
     driver.decrement(spinner, 2);
     assertFirstValueIsSelected();
@@ -243,9 +234,7 @@ public class JSpinnerDriverTest {
     });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldEnterTextAndCommit(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldEnterTextAndCommit() {
     driver.enterTextAndCommit(spinner, "Gandalf");
     assertLastValueIsSelected();
   }
@@ -270,9 +259,7 @@ public class JSpinnerDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldEnterText(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldEnterText() {
     setValue(spinner, "Frodo");
     robot.waitForIdle();
     driver.enterText(spinner, "Gandalf");
@@ -301,14 +288,11 @@ public class JSpinnerDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectValue(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectValue() {
     driver.selectValue(spinner, "Gandalf");
     assertLastValueIsSelected();
   }
 
-  @Test(groups = GUI)
   public void shouldThrowErrorIfValueToSelectNotValid() {
     try {
       driver.selectValue(spinner, "Yoda");

@@ -29,8 +29,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
@@ -44,8 +42,8 @@ import org.fest.swing.test.swing.TestWindow;
 import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.driver.JListSetSelectedIndexTask.setSelectedIndex;
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -143,9 +141,7 @@ public class JListDriverTest {
     assertCellReaderWasCalled();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldClickItemWithGivenText(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldClickItemWithGivenText() {
     setSelectedIndex(dragList, (-1));
     robot.waitForIdle();
     ClickRecorder recorder = ClickRecorder.attachTo(dragList);
@@ -164,25 +160,19 @@ public class JListDriverTest {
     });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectItemAtGivenIndex(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectItemAtGivenIndex() {
     driver.selectItem(dragList, 2);
     assertThat(selectedValue(dragList)).isEqualTo("three");
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSelectItemIfAlreadySelected(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldNotSelectItemIfAlreadySelected() {
     setSelectedIndex(dragList, 1);
     robot.waitForIdle();
     driver.selectItem(dragList, 1);
     assertThat(selectedIndexOf(dragList)).isEqualTo(1);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemAtGivenIndexInDisabledJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenSelectingItemAtGivenIndexInDisabledJList() {
     disableDragList();
     try {
       driver.selectItem(dragList, 2);
@@ -193,9 +183,7 @@ public class JListDriverTest {
     assertDragListHasNoSelection();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemAtGivenIndexInNotShowingJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenSelectingItemAtGivenIndexInNotShowingJList() {
     hideWindow();
     try {
       driver.selectItem(dragList, 2);
@@ -206,9 +194,7 @@ public class JListDriverTest {
     assertDragListHasNoSelection();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectItemWithGivenText(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectItemWithGivenText() {
     driver.selectItem(dragList, "two");
     assertThat(selectedValue(dragList)).isEqualTo("two");
     assertCellReaderWasCalled();
@@ -222,9 +208,7 @@ public class JListDriverTest {
     });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemWithGivenTextInDisabledJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenSelectingItemWithGivenTextInDisabledJList() {
     disableDragList();
     try {
       driver.selectItem(dragList, "two");
@@ -235,9 +219,7 @@ public class JListDriverTest {
     assertDragListHasNoSelection();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemWithGivenTextInNotShowingJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenSelectingItemWithGivenTextInNotShowingJList() {
     hideWindow();
     try {
       driver.selectItem(dragList, "two");
@@ -260,17 +242,13 @@ public class JListDriverTest {
     driver.selectItems(dragList, values);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectItemsWithGivenText(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectItemsWithGivenText() {
     driver.selectItems(dragList, array("two", "three"));
     assertThat(selectedValues(dragList)).isEqualTo(array("two", "three"));
     assertCellReaderWasCalled();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemsWithGivenTextInDisabledJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenSelectingItemsWithGivenTextInDisabledJList() {
     disableDragList();
     try {
       driver.selectItems(dragList, array("two", "three"));
@@ -281,9 +259,7 @@ public class JListDriverTest {
     assertDragListHasNoSelection();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemsWithGivenTextInNotShowingJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenSelectingItemsWithGivenTextInNotShowingJList() {
     hideWindow();
     try {
       driver.selectItems(dragList, array("two", "three"));
@@ -294,9 +270,7 @@ public class JListDriverTest {
     assertDragListHasNoSelection();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectItemsWithGivenIndices(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectItemsWithGivenIndices() {
     driver.selectItems(dragList, new int[] { 1, 2 });
     assertThat(selectedValues(dragList)).isEqualTo(array("two", "three"));
   }
@@ -313,16 +287,12 @@ public class JListDriverTest {
     driver.selectItems(dragList, indices);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectItemsWithGivenIndicesEvenIfIndexArrayHasOneElement(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectItemsWithGivenIndicesEvenIfIndexArrayHasOneElement() {
     driver.selectItems(dragList, new int[] { 1 });
     assertThat(selectedValues(dragList)).isEqualTo(array("two"));
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemsWithGivenIndicesInDisabledJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenSelectingItemsWithGivenIndicesInDisabledJList() {
     disableDragList();
     try {
       driver.selectItems(dragList, new int[] { 1, 2 });
@@ -333,9 +303,7 @@ public class JListDriverTest {
     assertDragListHasNoSelection();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemsWithGivenIndicesInNotShowingJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenSelectingItemsWithGivenIndicesInNotShowingJList() {
     hideWindow();
     try {
       driver.selectItems(dragList, new int[] { 1, 2 });
@@ -346,16 +314,12 @@ public class JListDriverTest {
     assertDragListHasNoSelection();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectItemsInFluentRange(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectItemsInFluentRange() {
     driver.selectItems(dragList, from(0), to(1));
     assertThat(selectedValues(dragList)).isEqualTo(array("one", "two"));
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemsInFluentRangeInDisabledJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenSelectingItemsInFluentRangeInDisabledJList() {
     disableDragList();
     try {
       driver.selectItems(dragList, from(0), to(1));
@@ -366,9 +330,7 @@ public class JListDriverTest {
     assertDragListHasNoSelection();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemsInFluentRangeInNotShowingJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenSelectingItemsInFluentRangeInNotShowingJList() {
     hideWindow();
     try {
       driver.selectItems(dragList, from(0), to(1));
@@ -379,13 +341,12 @@ public class JListDriverTest {
     assertDragListHasNoSelection();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectItemsInGivenRange(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectItemsInGivenRange() {
     driver.selectItems(dragList, 0, 1);
     assertThat(selectedValues(dragList)).isEqualTo(array("one", "two"));
   }
 
+  @RunsInEDT
   private static Object[] selectedValues(final JList list) {
     return execute(new GuiQuery<Object[]>() {
       protected Object[] executeInEDT() {
@@ -394,9 +355,7 @@ public class JListDriverTest {
     });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemsInGivenRangeInDisabledJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenSelectingItemsInGivenRangeInDisabledJList() {
     disableDragList();
     try {
       driver.selectItems(dragList, 0, 1);
@@ -407,9 +366,7 @@ public class JListDriverTest {
     assertDragListHasNoSelection();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenSelectingItemsInGivenRangeInNotShowingJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenSelectingItemsInGivenRangeInNotShowingJList() {
     hideWindow();
     try {
       driver.selectItems(dragList, 0, 1);
@@ -532,9 +489,7 @@ public class JListDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldShowPopupMenuAtItemWithValue(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldShowPopupMenuAtItemWithValue() {
     JPopupMenu popupMenu = setJPopupMenuInDragList();
     ClickRecorder recorder = ClickRecorder.attachTo(dragList);
     driver.showPopupMenu(dragList, "one");
@@ -543,9 +498,7 @@ public class JListDriverTest {
     assertCellReaderWasCalled();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenShowingPopupMenuAtItemWithValueInDisabledJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenShowingPopupMenuAtItemWithValueInDisabledJList() {
     ClickRecorder recorder = ClickRecorder.attachTo(dragList);
     disableDragList();
     try {
@@ -557,9 +510,7 @@ public class JListDriverTest {
     assertThat(recorder).wasNotClicked();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenShowingPopupMenuAtItemWithValueInNotShowingJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenShowingPopupMenuAtItemWithValueInNotShowingJList() {
     ClickRecorder recorder = ClickRecorder.attachTo(dragList);
     hideWindow();
     try {
@@ -571,9 +522,7 @@ public class JListDriverTest {
     assertThat(recorder).wasNotClicked();
   }
   
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldShowPopupMenuAtItemWithIndex(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldShowPopupMenuAtItemWithIndex() {
     JPopupMenu popupMenu = setJPopupMenuInDragList();
     ClickRecorder recorder = ClickRecorder.attachTo(dragList);
     driver.showPopupMenu(dragList, 0);
@@ -601,9 +550,7 @@ public class JListDriverTest {
     });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenShowingPopupMenuAtItemWithIndexInDisabledJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenShowingPopupMenuAtItemWithIndexInDisabledJList() {
     ClickRecorder recorder = ClickRecorder.attachTo(dragList);
     disableDragList();
     try {
@@ -615,9 +562,7 @@ public class JListDriverTest {
     assertThat(recorder).wasNotClicked();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenShowingPopupMenuAtItemWithIndexInNotShowingJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenShowingPopupMenuAtItemWithIndexInNotShowingJList() {
     ClickRecorder recorder = ClickRecorder.attachTo(dragList);
     hideWindow();
     try {
@@ -629,9 +574,7 @@ public class JListDriverTest {
     assertThat(recorder).wasNotClicked();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldDragAndDropValueUsingGivenValues(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldDragAndDropValueUsingGivenValues() {
     driver.drag(dragList, "two");
     driver.drop(dropList, "six");
     assertThat(dragList.elements()).isEqualTo(array("one", "three"));
@@ -639,9 +582,7 @@ public class JListDriverTest {
     assertCellReaderWasCalled();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenDraggingItemWithValueInDisabledJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenDraggingItemWithValueInDisabledJList() {
     disableDragList();
     try {
       driver.drag(dragList, "two");
@@ -651,9 +592,7 @@ public class JListDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenDraggingItemWithValueInNotShowingJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenDraggingItemWithValueInNotShowingJList() {
     hideWindow();
     try {
       driver.drag(dragList, "two");
@@ -663,9 +602,7 @@ public class JListDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenDroppingItemWithValueInDisabledJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenDroppingItemWithValueInDisabledJList() {
     disableDropList();
     try {
       driver.drop(dropList, "six");
@@ -675,9 +612,7 @@ public class JListDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenDroppingItemWithValueInNotShowingJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenDroppingItemWithValueInNotShowingJList() {
     hideWindow();
     try {
       driver.drop(dropList, "six");
@@ -687,18 +622,14 @@ public class JListDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldDrop(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldDrop() {
     driver.drag(dragList, "two");
     driver.drop(dropList);
     assertThat(dragList.elements()).isEqualTo(array("one", "three"));
     assertThat(dropList.elements()).hasSize(4);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenDroppingInDisabledJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenDroppingInDisabledJList() {
     disableDropList();
     try {
       driver.drop(dropList);
@@ -708,9 +639,7 @@ public class JListDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenDroppingInNotShowingJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenDroppingInNotShowingJList() {
     hideWindow();
     try {
       driver.drop(dropList);
@@ -720,18 +649,14 @@ public class JListDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldDragAndDropValueUsingGivenIndices(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldDragAndDropValueUsingGivenIndices() {
     driver.drag(dragList, 2);
     driver.drop(dropList, 2);
     assertThat(dragList.elements()).isEqualTo(array("one", "two"));
     assertThat(dropList.elements()).isEqualTo(array("four", "five", "six", "three"));
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenDraggingItemWithIndexInDisabledJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenDraggingItemWithIndexInDisabledJList() {
     disableDragList();
     try {
       driver.drag(dragList, 2);
@@ -741,9 +666,7 @@ public class JListDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenDraggingItemWithIndexInNotShowingJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenDraggingItemWithIndexInNotShowingJList() {
     hideWindow();
     try {
       driver.drag(dragList, 2);
@@ -753,9 +676,7 @@ public class JListDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenDroppingItemWithIndexInDisabledJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenDroppingItemWithIndexInDisabledJList() {
     disableDropList();
     try {
       driver.drop(dropList, 2);
@@ -765,9 +686,7 @@ public class JListDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorWhenDroppingItemWithIndexInNotShowingJList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorWhenDroppingItemWithIndexInNotShowingJList() {
     hideWindow();
     try {
       driver.drop(dropList, 2);

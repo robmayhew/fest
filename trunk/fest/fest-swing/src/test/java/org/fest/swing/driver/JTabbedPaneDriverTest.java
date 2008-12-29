@@ -24,8 +24,6 @@ import org.testng.annotations.*;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
@@ -36,7 +34,6 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTabbedPaneSelectTabTask.setSelectedTab;
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -77,9 +74,7 @@ public class JTabbedPaneDriverTest {
     robot.cleanUp();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSetTabDirectlyIfLocationOfTabNotFound(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSetTabDirectlyIfLocationOfTabNotFound() {
     setSelectedTab(tabbedPane, 0);
     robot.waitForIdle();
     final JTabbedPaneLocation location = createMock(JTabbedPaneLocation.class);
@@ -97,9 +92,8 @@ public class JTabbedPaneDriverTest {
     }.run();
   }
 
-  @Test(groups = GUI, dataProvider = "tabIndexProvider")
-  public void shouldSelectTabWithGivenIndex(int index, EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  @Test(groups = GUI, dataProvider = "indices")
+  public void shouldSelectTabWithGivenIndex(int index) {
     driver.selectTab(tabbedPane, index);
     assertThatSelectedTabIndexIsEqualTo(index);
   }
@@ -134,26 +128,19 @@ public class JTabbedPaneDriverTest {
     robot.waitForIdle();
   }
 
-  @Test(groups = GUI, dataProvider = "tabIndexProvider")
-  public void shouldSetTabWithGivenIndexDirectly(int index, EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  @Test(groups = GUI, dataProvider = "indices")
+  public void shouldSetTabWithGivenIndexDirectly(int index) {
     driver.setTabDirectly(tabbedPane, index);
     assertThatSelectedTabIndexIsEqualTo(index);
   }
 
-  @DataProvider(name = "tabIndexProvider")
+  @DataProvider(name = "indices")
   public Object[][] tabIndices() {
-    return new Object[][] {
-        { 0, AWT },
-        { 0, ROBOT },
-        { 1, AWT },
-        { 1, ROBOT }
-    };
+    return new Object[][] { { 0 }, { 1 } };
   }
 
-  @Test(groups = GUI, dataProvider = "indexOutOfBoundsProvider")
-  public void shouldThrowErrorIfIndexOutOfBounds(int index, EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  @Test(groups = GUI, dataProvider = "indicesOutOfBounds")
+  public void shouldThrowErrorIfIndexOutOfBounds(int index) {
     try {
       driver.selectTab(tabbedPane, index);
       failWhenExpectingException();
@@ -163,26 +150,17 @@ public class JTabbedPaneDriverTest {
     }
   }
 
-  @DataProvider(name = "indexOutOfBoundsProvider")
+  @DataProvider(name = "indicesOutOfBounds")
   public Object[][] indicesOutOfBounds() {
-    return new Object[][] {
-        { -1, AWT },
-        { -1, ROBOT },
-        { 2, AWT },
-        { 2, ROBOT }
-    };
+    return new Object[][] { { -1 }, { 2 } };
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectFirstTab(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectFirstTab() {
     driver.selectTab(tabbedPane, "First");
     assertThatSelectedTabIndexIsEqualTo(0);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectSecondTab(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectSecondTab() {
     driver.selectTab(tabbedPane, "Second");
     assertThatSelectedTabIndexIsEqualTo(1);
   }

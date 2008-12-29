@@ -28,8 +28,6 @@ import org.testng.annotations.Test;
 
 import org.fest.assertions.AssertExtension;
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
@@ -75,9 +73,7 @@ public class AbstractButtonDriverTest {
     robot.cleanUp();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldClickButton(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldClickButton() {
     ActionPerformedRecorder recorder = ActionPerformedRecorder.attachTo(checkBox);
     driver.click(checkBox);
     assertThat(recorder).wasPerformed();
@@ -125,17 +121,13 @@ public class AbstractButtonDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSelectIfButtonAlreadySelected(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldNotSelectIfButtonAlreadySelected() {
     selectCheckBox();
     driver.select(checkBox);
     assertThatCheckBoxIsSelected();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectButton(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectButton() {
     unselectCheckBox();
     driver.select(checkBox);
     assertThatCheckBoxIsSelected();
@@ -165,17 +157,13 @@ public class AbstractButtonDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotUnselectIfButtonAlreadySelected(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldNotUnselectIfButtonAlreadySelected() {
     unselectCheckBox();
     driver.unselect(checkBox);
     assertThatCheckBoxIsNotSelected();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldUnselectButton(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldUnselectButton() {
     selectCheckBox();
     driver.unselect(checkBox);
     assertThatCheckBoxIsNotSelected();

@@ -23,7 +23,6 @@ import javax.swing.JSplitPane;
 import org.testng.annotations.*;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.EventMode;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
@@ -32,7 +31,6 @@ import org.fest.swing.test.swing.TestWindow;
 import static javax.swing.JSplitPane.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.BasicRobot.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.test.core.CommonAssertions.*;
@@ -65,8 +63,7 @@ public class JSplitPaneDriverTest {
   }
 
   @Test(groups = GUI, dataProvider = "orientationsAndModes")
-  public void shouldMoveDividerToGivenLocation(int orientation, EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldMoveDividerToGivenLocation(int orientation) {
     MyWindow window = MyWindow.createNew(orientation);
     splitPane = window.splitPane;
     robot.showWindow(window);
@@ -77,10 +74,7 @@ public class JSplitPaneDriverTest {
 
   @DataProvider(name = "orientationsAndModes") public Object[][] orientationsAndModes() {
     return new Object[][] {
-        // { VERTICAL_SPLIT, AWT },
-        { VERTICAL_SPLIT, ROBOT },
-        // { HORIZONTAL_SPLIT, AWT },
-        { HORIZONTAL_SPLIT, ROBOT }
+        { VERTICAL_SPLIT }, { HORIZONTAL_SPLIT }
     };
   }
 

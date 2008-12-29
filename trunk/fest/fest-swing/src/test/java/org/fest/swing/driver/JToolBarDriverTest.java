@@ -23,8 +23,6 @@ import javax.swing.JToolBar;
 import org.testng.annotations.*;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
@@ -35,7 +33,6 @@ import static java.awt.BorderLayout.*;
 import static javax.swing.SwingUtilities.getWindowAncestor;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.ComponentLocationQuery.locationOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -92,18 +89,14 @@ public class JToolBarDriverTest {
     });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldFloatToolbar(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldFloatToolbar() {
     Window oldAncestor = ancestorOf(toolBar);
     driver.makeFloat(toolBar);
     Window newAncestor = ancestorOf(toolBar);
     assertThat(newAncestor).isNotSameAs(oldAncestor);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldFloatToolbarToPoint(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldFloatToolbarToPoint() {
     Window oldAncestor = ancestorOf(toolBar);
     Point where = whereToFloatTo();
     driver.floatTo(toolBar, where.x, where.y);
@@ -119,9 +112,7 @@ public class JToolBarDriverTest {
     assertThat(newAncestorLocation.y).isGreaterThan(oldAncestorLocation.y);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldUnfloatToolbar(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldUnfloatToolbar() {
     Window oldAncestor = ancestorOf(toolBar);
     Point where = whereToFloatTo();
     driver.floatTo(toolBar, where.x, where.y);
@@ -130,8 +121,7 @@ public class JToolBarDriverTest {
   }
 
   @Test(dataProvider = "unfloatConstraints")
-  public void shouldUnfloatToolbarToGivenPosition(String constraint, EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldUnfloatToolbarToGivenPosition(String constraint) {
     Window originalAncestor = ancestorOf(toolBar);
     Point where = whereToFloatTo();
     driver.floatTo(toolBar, where.x, where.y);
@@ -157,17 +147,9 @@ public class JToolBarDriverTest {
     });
   }
 
-  @DataProvider(name = "unfloatConstraints") public Object[][] unfloatConstraints() {
-    return new Object[][] {
-        // { NORTH, AWT },
-        { NORTH, ROBOT },
-        // { EAST, AWT },
-        { EAST, ROBOT },
-        // { SOUTH, AWT },
-        { SOUTH, ROBOT },
-        // { WEST, AWT },
-        { WEST, ROBOT }
-      };
+  @DataProvider(name = "unfloatConstraints") 
+  public Object[][] unfloatConstraints() {
+    return new Object[][] { { NORTH }, { EAST }, { SOUTH }, { WEST } };
   }
 
   @RunsInEDT

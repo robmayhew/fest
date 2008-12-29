@@ -29,8 +29,6 @@ import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.cell.JTableCellWriter;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.data.TableCell;
 import org.fest.swing.data.TableCellByColumnId;
@@ -51,9 +49,8 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.EventMode.ROBOT;
-import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
 import static org.fest.swing.data.TableCell.row;
 import static org.fest.swing.driver.JTableCellEditableQuery.isCellEditable;
 import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
@@ -113,23 +110,14 @@ public class JTableDriverTest {
   }
 
   @Test(groups = GUI, dataProvider = "cellsAndEventModes")
-  public void shouldSelectCell(int row, int column, EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectCell(int row, int column) {
     driver.selectCell(dragTable, row(row).column(column));
     assertThat(isCellSelected(dragTable, row, column)).isTrue();
   }
 
-  @DataProvider(name = "cellsAndEventModes") public Object[][] cellsAndEventModes() {
-    return new Object[][] {
-        // { 6, 5, AWT },
-        { 6, 5, ROBOT },
-        // { 0, 0, AWT },
-        { 0, 0, ROBOT },
-        //{ 8, 3, AWT },
-        { 8, 3, ROBOT },
-        //{ 5, 2, AWT },
-        { 5, 2, ROBOT }
-    };
+  @DataProvider(name = "cellsAndEventModes") 
+  public Object[][] cellsAndEventModes() {
+    return new Object[][] { { 6, 5 }, { 0, 0 }, { 8, 3 }, { 5, 2 } };
   }
 
   public void shouldReturnRowCount() {
@@ -168,9 +156,7 @@ public class JTableDriverTest {
     driver.selectCells(dragTable, cells);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectCells(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectCells() {
     setMultipleIntervalSelectionTo(dragTable);
     robot.waitForIdle();
     driver.selectCells(dragTable, new TableCell[] { row(0).column(0), row(2).column(0) });
@@ -178,9 +164,7 @@ public class JTableDriverTest {
     assertThat(isCellSelected(dragTable, 2, 0)).isTrue();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectCellsEvenIfArrayHasOneElement(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectCellsEvenIfArrayHasOneElement() {
     setMultipleIntervalSelectionTo(dragTable);
     robot.waitForIdle();
     driver.selectCells(dragTable, new TableCell[] { row(0).column(0) });
@@ -205,9 +189,7 @@ public class JTableDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSelectCellIfAlreadySelected(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldNotSelectCellIfAlreadySelected() {
     driver.selectCell(dragTable, row(0).column(0));
     assertThat(isCellSelected(dragTable, 0, 0)).isTrue();
     driver.selectCell(dragTable, row(0).column(0));
@@ -341,9 +323,7 @@ public class JTableDriverTest {
     assertThat(driver.selectionValue(dragTable)).isNull();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldDragAndDrop(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldDragAndDrop() {
     int dragRowCount = rowCountOf(dragTable);
     int dropRowCount = rowCountOf(dropTable);
     driver.drag(dragTable, row(3).column(0));
@@ -368,9 +348,7 @@ public class JTableDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldShowPopupMenuAtCell(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldShowPopupMenuAtCell() {
     setJPopupMenuToJTable(dragTable);
     robot.waitForIdle();
     ClickRecorder recorder = attachTo(dragTable);

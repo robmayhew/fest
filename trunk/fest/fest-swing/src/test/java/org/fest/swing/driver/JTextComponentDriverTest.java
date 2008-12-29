@@ -23,8 +23,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
@@ -73,9 +71,7 @@ public class JTextComponentDriverTest {
     robot.cleanUp();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldDeleteText(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldDeleteText() {
     driver.deleteText(textField);
     assertThat(textOf(textField)).isNullOrEmpty();
   }
@@ -100,17 +96,13 @@ public class JTextComponentDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldDeleteTextInEmptyTextComponent(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldDeleteTextInEmptyTextComponent() {
     setTextFieldText("");
     driver.deleteText(textField);
     assertThat(textOf(textField)).isNullOrEmpty();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldReplaceText(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldReplaceText() {
     setTextFieldText("Hi");
     driver.replaceText(textField, "Bye");
     assertThat(textOf(textField)).isEqualTo("Bye");
@@ -146,9 +138,7 @@ public class JTextComponentDriverTest {
     driver.replaceText(textField, "");
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectAllText(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectAllText() {
     setTextFieldText("Hello");
     driver.selectAll(textField);
     assertThat(selectedTextOf(textField)).isEqualTo(textOf(textField));
@@ -174,9 +164,7 @@ public class JTextComponentDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldEnterText(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldEnterText() {
     setTextFieldText("");
     String textToEnter = "Entering text";
     driver.enterText(textField, textToEnter);
@@ -203,9 +191,7 @@ public class JTextComponentDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSetText(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSetText() {
     setTextFieldText("");
     String textToEnter = "Entering text";
     driver.setText(textField, textToEnter);
@@ -232,9 +218,7 @@ public class JTextComponentDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectTextRange(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectTextRange() {
     driver.selectText(textField, 8, 14);
     assertThat(selectedTextOf(textField)).isEqualTo("a test");
   }
@@ -268,9 +252,7 @@ public class JTextComponentDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectGivenTextOnly(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectGivenTextOnly() {
     setTextFieldText("Hello World");
     driver.selectText(textField, "llo W");
     assertThat(selectedTextOf(textField)).isEqualTo("llo W");

@@ -29,10 +29,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
-import org.fest.swing.core.Robot;
 import org.fest.swing.core.BasicRobot;
+import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
@@ -91,9 +89,7 @@ public class JComboBoxDriverTest {
     assertCellReaderWasCalled();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectItemAtGivenIndex(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectItemAtGivenIndex() {
     clearSelectionInComboBox();
     driver.selectItem(comboBox, 2);
     assertThatSelectedItemIsEqualTo("third");
@@ -120,9 +116,7 @@ public class JComboBoxDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectItemWithGivenText(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectItemWithGivenText() {
     clearSelectionInComboBox();
     driver.selectItem(comboBox, "second");
     assertThatSelectedItemIsEqualTo("second");
@@ -154,9 +148,7 @@ public class JComboBoxDriverTest {
     assertThatSelectedIndexIsEqualTo(-1);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNotSelectItemWithGivenTextIfAlreadySelected(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldNotSelectItemWithGivenTextIfAlreadySelected() {
     setSelectedIndex(comboBox, 1);
     robot.waitForIdle();
     driver.selectItem(comboBox, "second");
@@ -186,9 +178,7 @@ public class JComboBoxDriverTest {
     assertCellReaderWasCalled();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldReturnDropDownList(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldReturnDropDownList() {
     driver.click(comboBox);
     JList dropDownList = driver.dropDownList();
     assertThat(contentsOf(dropDownList)).isEqualTo(array("first", "second", "third"));
@@ -356,9 +346,7 @@ public class JComboBoxDriverTest {
       assertActionFailureDueToNotEditableComboBox(e);
     }
   }
-@Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectAllText(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectAllText() {
     setEditableAndSelectFirstElement(comboBox, true);
     robot.waitForIdle();
     driver.selectAllText(comboBox);
@@ -417,9 +405,7 @@ public class JComboBoxDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldEnterText(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldEnterText() {
     makeComboBoxEditable();
     driver.enterText(comboBox, "Hello");
     assertThat(textIn(comboBox)).contains("Hello");
@@ -429,9 +415,7 @@ public class JComboBoxDriverTest {
     assertThat(e.getMessage()).contains("Expecting component").contains("to be editable");
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldReplaceText(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldReplaceText() {
     setEditableAndSelectFirstElement(comboBox, true);
     driver.replaceText(comboBox, "Hello");
     assertThat(textIn(comboBox)).isEqualTo("Hello");
@@ -514,17 +498,13 @@ public class JComboBoxDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldShowDropDownListWhenComboBoxIsNotEditable(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldShowDropDownListWhenComboBoxIsNotEditable() {
     makeComboBoxNotEditable();
     driver.showDropDownList(comboBox);
     assertThatDropDownIsVisible();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldShowDropDownListWhenComboBoxIsEditable(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldShowDropDownListWhenComboBoxIsEditable() {
     makeComboBoxEditable();
     driver.showDropDownList(comboBox);
     assertThatDropDownIsVisible();

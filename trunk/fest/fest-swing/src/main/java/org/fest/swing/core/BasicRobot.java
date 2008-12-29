@@ -53,7 +53,6 @@ import static org.fest.assertions.Fail.fail;
 import static org.fest.swing.awt.AWT.*;
 import static org.fest.swing.core.ActivateWindowTask.activateWindow;
 import static org.fest.swing.core.ComponentRequestFocusTask.giveFocusTo;
-import static org.fest.swing.core.EventMode.*;
 import static org.fest.swing.core.FocusOwnerFinder.*;
 import static org.fest.swing.core.InputModifiers.unify;
 import static org.fest.swing.core.MouseButton.*;
@@ -102,7 +101,7 @@ public class BasicRobot implements Robot {
   private final Settings settings;
 
   private final AWTEventPoster eventPoster;
-  private final InputEventGenerators eventGenerators;
+  private final InputEventGenerator eventGenerator;
 
   /**
    * Creates a new <code>{@link Robot}</code> with a new AWT hierarchy. The created <code>Robot</code> will not be able
@@ -129,8 +128,8 @@ public class BasicRobot implements Robot {
     ScreenLock.instance().acquire(this);
     this.hierarchy = hierarchy;
     settings = new Settings();
+    eventGenerator = new RobotEventGenerator(settings);
     eventPoster = new AWTEventPoster(toolkit, inputState, windowMonitor, settings);
-    eventGenerators = new InputEventGenerators(eventPoster);
     finder = new BasicComponentFinder(this.hierarchy);
   }
 
@@ -178,7 +177,7 @@ public class BasicRobot implements Robot {
   @RunsInEDT
   private void waitForWindow(Window w) {
     long start = currentTimeMillis();
-    while ((isRobotMode() && !windowMonitor.isWindowReady(w)) || !isShowing(w)) {
+    while (!windowMonitor.isWindowReady(w) || !isShowing(w)) {
       long elapsed = currentTimeMillis() - start;
       if (elapsed > WINDOW_DELAY)
         throw new WaitTimedOutError(concat("Timed out waiting for Window to open (", String.valueOf(elapsed), "ms)"));
@@ -507,21 +506,16 @@ public class BasicRobot implements Robot {
       KeyEvent keyEvent = keyEventFor(focus, character);
       // Allow any pending robot events to complete; otherwise we might stuff the typed event before previous
       // robot-generated events are posted.
-      if (isRobotMode()) waitForIdle();
+      waitForIdle();
       eventPoster.postEvent(focus, keyEvent);
       return;
     }
     keyPressAndRelease(keyStroke.getKeyCode(), keyStroke.getModifiers());
   }
 
-  private boolean isRobotMode() {
-    return ROBOT.equals(settings.eventMode());
-  }
-
   private KeyEvent keyEventFor(Component c, char character) {
     return new KeyEvent(c, KEY_TYPED, System.currentTimeMillis(), 0, VK_UNDEFINED, character);
   }
-
 
   /* Usually only needed when dealing with Applets. */
   private EventQueue eventQueueFor(Component c) {
@@ -594,7 +588,7 @@ public class BasicRobot implements Robot {
   }
 
   private InputEventGenerator eventGenerator() {
-    return eventGenerators.current();
+    return eventGenerator;
   }
 
   /** {@inheritDoc} */
@@ -706,14 +700,9 @@ public class BasicRobot implements Robot {
    */
   @RunsInCurrentThread
   public boolean isReadyForInput(Component c) {
-    if (isAWTMode()) return c.isShowing();
     Window w = windowAncestorOf(c);
     if (w == null) throw actionFailure(concat("Component ", format(c), " does not have a Window ancestor"));
     return c.isShowing() && windowMonitor.isWindowReady(w);
-  }
-
-  private boolean isAWTMode() {
-    return AWT.equals(settings.eventMode());
   }
 
   /** {@inheritDoc} */

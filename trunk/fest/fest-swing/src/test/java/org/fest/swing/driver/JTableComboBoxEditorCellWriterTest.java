@@ -17,15 +17,10 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
-import org.testng.annotations.Test;
-
 import org.fest.swing.cell.JTableCellWriter;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
-import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JTableComboBoxEditorCellWriter}</code>.
@@ -39,23 +34,19 @@ public class JTableComboBoxEditorCellWriterTest extends JTableCellWriterTestCase
     return new JTableComboBoxEditorCellWriter(robot());
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectItemInComboBoxEditor(EventMode eventMode) {
-    robot().settings().eventMode(eventMode);
+  public void shouldSelectItemInComboBoxEditor() {
     writer().enterValue(table(), 0, 2, "Pool");
     assertThat(valueAt(0, 2)).isEqualTo("Pool");
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldCancelEditing(EventMode eventMode) {
-    robot().settings().eventMode(eventMode);
+  public void shouldCancelEditing() {
     int row = 0;
-    int column = 2;
-    JComboBox editor = (JComboBox)writer().editorForCell(table(), row, column);
-    writer().startCellEditing(table(), row, column);
+    int col = 2;
+    JComboBox editor = (JComboBox)writer().editorForCell(table(), row, col);
+    writer().startCellEditing(table(), row, col);
     assertThat(isShowing(editor)).isTrue();
-    writer().cancelCellEditing(table(), row, column);
-    assertThat(valueAt(row, column)).isEqualTo("Snowboarding");
+    writer().cancelCellEditing(table(), row, col);
+    assertThat(valueAt(row, col)).isEqualTo("Snowboarding");
     assertThat(isShowing(editor)).isFalse();
   }
 }

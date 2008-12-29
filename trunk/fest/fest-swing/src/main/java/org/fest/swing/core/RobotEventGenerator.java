@@ -22,6 +22,7 @@ import static java.lang.String.valueOf;
 
 import static org.fest.swing.awt.AWT.locationOnScreenOf;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.exception.UnexpectedException.unexpected;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.swing.util.Platform.*;
 import static org.fest.util.Strings.concat;
@@ -38,9 +39,13 @@ class RobotEventGenerator implements InputEventGenerator {
   private final Robot robot;
   private final Settings settings;
 
-  RobotEventGenerator(Settings settings) throws AWTException {
+  RobotEventGenerator(Settings settings) {
     this.settings = settings;
-    robot = new Robot();
+    try {
+      robot = new Robot();
+    } catch (AWTException e) {
+      throw unexpected(e);
+    }
     settings.attachTo(robot);
     if (isWindows() || isOSX()) pause(500);
   }

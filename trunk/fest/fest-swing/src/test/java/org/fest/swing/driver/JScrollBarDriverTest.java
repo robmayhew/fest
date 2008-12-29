@@ -25,11 +25,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.test.data.ZeroAndNegativeProvider;
 import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -106,9 +105,7 @@ public class JScrollBarDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldScrollUnitUpTheGivenNumberOfTimes(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldScrollUnitUpTheGivenNumberOfTimes() {
     driver.scrollUnitUp(scrollBar, 6);
     assertThatScrollBarValueIsEqualTo(36);
   }
@@ -133,9 +130,7 @@ public class JScrollBarDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldScrollUnitUp(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldScrollUnitUp() {
     driver.scrollUnitUp(scrollBar);
     assertThatScrollBarValueIsEqualTo(31);
   }
@@ -172,9 +167,7 @@ public class JScrollBarDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldScrollUnitDownTheGivenNumberOfTimes(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldScrollUnitDownTheGivenNumberOfTimes() {
     driver.scrollUnitDown(scrollBar, 8);
     assertThatScrollBarValueIsEqualTo(22);
   }
@@ -199,9 +192,7 @@ public class JScrollBarDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldScrollUnitDown(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldScrollUnitDown() {
     driver.scrollUnitDown(scrollBar);
     assertThatScrollBarValueIsEqualTo(29);
   }
@@ -238,9 +229,7 @@ public class JScrollBarDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldScrollBlockUpTheGivenNumberOfTimes(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldScrollBlockUpTheGivenNumberOfTimes() {
     driver.scrollBlockUp(scrollBar, 2);
     assertThatScrollBarValueIsEqualTo(50);
   }
@@ -265,9 +254,7 @@ public class JScrollBarDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldScrollBlockUp(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldScrollBlockUp() {
     driver.scrollBlockUp(scrollBar);
     assertThatScrollBarValueIsEqualTo(40);
   }
@@ -304,9 +291,7 @@ public class JScrollBarDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldScrollBlockUpDownTheGivenNumberOfTimes(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldScrollBlockUpDownTheGivenNumberOfTimes() {
     driver.scrollBlockDown(scrollBar, 2);
     assertThatScrollBarValueIsEqualTo(10);
   }
@@ -331,9 +316,7 @@ public class JScrollBarDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldScrollBlockDown(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldScrollBlockDown() {
     driver.scrollBlockDown(scrollBar);
     assertThatScrollBarValueIsEqualTo(20);
   }
@@ -358,23 +341,17 @@ public class JScrollBarDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldScrollToGivenPosition(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldScrollToGivenPosition() {
     driver.scrollTo(scrollBar, 68);
     assertThatScrollBarValueIsEqualTo(68);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldScrollToMaximum(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldScrollToMaximum() {
     driver.scrollToMaximum(scrollBar);
     assertThatScrollBarValueIsEqualTo(MAXIMUM - EXTENT); // JScrollBar value cannot go to maximum
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldScrollToMinimum(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldScrollToMinimum() {
     driver.scrollToMinimum(scrollBar);
     assertThatScrollBarValueIsEqualTo(MINIMUM);
   }

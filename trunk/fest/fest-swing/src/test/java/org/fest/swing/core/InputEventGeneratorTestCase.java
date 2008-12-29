@@ -52,7 +52,7 @@ import static org.fest.swing.timing.Pause.pause;
 public abstract class InputEventGeneratorTestCase {
 
   private MyWindow window;
-  private InputEventGenerator generator;
+  private InputEventGenerator eventGenerator;
 
   protected static final String MOVE_MOUSE_TEST = "Move Mouse Test";
 
@@ -64,13 +64,13 @@ public abstract class InputEventGeneratorTestCase {
     ScreenLock.instance().acquire(this);
     window = MyWindow.createNew(getClass());
     onSetUp();
-    generator = generator();
+    eventGenerator = eventGenerator();
     window.display();
   }
 
   void onSetUp() throws Exception {}
 
-  abstract InputEventGenerator generator();
+  abstract InputEventGenerator eventGenerator();
 
   @AfterMethod public void tearDown() {
     try {
@@ -82,12 +82,12 @@ public abstract class InputEventGeneratorTestCase {
 
   @Test(groups = { GUI, MOVE_MOUSE_TEST }, enabled = false)
   public void shouldMoveMouse() {
-    generator.moveMouse(window, 10, 10);
+    eventGenerator.moveMouse(window, 10, 10);
     pause(200);
     MouseMotionRecorder recorder = MouseMotionRecorder.attachTo(window);
     pause(200);
     Point center = centerOf(window);
-    generator.moveMouse(window, center.x, center.y);
+    eventGenerator.moveMouse(window, center.x, center.y);
     pause(200);
     assertThat(recorder.point()).isEqualTo(center);
   }
@@ -96,8 +96,8 @@ public abstract class InputEventGeneratorTestCase {
   public void shouldClickMouseButtonOnComponent(MouseButton button) {
     ClickRecorder recorder = ClickRecorder.attachTo(window.textBox);
     Point center = centerOf(window.textBox);
-    generator.pressMouse(window.textBox, center, button.mask);
-    generator.releaseMouse(button.mask);
+    eventGenerator.pressMouse(window.textBox, center, button.mask);
+    eventGenerator.releaseMouse(button.mask);
     pause(200);
     recorder.clicked(button);
     assertThat(recorder.pointClicked()).isEqualTo(center);
@@ -106,10 +106,10 @@ public abstract class InputEventGeneratorTestCase {
   @Test(groups = GUI, dataProvider = "mouseButtons")
   public void shouldClickMouseButton(MouseButton button) {
     Point center = centerOf(window);
-    generator.moveMouse(window, center.x, center.y);
+    eventGenerator.moveMouse(window, center.x, center.y);
     ClickRecorder recorder = ClickRecorder.attachTo(window);
-    generator.pressMouse(button.mask);
-    generator.releaseMouse(button.mask);
+    eventGenerator.pressMouse(button.mask);
+    eventGenerator.releaseMouse(button.mask);
     pause(200);
     assertThat(recorder.clicked(button));
   }
@@ -122,8 +122,8 @@ public abstract class InputEventGeneratorTestCase {
   public void shouldTypeKey(int keyToPress, String expectedText) {
     giveFocusTo(window.textBox);
     pause(untilFocused(window.textBox));
-    generator.pressKey(keyToPress, CHAR_UNDEFINED);
-    generator.releaseKey(keyToPress);
+    eventGenerator.pressKey(keyToPress, CHAR_UNDEFINED);
+    eventGenerator.releaseKey(keyToPress);
     pause(200);
     assertThatTextBoxTextIsEqualTo(expectedText);
   }

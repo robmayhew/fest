@@ -29,8 +29,6 @@ import javax.swing.tree.*;
 import org.testng.annotations.*;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
@@ -40,7 +38,6 @@ import org.fest.swing.test.swing.TestTree;
 import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTreeSetEditableTask.setEditable;
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -85,9 +82,7 @@ public class JTreeDriverTest {
     robot.cleanUp();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectNodeByRow(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectNodeByRow() {
     clearSelectionOf(dragTree);
     robot.waitForIdle();
     assertThat(selectionRowsOf(dragTree)).isNull();
@@ -131,9 +126,7 @@ public class JTreeDriverTest {
     driver.selectRows(dragTree, rows);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectNodesByRow(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectNodesByRow() {
     clearSelectionOf(dragTree);
     setDefaultSelectionModelTo(dragTree);
     robot.waitForIdle();
@@ -174,9 +167,7 @@ public class JTreeDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldToggleNodeByRow(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldToggleNodeByRow() {
     assertThat(isRowExpanded(dragTree, 1)).isFalse();
     driver.toggleRow(dragTree, 1);
     assertThat(isRowExpanded(dragTree, 1)).isTrue();
@@ -193,9 +184,7 @@ public class JTreeDriverTest {
     });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorIfPathNotFound(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorIfPathNotFound() {
     try {
       driver.selectPath(dragTree, "another");
       failWhenExpectingException();
@@ -205,8 +194,7 @@ public class JTreeDriverTest {
   }
 
   @Test(groups = GUI, dataProvider = "selectionPath")
-  public void shouldSelectNodeByPath(String treePath, EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectNodeByPath(String treePath) {
     clearSelectionOf(dragTree);
     robot.waitForIdle();
     driver.selectPath(dragTree, treePath);
@@ -224,12 +212,9 @@ public class JTreeDriverTest {
   @DataProvider(name = "selectionPath")
   public Object[][] selectionPath() {
     return new Object[][] {
-//        { "root/branch1", AWT },
-        { "root/branch1", ROBOT },
-//        { "root/branch1/branch1.2", AWT },
-        { "root/branch1/branch1.2", ROBOT },
-//        { "root", AWT },
-        { "root", ROBOT }
+        { "root/branch1" },
+        { "root/branch1/branch1.2" },
+        { "root" }
     };
   }
 
@@ -265,9 +250,7 @@ public class JTreeDriverTest {
     driver.selectPaths(dragTree, paths);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectNodesByPaths(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectNodesByPaths() {
     clearSelectionOf(dragTree);
     setDefaultSelectionModelTo(dragTree);
     robot.waitForIdle();
@@ -332,9 +315,7 @@ public class JTreeDriverTest {
     robot.waitForIdle();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldDragAndDropUsingGivenTreePaths(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldDragAndDropUsingGivenTreePaths() {
     driver.drag(dragTree, "root/branch1/branch1.1");
     driver.drop(dropTree, "root");
     DefaultMutableTreeNode branch1 = firstChildOfRootOf(dragTree);
@@ -345,9 +326,7 @@ public class JTreeDriverTest {
     assertThat(textOf(firstChildOf(root))).isEqualTo("branch1.1");
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldDragAndDropUsingGivenRows(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldDragAndDropUsingGivenRows() {
     driver.drag(dragTree, 2);
     driver.drop(dropTree, 0);
     DefaultMutableTreeNode sourceRoot = rootOf(dragTree);
@@ -596,16 +575,12 @@ public class JTreeDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldShowPopupMenuAtRow(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldShowPopupMenuAtRow() {
     JPopupMenu popupMenu = driver.showPopupMenu(dragTree, 0);
     assertThat(popupMenu).isSameAs(window.popupMenu);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldShowPopupMenuAtPath(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldShowPopupMenuAtPath() {
     JPopupMenu popupMenu = driver.showPopupMenu(dragTree, "root");
     assertThat(popupMenu).isSameAs(window.popupMenu);
   }

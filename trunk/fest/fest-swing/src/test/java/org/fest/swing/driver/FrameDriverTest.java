@@ -22,8 +22,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiTask;
@@ -70,9 +68,7 @@ public class FrameDriverTest {
     robot.cleanUp();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldIconifyAndDeiconifyFrame(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldIconifyAndDeiconifyFrame() {
     driver.iconify(window);
     assertThat(frameState()).isEqualTo(ICONIFIED);
     driver.deiconify(window);
@@ -121,9 +117,7 @@ public class FrameDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldMaximizeFrame(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldMaximizeFrame() {
     driver.maximize(window);
     int frameState = frameState() & MAXIMIZED_BOTH;
     assertThat(frameState).isEqualTo(MAXIMIZED_BOTH);
@@ -149,9 +143,7 @@ public class FrameDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldNormalizeFrame(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldNormalizeFrame() {
     driver.maximize(window);
     driver.normalize(window);
     assertThat(frameState()).isEqualTo(NORMAL);
@@ -183,9 +175,7 @@ public class FrameDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldResizeFrameToGivenSize(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldResizeFrameToGivenSize() {
     FluentDimension newSize = frameSize().addToWidth(20).addToHeight(40);
     driver.resizeTo(window, newSize);
     assertThat(sizeOf(window)).isEqualTo(newSize);
@@ -222,9 +212,7 @@ public class FrameDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldResizeFrameToGivenWidth(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldResizeFrameToGivenWidth() {
     FluentDimension newSize = frameSize().addToWidth(20);
     driver.resizeWidthTo(window, newSize.width);
     assertThat(sizeOf(window)).isEqualTo(newSize);
@@ -261,9 +249,7 @@ public class FrameDriverTest {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldResizeFrameToGivenHeight(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldResizeFrameToGivenHeight() {
     FluentDimension newSize = frameSize().addToHeight(30);
     driver.resizeHeightTo(window, newSize.height);
     assertThat(sizeOf(window)).isEqualTo(newSize);
@@ -312,9 +298,7 @@ public class FrameDriverTest {
     });
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldMoveFrame(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldMoveFrame() {
     Point p = locationOnScreenOfWindow().addToX(10).addToY(10);
     driver.moveTo(window, p);
     assertThat(locationOnScreenOfWindow()).isEqualTo(p);

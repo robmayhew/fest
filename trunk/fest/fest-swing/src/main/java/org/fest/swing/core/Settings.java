@@ -18,7 +18,6 @@ package org.fest.swing.core;
 import static java.lang.Math.*;
 
 import static org.fest.swing.core.ComponentLookupScope.DEFAULT;
-import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.util.Platform.*;
 
 /**
@@ -30,7 +29,6 @@ public class Settings {
 
   private static final int DEFAULT_DELAY = 30000;
   
-  private EventMode eventMode;
   private ComponentLookupScope componentLookupScope;
   private int timeoutToBeVisible;
   private int timeoutToFindPopup;
@@ -57,26 +55,9 @@ public class Settings {
     robot = newRobot;
     if (delayBetweenEvents < 0) delayBetweenEvents = this.robot.getAutoDelay();
     else updateRobotAutoDelay();
-    eventMode(ROBOT);
   }
 
   java.awt.Robot robot() { return robot; }
-  
-  /**
-   * Returns the event-generation mode.
-   * @return the event-generation mode.
-   */
-  public EventMode eventMode() {
-    return eventMode;
-  }
-
-  /**
-   * Updates the event-generation mode.
-   * @param newEventMode the new event-generation mode.
-   */
-  public void eventMode(EventMode newEventMode) {
-    this.eventMode = newEventMode;
-  }
   
   /**
    * Returns a value representing the millisecond count in between generated events. The default is 30 milliseconds.

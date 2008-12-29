@@ -25,8 +25,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.cell.JTableCellWriter;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.exception.ActionFailedException;
@@ -67,9 +65,7 @@ public abstract class JTableCellWriterTestCase {
     robot.cleanUp();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenEnteringValue(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenEnteringValue() {
     try {
       writer.enterValue(window.table, 0, 1, "hello");
       failWhenExpectingException();
@@ -78,9 +74,7 @@ public abstract class JTableCellWriterTestCase {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenStartingEditing(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldThrowErrorIfEditorComponentCannotBeHandledWhenStartingEditing() {
     try {
       writer.startCellEditing(window.table, 0, 1);
       failWhenExpectingException();
@@ -92,10 +86,18 @@ public abstract class JTableCellWriterTestCase {
   private void assertMessageIncludesComponentNotHandled(ActionFailedException e) {
     assertThat(e.getMessage()).contains("Unable to handle editor component of type javax.swing.JButton");
   }
+  
+  protected final JTable table() {
+    return window.table;
+  }
 
-  protected final Robot robot() { return robot; }
-  protected final JTable table() { return window.table; }
-  protected final JTableCellWriter writer() { return writer; }
+  protected final Robot robot() {
+    return robot;
+  }
+
+  protected final JTableCellWriter writer() {
+    return writer;
+  }
 
   protected final Object valueAt(int row, int column) {
     return cellValueOf(window.table, row, column);

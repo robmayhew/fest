@@ -29,19 +29,18 @@ import static org.fest.swing.test.core.TestGroups.GUI;
 public class RobotEventGeneratorTest extends InputEventGeneratorTestCase {
 
   private Settings settings;
-  private RobotEventGenerator generator;
+  private RobotEventGenerator eventGenerator;
   
-  @Override void onSetUp() throws Exception {
+  @Override void onSetUp() {
     settings = new Settings();
-    generator = new RobotEventGenerator(settings);
+    eventGenerator = new RobotEventGenerator(settings);
   }
   
-  InputEventGenerator generator() {
-    return generator;
+  InputEventGenerator eventGenerator() {
+    return eventGenerator;
   }
 
   public void shouldAttachRobotToSettings() {
-    assertThat(generator.robot()).isSameAs(settings.robot());
-    assertThat(settings.eventMode()).isEqualTo(EventMode.ROBOT);
+    assertThat(eventGenerator.robot()).isSameAs(settings.robot());
   }
 }

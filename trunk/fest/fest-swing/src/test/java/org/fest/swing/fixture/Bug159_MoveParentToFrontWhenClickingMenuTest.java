@@ -26,8 +26,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
@@ -48,6 +46,7 @@ import static org.fest.util.Strings.concat;
  *
  * @author Alex Ruiz
  */
+@Test(groups = { GUI, BUG })
 public class Bug159_MoveParentToFrontWhenClickingMenuTest {
 
   private static final int DELAY_BEFORE_SHOWING_MENU = 2000;
@@ -75,9 +74,7 @@ public class Bug159_MoveParentToFrontWhenClickingMenuTest {
     robot.cleanUp();
   }
 
-  @Test(groups = { GUI, BUG }, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectMenuFromMenuBar(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectMenuFromMenuBar() {
     JMenuItem menuItem = window.menuItemFromMenuBar;
     JMenuItemFixture fixture = fixtureFor(menuItem);
     pauseBeforeShowingMenu();
@@ -86,9 +83,7 @@ public class Bug159_MoveParentToFrontWhenClickingMenuTest {
     assertThat(clickRecorder).wasClicked();
   }
 
-  @Test(groups = { GUI, BUG }, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectMenuPopupMenu(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSelectMenuPopupMenu() {
     JMenuItem menuItem = window.menuItemFromPopupMenu;
     JMenuItemFixture fixture = fixtureFor(menuItem);
     pauseBeforeShowingMenu();

@@ -22,15 +22,12 @@ import javax.swing.JSlider;
 import org.testng.annotations.*;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JSliderValueQuery.valueOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
@@ -74,8 +71,7 @@ public abstract class JSliderDriverTestCase {
   }
 
   @Test(dataProvider = "valueProvider")
-  public void shouldSlideToValue(int value, EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSlideToValue(int value) {
     driver.slide(slider, value);
     assertThatSliderValueIsEqualTo(value);
   }
@@ -83,10 +79,7 @@ public abstract class JSliderDriverTestCase {
   @DataProvider(name = "valueProvider")
   public Object[][] valueProvider() {
     return new Object[][] {
-        /* {  5, AWT }, */ {  5, ROBOT },
-        /* { 10, AWT }, */ { 10, ROBOT },
-        /* { 28, AWT }, */ { 28, ROBOT },
-        /* { 20, AWT }, */ { 20, ROBOT }
+        { 5 }, { 10 }, { 28 }, { 20 }
     };
   }
 
@@ -110,9 +103,7 @@ public abstract class JSliderDriverTestCase {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSlideToMaximum(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSlideToMaximum() {
     driver.slideToMaximum(slider);
     assertThatSliderValueIsEqualTo(maximumOf(slider));
   }
@@ -145,13 +136,12 @@ public abstract class JSliderDriverTestCase {
     }
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSlideToMinimum(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldSlideToMinimum() {
     driver.slideToMinimum(slider);
     assertThatSliderValueIsEqualTo(minimumOf(slider));
   }
 
+  @RunsInEDT
   private static int minimumOf(final JSlider slider) {
     return execute(new GuiQuery<Integer>() {
       protected Integer executeInEDT() {
@@ -180,6 +170,7 @@ public abstract class JSliderDriverTestCase {
     }
   }
 
+  @RunsInEDT
   private void assertThatSliderValueIsEqualTo(int expected) {
     assertThat(valueOf(slider)).isEqualTo(expected);
   }

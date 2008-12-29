@@ -18,8 +18,6 @@ package org.fest.swing.driver;
 import org.testng.annotations.Test;
 
 import org.fest.swing.cell.JTableCellWriter;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.test.core.TestGroups.GUI;
@@ -30,35 +28,30 @@ import static org.fest.swing.test.core.TestGroups.GUI;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Test(groups = GUI)
 public class BasicJTableCellWriterTest extends JTableCellWriterTestCase {
 
   protected JTableCellWriter createWriter() {
     return new BasicJTableCellWriter(robot());
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectItemInComboBoxEditor(EventMode eventMode) {
-    robot().settings().eventMode(eventMode);
+  public void shouldSelectItemInComboBoxEditor() {
     writer().enterValue(table(), 0, 2, "Pool");
     assertThat(valueAt(0, 2)).isEqualTo("Pool");
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldSelectItemInCheckBoxEditor(EventMode eventMode) {
-    robot().settings().eventMode(eventMode);
+  public void shouldSelectItemInCheckBoxEditor() {
     int row = 0;
-    int column = 4;
-    writer().enterValue(table(), row, column, "false");
-    assertThat(valueAt(row,column)).isEqualTo(false);
-    writer().enterValue(table(), row, column, "true");
-    assertThat(valueAt(row,column)).isEqualTo(true);
-    writer().enterValue(table(), row, column, "false");
-    assertThat(valueAt(row,column)).isEqualTo(false);
+    int col = 4;
+    writer().enterValue(table(), row, col, "false");
+    assertThat(valueAt(row,col)).isEqualTo(false);
+    writer().enterValue(table(), row, col, "true");
+    assertThat(valueAt(row,col)).isEqualTo(true);
+    writer().enterValue(table(), row, col, "false");
+    assertThat(valueAt(row,col)).isEqualTo(false);
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldEnterTextInTextComponentEditor(EventMode eventMode) {
-    robot().settings().eventMode(eventMode);
+  public void shouldEnterTextInTextComponentEditor() {
     writer().enterValue(table(), 4, 3, "8");
     assertThat(valueAt(4, 3)).isEqualTo(8);
   }

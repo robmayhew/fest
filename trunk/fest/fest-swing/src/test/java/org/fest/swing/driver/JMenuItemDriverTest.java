@@ -27,8 +27,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.EventMode;
-import org.fest.swing.core.EventModeProvider;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
@@ -69,9 +67,7 @@ public class JMenuItemDriverTest {
     robot.cleanUp();
   }
 
-  @Test(groups = GUI, dataProvider = "eventModes", dataProviderClass = EventModeProvider.class)
-  public void shouldClickMenu(EventMode eventMode) {
-    robot.settings().eventMode(eventMode);
+  public void shouldClickMenu() {
     ClickRecorder clickRecorder = attachTo(menuItem);
     driver.click(menuItem);
     clickRecorder.wasClicked();
