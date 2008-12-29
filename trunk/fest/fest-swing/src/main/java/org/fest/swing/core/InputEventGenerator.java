@@ -37,12 +37,19 @@ interface InputEventGenerator {
   /**
    * Simulates a user pressing the given mouse buttons on the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
-   * @param where the position where to press the given mouse button.
+   * @param where the position where to press the given mouse buttons.
    * @param buttons the mouse buttons to press.
    * @throws ActionFailedException if the component to click is out of the boundaries of the screen.
    */
   void pressMouse(Component c, Point where, int buttons);
 
+  /**
+   * Simulates a user pressing the given mouse buttons on the given coordinates.
+   * @param where the position where to press the given mouse buttons.
+   * @param buttons the mouse buttons to press.
+   */
+  void pressMouse(Point where, int buttons);
+  
   /**
    * Simulates a user moving the mouse pointer to the given coordinates relative to the given 
    * <code>{@link Component}</code>.
