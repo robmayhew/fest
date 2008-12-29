@@ -44,13 +44,20 @@ interface InputEventGenerator {
   void pressMouse(Component c, Point where, int buttons);
 
   /**
-   * Simulates a user moving the mouse pointer to the given coordinates relative to the given
+   * Simulates a user moving the mouse pointer to the given coordinates relative to the given 
    * <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
-   * @param x horizontal coordinate relative to the given <code>Component</code>.
-   * @param y vertical coordinate relative to the given <code>Component</code>.
+   * @param x X coordinate relative to the given <code>Component</code>.
+   * @param y Y coordinate relative to the given <code>Component</code>.
    */
   void moveMouse(Component c, int x, int y);
+  
+  /**
+   * Simulates a user moving the mouse pointer to the given coordinates.
+   * @param x X coordinate.
+   * @param y Y coordinate.
+   */
+  void moveMouse(int x, int y);
   
   /**
    * Releases the given mouse buttons.
@@ -62,6 +69,7 @@ interface InputEventGenerator {
    * Simulates a user pressing given key.
    * @param keyCode the code of the key to press.
    * @param keyChar the given character.
+   * @throws IllegalArgumentException if the key code is not valid.
    * @see java.awt.event.KeyEvent
    */
   void pressKey(int keyCode, char keyChar);

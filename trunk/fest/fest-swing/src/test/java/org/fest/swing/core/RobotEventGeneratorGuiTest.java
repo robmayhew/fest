@@ -26,7 +26,7 @@ import static org.fest.swing.test.core.TestGroups.GUI;
  * @author Alex Ruiz
  */
 @Test(groups = GUI)
-public class RobotEventGeneratorTest extends InputEventGeneratorTestCase {
+public class RobotEventGeneratorGuiTest extends InputEventGeneratorTestCase {
 
   private Settings settings;
   private RobotEventGenerator eventGenerator;

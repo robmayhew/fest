@@ -51,6 +51,7 @@ import static org.fest.swing.timing.Pause.pause;
  */
 public abstract class InputEventGeneratorTestCase {
 
+  private static final int DELAY = 200;
   private MyWindow window;
   private InputEventGenerator eventGenerator;
 
@@ -83,12 +84,12 @@ public abstract class InputEventGeneratorTestCase {
   @Test(groups = { GUI, MOVE_MOUSE_TEST }, enabled = false)
   public void shouldMoveMouse() {
     eventGenerator.moveMouse(window, 10, 10);
-    pause(200);
+    pause(DELAY);
     MouseMotionRecorder recorder = MouseMotionRecorder.attachTo(window);
-    pause(200);
+    pause(DELAY);
     Point center = centerOf(window);
     eventGenerator.moveMouse(window, center.x, center.y);
-    pause(200);
+    pause(DELAY);
     assertThat(recorder.point()).isEqualTo(center);
   }
 
@@ -98,7 +99,7 @@ public abstract class InputEventGeneratorTestCase {
     Point center = centerOf(window.textBox);
     eventGenerator.pressMouse(window.textBox, center, button.mask);
     eventGenerator.releaseMouse(button.mask);
-    pause(200);
+    pause(DELAY);
     recorder.clicked(button);
     assertThat(recorder.pointClicked()).isEqualTo(center);
   }
@@ -110,7 +111,7 @@ public abstract class InputEventGeneratorTestCase {
     ClickRecorder recorder = ClickRecorder.attachTo(window);
     eventGenerator.pressMouse(button.mask);
     eventGenerator.releaseMouse(button.mask);
-    pause(200);
+    pause(DELAY);
     assertThat(recorder.clicked(button));
   }
 
@@ -124,7 +125,7 @@ public abstract class InputEventGeneratorTestCase {
     pause(untilFocused(window.textBox));
     eventGenerator.pressKey(keyToPress, CHAR_UNDEFINED);
     eventGenerator.releaseKey(keyToPress);
-    pause(200);
+    pause(DELAY);
     assertThatTextBoxTextIsEqualTo(expectedText);
   }
 

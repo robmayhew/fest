@@ -209,6 +209,17 @@ public interface Robot {
   void moveMouse(Component c, int x, int y);
 
   /**
+   * Releases the given mouse button.
+   * @param button the mouse button to release.
+   */
+  void releaseMouse(MouseButton button);
+
+  /**
+   * Releases any mouse button(s) used by the robot.
+   */
+  void releaseMouseButtons();
+
+  /**
    * Makes the mouse pointer show small quick jumpy movements on the given <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
    */
@@ -267,17 +278,6 @@ public interface Robot {
    * @throws IllegalArgumentException if the given code is not a valid key code.
    */
   void releaseKey(int keyCode);
-
-  /**
-   * Releases the given mouse button.
-   * @param button the mouse button to release.
-   */
-  void releaseMouseButton(MouseButton button);
-
-  /**
-   * Releases any mouse button(s) used by the robot.
-   */
-  void releaseMouseButtons();
 
   /**
    * Presses the appropriate modifiers corresponding to the given mask.

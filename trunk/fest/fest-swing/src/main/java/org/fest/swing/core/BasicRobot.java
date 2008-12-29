@@ -545,7 +545,7 @@ public class BasicRobot implements Robot {
 
   /** {@inheritDoc} */
   @RunsInEDT
-  public void releaseMouseButton(MouseButton button) {
+  public void releaseMouse(MouseButton button) {
     mouseRelease(button.mask);
   }
 
