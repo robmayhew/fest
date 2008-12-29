@@ -53,7 +53,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.EventMode.ROBOT;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.data.TableCell.row;
 import static org.fest.swing.driver.JTableCellEditableQuery.isCellEditable;
 import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;

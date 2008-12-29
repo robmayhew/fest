@@ -45,7 +45,7 @@ import static javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.MouseButton.RIGHT_BUTTON;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JListSelectedIndexQuery.selectedIndexOf;
 import static org.fest.swing.driver.JListSetSelectedIndexTask.setSelectedIndex;
 import static org.fest.swing.edt.GuiActionRunner.execute;

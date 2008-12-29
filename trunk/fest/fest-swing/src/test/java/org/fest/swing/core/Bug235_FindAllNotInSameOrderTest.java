@@ -51,7 +51,7 @@ public class Bug235_FindAllNotInSameOrderTest {
   }
   
   @BeforeMethod public void setUp() {
-    robot = RobotFixture.robotWithNewAwtHierarchy();
+    robot = BasicRobot.robotWithNewAwtHierarchy();
   }
 
   @AfterMethod public void tearDown() {

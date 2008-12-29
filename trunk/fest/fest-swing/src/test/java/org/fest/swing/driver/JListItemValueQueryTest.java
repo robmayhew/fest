@@ -25,7 +25,7 @@ import org.testng.annotations.*;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.BasicRobot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.test.swing.TestWindow;
@@ -52,7 +52,7 @@ public class JListItemValueQueryTest {
   }
 
   @BeforeMethod public void setUp() {
-    robot = RobotFixture.robotWithNewAwtHierarchy();
+    robot = BasicRobot.robotWithNewAwtHierarchy();
     MyWindow window = MyWindow.createNew();
     list = window.list;
     robot.showWindow(window);

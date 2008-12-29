@@ -369,8 +369,7 @@ public class ComponentDriver {
    * Ends a drag operation, releasing the mouse button over the given target location.
    * <p>
    * This method is tuned for native drag/drop operations, so if you get odd behavior, you might try using a simple
-   * <code>{@link RobotFixture#moveMouse(Component, int, int)}</code> and
-   * <code>{@link RobotFixture#releaseMouseButtons()}</code>.
+   * <code>{@link Robot#moveMouse(Component, int, int)}</code> and <code>{@link Robot#releaseMouseButtons()}</code>.
    * @param c the target component.
    * @param where the point where the drag operation ends.
    * @throws ActionFailedException if there is no drag action in effect.

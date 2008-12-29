@@ -35,7 +35,7 @@ import org.fest.swing.test.swing.TestDialog;
 import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.finder.WindowFinder.findDialog;
 import static org.fest.swing.test.core.TestGroups.GUI;
 

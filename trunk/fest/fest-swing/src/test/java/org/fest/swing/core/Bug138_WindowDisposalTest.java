@@ -47,7 +47,7 @@ import static org.fest.swing.test.core.TestGroups.*;
 public class Bug138_WindowDisposalTest {
 
   private ComponentHierarchy hierarchy;
-  private RobotFixture robot;
+  private BasicRobot robot;
 
   @BeforeClass public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();

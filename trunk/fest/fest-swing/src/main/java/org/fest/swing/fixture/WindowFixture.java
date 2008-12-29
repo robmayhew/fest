@@ -19,11 +19,11 @@ import java.awt.Dimension;
 import java.awt.Window;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.BasicRobot;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.lock.ScreenLock;
 
-import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
+import static org.fest.swing.core.BasicRobot.robotWithCurrentAwtHierarchy;
 
 /**
  * Understands simulation of user events on a <code>{@link Window}</code> and verification of the state of such
@@ -42,7 +42,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * @throws NullPointerException if the given <code>Window</code> type is <code>null</code>.
    * @throws ComponentLookupException if a <code>Window</code> having a matching type could not be found.
    * @throws ComponentLookupException if more than one <code>Window</code> having a matching type is found.
-   * @see RobotFixture#robotWithCurrentAwtHierarchy()
+   * @see BasicRobot#robotWithCurrentAwtHierarchy()
    */
   public WindowFixture(Class<? extends T> type) {
     this(robotWithCurrentAwtHierarchy(), type);
@@ -69,7 +69,7 @@ public abstract class WindowFixture<T extends Window> extends ContainerFixture<T
    * @throws NullPointerException if the given <code>Window</code> type is <code>null</code>.
    * @throws ComponentLookupException if a <code>Window</code> having a matching name could not be found.
    * @throws ComponentLookupException if more than one <code>Window</code> having a matching name is found.
-   * @see RobotFixture#robotWithCurrentAwtHierarchy()
+   * @see BasicRobot#robotWithCurrentAwtHierarchy()
    */
   public WindowFixture(String name, Class<? extends T> type) {
     this(robotWithCurrentAwtHierarchy(), name, type);

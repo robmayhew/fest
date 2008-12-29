@@ -21,7 +21,6 @@ import java.awt.Point;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
 import org.fest.swing.core.Settings;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.util.TimeoutWatch;
@@ -103,8 +102,7 @@ public class DragAndDrop {
    * Ends a drag operation, releasing the mouse button over the given target location.
    * <p>
    * This method is tuned for native drag/drop operations, so if you get odd behavior, you might try using a simple
-   * <code>{@link RobotFixture#moveMouse(Component, int, int)}</code> and
-   * <code>{@link RobotFixture#releaseMouseButtons()}</code>.
+   * <code>{@link Robot#moveMouse(Component, int, int)}</code> and <code>{@link Robot#releaseMouseButtons()}</code>.
    * @param target the target component.
    * @param where the point where the drag operation ends.
    * @throws ActionFailedException if there is no drag action in effect.

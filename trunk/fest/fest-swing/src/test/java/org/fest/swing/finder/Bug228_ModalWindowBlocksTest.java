@@ -26,7 +26,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.BasicRobot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.test.swing.TestDialog;
@@ -54,7 +54,7 @@ public class Bug228_ModalWindowBlocksTest {
   }
   
   @BeforeMethod public void setUp() {
-    robot = RobotFixture.robotWithNewAwtHierarchy();
+    robot = BasicRobot.robotWithNewAwtHierarchy();
   }
 
   @AfterMethod public void tearDown() {

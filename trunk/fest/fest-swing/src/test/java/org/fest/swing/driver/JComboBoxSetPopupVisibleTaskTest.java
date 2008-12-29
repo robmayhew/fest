@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.BasicRobot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ComponentLookupException;
@@ -56,7 +56,7 @@ public class JComboBoxSetPopupVisibleTaskTest {
   }
 
   @BeforeMethod public void setUp() {
-    robot = RobotFixture.robotWithNewAwtHierarchy();
+    robot = BasicRobot.robotWithNewAwtHierarchy();
     window = MyWindow.createNew();
     comboBox = window.comboBox;
     robot.showWindow(window);

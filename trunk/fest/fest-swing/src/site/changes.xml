@@ -30,6 +30,9 @@
       <action dev="alruiz" type="remove">
         Removed method 'releaseLeftMouseButton' in org.fest.swing.core.Robot.
       </action>
+      <action dev="alruiz" type="fix" issue="271">
+        Renamed org.fest.swing.core.RobotFixture to BasicRobot.
+      </action>
     </release>
     <release version="1.0rc" date="2008-12-08" description="Subsequent release">
       <action dev="alruiz" type="fix" issue="134" due-to="Woody Folsom">

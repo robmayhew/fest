@@ -38,7 +38,7 @@ import static javax.swing.JFileChooser.*;
 import static javax.swing.SwingUtilities.invokeLater;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.AbstractButtonTextQuery.textOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.test.core.CommonAssertions.*;

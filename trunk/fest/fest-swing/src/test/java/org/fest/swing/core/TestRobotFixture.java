@@ -18,12 +18,12 @@ package org.fest.swing.core;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 
 /**
- * Understands a <code>{@link RobotFixture}</code> to be used for testing.
+ * Understands a <code>{@link BasicRobot}</code> to be used for testing.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class TestRobotFixture extends RobotFixture {
+public class TestRobotFixture extends BasicRobot {
 
   public TestRobotFixture(ComponentHierarchy hierarchy) {
     super(hierarchy);

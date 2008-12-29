@@ -34,7 +34,7 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
+import static org.fest.swing.core.BasicRobot.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.finder.WindowFinder.findFrame;
 import static org.fest.swing.test.core.TestGroups.GUI;

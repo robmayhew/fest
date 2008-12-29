@@ -74,7 +74,7 @@ public class WindowAncestorFinderTest {
   }
 
   public void shouldReturnInvokerAncestorAsAncestorIfComponentIsMenuElement() {
-    Robot robot = RobotFixture.robotWithCurrentAwtHierarchy();
+    Robot robot = BasicRobot.robotWithCurrentAwtHierarchy();
     robot.showWindow(frame);
     robot.showPopupMenu(frame.textField);
     Window ancestor = WindowAncestorFinder.windowAncestorOf(frame.popupMenu);

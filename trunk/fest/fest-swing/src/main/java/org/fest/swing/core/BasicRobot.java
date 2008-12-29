@@ -75,7 +75,7 @@ import static org.fest.util.Strings.*;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class RobotFixture implements Robot {
+public class BasicRobot implements Robot {
 
   private static final int POPUP_DELAY = 10000;
   private static final int POPUP_TIMEOUT = 5000;
@@ -110,7 +110,7 @@ public class RobotFixture implements Robot {
    * @return the created <code>Robot</code>.
    */
   public static Robot robotWithNewAwtHierarchy() {
-    return new RobotFixture(ignoreExistingComponents());
+    return new BasicRobot(ignoreExistingComponents());
   }
 
   /**
@@ -118,14 +118,14 @@ public class RobotFixture implements Robot {
    * @return the created <code>Robot</code>.
    */
   public static Robot robotWithCurrentAwtHierarchy() {
-    return new RobotFixture(new ExistingHierarchy());
+    return new BasicRobot(new ExistingHierarchy());
   }
 
   /**
-   * Creates a new <code>{@link RobotFixture}</code>.
+   * Creates a new <code>{@link BasicRobot}</code>.
    * @param hierarchy the component hierarchy to use.
    */
-  protected RobotFixture(ComponentHierarchy hierarchy) {
+  protected BasicRobot(ComponentHierarchy hierarchy) {
     ScreenLock.instance().acquire(this);
     this.hierarchy = hierarchy;
     settings = new Settings();

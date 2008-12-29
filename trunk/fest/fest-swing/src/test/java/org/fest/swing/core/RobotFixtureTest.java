@@ -58,7 +58,7 @@ import static org.fest.swing.test.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.timing.Pause.pause;
 
 /**
- * Tests for <code>{@link org.fest.swing.core.RobotFixture}</code>.
+ * Tests for <code>{@link org.fest.swing.core.BasicRobot}</code>.
  *
  * @author Yvonne Wang
  */
@@ -75,7 +75,7 @@ public class RobotFixtureTest {
   }
   
   @BeforeMethod public void setUp() {
-    robot = RobotFixture.robotWithCurrentAwtHierarchy();
+    robot = BasicRobot.robotWithCurrentAwtHierarchy();
     window = MyWindow.createAndShow();
     textFieldWithPopup = window.textFieldWithPopup;
     textFieldWithoutPopup = window.textFieldWithoutPopup;

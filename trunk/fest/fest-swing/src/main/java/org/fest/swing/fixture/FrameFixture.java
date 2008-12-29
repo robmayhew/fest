@@ -42,7 +42,7 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
    * containing the current AWT hierarchy.
    * @param target the <code>Frame</code> to be managed by this fixture.
    * @throws NullPointerException if the given frame is <code>null</code>.
-   * @see RobotFixture#robotWithCurrentAwtHierarchy()
+   * @see BasicRobot#robotWithCurrentAwtHierarchy()
    */
   public FrameFixture(Frame target) {
     super(target);

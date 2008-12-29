@@ -45,7 +45,7 @@ import static org.fest.swing.awt.AWT.centerOf;
 import static org.fest.swing.core.KeyPressInfo.keyCode;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.MouseClickInfo.*;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTextComponentTextQuery.textOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;

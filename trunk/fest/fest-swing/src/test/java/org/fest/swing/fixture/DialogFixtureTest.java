@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.BasicRobot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.DialogDriver;
 import org.fest.swing.edt.GuiQuery;
@@ -80,7 +80,7 @@ public class DialogFixtureTest extends CommonComponentFixtureTestCase<Dialog> {
   public void shouldCreateFixtureWithNewRobotAndGivenTarget() {
     fixture = new DialogFixture(target);
     try {
-      assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
+      assertThat(fixture.robot).isInstanceOf(BasicRobot.class);
     } finally {
       fixture.cleanUp();
     }
@@ -91,7 +91,7 @@ public class DialogFixtureTest extends CommonComponentFixtureTestCase<Dialog> {
     packAndShow(target);
     fixture = new DialogFixture("dialog");
     try {
-      assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
+      assertThat(fixture.robot).isInstanceOf(BasicRobot.class);
       assertThat(fixture.component()).isSameAs(target);
     } finally {
       fixture.cleanUp();

@@ -28,7 +28,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.test.core.TestGroups.*;
 import static org.fest.swing.test.swing.JOptionPaneLauncher.launch;

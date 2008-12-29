@@ -22,7 +22,7 @@ import java.awt.Point;
 import org.testng.annotations.Test;
 
 import org.fest.mocks.EasyMockTemplate;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.BasicRobot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.driver.FrameDriver;
 
@@ -65,7 +65,7 @@ import static org.fest.swing.test.task.FrameShowTask.packAndShow;
   public void shouldCreateFixtureWithNewRobotAndGivenTarget() {
     fixture = new FrameFixture(target);
     try {
-      assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
+      assertThat(fixture.robot).isInstanceOf(BasicRobot.class);
     } finally {
       fixture.cleanUp();
     }
@@ -76,7 +76,7 @@ import static org.fest.swing.test.task.FrameShowTask.packAndShow;
     packAndShow(target);
     fixture = new FrameFixture("frame");
     try {
-      assertThat(fixture.robot).isInstanceOf(RobotFixture.class);
+      assertThat(fixture.robot).isInstanceOf(BasicRobot.class);
       assertThat(fixture.component()).isSameAs(target);
     } finally {
       fixture.cleanUp();

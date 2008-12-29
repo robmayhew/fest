@@ -37,7 +37,7 @@ import org.fest.swing.core.GenericTypeMatcher;
  * 
  * </p>
  * <p>
- * Where <code>robot</code> is an instance of <code>{@link org.fest.swing.core.RobotFixture}</code>.
+ * Where <code>robot</code> is an instance of <code>{@link org.fest.swing.core.Robot}</code>.
  * </p>
  * <p>
  * This example shows how to find a <code>{@link Dialog}</code> by type using a lookup time of 10 seconds:

@@ -28,7 +28,7 @@ import org.testng.annotations.*;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.BasicRobot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.LocationUnavailableException;
@@ -57,7 +57,7 @@ public class JTableHeaderLocationTest {
   }
   
   @BeforeMethod public void setUp() {
-    robot = RobotFixture.robotWithNewAwtHierarchy();
+    robot = BasicRobot.robotWithNewAwtHierarchy();
     location = new JTableHeaderLocation();
     MyWindow window = MyWindow.createNew();
     tableHeader = window.tableHeader;

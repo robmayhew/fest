@@ -39,7 +39,7 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JSpinnerSetValueTask.setValue;
 import static org.fest.swing.driver.JSpinnerValueQuery.valueOf;
 import static org.fest.swing.driver.JTextComponentTextQuery.textOf;

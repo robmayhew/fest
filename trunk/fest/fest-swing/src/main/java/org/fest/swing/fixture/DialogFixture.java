@@ -40,7 +40,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * containing the current AWT hierarchy.
    * @param target the <code>Dialog</code> to be managed by this fixture.
    * @throws NullPointerException if <code>target</code> is <code>null</code>.
-   * @see RobotFixture#robotWithCurrentAwtHierarchy()
+   * @see BasicRobot#robotWithCurrentAwtHierarchy()
    */
   public DialogFixture(Dialog target) {
     super(target);
@@ -78,7 +78,7 @@ public class DialogFixture extends WindowFixture<Dialog> {
    * @param dialogName the name of the <code>Dialog</code> to find.
    * @throws ComponentLookupException if a <code>Dialog</code> having a matching name could not be found.
    * @throws ComponentLookupException if more than one <code>Dialog</code> having a matching name is found.
-   * @see RobotFixture#robotWithCurrentAwtHierarchy()
+   * @see BasicRobot#robotWithCurrentAwtHierarchy()
    */
   public DialogFixture(String dialogName) {
     super(dialogName, Dialog.class);

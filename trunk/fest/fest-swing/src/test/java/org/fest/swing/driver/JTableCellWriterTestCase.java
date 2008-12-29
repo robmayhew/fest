@@ -32,7 +32,7 @@ import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTableCellValueQuery.cellValueOf;
 import static org.fest.swing.test.core.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.test.core.TestGroups.GUI;

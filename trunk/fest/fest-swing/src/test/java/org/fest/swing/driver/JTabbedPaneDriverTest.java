@@ -37,7 +37,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.EventMode.*;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTabbedPaneSelectTabTask.setSelectedTab;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.test.core.CommonAssertions.*;

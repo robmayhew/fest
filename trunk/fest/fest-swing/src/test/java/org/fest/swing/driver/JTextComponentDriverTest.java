@@ -34,7 +34,7 @@ import org.fest.swing.test.swing.TestWindow;
 import org.fest.swing.test.task.ComponentSetVisibleTask;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTextComponentSelectedTextQuery.selectedTextOf;
 import static org.fest.swing.driver.JTextComponentSetEditableTask.setTextFieldEditable;
 import static org.fest.swing.driver.JTextComponentTextQuery.textOf;

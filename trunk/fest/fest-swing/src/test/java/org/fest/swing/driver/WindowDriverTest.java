@@ -30,7 +30,7 @@ import org.fest.swing.test.awt.FluentDimension;
 import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.core.RobotFixture.robotWithNewAwtHierarchy;
+import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;

@@ -37,7 +37,7 @@ import org.fest.swing.finder.WindowFinder;
 
 import static java.awt.BorderLayout.*;
 
-import static org.fest.swing.core.RobotFixture.robotWithCurrentAwtHierarchy;
+import static org.fest.swing.core.BasicRobot.robotWithCurrentAwtHierarchy;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.test.core.TestGroups.*;
 import static org.fest.util.Strings.*;

@@ -21,7 +21,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.RobotFixture;
+import org.fest.swing.core.BasicRobot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.test.swing.TestWindow;
@@ -49,7 +49,7 @@ public class ComponentShownWaiterTest {
   }
   
   @BeforeMethod public void setUp() {
-    robot = RobotFixture.robotWithNewAwtHierarchy();
+    robot = BasicRobot.robotWithNewAwtHierarchy();
     window = TestWindow.createNewWindow(getClass());
   }
 
