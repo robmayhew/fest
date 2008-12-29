@@ -313,9 +313,12 @@ public class RobotFixture implements Robot {
 
   @RunsInEDT
   private void cleanUp(boolean disposeWindows) {
-    if (disposeWindows) disposeWindows(hierarchy);
-    releaseMouseButtons();
-    ScreenLock.instance().release(this);
+    try {
+      if (disposeWindows) disposeWindows(hierarchy);
+      releaseMouseButtons();
+    } finally {
+      ScreenLock.instance().release(this);
+    }
   }
 
   @RunsInEDT
