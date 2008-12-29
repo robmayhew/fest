@@ -88,27 +88,6 @@ public interface Robot {
   void focusAndWaitForFocusGain(Component c);
 
   /**
-   * Posts a <code>{@link Runnable}</code> on the given component's event queue. Useful to ensure an operation happens
-   * on the event dispatch thread.
-   * @param c the component which event queue will be used.
-   * @param action the <code>Runnable</code> to post in the event queue.
-   */
-  void invokeLater(Component c, Runnable action);
-
-  /**
-   * Runs the given <code>{@link Runnable}</code> on the event dispatch thread, but don't return until it's been run.
-   * @param action the <code>Runnable</code> to run.
-   */
-  void invokeAndWait(Runnable action);
-
-  /**
-   * Posts a <code>{@link Runnable}</code> on the given component's event queue and wait for it to finish.
-   * @param c the component which event queue will be used.
-   * @param action the <code>Runnable</code> to post in the event queue.
-   */
-  void invokeAndWait(Component c, Runnable action);
-
-  /**
    * Cleans up any used resources (keyboard, mouse, open windows and <code>{@link ScreenLock}</code>) used by this
    * robot.
    */

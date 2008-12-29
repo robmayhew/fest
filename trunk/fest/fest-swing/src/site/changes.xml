@@ -32,8 +32,8 @@
       <action dev="alruiz" type="remove" issue="273">
         Removed class org.fest.swing.core.InputEventGenerators.
       </action>
-      <action dev="alruiz" type="remove">
-        Removed method 'releaseLeftMouseButton' in org.fest.swing.core.Robot.
+      <action dev="alruiz" type="remove" issue="274">
+        Removed methods 'invokeLater', 'invokeAndWait' and 'releaseLeftMouseButton' in org.fest.swing.core.Robot.
       </action>
     </release>
     <release version="1.0rc" date="2008-12-08" description="Subsequent release">

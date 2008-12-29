@@ -280,26 +280,6 @@ public class BasicRobot implements Robot {
 
   /** {@inheritDoc} */
   @RunsInEDT
-  public void invokeAndWait(Runnable action) {
-    invokeAndWait(null, action);
-  }
-
-  /** {@inheritDoc} */
-  @RunsInEDT
-  public void invokeAndWait(Component c, Runnable action) {
-    invokeLater(c, action);
-    waitForIdle();
-  }
-
-  /** {@inheritDoc} */
-  @RunsInEDT
-  public void invokeLater(Component c, Runnable action) {
-    EventQueue queue = eventQueueFor(c);
-    queue.postEvent(new InvocationEvent(toolkit, action));
-  }
-
-  /** {@inheritDoc} */
-  @RunsInEDT
   public void cleanUp() {
     cleanUp(true);
   }
@@ -515,11 +495,6 @@ public class BasicRobot implements Robot {
 
   private KeyEvent keyEventFor(Component c, char character) {
     return new KeyEvent(c, KEY_TYPED, System.currentTimeMillis(), 0, VK_UNDEFINED, character);
-  }
-
-  /* Usually only needed when dealing with Applets. */
-  private EventQueue eventQueueFor(Component c) {
-    return c != null ? windowMonitor.eventQueueFor(c) : toolkit.getSystemEventQueue();
   }
 
   /** {@inheritDoc} */
