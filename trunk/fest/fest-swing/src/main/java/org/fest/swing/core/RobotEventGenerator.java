@@ -101,9 +101,7 @@ class RobotEventGenerator implements InputEventGenerator {
   /** {@inheritDoc} */
   public void releaseKey(int keyCode) {
     robot.keyRelease(keyCode);
-    if (!isOSX()) return;
     int delayBetweenEvents = settings.delayBetweenEvents();
     if (KEY_INPUT_DELAY > delayBetweenEvents) pause(KEY_INPUT_DELAY - delayBetweenEvents);
-    return;
   }
 }
