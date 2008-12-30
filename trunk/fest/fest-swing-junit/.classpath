@@ -18,8 +18,8 @@
 	<classpathentry kind="lib" path="lib/fest-assert-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/fest-mocks-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/fest-reflect-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/fest-swing-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/fest-util-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/testng-5.7-jdk15.jar"/>
+	<classpathentry kind="lib" path="lib/fest-swing-1.0rc2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
