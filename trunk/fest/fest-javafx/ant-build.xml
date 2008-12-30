@@ -2,5 +2,5 @@
 <project name="fest-javafx" default="test-report" basedir="." xmlns:artifact="urn:maven-artifact-ant">
   <import file="../build-template.xml"/>
 
-  <taskdef classname="com.sun.tools.javafx.ant.JavaFxAntTask" classpath="${lib.classpath}" name="javafxc"/>
+  <!--taskdef classname="com.sun.tools.javafx.ant.JavaFxAntTask" classpath="${lib.classpath}" name="javafxc"/-->
 </project>
