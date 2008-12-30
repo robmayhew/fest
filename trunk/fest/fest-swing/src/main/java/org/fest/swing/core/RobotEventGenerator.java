@@ -94,6 +94,11 @@ class RobotEventGenerator implements InputEventGenerator {
   }
 
   /** {@inheritDoc} */
+  public void rotateMouseWheel(int amount) {
+    robot.mouseWheel(amount);
+  }
+
+  /** {@inheritDoc} */
   public void moveMouse(Component c, int x, int y) {
     Point p = pointToMoveMouseTo(c, x, y);
     moveMouse(p.x, p.y);

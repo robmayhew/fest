@@ -1,16 +1,15 @@
 /*
  * Created on Apr 2, 2008
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
- *
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ * 
  * Copyright @2008 the original author or authors.
  */
 package org.fest.swing.core;
@@ -22,7 +21,7 @@ import org.fest.swing.exception.ActionFailedException;
 
 /**
  * Understands generation of input events.
- *
+ * 
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
@@ -35,7 +34,7 @@ interface InputEventGenerator {
   void pressMouse(int buttons);
 
   /**
-   * Simulates a user pressing the given mouse buttons on the given <code>{@link Component}</code>. If the given 
+   * Simulates a user pressing the given mouse buttons on the given <code>{@link Component}</code>. If the given
    * component is <code>null</code>, this method will delegate to <code>{@link #pressMouse(Point, int)}</code>.
    * @param c the <code>Component</code> to click on.
    * @param where the position where to press the given mouse buttons.
@@ -50,28 +49,36 @@ interface InputEventGenerator {
    * @param buttons the mouse buttons to press.
    */
   void pressMouse(Point where, int buttons);
-  
+
   /**
-   * Simulates a user moving the mouse pointer to the given coordinates relative to the given 
+   * Simulates a user moving the mouse pointer to the given coordinates relative to the given
    * <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
    * @param x X coordinate relative to the given <code>Component</code>.
    * @param y Y coordinate relative to the given <code>Component</code>.
    */
   void moveMouse(Component c, int x, int y);
-  
+
   /**
    * Simulates a user moving the mouse pointer to the given coordinates.
    * @param x X coordinate.
    * @param y Y coordinate.
    */
   void moveMouse(int x, int y);
-  
+
   /**
    * Releases the given mouse buttons.
    * @param buttons the mouse buttons to release.
    */
   void releaseMouse(int buttons);
+
+  /**
+   * Rotates the scroll wheel on wheel-equipped mice.
+   * 
+   * @param amount number of "notches" to move the mouse wheel. Negative values indicate movement up/away from the user,
+   * while positive values indicate movement down/towards the user.
+   */
+  void rotateMouseWheel(int amount);
 
   /**
    * Simulates a user pressing given key.

@@ -43,7 +43,8 @@ import static org.fest.util.Arrays.array;
     Class<Robot> targetType = Robot.class;
     Method mouseMoveMethod  = targetType.getMethod("mouseMove", int.class, int.class);
     Method mousePressMethod = targetType.getMethod("mousePress", int.class);
-    robot = createMock(targetType, array(mouseMoveMethod, mousePressMethod));
+    Method mouseWheelMethod = targetType.getMethod("mouseWheel", int.class);
+    robot = createMock(targetType, array(mouseMoveMethod, mousePressMethod, mouseWheelMethod));
     eventGenerator = new RobotEventGenerator(robot, new Settings());
   }
   
@@ -87,6 +88,19 @@ import static org.fest.util.Arrays.array;
 
       protected void codeToTest() {
         eventGenerator.pressMouse(null, where, mouseButtons);
+      }
+    }.run();
+  }
+  
+  public void shouldRotateMouseWheel() {
+    final int amount = 8;
+    new EasyMockTemplate(robot) {
+      protected void expectations() {
+        robot.mouseWheel(amount);
+      }
+
+      protected void codeToTest() {
+        eventGenerator.rotateMouseWheel(amount);
       }
     }.run();
   }
