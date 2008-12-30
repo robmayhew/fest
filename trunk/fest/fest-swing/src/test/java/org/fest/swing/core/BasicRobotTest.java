@@ -18,10 +18,7 @@ package org.fest.swing.core;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,11 +53,13 @@ import static org.fest.swing.test.core.TestGroups.GUI;
 import static org.fest.swing.test.recorder.ClickRecorder.attachTo;
 import static org.fest.swing.test.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.timing.Pause.pause;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link org.fest.swing.core.BasicRobot}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 @Test(groups = GUI)
 public class BasicRobotTest {
@@ -287,7 +286,7 @@ public class BasicRobotTest {
     w.display();
     robot.close(w);
     pause(new Condition("Window closed") {
-      @Override public boolean test() {
+      public boolean test() {
         return !isVisible(w);
       }
     });
@@ -329,7 +328,7 @@ public class BasicRobotTest {
     robot.requireNoJOptionPaneIsShowing();
   }
 
-  public void shouldFailIfJOptionPaneIsShowingAndExpectingNotShowing() throws Exception {
+  public void shouldFailIfJOptionPaneIsShowingAndExpectingNotShowing() {
     robot.click(window.button);
     pause(500);
     try {
@@ -338,6 +337,41 @@ public class BasicRobotTest {
     } catch (AssertionError e) {
       assertThat(e.getMessage()).contains("Expecting no JOptionPane to be showing");
     }
+  }
+  
+  public void shouldRotateMouseWheel() {
+    JList list = window.list;
+    assertThat(firstVisibleIndexOf(list)).isEqualTo(0);
+    MouseWheelRecorder recorder = MouseWheelRecorder.attachTo(window.listScrollPane);
+    int amount = 50;
+    robot.rotateMouseWheel(list, amount);
+    assertThat(recorder.wheelRotation()).isEqualTo(amount);
+    assertThat(firstVisibleIndexOf(list)).isGreaterThan(0);
+  }
+  
+  @RunsInEDT
+  private static int firstVisibleIndexOf(final JList list) {
+    return execute(new GuiQuery<Integer>() {
+      protected Integer executeInEDT() {
+        return list.getFirstVisibleIndex();
+      }
+    });
+  }
+  
+  private static class MouseWheelRecorder implements MouseWheelListener {
+    private int wheelRotation;
+
+    static MouseWheelRecorder attachTo(Component c) {
+      MouseWheelRecorder recorder = new MouseWheelRecorder();
+      c.addMouseWheelListener(recorder);
+      return recorder;
+    }
+    
+    public void mouseWheelMoved(MouseWheelEvent e) {
+      wheelRotation = e.getWheelRotation();
+    }
+
+    int wheelRotation() { return wheelRotation; }
   }
 
   static class KeyPressRecorder extends KeyAdapter {
@@ -399,10 +433,15 @@ public class BasicRobotTest {
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
-    final JTextField textFieldWithPopup = new JTextField("With Pop-up Menu");
-    final JTextField textFieldWithoutPopup = new JTextField("Without Pop-up Menu");
+    private static final int COLUMNS = 15;
+
+    final JTextField textFieldWithPopup = new JTextField("With Pop-up Menu", COLUMNS);
+    final JTextField textFieldWithoutPopup = new JTextField("Without Pop-up Menu", COLUMNS);
+    final JList list = new JList(array("One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight"));
+    final JScrollPane listScrollPane = new JScrollPane(list);
     final JButton button = new JButton("Click Me");
     final JPopupMenu popupMenu = new JPopupMenu("Pop-up Menu");
+
 
     @RunsInEDT
     static MyWindow createAndShow() {
@@ -417,7 +456,8 @@ public class BasicRobotTest {
 
     private MyWindow() {
       super(BasicRobotTest.class);
-      addComponents(textFieldWithPopup, textFieldWithoutPopup, button);
+      listScrollPane.setPreferredSize(new Dimension(300, 100));
+      addComponents(textFieldWithPopup, textFieldWithoutPopup, button, listScrollPane);
       button.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           JOptionPane.showMessageDialog(MyWindow.this, "A Message");

@@ -400,37 +400,6 @@ public class BasicRobot implements Robot {
   }
 
   /** {@inheritDoc} */
-  public void pressMouse(MouseButton button) {
-    eventGenerator.pressMouse(button.mask);
-  }
-
-  /** {@inheritDoc} */
-  public void pressMouse(Component c, Point where) {
-    pressMouse(c, where, LEFT_BUTTON);
-  }
-
-  /** {@inheritDoc} */
-  public void pressMouse(Component c, Point where, MouseButton button) {
-    jitter(c, where);
-    moveMouse(c, where.x, where.y);
-    eventGenerator.pressMouse(c, where, button.mask);
-  }
-
-  /** {@inheritDoc} */
-  @RunsInEDT
-  public void jitter(Component c) {
-    jitter(c, visibleCenterOf(c));
-  }
-
-  /** {@inheritDoc} */
-  @RunsInEDT
-  public void jitter(Component c, Point where) {
-    int x = where.x;
-    int y = where.y;
-    moveMouse(c, (x > 0 ? x - 1 : x + 1), y);
-  }
-
-  /** {@inheritDoc} */
   @RunsInEDT
   public void moveMouse(Component c) {
     moveMouse(c, visibleCenterOf(c));
@@ -449,6 +418,63 @@ public class BasicRobot implements Robot {
       throw actionFailure(concat("Could not obtain position of component ", format(c)));
     eventGenerator.moveMouse(c, x, y);
     waitForIdle();
+  }
+
+  /** {@inheritDoc} */
+  public void pressMouse(MouseButton button) {
+    eventGenerator.pressMouse(button.mask);
+  }
+
+  /** {@inheritDoc} */
+  public void pressMouse(Component c, Point where) {
+    pressMouse(c, where, LEFT_BUTTON);
+  }
+
+  /** {@inheritDoc} */
+  public void pressMouse(Component c, Point where, MouseButton button) {
+    jitter(c, where);
+    moveMouse(c, where.x, where.y);
+    eventGenerator.pressMouse(c, where, button.mask);
+  }
+
+  /** {@inheritDoc} */
+  @RunsInEDT
+  public void releaseMouse(MouseButton button) {
+    mouseRelease(button.mask);
+  }
+
+  /** {@inheritDoc} */
+  @RunsInEDT
+  public void releaseMouseButtons() {
+    int buttons = inputState.buttons();
+    if (buttons == 0) return;
+    mouseRelease(buttons);
+  }
+
+  /** {@inheritDoc} */
+  public void rotateMouseWheel(Component c, int amount) {
+    moveMouse(c);
+    rotateMouseWheel(amount);
+  }
+
+  /** {@inheritDoc} */
+  public void rotateMouseWheel(int amount) {
+    eventGenerator.rotateMouseWheel(amount);
+    waitForIdle();
+  }
+
+  /** {@inheritDoc} */
+  @RunsInEDT
+  public void jitter(Component c) {
+    jitter(c, visibleCenterOf(c));
+  }
+
+  /** {@inheritDoc} */
+  @RunsInEDT
+  public void jitter(Component c, Point where) {
+    int x = where.x;
+    int y = where.y;
+    moveMouse(c, (x > 0 ? x - 1 : x + 1), y);
   }
 
   // Wait the given number of milliseconds for the component to be showing and ready.
@@ -528,7 +554,7 @@ public class BasicRobot implements Robot {
     int updatedModifiers = updateModifierWithKeyCode(keyCode, modifiers);
     pressModifiers(updatedModifiers);
     if (updatedModifiers == modifiers) {
-      keyPress(keyCode);
+      doPressKey(keyCode);
       eventGenerator.releaseKey(keyCode);
     }
     releaseModifiers(updatedModifiers);
@@ -537,12 +563,12 @@ public class BasicRobot implements Robot {
   /** {@inheritDoc} */
   @RunsInEDT
   public void pressKey(int keyCode) {
-    keyPress(keyCode);
+    doPressKey(keyCode);
     waitForIdle();
   }
 
   @RunsInEDT
-  private void keyPress(int keyCode) {
+  private void doPressKey(int keyCode) {
     eventGenerator.pressKey(keyCode, CHAR_UNDEFINED);
   }
 
@@ -551,20 +577,6 @@ public class BasicRobot implements Robot {
   public void releaseKey(int keyCode) {
     eventGenerator.releaseKey(keyCode);
     waitForIdle();
-  }
-
-  /** {@inheritDoc} */
-  @RunsInEDT
-  public void releaseMouse(MouseButton button) {
-    mouseRelease(button.mask);
-  }
-
-  /** {@inheritDoc} */
-  @RunsInEDT
-  public void releaseMouseButtons() {
-    int buttons = inputState.buttons();
-    if (buttons == 0) return;
-    mouseRelease(buttons);
   }
 
   @RunsInEDT

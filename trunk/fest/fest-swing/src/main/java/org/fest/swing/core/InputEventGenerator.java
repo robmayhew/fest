@@ -74,7 +74,6 @@ interface InputEventGenerator {
 
   /**
    * Rotates the scroll wheel on wheel-equipped mice.
-   * 
    * @param amount number of "notches" to move the mouse wheel. Negative values indicate movement up/away from the user,
    * while positive values indicate movement down/towards the user.
    */

@@ -228,6 +228,22 @@ public interface Robot {
   void releaseMouseButtons();
 
   /**
+   * Moves the mouse pointer over to the given <code>{@link Component}</code> and rotates the scroll wheel on
+   * wheel-equipped mice.
+   * @param c the given <code>Component</code>.
+   * @param amount number of "notches" to move the mouse wheel. Negative values indicate movement up/away from the user,
+   * while positive values indicate movement down/towards the user.
+   */
+  void rotateMouseWheel(Component c, int amount);
+  
+  /**
+   * Rotates the scroll wheel on wheel-equipped mice.
+   * @param amount number of "notches" to move the mouse wheel. Negative values indicate movement up/away from the user,
+   * while positive values indicate movement down/towards the user.
+   */
+  void rotateMouseWheel(int amount);
+
+  /**
    * Makes the mouse pointer show small quick jumpy movements on the given <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
    */

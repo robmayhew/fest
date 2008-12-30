@@ -23,6 +23,9 @@
       <action dev="alruiz" type="fix" issue="268" due-to="Jean-Francois Poilpret">
         TestNG is a compile-scoped dependency of the fest-swing-testng module.
       </action>
+      <action dev="alruiz" type="add" issue="270" due-to="Slava Gurilev">
+        Added methods 'rotateMouseWheel(Component, int)' and 'rotateMouseWheel(int)' to org.fest.swing.core.Robot.
+      </action>
       <action dev="alruiz" type="fix" issue="271">
         Renamed org.fest.swing.core.RobotFixture to BasicRobot.
       </action>
