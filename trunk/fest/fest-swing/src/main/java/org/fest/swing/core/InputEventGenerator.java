@@ -35,7 +35,8 @@ interface InputEventGenerator {
   void pressMouse(int buttons);
 
   /**
-   * Simulates a user pressing the given mouse buttons on the given <code>{@link Component}</code>.
+   * Simulates a user pressing the given mouse buttons on the given <code>{@link Component}</code>. If the given 
+   * component is <code>null</code>, this method will delegate to <code>{@link #pressMouse(Point, int)}</code>.
    * @param c the <code>Component</code> to click on.
    * @param where the position where to press the given mouse buttons.
    * @param buttons the mouse buttons to press.

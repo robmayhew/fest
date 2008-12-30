@@ -63,9 +63,12 @@ class RobotEventGenerator implements InputEventGenerator {
 
   /** {@inheritDoc} */
   public void pressMouse(Component c, Point where, int buttons) {
-    Point p = pointToMoveMouseTo(c, where.x, where.y);
-    if (!isPointInScreenBoundaries(p)) 
-      throw actionFailure("The component to click is out of the boundaries of the screeen");
+    Point p = where;
+    if (c != null) {
+      p = pointToMoveMouseTo(c, where.x, where.y);
+      if (!isPointInScreenBoundaries(p)) 
+        throw actionFailure("The component to click is out of the boundaries of the screeen");
+    }
     pressMouse(p, buttons);
   }
 
@@ -74,7 +77,7 @@ class RobotEventGenerator implements InputEventGenerator {
     return screen.contains(p);
   }
   
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void pressMouse(Point where, int buttons) {
     moveMouse(where.x, where.y);
     pressMouse(buttons);
@@ -96,7 +99,7 @@ class RobotEventGenerator implements InputEventGenerator {
     moveMouse(p.x, p.y);
   }
   
-  /** ${@inheritDoc} */
+  /** {@inheritDoc} */
   public void moveMouse(int x, int y) {
     robot.mouseMove(x, y);
   }

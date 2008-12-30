@@ -354,8 +354,14 @@ public class BasicRobot implements Robot {
 
   /** {@inheritDoc} */
   @RunsInEDT
+  public void click(Point where, MouseButton button, int times) {
+    click(null, where, button, times);
+  }
+
+  /** {@inheritDoc} */
+  @RunsInEDT
   public void click(Component c, Point where, MouseButton button, int times) {
-    focus(c);
+    if (c != null) focus(c);
     int mask = button.mask;
     int modifierMask = mask & ~BUTTON_MASK;
     mask &= BUTTON_MASK;
@@ -363,16 +369,20 @@ public class BasicRobot implements Robot {
     // From Abbot: Adjust the auto-delay to ensure we actually get a multiple click
     // In general clicks have to be less than 200ms apart, although the actual setting is not readable by Java.
     int delayBetweenEvents = settings.delayBetweenEvents();
-    if (times > 1 && delayBetweenEvents * 2 > 200) settings.delayBetweenEvents(0);
-    eventGenerator().pressMouse(c, where, mask);
+    if (shouldSetDelayBetweenEventsToZeroWhenClicking(times)) settings.delayBetweenEvents(0);
+    eventGenerator.pressMouse(c, where, mask);
     for (int i = times; i > 1; i--) {
-      eventGenerator().releaseMouse(mask);
-      eventGenerator().pressMouse(c, where, mask);
+      eventGenerator.releaseMouse(mask);
+      eventGenerator.pressMouse(c, where, mask);
     }
     settings.delayBetweenEvents(delayBetweenEvents);
-    eventGenerator().releaseMouse(mask);
+    eventGenerator.releaseMouse(mask);
     releaseModifiers(modifierMask);
     waitForIdle();
+  }
+
+  private boolean shouldSetDelayBetweenEventsToZeroWhenClicking(int times) {
+    return times > 1 && settings.delayBetweenEvents() * 2 > 200;
   }
 
   /** {@inheritDoc} */
@@ -391,7 +401,7 @@ public class BasicRobot implements Robot {
 
   /** {@inheritDoc} */
   public void pressMouse(MouseButton button) {
-    eventGenerator().pressMouse(button.mask);
+    eventGenerator.pressMouse(button.mask);
   }
 
   /** {@inheritDoc} */
@@ -403,7 +413,7 @@ public class BasicRobot implements Robot {
   public void pressMouse(Component c, Point where, MouseButton button) {
     jitter(c, where);
     moveMouse(c, where.x, where.y);
-    eventGenerator().pressMouse(c, where, button.mask);
+    eventGenerator.pressMouse(c, where, button.mask);
   }
 
   /** {@inheritDoc} */
@@ -437,7 +447,7 @@ public class BasicRobot implements Robot {
   public void moveMouse(Component c, int x, int y) {
     if (!waitForComponentToBeReady(c, settings.timeoutToBeVisible()))
       throw actionFailure(concat("Could not obtain position of component ", format(c)));
-    eventGenerator().moveMouse(c, x, y);
+    eventGenerator.moveMouse(c, x, y);
     waitForIdle();
   }
 
@@ -519,7 +529,7 @@ public class BasicRobot implements Robot {
     pressModifiers(updatedModifiers);
     if (updatedModifiers == modifiers) {
       keyPress(keyCode);
-      eventGenerator().releaseKey(keyCode);
+      eventGenerator.releaseKey(keyCode);
     }
     releaseModifiers(updatedModifiers);
   }
@@ -533,13 +543,13 @@ public class BasicRobot implements Robot {
 
   @RunsInEDT
   private void keyPress(int keyCode) {
-    eventGenerator().pressKey(keyCode, CHAR_UNDEFINED);
+    eventGenerator.pressKey(keyCode, CHAR_UNDEFINED);
   }
 
   /** {@inheritDoc} */
   @RunsInEDT
   public void releaseKey(int keyCode) {
-    eventGenerator().releaseKey(keyCode);
+    eventGenerator.releaseKey(keyCode);
     waitForIdle();
   }
 
@@ -559,11 +569,7 @@ public class BasicRobot implements Robot {
 
   @RunsInEDT
   private void mouseRelease(int buttons) {
-    eventGenerator().releaseMouse(buttons);
-  }
-
-  private InputEventGenerator eventGenerator() {
-    return eventGenerator;
+    eventGenerator.releaseMouse(buttons);
   }
 
   /** {@inheritDoc} */

@@ -43,9 +43,9 @@ import static java.awt.event.InputEvent.*;
 import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.awt.AWT.centerOf;
+import static org.fest.swing.awt.AWT.*;
+import static org.fest.swing.core.BasicRobotTest.KeyAction.action;
 import static org.fest.swing.core.MouseButton.*;
-import static org.fest.swing.core.RobotFixtureTest.KeyAction.action;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
@@ -63,7 +63,7 @@ import static org.fest.swing.timing.Pause.pause;
  * @author Yvonne Wang
  */
 @Test(groups = GUI)
-public class RobotFixtureTest {
+public class BasicRobotTest {
 
   private Robot robot;
   private MyWindow window;
@@ -194,6 +194,16 @@ public class RobotFixtureTest {
     assertThat(recorder).clicked(button).timesClicked(times).clickedAt(point);
   }
 
+  @Test(groups = GUI, dataProvider = "clickingData")
+  public void shouldClickWithGivenMouseButtonAndGivenNumberOfTimesAtGivenPoint(MouseButton button, int times) {
+    ClickRecorder recorder = attachTo(textFieldWithoutPopup);
+    Point where = locationOnScreenOf(textFieldWithoutPopup);
+    Point visibleCenter = visibleCenterOf(textFieldWithoutPopup);
+    where.translate(visibleCenter.x, visibleCenter.y);
+    robot.click(where, button, times);
+    assertThat(recorder).clicked(button).timesClicked(times).clickedAt(visibleCenter);
+  }
+  
   @DataProvider(name = "clickingData")
   public Object[][] clickingData() {
     return new Object[][] {
@@ -406,7 +416,7 @@ public class RobotFixtureTest {
     }
 
     private MyWindow() {
-      super(RobotFixtureTest.class);
+      super(BasicRobotTest.class);
       addComponents(textFieldWithPopup, textFieldWithoutPopup, button);
       button.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {

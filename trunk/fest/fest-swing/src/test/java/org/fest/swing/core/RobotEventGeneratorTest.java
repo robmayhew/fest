@@ -75,4 +75,19 @@ import static org.fest.util.Arrays.array;
       }
     }.run();
   }
+
+  public void shouldPressMouseAtGivenAbsoluteCoordinatesIfComponentIsNull() {
+    final Point where = new Point(6, 8);
+    final int mouseButtons = BUTTON1_MASK;
+    new EasyMockTemplate(robot) {
+      protected void expectations() {
+        robot.mouseMove(where.x, where.y);
+        robot.mousePress(mouseButtons);
+      }
+
+      protected void codeToTest() {
+        eventGenerator.pressMouse(null, where, mouseButtons);
+      }
+    }.run();
+  }
 }

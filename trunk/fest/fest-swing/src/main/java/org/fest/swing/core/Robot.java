@@ -155,12 +155,20 @@ public interface Robot {
    * Simulates a user clicking the given mouse button, the given times at the given position on the given
    * <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
-   * @param where the position where to click.
+   * @param where the coordinates where to click.
    * @param button the mouse button to click.
    * @param times the number of times to click the given mouse button.
    * @throws ActionFailedException if the component to click is out of the boundaries of the screen.
    */
   void click(Component c, Point where, MouseButton button, int times);
+
+  /**
+   * Simulates a user clicking the given mouse button, the given times at the given absolute coordinates.
+   * @param where the coordinates where to click.
+   * @param button the mouse button to click.
+   * @param times the number of times to click the given mouse button.
+   */
+  void click(Point where, MouseButton button, int times);
 
   /**
    * Simulates a user pressing a mouse button.
