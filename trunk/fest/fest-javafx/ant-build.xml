@@ -1,6 +1,17 @@
 <?xml version="1.0"?>
 <project name="fest-javafx" default="test-report" basedir="." xmlns:artifact="urn:maven-artifact-ant">
   <import file="../build-template.xml"/>
+  
+  <property name="src.test.javafx.dir" value="${src.test}/javafx" />
 
-  <!--taskdef classname="com.sun.tools.javafx.ant.JavaFxAntTask" classpath="${lib.classpath}" name="javafxc"/-->
+  <target name="eclipse.compile.test.javafx">
+    <path id="lib.classpath">
+      <fileset dir="${lib.dir}" includes="**/*.jar,**/*.zip" />
+    </path>
+    <taskdef classname="com.sun.tools.javafx.ant.JavaFxAntTask" classpathref="lib.classpath" name="javafxc"/>
+    <javafxc destdir="${basedir}/bin" compilerclasspathref="lib.classpath">
+      <src path="${src.test.javafx.dir}" />
+      <classpath refid="lib.classpath" />
+    </javafxc>
+  </target>
 </project>
