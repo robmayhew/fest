@@ -13,17 +13,21 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.javafx.launcher;
+package org.fest.javafx.desktop.launcher;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import javafx.stage.Stage;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import javax.swing.JFrame;
 
 import org.fest.swing.annotation.RunsInEDT;
-import org.fest.swing.edt.GuiTask;
+import org.fest.swing.edt.GuiQuery;
 
+import static org.fest.javafx.desktop.util.Windows.frameFrom;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.util.Strings.isEmpty;
 
@@ -35,28 +39,34 @@ import static org.fest.util.Strings.isEmpty;
 public final class ScriptLauncher {
 
   /**
-   * Launches the JavaFX script with the given name.
+   * Launches the JavaFX script with the given name and returns the <code>{@link JFrame}</code> hosting the JavaFX UI.
+   * <p>
+   * <b>Note:</b> this launcher can only start JavaFX scripts that has no dependencies on other scripts or JavaFX 
+   * classes.
+   * </p>
    * @param scriptName the name of the JavaFX script to launch.
+   * @return the <code>JFrame</code> hosting the JavaFX UI once it's started.
    * @throws NullPointerException if the given name is <code>null</code>.
    * @throws IllegalArgumentException if the given name is empty.
    */
   @RunsInEDT
-  public static void launch(String scriptName) {
+  public static JFrame launch(String scriptName) {
     if (scriptName == null) throw new NullPointerException("The name of the script to launch should not be null");
     if (isEmpty(scriptName)) 
       throw new IllegalArgumentException("The name of the script to launch should not be empty");
-    launch(ScriptLauncher.class.getResourceAsStream(scriptName));
+    Stage stage = launch(ScriptLauncher.class.getResourceAsStream(scriptName));
+    return frameFrom(stage);
   }
 
   @RunsInEDT
-  private static void launch(final InputStream script) {
+  private static Stage launch(InputStream script) {
     if (script == null) throw new NullPointerException("The stream containing the script to launch should not be null");
-    execute(new GuiTask() {
-      protected void executeInEDT() throws Throwable {
-        ScriptEngineManager manager = new ScriptEngineManager();
-        ScriptEngine engine = manager.getEngineByExtension("fx");
-        InputStreamReader reader = new InputStreamReader(script);
-        engine.eval(reader);
+    ScriptEngineManager manager = new ScriptEngineManager();
+    final ScriptEngine engine = manager.getEngineByExtension("fx");
+    final InputStreamReader reader = new InputStreamReader(script);
+    return execute(new GuiQuery<Stage>() {
+      protected Stage executeInEDT() throws Throwable {
+        return (Stage) engine.eval(reader);
       }
     });
   }

@@ -13,7 +13,7 @@
  * 
  * Copyright @2008 the original author or authors.
  */
-package org.fest.javafx.launcher;
+package org.fest.javafx.desktop.launcher;
 
 import javafx.stage.Stage;
 
@@ -21,28 +21,38 @@ import javax.swing.JFrame;
 
 import com.sun.javafx.runtime.TypeInfo;
 import com.sun.javafx.runtime.sequence.Sequence;
-import com.sun.javafx.stage.FrameStageDelegate;
 
+import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.edt.GuiQuery;
+
+import static org.fest.javafx.desktop.util.Windows.frameFrom;
 import static org.fest.reflect.core.Reflection.staticMethod;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands how to start a compile JavaFX UI.
  *
  * @author Alex Ruiz
  */
-public class JavaFxClassLauncher {
+public final class JavaFxClassLauncher {
 
   /**
-   * Launches the given compiled JavaFX UI.
+   * Launches the given compiled JavaFX UI and returns the <code>{@link JFrame}</code> hosting the JavaFX UI.
    * @param javaFxClass the class containing the JavaFX UI to launch.
    * @return the <code>JFrame</code> hosting the JavaFX UI once it's started.
    */
-  public static JFrame launch(Class<?> javaFxClass) {
-    Stage stage = (Stage) staticMethod("javafx$run$").withReturnType(Object.class)
-                                                     .withParameterTypes(Sequence.class)
-                                                     .in(javaFxClass)
-                                                     .invoke(TypeInfo.String.emptySequence);
-    FrameStageDelegate frameDelegate = (FrameStageDelegate) stage.get$impl_stageDelegate().get();
-    return (JFrame) frameDelegate.get$window().get();
+  @RunsInEDT
+  public static JFrame launch(final Class<?> javaFxClass) {
+    Stage stage = execute(new GuiQuery<Stage>() {
+      protected Stage executeInEDT() throws Throwable {
+        return (Stage) staticMethod("javafx$run$").withReturnType(Object.class)
+                                                  .withParameterTypes(Sequence.class)
+                                                  .in(javaFxClass)
+                                                  .invoke(TypeInfo.String.emptySequence);
+      }
+    });
+    return frameFrom(stage);
   }
+  
+  private JavaFxClassLauncher() {}
 }

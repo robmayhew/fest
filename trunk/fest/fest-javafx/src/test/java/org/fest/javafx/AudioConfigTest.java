@@ -16,7 +16,7 @@
 package org.fest.javafx;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.javafx.launcher.ScriptLauncher.launch;
+import static org.fest.javafx.desktop.launcher.ScriptLauncher.launch;
 import static org.fest.swing.core.matcher.FrameByTitleMatcher.withTitle;
 import static org.fest.swing.finder.WindowFinder.findFrame;
 
