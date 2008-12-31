@@ -13,7 +13,7 @@
 	<classpathentry kind="lib" path="lib/testng-5.7-jdk15.jar"/>
 	<classpathentry kind="lib" path="lib/fest-swing-1.0rc2.jar"/>
 	<classpathentry kind="lib" path="lib/javafx-swing.jar"/>
-	<classpathentry kind="lib" path="lib/javafxc.jar" sourcepath="C:/Program Files/JavaFX/javafx-sdk1.0/src.zip"/>
+	<classpathentry kind="lib" path="lib/javafxc.jar" sourcepath="lib/javafx-src.zip"/>
 	<classpathentry kind="lib" path="lib/javafxgui.jar"/>
 	<classpathentry kind="lib" path="lib/javafxrt.jar"/>
 	<classpathentry kind="lib" path="lib/Scenario.jar"/>
