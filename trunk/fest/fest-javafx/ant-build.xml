@@ -3,15 +3,30 @@
   <import file="../build-template.xml"/>
   
   <property name="src.test.javafx.dir" value="${src.test}/javafx" />
+  <property name="javafx.bin.dir" value="${basedir}/javafx-bin"/>
+  <property name="javafx.scripts.jar" value="${lib.dir}/fest-javafx-scripts.jar"/>
 
+  <target name="eclipse.clean.test.javafx">
+    <delete file="${javafx.scripts.jar}" failonerror="true"></delete>
+  </target>
+  
   <target name="eclipse.compile.test.javafx">
     <path id="lib.classpath">
       <fileset dir="${lib.dir}" includes="**/*.jar,**/*.zip" />
     </path>
     <taskdef classname="com.sun.tools.javafx.ant.JavaFxAntTask" classpathref="lib.classpath" name="javafxc"/>
-    <javafxc destdir="${basedir}/bin" compilerclasspathref="lib.classpath">
+    <copy todir="${javafx.bin.dir}">
+      <fileset dir="${src.test.javafx.dir}" includes="**/*.fx" />
+    </copy>
+    <javafxc destdir="${javafx.bin.dir}" 
+             compilerclasspathref="lib.classpath"
+             debug="compiler.debug"
+             verbose="true"> 
       <src path="${src.test.javafx.dir}" />
       <classpath refid="lib.classpath" />
     </javafxc>
+    <zip destfile="${javafx.scripts.jar}">
+      <fileset dir="${javafx.bin.dir}" includes="**/*.class"  />
+    </zip> 
   </target>
 </project>

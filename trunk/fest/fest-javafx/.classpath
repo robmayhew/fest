@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="src" path="src/test/javafx"/>
+	<classpathentry kind="src" output="javafx-bin" path="src/test/javafx"/>
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/debug-1.0.jar"/>
@@ -19,5 +19,6 @@
 	<classpathentry kind="lib" path="lib/Scenario.jar"/>
 	<classpathentry kind="lib" path="lib/toolchain.jar"/>
 	<classpathentry kind="lib" path="lib/websvc.jar"/>
+	<classpathentry kind="lib" path="lib/fest-javafx-scripts.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
