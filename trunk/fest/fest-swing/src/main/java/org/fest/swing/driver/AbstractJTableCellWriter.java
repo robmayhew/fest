@@ -26,6 +26,7 @@ import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.ComponentFoundCondition;
 import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.Robot;
+import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -125,13 +126,13 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
    * @throws IllegalStateException if the <code>JTable</code> is disabled.
    * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
    * @throws IllegalStateException if the table cell in the given coordinates is not editable.
+   * @throws IndexOutOfBoundsException if any of the indices is out of bounds or if the <code>JTable</code> does not
+   * have any rows.
    * @throws ActionFailedException if an editor for the given cell cannot be found.
    */
   @RunsInCurrentThread
   protected static <T extends Component> T editor(JTable table, int row, int column, Class<T> supportedType) {
-    validateIndices(table, row, column);
-    validateIsEnabledAndShowing(table);
-    validateCellIsEditable(table, row, column);
+    validate(table, row, column);
     Component editor = cellEditorIn(table, row, column);
     if (supportedType.isInstance(editor)) return supportedType.cast(editor);
     throw cannotHandleEditor(editor);
@@ -146,21 +147,63 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
    * @return the location of the given table cell.
    * @throws IllegalStateException if the <code>JTable</code> is disabled.
    * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if any of the indices is out of bounds or if the <code>JTable</code> does not
+   * have any rows.
    * @throws IllegalStateException if the table cell in the given coordinates is not editable.
    */
   @RunsInEDT
   protected static Point cellLocation(final JTable table, final int row, final int column, final JTableLocation location) {
     return execute(new GuiQuery<Point>() {
       protected Point executeInEDT() {
-        validateIndices(table, row, column);
-        validateIsEnabledAndShowing(table);
-        validateCellIsEditable(table, row, column);
+        validate(table, row, column);
         scrollToCell(table, row, column, location);
         return location.pointAt(table, row, column);
       }
     });
   }
 
+  /**
+   * Validates that:
+   * <ol>
+   * <li>the given <code>JTable</code> is enabled and showing on the screen</li>
+   * <li>the row and column indices are correct (not out of bounds)</li>
+   * <li>the table cell at the given indices is editable</li>
+   * </ol>
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
+   * @param table the target <code>JTable</code>.
+   * @param row the row index of the cell.
+   * @param column the column index of the cell.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
+   * @throws IndexOutOfBoundsException if any of the indices is out of bounds or if the <code>JTable</code> does not
+   * have any rows.
+   * @throws IllegalStateException if the table cell in the given coordinates is not editable.
+   */
+  @RunsInCurrentThread
+  protected static void validate(final JTable table, final int row, final int column) {
+    validateIndices(table, row, column);
+    validateIsEnabledAndShowing(table);
+    validateCellIsEditable(table, row, column);
+  }
+
+  /**
+   * Waits until the editor of the given table cell is showing on the screen. Component lookup is performed by type.
+   * @param <T> the generic type of the cell editor.
+   * @param table the target <code>JTable</code>.
+   * @param row the row index of the cell.
+   * @param column the column index of the cell.
+   * @param supportedType the type of component we expect as editor.
+   * @return the editor of the given table cell once it is showing on the screen.
+   * @throws ActionFailedException if an editor for the given cell cannot be found.
+   */
+  @RunsInEDT
+  protected final <T extends Component> T waitForEditorActivation(JTable table, int row, 
+      int column, Class<T> supportedType) {
+    return waitForEditorActivation(new TypeMatcher(supportedType, true), table, row, column, supportedType);
+  }  
   
   /**
    * Waits until the editor of the given table cell is showing on the screen.

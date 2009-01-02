@@ -23,7 +23,6 @@ import javax.swing.JTable;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.TypeMatcher;
 
 import static org.fest.swing.driver.JTableStopCellEditingTask.stopEditing;
 
@@ -66,6 +65,6 @@ public class JTableComboBoxEditorCellWriter extends AbstractJTableCellWriter {
 
   @RunsInEDT
   private JComboBox waitForEditorActivation(JTable table, int row, int column) {
-    return waitForEditorActivation(new TypeMatcher(JComboBox.class), table, row, column, JComboBox.class);
+    return waitForEditorActivation(table, row, column, JComboBox.class);
   }
 }

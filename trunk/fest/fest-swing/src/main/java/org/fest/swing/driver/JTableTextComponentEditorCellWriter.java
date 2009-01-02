@@ -23,7 +23,6 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.exception.WaitTimedOutError;
 
 import static java.awt.event.KeyEvent.VK_F2;
@@ -100,6 +99,6 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
 
   @RunsInEDT
   private JTextComponent waitForEditorActivation(JTable table, int row, int column) {
-    return waitForEditorActivation(new TypeMatcher(JTextComponent.class), table, row, column, JTextComponent.class);
+    return waitForEditorActivation(table, row, column, JTextComponent.class);
   }
 }
