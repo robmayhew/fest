@@ -15,6 +15,7 @@
  */
 package org.fest.swing.finder;
 
+import java.awt.Component;
 import java.awt.Dialog;
 import java.util.concurrent.TimeUnit;
 
@@ -73,4 +74,6 @@ public final class DialogFinder extends WindowFinderTemplate<Dialog> {
   public DialogFixture using(Robot robot) {
     return new DialogFixture(robot, findComponentWith(robot));
   }
+
+  Dialog cast(Component c) { return (Dialog)c; }
 }

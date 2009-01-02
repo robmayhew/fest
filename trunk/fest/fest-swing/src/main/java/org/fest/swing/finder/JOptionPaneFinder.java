@@ -15,6 +15,7 @@
  */
 package org.fest.swing.finder;
 
+import java.awt.Component;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
@@ -128,4 +129,6 @@ public final class JOptionPaneFinder extends ComponentFinderTemplate<JOptionPane
     super.withTimeout(timeout, unit);
     return this;
   }
+
+  JOptionPane cast(Component c) { return (JOptionPane) c; }
 }

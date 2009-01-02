@@ -15,6 +15,7 @@
  */
 package org.fest.swing.finder;
 
+import java.awt.Component;
 import java.awt.Frame;
 import java.util.concurrent.TimeUnit;
 
@@ -73,4 +74,6 @@ public final class FrameFinder extends WindowFinderTemplate<Frame> {
   public FrameFixture using(Robot robot) {
     return new FrameFixture(robot, findComponentWith(robot));
   }
+
+  Frame cast(Component c) { return (Frame) c; }
 }

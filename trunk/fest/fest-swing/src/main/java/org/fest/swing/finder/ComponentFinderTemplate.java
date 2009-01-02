@@ -84,10 +84,11 @@ abstract class ComponentFinderTemplate<T extends Component> {
    * @return the found component.
    * @throws WaitTimedOutError if a component with the given name or of the given type could not be found.
    */
-  @SuppressWarnings("unchecked")
-  protected final T findComponentWith(Robot robot) {
+  final T findComponentWith(Robot robot) {
     ComponentFoundCondition condition = new ComponentFoundCondition(searchDescription, robot.finder(), matcher);
     pause(condition, timeout);
-    return (T)condition.found();
+    return cast(condition.found());
   }
+  
+  abstract T cast(Component c);
 }

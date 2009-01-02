@@ -15,6 +15,7 @@
  */
 package org.fest.swing.finder;
 
+import java.awt.Component;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFileChooser;
@@ -141,4 +142,6 @@ public final class JFileChooserFinder extends ComponentFinderTemplate<JFileChoos
     super.withTimeout(timeout, unit);
     return this;
   }
+
+  JFileChooser cast(Component c) { return (JFileChooser) c; }
 }
