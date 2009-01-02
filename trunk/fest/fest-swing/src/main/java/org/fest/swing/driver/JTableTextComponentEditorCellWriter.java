@@ -23,16 +23,13 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
-import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.core.TypeMatcher;
 import org.fest.swing.exception.WaitTimedOutError;
-import org.fest.swing.util.Pair;
 
 import static java.awt.event.KeyEvent.VK_F2;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.driver.ComponentShownWaiter.waitTillShown;
 import static org.fest.swing.driver.JTableStopCellEditingTask.stopEditing;
-import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands an implementation of <code>{@link JTableCellWriter}</code> that knows how to use
@@ -55,6 +52,7 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
   public void enterValue(JTable table, int row, int column, String value) {
     JTextComponent editor = doStartCellEditing(table, row, column);
     driver.replaceText(editor, value);
+    driver.robot.printer().printComponents(System.out, table);
     doStopEditing(table, row, column);
   }
   
@@ -79,42 +77,29 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
 
   @RunsInEDT
   private JTextComponent doStartCellEditing(JTable table, int row, int column) {
-    Pair<Point, JTextComponent> info = startEditingCellInfo(table, row, column, location);
+    Point cellLocation = cellLocation(table, row, column, location);
     try {
-      activateEditorWithF2Key(table, info);
+      return activateEditorWithF2Key(table, row, column, cellLocation);
     } catch (WaitTimedOutError e) {
-      activateEditorWithDoubleClick(table, info);
+      return activateEditorWithDoubleClick(table, row, column, cellLocation);
     }
-    return info.ii;
   }
 
   @RunsInEDT
-  private static Pair<Point, JTextComponent> startEditingCellInfo(final JTable table, final int row, final int column, 
-      final JTableLocation location) {
-    return execute(new GuiQuery<Pair<Point, JTextComponent>>() {
-      protected Pair<Point, JTextComponent> executeInEDT() {
-        JTextComponent editor = editor(table, row, column, JTextComponent.class);
-        scrollToCell(table, row, column, location);
-        return new Pair<Point, JTextComponent>(location.pointAt(table, row, column), editor);
-      }
-    });
-  }
-
-  @RunsInEDT
-  private void activateEditorWithF2Key(JTable table, Pair<Point, JTextComponent> editingCellInfo) {
-    robot.click(table, editingCellInfo.i);
+  private JTextComponent activateEditorWithF2Key(JTable table, int row, int column, Point cellLocation) {
+    robot.click(table, cellLocation);
     robot.pressAndReleaseKeys(VK_F2);
-    waitForEditorActivation(editingCellInfo);
+    return waitForEditorActivation(table, row, column);
   }
   
   @RunsInEDT
-  private void activateEditorWithDoubleClick(JTable table, Pair<Point, JTextComponent> editingCellInfo) {
-    robot.click(table, editingCellInfo.i, LEFT_BUTTON, 2);
-    waitForEditorActivation(editingCellInfo);
+  private JTextComponent activateEditorWithDoubleClick(JTable table, int row, int column, Point cellLocation) {
+    robot.click(table, cellLocation, LEFT_BUTTON, 2);
+    return waitForEditorActivation(table, row, column);
   }
 
   @RunsInEDT
-  private void waitForEditorActivation(Pair<Point, JTextComponent> editingCellInfo) {
-    waitTillShown(editingCellInfo.ii);
+  private JTextComponent waitForEditorActivation(JTable table, int row, int column) {
+    return waitForEditorActivation(new TypeMatcher(JTextComponent.class), table, row, column, JTextComponent.class);
   }
 }

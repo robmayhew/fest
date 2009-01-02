@@ -78,6 +78,14 @@ public abstract class GenericTypeMatcher<T extends Component> extends AbstractCo
   }
 
   /**
+   * Returns the supported type of this matcher.
+   * @return the supported type of this matcher.
+   */
+  public final Class<T> supportedType() {
+    return supportedType;
+  }
+  
+  /**
    * Verifies that the given component matches some search criteria.
    * <p>
    * <b>Note:</b> Implementations of this method should <b>not</b> use the event dispatch thread (EDT.) Clients are

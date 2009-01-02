@@ -16,15 +16,19 @@
 package org.fest.swing.driver;
 
 import java.awt.Component;
+import java.awt.Point;
 
 import javax.swing.JTable;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellWriter;
+import org.fest.swing.core.ComponentFoundCondition;
+import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
+import org.fest.swing.exception.WaitTimedOutError;
 
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.JTableCancelCellEditingTask.cancelEditing;
@@ -33,6 +37,7 @@ import static org.fest.swing.driver.JTableCellValidator.*;
 import static org.fest.swing.driver.JTableStopCellEditingTask.validateAndStopEditing;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
+import static org.fest.swing.timing.Pause.pause;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -46,6 +51,8 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
   protected final Robot robot;
   protected final JTableLocation location = new JTableLocation();
 
+  private static final long EDITOR_LOOKUP_TIMEOUT = 5000;
+  
   public AbstractJTableCellWriter(Robot robot) {
     this.robot = robot;
   }
@@ -78,16 +85,6 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
   @RunsInCurrentThread
   protected static void scrollToCell(JTable table, int row, int column, JTableLocation location) {
     table.scrollRectToVisible(location.cellBounds(table, row, column));
-  }
-
-  /**
-   * Throws a <code>{@link ActionFailedException}</code> if the given editor cannot be handled by this
-   * <code>{@link JTableCellWriter}</code>.
-   * @param editor the given editor.
-   * @return the thrown exception.
-   */
-  protected static final ActionFailedException cannotHandleEditor(Component editor) {
-    throw actionFailure(concat("Unable to handle editor component of type ", editorTypeName(editor)));
   }
 
   private static String editorTypeName(Component editor) {
@@ -138,5 +135,63 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
     Component editor = cellEditorIn(table, row, column);
     if (supportedType.isInstance(editor)) return supportedType.cast(editor);
     throw cannotHandleEditor(editor);
+  }
+  
+  /**
+   * Returns the location of the given table cell. 
+   * @param table the target <code>JTable</code>.
+   * @param row the row index of the cell.
+   * @param column the column index of the cell.
+   * @param location knows how to get the location of a table cell.
+   * @return the location of the given table cell.
+   * @throws IllegalStateException if the <code>JTable</code> is disabled.
+   * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
+   * @throws IllegalStateException if the table cell in the given coordinates is not editable.
+   */
+  @RunsInEDT
+  protected static Point cellLocation(final JTable table, final int row, final int column, final JTableLocation location) {
+    return execute(new GuiQuery<Point>() {
+      protected Point executeInEDT() {
+        validateIndices(table, row, column);
+        validateIsEnabledAndShowing(table);
+        validateCellIsEditable(table, row, column);
+        scrollToCell(table, row, column, location);
+        return location.pointAt(table, row, column);
+      }
+    });
+  }
+
+  
+  /**
+   * Waits until the editor of the given table cell is showing on the screen.
+   * @param <T> the generic type of the cell editor.
+   * @param matcher the condition that the cell editor to look for needs to satisfy.
+   * @param table the target <code>JTable</code>.
+   * @param row the row index of the cell.
+   * @param column the column index of the cell.
+   * @param supportedType the type of component we expect as editor.
+   * @return the editor of the given table cell once it is showing on the screen.
+   * @throws ActionFailedException if an editor for the given cell cannot be found.
+   */
+  @RunsInEDT
+  protected final <T extends Component> T waitForEditorActivation(ComponentMatcher matcher, JTable table, int row, 
+      int column, Class<T> supportedType) {
+    ComponentFoundCondition condition = new ComponentFoundCondition("", robot.finder(), matcher, table);
+    try {
+      pause(condition, EDITOR_LOOKUP_TIMEOUT);
+    } catch (WaitTimedOutError e) {
+      throw cannotHandleEditor(cellEditorIn(table, row, column));
+    }
+    return supportedType.cast(condition.found());
+  }  
+
+  /**
+   * Throws a <code>{@link ActionFailedException}</code> if the given editor cannot be handled by this
+   * <code>{@link JTableCellWriter}</code>.
+   * @param editor the given editor.
+   * @return the thrown exception.
+   */
+  protected static final ActionFailedException cannotHandleEditor(Component editor) {
+    throw actionFailure(concat("Unable to handle editor component of type ", editorTypeName(editor)));
   }
 }

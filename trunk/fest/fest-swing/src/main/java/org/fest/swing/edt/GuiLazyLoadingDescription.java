@@ -16,6 +16,7 @@
 package org.fest.swing.edt;
 
 import org.fest.assertions.Description;
+import org.fest.swing.annotation.RunsInCurrentThread;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
@@ -39,5 +40,6 @@ public abstract class GuiLazyLoadingDescription implements Description {
     });
   }
 
+  @RunsInCurrentThread
   protected abstract String loadDescription();
 }

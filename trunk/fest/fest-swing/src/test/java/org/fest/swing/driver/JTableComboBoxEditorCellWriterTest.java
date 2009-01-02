@@ -17,10 +17,13 @@ package org.fest.swing.driver;
 
 import javax.swing.JComboBox;
 
+import org.testng.annotations.Test;
+
 import org.fest.swing.cell.JTableCellWriter;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.query.ComponentShowingQuery.isShowing;
+import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JTableComboBoxEditorCellWriter}</code>.
@@ -28,6 +31,7 @@ import static org.fest.swing.query.ComponentShowingQuery.isShowing;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Test(groups = GUI)
 public class JTableComboBoxEditorCellWriterTest extends JTableCellWriterTestCase {
 
   protected JTableCellWriter createWriter() {

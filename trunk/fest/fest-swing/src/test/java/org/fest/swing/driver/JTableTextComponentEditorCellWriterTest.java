@@ -20,6 +20,7 @@ import org.testng.annotations.Test;
 import org.fest.swing.cell.JTableCellWriter;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JTableTextComponentEditorCellWriter}</code>.
@@ -27,18 +28,19 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Test(groups = GUI)
 public class JTableTextComponentEditorCellWriterTest extends JTableCellWriterTestCase {
 
   protected JTableCellWriter createWriter() {
     return new JTableTextComponentEditorCellWriter(robot());
   }
 
-  @Test public void shouldEnterTextInTextComponentEditor() {
+  public void shouldEnterTextInTextComponentEditor() {
     writer().enterValue(table(), 4, 3, "8");
     assertThat(valueAt(4, 3)).isEqualTo(8);
   }
 
-  @Test public void shouldCancelEditingIfDropDownVisible() {
+  public void shouldCancelEditingIfDropDownVisible() {
     int row = 0;
     int column = 3;
     assertThat(valueAt(row, column)).isEqualTo(5);

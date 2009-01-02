@@ -16,6 +16,10 @@
         org.fest.swing.edt.GuiActionRunner appends stack trace of current thread to an exception thrown in the event
         dispatch thread.
       </action>
+      <action dev="alruiz" type="fix" issue="251" due-to="Juhos Csaba-Zsolt">
+        JTable cell editor lookup fixed in org.fest.swing.driver.JTableTextComponentEditorCellWriter and 
+        JTableComboBoxEditorCellWriter by looking up the editor after it has been activated.
+      </action>
       <action dev="alruiz" type="fix" issue="257" due-to="Juhos Csaba-Zsolt">
         Constructors in org.fest.swing.core.GenericTypeMatcher now take the supported type as parameter to guarantee
         correct casting in the 'isMatching' method.

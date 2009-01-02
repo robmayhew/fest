@@ -23,12 +23,9 @@ import javax.swing.JTable;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
-import org.fest.swing.edt.GuiQuery;
-import org.fest.swing.util.Pair;
+import org.fest.swing.core.TypeMatcher;
 
-import static org.fest.swing.driver.ComponentShownWaiter.waitTillShown;
 import static org.fest.swing.driver.JTableStopCellEditingTask.stopEditing;
-import static org.fest.swing.edt.GuiActionRunner.execute;
 
 /**
  * Understands an implementation of <code>{@link JTableCellWriter}</code> that knows how to use
@@ -62,22 +59,13 @@ public class JTableComboBoxEditorCellWriter extends AbstractJTableCellWriter {
 
   @RunsInEDT
   private JComboBox doStartCellEditing(JTable table, int row, int column) {
-    Pair<Point, JComboBox> info = startEditingCellInfo(table, row, column, location);
-    robot.click(table, info.i); // activate JComboBox editor
-    JComboBox editor = info.ii;
-    waitTillShown(editor);
-    return editor;
+    Point cellLocation = cellLocation(table, row, column, location);
+    robot.click(table, cellLocation); // activate JComboBox editor
+    return waitForEditorActivation(table, row, column);
   }
 
   @RunsInEDT
-  private static Pair<Point, JComboBox> startEditingCellInfo(final JTable table, final int row, final int column, 
-      final JTableLocation location) {
-    return execute(new GuiQuery<Pair<Point, JComboBox>>() {
-      protected Pair<Point, JComboBox> executeInEDT() {
-        JComboBox editor = editor(table, row, column, JComboBox.class);
-        scrollToCell(table, row, column, location);
-        return new Pair<Point, JComboBox>(location.pointAt(table, row, column), editor);
-      }
-    });
+  private JComboBox waitForEditorActivation(JTable table, int row, int column) {
+    return waitForEditorActivation(new TypeMatcher(JComboBox.class), table, row, column, JComboBox.class);
   }
 }
