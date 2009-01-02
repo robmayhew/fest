@@ -79,9 +79,9 @@ public class JPopupMenuFixtureTest extends CommonComponentFixtureTestCase<JPopup
     }.run();
   }
   
-  @SuppressWarnings("unchecked") 
+  @SuppressWarnings("unchecked")
   @Test public void shouldReturnMenuItemUsingSearchCriteria() {
-    final GenericTypeMatcher<? extends JMenuItem> matcher = createMock(GenericTypeMatcher.class);
+    final GenericTypeMatcher<JMenuItem> matcher = createMock(GenericTypeMatcher.class);
     final JMenuItem menuItem = menuItem().createNew();
     new EasyMockTemplate(driver) {
       protected void expectations() {
