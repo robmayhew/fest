@@ -1,32 +1,25 @@
 <?xml version="1.0"?>
-<project name="fest-javafx" default="test-report" basedir="." xmlns:artifact="urn:maven-artifact-ant">
-  <import file="../build-template.xml"/>
-  
-  <property name="src.test.javafx.dir" value="${src.test}/javafx" />
+<project name="fest-javafx" default="compile" basedir="." >
+  <property name="lib.dir" value="${basedir}/lib" />
+  <property name="javafx.src.dir" value="${basedir}/src/test/javafx" />
   <property name="javafx.bin.dir" value="${basedir}/javafx-bin"/>
-  <property name="javafx.scripts.jar" value="${lib.dir}/fest-javafx-scripts.jar"/>
-
-  <target name="eclipse.clean.test.javafx">
-    <delete file="${javafx.scripts.jar}" failonerror="true"></delete>
-  </target>
-  
-  <target name="eclipse.compile.test.javafx">
+  <property name="javafxc.home" value="${basedir}/javafx2" />
+  <path id="javafxc.classpath">
+     <fileset dir="${javafxc.home}" includes="**/*.jar,**/*.zip" />
+  </path>
+  <path id="lib.classpath">
+	 <fileset dir="${lib.dir}" includes="**/*.jar,**/*.zip" />
+  </path>
+  <target name="compile">
     <path id="lib.classpath">
       <fileset dir="${lib.dir}" includes="**/*.jar,**/*.zip" />
     </path>
-    <taskdef classname="com.sun.tools.javafx.ant.JavaFxAntTask" classpathref="lib.classpath" name="javafxc"/>
+    <taskdef classname="com.sun.tools.javafx.ant.JavaFxAntTask" classpathref="javafxc.classpath" name="javafxc"/>
     <copy todir="${javafx.bin.dir}">
-      <fileset dir="${src.test.javafx.dir}" includes="**/*.fx" />
+      <fileset dir="${javafx.src.dir}" includes="**/*.fx" />
     </copy>
-    <javafxc destdir="${javafx.bin.dir}" 
-             compilerclasspathref="lib.classpath"
-             debug="compiler.debug"
-             verbose="true"> 
-      <src path="${src.test.javafx.dir}" />
-      <classpath refid="lib.classpath" />
-    </javafxc>
-    <zip destfile="${javafx.scripts.jar}">
-      <fileset dir="${javafx.bin.dir}" includes="**/*.class"  />
-    </zip> 
+  	<javafxc srcdir="${javafx.src.dir}" destdir="${javafx.bin.dir}" includes="**/*.fx"
+      		compilerclasspath="${javafxc.classpath};${lib.classpath}"  />
+  	
   </target>
 </project>
