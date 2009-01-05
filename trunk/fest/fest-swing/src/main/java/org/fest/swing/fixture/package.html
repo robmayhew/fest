@@ -19,7 +19,7 @@ Copyright @2007-2008 the original author or authors.
 <body bgcolor="white">
 <p>
 The power and flexibility of FEST-Swing come from the fixtures in
-this package. Although you can use the <code>{@link org.fest.swing.core.RobotFixture}</code> directly, it is too
+this package. Although you can use the <code>{@link org.fest.swing.core.BasicRobot}</code> directly, it is too
 low-level and requires, in our opinion, too much code. FEST fixtures can simplify creation and maintenance of functional
 GUI tests by:
 <ol>
@@ -58,10 +58,10 @@ The test uses a <code>{@link org.fest.swing.fixture.FrameFixture}</code> to laun
 could also use individual fixtures to simulate user events, but it would result in more code to write and maintain:
 <pre>
 <code>
-  private {@link org.fest.swing.core.RobotFixture} robot;
+  private {@link org.fest.swing.core.BasicRobot} robot;
 
   &#64;BeforeMethod public void setUp() {
-    robot = RobotFixture.robotWithNewAwtHierarchy();
+    robot = BasicRobot.robotWithNewAwtHierarchy();
     robot.showWindow(new LoginWindow());
   }
 
@@ -80,7 +80,7 @@ could also use individual fixtures to simulate user events, but it would result 
 <p>
 <strong>Note:</strong> It is very important to clean up resources used by FEST (keyboard, mouse and opened windows) after
 each test; otherwise, the FEST robot will keep control of them and can make your computer pretty much unusable. To clean
-up resources call the method 'cleanUp' from <code>{@link org.fest.swing.core.RobotFixture}</code>,
+up resources call the method 'cleanUp' from <code>{@link org.fest.swing.core.BasicRobot}</code>,
 <code>{@link org.fest.swing.fixture.FrameFixture}</code> or <code>{@link org.fest.swing.fixture.DialogFixture}</code>.
 </p>
 <p>

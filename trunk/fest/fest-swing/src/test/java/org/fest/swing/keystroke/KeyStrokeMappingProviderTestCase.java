@@ -98,7 +98,7 @@ public abstract class KeyStrokeMappingProviderTestCase {
 
   private void pressInTextArea(KeyStroke keyStroke) {
     driver.pressAndReleaseKey(textArea, keyStroke.getKeyCode(), new int[] { keyStroke.getModifiers() });
-    pause(100);
+    pause(200);
   }
 
   static class KeyStrokeMappingIterator implements Iterator<Object[]> {

@@ -64,7 +64,7 @@ import static org.fest.util.Arrays.array;
 @Test(groups = GUI)
 public class BasicRobotTest {
 
-  private Robot robot;
+  private BasicRobot robot;
   private MyWindow window;
   private JTextField textFieldWithPopup;
   private JTextField textFieldWithoutPopup;
@@ -74,7 +74,7 @@ public class BasicRobotTest {
   }
   
   @BeforeMethod public void setUp() {
-    robot = BasicRobot.robotWithCurrentAwtHierarchy();
+    robot = (BasicRobot)BasicRobot.robotWithCurrentAwtHierarchy();
     window = MyWindow.createAndShow();
     textFieldWithPopup = window.textFieldWithPopup;
     textFieldWithoutPopup = window.textFieldWithoutPopup;
@@ -220,13 +220,15 @@ public class BasicRobotTest {
     KeyRecorder recorder = KeyRecorder.attachTo(textFieldWithPopup);
     int[] keys = { VK_A, VK_B, VK_Z };
     robot.pressAndReleaseKeys(keys);
+    robot.waitForIdle();
     assertThat(recorder).keysPressed(keys).keysReleased(keys);
   }
 
   public void shouldPressKeyAndModifiers() {
-    textFieldWithPopup.requestFocusInWindow();
+    robot.focusAndWaitForFocusGain(textFieldWithPopup);
     KeyPressRecorder recorder = KeyPressRecorder.attachTo(textFieldWithPopup);
     robot.pressAndReleaseKey(VK_C, new int[] { CTRL_MASK, SHIFT_MASK });
+    robot.waitForIdle();
     List<KeyAction> actions = recorder.actions;
     assertThat(actions).containsOnly(
         action(KEY_PRESSED,  VK_SHIFT),

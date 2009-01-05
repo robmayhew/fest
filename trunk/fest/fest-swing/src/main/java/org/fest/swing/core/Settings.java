@@ -69,7 +69,7 @@ public class Settings {
   
   /**
    * Updates the value representing the millisecond count in between generated events. Usually just set to 100-200 if
-   * you want to slow down the playback to simulate actual user input. The default is 30 milliseconds.
+   * you want to slow down the playback to simulate actual user input. The default is 60 milliseconds.
    * <p>
    * To change the speed of a GUI test, you need to change the values of both <code>delayBetweenEvents</code> and 
    * <code>eventPostingDelay</code>.
