@@ -4,7 +4,7 @@
 	<classpathentry kind="src" output="javafx-bin" path="src/test/javafx"/>
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JFX"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/FX"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/FEST"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
