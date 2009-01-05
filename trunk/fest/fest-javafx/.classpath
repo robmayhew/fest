@@ -4,32 +4,7 @@
 	<classpathentry kind="src" output="javafx-bin" path="src/test/javafx"/>
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/debug-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/fest-assert-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/fest-reflect-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/fest-util-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/jcip-annotations-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/MRJToolkitStubs-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/testng-5.7-jdk15.jar"/>
-	<classpathentry kind="lib" path="lib/fest-swing-1.0rc2.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/desktop/Decora-D3D.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/desktop/Decora-HW.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/desktop/Decora-OGL.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/desktop/Decora-SSE.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/desktop/eula.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/desktop/gluegen-rt.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/desktop/javafxgui.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/desktop/javafx-swing.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/desktop/jmc.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/desktop/jogl.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/desktop/rt15.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/desktop/Scenario.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/desktop/script-api.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/desktop/websvc.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/shared/asm-all-3.1.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/shared/javafxc.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/shared/javafxdoc.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/shared/javafxrt.jar"/>
-	<classpathentry kind="var" path="JAVAFX_HOME/lib/shared/toolchain.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JFX"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/FEST"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
