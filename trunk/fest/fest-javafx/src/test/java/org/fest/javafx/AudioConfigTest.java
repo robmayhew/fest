@@ -16,7 +16,7 @@
 package org.fest.javafx;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.javafx.desktop.launcher.ScriptLauncher.launch;
+import static org.fest.javafx.desktop.launcher.JavaFxClassLauncher.launch;
 import static org.fest.swing.core.matcher.FrameByTitleMatcher.withTitle;
 import static org.fest.swing.finder.WindowFinder.findFrame;
 
@@ -43,7 +43,7 @@ public class AudioConfigTest {
 
   @BeforeMethod public void setUp() throws Exception {
     robot = BasicRobot.robotWithNewAwtHierarchy();
-    launch("/org/fest/javafx/AudioConfigStage.fx");
+    launch(AudioConfigStage.class);
     main = findFrame(withTitle("Audio")).using(robot);
   }
   

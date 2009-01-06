@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="fest-javafx" default="compile" basedir="." >
+<project name="fest-javafx" default="jar" basedir="." >
   <property name="lib.dir" value="${basedir}/lib" />
   <property name="javafx.src.dir" value="${basedir}/src/test/javafx" />
   <property name="javafx.bin.dir" value="${basedir}/javafx-bin"/>
@@ -8,10 +8,12 @@
      <fileset dir="${javafxc.home}" includes="**/*.jar,**/*.zip" />
   </path>
   <target name="clean">
-  	 <delete dir="${basedir}/javafx-bin"/>
-  	 <mkdir dir="${basedir}/javafx-bin"/> 
-  </target>
-  <target name="compile" depends="clean">
+  	 <delete dir="${javafx.bin.dir}"/>
+  	 <mkdir dir="${javafx.bin.dir}"/> 
+  	 <delete file="${lib.dir}/javafx-classes.jar"/>
+ 	 <delete file="${lib.dir}/javafx-src.zip"/>
+  </target> 
+  <target name="compile">
     <taskdef classname="com.sun.tools.javafx.ant.JavaFxAntTask" classpathref="javafxc.classpath" name="javafxc"/>
     <javafxc destdir="${javafx.bin.dir}" 
                  compilerclasspathref="javafxc.classpath"
@@ -19,5 +21,11 @@
                  verbose="true"> 
           <src path="${javafx.src.dir}" />
     </javafxc>
+  </target>
+  <target name="jar" depends="clean,compile">
+  	<jar destfile="${lib.dir}/javafx-classes.jar" 
+  	    basedir="${javafx.bin.dir}" />
+    <zip destfile="${lib.dir}/javafx-src.zip" 
+    	basedir="${javafx.bin.dir}" />
   </target>
 </project>

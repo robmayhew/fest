@@ -5,6 +5,6 @@
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JFX"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/FEST"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Libs"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
