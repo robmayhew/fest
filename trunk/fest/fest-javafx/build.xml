@@ -11,7 +11,11 @@
   <path id="lib.classpath">
 	 <fileset dir="${lib.dir}" includes="**/*.jar,**/*.zip" />
   </path>
-  <target name="compile">
+  <target name="clean">
+  	 <delete dir="${basedir}/javafx-bin"/>
+  	 <mkdir dir="${basedir}/javafx-bin"/> 
+  </target>
+  <target name="compile" depends="clean">
     <path id="lib.classpath">
       <fileset dir="${lib.dir}" includes="**/*.jar,**/*.zip" />
     </path>
