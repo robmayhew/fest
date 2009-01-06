@@ -1,28 +1,18 @@
 <?xml version="1.0"?>
 <project name="fest-javafx" default="compile" basedir="." >
-  <property name="lib.dir" value="${basedir}/javafx2/lib" />
+  <property name="lib.dir" value="${basedir}/lib" />
   <property name="javafx.src.dir" value="${basedir}/src/test/javafx" />
   <property name="javafx.bin.dir" value="${basedir}/javafx-bin"/>
   <property name="javafxc.home" value="${basedir}/javafx2/lib" />
-  
   <path id="javafxc.classpath">
      <fileset dir="${javafxc.home}" includes="**/*.jar,**/*.zip" />
-  </path>
-  <path id="lib.classpath">
-	 <fileset dir="${lib.dir}" includes="**/*.jar,**/*.zip" />
   </path>
   <target name="clean">
   	 <delete dir="${basedir}/javafx-bin"/>
   	 <mkdir dir="${basedir}/javafx-bin"/> 
   </target>
   <target name="compile" depends="clean">
-    <path id="lib.classpath">
-      <fileset dir="${lib.dir}" includes="**/*.jar,**/*.zip" />
-    </path>
     <taskdef classname="com.sun.tools.javafx.ant.JavaFxAntTask" classpathref="javafxc.classpath" name="javafxc"/>
-    <copy todir="${javafx.bin.dir}">
-      <fileset dir="${javafx.src.dir}" includes="**/*.fx" />
-    </copy> 
     <javafxc destdir="${javafx.bin.dir}" 
                  compilerclasspathref="javafxc.classpath"
                  debug="compiler.debug"
