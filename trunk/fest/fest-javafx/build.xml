@@ -18,13 +18,12 @@
     <taskdef classname="com.sun.tools.javafx.ant.JavaFxAntTask" classpathref="javafxc.classpath" name="javafxc"/>
     <copy todir="${javafx.bin.dir}">
       <fileset dir="${javafx.src.dir}" includes="**/*.fx" />
-    </copy>
+    </copy> 
     <javafxc destdir="${javafx.bin.dir}" 
                  compilerclasspathref="javafxc.classpath"
                  debug="compiler.debug"
                  verbose="true"> 
           <src path="${javafx.src.dir}" />
-          <classpath refid="lib.classpath" />
     </javafxc>
   </target>
 </project>
