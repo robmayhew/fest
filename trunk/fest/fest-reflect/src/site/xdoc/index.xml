@@ -3,63 +3,12 @@
 
 	<properties>
 		<title>Welcome</title>
+    <!--meta HTTP-EQUIV="REFRESH" content="0; url=http://fest.easytesting.org/reflect/index.php" /-->
 	</properties>
 
-	<body>
-		<section name="Welcome to the FEST Reflection Module">
-			<p>
-			  FEST-Reflect is a Java library that provides a 
-			  <a href="http://martinfowler.com/bliki/FluentInterface.html" target="_blank">Fluent Interface</a>-based
-			  API that simplifies the usage of 
-			  <a href="http://java.sun.com/docs/books/tutorial/reflect/" target="_blank">Java Reflection</a>, resulting in
-			  improved readability and type safety. 
-			</p>
-			<p>  
-			  It can be downloaded 
-			  <a href="http://code.google.com/p/fest/downloads/list" target="_blank">here</a>. For
-			  <a href="http://maven.apache.org/" target="_blank">Maven 2</a> users, the project's repository can be found at 
-			  <a href="http://fest.googlecode.com/svn/trunk/fest/m2/repository/" target="_blank">http://fest.googlecode.com/svn/trunk/fest/m2/repository/</a>
-			  (groupId: fest, artifactId: fest-reflect).
-			</p>
-			<subsection name="Examples">
-			  <p>
-			    The following examples demonstrate how easy is to access constructors, methods and fields using 
-			    FEST-Reflect:
-			  </p>
-        <p>
-            <pre class="prettyprint">
-<span class="typ">Person</span> person = <span class="fnc">constructor</span>().<span class="fnc">withParameterTypes</span>(String.<span class="kwd">class</span>)
-                             .<span class="fnc">in</span>(Person.<span class="kwd">class</span>)
-                             .<span class="fnc">newInstance</span>(<span class="str">&quot;Yoda&quot;</span>);
-                             
-<span class="fnc">method</span>(<span class="str">&quot;setName&quot;</span>).<span class="fnc">withParameterTypes</span>(String.<span class="kwd">class</span>)
-                 .<span class="fnc">in</span>(person)
-                 .<span class="fnc">invoke</span>(<span class="str">&quot;Luke&quot;</span>);
-                 
-<span class="fnc">field</span>(<span class="str">&quot;name&quot;</span>).<span class="fnc">ofType</span>(String.<span class="kwd">class</span>)
-             .<span class="fnc">in</span>(person)
-             .<span class="fnc">set</span>(<span class="str">&quot;Anakin&quot;</span>);</pre>          
-			  </p>
-			</subsection>
-			<subsection name="Links">
-			 <p>
-				 <ul>
-				   <li><a href="constructor.html">Invoking Constructors</a></li>
-	         <li><a href="method.html">Invoking Methods</a></li>
-           <li><a href="static-method.html">Invoking Static Methods</a></li>
-	         <li><a href="field.html">Accessing Fields</a></li>
-           <li><a href="static-field.html">Accessing Static Fields</a></li>
-				 </ul>
-			 </p>
-			</subsection>
-			<subsection name="References">
-			 <p>
-	       <ul>
-	         <li><a href="http://www.infoq.com/articles/internal-dsls-java" target="_blank">An Approach to Internal Domain-Specific Languages in Java</a></li>
-	         <li><a href="http://java.sun.com/docs/books/tutorial/reflect/" target="_blank">Java Reflection</a></li>
-	       </ul>
-			 </p>
-			</subsection>
-		</section>
-	</body>
+  <body>
+    <p>
+    You are being redirected to the <a href="index.php">wiki page</a>.
+    </p>
+  </body>
 </document>

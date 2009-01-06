@@ -5,40 +5,21 @@
 		<artifactId>fest-site-skin</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</skin>
-	
 	<bannerLeft>
 		<name>FEST-Reflect</name>
 		<src>/images/fest-reflect.png</src>
-		<href>index.html</href>
+		<href>index.php</href>
 	</bannerLeft>
+  <poweredBy>
+    <logo name="Built with Maven 2" href="http://maven.apache.org"
+      img="images/logos/maven-feather.png" />
+  </poweredBy>
 
 	<body>
 		<breadcrumbs>
-			<item name="FEST" href="../index.html" />
-      <item name="Reflection" href="index.html"/>
+			<item name="FEST" href="../index.php" />
+      <item name="Reflection" href="index.php"/>
     </breadcrumbs>
-
-		<menu name="Overview">
-			<item name="Introduction" href="index.html" />
-      <item name="Changelog" href="changes-report.html" />
-			<item name="Javadocs" href="apidocs/index.html" />
-		</menu>
-		
-		<menu name="Features">
-      <item name="Constructors" href="constructor.html" />
-      <item name="Methods" href="method.html" />
-      <item name="Static Methods" href="static-method.html" />
-      <item name="Fields" href="field.html" />
-      <item name="Static Fields" href="static-field.html" />
-		</menu>
-
-		<menu name="FEST Modules">
-			<item name="FEST-Swing" href="../swing/index.html" />
-			<item name="FEST-Assert" href="../assert/index.html" />
-			<item name="FEST-Reflect" href="../reflect/index.html" />
-			<item name="FEST-Mocks" href="../mocks/index.html" />
-		</menu>
-
 		<menu ref="reports"/>		
 	</body>
 </project>
