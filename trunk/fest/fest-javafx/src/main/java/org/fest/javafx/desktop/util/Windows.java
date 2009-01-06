@@ -23,20 +23,24 @@ import com.sun.javafx.stage.FrameStageDelegate;
 
 /**
  * Understands utilities related to JavaFX's desktop profile.
- *
+ * 
  * @author Alex Ruiz
  */
 public final class Windows {
 
-  /**
-   * Returns the <code>{@link JFrame}</code> stored in the given JavaFX stage.
-   * @param stage the given JavaFX stage.
-   * @return the <code>JFrame</code> from given JavaFX stage.
-   */
-  public static JFrame frameFrom(Stage stage) {
-    FrameStageDelegate frameDelegate = (FrameStageDelegate) stage.get$impl_stageDelegate().get();
-    return (JFrame) frameDelegate.get$window().get();
-  }
-  
-  private Windows() {}
+	/**
+	 * Returns the <code>{@link JFrame}</code> stored in the given JavaFX stage.
+	 * 
+	 * @param stage
+	 *            the given JavaFX stage.
+	 * @return the <code>JFrame</code> from given JavaFX stage.
+	 */
+	public static JFrame frameFrom(Stage stage) {
+		FrameStageDelegate frameDelegate = (FrameStageDelegate) stage
+				.get$impl_stageDelegate().get();
+		return (JFrame) frameDelegate.get$window().get();
+	}
+
+	private Windows() {
+	}
 }

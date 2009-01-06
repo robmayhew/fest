@@ -17,17 +17,20 @@ package org.fest.javafx;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.javafx.desktop.launcher.JavaFxClassLauncher.launch;
-import static org.fest.swing.core.matcher.FrameByTitleMatcher.withTitle;
-import static org.fest.swing.finder.WindowFinder.findFrame;
+
+import javax.swing.JFrame;
 
 import org.fest.swing.core.BasicRobot;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
-import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.timing.Pause;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import com.sun.javafx.scene.JSGPanelImpl;
+import com.sun.scenario.scenegraph.SGNode;
 
 /**
  * @author Michael Huettermann
@@ -35,7 +38,7 @@ import org.testng.annotations.Test;
 public class AudioConfigTest {
   
   private Robot robot;
-  private FrameFixture main;
+  private JFrame frame;
   
   @BeforeClass public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
@@ -43,8 +46,7 @@ public class AudioConfigTest {
 
   @BeforeMethod public void setUp() throws Exception {
     robot = BasicRobot.robotWithNewAwtHierarchy();
-    launch(AudioConfigStage.class);
-    main = findFrame(withTitle("Audio")).using(robot);
+    frame=launch(AudioConfigStage.class);
   }
   
   @AfterMethod public void tearDown() {
@@ -56,4 +58,12 @@ public class AudioConfigTest {
 	  assertThat(0==0);
   }
   
+  @Test
+  public void testBla() {
+	  JSGPanelImpl panel = (JSGPanelImpl) frame.getLayeredPane()
+				.getComponent(0);
+		SGNode scene = 
+			panel.getScene();
+		Pause.pause(30000);
+	}
 }

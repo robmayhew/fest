@@ -17,21 +17,18 @@ package org.fest.javafx;
 
 import static java.awt.event.InputEvent.BUTTON1_MASK;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.javafx.desktop.launcher.ScriptLauncher.launch;
-import static org.fest.swing.core.matcher.FrameByTitleMatcher.withTitle;
-import static org.fest.swing.finder.WindowFinder.findFrame;
+import static org.fest.javafx.desktop.launcher.JavaFxClassLauncher.launch;
+import static org.fest.javafx.finder.ButtonFinder.nodeWithButton;
+import static org.fest.javafx.finder.TextFinder.nodeWithTextBox;
 
-import java.awt.Component;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import org.fest.swing.core.BasicRobot;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
-import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.timing.Pause;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -39,7 +36,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.sun.javafx.scene.JSGPanelImpl;
-import com.sun.scenario.scenegraph.SGComponent;
 import com.sun.scenario.scenegraph.SGNode;
 import com.sun.scenario.scenegraph.SGParent;
 import com.sun.scenario.scenegraph.SGText;
@@ -55,7 +51,7 @@ public class ClickButtonTest {
   
   private Robot robot;
   private java.awt.Robot realRobot;
-  private FrameFixture calculator;
+  private JFrame frame;
   
   @BeforeClass public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
@@ -64,8 +60,7 @@ public class ClickButtonTest {
   @BeforeMethod public void setUp() throws Exception {
     robot = BasicRobot.robotWithNewAwtHierarchy();
     realRobot = new java.awt.Robot();
-    launch("/org/fest/javafx/Calculator.fx");
-    calculator = findFrame(withTitle("Calculator")).using(robot);
+    frame=launch(Calculator.class);
   }
 
   @AfterMethod public void tearDown() {
@@ -73,7 +68,6 @@ public class ClickButtonTest {
   }
   
   public void shouldUpdateTextBoxWithPressedNumber() {
-    JFrame frame = calculator.targetCastedTo(JFrame.class);
     JSGPanelImpl panel = (JSGPanelImpl)frame.getLayeredPane().getComponent(0);   
     SGNode scene = panel.getScene();
     SGParent parent = scene.getParent();
@@ -86,45 +80,6 @@ public class ClickButtonTest {
     click(nodeWithButton6);
     assertThat(textNode.getText()).isEqualTo("86");
     Pause.pause(3000);
-  }
-  
-  private static FXNode nodeWithButton(String text, SGParent root) {
-    for (SGNode child : root.getChildren()) {
-      if (child instanceof FXNode) {
-        FXNode fxNode = (FXNode) child;
-        SGNode leaf = fxNode.getLeaf();
-        if (leaf instanceof SGComponent) {
-          SGComponent componentNode = (SGComponent) leaf;
-          Component component = componentNode.getComponent();
-          if (component instanceof JButton) {
-            JButton button = (JButton) component;
-            if (text.equals(button.getText())) return fxNode;
-          }
-        }
-      }
-      if (child instanceof SGParent) {
-        SGParent newRoot = (SGParent) child;
-        FXNode fxNode = nodeWithButton(text, newRoot);
-        if (fxNode != null) return fxNode;
-      }
-    }
-    return null;
-  }
-
-  private static FXNode nodeWithTextBox(SGParent root) {
-    for (SGNode child : root.getChildren()) {
-      if (child instanceof FXNode) {
-        FXNode fxNode = (FXNode) child;
-        SGNode leaf = fxNode.getLeaf();
-        if (leaf instanceof SGText) return fxNode;
-      }
-      if (child instanceof SGParent) {
-        SGParent newRoot = (SGParent) child;
-        FXNode fxNode = nodeWithTextBox(newRoot);
-        if (fxNode != null) return fxNode;
-      }
-    }
-    return null;
   }
 
   private void click(FXNode node) {
