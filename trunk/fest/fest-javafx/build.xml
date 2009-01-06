@@ -3,7 +3,7 @@
   <property name="lib.dir" value="${basedir}/javafx2/lib" />
   <property name="javafx.src.dir" value="${basedir}/src/test/javafx" />
   <property name="javafx.bin.dir" value="${basedir}/javafx-bin"/>
-  <property name="javafxc.home" value="${basedir}/javafx2" />
+  <property name="javafxc.home" value="${basedir}/javafx2/lib" />
   
   <path id="javafxc.classpath">
      <fileset dir="${javafxc.home}" includes="**/*.jar,**/*.zip" />
@@ -19,8 +19,12 @@
     <copy todir="${javafx.bin.dir}">
       <fileset dir="${javafx.src.dir}" includes="**/*.fx" />
     </copy>
-  	<javafxc srcdir="${javafx.src.dir}" destdir="${javafx.bin.dir}" includes="**/*.fx"
-      		compilerclasspath="${javafxc.classpath};${lib.classpath}"  />
-  	
+    <javafxc destdir="${javafx.bin.dir}" 
+                 compilerclasspathref="javafxc.classpath"
+                 debug="compiler.debug"
+                 verbose="true"> 
+          <src path="${javafx.src.dir}" />
+          <classpath refid="lib.classpath" />
+    </javafxc>
   </target>
 </project>
