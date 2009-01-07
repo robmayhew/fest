@@ -7,12 +7,6 @@
   <version>1.0</version>
   <packaging>pom</packaging>
   <name>FEST: Fixtures for Easy Software Testing</name>
-  <modules>
-    <module>fest-assert</module>
-    <module>fest-mocks</module>
-    <module>fest-test</module>
-    <module>fest-util</module>
-  </modules>
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
