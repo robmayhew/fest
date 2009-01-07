@@ -10,6 +10,12 @@
   <name>FEST Util</name>
   <description>Utility methods used by FEST modules</description>
   <inceptionYear>2007</inceptionYear>
+  <url>http://code.google.com/p/fest/</url>
+  <parent>
+    <groupId>fest</groupId>
+    <artifactId>fest</artifactId>
+    <version>1.0</version>
+  </parent>
   <mailingLists>
     <mailingList>
       <name>Easy Testing Group</name>
