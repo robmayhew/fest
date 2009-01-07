@@ -12,6 +12,7 @@
       <outputDirectory>lib</outputDirectory>
       <scope>runtime</scope>
     </dependencySet>
+    <!-- Copy source of dependencies -->
     <dependencySet>
       <useProjectArtifact>false</useProjectArtifact>
       <outputFileNameMapping>${artifact.artifactId}-${artifact.version}${dashClassifier?}-source.${artifact.extension}</outputFileNameMapping>
