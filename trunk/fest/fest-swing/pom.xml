@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="htt//maven.apache.org/POM/4.0.0" xmlns:xsi="htt//www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="htt//maven.apache.org/POM/4.0.0 htt//maven.apache.org/maven-v4_0_0.xsd ">
-  
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd ">
+
   <modelVersion>4.0.0</modelVersion>
   <groupId>fest</groupId>
   <artifactId>fest-swing</artifactId>
-  <version>1.0rc2</version>
+  <version>1.0</version>
   <name>FEST Swing</name>
   <description>Fluent interface for functional GUI testing
   </description>
   <inceptionYear>2007</inceptionYear>
-  <url>http://fest.easytesting.org/swing
-  </url>
+  <url>http://fest.easytesting.org/swing</url>
+  <parent>
+    <groupId>fest</groupId>
+    <artifactId>fest</artifactId>
+    <version>1.0</version>
+  </parent>
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
@@ -44,12 +48,6 @@
     <url>http://code.google.com/p/fest/issues
     </url>
   </issueManagement>
-  <!--parent> 
-    <groupId>fest</groupId>
-    <artifactId>pom-template</artifactId> 
-    <version>1.0</version>
-    <relativePath>../pom-template</relativePath> 
-  </parent-->
   <dependencies>
     <dependency>
       <groupId>mrj</groupId>
@@ -62,12 +60,6 @@
       <artifactId>testng</artifactId>
       <version>5.7</version>
       <classifier>jdk15</classifier>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>reportng</groupId>
-      <artifactId>reportng</artifactId>
-      <version>0.9.6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -103,13 +95,13 @@
     <dependency>
       <groupId>net.jcip</groupId>
       <artifactId>jcip-annotations</artifactId>
-      <version>1.0</version>    
+      <version>1.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>swinghelper</groupId>
       <artifactId>debug</artifactId>
-      <version>1.0</version>   
+      <version>1.0</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
