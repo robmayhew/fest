@@ -11,6 +11,11 @@
   <description>Fluent Interface that simplifies usage of Java Reflection</description>
   <inceptionYear>2007</inceptionYear>
   <url>http://code.google.com/p/fest/</url>
+  <parent>
+    <groupId>fest</groupId>
+    <artifactId>fest</artifactId>
+    <version>1.0</version>
+  </parent>
   <mailingLists>
     <mailingList>
       <name>Easy Testing Group</name>
@@ -28,12 +33,6 @@
     <system>Google Code</system>
     <url>http://code.google.com/p/fest/issues</url>
   </issueManagement>
-  <parent>
-    <groupId>fest</groupId>
-    <artifactId>pom-template</artifactId>
-    <version>1.0</version>
-    <relativePath>../pom-template</relativePath>
-  </parent>
 	<dependencies>
 		<dependency>
 			<groupId>fest</groupId>
@@ -61,4 +60,25 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptors>
+            <descriptor>src/main/assembly/src.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attached</goal>
+            </goals>
+          </execution>
+        </executions>  
+      </plugin>    
+    </plugins>
+  </build>
 </project>

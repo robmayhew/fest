@@ -1,4 +1,0 @@
-<?xml version="1.0"?>
-<project name="fest-util" default="all" basedir="." xmlns:artifact="urn:maven-artifact-ant">
-	<import file="../build-template.xml" />
-</project>
