@@ -12,7 +12,7 @@
  * 
  * Copyright @2007-2008 the original author or authors.
  */
-package org.fest.swing.core;
+package org.fest.swing.hierarchy;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.fest.swing.hierarchy.ComponentHierarchy;
-
 import static javax.swing.SwingUtilities.isDescendingFrom;
 
 /**
@@ -30,7 +28,7 @@ import static javax.swing.SwingUtilities.isDescendingFrom;
  * 
  * @author Alex Ruiz
  */
-final class SingleComponentHierarchy implements ComponentHierarchy {
+public final class SingleComponentHierarchy implements ComponentHierarchy {
 
   private final Container root;
   private final List<Container> list = new ArrayList<Container>();
@@ -38,7 +36,7 @@ final class SingleComponentHierarchy implements ComponentHierarchy {
 
   /**
    * Creates a new </code>{@link SingleComponentHierarchy}</code>.
-   * @param root the root component of this hierarchy
+   * @param root the root component for this hierarchy
    * @param hierarchy the base component hierarchy.
    */
   public SingleComponentHierarchy(Container root, ComponentHierarchy hierarchy) {
@@ -47,7 +45,11 @@ final class SingleComponentHierarchy implements ComponentHierarchy {
     list.add(root);
   }
 
-  Container root() { return root; }
+  /**
+   * Returns the root component in this hierarchy.
+   * @return the root component in this hierarchy.
+   */
+  public Container root() { return root; }
   
   /** 
    * Returns the parent component for the given <code>{@link Component}</code>.

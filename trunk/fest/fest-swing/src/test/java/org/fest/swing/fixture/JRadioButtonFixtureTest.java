@@ -70,12 +70,38 @@ public class JRadioButtonFixtureTest extends CommonComponentFixtureTestCase<JRad
   @Test public void shouldRequireText() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.requireText(target, "A CheckBox");
+        driver.requireText(target, "A Radio Button");
         expectLastCall().once();
       }
       
       protected void codeToTest() {
-        assertThatReturnsThis(fixture.requireText("A CheckBox"));
+        assertThatReturnsThis(fixture.requireText("A Radio Button"));
+      }
+    }.run();
+  }
+  
+  public void shouldSelectRadioButton() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.select(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.check());
+      }
+    }.run();
+  }
+  
+  public void shoulUnselectRadioButton() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.unselect(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.uncheck());
       }
     }.run();
   }

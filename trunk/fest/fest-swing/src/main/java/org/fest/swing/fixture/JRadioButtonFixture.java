@@ -78,6 +78,28 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
 
   /**
+   * Checks (or selects) this fixture's <code>{@link JRadioButton}</code> only it is not already checked.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is not showing on the screen.
+   */
+  public JRadioButtonFixture check() {
+    driver.select(target);
+    return this;
+  }
+
+  /**
+   * Unchecks this fixture's <code>{@link JRadioButton}</code> only if it is checked.
+   * @return this fixture.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is not showing on the screen.
+   */
+  public JRadioButtonFixture uncheck() {
+    driver.unselect(target);
+    return this;
+  }
+
+  /**
    * Simulates a user clicking this fixture's <code>{@link JRadioButton}</code>.
    * @return this fixture.
    * @throws IllegalStateException if this fixture's <code>JRadioButton</code> is disabled.

@@ -27,6 +27,7 @@ import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 import org.fest.swing.hierarchy.ExistingHierarchy;
+import org.fest.swing.hierarchy.SingleComponentHierarchy;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
