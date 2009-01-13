@@ -28,6 +28,9 @@
       <action dev="alruiz" type="fix" issue="280">
         Replaced JLabelByTextMatcher with JLabelMatcher in package org.fest.swing.core.matcher.
       </action>
+      <action dev="alruiz" type="add" issue="281" due-to="Konrad Garus">
+        Class org.fest.swing.fixture.ContainerFixture implements interface org.fest.swing.fixture.ComponentContainerFixture.
+      </action>
       <action dev="alruiz" type="fix">
         Moved SingleComponentHierarchy from package org.fest.swing.core to org.fest.swing.hierarchy.
       </action>
