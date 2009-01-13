@@ -18,6 +18,7 @@ package org.fest.swing.core.matcher;
 import javax.swing.JButton;
 
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
@@ -32,36 +33,73 @@ import static org.fest.swing.test.builder.JButtons.button;
 import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**
- * Tests for <code>{@link JButtonByTextMatcher}</code>.
+ * Tests for <code>{@link JButtonMatcher}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test public class JButtonByTextMatcherTest {
+@Test public class JButtonMatcherTest {
 
   @BeforeClass public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
   }
 
-  public void shouldReturnTrueIfTitleIsEqualToExpected() {
+  public void shouldReturnTrueIfNameIsEqualToExpected() {
+    String name = "button";
+    JButtonMatcher matcher = JButtonMatcher.withName(name);
+    JButton button = button().withName(name).createNew();
+    assertThat(matcher.matches(button)).isTrue();
+  }
+
+  public void shouldReturnFalseIfNameIsNotEqualToExpected() {
+    JButtonMatcher matcher = JButtonMatcher.withName("button");
+    JButton button = button().withName("label").createNew();
+    assertThat(matcher.matches(button)).isFalse();
+  }
+
+  public void shouldReturnTrueIfNameAndTextAreEqualToExpected() {
+    String name = "button";
     String text = "Hello";
-    JButtonByTextMatcher matcher = JButtonByTextMatcher.withText(text);
+    JButtonMatcher matcher = JButtonMatcher.withName(name).andText(text);
+    JButton button = button().withName(name).withText(text).createNew();
+    assertThat(matcher.matches(button)).isTrue();
+  }
+
+  @Test(dataProvider = "notMatchingNameAndText")
+  public void shouldReturnFalseIfNameAndTextAreNotEqualToExpected(String name, String text) {
+    JButtonMatcher matcher = JButtonMatcher.withName("someName").andText("someText");
+    JButton button = button().withName(name).withText(text).createNew();
+    assertThat(matcher.matches(button)).isFalse();
+  }
+  
+  @DataProvider(name = "notMatchingNameAndText")
+  public Object[][] notMatchingNameAndText() {
+    return new Object[][] {
+        { "someName", "text" },
+        { "name", "someText" },
+        { "name", "text" }
+    };
+  }
+
+  public void shouldReturnTrueIfTextIsEqualToExpected() {
+    String text = "Hello";
+    JButtonMatcher matcher = JButtonMatcher.withText(text);
     JButton button = button().withText(text).createNew();
     assertThat(matcher.matches(button)).isTrue();
   }
 
-  public void shouldReturnFalseIfTitleIsNotEqualToExpected() {
-    JButtonByTextMatcher matcher = JButtonByTextMatcher.withText("Hello");
+  public void shouldReturnFalseIfTextIsNotEqualToExpected() {
+    JButtonMatcher matcher = JButtonMatcher.withText("Hello");
     JButton button = button().withText("Bye").createNew();
     assertThat(matcher.matches(button)).isFalse();
   }
 
   @Test(groups = GUI)
-  public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
+  public void shouldReturnTrueIfButtonIsShowingAndTextIsEqualToExpected() {
     ScreenLock.instance().acquire(this);
     MyWindow window = MyWindow.createAndShow();
     try {
-      JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing("Hello");
+      JButtonMatcher matcher = JButtonMatcher.withText("Hello").andShowing();
       assertThat(matcher.matches(window.button)).isTrue();
     } finally {
       window.destroy();
@@ -69,19 +107,19 @@ import static org.fest.swing.test.core.TestGroups.GUI;
     }
   }
 
-  public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsEqualToExpected() {
+  public void shouldReturnFalseIfButtonIsNotShowingAndTextIsEqualToExpected() {
     String text = "Hello";
-    JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing(text);
+    JButtonMatcher matcher = JButtonMatcher.withText(text).andShowing();
     JButton button = button().withText(text).createNew();
     assertThat(matcher.matches(button)).isFalse();
   }
 
   @Test(groups = GUI)
-  public void shouldReturnFalseIfFrameIsShowingAndTextIsNotEqualToExpected() {
+  public void shouldReturnFalseIfButtonIsShowingAndTextIsNotEqualToExpected() {
     ScreenLock.instance().acquire(this);
     MyWindow window = MyWindow.createAndShow();
     try {
-      JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing("Bye");
+      JButtonMatcher matcher = JButtonMatcher.withText("Bye").andShowing();
       assertThat(matcher.matches(window.button)).isFalse();
     } finally {
       window.destroy();
@@ -89,8 +127,8 @@ import static org.fest.swing.test.core.TestGroups.GUI;
     }
   }
 
-  public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsNotEqualToExpected() {
-    JButtonByTextMatcher matcher = JButtonByTextMatcher.withTextAndShowing("Hello");
+  public void shouldReturnFalseIfButtonIsNotShowingAndTextIsNotEqualToExpected() {
+    JButtonMatcher matcher = JButtonMatcher.withText("Hello").andShowing();
     JButton button = button().withText("Bye").createNew();
     assertThat(matcher.matches(button)).isFalse();
   }
@@ -112,7 +150,7 @@ import static org.fest.swing.test.core.TestGroups.GUI;
     final JButton button = new JButton("Hello");
 
     private MyWindow() {
-      super(JButtonByTextMatcherTest.class);
+      super(JButtonMatcherTest.class);
       addComponents(button);
     }
   }

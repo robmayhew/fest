@@ -27,7 +27,7 @@ import org.fest.swing.annotation.RunsInCurrentThread;
  */
 public abstract class AbstractComponentMatcher implements ComponentMatcher {
 
-  private final boolean requireShowing;
+  private boolean requireShowing;
 
   /**
    * Creates a new </code>{@link AbstractComponentMatcher}</code>.
@@ -41,15 +41,23 @@ public abstract class AbstractComponentMatcher implements ComponentMatcher {
    * @param requireShowing indicates if the component to match should be showing or not.
    */
   public AbstractComponentMatcher(boolean requireShowing) {
-    this.requireShowing = requireShowing;
+    requireShowing(requireShowing);
   }
 
   /**
    * Indicates whether the component to match has to be showing.
    * @return <code>true</code> if the component to find has to be showing, <code>false</code> otherwise.
    */
-  public final boolean requireShowing() { return requireShowing; }
+  protected final boolean requireShowing() { return requireShowing; }
 
+  /**
+   * Updates the value of the flag that indicates if the component to match should be showing or not.
+   * @param shouldBeShowing the new value to set.
+   */
+  protected final void requireShowing(boolean shouldBeShowing) {
+    requireShowing = shouldBeShowing;
+  }
+  
   /**
    * Indicates if the value of the "showing" property of the given component matches the value specified in this
    * matcher.

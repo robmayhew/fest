@@ -25,7 +25,7 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.exception.ComponentLookupException;
 
-import static org.fest.swing.core.matcher.JButtonByTextMatcher.withTextAndShowing;
+import static org.fest.swing.core.matcher.JButtonMatcher.withText;
 import static org.fest.swing.driver.JFileChooserApproveButtonTextQuery.approveButtonTextFrom;
 import static org.fest.swing.driver.JFileChooserCancelButtonTextQuery.cancelButtonText;
 import static org.fest.swing.driver.JFileChooserSelectFileTask.validateAndSelectFile;
@@ -140,7 +140,7 @@ public class JFileChooserDriver extends JComponentDriver {
 
   @RunsInEDT
   private JButton findButton(JFileChooser fileChooser, String logicalName, String text) {
-    JButton button = robot.finder().find(fileChooser, withTextAndShowing(text));
+    JButton button = robot.finder().find(fileChooser, withText(text).andShowing());
     if (button == null) throw cannotFindButton(logicalName, text);
     return button;
   }

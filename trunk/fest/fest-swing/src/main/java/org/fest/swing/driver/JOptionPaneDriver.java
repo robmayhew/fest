@@ -23,7 +23,7 @@ import javax.swing.text.JTextComponent;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
-import org.fest.swing.core.matcher.JButtonByTextMatcher;
+import org.fest.swing.core.matcher.JButtonMatcher;
 import org.fest.swing.exception.ComponentLookupException;
 
 import static javax.swing.JOptionPane.*;
@@ -149,7 +149,7 @@ public class JOptionPaneDriver extends JComponentDriver {
    */
   @RunsInEDT
   public JButton buttonWithText(JOptionPane optionPane, String text) {
-    return robot.finder().find(optionPane, JButtonByTextMatcher.withTextAndShowing(text));
+    return robot.finder().find(optionPane, JButtonMatcher.withText(text).andShowing());
   }
 
   /**

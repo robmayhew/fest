@@ -18,6 +18,7 @@ package org.fest.swing.core.matcher;
 import javax.swing.JDialog;
 
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
@@ -30,26 +31,63 @@ import static org.fest.swing.test.builder.JDialogs.dialog;
 import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**
- * Tests for <code>{@link DialogByTitleMatcher}</code>.
+ * Tests for <code>{@link DialogMatcher}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test public class DialogByTitleMatcherTest {
+@Test public class DialogMatcherTest {
 
   @BeforeMethod public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
   }
   
+  public void shouldReturnTrueIfNameIsEqualToExpected() {
+    String name = "dialog";
+    DialogMatcher matcher = DialogMatcher.withName(name);
+    JDialog dialog = dialog().withName(name).createNew();
+    assertThat(matcher.matches(dialog)).isTrue();
+  }
+
+  public void shouldReturnFalseIfNameIsNotEqualToExpected() {
+    DialogMatcher matcher = DialogMatcher.withName("dialog");
+    JDialog dialog = dialog().withName("label").createNew();
+    assertThat(matcher.matches(dialog)).isFalse();
+  }
+
+  public void shouldReturnTrueIfNameAndTitleAreEqualToExpected() {
+    String name = "dialog";
+    String title = "Hello";
+    DialogMatcher matcher = DialogMatcher.withName(name).andTitle(title);
+    JDialog dialog = dialog().withName(name).withTitle(title).createNew();
+    assertThat(matcher.matches(dialog)).isTrue();
+  }
+
+  @Test(dataProvider = "notMatchingNameAndTitle")
+  public void shouldReturnFalseIfNameAndTitleAreNotEqualToExpected(String name, String title) {
+    DialogMatcher matcher = DialogMatcher.withName("someName").andTitle("someTitle");
+    JDialog dialog = dialog().withName(name).withTitle(title).createNew();
+    assertThat(matcher.matches(dialog)).isFalse();
+  }
+  
+  @DataProvider(name = "notMatchingNameAndTitle")
+  public Object[][] notMatchingNameAndTitle() {
+    return new Object[][] {
+        { "someName", "title" },
+        { "name", "someTitle" },
+        { "name", "title" }
+    };
+  }
+
   public void shouldReturnTrueIfTitleIsEqualToExpected() {
     String title = "Hello";
-    DialogByTitleMatcher matcher = DialogByTitleMatcher.withTitle(title);
+    DialogMatcher matcher = DialogMatcher.withTitle(title);
     JDialog dialog = dialog().withTitle(title).createNew();
     assertThat(matcher.matches(dialog)).isTrue();
   }
 
   public void shouldReturnFalseIfTitleIsNotEqualToExpected() {
-    DialogByTitleMatcher matcher = DialogByTitleMatcher.withTitle("Hello");
+    DialogMatcher matcher = DialogMatcher.withTitle("Hello");
     JDialog dialog = dialog().withTitle("Bye").createNew();
     assertThat(matcher.matches(dialog)).isFalse();
   }
@@ -60,7 +98,7 @@ import static org.fest.swing.test.core.TestGroups.GUI;
     String title = "Hello";
     JDialog dialog = dialog().withTitle(title).createAndShow();
     try {
-      DialogByTitleMatcher matcher = DialogByTitleMatcher.withTitleAndShowing(title);
+      DialogMatcher matcher = DialogMatcher.withTitle(title).andShowing();
       assertThat(matcher.matches(dialog)).isTrue();
     } finally {
       ScreenLock.instance().release(this);
@@ -69,7 +107,7 @@ import static org.fest.swing.test.core.TestGroups.GUI;
 
   public void shouldReturnFalseIfDialogIsNotShowingAndTitleIsEqualToExpected() {
     String title = "Hello";
-    DialogByTitleMatcher matcher = DialogByTitleMatcher.withTitleAndShowing(title);
+    DialogMatcher matcher = DialogMatcher.withTitle(title).andShowing();
     JDialog dialog = dialog().withTitle(title).createNew();
     assertThat(matcher.matches(dialog)).isFalse();
   }
@@ -77,10 +115,10 @@ import static org.fest.swing.test.core.TestGroups.GUI;
   @Test(groups = GUI)
   public void shouldReturnFalseIfDialogIsShowingAndTitleIsNotEqualToExpected() {
     ScreenLock.instance().acquire(this);
-    TestWindow window = TestWindow.createAndShowNewWindow(DialogByTitleMatcher.class);
+    TestWindow window = TestWindow.createAndShowNewWindow(DialogMatcher.class);
     TestDialog dialog = TestDialog.createAndShowNewDialog(window);
     try {
-      DialogByTitleMatcher matcher = DialogByTitleMatcher.withTitleAndShowing("Hello");
+      DialogMatcher matcher = DialogMatcher.withTitle("Hello").andShowing();
       assertThat(matcher.matches(dialog)).isFalse();
     } finally {
       dialog.destroy();
@@ -90,7 +128,7 @@ import static org.fest.swing.test.core.TestGroups.GUI;
   }
 
   public void shouldReturnFalseIfDialogIsNotShowingAndTitleIsNotEqualToExpected() {
-    DialogByTitleMatcher matcher = DialogByTitleMatcher.withTitleAndShowing("Hello");
+    DialogMatcher matcher = DialogMatcher.withTitle("Hello").andShowing();
     JDialog dialog = dialog().withTitle("Bye").createNew();
     assertThat(matcher.matches(dialog)).isFalse();
   }

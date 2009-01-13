@@ -9,8 +9,27 @@
       <action dev="alruiz" type="add" issue="277" due-to="Juhos Csaba-Zsolt">
         Added methods 'check' and 'uncheck' to org.fest.swing.fixture.JRadioButtonFixture.
       </action>
+      <action dev="alruiz" type="fix" issue="280">
+        Matchers in org.fest.swing.core.matcher now more search options for component matching (by type, by name,
+        by text/title.)
+      </action>
+      <action dev="alruiz" type="fix" issue="280">
+        Replaced DialogByTitleMatcher with DialogMatcher in package org.fest.swing.core.matcher.
+      </action>
+      <action dev="alruiz" type="fix" issue="280">
+        Replaced FrameByTitleMatcher with FrameMatcher in package org.fest.swing.core.matcher.
+      </action>
+      <action dev="alruiz" type="fix" issue="280">
+        Replaced JButtonByTextMatcher with JButtonMatcher in package org.fest.swing.core.matcher.
+      </action>
+      <action dev="alruiz" type="fix" issue="280">
+        Replaced JLabelByTextMatcher with JLabelMatcher in package org.fest.swing.core.matcher.
+      </action>
       <action dev="alruiz" type="fix">
         Moved SingleComponentHierarchy from package org.fest.swing.core to org.fest.swing.hierarchy.
+      </action>
+      <action dev="alruiz" type="fix">
+        Made class org.fest.swing.hierarchySingleComponentHierarchy public.
       </action>
     </release>
     <release version="1.0rc2" date="2009-01-05" description="Subsequent release">

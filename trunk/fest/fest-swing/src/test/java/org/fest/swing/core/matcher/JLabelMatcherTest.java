@@ -18,6 +18,7 @@ package org.fest.swing.core.matcher;
 import javax.swing.JLabel;
 
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.annotation.RunsInEDT;
@@ -32,35 +33,72 @@ import static org.fest.swing.test.builder.JLabels.label;
 import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**
- * Tests for <code>{@link JLabelByTextMatcher}</code>.
+ * Tests for <code>{@link JLabelMatcher}</code>.
  *
  * @author Alex Ruiz
  */
-@Test public class JLabelByTextMatcherTest {
+@Test public class JLabelMatcherTest {
+
+  public void shouldReturnTrueIfNameIsEqualToExpected() {
+    String name = "label";
+    JLabelMatcher matcher = JLabelMatcher.withName(name);
+    JLabel label = label().withName(name).createNew();
+    assertThat(matcher.matches(label)).isTrue();
+  }
+
+  public void shouldReturnFalseIfNameIsNotEqualToExpected() {
+    JLabelMatcher matcher = JLabelMatcher.withName("label");
+    JLabel label = label().withName("button").createNew();
+    assertThat(matcher.matches(label)).isFalse();
+  }
+
+  public void shouldReturnTrueIfNameAndTextAreEqualToExpected() {
+    String name = "label";
+    String text = "Hello";
+    JLabelMatcher matcher = JLabelMatcher.withName(name).andText(text);
+    JLabel label = label().withName(name).withText(text).createNew();
+    assertThat(matcher.matches(label)).isTrue();
+  }
+
+  @Test(dataProvider = "notMatchingNameAndText")
+  public void shouldReturnFalseIfNameAndTextAreNotEqualToExpected(String name, String text) {
+    JLabelMatcher matcher = JLabelMatcher.withName("someName").andText("someText");
+    JLabel label = label().withName(name).withText(text).createNew();
+    assertThat(matcher.matches(label)).isFalse();
+  }
+  
+  @DataProvider(name = "notMatchingNameAndText")
+  public Object[][] notMatchingNameAndText() {
+    return new Object[][] {
+        { "someName", "text" },
+        { "name", "someText" },
+        { "name", "text" }
+    };
+  }
 
   @BeforeClass public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
   }
 
-  public void shouldReturnTrueIfTitleIsEqualToExpected() {
+  public void shouldReturnTrueIfTextIsEqualToExpected() {
     String text = "Hello";
-    JLabelByTextMatcher matcher = JLabelByTextMatcher.withText(text);
+    JLabelMatcher matcher = JLabelMatcher.withText(text);
     JLabel label = label().withText(text).createNew();
     assertThat(matcher.matches(label)).isTrue();
   }
 
-  public void shouldReturnFalseIfTitleIsNotEqualToExpected() {
-    JLabelByTextMatcher matcher = JLabelByTextMatcher.withText("Hello");
+  public void shouldReturnFalseIfTextIsNotEqualToExpected() {
+    JLabelMatcher matcher = JLabelMatcher.withText("Hello");
     JLabel label = label().withText("Bye").createNew();
     assertThat(matcher.matches(label)).isFalse();
   }
 
   @Test(groups = GUI)
-  public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
+  public void shouldReturnTrueIfLabelIsShowingAndTextIsEqualToExpected() {
     ScreenLock.instance().acquire(this);
     MyWindow window = MyWindow.createAndShow();
     try {
-      JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing("Hello");
+      JLabelMatcher matcher = JLabelMatcher.withText("Hello").andShowing();
       assertThat(matcher.matches(window.label)).isTrue();
     } finally {
       window.destroy();
@@ -68,19 +106,19 @@ import static org.fest.swing.test.core.TestGroups.GUI;
     }
   }
 
-  public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsEqualToExpected() {
+  public void shouldReturnFalseIfLabelIsNotShowingAndTextIsEqualToExpected() {
     String text = "Hello";
-    JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing(text);
+    JLabelMatcher matcher = JLabelMatcher.withText(text).andShowing();
     JLabel label = label().withText(text).createNew();
     assertThat(matcher.matches(label)).isFalse();
   }
 
   @Test(groups = GUI)
-  public void shouldReturnFalseIfFrameIsShowingAndTitleIsNotEqualToExpected() {
+  public void shouldReturnFalseIfLabelIsShowingAndTextIsNotEqualToExpected() {
     ScreenLock.instance().acquire(this);
     MyWindow window = MyWindow.createAndShow();
     try {
-      JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing("Bye");
+      JLabelMatcher matcher = JLabelMatcher.withText("Bye").andShowing();
       assertThat(matcher.matches(window.label)).isFalse();
     } finally {
       window.destroy();
@@ -88,8 +126,8 @@ import static org.fest.swing.test.core.TestGroups.GUI;
     }
   }
 
-  public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsNotEqualToExpected() {
-    JLabelByTextMatcher matcher = JLabelByTextMatcher.withTextAndShowing("Hello");
+  public void shouldReturnFalseIfLabelIsNotShowingAndTextIsNotEqualToExpected() {
+    JLabelMatcher matcher = JLabelMatcher.withText("Hello").andShowing();
     JLabel label = label().withText("Bye").createNew();
     assertThat(matcher.matches(label)).isFalse();
   }
@@ -111,7 +149,7 @@ import static org.fest.swing.test.core.TestGroups.GUI;
     final JLabel label = new JLabel("Hello");
 
     private MyWindow() {
-      super(JLabelByTextMatcherTest.class);
+      super(JLabelMatcherTest.class);
       addComponents(label);
     }
   }

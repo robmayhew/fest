@@ -18,6 +18,7 @@ package org.fest.swing.core.matcher;
 import javax.swing.JFrame;
 
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
@@ -29,26 +30,63 @@ import static org.fest.swing.test.builder.JFrames.frame;
 import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**
- * Tests for <code>{@link FrameByTitleMatcher}</code>.
+ * Tests for <code>{@link FrameMatcher}</code>.
  *
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-@Test public class FrameByTitleMatcherTest {
+@Test public class FrameMatcherTest {
 
   @BeforeClass public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
   }
   
+  public void shouldReturnTrueIfNameIsEqualToExpected() {
+    String name = "frame";
+    FrameMatcher matcher = FrameMatcher.withName(name);
+    JFrame frame = frame().withName(name).createNew();
+    assertThat(matcher.matches(frame)).isTrue();
+  }
+
+  public void shouldReturnFalseIfNameIsNotEqualToExpected() {
+    FrameMatcher matcher = FrameMatcher.withName("frame");
+    JFrame frame = frame().withName("label").createNew();
+    assertThat(matcher.matches(frame)).isFalse();
+  }
+
+  public void shouldReturnTrueIfNameAndTitleAreEqualToExpected() {
+    String name = "frame";
+    String title = "Hello";
+    FrameMatcher matcher = FrameMatcher.withName(name).andTitle(title);
+    JFrame frame = frame().withName(name).withTitle(title).createNew();
+    assertThat(matcher.matches(frame)).isTrue();
+  }
+
+  @Test(dataProvider = "notMatchingNameAndTitle")
+  public void shouldReturnFalseIfNameAndTitleAreNotEqualToExpected(String name, String title) {
+    FrameMatcher matcher = FrameMatcher.withName("someName").andTitle("someTitle");
+    JFrame frame = frame().withName(name).withTitle(title).createNew();
+    assertThat(matcher.matches(frame)).isFalse();
+  }
+  
+  @DataProvider(name = "notMatchingNameAndTitle")
+  public Object[][] notMatchingNameAndTitle() {
+    return new Object[][] {
+        { "someName", "title" },
+        { "name", "someTitle" },
+        { "name", "title" }
+    };
+  }
+
   public void shouldReturnTrueIfTitleIsEqualToExpected() {
     String title = "Hello";
-    FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitle(title);
+    FrameMatcher matcher = FrameMatcher.withTitle(title);
     JFrame frame = frame().withTitle(title).createNew();
     assertThat(matcher.matches(frame)).isTrue();
   }
 
   public void shouldReturnFalseIfTitleIsNotEqualToExpected() {
-    FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitle("Hello");
+    FrameMatcher matcher = FrameMatcher.withTitle("Hello");
     JFrame frame = frame().withTitle("Bye").createNew();
     assertThat(matcher.matches(frame)).isFalse();
   }
@@ -56,10 +94,10 @@ import static org.fest.swing.test.core.TestGroups.GUI;
   @Test(groups = GUI)
   public void shouldReturnTrueIfFrameIsShowingAndTitleIsEqualToExpected() {
     ScreenLock.instance().acquire(this);
-    Class<FrameByTitleMatcher> testType = FrameByTitleMatcher.class;
+    Class<FrameMatcher> testType = FrameMatcher.class;
     TestWindow frame = TestWindow.createAndShowNewWindow(testType);
     try {
-      FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing(testType.getSimpleName());
+      FrameMatcher matcher = FrameMatcher.withTitle(testType.getSimpleName()).andShowing();
       assertThat(matcher.matches(frame)).isTrue();
     } finally {
       try {
@@ -71,7 +109,7 @@ import static org.fest.swing.test.core.TestGroups.GUI;
 
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsEqualToExpected() {
     String title = "Hello";
-    FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing(title);
+    FrameMatcher matcher = FrameMatcher.withTitle(title).andShowing();
     JFrame frame = frame().withTitle(title).createNew();
     assertThat(matcher.matches(frame)).isFalse();
   }
@@ -79,9 +117,9 @@ import static org.fest.swing.test.core.TestGroups.GUI;
   @Test(groups = GUI)
   public void shouldReturnFalseIfFrameIsShowingAndTitleIsNotEqualToExpected() {
     ScreenLock.instance().acquire(this);
-    TestWindow frame = TestWindow.createAndShowNewWindow(FrameByTitleMatcher.class);
+    TestWindow frame = TestWindow.createAndShowNewWindow(FrameMatcher.class);
     try {
-      FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing("Hello");
+      FrameMatcher matcher = FrameMatcher.withTitle("Hello").andShowing();
       assertThat(matcher.matches(frame)).isFalse();
     } finally {
       try {
@@ -92,7 +130,7 @@ import static org.fest.swing.test.core.TestGroups.GUI;
   }
 
   public void shouldReturnFalseIfFrameIsNotShowingAndTitleIsNotEqualToExpected() {
-    FrameByTitleMatcher matcher = FrameByTitleMatcher.withTitleAndShowing("Hello");
+    FrameMatcher matcher = FrameMatcher.withTitle("Hello").andShowing();
     JFrame frame = frame().withTitle("Bye").createNew();
     assertThat(matcher.matches(frame)).isFalse();
   }
