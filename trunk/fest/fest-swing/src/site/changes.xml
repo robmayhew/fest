@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="1.0" date="2009-01-15" description="Subsequent release">
+      <action dev="alruiz" type="add" issue="238" due-to="Juhos Csaba-Zsolt">
+        Added class org.fest.swing.driver.Scrolling.
+      </action>
       <action dev="alruiz" type="add" issue="277" due-to="Juhos Csaba-Zsolt">
         Added methods 'check' and 'uncheck' to org.fest.swing.fixture.JRadioButtonFixture.
       </action>

@@ -81,15 +81,9 @@ public class ParentFinderTest {
     static MyWindow createAndShow() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {
-          MyWindow window = new MyWindow();
-          window.displayInCurrentThread();
-          return window;
+          return display(new MyWindow());
         }
       });
-    }
-
-    private void displayInCurrentThread() {
-      TestWindow.display(this);
     }
 
     final JTextField textField = new JTextField();

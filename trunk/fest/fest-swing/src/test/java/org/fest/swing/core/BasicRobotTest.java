@@ -449,9 +449,7 @@ public class BasicRobotTest {
     static MyWindow createAndShow() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {
-          MyWindow window = new MyWindow();
-          TestWindow.display(window);
-          return window;
+          return display(new MyWindow());
         }
       });
     }

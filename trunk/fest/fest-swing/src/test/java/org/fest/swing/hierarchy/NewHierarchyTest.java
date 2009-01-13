@@ -141,15 +141,9 @@ public class NewHierarchyTest {
     static MyWindow createAndShow() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {
-          MyWindow window = new MyWindow();
-          window.displayInCurrentThread();
-          return window;
+          return display(new MyWindow());
         }
       });
-    }
-
-    private void displayInCurrentThread() {
-      TestWindow.display(this);
     }
 
     final JComboBox comboBox = new JComboBox(array("One", "Two"));

@@ -117,12 +117,15 @@ public class TestWindow extends JFrame {
 
   /**
    * Displays the given window on the screen. This method is executed in the current thread where it is called.
-   * @param window the window to display on the screen.
+   * @param <T> the type of window to display.
+   * @param w the window to display on the screen.
+   * @return the displayed window.
    */
   @RunsInCurrentThread
-  protected static void display(TestWindow window) {
-    window.setLocation(DEFAULT_WINDOW_LOCATION);
-    packAndShow(window);
+  protected static <T extends TestWindow> T display(T w) {
+    w.setLocation(DEFAULT_WINDOW_LOCATION);
+    packAndShow(w);
+    return w;
   }
 
   /**

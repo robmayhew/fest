@@ -53,7 +53,7 @@ public class Bug213_HideCaretInTextFieldWhenTakingScreenshot {
   @BeforeMethod public void setUp() {
     ScreenLock.instance().acquire(this);
     screenshotTaker = new ScreenshotTaker();
-    window = MyWindow.createAndShowNew();
+    window = MyWindow.createAndShow();
   }
 
   @AfterMethod public void tearDown() {
@@ -76,12 +76,10 @@ public class Bug213_HideCaretInTextFieldWhenTakingScreenshot {
     private static final long serialVersionUID = 1L;
 
     @RunsInEDT
-    static MyWindow createAndShowNew() {
+    static MyWindow createAndShow() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {
-          MyWindow window = new MyWindow();
-          TestWindow.display(window);
-          return window;
+          return display(new MyWindow());
         }
       });
     }

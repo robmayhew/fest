@@ -34,8 +34,8 @@ import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.lock.ScreenLock;
 import org.fest.swing.test.builder.JMenus;
-import org.fest.swing.test.swing.TestMdiWindow;
 import org.fest.swing.test.swing.TestDialog;
+import org.fest.swing.test.swing.TestMdiWindow;
 import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -159,15 +159,9 @@ import static org.fest.swing.test.swing.TestMdiWindow.createAndShowNewWindow;
     static MyWindow createAndShow() {
       return execute(new GuiQuery<MyWindow>() {
         protected MyWindow executeInEDT() {
-          MyWindow window = new MyWindow();
-          window.displayInCurrentThread();
-          return window;
+          return display(new MyWindow());
         }
       });
-    }
-
-    private void displayInCurrentThread() {
-      TestWindow.display(this);
     }
 
     final JTextField textField = new JTextField(20);
