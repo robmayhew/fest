@@ -37,7 +37,7 @@ interface InputEventGenerator {
    * Simulates a user pressing the given mouse buttons on the given <code>{@link Component}</code>. If the given
    * component is <code>null</code>, this method will delegate to <code>{@link #pressMouse(Point, int)}</code>.
    * @param c the <code>Component</code> to click on.
-   * @param where the position where to press the given mouse buttons.
+   * @param where the given coordinates, relative to the given <code>Component</code>.
    * @param buttons the mouse buttons to press.
    * @throws ActionFailedException if the component to click is out of the boundaries of the screen.
    */
@@ -45,7 +45,7 @@ interface InputEventGenerator {
 
   /**
    * Simulates a user pressing the given mouse buttons on the given coordinates.
-   * @param where the position where to press the given mouse buttons.
+   * @param where the coordinates where to press the given mouse buttons.
    * @param buttons the mouse buttons to press.
    */
   void pressMouse(Point where, int buttons);
@@ -54,8 +54,8 @@ interface InputEventGenerator {
    * Simulates a user moving the mouse pointer to the given coordinates relative to the given
    * <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
-   * @param x X coordinate relative to the given <code>Component</code>.
-   * @param y Y coordinate relative to the given <code>Component</code>.
+   * @param x X coordinate, relative to the given <code>Component</code>.
+   * @param y Y coordinate, relative to the given <code>Component</code>.
    */
   void moveMouse(Component c, int x, int y);
 

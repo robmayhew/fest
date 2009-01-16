@@ -419,6 +419,16 @@ public class BasicRobot implements Robot {
     eventGenerator.moveMouse(c, x, y);
     waitForIdle();
   }
+  
+  /** {@inheritDoc} */
+  public void moveMouse(Point p) {
+    moveMouse(p.x, p.y);
+  }
+  
+  /** {@inheritDoc} */
+  public void moveMouse(int x, int y) {
+    eventGenerator.moveMouse(x, y);
+  }
 
   /** {@inheritDoc} */
   public void pressMouse(MouseButton button) {
@@ -435,6 +445,11 @@ public class BasicRobot implements Robot {
     jitter(c, where);
     moveMouse(c, where.x, where.y);
     eventGenerator.pressMouse(c, where, button.mask);
+  }
+
+  /** {@inheritDoc} */
+  public void pressMouse(Point where, MouseButton button) {
+    eventGenerator.pressMouse(where, button.mask);
   }
 
   /** {@inheritDoc} */

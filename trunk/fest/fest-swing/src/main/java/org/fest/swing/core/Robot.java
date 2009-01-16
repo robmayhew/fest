@@ -146,7 +146,7 @@ public interface Robot {
   /**
    * Simulates a user clicking at the given position on the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
-   * @param where the position where to click.
+   * @param where the given coordinates, relative to the given <code>Component</code>.
    * @throws ActionFailedException if the component to click is out of the boundaries of the screen.
    */
   void click(Component c, Point where);
@@ -155,7 +155,7 @@ public interface Robot {
    * Simulates a user clicking the given mouse button, the given times at the given position on the given
    * <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
-   * @param where the coordinates where to click.
+   * @param where the given coordinates, relative to the given <code>Component</code>.
    * @param button the mouse button to click.
    * @param times the number of times to click the given mouse button.
    * @throws ActionFailedException if the component to click is out of the boundaries of the screen.
@@ -179,17 +179,24 @@ public interface Robot {
   /**
    * Simulates a user pressing the left mouse button on the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
-   * @param where the position where to press the left mouse button.
+   * @param where the given coordinates, relative to the given <code>Component</code>.
    */
   void pressMouse(Component c, Point where);
 
   /**
    * Simulates a user pressing the given mouse button on the given <code>{@link Component}</code>.
    * @param c the <code>Component</code> to click on.
-   * @param where the position where to press the given mouse button.
+   * @param where the given coordinates, relative to the given <code>Component</code>.
    * @param button the mouse button to press.
    */
   void pressMouse(Component c, Point where, MouseButton button);
+
+  /**
+   * Simulates a user pressing the given mouse button on the given coordinates.
+   * @param where the position where to press the given mouse button.
+   * @param button the mouse button to press.
+   */
+  void pressMouse(Point where, MouseButton button);
 
   /**
    * Simulates a user moving the mouse pointer to the center of the given <code>{@link Component}</code>.
@@ -201,7 +208,7 @@ public interface Robot {
    * Simulates a user moving the mouse pointer to the given coordinates relative to the given
    * <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
-   * @param p the given coordinates.
+   * @param p the given coordinates, relative to the given <code>Component</code>.
    * @throws ActionFailedException if the given component is not showing and ready for input.
    */
   void moveMouse(Component c, Point p);
@@ -210,11 +217,24 @@ public interface Robot {
    * Simulates a user moving the mouse pointer to the given coordinates relative to the given
    * <code>{@link Component}</code>.
    * @param c the given <code>Component</code>.
-   * @param x horizontal coordinate relative to the given <code>Component</code>.
-   * @param y vertical coordinate relative to the given <code>Component</code>.
+   * @param x X coordinate, relative to the given <code>Component</code>.
+   * @param y Y coordinate, relative to the given <code>Component</code>.
    * @throws ActionFailedException if the given component is not showing and ready for input.
    */
   void moveMouse(Component c, int x, int y);
+
+  /**
+   * Simulates a user moving the mouse pointer to the given coordinates.
+   * @param p the given coordinates.
+   */
+  void moveMouse(Point p);
+
+  /**
+   * Simulates a user moving the mouse pointer to the given coordinates.
+   * @param x x coordinate.
+   * @param y y coordinate.
+   */
+  void moveMouse(int x, int y);
 
   /**
    * Releases the given mouse button.
