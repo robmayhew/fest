@@ -49,7 +49,7 @@ public class DragAndDrop {
   }
 
   /** Number of pixels traversed before a drag starts. */
-  static final int DRAG_THRESHOLD = isWindows() || isMacintosh() ? 10 : 16;
+  public static final int DRAG_THRESHOLD = isWindows() || isMacintosh() ? 10 : 16;
 
   /**
    * Performs a drag action at the given point.
