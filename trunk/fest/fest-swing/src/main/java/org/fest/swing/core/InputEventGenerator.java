@@ -25,7 +25,7 @@ import org.fest.swing.exception.ActionFailedException;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-interface InputEventGenerator {
+public interface InputEventGenerator {
 
   /**
    * Simulates a user pressing mouse buttons.
