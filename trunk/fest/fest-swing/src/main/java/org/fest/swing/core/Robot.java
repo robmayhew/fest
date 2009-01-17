@@ -195,6 +195,7 @@ public interface Robot {
    * Simulates a user pressing the given mouse button on the given coordinates.
    * @param where the position where to press the given mouse button.
    * @param button the mouse button to press.
+   * @since 1.1
    */
   void pressMouse(Point where, MouseButton button);
 
@@ -226,6 +227,7 @@ public interface Robot {
   /**
    * Simulates a user moving the mouse pointer to the given coordinates.
    * @param p the given coordinates.
+   * @since 1.1
    */
   void moveMouse(Point p);
 
@@ -233,6 +235,7 @@ public interface Robot {
    * Simulates a user moving the mouse pointer to the given coordinates.
    * @param x X coordinate.
    * @param y Y coordinate.
+   * @since 1.1
    */
   void moveMouse(int x, int y);
 
