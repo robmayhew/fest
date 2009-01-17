@@ -97,7 +97,7 @@ public class BasicRobot extends RobotTemplate implements Robot {
    */
   protected BasicRobot(ComponentHierarchy hierarchy) {
     super(hierarchy);
-    eventPoster = new AWTEventPoster(toolkit, inputState, windowMonitor, settings());
+    eventPoster = new AWTEventPoster(TOOLKIT, INPUT_STATE, WINDOW_MONITOR, settings);
   }
 
   /** {@inheritDoc} */
@@ -129,7 +129,7 @@ public class BasicRobot extends RobotTemplate implements Robot {
     giveFocusTo(target);
     try {
       if (wait) {
-        TimeoutWatch watch = startWatchWithTimeoutOf(settings().timeoutToBeVisible());
+        TimeoutWatch watch = startWatchWithTimeoutOf(settings.timeoutToBeVisible());
         while (!focusMonitor.hasFocus()) {
           if (watch.isTimeOut()) throw actionFailure(concat("Focus change to ", format(target), " failed"));
           pause();
@@ -225,15 +225,15 @@ public class BasicRobot extends RobotTemplate implements Robot {
     pressModifiers(modifierMask);
     // From Abbot: Adjust the auto-delay to ensure we actually get a multiple click
     // In general clicks have to be less than 200ms apart, although the actual setting is not readable by Java.
-    int delayBetweenEvents = settings().delayBetweenEvents();
-    if (shouldSetDelayBetweenEventsToZeroWhenClicking(times)) settings().delayBetweenEvents(0);
-    eventGenerator().pressMouse(c, where, mask);
+    int delayBetweenEvents = settings.delayBetweenEvents();
+    if (shouldSetDelayBetweenEventsToZeroWhenClicking(times)) settings.delayBetweenEvents(0);
+    eventGenerator.pressMouse(c, where, mask);
     for (int i = times; i > 1; i--) {
-      eventGenerator().releaseMouse(mask);
-      eventGenerator().pressMouse(c, where, mask);
+      eventGenerator.releaseMouse(mask);
+      eventGenerator.pressMouse(c, where, mask);
     }
-    settings().delayBetweenEvents(delayBetweenEvents);
-    eventGenerator().releaseMouse(mask);
+    settings.delayBetweenEvents(delayBetweenEvents);
+    eventGenerator.releaseMouse(mask);
     releaseModifiers(modifierMask);
     waitForIdle();
   }
@@ -253,15 +253,15 @@ public class BasicRobot extends RobotTemplate implements Robot {
   /** {@inheritDoc} */
   @RunsInEDT
   public void moveMouse(Component c, int x, int y) {
-    if (!waitForComponentToBeReady(c, settings().timeoutToBeVisible()))
+    if (!waitForComponentToBeReady(c, settings.timeoutToBeVisible()))
       throw actionFailure(concat("Could not obtain position of component ", format(c)));
-    eventGenerator().moveMouse(c, x, y);
+    eventGenerator.moveMouse(c, x, y);
     waitForIdle();
   }
   
   /** {@inheritDoc} */
   public void pressMouse(MouseButton button) {
-    pressMouse(button.mask);
+    eventGenerator.pressMouse(button.mask);
   }
 
   /** {@inheritDoc} */
@@ -273,18 +273,18 @@ public class BasicRobot extends RobotTemplate implements Robot {
   public void pressMouse(Component c, Point where, MouseButton button) {
     jitter(c, where);
     moveMouse(c, where.x, where.y);
-    eventGenerator().pressMouse(c, where, button.mask);
+    eventGenerator.pressMouse(c, where, button.mask);
   }
 
   /** {@inheritDoc} */
   public void pressMouse(Point where, MouseButton button) {
-    pressMouse(where, button.mask);
+    eventGenerator.pressMouse(where, button.mask);
   }
 
   /** {@inheritDoc} */
   @RunsInEDT
   public void releaseMouse(MouseButton button) {
-    releaseMouse(button.mask);
+    eventGenerator.releaseMouse(button.mask);
   }
 
   /** {@inheritDoc} */
@@ -398,7 +398,7 @@ public class BasicRobot extends RobotTemplate implements Robot {
   public boolean isReadyForInput(Component c) {
     Window w = windowAncestorOf(c);
     if (w == null) throw actionFailure(concat("Component ", format(c), " does not have a Window ancestor"));
-    return c.isShowing() && windowMonitor.isWindowReady(w);
+    return c.isShowing() && WINDOW_MONITOR.isWindowReady(w);
   }
 
   /** {@inheritDoc} */
@@ -440,4 +440,11 @@ public class BasicRobot extends RobotTemplate implements Robot {
     message.append("]>");
     fail(message.toString());
   }
+
+  /** {@inheritDoc} */
+  public ComponentFinder finder() {
+    return finder;
+  }
+  
+  
 }

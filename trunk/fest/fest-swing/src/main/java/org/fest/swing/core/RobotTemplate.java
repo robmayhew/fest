@@ -64,19 +64,26 @@ public abstract class RobotTemplate {
 
   private static final int BUTTON_MASK = BUTTON1_MASK | BUTTON2_MASK | BUTTON3_MASK;
 
-  protected static Toolkit toolkit = Toolkit.getDefaultToolkit();
-  protected static WindowMonitor windowMonitor = WindowMonitor.instance();
-  protected static InputState inputState = new InputState(toolkit);
+  /** The AWT toolkit used in this robot. **/
+  protected static final Toolkit TOOLKIT = Toolkit.getDefaultToolkit();
+  
+  /** Monitors root windows. **/
+  protected static final WindowMonitor WINDOW_MONITOR = WindowMonitor.instance();
+  
+  /** Keeps track of input state (mouse/keyboard). **/
+  protected static final InputState INPUT_STATE = new InputState(TOOLKIT);
 
   /** Provides access to all the components in the hierarchy. */
-  private final ComponentHierarchy hierarchy;
+  protected final ComponentHierarchy hierarchy;
 
   /** Looks up <code>{@link java.awt.Component}</code>s. */
-  private final ComponentFinder finder;
+  protected final ComponentFinder finder;
 
-  private final Settings settings;
+  /** Configuration settings. **/
+  protected final Settings settings;
 
-  private final InputEventGenerator eventGenerator;
+  /** Generates user input. **/
+  protected final InputEventGenerator eventGenerator;
 
   /**
    * Creates a new <code>{@link RobotTemplate}</code>.
@@ -144,7 +151,7 @@ public abstract class RobotTemplate {
   @RunsInEDT
   private void waitForWindow(Window w) {
     long start = currentTimeMillis();
-    while (!windowMonitor.isWindowReady(w) || !isShowing(w)) {
+    while (!WINDOW_MONITOR.isWindowReady(w) || !isShowing(w)) {
       long elapsed = currentTimeMillis() - start;
       if (elapsed > WINDOW_DELAY)
         throw new WaitTimedOutError(concat("Timed out waiting for Window to open (", String.valueOf(elapsed), "ms)"));
@@ -162,7 +169,7 @@ public abstract class RobotTemplate {
     // If the window contains an applet, send the event on the applet's queue instead to ensure a shutdown from the
     // applet's context (assists AppletViewer cleanup).
     Component applet = findAppletDescendent(w);
-    EventQueue eventQueue = windowMonitor.eventQueueFor(applet != null ? applet : w);
+    EventQueue eventQueue = WINDOW_MONITOR.eventQueueFor(applet != null ? applet : w);
     eventQueue.postEvent(event);
     waitForIdle();
   }
@@ -282,6 +289,16 @@ public abstract class RobotTemplate {
   }
 
   /**
+   * Makes the mouse pointer show small quick jumpy movements at the given coordinates.
+   * @param x X coordinate.
+   * @param y Y coordinate.
+   */
+  @RunsInEDT
+  protected void jitter(int x, int y) {
+    moveMouse((x > 0 ? x - 1 : x + 1), y);
+  }
+
+  /**
    * Simulates a user moving the mouse pointer to the given coordinates.
    * @param p the given coordinates.
    */
@@ -299,39 +316,13 @@ public abstract class RobotTemplate {
   }
 
   /**
-   * Simulates a user pressing a mouse button.
-   * @param buttonMask the mask of the mouse button to press.
-   */
-  protected void pressMouse(int buttonMask) {
-    eventGenerator.pressMouse(buttonMask);
-  }
-
-  /**
-   * Simulates a user pressing the given mouse button on the given coordinates.
-   * @param where the position where to press the given mouse button.
-   * @param buttonMask the mask of the mouse button to press.
-   */
-  protected void pressMouse(Point where, int buttonMask) {
-    eventGenerator.pressMouse(where, buttonMask);
-  }
-
-  /**
-   * Releases the given mouse button.
-   * @param buttonMask the mask of the mouse button to press.
-   */
-  @RunsInEDT
-  protected void releaseMouse(int buttonMask) {
-    mouseRelease(buttonMask);
-  }
-
-  /**
    * Releases any mouse button(s) used by the robot.
    */
   @RunsInEDT
   public void releaseMouseButtons() {
-    int buttons = inputState.buttons();
+    int buttons = INPUT_STATE.buttons();
     if (buttons == 0) return;
-    mouseRelease(buttons);
+    eventGenerator.releaseMouse(buttons);
   }
 
   /**
@@ -440,11 +431,6 @@ public abstract class RobotTemplate {
     waitForIdle();
   }
 
-  @RunsInEDT
-  private void mouseRelease(int buttons) {
-    eventGenerator.releaseMouse(buttons);
-  }
-
   /**
    * Wait for an idle AWT event queue. Note that this is different from the implementation of
    * <code>java.awt.Robot.waitForIdle()</code>, which may have events on the queue when it returns. Do <strong>NOT</strong>
@@ -455,9 +441,9 @@ public abstract class RobotTemplate {
   @RunsInEDT
   public void waitForIdle() {
     waitIfNecessary();
-    Collection<EventQueue> queues = windowMonitor.allEventQueues();
+    Collection<EventQueue> queues = WINDOW_MONITOR.allEventQueues();
     if (queues.size() == 1) {
-      waitForIdle(toolkit.getSystemEventQueue());
+      waitForIdle(TOOLKIT.getSystemEventQueue());
       return;
     }
     // FIXME this resurrects dead event queues
@@ -499,7 +485,7 @@ public abstract class RobotTemplate {
   private boolean postInvocationEvent(EventQueue eventQueue, long timeout) {
     Object lock = new RobotIdleLock();
     synchronized (lock) {
-      eventQueue.postEvent(new InvocationEvent(toolkit, EMPTY_RUNNABLE, lock, true));
+      eventQueue.postEvent(new InvocationEvent(TOOLKIT, EMPTY_RUNNABLE, lock, true));
       long start = currentTimeMillis();
       try {
         // NOTE: on fast linux systems when showing a dialog, if we don't provide a timeout, we're never notified, and
@@ -520,7 +506,7 @@ public abstract class RobotTemplate {
    * @return <code>true</code> if the robot is currently in a dragging operation, <code>false</code> otherwise.
    */
   public boolean isDragging() {
-    return inputState.dragInProgress();
+    return INPUT_STATE.dragInProgress();
   }
 
   /**
@@ -530,14 +516,6 @@ public abstract class RobotTemplate {
   public Settings settings() {
     return settings;
   }
-  
-  /**
-   * Returns the <code>{@link ComponentFinder}</code> being used by this robot.
-   * @return the <code>ComponentFinder</code> being used by this robot.
-   */
-  public ComponentFinder finder() {
-    return finder;
-  }
 
   /**
    * Returns the <code>{@link ComponentHierarchy}</code> being used by this robot.
@@ -546,10 +524,4 @@ public abstract class RobotTemplate {
   public ComponentHierarchy hierarchy() {
     return hierarchy;
   }
-  
-  /**
-   * Returns the event generator used by this robot.
-   * @return the event generator used by this robot.
-   */
-  protected InputEventGenerator eventGenerator() { return eventGenerator; }
 }
