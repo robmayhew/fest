@@ -20,6 +20,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 
 import org.fest.swing.annotation.RunsInEDT;
+import org.fest.swing.core.ComponentDragAndDrop;
 import org.fest.swing.core.Robot;
 import org.fest.swing.core.Settings;
 import org.fest.swing.exception.ActionFailedException;
@@ -35,7 +36,10 @@ import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
  * Understands drag and drop.
  *
  * @author Alex Ruiz
+ * 
+ * @deprecated use <code>{@link ComponentDragAndDrop}</code> instead. This class will be removed in version 1.2.
  */
+@Deprecated
 public class DragAndDrop {
 
   private final Robot robot;

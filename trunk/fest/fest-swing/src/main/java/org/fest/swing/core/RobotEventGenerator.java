@@ -20,7 +20,7 @@ import java.awt.Robot;
 
 import static java.lang.String.valueOf;
 
-import static org.fest.swing.awt.AWT.locationOnScreenOf;
+import static org.fest.swing.awt.AWT.translate;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.exception.UnexpectedException.unexpected;
 import static org.fest.swing.timing.Pause.pause;
@@ -65,7 +65,7 @@ class RobotEventGenerator implements InputEventGenerator {
   public void pressMouse(Component c, Point where, int buttons) {
     Point p = where;
     if (c != null) {
-      p = pointToMoveMouseTo(c, where.x, where.y);
+      p = translate(c, where.x, where.y);
       if (!isPointInScreenBoundaries(p)) 
         throw actionFailure("The component to click is out of the boundaries of the screeen");
     }
@@ -100,7 +100,7 @@ class RobotEventGenerator implements InputEventGenerator {
 
   /** {@inheritDoc} */
   public void moveMouse(Component c, int x, int y) {
-    Point p = pointToMoveMouseTo(c, x, y);
+    Point p = translate(c, x, y);
     moveMouse(p.x, p.y);
   }
   
@@ -109,13 +109,6 @@ class RobotEventGenerator implements InputEventGenerator {
     robot.mouseMove(x, y);
   }
 
-  private Point pointToMoveMouseTo(Component c, int x, int y) {
-    Point p = locationOnScreenOf(c);
-    if (p == null) return null;
-    p.translate(x, y);
-    return p;
-  }
-  
   /** {@inheritDoc} */
   public void pressKey(int keyCode, char keyChar) {
     try {

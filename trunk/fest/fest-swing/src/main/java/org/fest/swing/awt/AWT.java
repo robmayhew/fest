@@ -49,6 +49,31 @@ public class AWT {
   // Abbot: Macintosh *used* to map button2 to the pop-up trigger (1.3). Not clear when this changed.
   private static final boolean POPUP_ON_BUTTON2 = false;
 
+  /**
+   * Translates the given coordinates to the location on screen of the given <code>{@link Component}</code>.
+   * <p>
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * invoking this method in the EDT.
+   * </p>
+   * @param c the given <code>Component</code>.
+   * @param x X coordinate.
+   * @param y Y coordinate.
+   * @return the translated coordinates.
+   */
+  @RunsInCurrentThread
+  public static Point translate(Component c, int x, int y) {
+    Point p = locationOnScreenOf(c);
+    if (p == null) return null;
+    p.translate(x, y);
+    return p;
+  }
+
+  
+  /**
+   * Returns a point at the center of the visible area of the given <code>{@link Component}</code>.
+   * @param c the given <code>Component</code>.
+   * @return a point at the center of the visible area of the given <code>Component</code>.
+   */
   @RunsInEDT
   public static Point visibleCenterOf(final Component c) {
     return execute(new GuiQuery<Point>() {

@@ -64,19 +64,15 @@ public class ComponentDriver {
 
   protected final Robot robot;
 
-  private final DragAndDrop dragAndDrop;
+  private final ComponentDragAndDrop dragAndDrop;
 
   /**
    * Creates a new </code>{@link ComponentDriver}</code>.
    * @param robot the robot to use to simulate user input.
    */
   public ComponentDriver(Robot robot) {
-    this(robot, new DragAndDrop(robot));
-  }
-
-  ComponentDriver(Robot robot, DragAndDrop dragAndDrop) {
     this.robot = robot;
-    this.dragAndDrop = dragAndDrop;
+    this.dragAndDrop = new ComponentDragAndDrop(robot);
   }
 
   /**
