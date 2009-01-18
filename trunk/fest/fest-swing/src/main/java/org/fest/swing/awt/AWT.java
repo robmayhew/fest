@@ -59,6 +59,7 @@ public class AWT {
    * @param x X coordinate.
    * @param y Y coordinate.
    * @return the translated coordinates.
+   * @since 1.1
    */
   @RunsInCurrentThread
   public static Point translate(Component c, int x, int y) {
