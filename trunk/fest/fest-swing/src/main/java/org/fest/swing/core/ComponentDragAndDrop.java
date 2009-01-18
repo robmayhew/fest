@@ -30,7 +30,8 @@ import static org.fest.swing.util.Platform.*;
 import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
 
 /**
- * Understands <code>{@link Component}</code>-based .
+ * Understands <code>{@link Component}</code>-based drag and drop.
+ * @since 1.1
  *
  * @author Alex Ruiz
  */
