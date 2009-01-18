@@ -9,6 +9,12 @@
       <action dev="alruiz" type="add" issue="91" due-to="Andres Almiray">
         Added class org.fest.swing.testing.FestSwingTestCase.
       </action>
+      <action dev="alruiz" type="add" issue="91" due-to="Andres Almiray">
+        Added class org.fest.swing.junit.testing.FestSwingJUnitTestCase.
+      </action>
+      <action dev="alruiz" type="add" issue="91" due-to="Andres Almiray">
+        Added class org.fest.swing.testng.testing.FestSwingTestngTestCase.
+      </action>
       <action dev="alruiz" type="add" issue="282">
         Added methods moveMouse(Point), moveMouse(int, int) and pressMouse(Point, MouseButton) to 
         org.fest.swing.core.Robot.  
