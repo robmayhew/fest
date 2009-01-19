@@ -20,6 +20,7 @@ import org.fest.swing.core.Robot;
 
 /**
  * Understands a template for test cases that use FEST-Swing.
+ * @since 1.1
  *
  * @author Alex Ruiz
  */
