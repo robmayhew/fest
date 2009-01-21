@@ -15,12 +15,12 @@
  */
 package org.fest.swing.core;
 
-import static org.fest.swing.util.Arrays.copyOf;
-
 import java.awt.Event;
 import java.awt.event.KeyEvent;
 
 import org.fest.swing.util.Platform;
+
+import static org.fest.swing.util.Arrays.copyOf;
 
 /**
  * Understands information about pressing a keyboard key.
@@ -31,7 +31,7 @@ import org.fest.swing.util.Platform;
  * Specify that 'CTRL' + 'C' should be pressed:
  * <pre>
  * // import static org.fest.swing.fixture.KeyPressInfo.*;
- * MouseClickInfo i = key(VK_C).modifiers(CTRL_MASK);
+ * KeyPressInfo i = key(VK_C).modifiers(CTRL_MASK);
  * </pre>
  * </p>
  * <p>
