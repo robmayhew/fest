@@ -60,16 +60,6 @@ public abstract class GroupAssert<T> extends GenericAssert<T> {
   abstract GroupAssert<T> hasSize(int expected);
 
   /**
-   * Returns an <code>{@link IntAssert}</code> for verification of the size of the actual group.
-   * @return assertion methods for verification of the size of the actual group.
-   * @throws AssertionError if the actual group is <code>null</code>.
-   */
-  public final IntAssert size() {
-    isNotNull();
-    return new IntAssert(actualGroupSize());
-  }
-
-  /**
    * Returns the size of the actual group (array, collection, etc.)
    * @return the size of the actual group.
    */
