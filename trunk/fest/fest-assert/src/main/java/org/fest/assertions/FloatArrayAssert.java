@@ -237,7 +237,11 @@ public final class FloatArrayAssert extends ArrayAssert<float[]> {
     return this;
   }
 
-  int actualGroupSize() {
+  /**
+   * Returns the number of elements in the actual <code>float</code> array.
+   * @return the number of elements in the actual <code>float</code> array.
+   */
+  protected int actualGroupSize() {
     isNotNull();
     return actual.length;
   }

@@ -26,15 +26,15 @@ import static org.fest.util.Strings.concat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-abstract class GenericAssert<T> extends Assert {
+public abstract class GenericAssert<T> extends Assert {
 
-  final T actual;
+  protected final T actual;
 
   /**
    * Creates a new <code>{@link GenericAssert}</code>.
    * @param actual the actual target to verify.
    */
-  GenericAssert(T actual) {
+  protected GenericAssert(T actual) {
     this.actual = actual;
   }
 
@@ -52,7 +52,7 @@ abstract class GenericAssert<T> extends Assert {
    * @return this assertion object.
    * @throws AssertionError if the actual value does not satisfy the given condition.
    */
-  abstract GenericAssert<T> satisfies(Condition<T> condition);
+  protected abstract GenericAssert<T> satisfies(Condition<T> condition);
 
   /**
    * Verifies that the actual value does not satisfy the given condition.
@@ -60,7 +60,7 @@ abstract class GenericAssert<T> extends Assert {
    * @return this assertion object.
    * @throws AssertionError if the actual value does satisfies the given condition.
    */
-  abstract GenericAssert<T> doesNotSatisfy(Condition<T> condition);
+  protected abstract GenericAssert<T> doesNotSatisfy(Condition<T> condition);
 
   /**
    * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
@@ -75,7 +75,7 @@ abstract class GenericAssert<T> extends Assert {
    * @param description the description of the actual value.
    * @return this assertion object.
    */
-  abstract GenericAssert<T> as(String description);
+  protected abstract GenericAssert<T> as(String description);
 
   /**
    * Alternative to <code>{@link #as(String)}</code>, since "as" is a keyword in
@@ -90,7 +90,7 @@ abstract class GenericAssert<T> extends Assert {
    * @param description the description of the actual value.
    * @return this assertion object.
    */
-  abstract GenericAssert<T> describedAs(String description);
+  protected abstract GenericAssert<T> describedAs(String description);
 
   /**
    * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
@@ -105,7 +105,7 @@ abstract class GenericAssert<T> extends Assert {
    * @param description the description of the actual value.
    * @return this assertion object.
    */
-  abstract GenericAssert<T> as(Description description);
+  protected abstract GenericAssert<T> as(Description description);
 
   /**
    * Alternative to <code>{@link #as(Description)}</code>, since "as" is a keyword in
@@ -120,7 +120,7 @@ abstract class GenericAssert<T> extends Assert {
    * @param description the description of the actual value.
    * @return this assertion object.
    */
-  abstract GenericAssert<T> describedAs(Description description);
+  protected abstract GenericAssert<T> describedAs(Description description);
 
   /**
    * Verifies that the actual value is equal to the given one.
@@ -128,7 +128,7 @@ abstract class GenericAssert<T> extends Assert {
    * @return this assertion object.
    * @throws AssertionError if the actual value is not equal to the given one.
    */
-  abstract GenericAssert<T> isEqualTo(T expected);
+  protected abstract GenericAssert<T> isEqualTo(T expected);
 
   /**
    * Verifies that the actual value is not equal to the given one.
@@ -136,14 +136,14 @@ abstract class GenericAssert<T> extends Assert {
    * @return this assertion object.
    * @throws AssertionError if the actual value is equal to the given one.
    */
-  abstract GenericAssert<T> isNotEqualTo(T other);
+  protected abstract GenericAssert<T> isNotEqualTo(T other);
 
   /**
    * Verifies that the actual value is not <code>null</code>.
    * @return this assertion object.
    * @throws AssertionError if the actual value is <code>null</code>.
    */
-  abstract GenericAssert<T> isNotNull();
+  protected abstract GenericAssert<T> isNotNull();
 
   /**
    * Verifies that the actual value is the same as the given one.
@@ -151,7 +151,7 @@ abstract class GenericAssert<T> extends Assert {
    * @return this assertion object.
    * @throws AssertionError if the actual value is not the same as the given one.
    */
-  abstract GenericAssert<T> isSameAs(T expected);
+  protected abstract GenericAssert<T> isSameAs(T expected);
 
   /**
    * Verifies that the actual value is not the same as the given one.
@@ -159,9 +159,14 @@ abstract class GenericAssert<T> extends Assert {
    * @return this assertion object.
    * @throws AssertionError if the actual value is the same as the given one.
    */
-  abstract GenericAssert<T> isNotSameAs(T other);
+  protected abstract GenericAssert<T> isNotSameAs(T other);
 
-  final void assertSatisfies(Condition<T> condition) {
+  /**
+   * Verifies that the actual value satisfies the given condition.
+   * @param condition the condition to check.
+   * @throws AssertionError if the actual value does not satisfy the given condition.
+   */
+  protected final void assertSatisfies(Condition<T> condition) {
     validate(condition);
     if (condition.matches(actual)) return;
     fail(errorMessageIfConditionNotSatisfied(condition));
@@ -172,7 +177,12 @@ abstract class GenericAssert<T> extends Assert {
     return condition.addDescriptionTo(message);
   }
 
-  final void assertDoesNotSatisfy(Condition<T> condition) {
+  /**
+   * Verifies that the actual value does not satisfy the given condition.
+   * @param condition the condition to check.
+   * @throws AssertionError if the actual value satisfies the given condition.
+   */
+  protected final void assertDoesNotSatisfy(Condition<T> condition) {
     validate(condition);
     if (!condition.matches(actual)) return;
     fail(errorMessageIfConditionSatisfied(condition));
@@ -187,31 +197,64 @@ abstract class GenericAssert<T> extends Assert {
     if (condition == null) throw new IllegalArgumentException("Condition to check should be null");
   }
 
-  final void assertEqualTo(T expected) {
+  /**
+   * Verifies that the actual value is equal to the given one.
+   * @param expected the value to compare the actual value to.
+   * @throws AssertionError if the actual value is not equal to the given one. 
+   */
+  protected final void assertEqualTo(T expected) {
     failIfNotEqual(description(), actual, expected);
   }
 
-  final void assertNotEqualTo(T obj) {
+  /**
+   * Verifies that the actual value is not equal to the given one.
+   * @param obj the value to compare the actual value to.
+   * @throws AssertionError if the actual value is equal to the given one. 
+   */
+  protected final void assertNotEqualTo(T obj) {
     failIfEqual(description(), actual, obj);
   }
 
-  final void assertNotNull() {
+  /**
+   * Verifies that the actual value is not <code>null</code>.
+   * @throws AssertionError if the actual value is <code>null</code>.
+   */
+  protected final void assertNotNull() {
     failIfNull(description(), actual);
   }
 
-  final void assertSameAs(T expected) {
+  /**
+   * Verifies that the actual value is the same as the given one.
+   * @param expected the value to compare the actual value to.
+   * @throws AssertionError if the actual value is not the same as the given one. 
+   */
+  protected final void assertSameAs(T expected) {
     failIfNotSame(description(), actual, expected);
   }
 
-  final void assertNotSameAs(T expected) {
+  /**
+   * Verifies that the actual value is not the same as the given one.
+   * @param expected the value to compare the actual value to.
+   * @throws AssertionError if the actual value is the same as the given one. 
+   */
+  protected final void assertNotSameAs(T expected) {
     failIfSame(description(), actual, expected);
   }
 
-  final void fail(String reason) {
+  /**
+   * Fails by throwing an <code>{@link AssertionError}</code>.
+   * @param reason the reason for the failure, used as the message for the thrown exception.
+   */
+  protected final void fail(String reason) {
     Fail.fail(formatted(reason));
   }
 
-  final void fail(String reason, Throwable cause) {
+  /**
+   * Fails by throwing an <code>{@link AssertionError}</code>.
+   * @param reason the reason for the failure, used as the message for the thrown exception.
+   * @param cause the root cause of the failure, included in the thrown exception.
+   */
+  protected final void fail(String reason, Throwable cause) {
     Fail.fail(formatted(reason), cause);
   }
 

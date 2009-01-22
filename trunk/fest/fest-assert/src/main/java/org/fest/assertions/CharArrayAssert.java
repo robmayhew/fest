@@ -236,7 +236,11 @@ public final class CharArrayAssert extends ArrayAssert<char[]> {
     return this;
   }
 
-  int actualGroupSize() {
+  /**
+   * Returns the number of elements in the actual <code>char</code> array.
+   * @return the number of elements in the actual <code>char</code> array.
+   */
+  protected int actualGroupSize() {
     isNotNull();
     return actual.length;
   }

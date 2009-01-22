@@ -236,7 +236,11 @@ public final class ShortArrayAssert extends ArrayAssert<short[]> {
     return this;
   }
 
-  int actualGroupSize() {
+  /**
+   * Returns the number of elements in the actual <code>short</code> array.
+   * @return the number of elements in the actual <code>short</code> array.
+   */
+  protected int actualGroupSize() {
     isNotNull();
     return actual.length;
   }

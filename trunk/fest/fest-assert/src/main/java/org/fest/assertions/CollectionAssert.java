@@ -275,7 +275,11 @@ public final class CollectionAssert extends GroupAssert<Collection<?>> {
     return this;
   }
 
-  int actualGroupSize() {
+  /**
+   * Returns the number of elements in the actual collection.
+   * @return the number of elements in the actual collection.
+   */
+  protected int actualGroupSize() {
     isNotNull();
     return actual.size();
   }

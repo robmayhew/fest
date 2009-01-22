@@ -291,7 +291,11 @@ public final class ObjectArrayAssert extends ArrayAssert<Object[]> {
     return this;
   }
 
-  int actualGroupSize() {
+  /**
+   * Returns the number of elements in the actual <code>Object</code> array.
+   * @return the number of elements in the actual <code>Object</code> array.
+   */
+  protected int actualGroupSize() {
     isNotNull();
     return actual.length;
   }

@@ -226,7 +226,11 @@ public final class StringAssert extends GroupAssert<String> {
     return this;
   }
 
-  int actualGroupSize() {
+  /**
+   * Returns the number of elements in the actual <code>String</code>.
+   * @return the number of elements in the actual <code>String</code>.
+   */
+  protected int actualGroupSize() {
     isNotNull();
     return actual.length();
   }

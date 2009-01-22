@@ -236,7 +236,11 @@ public final class LongArrayAssert extends ArrayAssert<long[]> {
     return this;
   }
 
-  int actualGroupSize() {
+  /**
+   * Returns the number of elements in the actual <code>int</code> array.
+   * @return the number of elements in the actual <code>int</code> array.
+   */
+  protected int actualGroupSize() {
     isNotNull();
     return actual.length;
   }

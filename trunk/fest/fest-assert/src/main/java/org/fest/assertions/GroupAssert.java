@@ -22,7 +22,7 @@ package org.fest.assertions;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-abstract class GroupAssert<T> extends GenericAssert<T> {
+public abstract class GroupAssert<T> extends GenericAssert<T> {
 
   /**
    * Creates a new <code>{@link GroupAssert}</code>.
@@ -69,5 +69,9 @@ abstract class GroupAssert<T> extends GenericAssert<T> {
     return new IntAssert(actualGroupSize());
   }
 
-  abstract int actualGroupSize();
+  /**
+   * Returns the size of the actual group (array, collection, etc.)
+   * @return the size of the actual group.
+   */
+  protected abstract int actualGroupSize();
 }

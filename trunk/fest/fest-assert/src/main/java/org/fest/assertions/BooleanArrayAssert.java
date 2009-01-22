@@ -236,7 +236,11 @@ public final class BooleanArrayAssert extends ArrayAssert<boolean[]> {
     return this;
   }
 
-  int actualGroupSize() {
+  /**
+   * Returns the number of elements in the actual <code>boolean</code> array.
+   * @return the number of elements in the actual <code>boolean</code> array.
+   */
+  protected int actualGroupSize() {
     isNotNull();
     return actual.length;
   }

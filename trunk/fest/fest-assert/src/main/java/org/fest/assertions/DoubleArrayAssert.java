@@ -235,7 +235,11 @@ public final class DoubleArrayAssert extends ArrayAssert<double[]> {
     return this;
   }
 
-  int actualGroupSize() {
+  /**
+   * Returns the number of elements in the actual <code>double</code> array.
+   * @return the number of elements in the actual <code>double</code> array.
+   */
+  protected int actualGroupSize() {
     isNotNull();
     return actual.length;
   }

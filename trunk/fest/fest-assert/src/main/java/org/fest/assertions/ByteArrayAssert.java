@@ -236,7 +236,11 @@ public final class ByteArrayAssert extends ArrayAssert<byte[]> {
     return this;
   }
 
-  int actualGroupSize() {
+  /**
+   * Returns the number of elements in the actual <code>byte</code> array.
+   * @return the number of elements in the actual <code>byte</code> array.
+   */
+  protected int actualGroupSize() {
     isNotNull();
     return actual.length;
   }

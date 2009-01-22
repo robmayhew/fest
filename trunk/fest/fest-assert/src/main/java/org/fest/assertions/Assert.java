@@ -19,8 +19,9 @@ package org.fest.assertions;
  * Understands the base class for all assertion methods for objects and primitives.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-abstract class Assert {
+public abstract class Assert {
 
   Description description;
 
@@ -32,11 +33,21 @@ abstract class Assert {
     return description != null ? description.value() : null;
   }
 
-  final void description(String description) {
+  /**
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails.
+   * @param description the new description.
+   */
+  protected final void description(String description) {
     description(new BasicDescription(description));
   }
 
-  final void description(Description description) {
+  /**
+   * Sets the description of the actual value, to be used in as message of any <code>{@link AssertionError}</code>
+   * thrown when an assertion fails.
+   * @param description the new description.
+   */
+  protected final void description(Description description) {
     this.description = description;
   }
 

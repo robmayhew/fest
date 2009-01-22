@@ -350,7 +350,11 @@ public final class MapAssert extends GroupAssert<Map<?, ?>> {
     return this;
   }
 
-  int actualGroupSize() {
+  /**
+   * Returns the number of elements in the actual <code>{@link Map}</code>.
+   * @return the number of elements in the actual <code>{@link Map}</code>.
+   */
+  protected int actualGroupSize() {
     isNotNull();
     return actual.size();
   }
