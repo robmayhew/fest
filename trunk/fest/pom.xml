@@ -26,6 +26,7 @@
       <email>alex.ruiz.05 at gmail.com</email>
       <url>http://www.jroller.com/alexRuiz/</url>
       <roles>
+        <role>Project Manager</role>
         <role>Developer</role>
       </roles>
     </developer>
@@ -34,12 +35,33 @@
       <name>Yvonne Wang Price</name>
       <email>wanghy1101 at gmail.com</email>
       <roles>
+        <role>Project Manager</role>
         <role>Developer</role>
       </roles>
     </developer>
     <developer>
       <name>Michael Huttermann</name>
       <url>http://michaelhuettermann.blogspot.com/</url>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Juhos Csaba-Zsolt</name>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Simeon Fitch</name>
+      <url>http://www.mseedsoft.com/</url>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Ted Young</name>
+      <url>http://tedyoung.blogsome.com/</url>
       <roles>
         <role>Developer</role>
       </roles>
@@ -78,9 +100,6 @@
       <name>Keith Coughtrey</name>
     </contributor>
     <contributor>
-      <name>Juhos Csaba-Zsolt</name>
-    </contributor>
-    <contributor>
       <name>Wim Deblauwe</name>
       <url>http://www.jroller.com/page/Fester</url>
       <organizationUrl>http://vigilog.sourceforge.net/</organizationUrl>
@@ -100,7 +119,7 @@
       <name>Dan Dyer</name>
     </contributor>
     <contributor>
-      <name>Simeon Fitch</name>
+      <name>Jacob Fahrenkrug</name>
     </contributor>
     <contributor>
       <name>Woody Folsom</name>
@@ -110,6 +129,9 @@
     </contributor>
     <contributor>
       <name>Ken Geis</name>
+    </contributor>
+    <contributor>
+      <name>Timmo Gierke</name>
     </contributor>
     <contributor>
       <name>Jason Goodwin</name>
@@ -214,11 +236,6 @@
     </contributor>
     <contributor>
       <name>Geoffrey Wiseman</name>
-    </contributor>
-    <contributor>
-      <name>Ted Young</name>
-      <organization>Guidewire Software</organization>
-      <organizationUrl>http://www.guidewire.com</organizationUrl>
     </contributor>
     <contributor>
       <name>Jan Zuchhold</name>
