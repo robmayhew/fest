@@ -21,23 +21,29 @@ package org.fest.reflect.field;
  * The following is an example of proper usage of this class:
  * <pre>
  *   // Retrieves the value of the field "name"
- *   String name = {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link Name#ofType(Class) ofType}(String.class).{@link Type#in(Object) in}(person).{@link Invoker#get() get}();
+ *   String name = {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link FieldName#ofType(Class) ofType}(String.class).{@link FieldType#in(Object) in}(person).{@link Invoker#get() get}();
  *   
  *   // Sets the value of the field "name" to "Yoda"
- *   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link Name#ofType(Class) ofType}(String.class).{@link Type#in(Object) in}(person).{@link Invoker#set(Object) set}("Yoda");
+ *   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link FieldName#ofType(Class) ofType}(String.class).{@link FieldType#in(Object) in}(person).{@link Invoker#set(Object) set}("Yoda");
  * </pre>
  * </p>
  *
  * @author Alex Ruiz
  */
-public final class Name extends NameTemplate {
+public final class FieldName extends NameTemplate {
 
   /**
-   * Creates a new <code>{@link Name}</code>.
+   * Creates a new <code>{@link FieldName}</code>: the starting point of the fluent interface for accessing fields
+   * using Java Reflection.
    * @param name the name of the field to access using Java Reflection.
+   * @return the created <code>FieldName</code> instance.
    * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
-  public Name(String name) {
+  public static FieldName fieldName(String name) {
+    return new FieldName(name);
+  }
+  
+  private FieldName(String name) {
     super(name);
   }
 
@@ -48,7 +54,7 @@ public final class Name extends NameTemplate {
    * @return a recipient for the field type.
    * @throws IllegalArgumentException if the given type is <code>null</code>.
    */
-  public <T> Type<T> ofType(Class<T> type) {
-    return new Type<T>(type, this);
+  public <T> FieldType<T> ofType(Class<T> type) {
+    return new FieldType<T>(type, this);
   }
 }

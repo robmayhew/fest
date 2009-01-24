@@ -34,18 +34,18 @@ public class ReflectionTest {
   }
   
   @Test public void shouldReturnFieldFactory() {
-    assertThat(Reflection.field("field")).isInstanceOf(org.fest.reflect.field.Name.class);
+    assertThat(Reflection.field("field")).isInstanceOf(org.fest.reflect.field.FieldName.class);
   }
 
   @Test public void shouldReturnStaticFieldFactory() {
-    assertThat(Reflection.staticField("field")).isInstanceOf(org.fest.reflect.field.StaticName.class);
+    assertThat(Reflection.staticField("field")).isInstanceOf(org.fest.reflect.field.StaticFieldName.class);
   }
 
   @Test public void shouldReturnMethodFactory() {
-    assertThat(Reflection.method("method")).isInstanceOf(org.fest.reflect.method.Name.class);
+    assertThat(Reflection.method("method")).isInstanceOf(org.fest.reflect.method.MethodName.class);
   }
 
   @Test public void shouldReturnStaticMethodFactory() {
-    assertThat(Reflection.staticMethod("method")).isInstanceOf(org.fest.reflect.method.StaticName.class);
+    assertThat(Reflection.staticMethod("method")).isInstanceOf(org.fest.reflect.method.StaticMethodName.class);
   }
 }

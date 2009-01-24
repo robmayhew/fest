@@ -21,15 +21,15 @@ package org.fest.reflect.method;
  * The following is an example of proper usage of this class:
  * <pre>
  *   // Equivalent to call 'person.setName("Luke")'
- *   {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link Name#withParameterTypes(Class...) withParameterTypes}(String.class)
+ *   {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link MethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
  *                    .{@link ParameterTypes#in(Object) in}(person)
  *                    .{@link Invoker#invoke(Object...) invoke}("Luke");
  * 
  *   // Equivalent to call 'person.concentrate()'
- *   {@link org.fest.reflect.core.Reflection#method(String) method}("concentrate").{@link Name#in(Object) in}(person).{@link Invoker#invoke(Object...) invoke}();
+ *   {@link org.fest.reflect.core.Reflection#method(String) method}("concentrate").{@link MethodName#in(Object) in}(person).{@link Invoker#invoke(Object...) invoke}();
  *   
  *   // Equivalent to call 'person.getName()'
- *   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link Name#withReturnType(Class) withReturnType}(String.class)
+ *   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link MethodName#withReturnType(Class) withReturnType}(String.class)
  *                                  .{@link ReturnType#in(Object) in}(person)
  *                                  .{@link Invoker#invoke(Object...) invoke}();   
  * </pre>
@@ -41,7 +41,7 @@ package org.fest.reflect.method;
  * @author Alex Ruiz
  */
 public class ReturnType<T> extends ReturnTypeTemplate<T> {
-  ReturnType(Class<T> type, Name methodName) {
+  ReturnType(Class<T> type, MethodName methodName) {
     super(type, methodName);
   }
 

@@ -44,35 +44,36 @@ public class MethodTest {
   public void shouldThrowErrorIfFieldNameIsNullOrEmpty(final String name) {
     expectIllegalArgumentException("The name of the method to access should not be null or empty").on(new CodeToTest() {
       public void run() {
-        new Name(name);
+        MethodName.methodName(name);
       }
     });
   }
 
   @Test public void shouldCallMethodWithArgsAndNoReturnValue() {
-    new Name("setName").withParameterTypes(String.class).in(jedi).invoke("Leia");
+    MethodName.methodName("setName").withParameterTypes(String.class).in(jedi).invoke("Leia");
     assertThat(jedi.getName()).isEqualTo("Leia");
   }
 
   @Test public void shouldCallMethodWithNoArgsAndReturnValue() {
-    String personName = new Name("getName").withReturnType(String.class).in(jedi).invoke();
+    String personName = MethodName.methodName("getName").withReturnType(String.class).in(jedi).invoke();
     assertThat(personName).isEqualTo("Luke");
   }
 
   @Test public void shouldCallMethodWithArgsAndReturnType() {
     jedi.addPower("Healing");
-    String power = new Name("powerAt").withReturnType(String.class).withParameterTypes(int.class).in(jedi).invoke(0);
+    String power = MethodName.methodName("powerAt").withReturnType(String.class)
+                                                   .withParameterTypes(int.class).in(jedi).invoke(0);
     assertThat(power).isEqualTo("Healing");
   }
 
   @Test public void shouldCallMethodWithNoArgsAndNoReturnValue() {
     assertThat(jedi.isMaster()).isFalse();
-    new Name("makeMaster").in(jedi).invoke();
+    MethodName.methodName("makeMaster").in(jedi).invoke();
     assertThat(jedi.isMaster()).isTrue();
   }
 
   @Test public void shouldReturnMethodInfo() {
-    java.lang.reflect.Method method = new Name("setName").withParameterTypes(String.class).in(jedi).info();
+    java.lang.reflect.Method method = MethodName.methodName("setName").withParameterTypes(String.class).in(jedi).info();
     assertThat(method).isNotNull();
     assertThat(method.getName()).isEqualTo("setName");
     Class<?>[] parameterTypes = method.getParameterTypes();
@@ -85,7 +86,7 @@ public class MethodTest {
     expectReflectionError(message).on(new CodeToTest() {
       public void run() {
         String invalidName = "getAge";
-        new Name(invalidName).withReturnType(Integer.class).in(jedi);
+        MethodName.methodName(invalidName).withReturnType(Integer.class).in(jedi);
       }
     });
   }
@@ -94,7 +95,7 @@ public class MethodTest {
     expectReflectionError("Unable to invoke method 'setName' with arguments [8]").on(new CodeToTest() {
       public void run() {
         int invalidArg = 8;
-        new Name("setName").withParameterTypes(String.class).in(jedi).invoke(invalidArg);
+        MethodName.methodName("setName").withParameterTypes(String.class).in(jedi).invoke(invalidArg);
       }
     });
   }
@@ -103,7 +104,7 @@ public class MethodTest {
   public void shouldThrowErrorIfStaticFieldNameIsNullOrEmpty(final String name) {
     expectIllegalArgumentException("The name of the method to access should not be null or empty").on(new CodeToTest() {
       public void run() {
-        new StaticName(name);
+        StaticMethodName.staticMethodName(name);
       }
     });
   }
@@ -112,12 +113,13 @@ public class MethodTest {
     Jedi.addCommonPower("Jump");
     String method = "commonPowerAt";
     String power =
-      new StaticName(method).withReturnType(String.class).withParameterTypes(int.class).in(Jedi.class).invoke(0);
+      StaticMethodName.staticMethodName(method).withReturnType(String.class).withParameterTypes(int.class)
+                                               .in(Jedi.class).invoke(0);
     assertThat(power).isEqualTo("Jump");
   }
 
   @Test public void shouldStaticCallMethodWithArgsAndNoReturnValue() {
-    new StaticName("addCommonPower").withParameterTypes(String.class).in(Jedi.class).invoke("Jump");
+    StaticMethodName.staticMethodName("addCommonPower").withParameterTypes(String.class).in(Jedi.class).invoke("Jump");
     assertThat(Jedi.commonPowerAt(0)).isEqualTo("Jump");
   }
 
@@ -125,13 +127,13 @@ public class MethodTest {
     Jedi.addCommonPower("Jump");
     assertThat(Jedi.commonPowerCount()).isEqualTo(1);
     assertThat(Jedi.commonPowerAt(0)).isEqualTo("Jump");
-    new StaticName("clearCommonPowers").in(Jedi.class).invoke();
+    StaticMethodName.staticMethodName("clearCommonPowers").in(Jedi.class).invoke();
     assertThat(Jedi.commonPowerCount()).isEqualTo(0);
   }
 
   @Test public void shouldCallStaticMethodWithReturnValueAndNoArgs() {
     Jedi.addCommonPower("Jump");
-    int count = new StaticName("commonPowerCount").withReturnType(int.class).in(Jedi.class).invoke();
+    int count = StaticMethodName.staticMethodName("commonPowerCount").withReturnType(int.class).in(Jedi.class).invoke();
     assertThat(count).isEqualTo(Jedi.commonPowerCount());
   }
   
@@ -140,7 +142,7 @@ public class MethodTest {
     expectReflectionError(message).on(new CodeToTest() {
       public void run() {
         String invalidName = "powerSize";
-        new StaticName(invalidName).in(Jedi.class);
+        StaticMethodName.staticMethodName(invalidName).in(Jedi.class);
       }
     });
   }
@@ -149,7 +151,8 @@ public class MethodTest {
     expectReflectionError("Unable to invoke method 'addCommonPower' with arguments [8]").on(new CodeToTest() {
       public void run() {
         int invalidArg = 8;
-        new StaticName("addCommonPower").withParameterTypes(String.class).in(Jedi.class).invoke(invalidArg);
+        StaticMethodName.staticMethodName("addCommonPower").withParameterTypes(String.class)
+                                                           .in(Jedi.class).invoke(invalidArg);
       }
     });
   }

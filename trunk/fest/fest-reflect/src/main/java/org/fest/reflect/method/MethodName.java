@@ -24,15 +24,15 @@ import org.fest.reflect.exception.ReflectionError;
  * The following is an example of proper usage of this class:
  * <pre>
  *   // Equivalent to call 'person.setName("Luke")'
- *   {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link Name#withParameterTypes(Class...) withParameterTypes}(String.class)
+ *   {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link MethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
  *                    .{@link ParameterTypes#in(Object) in}(person)
  *                    .{@link Invoker#invoke(Object...) invoke}("Luke");
  *
  *   // Equivalent to call 'person.concentrate()'
- *   {@link org.fest.reflect.core.Reflection#method(String) method}("concentrate").{@link Name#in(Object) in}(person).{@link Invoker#invoke(Object...) invoke}();
+ *   {@link org.fest.reflect.core.Reflection#method(String) method}("concentrate").{@link MethodName#in(Object) in}(person).{@link Invoker#invoke(Object...) invoke}();
  *
  *   // Equivalent to call 'person.getName()'
- *   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link Name#withReturnType(Class) withReturnType}(String.class)
+ *   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link MethodName#withReturnType(Class) withReturnType}(String.class)
  *                                  .{@link ReturnType#in(Object) in}(person)
  *                                  .{@link Invoker#invoke(Object...) invoke}();
  * </pre>
@@ -41,14 +41,20 @@ import org.fest.reflect.exception.ReflectionError;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class Name extends NameTemplate {
+public final class MethodName extends NameTemplate {
 
   /**
-   * Creates a new <code>{@link Name}</code>.
-   * @param name the name of the method to invoke.
+   * Creates a new <code>{@link MethodName}</code>: the starting point of the fluent interface for accessing methods
+   * using Java Reflection.
+   * @param name the name of the method to invoke using Java Reflection.
+   * @return the created <code>MethodName</code> instance.
    * @throws ReflectionError if the given name is <code>null</code> or empty.
    */
-  public Name(String name) {
+  public static MethodName methodName(String name) {
+    return new MethodName(name);
+  }
+  
+  private MethodName(String name) {
     super(name);
   }
 

@@ -15,6 +15,8 @@
  */
 package org.fest.reflect.constructor;
 
+import java.lang.reflect.Constructor;
+
 import org.testng.annotations.Test;
 
 import org.fest.reflect.Person;
@@ -31,19 +33,19 @@ import static org.fest.assertions.Assertions.assertThat;
 public class ConstructorTest {
 
   @Test public void shouldCreateNewInstanceWithDefaultConstructor() {
-    Person person = new TargetType().in(Person.class).newInstance();
+    Person person = TargetType.type().in(Person.class).newInstance();
     assertThat(person).isNotNull();
     assertThat(person.getName()).isNull();
   }
   
   @Test public void shouldCreateNewInstanceUsingGivenConstructorParameters() {
-    Person person = new TargetType().withParameterTypes(String.class).in(Person.class).newInstance("Yoda");
+    Person person = TargetType.type().withParameterTypes(String.class).in(Person.class).newInstance("Yoda");
     assertThat(person).isNotNull();
     assertThat(person.getName()).isEqualTo("Yoda");
   }
   
   @Test public void shouldReturnConstructorInfo() {
-    java.lang.reflect.Constructor<Person> constructor = new TargetType().withParameterTypes(String.class).in(Person.class).info();
+    Constructor<Person> constructor = TargetType.type().withParameterTypes(String.class).in(Person.class).info();
     assertThat(constructor).isNotNull();
     Class<?>[] parameterTypes = constructor.getParameterTypes();
     assertThat(parameterTypes).hasSize(1);
@@ -53,12 +55,12 @@ public class ConstructorTest {
   @Test(expectedExceptions = ReflectionError.class)
   public void shouldThrowErrorIfConstructorNotFound() {
     Class<Integer> illegalType = Integer.class;
-    new TargetType().withParameterTypes(illegalType).in(Person.class);
+    TargetType.type().withParameterTypes(illegalType).in(Person.class);
   }
   
   @Test(expectedExceptions = ReflectionError.class)
   public void shouldThrowErrorIfInstanceNotCreated() {
     int illegalArg = 8;
-    new TargetType().withParameterTypes(String.class).in(Person.class).newInstance(illegalArg);
+    TargetType.type().withParameterTypes(String.class).in(Person.class).newInstance(illegalArg);
   }
 }

@@ -22,10 +22,10 @@ import org.fest.reflect.exception.ReflectionError;
  * The following is an example of proper usage of this class:
  * <pre>
  *   // Retrieves the value of the field "name"
- *   String name = {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link Name#ofType(Class) ofType}(String.class).{@link Type#in(Object) in}(person).{@link Invoker#get() get}();
+ *   String name = {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link FieldName#ofType(Class) ofType}(String.class).{@link FieldType#in(Object) in}(person).{@link Invoker#get() get}();
  *   
  *   // Sets the value of the field "name" to "Yoda"
- *   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link Name#ofType(Class) ofType}(String.class).{@link Type#in(Object) in}(person).{@link Invoker#set(Object) set}("Yoda");
+ *   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link FieldName#ofType(Class) ofType}(String.class).{@link FieldType#in(Object) in}(person).{@link Invoker#set(Object) set}("Yoda");
  * </pre>
  * </p>
  *
@@ -33,9 +33,9 @@ import org.fest.reflect.exception.ReflectionError;
  *
  * @author Alex Ruiz
  */
-public class Type<T> extends TypeTemplate<T> {
+public class FieldType<T> extends TypeTemplate<T> {
 
-  Type(Class<T> type, Name fieldName) {
+  FieldType(Class<T> type, FieldName fieldName) {
     super(type, fieldName);
   }
 

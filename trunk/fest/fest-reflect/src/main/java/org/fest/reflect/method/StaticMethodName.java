@@ -21,15 +21,15 @@ package org.fest.reflect.method;
  * The following is an example of proper usage of this class:
  * <pre>
  *   // Equivalent to call 'Jedi.class.setCommonPower("Jump")'
- *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("setCommonPower").{@link StaticName#withParameterTypes(Class...) withParameterTypes}(String.class)
+ *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("setCommonPower").{@link StaticMethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
  *                                 .{@link StaticParameterTypes#in(Class) in}(Jedi.class)
  *                                 .{@link Invoker#invoke(Object...) invoke}("Jump");
  *
  *   // Equivalent to call 'Jedi.class.addPadawan()'
- *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("addPadawan").{@link StaticName#in(Class) in}(Jedi.class).{@link Invoker#invoke(Object...) invoke}();
+ *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("addPadawan").{@link StaticMethodName#in(Class) in}(Jedi.class).{@link Invoker#invoke(Object...) invoke}();
  *
  *   // Equivalent to call 'Jedi.class.commonPowerCount()'
- *   String name = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("commonPowerCount").{@link StaticName#withReturnType(Class) withReturnType}(String.class)
+ *   String name = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("commonPowerCount").{@link StaticMethodName#withReturnType(Class) withReturnType}(String.class)
  *                                                 .{@link StaticReturnType#in(Class) in}(Jedi.class)
  *                                                 .{@link Invoker#invoke(Object...) invoke}();
  * </pre>
@@ -37,14 +37,20 @@ package org.fest.reflect.method;
  *
  * @author Alex Ruiz
  */
-public class StaticName extends NameTemplate {
+public class StaticMethodName extends NameTemplate {
 
   /**
-   * Creates a new </code>{@link StaticName}</code>.
+   * Creates a new </code>{@link StaticMethodName}</code>: the starting point of the fluent interface for accessing 
+   * static methods using Java Reflection.
    * @param name the name of the method to access using Java Reflection.
+   * @return the created <code>StaticMethodName</code> instance.
    * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
-  public StaticName(String name) {
+  public static StaticMethodName staticMethodName(String name) {
+    return new StaticMethodName(name);
+  }
+  
+  private StaticMethodName(String name) {
     super(name);
   }
 

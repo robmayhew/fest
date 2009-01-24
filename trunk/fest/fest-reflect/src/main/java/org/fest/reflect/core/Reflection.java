@@ -15,9 +15,18 @@
 package org.fest.reflect.core;
 
 import org.fest.reflect.constructor.TargetType;
+import org.fest.reflect.field.FieldName;
 import org.fest.reflect.field.Invoker;
-import org.fest.reflect.field.StaticName;
-import org.fest.reflect.field.StaticType;
+import org.fest.reflect.field.StaticFieldName;
+import org.fest.reflect.field.StaticFieldType;
+import org.fest.reflect.method.MethodName;
+import org.fest.reflect.method.StaticMethodName;
+
+import static org.fest.reflect.constructor.TargetType.type;
+import static org.fest.reflect.field.FieldName.fieldName;
+import static org.fest.reflect.field.StaticFieldName.staticFieldName;
+import static org.fest.reflect.method.MethodName.methodName;
+import static org.fest.reflect.method.StaticMethodName.staticMethodName;
 
 /**
  * Understands the entry point for the classes in this package.
@@ -30,40 +39,40 @@ import org.fest.reflect.field.StaticType;
  *   Person p = {@link org.fest.reflect.core.Reflection#constructor() constructor}().{@link TargetType#withParameterTypes(Class...) withParameterTypes}(String.class).{@link org.fest.reflect.constructor.ParameterTypes#in(Class) in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}("Yoda");
  * 
  *   // Retrieves the value of the field "name"
- *   String name = {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link org.fest.reflect.field.Name#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.Type#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#get() get}();
+ *   String name = {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link org.fest.reflect.field.FieldName#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.FieldType#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#get() get}();
  *   
  *   // Sets the value of the field "name" to "Yoda"
- *   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link org.fest.reflect.field.Name#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.Type#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#set(Object) set}("Yoda");
+ *   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link org.fest.reflect.field.FieldName#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.FieldType#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#set(Object) set}("Yoda");
  *   
  *   // Equivalent to call 'person.setName("Luke")'
- *   {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link org.fest.reflect.method.Name#withParameterTypes(Class...) withParameterTypes}(String.class)
+ *   {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link org.fest.reflect.method.MethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
  *                    .{@link org.fest.reflect.method.ParameterTypes#in(Object) in}(person)
  *                    .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}("Luke");
  * 
  *   // Retrieves the value of the static field "count" in Person.class
- *   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticName#ofType(Class) ofType}(int.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#get() get}();
+ *   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticFieldName#ofType(Class) ofType}(int.class).{@link StaticFieldType#in(Class) in}(Person.class).{@link Invoker#get() get}();
  *   
  *   // Sets the value of the static field "count" to 3 in Person.class
- *   {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticName#ofType(Class) ofType}(int.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#set(Object) set}(3);
+ *   {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticFieldName#ofType(Class) ofType}(int.class).{@link StaticFieldType#in(Class) in}(Person.class).{@link Invoker#set(Object) set}(3);
  *   
  *   // Equivalent to call 'person.concentrate()'
- *   {@link org.fest.reflect.core.Reflection#method(String) method}("concentrate").{@link org.fest.reflect.method.Name#in(Object) in}(person).{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();
+ *   {@link org.fest.reflect.core.Reflection#method(String) method}("concentrate").{@link org.fest.reflect.method.MethodName#in(Object) in}(person).{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();
  *   
  *   // Equivalent to call 'person.getName()'
- *   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link org.fest.reflect.method.Name#withReturnType(Class) withReturnType}(String.class)
+ *   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link org.fest.reflect.method.MethodName#withReturnType(Class) withReturnType}(String.class)
  *                                  .{@link org.fest.reflect.method.ReturnType#in(Object) in}(person)
  *                                  .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();
  *
  *   // Equivalent to call 'Jedi.class.setCommonPower("Jump")'
- *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("setCommonPower").{@link org.fest.reflect.method.StaticName#withParameterTypes(Class...) withParameterTypes}(String.class)
+ *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("setCommonPower").{@link org.fest.reflect.method.StaticMethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
  *                                 .{@link org.fest.reflect.method.StaticParameterTypes#in(Class) in}(Jedi.class)
  *                                 .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}("Jump");
  *
  *   // Equivalent to call 'Jedi.class.addPadawan()'
- *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("addPadawan").{@link org.fest.reflect.method.StaticName#in(Class) in}(Jedi.class).{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();
+ *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("addPadawan").{@link org.fest.reflect.method.StaticMethodName#in(Class) in}(Jedi.class).{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();
  *
  *   // Equivalent to call 'Jedi.class.commonPowerCount()'
- *   String name = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("commonPowerCount").{@link org.fest.reflect.method.StaticName#withReturnType(Class) withReturnType}(String.class)
+ *   String name = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("commonPowerCount").{@link org.fest.reflect.method.StaticMethodName#withReturnType(Class) withReturnType}(String.class)
  *                                                 .{@link org.fest.reflect.method.StaticReturnType#in(Class) in}(Jedi.class)
  *                                                 .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();
  *                                     
@@ -81,8 +90,8 @@ public final class Reflection {
    * @return the starting point of the method chain.
    * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
-  public static org.fest.reflect.field.Name field(String name) {
-    return new org.fest.reflect.field.Name(name);
+  public static FieldName field(String name) {
+    return fieldName(name);
   }
 
   /**
@@ -91,8 +100,8 @@ public final class Reflection {
    * @return the starting point of the method chain.
    * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
-  public static org.fest.reflect.field.StaticName staticField(String name) {
-    return new org.fest.reflect.field.StaticName(name);
+  public static StaticFieldName staticField(String name) {
+    return staticFieldName(name);
   }
 
   /**
@@ -101,8 +110,8 @@ public final class Reflection {
    * @return the starting point of the method chain.
    * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
-  public static org.fest.reflect.method.Name method(String name) {
-    return new org.fest.reflect.method.Name(name);
+  public static MethodName method(String name) {
+    return methodName(name);
   }
 
   /**
@@ -111,8 +120,8 @@ public final class Reflection {
    * @return the starting point of the static method chain.
    * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
-  public static org.fest.reflect.method.StaticName staticMethod(String name) {
-    return new org.fest.reflect.method.StaticName(name);
+  public static StaticMethodName staticMethod(String name) {
+    return staticMethodName(name);
   }
 
   /**
@@ -120,7 +129,7 @@ public final class Reflection {
    * @return the starting point of the method chain.
    */
   public static TargetType constructor() {
-    return new TargetType();
+    return type();
   }
 
   private Reflection() {}

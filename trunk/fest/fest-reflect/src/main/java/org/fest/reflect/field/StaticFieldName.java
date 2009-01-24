@@ -21,23 +21,29 @@ package org.fest.reflect.field;
  * The following is an example of proper usage of this class:
  * <pre>
  *   // Retrieves the value of the static field "count"
- *   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticName#ofType(Class) ofType}(int.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#get() get}();
+ *   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticFieldName#ofType(Class) ofType}(int.class).{@link StaticFieldType#in(Class) in}(Person.class).{@link Invoker#get() get}();
  *   
  *   // Sets the value of the static field "count" to 3
- *   {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticName#ofType(Class) ofType}(int.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#set(Object) set}(3);
+ *   {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticFieldName#ofType(Class) ofType}(int.class).{@link StaticFieldType#in(Class) in}(Person.class).{@link Invoker#set(Object) set}(3);
  * </pre>
  * </p>
  *
  * @author Alex Ruiz
  */
-public final class StaticName extends NameTemplate {
+public final class StaticFieldName extends NameTemplate {
 
   /**
-   * Creates a new <code>{@link StaticName}</code>.
+   * Creates a new <code>{@link StaticFieldName}</code>: the starting point of the fluent interface for accessing 
+   * static fields using Java Reflection.
    * @param name the name of the field to access using Java Reflection.
+   * @return the created <code>StaticFieldName</code> instance.
    * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
-  public StaticName(String name) {
+  public static StaticFieldName staticFieldName(String name) {
+    return new StaticFieldName(name);
+  }
+  
+  private StaticFieldName(String name) {
     super(name);
   }
 
@@ -48,7 +54,7 @@ public final class StaticName extends NameTemplate {
    * @return a recipient for the field type.
    * @throws IllegalArgumentException if the given type is <code>null</code>.
    */
-  public <T> StaticType<T> ofType(Class<T> type) {
-    return new StaticType<T>(type, this);
+  public <T> StaticFieldType<T> ofType(Class<T> type) {
+    return new StaticFieldType<T>(type, this);
   }
 }

@@ -22,10 +22,10 @@ import org.fest.reflect.exception.ReflectionError;
  * The following is an example of proper usage of this class:
  * <pre>
  *   // Retrieves the value of the static field "count"
- *   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticName#ofType(Class) ofType}(int.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#get() get}();
+ *   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticFieldName#ofType(Class) ofType}(int.class).{@link StaticFieldType#in(Class) in}(Person.class).{@link Invoker#get() get}();
  *   
  *   // Sets the value of the static field "count" to 3
- *   {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticName#ofType(Class) ofType}(int.class).{@link StaticType#in(Class) in}(Person.class).{@link Invoker#set(Object) set}(3);
+ *   {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticFieldName#ofType(Class) ofType}(int.class).{@link StaticFieldType#in(Class) in}(Person.class).{@link Invoker#set(Object) set}(3);
  * </pre>
  * </p>
  *
@@ -33,9 +33,9 @@ import org.fest.reflect.exception.ReflectionError;
  *
  * @author Alex Ruiz
  */
-public class StaticType<T> extends TypeTemplate<T> {
+public class StaticFieldType<T> extends TypeTemplate<T> {
 
-  StaticType(Class<T> type, StaticName fieldName) {
+  StaticFieldType(Class<T> type, StaticFieldName fieldName) {
     super(type, fieldName);
   }
 
