@@ -15,6 +15,7 @@
  */
 package org.fest.reflect.method;
 
+
 /**
  * Understands a template for the parameter types of the method to invoke.
  *
@@ -26,6 +27,7 @@ abstract class ParameterTypesTemplate<T> {
   final String methodName;
   
   public ParameterTypesTemplate(Class<?>[] parameterTypes, ReturnTypeTemplate<T> returnType) {
+    if (parameterTypes == null) throw new NullPointerException("The array of parameter types should not be null");
     this.parameterTypes = parameterTypes;
     this.methodName = returnType.methodName;
   }

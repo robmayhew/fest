@@ -51,11 +51,13 @@ public final class Invoker<T> {
   private final Method method;
 
   Invoker(String methodName, Class<?> target, Class<?>... parameterTypes) {
+    if (target == null) throw new NullPointerException("Target should not be null");
     this.target = target;
     method = lookupInClassHierarchy(methodName, target, parameterTypes);
   }
 
   Invoker(String methodName, Object target, Class<?>... parameterTypes) {
+    if (target == null) throw new NullPointerException("Target should not be null");
     this.target = target;
     method = lookupInClassHierarchy(methodName, target.getClass(), parameterTypes);
   }

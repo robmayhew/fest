@@ -43,7 +43,8 @@ public class StaticMethodName extends NameTemplate {
    * Creates a new </code>{@link StaticMethodName}</code>: the starting point of the fluent interface for accessing 
    * static methods using Java Reflection.
    * @param name the name of the method to access using Java Reflection.
-   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
+   * @throws NullPointerException if the given name is <code>null</code>.
+   * @throws IllegalArgumentException if the given name is empty.
    */
   public StaticMethodName(String name) {
     super(name);

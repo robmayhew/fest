@@ -25,6 +25,7 @@ abstract class ReturnTypeTemplate<T> {
   final String methodName;
   
   ReturnTypeTemplate(Class<T> type, NameTemplate methodName) {
+    if (type == null) throw new NullPointerException("The return type of the method to access should not be null");
     this.methodName = methodName.name;
   }
 }

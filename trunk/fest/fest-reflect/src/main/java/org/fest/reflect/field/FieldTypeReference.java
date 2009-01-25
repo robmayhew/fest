@@ -46,6 +46,7 @@ public class FieldTypeReference<T> extends TypeReferenceTemplate<T> {
    * Returns a new field invoker. A field invoker is capable of accessing (read/write) the underlying field.
    * @param target the object containing the field of interest.
    * @return the created field invoker.
+   * @throws NullPointerException if the given target is <code>null</code>.
    * @throws ReflectionError if a field with a matching name and type cannot be found.
    */
   public Invoker<T> in(Object target) {

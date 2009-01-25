@@ -26,7 +26,10 @@ class NameTemplate {
   final String name;
 
   public NameTemplate(String name) {
-    if (isEmpty(name)) throw new IllegalArgumentException("The name of the field to access should not be null or empty");
+    if (name == null) 
+      throw new NullPointerException("The name of the field to access should not be null");
+    if (isEmpty(name)) 
+      throw new IllegalArgumentException("The name of the field to access should not be empty");
     this.name = name;
   }
 }

@@ -83,7 +83,8 @@ public final class Reflection {
    * Starting point for the fluent interface for loading a class dynamically.
    * @param name the name of the class to load.
    * @return the starting point of the method chain.
-   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
+   * @throws NullPointerException if the given name is <code>null</code>.
+   * @throws IllegalArgumentException if the given name is empty.
    */
   public static Type type(String name) { return new Type(name); }
   
@@ -91,7 +92,8 @@ public final class Reflection {
    * Starting point for the fluent interface for accessing fields via reflection.
    * @param name the name of the field to access.
    * @return the starting point of the method chain.
-   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
+   * @throws NullPointerException if the given name is <code>null</code>.
+   * @throws IllegalArgumentException if the given name is empty.
    */
   public static FieldName field(String name) { return new FieldName(name); }
 
@@ -99,7 +101,8 @@ public final class Reflection {
    * Starting point for the fluent interface for accessing static fields via reflection.
    * @param name the name of the static field to access.
    * @return the starting point of the method chain.
-   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
+   * @throws NullPointerException if the given name is <code>null</code>.
+   * @throws IllegalArgumentException if the given name is empty.
    */
   public static StaticFieldName staticField(String name) { return new StaticFieldName(name); }
 
@@ -107,7 +110,8 @@ public final class Reflection {
    * Starting point for the fluent interface for invoking methods via reflection.
    * @param name the name of the method to invoke.
    * @return the starting point of the method chain.
-   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
+   * @throws NullPointerException if the given name is <code>null</code>.
+   * @throws IllegalArgumentException if the given name is empty.
    */
   public static MethodName method(String name) { return new MethodName(name); }
 
@@ -115,7 +119,8 @@ public final class Reflection {
    * Starting point for the fluent interface for invoking static methods via reflection.
    * @param name the name of the static method to invoke.
    * @return the starting point of the static method chain.
-   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
+   * @throws NullPointerException if the given name is <code>null</code>.
+   * @throws IllegalArgumentException if the given name is empty.
    */
   public static StaticMethodName staticMethod(String name) { return new StaticMethodName(name); }
 

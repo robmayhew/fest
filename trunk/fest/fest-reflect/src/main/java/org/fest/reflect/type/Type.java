@@ -38,10 +38,14 @@ public class Type {
    * Creates a new <code>{@link Type}</code>: the starting point of the fluent interface for loading classes 
    * dynamically.
    * @param name the name of the class to load.
-   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
+   * @throws NullPointerException if the given name is <code>null</code>.
+   * @throws IllegalArgumentException if the given name is empty.
    */
   public Type(String name) {
-    if (isEmpty(name)) throw new IllegalArgumentException("The name of the class to load should not be null or empty");
+    if (name == null) 
+      throw new NullPointerException("The name of the class to load should not be null");
+    if (isEmpty(name)) 
+      throw new IllegalArgumentException("The name of the class to load should not be empty");
     this.name = name;
   }
   

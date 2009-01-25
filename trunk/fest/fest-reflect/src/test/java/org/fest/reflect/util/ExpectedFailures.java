@@ -35,5 +35,9 @@ public final class ExpectedFailures {
     return expect(IllegalArgumentException.class).withMessage(message);
   }
 
+  public static Message expectNullPointerException(String message) {
+    return expect(NullPointerException.class).withMessage(message);
+  }
+
   private ExpectedFailures() {}
 }

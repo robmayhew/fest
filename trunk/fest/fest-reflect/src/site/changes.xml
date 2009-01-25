@@ -22,6 +22,9 @@
       <action dev="alruiz" type="fix" issue="287">
         Renamed class org.fest.reflect.method.Static to org.fest.reflect.field.StaticMethodName.
       </action>
+      <action dev="alruiz" type="fix" issue="288">
+        All public methods throw NullPointerException if any of their arguments is null.
+      </action>
     </release>
     <release version="1.0" date="2009-01-07" description="Subsequent release">
       <action dev="alruiz" type="fix">

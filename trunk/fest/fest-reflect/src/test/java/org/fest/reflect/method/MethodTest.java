@@ -19,7 +19,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.reflect.Jedi;
-import org.fest.reflect.util.NullAndEmptyStringProvider;
 import org.fest.test.CodeToTest;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -31,7 +30,7 @@ import static org.fest.reflect.util.ExpectedFailures.*;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class MethodTest {
+@Test public class MethodTest {
 
   private Jedi jedi;
 
@@ -40,38 +39,70 @@ public class MethodTest {
     jedi = new Jedi("Luke");
   }
 
-  @Test(dataProvider = "nullAndEmptyStrings", dataProviderClass = NullAndEmptyStringProvider.class) 
-  public void shouldThrowErrorIfFieldNameIsNullOrEmpty(final String name) {
-    expectIllegalArgumentException("The name of the method to access should not be null or empty").on(new CodeToTest() {
+  public void shouldThrowErrorIfMethodNameIsNull() {
+    expectNullPointerException("The name of the method to access should not be null").on(new CodeToTest() {
       public void run() {
-        new MethodName(name);
+        new MethodName(null);
       }
     });
   }
 
-  @Test public void shouldCallMethodWithArgsAndNoReturnValue() {
+  public void shouldThrowErrorIfMethodNameIsEmpty() {
+    expectIllegalArgumentException("The name of the method to access should not be empty").on(new CodeToTest() {
+      public void run() {
+        new MethodName("");
+      }
+    });
+  }
+  
+  public void shouldThrowErrorIfMethodReturnTypeIsNull() {
+    expectNullPointerException("The return type of the method to access should not be null").on(new CodeToTest() {
+      public void run() {
+        new MethodName("setName").withReturnType(null);
+      }
+    });
+  }
+  
+  public void shouldThrowErrorIfMethodParameterTypeArrayIsNull() {
+    expectNullPointerException("The array of parameter types should not be null").on(new CodeToTest() {
+      public void run() {
+        Class<?>[] parameterTypes = null;
+        new MethodName("setName").withParameterTypes(parameterTypes);
+      }
+    });
+  }
+  
+  public void shouldThrowErrorIfMethodTargetIsNull() {
+    expectNullPointerException("Target should not be null").on(new CodeToTest() {
+      public void run() {
+        new MethodName("setName").in(null);
+      }
+    });
+  }
+
+  public void shouldCallMethodWithArgsAndNoReturnValue() {
     new MethodName("setName").withParameterTypes(String.class).in(jedi).invoke("Leia");
     assertThat(jedi.getName()).isEqualTo("Leia");
   }
 
-  @Test public void shouldCallMethodWithNoArgsAndReturnValue() {
+  public void shouldCallMethodWithNoArgsAndReturnValue() {
     String personName = new MethodName("getName").withReturnType(String.class).in(jedi).invoke();
     assertThat(personName).isEqualTo("Luke");
   }
 
-  @Test public void shouldCallMethodWithArgsAndReturnType() {
+  public void shouldCallMethodWithArgsAndReturnType() {
     jedi.addPower("Healing");
     String power = new MethodName("powerAt").withReturnType(String.class).withParameterTypes(int.class).in(jedi).invoke(0);
     assertThat(power).isEqualTo("Healing");
   }
 
-  @Test public void shouldCallMethodWithNoArgsAndNoReturnValue() {
+  public void shouldCallMethodWithNoArgsAndNoReturnValue() {
     assertThat(jedi.isMaster()).isFalse();
     new MethodName("makeMaster").in(jedi).invoke();
     assertThat(jedi.isMaster()).isTrue();
   }
 
-  @Test public void shouldReturnMethodInfo() {
+  public void shouldReturnMethodInfo() {
     java.lang.reflect.Method method = new MethodName("setName").withParameterTypes(String.class).in(jedi).info();
     assertThat(method).isNotNull();
     assertThat(method.getName()).isEqualTo("setName");
@@ -80,7 +111,7 @@ public class MethodTest {
     assertThat(parameterTypes[0]).isEqualTo(String.class);
   }
 
-  @Test public void shouldThrowErrorIfInvalidMethodName() {
+  public void shouldThrowErrorIfInvalidMethodName() {
     String message = "Unable to find method 'getAge' in org.fest.reflect.Jedi with parameter type(s) []";
     expectReflectionError(message).on(new CodeToTest() {
       public void run() {
@@ -90,7 +121,7 @@ public class MethodTest {
     });
   }
 
-  @Test public void shouldThrowErrorIfInvalidArgs() {
+  public void shouldThrowErrorIfInvalidArgs() {
     expectReflectionError("Unable to invoke method 'setName' with arguments [8]").on(new CodeToTest() {
       public void run() {
         int invalidArg = 8;
@@ -99,16 +130,47 @@ public class MethodTest {
     });
   }
 
-  @Test(dataProvider = "nullAndEmptyStrings", dataProviderClass = NullAndEmptyStringProvider.class) 
-  public void shouldThrowErrorIfStaticFieldNameIsNullOrEmpty(final String name) {
-    expectIllegalArgumentException("The name of the method to access should not be null or empty").on(new CodeToTest() {
+  public void shouldThrowErrorIfStaticMethodNameIsNull() {
+    expectNullPointerException("The name of the method to access should not be null").on(new CodeToTest() {
       public void run() {
-        new StaticMethodName(name);
+        new StaticMethodName(null);
       }
     });
   }
 
-  @Test public void shouldCallStaticMethodWithArgsAndReturnType() {
+  public void shouldThrowErrorIfStaticMethodNameIsEmpty() {
+    expectIllegalArgumentException("The name of the method to access should not be empty").on(new CodeToTest() {
+      public void run() {
+        new StaticMethodName("");
+      }
+    });
+  }
+
+  public void shouldThrowErrorIfStaticMethodReturnTypeIsNull() {
+    expectNullPointerException("The return type of the method to access should not be null").on(new CodeToTest() {
+      public void run() {
+        new StaticMethodName("commonPowerCount").withReturnType(null);
+      }
+    });
+  }
+
+  public void shouldThrowErrorIfStaticMethodParameterTypeArrayIsNull() {
+    expectNullPointerException("The array of parameter types should not be null").on(new CodeToTest() {
+      public void run() {
+        Class<?>[] parameterTypes = null;
+        new StaticMethodName("commonPowerCount").withParameterTypes(parameterTypes);
+      }
+    });
+  }
+  public void shouldThrowErrorIfStaticMethodTargetIsNull() {
+    expectNullPointerException("Target should not be null").on(new CodeToTest() {
+      public void run() {
+        new StaticMethodName("commonPowerCount").in(null);
+      }
+    });
+  }
+
+  public void shouldCallStaticMethodWithArgsAndReturnType() {
     Jedi.addCommonPower("Jump");
     String method = "commonPowerAt";
     String power =
@@ -116,12 +178,12 @@ public class MethodTest {
     assertThat(power).isEqualTo("Jump");
   }
 
-  @Test public void shouldStaticCallMethodWithArgsAndNoReturnValue() {
+  public void shouldStaticCallMethodWithArgsAndNoReturnValue() {
     new StaticMethodName("addCommonPower").withParameterTypes(String.class).in(Jedi.class).invoke("Jump");
     assertThat(Jedi.commonPowerAt(0)).isEqualTo("Jump");
   }
 
-  @Test public void shouldCallStaticMethodWithNoArgsAndNoReturnValue() {
+  public void shouldCallStaticMethodWithNoArgsAndNoReturnValue() {
     Jedi.addCommonPower("Jump");
     assertThat(Jedi.commonPowerCount()).isEqualTo(1);
     assertThat(Jedi.commonPowerAt(0)).isEqualTo("Jump");
@@ -129,13 +191,13 @@ public class MethodTest {
     assertThat(Jedi.commonPowerCount()).isEqualTo(0);
   }
 
-  @Test public void shouldCallStaticMethodWithReturnValueAndNoArgs() {
+  public void shouldCallStaticMethodWithReturnValueAndNoArgs() {
     Jedi.addCommonPower("Jump");
     int count = new StaticMethodName("commonPowerCount").withReturnType(int.class).in(Jedi.class).invoke();
     assertThat(count).isEqualTo(Jedi.commonPowerCount());
   }
   
-  @Test public void shouldThrowErrorIfInvalidStaticMethodName() {
+  public void shouldThrowErrorIfInvalidStaticMethodName() {
     String message = "Unable to find method 'powerSize' in org.fest.reflect.Jedi with parameter type(s) []";
     expectReflectionError(message).on(new CodeToTest() {
       public void run() {
@@ -145,7 +207,7 @@ public class MethodTest {
     });
   }
 
-  @Test public void shouldThrowErrorIfInvalidArgsForStaticMethod() {
+  public void shouldThrowErrorIfInvalidArgsForStaticMethod() {
     expectReflectionError("Unable to invoke method 'addCommonPower' with arguments [8]").on(new CodeToTest() {
       public void run() {
         int invalidArg = 8;

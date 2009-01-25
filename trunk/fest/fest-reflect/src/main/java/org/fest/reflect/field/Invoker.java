@@ -52,22 +52,17 @@ public final class Invoker<T> {
   private final boolean accessible;
 
   Invoker(String fieldName, Class<?> target) {
-    if (target == null) throw new IllegalArgumentException("Target should not be null");
+    if (target == null) throw new NullPointerException("Target should not be null");
     this.target = target;
     field = lookupInClassHierarchy(fieldName, target);
     accessible = field.isAccessible();
   }
 
   Invoker(String fieldName, Object target) {
-    validate(target);
     this.target = target;
     Class<?> type = target.getClass();
     field = lookupInClassHierarchy(fieldName, type);
     accessible = field.isAccessible();
-  }
-
-  private static void validate(Object target) {
-    if (target == null) throw new IllegalArgumentException("Target should not be null");
   }
 
   private static Field lookupInClassHierarchy(String fieldName, Class<?> declaringType) {

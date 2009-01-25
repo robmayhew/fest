@@ -50,6 +50,7 @@ public final class ParameterTypes<T> extends ParameterTypesTemplate<T> {
    * Creates a new method invoker.
    * @param target the object containing the method to invoke.
    * @return the created method invoker.
+   * @throws NullPointerException if the given target is <code>null</code>.
    */
   public Invoker<T> in(Object target) {
     return new Invoker<T>(methodName, target, parameterTypes);

@@ -49,6 +49,7 @@ public class ReturnType<T> extends ReturnTypeTemplate<T> {
    * Creates a new method invoker.
    * @param target the object containing the method to invoke.
    * @return the created method invoker.
+   * @throws NullPointerException if the given target is <code>null</code>.
    */
   public Invoker<T> in(Object target) {
     return new Invoker<T>(methodName, target);
@@ -59,6 +60,7 @@ public class ReturnType<T> extends ReturnTypeTemplate<T> {
    * not take arguments.
    * @param parameterTypes the parameter types of the method to invoke.
    * @return the created parameter types holder.
+   * @throws NullPointerException if the array of parameter types is <code>null</code>.
    */
   public ParameterTypes<T> withParameterTypes(Class<?>... parameterTypes) {
     return new ParameterTypes<T>(parameterTypes, this);

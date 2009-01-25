@@ -23,7 +23,6 @@ import org.testng.annotations.Test;
 import org.fest.reflect.Jedi;
 import org.fest.reflect.Person;
 import org.fest.reflect.reference.TypeRef;
-import org.fest.reflect.util.NullAndEmptyStringProvider;
 import org.fest.test.CodeToTest;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -43,23 +42,38 @@ import static org.fest.util.Collections.list;
     person = new Person("Luke");
   }
   
-  @Test(dataProvider = "nullAndEmptyStrings", dataProviderClass = NullAndEmptyStringProvider.class) 
-  public void shouldThrowErrorIfFieldNameIsNullOrEmpty(final String name) {
-    expectIllegalArgumentException("The name of the field to access should not be null or empty").on(new CodeToTest() {
+  public void shouldThrowErrorIfFieldNameIsNullOrEmpty() {
+    expectNullPointerException("The name of the field to access should not be null").on(new CodeToTest() {
       public void run() {
-        new FieldName(name);
+        new FieldName(null);
       }
     });
   }
   
+  public void shouldThrowErrorIfFieldNameIsEmpty() {
+    expectIllegalArgumentException("The name of the field to access should not be empty").on(new CodeToTest() {
+      public void run() {
+        new FieldName("");
+      }
+    });
+  }
+
   public void shouldThrowErrorIfFieldTypeIsNull() {
-    expectIllegalArgumentException("The type of the field to access should not be null").on(new CodeToTest() {
+    expectNullPointerException("The type of the field to access should not be null").on(new CodeToTest() {
       public void run() {
         new FieldName("name").ofType((Class<?>)null);
       }      
     });
   }
   
+  public void shouldThrowErrorIfTargetIsNullWhenAccessingField() {
+    expectNullPointerException("Target should not be null").on(new CodeToTest() {
+      public void run() {
+        new FieldName("name").ofType(String.class).in(null);
+      }      
+    });
+  }
+
   public void shouldGetFieldValue() {
     String personName = new FieldName("name").ofType(String.class).in(person).get();
     assertThat(personName).isEqualTo("Luke");
@@ -102,7 +116,7 @@ import static org.fest.util.Collections.list;
   }
   
   public void shouldThrowErrorIfFieldTypeReferenceIsNull() {
-    expectIllegalArgumentException("The type reference of the field to access should not be null").on(new CodeToTest() {
+    expectNullPointerException("The type reference of the field to access should not be null").on(new CodeToTest() {
       public void run() {
         new FieldName("name").ofType((TypeRef<?>)null);
       }      
@@ -141,17 +155,24 @@ import static org.fest.util.Collections.list;
     assertThat(field.getType()).isEqualTo(int.class);
   }
   
-  @Test(dataProvider = "nullAndEmptyStrings", dataProviderClass = NullAndEmptyStringProvider.class) 
-  public void shouldThrowErrorIfStaticFieldNameIsNullOrEmpty(final String name) {
-    expectIllegalArgumentException("The name of the field to access should not be null or empty").on(new CodeToTest() {
+  public void shouldThrowErrorIfStaticFieldNameIsNullOrEmpty() {
+    expectNullPointerException("The name of the field to access should not be null").on(new CodeToTest() {
       public void run() {
-        new StaticFieldName(name);
+        new StaticFieldName(null);
+      }
+    });
+  }
+
+  public void shouldThrowErrorIfStaticFieldNameIsEmpty() {
+    expectIllegalArgumentException("The name of the field to access should not be empty").on(new CodeToTest() {
+      public void run() {
+        new StaticFieldName("");
       }
     });
   }
 
   public void shouldThrowErrorIfStaticFieldTypeIsNull() {
-    expectIllegalArgumentException("The type of the field to access should not be null").on(new CodeToTest() {
+    expectNullPointerException("The type of the field to access should not be null").on(new CodeToTest() {
       public void run() {
         new StaticFieldName("name").ofType((Class<?>)null);
       }      
@@ -182,7 +203,7 @@ import static org.fest.util.Collections.list;
   }
 
   public void shouldThrowErrorIfStaticFieldTypeReferenceIsNull() {
-    expectIllegalArgumentException("The type reference of the field to access should not be null").on(new CodeToTest() {
+    expectNullPointerException("The type reference of the field to access should not be null").on(new CodeToTest() {
       public void run() {
         new StaticFieldName("name").ofType((TypeRef<?>)null);
       }      
@@ -199,5 +220,13 @@ import static org.fest.util.Collections.list;
     List<String> powers = list("jump");
     new StaticFieldName("commonPowers").ofType(new TypeRef<List<String>>() {}).in(Jedi.class).set(powers);
     assertThat(Jedi.commonPowers()).containsOnly("jump");
+  }
+
+  public void shouldThrowErrorIfTargetIsNullWhenAccessingStaticField() {
+    expectNullPointerException("Target should not be null").on(new CodeToTest() {
+      public void run() {
+        new StaticFieldName("age").ofType(int.class).in(null);
+      }      
+    });
   }
 }

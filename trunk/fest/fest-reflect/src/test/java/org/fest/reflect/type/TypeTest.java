@@ -20,12 +20,10 @@ import org.testng.annotations.Test;
 import org.fest.reflect.Jedi;
 import org.fest.reflect.Person;
 import org.fest.reflect.exception.ReflectionError;
-import org.fest.reflect.util.NullAndEmptyStringProvider;
 import org.fest.test.CodeToTest;
-import org.fest.test.ExpectedFailure;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.reflect.util.ExpectedFailures.expectIllegalArgumentException;
+import static org.fest.reflect.util.ExpectedFailures.*;
 
 /**
  * Tests for <code>{@link Type}</code>.
@@ -34,23 +32,28 @@ import static org.fest.reflect.util.ExpectedFailures.expectIllegalArgumentExcept
  */
 @Test public class TypeTest {
 
-  @Test(dataProvider = "nullAndEmptyStrings", dataProviderClass = NullAndEmptyStringProvider.class) 
-  public void shouldThrowErrorIfFieldNameIsNullOrEmpty(final String name) {
-    expectIllegalArgumentException("The name of the class to load should not be null or empty").on(new CodeToTest() {
+  public void shouldThrowErrorIfFieldNameIsNull() {
+    expectNullPointerException("The name of the class to load should not be null").on(new CodeToTest() {
       public void run() {
-        new Type(name);
+        new Type(null);
+      }
+    });
+  }
+
+  public void shouldThrowErrorIfFieldNameIsEmpty() {
+    expectIllegalArgumentException("The name of the class to load should not be empty").on(new CodeToTest() {
+      public void run() {
+        new Type("");
       }
     });
   }
 
   public void shouldThrowErrorIfSubTypeIsNull() {
-    ExpectedFailure.expect(NullPointerException.class).withMessage("The given type should not be null").on(
-      new CodeToTest() {
-        public void run() {
-          new Type("hello").loadAs(null);
-        }
+    expectNullPointerException("The given type should not be null").on(new CodeToTest() {
+      public void run() {
+        new Type("hello").loadAs(null);
       }
-    );
+    });
   }
 
   public void shouldLoadClass() {

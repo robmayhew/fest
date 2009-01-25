@@ -26,8 +26,10 @@ abstract class NameTemplate {
   final String name;
 
   NameTemplate(String name) {
+    if (name == null)
+      throw new NullPointerException("The name of the method to access should not be null");
     if (isEmpty(name))
-      throw new IllegalArgumentException("The name of the method to access should not be null or empty");
+      throw new IllegalArgumentException("The name of the method to access should not be empty");
     this.name = name;
   }
 }

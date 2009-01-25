@@ -46,7 +46,8 @@ public final class MethodName extends NameTemplate {
    * Creates a new <code>{@link MethodName}</code>: the starting point of the fluent interface for accessing methods
    * using Java Reflection.
    * @param name the name of the method to invoke using Java Reflection.
-   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
+   * @throws NullPointerException if the given name is <code>null</code>.
+   * @throws IllegalArgumentException if the given name is empty.
    */
   public MethodName(String name) {
     super(name);
@@ -58,6 +59,7 @@ public final class MethodName extends NameTemplate {
    * @param <T> the generic type of the method's return type.
    * @param type the return type of the method to invoke.
    * @return the created return type holder.
+   * @throws NullPointerException if the given type is <code>null</code>.
    */
   public <T> ReturnType<T> withReturnType(Class<T> type) {
     return new ReturnType<T>(type, this);
@@ -68,6 +70,7 @@ public final class MethodName extends NameTemplate {
    * not take arguments.
    * @param parameterTypes the parameter types of the method to invoke.
    * @return the created parameter types holder.
+   * @throws NullPointerException if the array of parameter types is <code>null</code>.
    */
   public ParameterTypes<Void> withParameterTypes(Class<?>... parameterTypes) {
     ReturnType<Void> returnType = new ReturnType<Void>(Void.class, this);
@@ -78,6 +81,7 @@ public final class MethodName extends NameTemplate {
    * Creates a new invoker for a method that takes no parameters and return value <code>void</code>.
    * @param target the object containing the method to invoke.
    * @return the created method invoker.
+   * @throws NullPointerException if the given target is <code>null</code>.
    */
   public Invoker<Void> in(Object target) {
     return new Invoker<Void>(name, target);

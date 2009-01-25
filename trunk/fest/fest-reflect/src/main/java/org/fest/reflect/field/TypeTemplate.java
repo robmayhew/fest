@@ -27,7 +27,7 @@ abstract class TypeTemplate<T> {
 
   TypeTemplate(Class<T> type, NameTemplate fieldName) {
     name = fieldName.name;
-    if (type == null) throw new IllegalArgumentException("The type of the field to access should not be null");
+    if (type == null) throw new NullPointerException("The type of the field to access should not be null");
     this.type = type;
   }
 
