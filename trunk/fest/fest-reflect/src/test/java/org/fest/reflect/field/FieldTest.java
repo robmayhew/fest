@@ -16,11 +16,11 @@
 package org.fest.reflect.field;
 
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.reflect.Jedi;
 import org.fest.reflect.Person;
+import org.fest.reflect.util.NullAndEmptyStringProvider;
 import org.fest.test.CodeToTest;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -39,7 +39,7 @@ public class FieldTest {
     person = new Person("Luke");
   }
   
-  @Test(dataProvider = "emptyAndNullNames") 
+  @Test(dataProvider = "nullAndEmptyStrings", dataProviderClass = NullAndEmptyStringProvider.class) 
   public void shouldThrowErrorIfFieldNameIsNullOrEmpty(final String name) {
     expectIllegalArgumentException("The name of the field to access should not be null or empty").on(new CodeToTest() {
       public void run() {
@@ -115,7 +115,7 @@ public class FieldTest {
     assertThat(field.getType()).isEqualTo(int.class);
   }
   
-  @Test(dataProvider = "emptyAndNullNames") 
+  @Test(dataProvider = "nullAndEmptyStrings", dataProviderClass = NullAndEmptyStringProvider.class) 
   public void shouldThrowErrorIfStaticFieldNameIsNullOrEmpty(final String name) {
     expectIllegalArgumentException("The name of the field to access should not be null or empty").on(new CodeToTest() {
       public void run() {
@@ -153,9 +153,5 @@ public class FieldTest {
     Person.setCount(8);
     int count = StaticFieldName.staticFieldName("count").ofType(int.class).in(Person.class).get();
     assertThat(count).isEqualTo(8);
-  }
-
-  @DataProvider(name = "emptyAndNullNames") public Object[][] emptyAndNullNames() {
-    return new Object[][] { { "" }, { null } };
   }
 }

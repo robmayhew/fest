@@ -21,8 +21,8 @@ import org.fest.reflect.field.StaticFieldName;
 import org.fest.reflect.field.StaticFieldType;
 import org.fest.reflect.method.MethodName;
 import org.fest.reflect.method.StaticMethodName;
+import org.fest.reflect.type.Type;
 
-import static org.fest.reflect.constructor.TargetType.type;
 import static org.fest.reflect.field.FieldName.fieldName;
 import static org.fest.reflect.field.StaticFieldName.staticFieldName;
 import static org.fest.reflect.method.MethodName.methodName;
@@ -85,6 +85,14 @@ import static org.fest.reflect.method.StaticMethodName.staticMethodName;
 public final class Reflection {
 
   /**
+   * Starting point for the fluent interface for loading a class dynamically.
+   * @param name the name of the class to load.
+   * @return the starting point of the method chain.
+   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
+   */
+  public static Type type(String name) { return new Type(name); }
+  
+  /**
    * Starting point for the fluent interface for accessing fields via reflection.
    * @param name the name of the field to access.
    * @return the starting point of the method chain.
@@ -129,7 +137,7 @@ public final class Reflection {
    * @return the starting point of the method chain.
    */
   public static TargetType constructor() {
-    return type();
+    return TargetType.type();
   }
 
   private Reflection() {}

@@ -18,6 +18,11 @@ package org.fest.reflect.core;
 import org.testng.annotations.Test;
 
 import org.fest.reflect.constructor.TargetType;
+import org.fest.reflect.field.FieldName;
+import org.fest.reflect.field.StaticFieldName;
+import org.fest.reflect.method.MethodName;
+import org.fest.reflect.method.StaticMethodName;
+import org.fest.reflect.type.Type;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -29,23 +34,27 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class ReflectionTest {
 
-  @Test public void shouldReturnConstructorFactory() {
+  @Test public void shouldReturnConstructorFluentInterface() {
     assertThat(Reflection.constructor()).isInstanceOf(TargetType.class);
   }
   
-  @Test public void shouldReturnFieldFactory() {
-    assertThat(Reflection.field("field")).isInstanceOf(org.fest.reflect.field.FieldName.class);
+  @Test public void shouldReturnFieldFluentInterface() {
+    assertThat(Reflection.field("field")).isInstanceOf(FieldName.class);
   }
 
-  @Test public void shouldReturnStaticFieldFactory() {
-    assertThat(Reflection.staticField("field")).isInstanceOf(org.fest.reflect.field.StaticFieldName.class);
+  @Test public void shouldReturnStaticFieldFluentInterface() {
+    assertThat(Reflection.staticField("field")).isInstanceOf(StaticFieldName.class);
   }
 
-  @Test public void shouldReturnMethodFactory() {
-    assertThat(Reflection.method("method")).isInstanceOf(org.fest.reflect.method.MethodName.class);
+  @Test public void shouldReturnMethodFluentInterface() {
+    assertThat(Reflection.method("method")).isInstanceOf(MethodName.class);
   }
 
-  @Test public void shouldReturnStaticMethodFactory() {
-    assertThat(Reflection.staticMethod("method")).isInstanceOf(org.fest.reflect.method.StaticMethodName.class);
+  @Test public void shouldReturnStaticMethodFluentInterface() {
+    assertThat(Reflection.staticMethod("method")).isInstanceOf(StaticMethodName.class);
+  }
+  
+  @Test public void shouldReturnTypeFluentInterface() {
+    assertThat(Reflection.type("type")).isInstanceOf(Type.class);
   }
 }

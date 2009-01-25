@@ -15,7 +15,6 @@
  */
 package org.fest.reflect.method;
 
-import org.fest.reflect.exception.ReflectionError;
 
 
 /**
@@ -48,7 +47,7 @@ public final class MethodName extends NameTemplate {
    * using Java Reflection.
    * @param name the name of the method to invoke using Java Reflection.
    * @return the created <code>MethodName</code> instance.
-   * @throws ReflectionError if the given name is <code>null</code> or empty.
+   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
   public static MethodName methodName(String name) {
     return new MethodName(name);

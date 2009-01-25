@@ -16,10 +16,10 @@
 package org.fest.reflect.method;
 
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import org.fest.reflect.Jedi;
+import org.fest.reflect.util.NullAndEmptyStringProvider;
 import org.fest.test.CodeToTest;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -40,7 +40,7 @@ public class MethodTest {
     jedi = new Jedi("Luke");
   }
 
-  @Test(dataProvider = "emptyAndNullNames")
+  @Test(dataProvider = "nullAndEmptyStrings", dataProviderClass = NullAndEmptyStringProvider.class) 
   public void shouldThrowErrorIfFieldNameIsNullOrEmpty(final String name) {
     expectIllegalArgumentException("The name of the method to access should not be null or empty").on(new CodeToTest() {
       public void run() {
@@ -100,7 +100,7 @@ public class MethodTest {
     });
   }
 
-  @Test(dataProvider = "emptyAndNullNames")
+  @Test(dataProvider = "nullAndEmptyStrings", dataProviderClass = NullAndEmptyStringProvider.class) 
   public void shouldThrowErrorIfStaticFieldNameIsNullOrEmpty(final String name) {
     expectIllegalArgumentException("The name of the method to access should not be null or empty").on(new CodeToTest() {
       public void run() {
@@ -155,9 +155,5 @@ public class MethodTest {
                                                            .in(Jedi.class).invoke(invalidArg);
       }
     });
-  }
-
-  @DataProvider(name = "emptyAndNullNames") public Object[][] emptyAndNullNames() {
-    return new Object[][] { { "" }, { null } };
   }
 }
