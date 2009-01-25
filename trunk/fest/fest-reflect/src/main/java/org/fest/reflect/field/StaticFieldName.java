@@ -46,7 +46,8 @@ public final class StaticFieldName extends NameTemplate {
    * Creates a new <code>{@link StaticFieldName}</code>: the starting point of the fluent interface for accessing 
    * static fields using Java Reflection.
    * @param name the name of the field to access using Java Reflection.
-   * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
+   * @throws NullPointerException if the given name is <code>null</code>.
+   * @throws IllegalArgumentException if the given name is empty.
    */
   public StaticFieldName(String name) {
     super(name);
@@ -57,7 +58,7 @@ public final class StaticFieldName extends NameTemplate {
    * @param <T> the generic type of the field type.
    * @param type the type of the field to access.
    * @return a recipient for the field type.
-   * @throws IllegalArgumentException if the given type is <code>null</code>.
+   * @throws NullPointerException if the given type is <code>null</code>.
    */
   public <T> StaticFieldType<T> ofType(Class<T> type) {
     return new StaticFieldType<T>(type, this);
@@ -75,7 +76,7 @@ public final class StaticFieldName extends NameTemplate {
    * @param <T> the generic type of the field type.
    * @param type the type of the field to access.
    * @return a recipient for the field type.
-   * @throws IllegalArgumentException if the given type is <code>null</code>.
+   * @throws NullPointerException if the given type reference is <code>null</code>.
    */
   public <T> StaticFieldTypeReference<T> ofType(TypeRef<T> type) {
     return new StaticFieldTypeReference<T>(type, this);

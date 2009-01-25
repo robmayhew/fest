@@ -48,6 +48,7 @@ public class StaticReturnType<T> extends ReturnTypeTemplate<T> {
    * Creates a new method invoker.
    * @param target the object containing the method to invoke.
    * @return the created method invoker.
+   * @throws NullPointerException if the given target is <code>null</code>.
    */
   public Invoker<T> in(Class<?> target) {
     return new Invoker<T>(methodName, target);
@@ -58,6 +59,7 @@ public class StaticReturnType<T> extends ReturnTypeTemplate<T> {
    * does not take arguments.
    * @param parameterTypes the parameter types of the method to invoke.
    * @return the created parameter types holder.
+   * @throws NullPointerException if the array of parameter types is <code>null</code>.
    */
   public StaticParameterTypes<T> withParameterTypes(Class<?>... parameterTypes) {
     return new StaticParameterTypes<T>(parameterTypes, this);

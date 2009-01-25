@@ -49,6 +49,7 @@ public final class StaticParameterTypes<T> extends ParameterTypesTemplate<T> {
    * Creates a new method invoker.
    * @param target the class containing the static method to invoke.
    * @return the created method invoker.
+   * @throws NullPointerException if the given target is <code>null</code>.
    */
   public Invoker<T> in(Class<?> target) {
     return new Invoker<T>(methodName, target, parameterTypes);

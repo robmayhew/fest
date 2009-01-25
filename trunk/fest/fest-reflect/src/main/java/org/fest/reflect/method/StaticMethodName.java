@@ -56,6 +56,7 @@ public class StaticMethodName extends NameTemplate {
    * @param <T> the generic type of the method's return type.
    * @param type the return type of the method to invoke.
    * @return the created return type holder.
+   * @throws NullPointerException if the given type is <code>null</code>.
    */
   public <T> StaticReturnType<T> withReturnType(Class<T> type) {
     return new StaticReturnType<T>(type, this);
@@ -66,6 +67,7 @@ public class StaticMethodName extends NameTemplate {
    * does not take arguments.
    * @param parameterTypes the parameter types of the method to invoke.
    * @return the created parameter types holder.
+   * @throws NullPointerException if the array of parameter types is <code>null</code>.
    */
   public StaticParameterTypes<Void> withParameterTypes(Class<?>... parameterTypes) {
     StaticReturnType<Void> returnType = new StaticReturnType<Void>(Void.class, this);
@@ -76,6 +78,7 @@ public class StaticMethodName extends NameTemplate {
    * Creates a new invoker for a static method that takes no parameters and return value <code>void</code>.
    * @param target the object containing the method to invoke.
    * @return the created method invoker.
+   * @throws NullPointerException if the given target is <code>null</code>.
    */
   public Invoker<Void> in(Class<?> target) {
     return new Invoker<Void>(name, target);

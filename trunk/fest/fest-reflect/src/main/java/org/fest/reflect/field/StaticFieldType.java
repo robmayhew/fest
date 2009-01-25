@@ -43,6 +43,7 @@ public class StaticFieldType<T> extends TypeTemplate<T> {
    * Returns a new field invoker. A field invoker is capable of accessing (read/write) the underlying field.
    * @param target the type containing the static field of interest.
    * @return the created field invoker.
+   * @throws NullPointerException if the given target is <code>null</code>.
    * @throws ReflectionError if a static field with a matching name and type cannot be found.
    */
   public Invoker<T> in(Class<?> target) {
