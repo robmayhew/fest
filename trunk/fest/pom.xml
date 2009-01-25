@@ -26,7 +26,7 @@
       <email>alex.ruiz.05 at gmail.com</email>
       <url>http://www.jroller.com/alexRuiz/</url>
       <roles>
-        <role>Project Manager</role>
+        <role>Owner</role>
         <role>Developer</role>
       </roles>
     </developer>
@@ -35,7 +35,7 @@
       <name>Yvonne Wang Price</name>
       <email>wanghy1101 at gmail.com</email>
       <roles>
-        <role>Project Manager</role>
+        <role>Owner</role>
         <role>Developer</role>
       </roles>
     </developer>
@@ -97,6 +97,10 @@
       <name>Wim Boffe</name>
     </contributor>
     <contributor>
+      <name>Stephen Colebourne</name>
+      <url>http://www.jroller.com/scolebourne/</url>
+    </contributor>
+    <contributor>
       <name>Keith Coughtrey</name>
     </contributor>
     <contributor>
@@ -114,6 +118,9 @@
     <contributor>
       <name>Brian Duff</name>
       <url>http://blog.dubh.org/</url>
+    </contributor>
+    <contributor>
+      <name>Xavier Dury</name>
     </contributor>
     <contributor>
       <name>Dan Dyer</name>
