@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  *
- * Copyright @2008 the original author or authors.
+ * Copyright @2008-2009 the original author or authors.
  */
 package org.fest.reflect.method;
 
@@ -34,6 +34,11 @@ import org.fest.reflect.reference.TypeRef;
  *   String name = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("commonPowerCount").{@link StaticMethodName#withReturnType(Class) withReturnType}(String.class)
  *                                                 .{@link StaticReturnType#in(Class) in}(Jedi.class)
  *                                                 .{@link Invoker#invoke(Object...) invoke}();
+ *                                                 
+ *   // Equivalent to call 'Jedi.getCommonPowers()'
+ *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("getCommonPowers").{@link StaticMethodName#withReturnType(TypeRef) withReturnType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {})
+ *                                            .{@link StaticReturnTypeReference#in(Class) in}(Jedi.class)
+ *                                            .{@link Invoker#invoke(Object...) invoke}();   
  * </pre>
  * </p>
  *
