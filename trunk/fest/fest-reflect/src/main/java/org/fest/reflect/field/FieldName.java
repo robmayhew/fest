@@ -36,14 +36,9 @@ public final class FieldName extends NameTemplate {
    * Creates a new <code>{@link FieldName}</code>: the starting point of the fluent interface for accessing fields
    * using Java Reflection.
    * @param name the name of the field to access using Java Reflection.
-   * @return the created <code>FieldName</code> instance.
    * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
-  public static FieldName fieldName(String name) {
-    return new FieldName(name);
-  }
-  
-  private FieldName(String name) {
+  public FieldName(String name) {
     super(name);
   }
 

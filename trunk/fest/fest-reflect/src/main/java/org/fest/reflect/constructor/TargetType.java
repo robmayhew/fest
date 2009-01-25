@@ -33,17 +33,6 @@ package org.fest.reflect.constructor;
 public final class TargetType {
 
   /**
-   * Creates a new <code>{@link TargetType}</code>: the starting point of the fluent interface for accessing 
-   * constructors using Java Reflection.
-   * @return the created <code>TargeType</code> instance.
-   */
-  public static TargetType type() {
-    return new TargetType();
-  }
-  
-  private TargetType() {}
-  
-  /**
    * Creates a new constructor invoker.
    * @param <T> the generic type of the class containing the constructor to invoke.
    * @param target the the type of object that the constructor invoker will create.

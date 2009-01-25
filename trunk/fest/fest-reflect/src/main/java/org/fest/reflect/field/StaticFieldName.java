@@ -36,14 +36,9 @@ public final class StaticFieldName extends NameTemplate {
    * Creates a new <code>{@link StaticFieldName}</code>: the starting point of the fluent interface for accessing 
    * static fields using Java Reflection.
    * @param name the name of the field to access using Java Reflection.
-   * @return the created <code>StaticFieldName</code> instance.
    * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
-  public static StaticFieldName staticFieldName(String name) {
-    return new StaticFieldName(name);
-  }
-  
-  private StaticFieldName(String name) {
+  public StaticFieldName(String name) {
     super(name);
   }
 

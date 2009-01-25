@@ -23,11 +23,6 @@ import org.fest.reflect.method.MethodName;
 import org.fest.reflect.method.StaticMethodName;
 import org.fest.reflect.type.Type;
 
-import static org.fest.reflect.field.FieldName.fieldName;
-import static org.fest.reflect.field.StaticFieldName.staticFieldName;
-import static org.fest.reflect.method.MethodName.methodName;
-import static org.fest.reflect.method.StaticMethodName.staticMethodName;
-
 /**
  * Understands the entry point for the classes in this package.
  * The following is an example of proper usage of the classes in this package:
@@ -98,9 +93,7 @@ public final class Reflection {
    * @return the starting point of the method chain.
    * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
-  public static FieldName field(String name) {
-    return fieldName(name);
-  }
+  public static FieldName field(String name) { return new FieldName(name); }
 
   /**
    * Starting point for the fluent interface for accessing static fields via reflection.
@@ -108,9 +101,7 @@ public final class Reflection {
    * @return the starting point of the method chain.
    * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
-  public static StaticFieldName staticField(String name) {
-    return staticFieldName(name);
-  }
+  public static StaticFieldName staticField(String name) { return new StaticFieldName(name); }
 
   /**
    * Starting point for the fluent interface for invoking methods via reflection.
@@ -118,9 +109,7 @@ public final class Reflection {
    * @return the starting point of the method chain.
    * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
-  public static MethodName method(String name) {
-    return methodName(name);
-  }
+  public static MethodName method(String name) { return new MethodName(name); }
 
   /**
    * Starting point for the fluent interface for invoking static methods via reflection.
@@ -128,17 +117,13 @@ public final class Reflection {
    * @return the starting point of the static method chain.
    * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
-  public static StaticMethodName staticMethod(String name) {
-    return staticMethodName(name);
-  }
+  public static StaticMethodName staticMethod(String name) { return new StaticMethodName(name); }
 
   /**
    * Starting point for the fluent interface for invoking constructors via reflection.
    * @return the starting point of the method chain.
    */
-  public static TargetType constructor() {
-    return TargetType.type();
-  }
+  public static TargetType constructor() { return new TargetType(); }
 
   private Reflection() {}
 

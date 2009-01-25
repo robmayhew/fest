@@ -46,14 +46,9 @@ public final class MethodName extends NameTemplate {
    * Creates a new <code>{@link MethodName}</code>: the starting point of the fluent interface for accessing methods
    * using Java Reflection.
    * @param name the name of the method to invoke using Java Reflection.
-   * @return the created <code>MethodName</code> instance.
    * @throws IllegalArgumentException if the given name is <code>null</code> or empty.
    */
-  public static MethodName methodName(String name) {
-    return new MethodName(name);
-  }
-  
-  private MethodName(String name) {
+  public MethodName(String name) {
     super(name);
   }
 

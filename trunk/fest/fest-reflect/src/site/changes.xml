@@ -22,10 +22,6 @@
       <action dev="alruiz" type="fix" issue="287">
         Renamed class org.fest.reflect.method.Static to org.fest.reflect.field.StaticMethodName.
       </action>
-      <action dev="alruiz" type="fix" issue="287">
-        Replaced constructors with static factory methods in classes FieldName, StaticFieldName, MethodName, 
-        StaticMethodName and TargetType.
-      </action>
     </release>
     <release version="1.0" date="2009-01-07" description="Subsequent release">
       <action dev="alruiz" type="fix">
