@@ -14,7 +14,7 @@
  */
 package org.fest.reflect.field;
 
-import org.fest.reflect.reference.TypeReference;
+import org.fest.reflect.reference.TypeRef;
 
 /**
  * Understands a template for the type of a field to access using Java Reflection. This implementation supports
@@ -24,10 +24,10 @@ import org.fest.reflect.reference.TypeReference;
  */
 abstract class TypeReferenceTemplate<T> {
 
-  private final TypeReference<T> type;
+  private final TypeRef<T> type;
   private final String name;
 
-  TypeReferenceTemplate(TypeReference<T> type, NameTemplate fieldName) {
+  TypeReferenceTemplate(TypeRef<T> type, NameTemplate fieldName) {
     name = fieldName.name;
     if (type == null) throw new IllegalArgumentException("The type reference of the field to access should not be null");
     this.type = type;

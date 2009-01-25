@@ -14,7 +14,7 @@
  */
 package org.fest.reflect.field;
 
-import org.fest.reflect.reference.TypeReference;
+import org.fest.reflect.reference.TypeRef;
 
 
 /**
@@ -29,12 +29,12 @@ import org.fest.reflect.reference.TypeReference;
  *   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link FieldName#ofType(Class) ofType}(String.class).{@link FieldType#in(Object) in}(person).{@link Invoker#set(Object) set}("Yoda");
  *
  *   // Retrieves the value of the field "powers"
- *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeReference) ofType}(new {@link TypeReference TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#get() get}();
+ *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#get() get}();
  *   
  *   // Sets the value of the field "powers"
  *   List&lt;String&gt; powers = new ArrayList&lt;String&gt;();
  *   powers.add("heal");
- *   {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeReference) ofType}(new {@link TypeReference TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#set(Object) set}(powers);
+ *   {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#set(Object) set}(powers);
  * </pre>
  * </p>
  *
@@ -69,7 +69,7 @@ public final class FieldName extends NameTemplate {
    * <p>
    * For example:
    * <pre>
-   *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeReference) ofType}(new {@link TypeReference TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#get() get}();
+   *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#get() get}();
    * </pre>
    * </p>
    * @param <T> the generic type of the field type.
@@ -77,7 +77,7 @@ public final class FieldName extends NameTemplate {
    * @return a recipient for the field type.
    * @throws IllegalArgumentException if the given type is <code>null</code>.
    */
-  public <T> FieldTypeReference<T> ofType(TypeReference<T> type) {
+  public <T> FieldTypeReference<T> ofType(TypeRef<T> type) {
     return new FieldTypeReference<T>(type, this);
   }
 }

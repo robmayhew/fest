@@ -27,15 +27,15 @@ import org.fest.reflect.exception.ReflectionError;
  * @author crazybob@google.com (Bob Lee)
  * @author Alex Ruiz
  */
-public abstract class TypeReference<T> {
+public abstract class TypeRef<T> {
 
   private final Class<?> rawType;
 
   /**
-   * Creates a new </code>{@link TypeReference}</code>.
+   * Creates a new </code>{@link TypeRef}</code>.
    * @throws ReflectionError if the generic type of this reference is missing type parameter.
    */
-  public TypeReference() {
+  public TypeRef() {
     Type superclass = getClass().getGenericSuperclass();
     if (superclass instanceof Class) throw new ReflectionError("Missing type parameter.");
     Type type = ((ParameterizedType)superclass).getActualTypeArguments()[0];

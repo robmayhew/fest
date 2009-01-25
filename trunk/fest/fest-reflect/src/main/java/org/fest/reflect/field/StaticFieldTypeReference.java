@@ -15,7 +15,7 @@
 package org.fest.reflect.field;
 
 import org.fest.reflect.exception.ReflectionError;
-import org.fest.reflect.reference.TypeReference;
+import org.fest.reflect.reference.TypeRef;
 
 /**
  * Understands the type of a static field to access using Java Reflection.
@@ -36,7 +36,7 @@ import org.fest.reflect.reference.TypeReference;
  */
 public class StaticFieldTypeReference<T> extends TypeReferenceTemplate<T> {
 
-  StaticFieldTypeReference(TypeReference<T> type, StaticFieldName fieldName) {
+  StaticFieldTypeReference(TypeRef<T> type, StaticFieldName fieldName) {
     super(type, fieldName);
   }
 

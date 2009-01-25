@@ -22,7 +22,7 @@ import org.testng.annotations.Test;
 
 import org.fest.reflect.Jedi;
 import org.fest.reflect.Person;
-import org.fest.reflect.reference.TypeReference;
+import org.fest.reflect.reference.TypeRef;
 import org.fest.reflect.util.NullAndEmptyStringProvider;
 import org.fest.test.CodeToTest;
 
@@ -104,7 +104,7 @@ import static org.fest.util.Collections.list;
   public void shouldThrowErrorIfFieldTypeReferenceIsNull() {
     expectIllegalArgumentException("The type reference of the field to access should not be null").on(new CodeToTest() {
       public void run() {
-        new FieldName("name").ofType((TypeReference<?>)null);
+        new FieldName("name").ofType((TypeRef<?>)null);
       }      
     });
   }
@@ -112,14 +112,14 @@ import static org.fest.util.Collections.list;
   public void shouldUseTypeReferenceWhenReadingField() {
     Jedi jedi = new Jedi("Yoda");
     jedi.addPower("heal");
-    List<String> powers = new FieldName("powers").ofType(new TypeReference<List<String>>() {}).in(jedi).get();
+    List<String> powers = new FieldName("powers").ofType(new TypeRef<List<String>>() {}).in(jedi).get();
     assertThat(powers).containsOnly("heal");
   }
   
   public void shouldUseTypeReferenceWhenWritingField() {
     Jedi jedi = new Jedi("Yoda");
     List<String> powers = list("heal");
-    new FieldName("powers").ofType(new TypeReference<List<String>>() {}).in(jedi).set(powers);
+    new FieldName("powers").ofType(new TypeRef<List<String>>() {}).in(jedi).set(powers);
     assertThat(jedi.powers()).containsOnly("heal");
   }
 
@@ -184,20 +184,20 @@ import static org.fest.util.Collections.list;
   public void shouldThrowErrorIfStaticFieldTypeReferenceIsNull() {
     expectIllegalArgumentException("The type reference of the field to access should not be null").on(new CodeToTest() {
       public void run() {
-        new StaticFieldName("name").ofType((TypeReference<?>)null);
+        new StaticFieldName("name").ofType((TypeRef<?>)null);
       }      
     });
   }
 
   public void shouldUseTypeReferenceWhenReadingStaticField() {
     Jedi.addCommonPower("jump");
-    List<String> powers = new StaticFieldName("commonPowers").ofType(new TypeReference<List<String>>() {}).in(Jedi.class).get();
+    List<String> powers = new StaticFieldName("commonPowers").ofType(new TypeRef<List<String>>() {}).in(Jedi.class).get();
     assertThat(powers).containsOnly("jump");
   }
   
   public void shouldUseTypeReferenceWhenWritingStaticField() {
     List<String> powers = list("jump");
-    new StaticFieldName("commonPowers").ofType(new TypeReference<List<String>>() {}).in(Jedi.class).set(powers);
+    new StaticFieldName("commonPowers").ofType(new TypeRef<List<String>>() {}).in(Jedi.class).set(powers);
     assertThat(Jedi.commonPowers()).containsOnly("jump");
   }
 }

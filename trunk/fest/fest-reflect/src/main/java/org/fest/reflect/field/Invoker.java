@@ -17,7 +17,7 @@ package org.fest.reflect.field;
 import java.lang.reflect.Field;
 
 import org.fest.reflect.exception.ReflectionError;
-import org.fest.reflect.reference.TypeReference;
+import org.fest.reflect.reference.TypeRef;
 
 import static org.fest.reflect.util.Accessibles.*;
 import static org.fest.util.Strings.*;
@@ -90,7 +90,7 @@ public final class Invoker<T> {
     }
   }
   
-  void verifyCorrectType(TypeReference<?> expectedType) {
+  void verifyCorrectType(TypeRef<?> expectedType) {
     verifyCorrectType(expectedType.rawType());
   }
 

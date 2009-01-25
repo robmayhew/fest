@@ -15,7 +15,7 @@
 package org.fest.reflect.field;
 
 import org.fest.reflect.exception.ReflectionError;
-import org.fest.reflect.reference.TypeReference;
+import org.fest.reflect.reference.TypeRef;
 
 /**
  * Understands the type of a field to access using Java Reflection. This implementation supports Java generics.
@@ -23,12 +23,12 @@ import org.fest.reflect.reference.TypeReference;
  * The following is an example of proper usage of this class:
  * <pre>
  *   // Retrieves the value of the field "powers"
- *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link FieldName#ofType(TypeReference) ofType}(new {@link TypeReference TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link #in(Object) in}(jedi).{@link Invoker#get() get}();
+ *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link FieldName#ofType(TypeRef) ofType}(new {@link TypeRef TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link #in(Object) in}(jedi).{@link Invoker#get() get}();
  *   
  *   // Sets the value of the field "powers"
  *   List&lt;String&gt; powers = new ArrayList&lt;String&gt;();
  *   powers.add("heal");
- *   {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link FieldName#ofType(TypeReference) ofType}(new {@link TypeReference TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link #in(Object) in}(jedi).{@link Invoker#set(Object) set}(powers);
+ *   {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link FieldName#ofType(TypeRef) ofType}(new {@link TypeRef TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link #in(Object) in}(jedi).{@link Invoker#set(Object) set}(powers);
  * </pre>
  * </p>
  *
@@ -38,7 +38,7 @@ import org.fest.reflect.reference.TypeReference;
  */
 public class FieldTypeReference<T> extends TypeReferenceTemplate<T> {
 
-  FieldTypeReference(TypeReference<T> type, FieldName fieldName) {
+  FieldTypeReference(TypeRef<T> type, FieldName fieldName) {
     super(type, fieldName);
   }
 
