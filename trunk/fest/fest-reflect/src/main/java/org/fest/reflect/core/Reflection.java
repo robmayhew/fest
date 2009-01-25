@@ -41,7 +41,7 @@ import org.fest.reflect.type.Type;
  *   
  *   // Equivalent to call 'person.setName("Luke")'
  *   {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link org.fest.reflect.method.MethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
- *                    .{@link org.fest.reflect.method.ParameterTypes#in(Object) in}(person)
+ *                    .{@link org.fest.reflect.method.MethodParameterTypes#in(Object) in}(person)
  *                    .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}("Luke");
  * 
  *   // Retrieves the value of the static field "count" in Person.class
@@ -55,12 +55,12 @@ import org.fest.reflect.type.Type;
  *   
  *   // Equivalent to call 'person.getName()'
  *   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link org.fest.reflect.method.MethodName#withReturnType(Class) withReturnType}(String.class)
- *                                  .{@link org.fest.reflect.method.ReturnType#in(Object) in}(person)
+ *                                  .{@link org.fest.reflect.method.MethodReturnType#in(Object) in}(person)
  *                                  .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();
  *
  *   // Equivalent to call 'Jedi.class.setCommonPower("Jump")'
  *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("setCommonPower").{@link org.fest.reflect.method.StaticMethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
- *                                 .{@link org.fest.reflect.method.StaticParameterTypes#in(Class) in}(Jedi.class)
+ *                                 .{@link org.fest.reflect.method.StaticMethodParameterTypes#in(Class) in}(Jedi.class)
  *                                 .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}("Jump");
  *
  *   // Equivalent to call 'Jedi.class.addPadawan()'
@@ -68,7 +68,7 @@ import org.fest.reflect.type.Type;
  *
  *   // Equivalent to call 'Jedi.class.commonPowerCount()'
  *   String name = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("commonPowerCount").{@link org.fest.reflect.method.StaticMethodName#withReturnType(Class) withReturnType}(String.class)
- *                                                 .{@link org.fest.reflect.method.StaticReturnType#in(Class) in}(Jedi.class)
+ *                                                 .{@link org.fest.reflect.method.StaticMethodReturnType#in(Class) in}(Jedi.class)
  *                                                 .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();
  *                                     
  * </pre>

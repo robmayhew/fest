@@ -20,16 +20,34 @@
         the class(es) in the package org.fest.reflect.type.
       </action>
       <action dev="alruiz" type="fix" issue="287">
-        Renamed class org.fest.reflect.field.Name to org.fest.reflect.field.FieldName.
+        Renamed class Name to FieldName in package org.fest.reflect.field.
       </action>
       <action dev="alruiz" type="fix" issue="287">
-        Renamed class org.fest.reflect.field.StaticName to org.fest.reflect.field.StaticFieldName.
+        Renamed class StaticName to StaticFieldName in package org.fest.reflect.field.
       </action>
       <action dev="alruiz" type="fix" issue="287">
-        Renamed class org.fest.reflect.method.Name to org.fest.reflect.field.MethodName.
+        Renamed class Type to FieldType in package org.fest.reflect.field.
       </action>
       <action dev="alruiz" type="fix" issue="287">
-        Renamed class org.fest.reflect.method.Static to org.fest.reflect.field.StaticMethodName.
+        Renamed class StaticType to StaticFieldType in package org.fest.reflect.field.
+      </action>
+      <action dev="alruiz" type="fix" issue="287">
+        Renamed class Name to MethodName in package org.fest.reflect.method.
+      </action>
+      <action dev="alruiz" type="fix" issue="287">
+        Renamed class StaticName to StaticMethodName in package org.fest.reflect.method.
+      </action>
+      <action dev="alruiz" type="fix" issue="287">
+        Renamed class ParameterTypes to MethodParameterTypes in package org.fest.reflect.method.
+      </action>
+      <action dev="alruiz" type="fix" issue="287">
+        Renamed class StaticParameterTypes to StaticMethodParameterTypes in package org.fest.reflect.method.
+      </action>
+      <action dev="alruiz" type="fix" issue="287">
+        Renamed class ReturnType to MethodReturnType in package org.fest.reflect.method.
+      </action>
+      <action dev="alruiz" type="fix" issue="287">
+        Renamed class StaticReturnType to StaticMethodReturnType in package org.fest.reflect.method.
       </action>
       <action dev="alruiz" type="fix" issue="288">
         All public methods throw NullPointerException if any of their arguments is null.

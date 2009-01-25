@@ -22,7 +22,7 @@ package org.fest.reflect.method;
  * <pre>
  *   // Equivalent to call 'Jedi.class.setCommonPower("Jump")'
  *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("setCommonPower").{@link StaticMethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
- *                                 .{@link StaticParameterTypes#in(Class) in}(Jedi.class)
+ *                                 .{@link StaticMethodParameterTypes#in(Class) in}(Jedi.class)
  *                                 .{@link Invoker#invoke(Object...) invoke}("Jump");
  *
  *   // Equivalent to call 'Jedi.class.addPadawan()'
@@ -30,7 +30,7 @@ package org.fest.reflect.method;
  *
  *   // Equivalent to call 'Jedi.class.commonPowerCount()'
  *   String name = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("commonPowerCount").{@link StaticMethodName#withReturnType(Class) withReturnType}(String.class)
- *                                                 .{@link StaticReturnType#in(Class) in}(Jedi.class)
+ *                                                 .{@link StaticMethodReturnType#in(Class) in}(Jedi.class)
  *                                                 .{@link Invoker#invoke(Object...) invoke}();
  * </pre>
  * </p>
@@ -39,9 +39,9 @@ package org.fest.reflect.method;
  *
  * @author Alex Ruiz
  */
-public final class StaticParameterTypes<T> extends ParameterTypesTemplate<T> {
+public final class StaticMethodParameterTypes<T> extends ParameterTypesTemplate<T> {
 
-  StaticParameterTypes(Class<?>[] parameterTypes, String methodName) {
+  StaticMethodParameterTypes(Class<?>[] parameterTypes, String methodName) {
     super(parameterTypes, methodName);
   }
 

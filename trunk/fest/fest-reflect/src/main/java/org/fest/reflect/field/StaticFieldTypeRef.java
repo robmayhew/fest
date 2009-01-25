@@ -23,12 +23,12 @@ import org.fest.reflect.reference.TypeRef;
  * The following is an example of proper usage of this class:
  * <pre>
  *   // Retrieves the value of the static field "commonPowers"
- *   List&lt;String&gt; commmonPowers = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("commonPowers").{@link StaticFieldName#ofType(TypeRef) ofType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {}).{@link StaticFieldTypeReference#in(Class) in}(Jedi.class).{@link Invoker#get() get}();
+ *   List&lt;String&gt; commmonPowers = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("commonPowers").{@link StaticFieldName#ofType(TypeRef) ofType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {}).{@link StaticFieldTypeRef#in(Class) in}(Jedi.class).{@link Invoker#get() get}();
  *   
  *   // Sets the value of the static field "commonPowers"
  *   List&lt;String&gt; commonPowers = new ArrayList&lt;String&gt;();
  *   commonPowers.add("jump");
- *   {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("commonPowers").{@link StaticFieldName#ofType(TypeRef) ofType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {}).{@link StaticFieldTypeReference#in(Class) in}(Jedi.class).{@link Invoker#set(Object) set}(commonPowers);
+ *   {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("commonPowers").{@link StaticFieldName#ofType(TypeRef) ofType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {}).{@link StaticFieldTypeRef#in(Class) in}(Jedi.class).{@link Invoker#set(Object) set}(commonPowers);
  * </pre>
  * </p>
  *
@@ -36,9 +36,9 @@ import org.fest.reflect.reference.TypeRef;
  *
  * @author Alex Ruiz
  */
-public class StaticFieldTypeReference<T> extends TypeReferenceTemplate<T> {
+public class StaticFieldTypeRef<T> extends TypeRefTemplate<T> {
 
-  StaticFieldTypeReference(TypeRef<T> type, StaticFieldName fieldName) {
+  StaticFieldTypeRef(TypeRef<T> type, StaticFieldName fieldName) {
     super(type, fieldName);
   }
 

@@ -36,9 +36,9 @@ import org.fest.reflect.reference.TypeRef;
  *
  * @author Alex Ruiz
  */
-public class FieldTypeReference<T> extends TypeReferenceTemplate<T> {
+public class FieldTypeRef<T> extends TypeRefTemplate<T> {
 
-  FieldTypeReference(TypeRef<T> type, FieldName fieldName) {
+  FieldTypeRef(TypeRef<T> type, FieldName fieldName) {
     super(type, fieldName);
   }
 

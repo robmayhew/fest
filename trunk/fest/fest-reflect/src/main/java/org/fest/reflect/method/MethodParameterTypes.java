@@ -22,7 +22,7 @@ package org.fest.reflect.method;
  * <pre>
  *   // Equivalent to call 'person.setName("Luke")'
  *   {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link MethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
- *                    .{@link ParameterTypes#in(Object) in}(person)
+ *                    .{@link MethodParameterTypes#in(Object) in}(person)
  *                    .{@link Invoker#invoke(Object...) invoke}("Luke");
  * 
  *   // Equivalent to call 'person.concentrate()'
@@ -30,7 +30,7 @@ package org.fest.reflect.method;
  *   
  *   // Equivalent to call 'person.getName()'
  *   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link MethodName#withReturnType(Class) withReturnType}(String.class)
- *                                  .{@link ReturnType#in(Object) in}(person)
+ *                                  .{@link MethodReturnType#in(Object) in}(person)
  *                                  .{@link Invoker#invoke(Object...) invoke}();   
  * </pre>
  * </p>
@@ -40,9 +40,9 @@ package org.fest.reflect.method;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public final class ParameterTypes<T> extends ParameterTypesTemplate<T> {
+public final class MethodParameterTypes<T> extends ParameterTypesTemplate<T> {
 
-  ParameterTypes(Class<?>[] parameterTypes, String methodName) {
+  MethodParameterTypes(Class<?>[] parameterTypes, String methodName) {
     super(parameterTypes, methodName);
   }
 

@@ -40,7 +40,7 @@ Here are some examples:
    
    // Equivalent to call 'person.setName("Luke")'
    {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link org.fest.reflect.method.MethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
-                    .{@link org.fest.reflect.method.ParameterTypes#in(Object) in}(person)
+                    .{@link org.fest.reflect.method.MethodParameterTypes#in(Object) in}(person)
                     .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}("Luke");
  
    // Equivalent to call 'person.concentrate()'
@@ -48,7 +48,7 @@ Here are some examples:
    
    // Equivalent to call 'person.getName()'
    String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link org.fest.reflect.method.MethodName#withReturnType(Class) withReturnType}(String.class)
-                                  .{@link org.fest.reflect.method.ReturnType#in(Object) in}(person)
+                                  .{@link org.fest.reflect.method.MethodReturnType#in(Object) in}(person)
                                   .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();   
 </pre>
 </p>

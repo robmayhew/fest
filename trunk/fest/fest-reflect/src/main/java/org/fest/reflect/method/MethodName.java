@@ -26,7 +26,7 @@ import org.fest.reflect.reference.TypeRef;
  * <pre>
  *   // Equivalent to call 'person.setName("Luke")'
  *   {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link MethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
- *                    .{@link ParameterTypes#in(Object) in}(person)
+ *                    .{@link MethodParameterTypes#in(Object) in}(person)
  *                    .{@link Invoker#invoke(Object...) invoke}("Luke");
  *
  *   // Equivalent to call 'person.concentrate()'
@@ -34,7 +34,7 @@ import org.fest.reflect.reference.TypeRef;
  *
  *   // Equivalent to call 'person.getName()'
  *   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link MethodName#withReturnType(Class) withReturnType}(String.class)
- *                                  .{@link ReturnType#in(Object) in}(person)
+ *                                  .{@link MethodReturnType#in(Object) in}(person)
  *                                  .{@link Invoker#invoke(Object...) invoke}();
  * </pre>
  * </p>
@@ -63,8 +63,8 @@ public final class MethodName extends NameTemplate {
    * @return the created return type holder.
    * @throws NullPointerException if the given type is <code>null</code>.
    */
-  public <T> ReturnType<T> withReturnType(Class<T> type) {
-    return new ReturnType<T>(type, this);
+  public <T> MethodReturnType<T> withReturnType(Class<T> type) {
+    return new MethodReturnType<T>(type, this);
   }
 
   /**
@@ -75,8 +75,8 @@ public final class MethodName extends NameTemplate {
    * @return the created return type holder.
    * @throws NullPointerException if the given type reference is <code>null</code>.
    */
-  public <T> ReturnTypeReference<T> withReturnType(TypeRef<T> type) {
-    return new ReturnTypeReference<T>(type, this);
+  public <T> MethodReturnTypeRef<T> withReturnType(TypeRef<T> type) {
+    return new MethodReturnTypeRef<T>(type, this);
   }
 
   /**
@@ -86,8 +86,8 @@ public final class MethodName extends NameTemplate {
    * @return the created parameter types holder.
    * @throws NullPointerException if the array of parameter types is <code>null</code>.
    */
-  public ParameterTypes<Void> withParameterTypes(Class<?>... parameterTypes) {
-    return new ParameterTypes<Void>(parameterTypes, name);
+  public MethodParameterTypes<Void> withParameterTypes(Class<?>... parameterTypes) {
+    return new MethodParameterTypes<Void>(parameterTypes, name);
   }
 
   /**

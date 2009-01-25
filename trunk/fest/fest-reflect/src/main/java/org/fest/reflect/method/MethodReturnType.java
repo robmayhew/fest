@@ -22,7 +22,7 @@ package org.fest.reflect.method;
  * <pre>
  *   // Equivalent to call 'person.setName("Luke")'
  *   {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link MethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
- *                    .{@link ParameterTypes#in(Object) in}(person)
+ *                    .{@link MethodParameterTypes#in(Object) in}(person)
  *                    .{@link Invoker#invoke(Object...) invoke}("Luke");
  * 
  *   // Equivalent to call 'person.concentrate()'
@@ -30,7 +30,7 @@ package org.fest.reflect.method;
  *   
  *   // Equivalent to call 'person.getName()'
  *   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link MethodName#withReturnType(Class) withReturnType}(String.class)
- *                                  .{@link ReturnType#in(Object) in}(person)
+ *                                  .{@link MethodReturnType#in(Object) in}(person)
  *                                  .{@link Invoker#invoke(Object...) invoke}();   
  * </pre>
  * </p>
@@ -40,9 +40,9 @@ package org.fest.reflect.method;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class ReturnType<T> extends ReturnTypeTemplate<T> {
+public class MethodReturnType<T> extends ReturnTypeTemplate<T> {
   
-  ReturnType(Class<T> type, MethodName methodName) {
+  MethodReturnType(Class<T> type, MethodName methodName) {
     super(type, methodName);
   }
 
@@ -63,7 +63,7 @@ public class ReturnType<T> extends ReturnTypeTemplate<T> {
    * @return the created parameter types holder.
    * @throws NullPointerException if the array of parameter types is <code>null</code>.
    */
-  public ParameterTypes<T> withParameterTypes(Class<?>... parameterTypes) {
-    return new ParameterTypes<T>(parameterTypes, methodName);
+  public MethodParameterTypes<T> withParameterTypes(Class<?>... parameterTypes) {
+    return new MethodParameterTypes<T>(parameterTypes, methodName);
   }
 }

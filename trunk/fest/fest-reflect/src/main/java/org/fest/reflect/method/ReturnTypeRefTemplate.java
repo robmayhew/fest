@@ -21,11 +21,11 @@ import org.fest.reflect.reference.TypeRef;
  *
  * @author Alex Ruiz
  */
-abstract class ReturnTypeReferenceTemplate<T> {
+abstract class ReturnTypeRefTemplate<T> {
 
   final String methodName;
   
-  ReturnTypeReferenceTemplate(TypeRef<T> type, NameTemplate methodName) {
+  ReturnTypeRefTemplate(TypeRef<T> type, NameTemplate methodName) {
     if (type == null) 
       throw new NullPointerException("The return type reference of the method to access should not be null");
     this.methodName = methodName.name;

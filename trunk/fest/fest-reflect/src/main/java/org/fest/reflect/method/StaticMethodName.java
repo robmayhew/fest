@@ -24,7 +24,7 @@ import org.fest.reflect.reference.TypeRef;
  * <pre>
  *   // Equivalent to call 'Jedi.class.setCommonPower("Jump")'
  *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("setCommonPower").{@link StaticMethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
- *                                 .{@link StaticParameterTypes#in(Class) in}(Jedi.class)
+ *                                 .{@link StaticMethodParameterTypes#in(Class) in}(Jedi.class)
  *                                 .{@link Invoker#invoke(Object...) invoke}("Jump");
  *
  *   // Equivalent to call 'Jedi.class.addPadawan()'
@@ -32,12 +32,12 @@ import org.fest.reflect.reference.TypeRef;
  *
  *   // Equivalent to call 'Jedi.class.commonPowerCount()'
  *   String name = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("commonPowerCount").{@link StaticMethodName#withReturnType(Class) withReturnType}(String.class)
- *                                                 .{@link StaticReturnType#in(Class) in}(Jedi.class)
+ *                                                 .{@link StaticMethodReturnType#in(Class) in}(Jedi.class)
  *                                                 .{@link Invoker#invoke(Object...) invoke}();
  *                                                 
  *   // Equivalent to call 'Jedi.getCommonPowers()'
  *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("getCommonPowers").{@link StaticMethodName#withReturnType(TypeRef) withReturnType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {})
- *                                            .{@link StaticReturnTypeReference#in(Class) in}(Jedi.class)
+ *                                            .{@link StaticMethodReturnTypeRef#in(Class) in}(Jedi.class)
  *                                            .{@link Invoker#invoke(Object...) invoke}();   
  * </pre>
  * </p>
@@ -65,8 +65,8 @@ public class StaticMethodName extends NameTemplate {
    * @return the created return type holder.
    * @throws NullPointerException if the given type is <code>null</code>.
    */
-  public <T> StaticReturnType<T> withReturnType(Class<T> type) {
-    return new StaticReturnType<T>(type, this);
+  public <T> StaticMethodReturnType<T> withReturnType(Class<T> type) {
+    return new StaticMethodReturnType<T>(type, this);
   }
 
   /**
@@ -77,8 +77,8 @@ public class StaticMethodName extends NameTemplate {
    * @return the created return type holder.
    * @throws NullPointerException if the given type reference is <code>null</code>.
    */
-  public <T> StaticReturnTypeReference<T> withReturnType(TypeRef<T> type) {
-    return new StaticReturnTypeReference<T>(type, this);
+  public <T> StaticMethodReturnTypeRef<T> withReturnType(TypeRef<T> type) {
+    return new StaticMethodReturnTypeRef<T>(type, this);
   }
 
   /**
@@ -88,8 +88,8 @@ public class StaticMethodName extends NameTemplate {
    * @return the created parameter types holder.
    * @throws NullPointerException if the array of parameter types is <code>null</code>.
    */
-  public StaticParameterTypes<Void> withParameterTypes(Class<?>... parameterTypes) {
-    return new StaticParameterTypes<Void>(parameterTypes, name);
+  public StaticMethodParameterTypes<Void> withParameterTypes(Class<?>... parameterTypes) {
+    return new StaticMethodParameterTypes<Void>(parameterTypes, name);
   }
 
   /**

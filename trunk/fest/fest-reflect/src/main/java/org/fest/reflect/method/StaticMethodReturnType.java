@@ -22,7 +22,7 @@ package org.fest.reflect.method;
  * <pre>
  *   // Equivalent to call 'Jedi.class.setCommonPower("Jump")'
  *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("setCommonPower").{@link StaticMethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
- *                                 .{@link StaticParameterTypes#in(Class) in}(Jedi.class)
+ *                                 .{@link StaticMethodParameterTypes#in(Class) in}(Jedi.class)
  *                                 .{@link Invoker#invoke(Object...) invoke}("Jump");
  *
  *   // Equivalent to call 'Jedi.class.addPadawan()'
@@ -30,7 +30,7 @@ package org.fest.reflect.method;
  *
  *   // Equivalent to call 'Jedi.class.commonPowerCount()'
  *   String name = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("commonPowerCount").{@link StaticMethodName#withReturnType(Class) withReturnType}(String.class)
- *                                                 .{@link StaticReturnType#in(Class) in}(Jedi.class)
+ *                                                 .{@link StaticMethodReturnType#in(Class) in}(Jedi.class)
  *                                                 .{@link Invoker#invoke(Object...) invoke}();
  * </pre>
  * </p>
@@ -39,8 +39,8 @@ package org.fest.reflect.method;
  *
  * @author Alex Ruiz
  */
-public class StaticReturnType<T> extends ReturnTypeTemplate<T> {
-  StaticReturnType(Class<T> type, StaticMethodName methodName) {
+public class StaticMethodReturnType<T> extends ReturnTypeTemplate<T> {
+  StaticMethodReturnType(Class<T> type, StaticMethodName methodName) {
     super(type, methodName);
   }
 
@@ -61,7 +61,7 @@ public class StaticReturnType<T> extends ReturnTypeTemplate<T> {
    * @return the created parameter types holder.
    * @throws NullPointerException if the array of parameter types is <code>null</code>.
    */
-  public StaticParameterTypes<T> withParameterTypes(Class<?>... parameterTypes) {
-    return new StaticParameterTypes<T>(parameterTypes, methodName);
+  public StaticMethodParameterTypes<T> withParameterTypes(Class<?>... parameterTypes) {
+    return new StaticMethodParameterTypes<T>(parameterTypes, methodName);
   }
 }

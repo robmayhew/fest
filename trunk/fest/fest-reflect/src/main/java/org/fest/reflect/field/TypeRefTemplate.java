@@ -22,12 +22,12 @@ import org.fest.reflect.reference.TypeRef;
  *
  * @author Alex Ruiz
  */
-abstract class TypeReferenceTemplate<T> {
+abstract class TypeRefTemplate<T> {
 
   private final TypeRef<T> type;
   private final String name;
 
-  TypeReferenceTemplate(TypeRef<T> type, NameTemplate fieldName) {
+  TypeRefTemplate(TypeRef<T> type, NameTemplate fieldName) {
     name = fieldName.name;
     if (type == null) throw new NullPointerException("The type reference of the field to access should not be null");
     this.type = type;

@@ -28,7 +28,7 @@ import static org.fest.util.Strings.*;
  * <pre>
  *   // Equivalent to call 'person.setName("Luke")'
  *   {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link MethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
- *                    .{@link ParameterTypes#in(Object) in}(person)
+ *                    .{@link MethodParameterTypes#in(Object) in}(person)
  *                    .{@link Invoker#invoke(Object...) invoke}("Luke");
  *
  *   // Equivalent to call 'person.concentrate()'
@@ -36,7 +36,7 @@ import static org.fest.util.Strings.*;
  *
  *   // Equivalent to call 'person.getName()'
  *   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link MethodName#withReturnType(Class) withReturnType}(String.class)
- *                                  .{@link ReturnType#in(Object) in}(person)
+ *                                  .{@link MethodReturnType#in(Object) in}(person)
  *                                  .{@link Invoker#invoke(Object...) invoke}();
  * </pre>
  * </p>

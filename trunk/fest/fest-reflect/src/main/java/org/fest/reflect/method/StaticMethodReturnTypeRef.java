@@ -17,23 +17,24 @@ package org.fest.reflect.method;
 import org.fest.reflect.reference.TypeRef;
 
 /**
- * Understands the return type reference of the method to invoke.
+ * Understands the return type of the static method to invoke.
  * <p>
  * The following is an example of proper usage of this class:
  * <pre>
- *   // Equivalent to call 'jedi.getPowers()'
- *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#method(String) method}("getPowers").{@link MethodName#withReturnType(TypeRef) withReturnType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {})
- *                                            .{@link ReturnTypeReference#in(Object) in}(person)
+ *   // Equivalent to call 'Jedi.getCommonPowers()'
+ *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("getCommonPowers").{@link StaticMethodName#withReturnType(TypeRef) withReturnType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {})
+ *                                            .{@link StaticMethodReturnTypeRef#in(Class) in}(Jedi.class)
  *                                            .{@link Invoker#invoke(Object...) invoke}();   
  * </pre>
  * </p>
- * 
- * @param <T> the generic type of the method's return type reference. 
+ *
+ * @param <T> the generic type of the static method's return type.
  *
  * @author Alex Ruiz
  */
-public class ReturnTypeReference<T> extends ReturnTypeReferenceTemplate<T> {
-  ReturnTypeReference(TypeRef<T> type, MethodName methodName) {
+public class StaticMethodReturnTypeRef<T> extends ReturnTypeRefTemplate<T> {
+  
+  StaticMethodReturnTypeRef(TypeRef<T> type, StaticMethodName methodName) {
     super(type, methodName);
   }
 
@@ -43,18 +44,18 @@ public class ReturnTypeReference<T> extends ReturnTypeReferenceTemplate<T> {
    * @return the created method invoker.
    * @throws NullPointerException if the given target is <code>null</code>.
    */
-  public Invoker<T> in(Object target) {
+  public Invoker<T> in(Class<?> target) {
     return new Invoker<T>(methodName, target);
   }
 
   /**
-   * Specifies the parameter types of the method to invoke. This method call is optional if the method to invoke does 
-   * not take arguments.
+   * Specifies the parameter types of the static method to invoke. This method call is optional if the method to invoke
+   * does not take arguments.
    * @param parameterTypes the parameter types of the method to invoke.
    * @return the created parameter types holder.
    * @throws NullPointerException if the array of parameter types is <code>null</code>.
    */
-  public ParameterTypes<T> withParameterTypes(Class<?>... parameterTypes) {
-    return new ParameterTypes<T>(parameterTypes, methodName);
+  public StaticMethodParameterTypes<T> withParameterTypes(Class<?>... parameterTypes) {
+    return new StaticMethodParameterTypes<T>(parameterTypes, methodName);
   }
 }
