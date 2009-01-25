@@ -31,16 +31,16 @@ Here are some examples:
    // import static {@link org.fest.reflect.core.Reflection org.fest.reflect.core.Reflection}.*;
 
    // Retrieves the value of the field "name"
-   String name = {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link org.fest.reflect.field.Name#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.Type#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#get() get}();
+   String name = {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link org.fest.reflect.field.FieldName#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.FieldType#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#get() get}();
    
    // Sets the value of the field "name" to "Yoda"
-   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link org.fest.reflect.field.Name#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.Type#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#set(Object) set}("Yoda");
+   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link org.fest.reflect.field.FieldName#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.FieldType#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#set(Object) set}("Yoda");
 
    // Retrieves the value of the static field "count"
-   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link org.fest.reflect.field.StaticName#ofType(Class) ofType}(int.class).{@link org.fest.reflect.field.StaticType#in(Class) in}(Person.class).{@link org.fest.reflect.field.Invoker#get() get}();
+   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link org.fest.reflect.field.StaticFieldName#ofType(Class) ofType}(int.class).{@link org.fest.reflect.field.StaticFieldType#in(Class) in}(Person.class).{@link org.fest.reflect.field.Invoker#get() get}();
    
    // Sets the value of the static field "count" to 3
-   {@link org.fest.reflect.core.Reflection#staticField(String) field}("count").{@link org.fest.reflect.field.StaticName#ofType(Class) ofType}(int.class).{@link org.fest.reflect.field.StaticType#in(Class) in}(Person.class).{@link org.fest.reflect.field.Invoker#set(Object) set}(3);
+   {@link org.fest.reflect.core.Reflection#staticField(String) field}("count").{@link org.fest.reflect.field.StaticFieldName#ofType(Class) ofType}(int.class).{@link org.fest.reflect.field.StaticFieldType#in(Class) in}(Person.class).{@link org.fest.reflect.field.Invoker#set(Object) set}(3);
 </pre>
 </p>
 </body>
