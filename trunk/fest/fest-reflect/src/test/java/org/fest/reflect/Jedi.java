@@ -58,6 +58,13 @@ public class Jedi extends Person {
     return new ArrayList<String>(powers);
   }
   
+  public List<String> powersThatStartWith(String prefix) {
+    List<String> sub = new ArrayList<String>();
+    for (String power : powers) 
+      if (power != null && power.startsWith(prefix)) sub.add(power);
+    return sub;
+  }
+  
   public boolean isMaster() { return master; }
 
   public static void addCommonPower(String power) {
@@ -78,5 +85,12 @@ public class Jedi extends Person {
 
   public static List<String> commonPowers() {
     return new ArrayList<String>(commonPowers);
+  }
+
+  public static List<String> commonPowersThatStartWith(String prefix) {
+    List<String> sub = new ArrayList<String>();
+    for (String power : commonPowers) 
+      if (power != null && power.startsWith(prefix)) sub.add(power);
+    return sub;
   }
 }

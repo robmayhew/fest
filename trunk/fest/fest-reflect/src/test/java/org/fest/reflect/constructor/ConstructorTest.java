@@ -30,21 +30,21 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class ConstructorTest {
+@Test public class ConstructorTest {
 
-  @Test public void shouldCreateNewInstanceWithDefaultConstructor() {
+  public void shouldCreateNewInstanceWithDefaultConstructor() {
     Person person = new TargetType().in(Person.class).newInstance();
     assertThat(person).isNotNull();
     assertThat(person.getName()).isNull();
   }
   
-  @Test public void shouldCreateNewInstanceUsingGivenConstructorParameters() {
+  public void shouldCreateNewInstanceUsingGivenConstructorParameters() {
     Person person = new TargetType().withParameterTypes(String.class).in(Person.class).newInstance("Yoda");
     assertThat(person).isNotNull();
     assertThat(person.getName()).isEqualTo("Yoda");
   }
   
-  @Test public void shouldReturnConstructorInfo() {
+  public void shouldReturnConstructorInfo() {
     Constructor<Person> constructor = new TargetType().withParameterTypes(String.class).in(Person.class).info();
     assertThat(constructor).isNotNull();
     Class<?>[] parameterTypes = constructor.getParameterTypes();

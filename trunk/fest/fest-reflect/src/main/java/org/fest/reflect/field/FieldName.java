@@ -29,12 +29,12 @@ import org.fest.reflect.reference.TypeRef;
  *   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link FieldName#ofType(Class) ofType}(String.class).{@link FieldType#in(Object) in}(person).{@link Invoker#set(Object) set}("Yoda");
  *
  *   // Retrieves the value of the field "powers"
- *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#get() get}();
+ *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#get() get}();
  *   
  *   // Sets the value of the field "powers"
  *   List&lt;String&gt; powers = new ArrayList&lt;String&gt;();
  *   powers.add("heal");
- *   {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#set(Object) set}(powers);
+ *   {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#set(Object) set}(powers);
  * </pre>
  * </p>
  *
@@ -70,7 +70,7 @@ public final class FieldName extends NameTemplate {
    * <p>
    * For example:
    * <pre>
-   *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#get() get}();
+   *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#get() get}();
    * </pre>
    * </p>
    * @param <T> the generic type of the field type.

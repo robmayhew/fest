@@ -41,6 +41,7 @@ package org.fest.reflect.method;
  * @author Alex Ruiz
  */
 public class ReturnType<T> extends ReturnTypeTemplate<T> {
+  
   ReturnType(Class<T> type, MethodName methodName) {
     super(type, methodName);
   }
@@ -63,6 +64,6 @@ public class ReturnType<T> extends ReturnTypeTemplate<T> {
    * @throws NullPointerException if the array of parameter types is <code>null</code>.
    */
   public ParameterTypes<T> withParameterTypes(Class<?>... parameterTypes) {
-    return new ParameterTypes<T>(parameterTypes, this);
+    return new ParameterTypes<T>(parameterTypes, methodName);
   }
 }

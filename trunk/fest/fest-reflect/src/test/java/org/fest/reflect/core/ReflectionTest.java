@@ -32,29 +32,29 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class ReflectionTest {
+@Test public class ReflectionTest {
 
-  @Test public void shouldReturnConstructorFluentInterface() {
+  public void shouldReturnConstructorFluentInterface() {
     assertThat(Reflection.constructor()).isInstanceOf(TargetType.class);
   }
   
-  @Test public void shouldReturnFieldFluentInterface() {
+  public void shouldReturnFieldFluentInterface() {
     assertThat(Reflection.field("field")).isInstanceOf(FieldName.class);
   }
 
-  @Test public void shouldReturnStaticFieldFluentInterface() {
+  public void shouldReturnStaticFieldFluentInterface() {
     assertThat(Reflection.staticField("field")).isInstanceOf(StaticFieldName.class);
   }
 
-  @Test public void shouldReturnMethodFluentInterface() {
+  public void shouldReturnMethodFluentInterface() {
     assertThat(Reflection.method("method")).isInstanceOf(MethodName.class);
   }
 
-  @Test public void shouldReturnStaticMethodFluentInterface() {
+  public void shouldReturnStaticMethodFluentInterface() {
     assertThat(Reflection.staticMethod("method")).isInstanceOf(StaticMethodName.class);
   }
   
-  @Test public void shouldReturnTypeFluentInterface() {
+  public void shouldReturnTypeFluentInterface() {
     assertThat(Reflection.type("type")).isInstanceOf(Type.class);
   }
 }

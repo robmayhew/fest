@@ -15,10 +15,13 @@
  */
 package org.fest.reflect.method;
 
+import java.util.List;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import org.fest.reflect.Jedi;
+import org.fest.reflect.reference.TypeRef;
 import org.fest.test.CodeToTest;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -58,11 +61,20 @@ import static org.fest.reflect.util.ExpectedFailures.*;
   public void shouldThrowErrorIfMethodReturnTypeIsNull() {
     expectNullPointerException("The return type of the method to access should not be null").on(new CodeToTest() {
       public void run() {
-        new MethodName("setName").withReturnType(null);
+        new MethodName("setName").withReturnType((Class<?>)null);
       }
     });
   }
   
+  public void shouldThrowErrorIfMethodReturnTypeReferenceIsNull() {
+    expectNullPointerException("The return type reference of the method to access should not be null").on(
+      new CodeToTest() {
+        public void run() {
+          new MethodName("setName").withReturnType((TypeRef<?>)null);
+        }
+      });
+  }
+
   public void shouldThrowErrorIfMethodParameterTypeArrayIsNull() {
     expectNullPointerException("The array of parameter types should not be null").on(new CodeToTest() {
       public void run() {
@@ -90,10 +102,24 @@ import static org.fest.reflect.util.ExpectedFailures.*;
     assertThat(personName).isEqualTo("Luke");
   }
 
-  public void shouldCallMethodWithArgsAndReturnType() {
-    jedi.addPower("Healing");
+  public void shouldCallMethodWithArgsAndReturnValue() {
+    jedi.addPower("healing");
     String power = new MethodName("powerAt").withReturnType(String.class).withParameterTypes(int.class).in(jedi).invoke(0);
-    assertThat(power).isEqualTo("Healing");
+    assertThat(power).isEqualTo("healing");
+  }
+
+  public void shouldCallMethodWithNoArgsAndReturnTypeReference() {
+    jedi.addPower("jump");
+    List<String> powers = new MethodName("powers").withReturnType(new TypeRef<List<String>>() {}).in(jedi).invoke();
+    assertThat(powers).containsOnly("jump");
+  }
+
+  public void shouldCallMethodWithArgsAndReturnTypeReference() {
+    jedi.addPower("healing");
+    jedi.addPower("jump");
+    List<String> powers =  new MethodName("powersThatStartWith").withReturnType(new TypeRef<List<String>>() {})
+                                                                .withParameterTypes(String.class).in(jedi).invoke("ju");
+    assertThat(powers).containsOnly("jump");
   }
 
   public void shouldCallMethodWithNoArgsAndNoReturnValue() {
@@ -149,9 +175,18 @@ import static org.fest.reflect.util.ExpectedFailures.*;
   public void shouldThrowErrorIfStaticMethodReturnTypeIsNull() {
     expectNullPointerException("The return type of the method to access should not be null").on(new CodeToTest() {
       public void run() {
-        new StaticMethodName("commonPowerCount").withReturnType(null);
+        new StaticMethodName("commonPowerCount").withReturnType((Class<?>)null);
       }
     });
+  }
+
+  public void shouldThrowErrorIfStaticMethodReturnTypeReferenceIsNull() {
+    expectNullPointerException("The return type reference of the method to access should not be null").on(
+      new CodeToTest() {
+        public void run() {
+          new StaticMethodName("commonPowerCount").withReturnType((TypeRef<?>)null);
+        }
+      });
   }
 
   public void shouldThrowErrorIfStaticMethodParameterTypeArrayIsNull() {
@@ -169,13 +204,34 @@ import static org.fest.reflect.util.ExpectedFailures.*;
       }
     });
   }
-
-  public void shouldCallStaticMethodWithArgsAndReturnType() {
+  
+  public void shouldCallStaticMethodWithNoArgsAndReturnValue() {
     Jedi.addCommonPower("Jump");
-    String method = "commonPowerAt";
+    int count = new StaticMethodName("commonPowerCount").withReturnType(int.class).in(Jedi.class).invoke();
+    assertThat(count).isEqualTo(Jedi.commonPowerCount());
+  }
+
+  public void shouldCallStaticMethodWithArgsAndReturnValue() {
+    Jedi.addCommonPower("Jump");
     String power =
-      new StaticMethodName(method).withReturnType(String.class).withParameterTypes(int.class).in(Jedi.class).invoke(0);
+      new StaticMethodName("commonPowerAt").withReturnType(String.class)
+                                           .withParameterTypes(int.class).in(Jedi.class).invoke(0);
     assertThat(power).isEqualTo("Jump");
+  }
+  
+  public void shouldCallStaticMethodWithNoArgsAndReturnValueReference() {
+    Jedi.addCommonPower("jump");
+    List<String> powers = new StaticMethodName("commonPowers").withReturnType(new TypeRef<List<String>>() {})
+                                                              .in(Jedi.class).invoke();
+    assertThat(powers).containsOnly("jump");
+  }
+
+  public void shouldCallStaticMethodWithArgsAndReturnValueReference() {
+    Jedi.addCommonPower("jump");
+    List<String> powers =
+      new StaticMethodName("commonPowersThatStartWith").withReturnType(new TypeRef<List<String>>() {})
+                                                       .withParameterTypes(String.class).in(Jedi.class).invoke("ju");
+    assertThat(powers).containsOnly("jump");
   }
 
   public void shouldStaticCallMethodWithArgsAndNoReturnValue() {
@@ -189,12 +245,6 @@ import static org.fest.reflect.util.ExpectedFailures.*;
     assertThat(Jedi.commonPowerAt(0)).isEqualTo("Jump");
     new StaticMethodName("clearCommonPowers").in(Jedi.class).invoke();
     assertThat(Jedi.commonPowerCount()).isEqualTo(0);
-  }
-
-  public void shouldCallStaticMethodWithReturnValueAndNoArgs() {
-    Jedi.addCommonPower("Jump");
-    int count = new StaticMethodName("commonPowerCount").withReturnType(int.class).in(Jedi.class).invoke();
-    assertThat(count).isEqualTo(Jedi.commonPowerCount());
   }
   
   public void shouldThrowErrorIfInvalidStaticMethodName() {

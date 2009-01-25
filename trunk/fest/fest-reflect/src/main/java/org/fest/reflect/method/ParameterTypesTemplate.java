@@ -26,9 +26,9 @@ abstract class ParameterTypesTemplate<T> {
   final Class<?>[] parameterTypes;
   final String methodName;
   
-  public ParameterTypesTemplate(Class<?>[] parameterTypes, ReturnTypeTemplate<T> returnType) {
+  ParameterTypesTemplate(Class<?>[] parameterTypes, String methodName) {
     if (parameterTypes == null) throw new NullPointerException("The array of parameter types should not be null");
     this.parameterTypes = parameterTypes;
-    this.methodName = returnType.methodName;
+    this.methodName = methodName;
   }
 }

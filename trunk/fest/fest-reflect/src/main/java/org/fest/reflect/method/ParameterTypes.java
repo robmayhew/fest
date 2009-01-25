@@ -42,8 +42,8 @@ package org.fest.reflect.method;
  */
 public final class ParameterTypes<T> extends ParameterTypesTemplate<T> {
 
-  ParameterTypes(Class<?>[] parameterTypes, ReturnType<T> returnType) {
-    super(parameterTypes, returnType);
+  ParameterTypes(Class<?>[] parameterTypes, String methodName) {
+    super(parameterTypes, methodName);
   }
 
   /**

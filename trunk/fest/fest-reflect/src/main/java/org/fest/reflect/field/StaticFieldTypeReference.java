@@ -22,11 +22,13 @@ import org.fest.reflect.reference.TypeRef;
  * <p>
  * The following is an example of proper usage of this class:
  * <pre>
- *   // Retrieves the value of the static field "count"
- *   int count = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticFieldName#ofType(Class) ofType}(int.class).{@link StaticFieldTypeReference#in(Class) in}(Person.class).{@link Invoker#get() get}();
+ *   // Retrieves the value of the static field "commonPowers"
+ *   List&lt;String&gt; commmonPowers = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("commonPowers").{@link StaticFieldName#ofType(TypeRef) ofType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {}).{@link StaticFieldTypeReference#in(Class) in}(Jedi.class).{@link Invoker#get() get}();
  *   
- *   // Sets the value of the static field "count" to 3
- *   {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticFieldName#ofType(Class) ofType}(int.class).{@link StaticFieldTypeReference#in(Class) in}(Person.class).{@link Invoker#set(Object) set}(3);
+ *   // Sets the value of the static field "commonPowers"
+ *   List&lt;String&gt; commonPowers = new ArrayList&lt;String&gt;();
+ *   commonPowers.add("jump");
+ *   {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("commonPowers").{@link StaticFieldName#ofType(TypeRef) ofType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {}).{@link StaticFieldTypeReference#in(Class) in}(Jedi.class).{@link Invoker#set(Object) set}(commonPowers);
  * </pre>
  * </p>
  *

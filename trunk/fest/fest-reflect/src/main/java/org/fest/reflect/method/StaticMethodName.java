@@ -15,6 +15,8 @@
  */
 package org.fest.reflect.method;
 
+import org.fest.reflect.reference.TypeRef;
+
 /**
  * Understands the name of a static method to invoke using Java Reflection.
  * <p>
@@ -63,6 +65,18 @@ public class StaticMethodName extends NameTemplate {
   }
 
   /**
+   * Specifies the return type reference of the static method to invoke. This method call is optional if the return type 
+   * of the method to invoke is <code>void</code>.
+   * @param <T> the generic type of the method's return type.
+   * @param type the return type reference of the method to invoke.
+   * @return the created return type holder.
+   * @throws NullPointerException if the given type reference is <code>null</code>.
+   */
+  public <T> StaticReturnTypeReference<T> withReturnType(TypeRef<T> type) {
+    return new StaticReturnTypeReference<T>(type, this);
+  }
+
+  /**
    * Specifies the parameter types of the static method to invoke. This method call is optional if the method to invoke
    * does not take arguments.
    * @param parameterTypes the parameter types of the method to invoke.
@@ -70,8 +84,7 @@ public class StaticMethodName extends NameTemplate {
    * @throws NullPointerException if the array of parameter types is <code>null</code>.
    */
   public StaticParameterTypes<Void> withParameterTypes(Class<?>... parameterTypes) {
-    StaticReturnType<Void> returnType = new StaticReturnType<Void>(Void.class, this);
-    return new StaticParameterTypes<Void>(parameterTypes, returnType);
+    return new StaticParameterTypes<Void>(parameterTypes, name);
   }
 
   /**

@@ -15,6 +15,8 @@
  */
 package org.fest.reflect.method;
 
+import org.fest.reflect.reference.TypeRef;
+
 
 
 /**
@@ -66,6 +68,18 @@ public final class MethodName extends NameTemplate {
   }
 
   /**
+   * Specifies the return type reference of the method to invoke. This method call is optional if the return type of the
+   * method to invoke is <code>void</code>.
+   * @param <T> the generic type of the method's return type.
+   * @param type the return type reference of the method to invoke.
+   * @return the created return type holder.
+   * @throws NullPointerException if the given type reference is <code>null</code>.
+   */
+  public <T> ReturnTypeReference<T> withReturnType(TypeRef<T> type) {
+    return new ReturnTypeReference<T>(type, this);
+  }
+
+  /**
    * Specifies the parameter types of the method to invoke. This method call is optional if the method to invoke does
    * not take arguments.
    * @param parameterTypes the parameter types of the method to invoke.
@@ -73,8 +87,7 @@ public final class MethodName extends NameTemplate {
    * @throws NullPointerException if the array of parameter types is <code>null</code>.
    */
   public ParameterTypes<Void> withParameterTypes(Class<?>... parameterTypes) {
-    ReturnType<Void> returnType = new ReturnType<Void>(Void.class, this);
-    return new ParameterTypes<Void>(parameterTypes, returnType);
+    return new ParameterTypes<Void>(parameterTypes, name);
   }
 
   /**

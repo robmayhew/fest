@@ -62,6 +62,6 @@ public class StaticReturnType<T> extends ReturnTypeTemplate<T> {
    * @throws NullPointerException if the array of parameter types is <code>null</code>.
    */
   public StaticParameterTypes<T> withParameterTypes(Class<?>... parameterTypes) {
-    return new StaticParameterTypes<T>(parameterTypes, this);
+    return new StaticParameterTypes<T>(parameterTypes, methodName);
   }
 }

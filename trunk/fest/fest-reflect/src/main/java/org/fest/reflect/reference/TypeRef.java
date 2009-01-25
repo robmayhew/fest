@@ -21,7 +21,7 @@ import org.fest.reflect.exception.ReflectionError;
 
 /**
  * Understands a references a generic type. Based on Neal Gafter's
- * <code><a href="http://gafter.blogspot.com/2006/12/super-type-tokens.html" target="_blank">TypeReference</a></code>
+ * <code><a href="http://gafter.blogspot.com/2006/12/super-type-tokens.html" target="_blank">TypeReference</a></code>.
  * @param <T> the generic type in this reference. 
  * 
  * @author crazybob@google.com (Bob Lee)

@@ -29,12 +29,12 @@ import org.fest.reflect.reference.TypeRef;
  *   {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("count").{@link StaticFieldName#ofType(Class) ofType}(int.class).{@link StaticFieldType#in(Class) in}(Person.class).{@link Invoker#set(Object) set}(3);
  *   
  *   // Retrieves the value of the static field "commonPowers"
- *   List&lt;String&gt; commmonPowers = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("commonPowers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link StaticFieldTypeReference#in(Class) in}(Jedi.class).{@link Invoker#get() get}();
+ *   List&lt;String&gt; commmonPowers = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("commonPowers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {}).{@link StaticFieldTypeReference#in(Class) in}(Jedi.class).{@link Invoker#get() get}();
  *   
  *   // Sets the value of the static field "commonPowers"
  *   List&lt;String&gt; commonPowers = new ArrayList&lt;String&gt;();
  *   commonPowers.add("jump");
- *   {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("commonPowers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link StaticFieldTypeReference#in(Class) in}(Jedi.class).{@link Invoker#set(Object) set}(commonPowers);
+ *   {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("commonPowers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {}).{@link StaticFieldTypeReference#in(Class) in}(Jedi.class).{@link Invoker#set(Object) set}(commonPowers);
  * </pre>
  * </p>
  *
@@ -70,7 +70,7 @@ public final class StaticFieldName extends NameTemplate {
    * <p>
    * For example:
    * <pre>
-   *   List&lt;String&gt; commmonPowers = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("commonPowers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link StaticFieldTypeReference#in(Class) in}(Jedi.class).{@link Invoker#get() get}();
+   *   List&lt;String&gt; commmonPowers = {@link org.fest.reflect.core.Reflection#staticField(String) staticField}("commonPowers").{@link #ofType(TypeRef) ofType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {}).{@link StaticFieldTypeReference#in(Class) in}(Jedi.class).{@link Invoker#get() get}();
    * </pre>
    * </p>
    * @param <T> the generic type of the field type.

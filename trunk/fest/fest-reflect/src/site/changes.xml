@@ -6,6 +6,15 @@
   </properties>
   <body>
     <release version="1.1" date="TBD" description="Subsequent release">
+      <action dev="alruiz" type="add" issue="117" due-to="Xavier Dury">
+        Added class org.fest.reflect.type.TypeRef based on Neal Gafter's TypeReference.
+      </action>
+      <action dev="alruiz" type="add" issue="117" due-to="Xavier Dury">
+        Added support for TypeRef as field type in the fluent interface of the package org.fest.reflect.field.
+      </action>
+      <action dev="alruiz" type="add" issue="117" due-to="Xavier Dury">
+        Added support for TypeRef as method return type in the fluent interface of the package org.fest.reflect.method.
+      </action>
       <action dev="alruiz" type="add" issue="278" due-to="Stephen Colebourne">
         Added support for loading class objects via the method 'type(String)' in org.fest.reflect.core.Reflection and
         the class(es) in the package org.fest.reflect.type.

@@ -41,8 +41,8 @@ package org.fest.reflect.method;
  */
 public final class StaticParameterTypes<T> extends ParameterTypesTemplate<T> {
 
-  StaticParameterTypes(Class<?>[] parameterTypes, StaticReturnType<T> returnType) {
-    super(parameterTypes, returnType);
+  StaticParameterTypes(Class<?>[] parameterTypes, String methodName) {
+    super(parameterTypes, methodName);
   }
 
   /**
