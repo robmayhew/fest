@@ -31,15 +31,11 @@ public abstract class TypeReference<T> {
 
   private final Class<?> rawType;
 
-  public static <T> TypeReference<T> createNew() {
-    return new TypeReference<T>() {};
-  }
-  
   /**
    * Creates a new </code>{@link TypeReference}</code>.
    * @throws ReflectionError if the generic type of this reference is missing type parameter.
    */
-  protected TypeReference() {
+  public TypeReference() {
     Type superclass = getClass().getGenericSuperclass();
     if (superclass instanceof Class) throw new ReflectionError("Missing type parameter.");
     Type type = ((ParameterizedType)superclass).getActualTypeArguments()[0];
