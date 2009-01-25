@@ -15,23 +15,27 @@
  */
 package org.fest.reflect.field;
 
+import java.util.List;
+
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import org.fest.reflect.Jedi;
 import org.fest.reflect.Person;
+import org.fest.reflect.reference.TypeReference;
 import org.fest.reflect.util.NullAndEmptyStringProvider;
 import org.fest.test.CodeToTest;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.reflect.util.ExpectedFailures.*;
+import static org.fest.util.Collections.list;
 
 /**
  * Tests for the fluent interface for fields and static fields.
  *
  * @author Alex Ruiz
  */
-public class FieldTest {
+@Test public class FieldTest {
   
   private Person person;
   
@@ -48,32 +52,32 @@ public class FieldTest {
     });
   }
   
-  @Test public void shouldThrowErrorIfFieldTypeIsNull() {
+  public void shouldThrowErrorIfFieldTypeIsNull() {
     expectIllegalArgumentException("The type of the field to access should not be null").on(new CodeToTest() {
       public void run() {
-        new FieldName("name").ofType(null);
+        new FieldName("name").ofType((Class<?>)null);
       }      
     });
   }
   
-  @Test public void shouldGetFieldValue() {
+  public void shouldGetFieldValue() {
     String personName = new FieldName("name").ofType(String.class).in(person).get();
     assertThat(personName).isEqualTo("Luke");
   }
   
-  @Test public void shouldSetFieldValue() {
+  public void shouldSetFieldValue() {
     new FieldName("name").ofType(String.class).in(person).set("Leia");
     assertThat(person.getName()).isEqualTo("Leia");
   }
   
-  @Test public void shouldReturnFieldInfo() {
+  public void shouldReturnFieldInfo() {
     java.lang.reflect.Field field = new FieldName("name").ofType(String.class).in(person).info();
     assertThat(field).isNotNull();
     assertThat(field.getName()).isEqualTo("name");
     assertThat(field.getType()).isEqualTo(String.class);
   }
   
-  @Test public void shouldThrowErrorIfWrongFieldTypeSpecified() {
+  public void shouldThrowErrorIfWrongFieldTypeSpecified() {
     String message = 
       "The type of the field 'name' in org.fest.reflect.Person should be <java.lang.Integer> but was <java.lang.String>";
     expectReflectionError(message).on(new CodeToTest() {
@@ -83,7 +87,7 @@ public class FieldTest {
     });
   }
 
-  @Test public void shouldThrowErrorIfInvalidFieldName() {
+  public void shouldThrowErrorIfInvalidFieldName() {
     expectReflectionError("Unable to find field 'age' in org.fest.reflect.Person").on(new CodeToTest() {
       public void run()  {
         new FieldName("age").ofType(Integer.class).in(person);
@@ -91,24 +95,46 @@ public class FieldTest {
     });
   }
   
-  @Test public void shouldGetFieldInSuperType() {
+  public void shouldGetFieldInSuperType() {
     Jedi jedi = new Jedi("Yoda");
     String jediName = new FieldName("name").ofType(String.class).in(jedi).get();
     assertThat(jediName).isEqualTo("Yoda");
   }
   
-  @Test public void shouldGetStaticFieldValue() {
+  public void shouldThrowErrorIfFieldTypeReferenceIsNull() {
+    expectIllegalArgumentException("The type reference of the field to access should not be null").on(new CodeToTest() {
+      public void run() {
+        new FieldName("name").ofType((TypeReference<?>)null);
+      }      
+    });
+  }
+
+  public void shouldUseTypeReferenceWhenReadingField() {
+    Jedi jedi = new Jedi("Yoda");
+    jedi.addPower("heal");
+    List<String> powers = new FieldName("powers").ofType(new TypeReference<List<String>>() {}).in(jedi).get();
+    assertThat(powers).containsOnly("heal");
+  }
+  
+  public void shouldUseTypeReferenceWhenWritingField() {
+    Jedi jedi = new Jedi("Yoda");
+    List<String> powers = list("heal");
+    new FieldName("powers").ofType(new TypeReference<List<String>>() {}).in(jedi).set(powers);
+    assertThat(jedi.powers()).containsOnly("heal");
+  }
+
+  public void shouldGetStaticFieldValue() {
     Person.setCount(6);
     int count = new StaticFieldName("count").ofType(int.class).in(Person.class).get();
     assertThat(count).isEqualTo(6);
   }
   
-  @Test public void shouldSetStaticFieldValue() {
+  public void shouldSetStaticFieldValue() {
     new StaticFieldName("count").ofType(int.class).in(Person.class).set(8);
     assertThat(Person.getCount()).isEqualTo(8);
   }
   
-  @Test public void shouldReturnStaticFieldInfo() {
+  public void shouldReturnStaticFieldInfo() {
     java.lang.reflect.Field field = new StaticFieldName("count").ofType(int.class).in(Person.class).info();
     assertThat(field).isNotNull();
     assertThat(field.getName()).isEqualTo("count");
@@ -124,15 +150,15 @@ public class FieldTest {
     });
   }
 
-  @Test public void shouldThrowErrorIfStaticFieldTypeIsNull() {
+  public void shouldThrowErrorIfStaticFieldTypeIsNull() {
     expectIllegalArgumentException("The type of the field to access should not be null").on(new CodeToTest() {
       public void run() {
-        new StaticFieldName("name").ofType(null);
+        new StaticFieldName("name").ofType((Class<?>)null);
       }      
     });
   }
 
-  @Test public void shouldThrowErrorIfWrongStaticFieldTypeSpecified() {
+  public void shouldThrowErrorIfWrongStaticFieldTypeSpecified() {
     String message = "The type of the field 'count' in org.fest.reflect.Person should be <java.lang.Float> but was <int>";
     expectReflectionError(message).on(new CodeToTest() {
       public void run()  {
@@ -141,7 +167,7 @@ public class FieldTest {
     });
   }
 
-  @Test public void shouldThrowErrorIfInvalidStaticFieldName() {
+  public void shouldThrowErrorIfInvalidStaticFieldName() {
     expectReflectionError("Unable to find field 'age' in org.fest.reflect.Person").on(new CodeToTest() {
       public void run()  {
         new StaticFieldName("age").ofType(int.class).in(Person.class);
@@ -149,9 +175,29 @@ public class FieldTest {
     });
   }
   
-  @Test public void shouldGetStaticFieldInSuperType() {
+  public void shouldGetStaticFieldInSuperType() {
     Person.setCount(8);
     int count = new StaticFieldName("count").ofType(int.class).in(Person.class).get();
     assertThat(count).isEqualTo(8);
+  }
+
+  public void shouldThrowErrorIfStaticFieldTypeReferenceIsNull() {
+    expectIllegalArgumentException("The type reference of the field to access should not be null").on(new CodeToTest() {
+      public void run() {
+        new StaticFieldName("name").ofType((TypeReference<?>)null);
+      }      
+    });
+  }
+
+  public void shouldUseTypeReferenceWhenReadingStaticField() {
+    Jedi.addCommonPower("jump");
+    List<String> powers = new StaticFieldName("commonPowers").ofType(new TypeReference<List<String>>() {}).in(Jedi.class).get();
+    assertThat(powers).containsOnly("jump");
+  }
+  
+  public void shouldUseTypeReferenceWhenWritingStaticField() {
+    List<String> powers = list("jump");
+    new StaticFieldName("commonPowers").ofType(new TypeReference<List<String>>() {}).in(Jedi.class).set(powers);
+    assertThat(Jedi.commonPowers()).containsOnly("jump");
   }
 }

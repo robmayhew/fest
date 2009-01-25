@@ -14,6 +14,8 @@
  */
 package org.fest.reflect.field;
 
+import org.fest.reflect.reference.TypeReference;
+
 
 /**
  * Understands the name of a field to access using Java Reflection.
@@ -25,6 +27,14 @@ package org.fest.reflect.field;
  *   
  *   // Sets the value of the field "name" to "Yoda"
  *   {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link FieldName#ofType(Class) ofType}(String.class).{@link FieldType#in(Object) in}(person).{@link Invoker#set(Object) set}("Yoda");
+ *
+ *   // Retrieves the value of the field "powers"
+ *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeReference) ofType}(new {@link TypeReference TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#get() get}();
+ *   
+ *   // Sets the value of the field "powers"
+ *   List&lt;String&gt; powers = new ArrayList&lt;String&gt;();
+ *   powers.add("heal");
+ *   {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeReference) ofType}(new {@link TypeReference TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#set(Object) set}(powers);
  * </pre>
  * </p>
  *
@@ -51,5 +61,23 @@ public final class FieldName extends NameTemplate {
    */
   public <T> FieldType<T> ofType(Class<T> type) {
     return new FieldType<T>(type, this);
+  }
+  
+  /**
+   * Sets the type reference of the field to access. This method reduces casting when the type of the field to access 
+   * uses generics.
+   * <p>
+   * For example:
+   * <pre>
+   *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#field(String) field}("powers").{@link #ofType(TypeReference) ofType}(new {@link TypeReference TypeReference}&lt;List&lt;String&gt;&gt;() {}).{@link FieldTypeReference#in(Object) in}(jedi).{@link Invoker#get() get}();
+   * </pre>
+   * </p>
+   * @param <T> the generic type of the field type.
+   * @param type the type of the field to access.
+   * @return a recipient for the field type.
+   * @throws IllegalArgumentException if the given type is <code>null</code>.
+   */
+  public <T> FieldTypeReference<T> ofType(TypeReference<T> type) {
+    return new FieldTypeReference<T>(type, this);
   }
 }

@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class Jedi extends Person {
 
-  private static final List<String> COMMON_POWERS = new ArrayList<String>();
+  private static List<String> commonPowers = new ArrayList<String>();
 
   private final List<String> powers = new ArrayList<String>();
   private boolean master;
@@ -54,21 +54,29 @@ public class Jedi extends Person {
     master = true;
   }
 
+  public List<String> powers() {
+    return new ArrayList<String>(powers);
+  }
+  
   public boolean isMaster() { return master; }
 
   public static void addCommonPower(String power) {
-    COMMON_POWERS.add(power);
+    commonPowers.add(power);
   }
 
   public static String commonPowerAt(int index) {
-    return COMMON_POWERS.get(index);
+    return commonPowers.get(index);
   }
 
   public static int commonPowerCount() {
-    return COMMON_POWERS.size();
+    return commonPowers.size();
   }
 
   public static void clearCommonPowers() {
-    COMMON_POWERS.clear();
+    commonPowers.clear();
+  }
+
+  public static List<String> commonPowers() {
+    return new ArrayList<String>(commonPowers);
   }
 }
