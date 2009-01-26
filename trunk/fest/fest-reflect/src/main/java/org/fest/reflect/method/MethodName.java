@@ -36,6 +36,11 @@ import org.fest.reflect.reference.TypeRef;
  *   String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link MethodName#withReturnType(Class) withReturnType}(String.class)
  *                                  .{@link MethodReturnType#in(Object) in}(person)
  *                                  .{@link Invoker#invoke(Object...) invoke}();
+ *                                  
+ *   // Equivalent to call 'jedi.getPowers()'
+ *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#method(String) method}("getPowers").{@link MethodName#withReturnType(TypeRef) withReturnType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {})
+ *                                            .{@link MethodReturnTypeRef#in(Object) in}(person)
+ *                                            .{@link Invoker#invoke(Object...) invoke}();   
  * </pre>
  * </p>
  *

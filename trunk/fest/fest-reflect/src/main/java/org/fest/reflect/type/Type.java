@@ -24,7 +24,11 @@ import static org.fest.util.Strings.*;
  * <p>
  * The following is an example of proper usage of this class:
  * <pre>
- *   Class&lt;?&gt; jediType = {@link org.fest.reflect.core.Reflection#type(String) type}("org.fest.Jedi").{@link Type#load() load}();
+ *   // Loads the class 'org.republic.Jedi'
+ *   Class&lt;?&gt; jediType = {@link org.fest.reflect.core.Reflection#type(String) type}("org.republic.Jedi").{@link Type#load() load}();
+ *
+ *   // Loads the class 'org.republic.Jedi' as 'org.republic.Person' (Jedi extends Person)
+ *   Class&lt;Person&gt; jediType = {@link org.fest.reflect.core.Reflection#type(String) type}("org.republic.Jedi").{@link Type#loadAs(Class) loadAs}(Person.class);
  * </pre>
  * </p>
  *

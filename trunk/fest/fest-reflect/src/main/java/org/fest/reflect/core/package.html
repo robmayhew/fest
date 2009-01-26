@@ -26,18 +26,29 @@ Here are some examples:
 <pre>
    // import static {@link org.fest.reflect.core.Reflection org.fest.reflect.core.Reflection}.*;
 
+   // Loads the class 'org.republic.Jedi'
+   Class&lt;?&gt; jediType = {@link org.fest.reflect.core.Reflection#type(String) type}("org.republic.Jedi").{@link org.fest.reflect.type.Type#load() load}();
+   
+   // Loads the class 'org.republic.Jedi' as 'org.republic.Person' (Jedi extends Person)
+   Class&lt;Person&gt; jediType = {@link org.fest.reflect.core.Reflection#type(String) type}("org.republic.Jedi").{@link org.fest.reflect.type.Type#loadAs(Class) loadAs}(Person.class);
+
    // Equivalent to call 'new Person()'
    Person p = {@link org.fest.reflect.core.Reflection#constructor() constructor}().{@link org.fest.reflect.constructor.TargetType#in in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}();
    
-   // Equivalent to call 'new Person("Yoda")'
+   // Equivalent to call 'new Person(&quot;Yoda&quot;)'
    Person p = {@link org.fest.reflect.core.Reflection#constructor() constructor}().{@link org.fest.reflect.constructor.TargetType#withParameterTypes(Class...) withParameterTypes}(String.class).{@link org.fest.reflect.constructor.ParameterTypes#in(Class) in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}("Yoda");
  
-   // Retrieves the value of the field "name"
+   // Retrieves the value of the field &quot;name&quot;
    String name = {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link org.fest.reflect.field.FieldName#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.FieldType#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#get() get}();
    
-   // Sets the value of the field "name" to "Yoda"
+   // Sets the value of the field 'name' to &quot;Yoda&quot;
    {@link org.fest.reflect.core.Reflection#field(String) field}("name").{@link org.fest.reflect.field.FieldName#ofType(Class) ofType}(String.class).{@link org.fest.reflect.field.FieldType#in(Object) in}(person).{@link org.fest.reflect.field.Invoker#set(Object) set}("Yoda");
    
+   // Equivalent to call 'jedi.getPowers()'
+   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#method(String) method}("getPowers").{@link org.fest.reflect.method.MethodName#withReturnType(org.fest.reflect.reference.TypeRef) withReturnType}(new {@link org.fest.reflect.reference.TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {})
+                                            .{@link org.fest.reflect.method.MethodReturnTypeRef#in(Object) in}(person)
+                                            .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();   
+
    // Equivalent to call 'person.setName("Luke")'
    {@link org.fest.reflect.core.Reflection#method(String) method}("setName").{@link org.fest.reflect.method.MethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
                     .{@link org.fest.reflect.method.MethodParameterTypes#in(Object) in}(person)
@@ -50,6 +61,11 @@ Here are some examples:
    String name = {@link org.fest.reflect.core.Reflection#method(String) method}("getName").{@link org.fest.reflect.method.MethodName#withReturnType(Class) withReturnType}(String.class)
                                   .{@link org.fest.reflect.method.MethodReturnType#in(Object) in}(person)
                                   .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();   
+                                                  
+   // Equivalent to call 'Jedi.getCommonPowers()'
+   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("getCommonPowers").{@link org.fest.reflect.method.StaticMethodName#withReturnType(org.fest.reflect.reference.TypeRef) withReturnType}(new {@link org.fest.reflect.reference.TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {})
+                                                        .{@link org.fest.reflect.method.StaticMethodReturnTypeRef#in(Class) in}(Jedi.class)
+                                                        .{@link org.fest.reflect.method.Invoker#invoke(Object...) invoke}();   
 </pre>
 </p>
 </body>

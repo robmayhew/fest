@@ -15,23 +15,30 @@
  */
 package org.fest.reflect.method;
 
+import org.fest.reflect.reference.TypeRef;
+
 /**
  * Understands the return type of the static method to invoke.
  * <p>
  * The following is an example of proper usage of this class:
  * <pre>
- *   // Equivalent to call 'Jedi.class.setCommonPower("Jump")'
+ *   // Equivalent to call 'Jedi.setCommonPower("Jump")'
  *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("setCommonPower").{@link StaticMethodName#withParameterTypes(Class...) withParameterTypes}(String.class)
  *                                 .{@link StaticMethodParameterTypes#in(Class) in}(Jedi.class)
  *                                 .{@link Invoker#invoke(Object...) invoke}("Jump");
  *
- *   // Equivalent to call 'Jedi.class.addPadawan()'
+ *   // Equivalent to call 'Jedi.addPadawan()'
  *   {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("addPadawan").{@link StaticMethodName#in(Class) in}(Jedi.class).{@link Invoker#invoke(Object...) invoke}();
  *
- *   // Equivalent to call 'Jedi.class.commonPowerCount()'
+ *   // Equivalent to call 'Jedi.commonPowerCount()'
  *   String name = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("commonPowerCount").{@link StaticMethodName#withReturnType(Class) withReturnType}(String.class)
  *                                                 .{@link StaticMethodReturnType#in(Class) in}(Jedi.class)
  *                                                 .{@link Invoker#invoke(Object...) invoke}();
+ *                                                 
+ *   // Equivalent to call 'Jedi.getCommonPowers()'
+ *   List&lt;String&gt; powers = {@link org.fest.reflect.core.Reflection#staticMethod(String) staticMethod}("getCommonPowers").{@link StaticMethodName#withReturnType(TypeRef) withReturnType}(new {@link TypeRef TypeRef}&lt;List&lt;String&gt;&gt;() {})
+ *                                                        .{@link StaticMethodReturnTypeRef#in(Class) in}(Jedi.class)
+ *                                                        .{@link Invoker#invoke(Object...) invoke}();   
  * </pre>
  * </p>
  *
