@@ -29,6 +29,9 @@ import static org.fest.util.Strings.isEmpty;
  *
  *   // Loads the class 'org.republic.Jedi' as 'org.republic.Person' (Jedi extends Person)
  *   Class&lt;Person&gt; jediType = {@link org.fest.reflect.core.Reflection#type(String) type}("org.republic.Jedi").{@link Type#loadAs(Class) loadAs}(Person.class);
+ *
+ *   // Loads the class 'org.republic.Jedi' using a custom class loader
+ *   Class&lt;?&gt; jediType = {@link org.fest.reflect.core.Reflection#type(String) type}("org.republic.Jedi").{@link Type#withClassLoader(ClassLoader) withClassLoader}(myClassLoader).{@link org.fest.reflect.type.TypeLoader#load() load}();
  * </pre>
  * </p>
  *
@@ -94,6 +97,7 @@ public final class Type {
    * </p>
    * @param classLoader the given <code>ClassLoader</code>.
    * @return the class responsible of loading a class with the given <code>ClassLoader</code>.
+   * @throws NullPointerException if the given <code>ClassLoader</code> is <code>null</code>.
    */
   public TypeLoader withClassLoader(ClassLoader classLoader) {
     return new TypeLoader(name, classLoader);

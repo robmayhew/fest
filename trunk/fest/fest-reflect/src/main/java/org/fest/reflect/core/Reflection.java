@@ -31,6 +31,9 @@ import org.fest.reflect.type.Type;
  *   // Loads the class 'org.republic.Jedi' as 'org.republic.Person' (Jedi extends Person)
  *   Class&lt;Person&gt; jediType = {@link org.fest.reflect.core.Reflection#type(String) type}("org.republic.Jedi").{@link Type#loadAs(Class) loadAs}(Person.class);
  *   
+ *   // Loads the class 'org.republic.Jedi' using a custom class loader
+ *   Class&lt;?&gt; jediType = {@link org.fest.reflect.core.Reflection#type(String) type}("org.republic.Jedi").{@link Type#withClassLoader(ClassLoader) withClassLoader}(myClassLoader).{@link org.fest.reflect.type.TypeLoader#load() load}();
+ *   
  *   // Equivalent to call 'new Person()'
  *   Person p = {@link org.fest.reflect.core.Reflection#constructor() constructor}().{@link TargetType#in in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}();
  *   
