@@ -15,6 +15,9 @@
       <action dev="alruiz" type="add" issue="117" due-to="Xavier Dury">
         Added support for TypeRef as method return type in the fluent interface of the package org.fest.reflect.method.
       </action>
+      <action dev="alruiz" type="add" issue="194">
+        Added support for accessing static inner classes (code in package org.fest.reflect.innerclass.)
+      </action>
       <action dev="alruiz" type="add" issue="278" due-to="Stephen Colebourne">
         Added support for loading class objects via the method 'type(String)' in org.fest.reflect.core.Reflection and
         the class(es) in the package org.fest.reflect.type.

@@ -35,6 +35,9 @@ Here are some examples:
    // Loads the class 'org.republic.Jedi' using a custom class loader
    Class&lt;?&gt; jediType = {@link org.fest.reflect.core.Reflection#type(String) type}("org.republic.Jedi").{@link org.fest.reflect.type.Type#withClassLoader(ClassLoader) withClassLoader}(myClassLoader).{@link org.fest.reflect.type.TypeLoader#load() load}();
 
+   // Gets the inner class 'Master' in the declaring class 'Jedi':
+   Class&lt;?&gt; masterClass = {@link org.fest.reflect.core.Reflection#staticInnerClass(String) staticInnerClass}("Master").{@link org.fest.reflect.innerclass.StaticInnerClassName#in(Class) in}(Jedi.class).{@link org.fest.reflect.innerclass.Invoker#get() get}();
+
    // Equivalent to call 'new Person()'
    Person p = {@link org.fest.reflect.core.Reflection#constructor() constructor}().{@link org.fest.reflect.constructor.TargetType#in in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}();
    

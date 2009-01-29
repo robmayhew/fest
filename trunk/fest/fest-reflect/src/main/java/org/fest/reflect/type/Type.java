@@ -96,7 +96,7 @@ public final class Type {
    * </pre>
    * </p>
    * @param classLoader the given <code>ClassLoader</code>.
-   * @return the class responsible of loading a class with the given <code>ClassLoader</code>.
+   * @return an object responsible of loading a class with the given <code>ClassLoader</code>.
    * @throws NullPointerException if the given <code>ClassLoader</code> is <code>null</code>.
    */
   public TypeLoader withClassLoader(ClassLoader classLoader) {

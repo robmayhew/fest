@@ -16,6 +16,7 @@ package org.fest.reflect.core;
 
 import org.fest.reflect.constructor.TargetType;
 import org.fest.reflect.field.*;
+import org.fest.reflect.innerclass.StaticInnerClassName;
 import org.fest.reflect.method.*;
 import org.fest.reflect.method.Invoker;
 import org.fest.reflect.reference.TypeRef;
@@ -34,6 +35,9 @@ import org.fest.reflect.type.Type;
  *   // Loads the class 'org.republic.Jedi' using a custom class loader
  *   Class&lt;?&gt; jediType = {@link org.fest.reflect.core.Reflection#type(String) type}("org.republic.Jedi").{@link Type#withClassLoader(ClassLoader) withClassLoader}(myClassLoader).{@link org.fest.reflect.type.TypeLoader#load() load}();
  *   
+ *   // Gets the inner class 'Master' in the declaring class 'Jedi':
+ *   Class&lt;?&gt; masterClass = {@link org.fest.reflect.core.Reflection#staticInnerClass(String) staticInnerClass}("Master").{@link org.fest.reflect.innerclass.StaticInnerClassName#in(Class) in}(Jedi.class).{@link org.fest.reflect.innerclass.Invoker#get() get}();
+ * 
  *   // Equivalent to call 'new Person()'
  *   Person p = {@link org.fest.reflect.core.Reflection#constructor() constructor}().{@link TargetType#in in}(Person.class).{@link org.fest.reflect.constructor.Invoker#newInstance(Object...) newInstance}();
  *   
@@ -103,7 +107,7 @@ import org.fest.reflect.type.Type;
 public final class Reflection {
 
   /**
-   * Starting point for the fluent interface for loading a class dynamically.
+   * Starting point of the fluent interface for loading a class dynamically.
    * @param name the name of the class to load.
    * @return the starting point of the method chain.
    * @throws NullPointerException if the given name is <code>null</code>.
@@ -112,7 +116,16 @@ public final class Reflection {
   public static Type type(String name) { return new Type(name); }
   
   /**
-   * Starting point for the fluent interface for accessing fields via reflection.
+   * Starting point of the fluent interface for accessing static inner class via reflection.
+   * @param name the name of the static inner class to access.
+   * @return the starting point of the method chain.
+   * @throws NullPointerException if the given name is <code>null</code>.
+   * @throws IllegalArgumentException if the given name is empty.
+   */
+  public static StaticInnerClassName staticInnerClass(String name) { return new StaticInnerClassName(name); }
+  
+  /**
+   * Starting point of the fluent interface for accessing fields via reflection.
    * @param name the name of the field to access.
    * @return the starting point of the method chain.
    * @throws NullPointerException if the given name is <code>null</code>.
@@ -121,7 +134,7 @@ public final class Reflection {
   public static FieldName field(String name) { return new FieldName(name); }
 
   /**
-   * Starting point for the fluent interface for accessing static fields via reflection.
+   * Starting point of the fluent interface for accessing static fields via reflection.
    * @param name the name of the static field to access.
    * @return the starting point of the method chain.
    * @throws NullPointerException if the given name is <code>null</code>.
@@ -130,7 +143,7 @@ public final class Reflection {
   public static StaticFieldName staticField(String name) { return new StaticFieldName(name); }
 
   /**
-   * Starting point for the fluent interface for invoking methods via reflection.
+   * Starting point of the fluent interface for invoking methods via reflection.
    * @param name the name of the method to invoke.
    * @return the starting point of the method chain.
    * @throws NullPointerException if the given name is <code>null</code>.
@@ -139,7 +152,7 @@ public final class Reflection {
   public static MethodName method(String name) { return new MethodName(name); }
 
   /**
-   * Starting point for the fluent interface for invoking static methods via reflection.
+   * Starting point of the fluent interface for invoking static methods via reflection.
    * @param name the name of the static method to invoke.
    * @return the starting point of the static method chain.
    * @throws NullPointerException if the given name is <code>null</code>.
@@ -148,7 +161,7 @@ public final class Reflection {
   public static StaticMethodName staticMethod(String name) { return new StaticMethodName(name); }
 
   /**
-   * Starting point for the fluent interface for invoking constructors via reflection.
+   * Starting point of the fluent interface for invoking constructors via reflection.
    * @return the starting point of the method chain.
    */
   public static TargetType constructor() { return new TargetType(); }
