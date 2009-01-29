@@ -17,7 +17,7 @@ package org.fest.reflect.type;
 
 import org.fest.reflect.exception.ReflectionError;
 
-import static org.fest.util.Strings.*;
+import static org.fest.util.Strings.isEmpty;
 
 /**
  * Understands loading a class dynamically.
@@ -34,7 +34,7 @@ import static org.fest.util.Strings.*;
  *
  * @author Alex Ruiz
  */
-public class Type {
+public final class Type {
 
   private final String name;
 
@@ -59,11 +59,7 @@ public class Type {
    * @throws ReflectionError wrapping any error that occurred during class loading.
    */
   public Class<?> load() {
-    try {
-      return getClass().getClassLoader().loadClass(name);
-    } catch (Exception e) {
-      throw new ReflectionError(concat("Unable to load class ", quote(name)), e);
-    }
+    return new TypeLoader(name, thisClassLoader()).load();
   }
   
   /**
@@ -73,7 +69,7 @@ public class Type {
    * The following example shows how to use this method. Let's assume that we have the class <code>Jedi</code> that 
    * extends the class <code>Person</code>:
    * <pre>
-   * Class<? extends Person> type = new Type("org.republic.Jedi").loadAs(Person.class);
+   * Class&lt;Person&gt; type = {@link org.fest.reflect.core.Reflection#type(String) type}("org.republic.Jedi").{@link Type#loadAs(Class) loadAs}(Person.class);
    * </pre>
    * </p>
    * @param type the given type. 
@@ -83,11 +79,23 @@ public class Type {
    * @throws ReflectionError wrapping any error that occurred during class loading.
    */
   public <T> Class<? extends T> loadAs(Class<T> type) {
-    if (type == null) throw new NullPointerException("The given type should not be null");
-    try {
-      return getClass().getClassLoader().loadClass(name).asSubclass(type);
-    } catch (Exception e) {
-      throw new ReflectionError(concat("Unable to load class ", quote(name), " as ", type.getName()), e);
-    }
+    return new TypeLoader(name, thisClassLoader()).loadAs(type);
+  }
+
+  private ClassLoader thisClassLoader() { return getClass().getClassLoader(); }
+
+  /**
+   * Specifies the <code>{@link ClassLoader}</code> to use to load the class.
+   * <p>
+   * Example:
+   * <pre>
+   * Class&lt;?&gt; type = {@link org.fest.reflect.core.Reflection#type(String) type}("org.republic.Jedi").{@link Type#withClassLoader(ClassLoader) withClassLoader}(myClassLoader).{@link TypeLoader#load() load}();
+   * </pre>
+   * </p>
+   * @param classLoader the given <code>ClassLoader</code>.
+   * @return the class responsible of loading a class with the given <code>ClassLoader</code>.
+   */
+  public TypeLoader withClassLoader(ClassLoader classLoader) {
+    return new TypeLoader(name, classLoader);
   }
 }

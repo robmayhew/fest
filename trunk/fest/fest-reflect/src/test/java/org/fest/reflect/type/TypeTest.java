@@ -61,12 +61,27 @@ import static org.fest.reflect.util.ExpectedFailures.*;
     Class<?> type = new Type(expected.getName()).load();
     assertThat(type).isEqualTo(expected);
   }
+
+  public void shouldLoadClassWithGivenClassLoader() {
+    Class<Jedi> expected = Jedi.class;
+    Class<?> type = new Type(expected.getName()).withClassLoader(getClass().getClassLoader()).load();
+    assertThat(type).isEqualTo(expected);
+  }
+
+  public void shouldThrowErrorIfClassloaderIsNull() {
+    expectNullPointerException("The given class loader should not be null").on(new CodeToTest() {
+      public void run() {
+        new Type("hello").withClassLoader(null);
+      }
+    });
+  }
   
   public void shouldWrapAnyExceptionThrownWhenLoadingClass() {
     try {
       new Type("org.fest.reflect.NonExistingType").load();
     } catch (ReflectionError expected) {
-      assertThat(expected.getMessage()).isEqualTo("Unable to load class 'org.fest.reflect.NonExistingType'");
+      assertThat(expected.getMessage()).contains(
+          "Unable to load class 'org.fest.reflect.NonExistingType' using class loader ");
       assertThat(expected.getCause()).isInstanceOf(ClassNotFoundException.class);
     }
   }
@@ -76,11 +91,18 @@ import static org.fest.reflect.util.ExpectedFailures.*;
     assertThat(type).isEqualTo(Jedi.class);
   }
 
+  public void shouldLoadClassAsGivenTypeWithGivenClassLoader() {
+    Class<? extends Person> type = new Type(Jedi.class.getName()).withClassLoader(getClass().getClassLoader())
+                                                                 .loadAs(Person.class);
+    assertThat(type).isEqualTo(Jedi.class);
+  }
+
   public void shouldWrapAnyExceptionThrownWhenLoadingClassAsType() {
     try {
       new Type("org.fest.reflect.NonExistingType").loadAs(Jedi.class);
     } catch (ReflectionError expected) {
-      assertThat(expected.getMessage()).isEqualTo("Unable to load class 'org.fest.reflect.NonExistingType' as org.fest.reflect.Jedi");
+      assertThat(expected.getMessage()).contains(
+          "Unable to load class 'org.fest.reflect.NonExistingType' as org.fest.reflect.Jedi using class loader ");
       assertThat(expected.getCause()).isInstanceOf(ClassNotFoundException.class);
     }
   }
