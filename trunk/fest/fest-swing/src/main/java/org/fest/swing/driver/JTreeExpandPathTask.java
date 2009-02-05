@@ -5,6 +5,7 @@ import javax.swing.tree.TreePath;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.edt.GuiTask;
+import org.fest.util.Arrays;
 
 import static org.fest.swing.edt.GuiActionRunner.execute;
 
@@ -22,7 +23,15 @@ final class JTreeExpandPathTask {
   static void expandPath(final JTree tree, final TreePath path) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        if (!tree.isExpanded(path)) tree.expandPath(path);
+        TreePath realPath = path;
+        if (path.getPathCount() == 1 && !tree.isRootVisible()) {
+          Object root = tree.getModel().getRoot();
+          Object target = path.getLastPathComponent();
+          if (target != root) {
+            realPath = new TreePath(Arrays.array(root, target));
+          }
+        }
+        if (!tree.isExpanded(path)) tree.expandPath(realPath);
       }
     });
   }

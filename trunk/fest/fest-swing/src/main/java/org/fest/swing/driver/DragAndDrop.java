@@ -37,7 +37,7 @@ import static org.fest.swing.util.TimeoutWatch.startWatchWithTimeoutOf;
  *
  * @author Alex Ruiz
  * 
- * @deprecated use <code>{@link ComponentDragAndDrop}</code> instead. This class will be removed in version 1.2.
+ * @deprecated use <code>{@link ComponentDragAndDrop}</code> instead. This class will be removed in version 2.0.
  */
 @Deprecated
 public class DragAndDrop {

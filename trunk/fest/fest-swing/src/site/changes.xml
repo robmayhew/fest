@@ -23,7 +23,10 @@
         Replaced org.fest.swing.driver.DragAndDrop with org.fest.swing.core.ComponentDragAndDrop. 
       </action>
       <action dev="alruiz" type="add" issue="283">
-        Class org.fest.swing.driver.DragAndDrop is now deprecated and will be removed in version 1.2. 
+        Class org.fest.swing.driver.DragAndDrop is now deprecated and will be removed in version 2.0. 
+      </action>
+      <action dev="alruiz" type="fix" issue="293" due-to="Gino John">
+        org.fest.swing.driver.JTreeDriver now adds the root to the path to expand, if the JTree has its root invisible.
       </action>
     </release>
     <release version="1.0" date="2009-01-15" description="Subsequent release">

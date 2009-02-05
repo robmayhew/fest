@@ -17,6 +17,7 @@ package org.fest.swing.driver;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.List;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
@@ -51,6 +52,7 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.timing.Pause.pause;
 import static org.fest.util.Arrays.*;
+import static org.fest.util.Collections.list;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -248,7 +250,8 @@ public class JTreeDriver extends JComponentDriver {
    */
   @RunsInEDT
   public JPopupMenu showPopupMenu(JTree tree, String path) {
-    TreePath matchingPath = validateAndFindMatchingPath(tree, path, pathFinder);
+    TreePath matchingPath = findVisibleMatchingPath(tree, path, pathFinder);
+    matchingPath = addRootIfInvisible(tree, matchingPath);
     makeVisible(tree, matchingPath, false);
     return robot.showPopupMenu(tree, pointAtPath(tree, matchingPath, location));
   }
@@ -341,11 +344,29 @@ public class JTreeDriver extends JComponentDriver {
 
   @RunsInEDT
   private Point selectMatchingPath(JTree tree, String path) {
-    TreePath matchingPath = validateAndFindMatchingPath(tree, path, pathFinder);
+    TreePath matchingPath = findVisibleMatchingPath(tree, path, pathFinder);
+    matchingPath = addRootIfInvisible(tree, matchingPath);
     makeVisible(tree, matchingPath, false);
     Point p = scrollToPathToSelect(tree, matchingPath, location);
     robot.click(tree, p);
     return p;
+  }
+  
+  @RunsInEDT
+  private static TreePath addRootIfInvisible(final JTree tree, final TreePath path) {
+    return execute(new GuiQuery<TreePath>() {
+      protected TreePath executeInEDT() {
+        if (tree.isRootVisible()) return path;
+        Object root = tree.getModel().getRoot();
+        if (path.getPathCount() > 0) {
+          Object first = path.getPathComponent(0);
+          if (root == first) return path;
+        }
+        List<Object> newPath = list(path.getPath());
+        newPath.add(0, root);
+        return new TreePath(newPath.toArray());
+      }
+    });
   }
   
   @RunsInEDT
@@ -405,7 +426,7 @@ public class JTreeDriver extends JComponentDriver {
     waitForChildrenToShowUp(tree, path);
     return true;
   }
-
+  
   @RunsInEDT
   private boolean makeParentVisible(JTree tree, TreePath path) {
     boolean changed = makeVisible(tree, path.getParentPath(), true);
