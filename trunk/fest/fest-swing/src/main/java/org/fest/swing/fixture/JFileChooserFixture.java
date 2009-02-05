@@ -136,6 +136,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
    * Selects the given file in this fixture's <code>{@link JFileChooser}</code>.
    * @param file the file to select.
    * @return this fixture.
+   * @throws NullPointerException if the given file is <code>null</code>.
    * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
    * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
    * @throws IllegalArgumentException if this fixture's <code>JFileChooser</code> can select directories only and the
@@ -148,6 +149,27 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
     return this;
   }
   
+
+  /**
+   * Selects the given files in this fixture's <code>{@link JFileChooser}</code>.
+   * @param files the files to select.
+   * @return this fixture.
+   * @throws NullPointerException if the given array of files is <code>null</code>.
+   * @throws IllegalArgumentException if the given array of files is empty.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> does not support multiple selection and 
+   * there  is more than one file to select.
+   * @throws IllegalArgumentException if this fixture's <code>JFileChooser</code> can select directories only and any of
+   * the files to select is not a directory.
+   * @throws IllegalArgumentException if this fixture's <code>JFileChooser</code> cannot select directories and any of 
+   * the files to select is a directory.
+   */
+  public JFileChooserFixture selectFiles(File... files) {
+    driver.selectFiles(target, files);
+    return this;
+  }
+
   /**
    * Sets the current directory of this fixture's <code>{@link JFileChooser}</code> to the given one.
    * @param dir the directory to set as current.

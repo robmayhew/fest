@@ -27,6 +27,7 @@ import static javax.swing.JFileChooser.*;
 
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.format.Formatting.format;
 import static org.fest.util.Strings.concat;
 
 /**
@@ -47,7 +48,21 @@ final class JFileChooserSelectFileTask {
       }
     });
   }
-  
+
+  @RunsInEDT
+  static void validateAndSelectFiles(final JFileChooser fileChooser, final File[] files) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        validateIsEnabledAndShowing(fileChooser);
+        if (files.length > 1 && !fileChooser.isMultiSelectionEnabled())
+          throw new IllegalStateException(
+              concat("Expecting file chooser ", format(fileChooser), " to handle multiple selection"));
+        for (File file : files) validateFileToChoose(fileChooser, file);
+        fileChooser.setSelectedFiles(files);
+      }
+    });
+  }
+
   @RunsInCurrentThread
   private static void validateFileToChoose(JFileChooser fileChooser, File file) {
     int mode = fileChooser.getFileSelectionMode();

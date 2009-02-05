@@ -30,6 +30,7 @@ import static org.fest.swing.driver.JFileChooserApproveButtonTextQuery.approveBu
 import static org.fest.swing.driver.JFileChooserCancelButtonTextQuery.cancelButtonText;
 import static org.fest.swing.driver.JFileChooserSelectFileTask.validateAndSelectFile;
 import static org.fest.swing.driver.JFileChooserSetCurrentDirectoryTask.validateAndSetCurrentDirectory;
+import static org.fest.util.Arrays.isEmpty;
 import static org.fest.util.Strings.*;
 
 /**
@@ -57,6 +58,7 @@ public class JFileChooserDriver extends JComponentDriver {
    * Selects the given file in the <code>{@link JFileChooser}</code>.
    * @param fileChooser the target <code>JFileChooser</code>.
    * @param file the file to select.
+   * @throws NullPointerException if the given file is <code>null</code>.
    * @throws IllegalStateException if the <code>JFileChooser</code> is disabled.
    * @throws IllegalStateException if the <code>JFileChooser</code> is not showing on the screen.
    * @throws IllegalArgumentException if the <code>JFileChooser</code> can select directories only and the file to 
@@ -66,7 +68,28 @@ public class JFileChooserDriver extends JComponentDriver {
    */
   @RunsInEDT
   public void selectFile(JFileChooser fileChooser, File file) {
+    if (file == null) throw new NullPointerException("The file to select should not be null");
     validateAndSelectFile(fileChooser, file);
+  }
+
+  /**
+   * Selects the given file in the <code>{@link JFileChooser}</code>.
+   * @param fileChooser the target <code>JFileChooser</code>.
+   * @param files the files to select.
+   * @throws NullPointerException if the given array of files is <code>null</code>.
+   * @throws IllegalArgumentException if the given array of files is empty.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
+   * @throws IllegalStateException if this fixture's <code>JFileChooser</code> does not support multiple selection and 
+   * there is more than one file to select.
+   * @throws IllegalArgumentException if this fixture's <code>JFileChooser</code> can select directories only and any of
+   * the files to select is not a directory.
+   * @throws IllegalArgumentException if this fixture's <code>JFileChooser</code> cannot select directories and any of 
+   * the files to select is a directory.
+   */
+  public void selectFiles(JFileChooser fileChooser, File[] files) {
+    if (files == null) throw new NullPointerException("The files to select should not be null");
+    if (isEmpty(files)) throw new IllegalArgumentException("The array of files to select should not be null");
   }
 
   /**

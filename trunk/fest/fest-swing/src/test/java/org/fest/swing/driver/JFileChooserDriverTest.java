@@ -118,6 +118,15 @@ public class JFileChooserDriverTest {
       temporaryFile.delete();
     }
   }
+  
+  public void shouldThrowErrorIfFileToSelectIsNull() {
+    try {
+      driver.selectFile(fileChooser, null);
+      failWhenExpectingException();
+    } catch (NullPointerException e) {
+      assertThat(e.getMessage()).isEqualTo("The file to select should not be null");
+    }
+  }
 
   public void shouldThrowErrorWhenSelectingFileInNotShowingJFileChooser() {
     File temporaryFile = newTemporaryFile();
@@ -169,6 +178,24 @@ public class JFileChooserDriverTest {
         return fileChooser.getFileSelectionMode() == mode;
       }
     }); 
+  }
+
+  public void shouldThrowErrorIfFilesToSelectIsNull() {
+    try {
+      driver.selectFiles(fileChooser, null);
+      failWhenExpectingException();
+    } catch (NullPointerException e) {
+      assertThat(e.getMessage()).isEqualTo("The files to select should not be null");
+    }
+  }
+
+  public void shouldThrowErrorIfFilesToSelectIsEmpty() {
+    try {
+      driver.selectFiles(fileChooser, null);
+      failWhenExpectingException();
+    } catch (IllegalArgumentException e) {
+      assertThat(e.getMessage()).isEqualTo("The array of files to select should not be empty");
+    }
   }
 
   public void shouldFindApproveButton() {

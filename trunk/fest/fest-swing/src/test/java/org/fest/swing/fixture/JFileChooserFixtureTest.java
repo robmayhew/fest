@@ -34,6 +34,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.test.builder.JButtons.button;
 import static org.fest.swing.test.builder.JFileChoosers.fileChooser;
 import static org.fest.swing.test.builder.JTextFields.textField;
+import static org.fest.util.Arrays.array;
 
 /**
  * Tests for <code>{@link JFileChooserFixture}</code>.
@@ -146,6 +147,20 @@ import static org.fest.swing.test.builder.JTextFields.textField;
 
       protected void codeToTest() {
         assertThatReturnsThis(fixture.selectFile(file));
+      }
+    }.run();
+  }
+  
+  public void shouldSelectFiles() {
+    final File[] files = array(new File("Fake1"), new File("Fake2"));
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.selectFiles(target, files);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.selectFiles(files));
       }
     }.run();
   }
