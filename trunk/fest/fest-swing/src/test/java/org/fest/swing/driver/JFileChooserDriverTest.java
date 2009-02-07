@@ -31,11 +31,10 @@ import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.test.swing.TestWindow;
-import org.fest.swing.timing.Condition;
 
 import static javax.swing.JFileChooser.*;
-import static javax.swing.SwingUtilities.invokeLater;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
@@ -45,7 +44,7 @@ import static org.fest.swing.test.core.CommonAssertions.*;
 import static org.fest.swing.test.core.TestGroups.GUI;
 import static org.fest.swing.test.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.test.task.ComponentSetVisibleTask.hide;
-import static org.fest.swing.timing.Pause.pause;
+import static org.fest.util.Arrays.array;
 import static org.fest.util.Files.*;
 import static org.fest.util.Strings.isEmpty;
 
@@ -91,10 +90,13 @@ public class JFileChooserDriverTest {
 
   public void shouldSelectFile() {
     File temporaryFile = newTemporaryFile();
-    driver.selectFile(fileChooser, temporaryFile);
-    File selectedFile = selectedFileIn(fileChooser);
-    assertThat(selectedFile).isSameAs(temporaryFile);
-    temporaryFile.delete();
+    try {
+      driver.selectFile(fileChooser, temporaryFile);
+      File selectedFile = selectedFileIn(fileChooser);
+      assertThat(selectedFile).isSameAs(temporaryFile);
+    } finally {
+      temporaryFile.delete();
+    }
   }
 
   @RunsInEDT
@@ -129,21 +131,18 @@ public class JFileChooserDriverTest {
   }
 
   public void shouldThrowErrorWhenSelectingFileInNotShowingJFileChooser() {
-    File temporaryFile = newTemporaryFile();
     hideWindow();
     try {
-      driver.selectFile(fileChooser, temporaryFile);
+      driver.selectFile(fileChooser, new File("Fake"));
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToNotShowingComponent(e);
-    } finally {
-      temporaryFile.delete();
     }
   }
 
   public void shouldThrowErrorIfJFileChooserCanOnlySelectFoldersAndFileToSelectIsFile() {
     File temporaryFile = newTemporaryFile();
-    setFileSelectionMode(fileChooser, DIRECTORIES_ONLY);
+    setFileChooserToSelectDirectoriesOnly();
     try {
       driver.selectFile(fileChooser, temporaryFile);
       failWhenExpectingException();
@@ -156,7 +155,7 @@ public class JFileChooserDriverTest {
 
   public void shouldThrowErrorIfJFileChooserCanOnlySelectFilesAndFileToSelectIsFolder() {
     File temporaryFolder = newTemporaryFolder();
-    setFileSelectionMode(fileChooser, FILES_ONLY);
+    setFileChooserToSelectFilesOny();
     try {
       driver.selectFile(fileChooser, temporaryFolder);
       failWhenExpectingException();
@@ -165,19 +164,6 @@ public class JFileChooserDriverTest {
     } finally {
       temporaryFolder.delete();
     }
-  }
-
-  private static void setFileSelectionMode(final JFileChooser fileChooser, final int mode) {
-    invokeLater(new Runnable() {
-      public void run() {
-        fileChooser.setFileSelectionMode(mode);       
-      }
-    });
-    pause(new Condition("JFileChooser's selection mode is set") {
-      public boolean test() {
-        return fileChooser.getFileSelectionMode() == mode;
-      }
-    }); 
   }
 
   public void shouldThrowErrorIfFilesToSelectIsNull() {
@@ -191,13 +177,157 @@ public class JFileChooserDriverTest {
 
   public void shouldThrowErrorIfFilesToSelectIsEmpty() {
     try {
-      driver.selectFiles(fileChooser, null);
+      driver.selectFiles(fileChooser, new File[0]);
       failWhenExpectingException();
     } catch (IllegalArgumentException e) {
       assertThat(e.getMessage()).isEqualTo("The array of files to select should not be empty");
     }
   }
+  
+  public void shouldThrowErrorIfAnyFileToSelectIsNull() {
+    try {
+      driver.selectFiles(fileChooser, array(new File("Fake"), null));
+      failWhenExpectingException();
+    } catch (NullPointerException e) {
+      assertThat(e.getMessage()).isEqualTo("The array of files to select should not contain null elements");
+    }
+  }
+  
+  public void shouldThrowErrorWhenSelectingFilesInNotShowingJFileChooser() {
+    hideWindow();
+    try {
+      driver.selectFiles(fileChooser, array(new File("Fake")));
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertActionFailureDueToNotShowingComponent(e);
+    } 
+  }
+  
+  public void shouldThrowErrorWhenSelectingFilesAndJFileChooserCannotHandleMultipleSelection() {
+    disableMultipleSelection();
+    try {
+      driver.selectFiles(fileChooser, array(new File("Fake1"), new File("Fake2")));
+      failWhenExpectingException();
+    } catch (IllegalStateException e) {
+      assertThat(e.getMessage()).contains("Expecting file chooser")
+                                .contains("to handle multiple selection");
+    }
+  }
 
+  private void disableMultipleSelection() {
+    setMultipleSelectionEnabled(fileChooser, false);
+    robot.waitForIdle();
+  }
+
+  public void shouldThrowErrorIfJFileChooserCanOnlySelectFoldersAndOneOfFilesToSelectIsFile() {
+    enableMultipleSelection();
+    File temporaryFolder = newTemporaryFolder();
+    File temporaryFile = newTemporaryFile();
+    setFileChooserToSelectDirectoriesOnly();
+    try {
+      driver.selectFiles(fileChooser, array(temporaryFolder, temporaryFile));
+      failWhenExpectingException();
+    } catch (IllegalArgumentException e) {
+      assertThat(e.getMessage()).contains("the file chooser can only open directories");
+    } finally {
+      temporaryFile.delete();
+      temporaryFile.delete();
+    }
+  }
+
+  private void setFileChooserToSelectDirectoriesOnly() {
+    setFileSelectionMode(DIRECTORIES_ONLY);
+  }
+
+  public void shouldThrowErrorIfJFileChooserCanOnlySelectFilesAndOneOfFilesToSelectIsFolder() {
+    enableMultipleSelection();
+    File temporaryFolder = newTemporaryFolder();
+    File temporaryFile = newTemporaryFile();
+    setFileChooserToSelectFilesOny();
+    try {
+      driver.selectFiles(fileChooser, array(temporaryFolder, temporaryFile));
+      failWhenExpectingException();
+    } catch (IllegalArgumentException e) {
+      assertThat(e.getMessage()).contains("the file chooser cannot open directories");
+    } finally {
+      temporaryFolder.delete();
+      temporaryFile.delete();
+    }
+  }
+
+  public void shouldNotThrowErrorIfJFileChooserCannotHandleMultipleSelectionAndArrayOfFilesToSelectHasOneElementOnly() {
+    disableMultipleSelection();
+    File temporaryFile = newTemporaryFile();
+    try {
+      driver.selectFiles(fileChooser, array(temporaryFile));
+      File[] selectedFiles = selectedFilesIn(fileChooser);
+      assertThat(selectedFiles).containsOnly(temporaryFile);
+    } finally {
+      temporaryFile.delete();
+    }
+  }
+  
+  public void shouldSelectFiles() {
+    enableMultipleSelection();
+    setFileChooserToSelectFilesAndDirectories();
+    File temporaryFolder = newTemporaryFolder();
+    File temporaryFile = newTemporaryFile();
+    try {
+      driver.selectFiles(fileChooser, array(temporaryFolder, temporaryFile));
+      File[] selectedFiles = selectedFilesIn(fileChooser);
+      assertThat(selectedFiles).containsOnly(temporaryFolder, temporaryFile);
+    } finally {
+      temporaryFolder.delete();
+      temporaryFile.delete();
+    }
+  }
+
+  private void setFileChooserToSelectFilesAndDirectories() {
+    setFileSelectionMode(fileChooser, FILES_AND_DIRECTORIES);
+    robot.waitForIdle();
+  }
+
+  @RunsInEDT
+  private static File[] selectedFilesIn(final JFileChooser fileChooser) {
+    return execute(new GuiQuery<File[]>() {
+      protected File[] executeInEDT() {
+        return fileChooser.getSelectedFiles();
+      }
+    });
+  }
+
+  private void enableMultipleSelection() {
+    setMultipleSelectionEnabled(fileChooser, true);
+    robot.waitForIdle();
+  }
+  
+  @RunsInEDT
+  private static void setMultipleSelectionEnabled(final JFileChooser fileChooser, final boolean b) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        fileChooser.setMultiSelectionEnabled(b);
+      }
+    });
+  }
+  
+  private void setFileChooserToSelectFilesOny() {
+    setFileSelectionMode(FILES_ONLY);
+  }
+
+  private void setFileSelectionMode(int filesOnly) {
+    setFileSelectionMode(fileChooser, filesOnly);
+    robot.waitForIdle();
+  }
+
+  @RunsInEDT
+  private static void setFileSelectionMode(final JFileChooser fileChooser, final int mode) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        fileChooser.setFileSelectionMode(mode);       
+      }
+    });
+  }
+  
   public void shouldFindApproveButton() {
     JButton approveButton = driver.approveButton(fileChooser);
     assertThat(approveButton).isNotNull();

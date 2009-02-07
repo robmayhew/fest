@@ -28,7 +28,7 @@ import org.fest.swing.exception.ComponentLookupException;
 import static org.fest.swing.core.matcher.JButtonMatcher.withText;
 import static org.fest.swing.driver.JFileChooserApproveButtonTextQuery.approveButtonTextFrom;
 import static org.fest.swing.driver.JFileChooserCancelButtonTextQuery.cancelButtonText;
-import static org.fest.swing.driver.JFileChooserSelectFileTask.validateAndSelectFile;
+import static org.fest.swing.driver.JFileChooserSelectFileTask.*;
 import static org.fest.swing.driver.JFileChooserSetCurrentDirectoryTask.validateAndSetCurrentDirectory;
 import static org.fest.util.Arrays.isEmpty;
 import static org.fest.util.Strings.*;
@@ -89,7 +89,10 @@ public class JFileChooserDriver extends JComponentDriver {
    */
   public void selectFiles(JFileChooser fileChooser, File[] files) {
     if (files == null) throw new NullPointerException("The files to select should not be null");
-    if (isEmpty(files)) throw new IllegalArgumentException("The array of files to select should not be null");
+    if (isEmpty(files)) throw new IllegalArgumentException("The array of files to select should not be empty");
+    for (File file : files)
+      if (file == null) throw new NullPointerException("The array of files to select should not contain null elements");
+    validateAndSelectFiles(fileChooser, files);
   }
 
   /**

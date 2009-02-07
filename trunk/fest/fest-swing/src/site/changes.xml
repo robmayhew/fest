@@ -28,6 +28,9 @@
       <action dev="alruiz" type="fix" issue="293" due-to="Gino John">
         org.fest.swing.driver.JTreeDriver now adds the root to the path to expand, if the JTree has its root invisible.
       </action>
+      <action dev="alruiz" type="add" issue="297" due-to="rshulst">
+        Added method 'selectFiles(File...)' to org.fest.swing.fixture.JFileChooserFixture.
+      </action>
     </release>
     <release version="1.0" date="2009-01-15" description="Subsequent release">
       <action dev="alruiz" type="add" issue="238" due-to="Juhos Csaba-Zsolt">

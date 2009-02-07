@@ -159,7 +159,7 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
    * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is disabled.
    * @throws IllegalStateException if this fixture's <code>JFileChooser</code> is not showing on the screen.
    * @throws IllegalStateException if this fixture's <code>JFileChooser</code> does not support multiple selection and 
-   * there  is more than one file to select.
+   * there is more than one file to select.
    * @throws IllegalArgumentException if this fixture's <code>JFileChooser</code> can select directories only and any of
    * the files to select is not a directory.
    * @throws IllegalArgumentException if this fixture's <code>JFileChooser</code> cannot select directories and any of 
