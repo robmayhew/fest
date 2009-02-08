@@ -23,7 +23,7 @@ import javax.swing.text.JTextComponent;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.cell.JTableCellWriter;
 import org.fest.swing.core.Robot;
-import org.fest.swing.exception.WaitTimedOutError;
+import org.fest.swing.exception.ActionFailedException;
 
 import static java.awt.event.KeyEvent.VK_F2;
 
@@ -79,7 +79,7 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
     Point cellLocation = cellLocation(table, row, column, location);
     try {
       return activateEditorWithF2Key(table, row, column, cellLocation);
-    } catch (WaitTimedOutError e) {
+    } catch (ActionFailedException e) {
       return activateEditorWithDoubleClick(table, row, column, cellLocation);
     }
   }

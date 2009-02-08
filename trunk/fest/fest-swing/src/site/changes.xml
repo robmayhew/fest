@@ -35,6 +35,10 @@
       <action dev="alruiz" type="add" issue="297" due-to="rshulst">
         Added method 'selectFiles(File...)' to org.fest.swing.fixture.JFileChooserFixture.
       </action>
+      <action dev="alruiz" type="fix" issue="308" due-to="Ken Geis">
+        org.fest.swing.driver.JTableTextComponentEditorCellWriter now correctly catches ActionFailedException when
+        the cell editor cannot be activated by pressing the key 'F2'.
+      </action>
     </release>
     <release version="1.0" date="2009-01-15" description="Subsequent release">
       <action dev="alruiz" type="add" issue="238" due-to="Juhos Csaba-Zsolt">
