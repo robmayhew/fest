@@ -31,6 +31,8 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.WaitTimedOutError;
 
+import static java.lang.String.valueOf;
+
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.JTableCancelCellEditingTask.cancelEditing;
 import static org.fest.swing.driver.JTableCellEditorQuery.cellEditorIn;
@@ -39,6 +41,7 @@ import static org.fest.swing.driver.JTableStopCellEditingTask.validateAndStopEdi
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.timing.Pause.pause;
+import static org.fest.util.Strings.concat;
 
 /**
  * Understands the base class for implementations of <code>{@link JTableCellWriter}</code>.
@@ -122,14 +125,14 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
    * @throws IllegalStateException if the table cell in the given coordinates is not editable.
    * @throws IndexOutOfBoundsException if any of the indices is out of bounds or if the <code>JTable</code> does not
    * have any rows.
-   * @throws ActionFailedException if an editor for the given cell cannot be found.
+   * @throws ActionFailedException if an editor for the given cell cannot be found or cannot be activated.
    */
   @RunsInCurrentThread
   protected static <T extends Component> T editor(JTable table, int row, int column, Class<T> supportedType) {
     validate(table, row, column);
     Component editor = cellEditorIn(table, row, column);
     if (supportedType.isInstance(editor)) return supportedType.cast(editor);
-    throw cannotActivateEditor();
+    throw cannotFindOrActivateEditor(row, column);
   }
   
   /**
@@ -191,7 +194,7 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
    * @param column the column index of the cell.
    * @param supportedType the type of component we expect as editor.
    * @return the editor of the given table cell once it is showing on the screen.
-   * @throws ActionFailedException if an editor for the given cell cannot be found.
+   * @throws ActionFailedException if an editor for the given cell cannot be found or cannot be activated.
    */
   @RunsInEDT
   protected final <T extends Component> T waitForEditorActivation(JTable table, int row, 
@@ -208,7 +211,7 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
    * @param column the column index of the cell.
    * @param supportedType the type of component we expect as editor.
    * @return the editor of the given table cell once it is showing on the screen.
-   * @throws ActionFailedException if an editor for the given cell cannot be found.
+   * @throws ActionFailedException if an editor for the given cell cannot be found or cannot be activated.
    */
   @RunsInEDT
   protected final <T extends Component> T waitForEditorActivation(ComponentMatcher matcher, JTable table, int row, 
@@ -217,17 +220,20 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
     try {
       pause(condition, EDITOR_LOOKUP_TIMEOUT);
     } catch (WaitTimedOutError e) {
-      throw cannotActivateEditor();
+      throw cannotFindOrActivateEditor(row, column);
     }
     return supportedType.cast(condition.found());
   }  
 
   /**
-   * Throws a <code>{@link ActionFailedException}</code> if this <code>{@link JTableCellWriter}</code> could not
+   * Throws a <code>{@link ActionFailedException}</code> if this <code>{@link JTableCellWriter}</code> could not find or
    * activate the cell editor of the supported type.
+   * @param row the row index of the cell.
+   * @param column the column index of the cell.
    * @return the thrown exception.
    */
-  protected static ActionFailedException cannotActivateEditor() {
-    throw actionFailure("Unable to activate cell editor");
+  protected static ActionFailedException cannotFindOrActivateEditor(int row, int column) {
+    String msg = concat("Unable to find or activate editor for cell [", valueOf(row), ",", valueOf(column), "]");
+    throw actionFailure(msg);
   }
 }

@@ -84,7 +84,7 @@ public abstract class JTableCellWriterTestCase {
   }
 
   private void assertUnableToActivateErrorMessageIsCorrect(ActionFailedException e) {
-    assertThat(e.getMessage()).contains("Unable to activate cell editor");
+    assertThat(e.getMessage()).contains("Unable to find or activate editor");
   }
   
   protected final JTable table() {

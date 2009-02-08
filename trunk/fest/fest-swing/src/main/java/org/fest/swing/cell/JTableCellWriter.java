@@ -43,8 +43,7 @@ public interface JTableCellWriter {
    * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
    * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
-   * @throws ActionFailedException if the cell editor cannot be activated or if this writer is unable to handle the 
-   * underlying cell editor.
+   * @throws ActionFailedException if an editor for the given cell cannot be found or cannot be activated.
    */
   void enterValue(JTable table, int row, int column, String value);
 
@@ -58,8 +57,7 @@ public interface JTableCellWriter {
    * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
    * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
-   * @throws ActionFailedException if the cell editor cannot be activated or if this writer is unable to handle the 
-   * underlying cell editor.
+   * @throws ActionFailedException if an editor for the given cell cannot be found or cannot be activated.
    * @see #editorForCell(JTable, int, int)
    */
   void startCellEditing(JTable table, int row, int column);
@@ -74,7 +72,7 @@ public interface JTableCellWriter {
    * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
    * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
-   * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
+   * @throws ActionFailedException if an editor for the given cell cannot be found or cannot be activated.
    * @see #editorForCell(JTable, int, int)
    */
   void stopCellEditing(JTable table, int row, int column);
@@ -89,7 +87,7 @@ public interface JTableCellWriter {
    * @throws IllegalStateException if the <code>JTable</code> is not showing on the screen.
    * @throws IllegalStateException if the <code>JTable</code> cell is not editable.
    * @throws IndexOutOfBoundsException if any of the indices (row and column) is out of bounds.
-   * @throws ActionFailedException if this writer is unable to handle the underlying cell editor.
+   * @throws ActionFailedException if an editor for the given cell cannot be found or cannot be activated.
    * @see #editorForCell(JTable, int, int)
    */
   void cancelCellEditing(JTable table, int row, int column);
