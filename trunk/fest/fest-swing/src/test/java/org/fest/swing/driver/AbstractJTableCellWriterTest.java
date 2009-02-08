@@ -26,11 +26,9 @@ import org.testng.annotations.*;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
-import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
-import static org.fest.swing.test.core.CommonAssertions.failWhenExpectingException;
 import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**
@@ -59,15 +57,6 @@ public class AbstractJTableCellWriterTest {
 
   @AfterMethod public void tearDown() {
     robot.cleanUp();
-  }
-
-  public void shouldThrowErrorIfEditorToHandleIsNull() {
-    try {
-      AbstractJTableCellWriter.cannotHandleEditor(null);
-      failWhenExpectingException();
-    } catch (ActionFailedException e) {
-      assertThat(e.getMessage()).contains("Unable to handle editor component of type <null>");
-    }
   }
 
   @Test(groups = GUI, dataProvider = "cellEditors")

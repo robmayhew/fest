@@ -15,9 +15,12 @@
  */
 package org.fest.swing.driver;
 
+import org.testng.annotations.Test;
+
 import org.fest.swing.cell.JTableCellWriter;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.test.core.TestGroups.GUI;
 
 /**
  * Tests for <code>{@link JTableCheckBoxEditorCellWriter}</code>.
@@ -25,6 +28,7 @@ import static org.fest.assertions.Assertions.assertThat;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
+@Test(groups = GUI)
 public class JTableCheckBoxEditorCellWriterTest extends JTableCellWriterTestCase {
 
   protected JTableCellWriter createWriter() {

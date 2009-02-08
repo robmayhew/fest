@@ -25,6 +25,10 @@
       <action dev="alruiz" type="add" issue="283">
         Class org.fest.swing.driver.DragAndDrop is now deprecated and will be removed in version 2.0. 
       </action>
+      <action dev="alruiz" type="fix" issue="286" due-to="Ken Geis">
+        Failure to activate cell editor in org.fest.swing.driver.AbstractJTableCellWriter now throw an 
+        ActionFailureException with the message "Unable to activate cell editor".
+      </action>
       <action dev="alruiz" type="fix" issue="293" due-to="Gino John">
         org.fest.swing.driver.JTreeDriver now adds the root to the path to expand, if the JTree has its root invisible.
       </action>

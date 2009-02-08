@@ -39,7 +39,6 @@ import static org.fest.swing.driver.JTableStopCellEditingTask.validateAndStopEdi
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.timing.Pause.pause;
-import static org.fest.util.Strings.concat;
 
 /**
  * Understands the base class for implementations of <code>{@link JTableCellWriter}</code>.
@@ -88,11 +87,6 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
     table.scrollRectToVisible(location.cellBounds(table, row, column));
   }
 
-  private static String editorTypeName(Component editor) {
-    if (editor == null) return "<null>";
-    return editor.getClass().getName();
-  }
-
   /** {@inheritDoc} */
   @RunsInEDT
   public Component editorForCell(JTable table, int row, int column) {
@@ -135,7 +129,7 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
     validate(table, row, column);
     Component editor = cellEditorIn(table, row, column);
     if (supportedType.isInstance(editor)) return supportedType.cast(editor);
-    throw cannotHandleEditor(editor);
+    throw cannotActivateEditor();
   }
   
   /**
@@ -223,18 +217,17 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
     try {
       pause(condition, EDITOR_LOOKUP_TIMEOUT);
     } catch (WaitTimedOutError e) {
-      throw cannotHandleEditor(cellEditorIn(table, row, column));
+      throw cannotActivateEditor();
     }
     return supportedType.cast(condition.found());
   }  
 
   /**
-   * Throws a <code>{@link ActionFailedException}</code> if the given editor cannot be handled by this
-   * <code>{@link JTableCellWriter}</code>.
-   * @param editor the given editor.
+   * Throws a <code>{@link ActionFailedException}</code> if this <code>{@link JTableCellWriter}</code> could not
+   * activate the cell editor of the supported type.
    * @return the thrown exception.
    */
-  protected static final ActionFailedException cannotHandleEditor(Component editor) {
-    throw actionFailure(concat("Unable to handle editor component of type ", editorTypeName(editor)));
+  protected static ActionFailedException cannotActivateEditor() {
+    throw actionFailure("Unable to activate cell editor");
   }
 }

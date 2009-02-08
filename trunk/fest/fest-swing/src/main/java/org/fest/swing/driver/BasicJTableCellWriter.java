@@ -121,6 +121,6 @@ public class BasicJTableCellWriter extends AbstractJTableCellWriter {
     if (editor instanceof JCheckBox) return checkBoxWriter;
     if (editor instanceof JComboBox) return comboBoxWriter;
     if (editor instanceof JTextComponent) return textComponentWriter;
-    throw cannotHandleEditor(editor);
+    throw cannotActivateEditor();
   }
 }

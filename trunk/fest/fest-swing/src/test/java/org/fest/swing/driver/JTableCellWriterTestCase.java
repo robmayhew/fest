@@ -70,7 +70,7 @@ public abstract class JTableCellWriterTestCase {
       writer.enterValue(window.table, 0, 1, "hello");
       failWhenExpectingException();
     } catch (ActionFailedException e) {
-      assertMessageIncludesComponentNotHandled(e);
+      assertUnableToActivateErrorMessageIsCorrect(e);
     }
   }
 
@@ -79,12 +79,12 @@ public abstract class JTableCellWriterTestCase {
       writer.startCellEditing(window.table, 0, 1);
       failWhenExpectingException();
     } catch (ActionFailedException e) {
-      assertMessageIncludesComponentNotHandled(e);
+      assertUnableToActivateErrorMessageIsCorrect(e);
     }
   }
 
-  private void assertMessageIncludesComponentNotHandled(ActionFailedException e) {
-    assertThat(e.getMessage()).contains("Unable to handle editor component of type javax.swing.JButton");
+  private void assertUnableToActivateErrorMessageIsCorrect(ActionFailedException e) {
+    assertThat(e.getMessage()).contains("Unable to activate cell editor");
   }
   
   protected final JTable table() {
