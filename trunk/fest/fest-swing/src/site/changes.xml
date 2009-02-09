@@ -38,6 +38,10 @@
       <action dev="alruiz" type="fix" issue="303" due-to="parilinsa">
         org.fest.swing.driver.JSpinnerDriver correctly selects the current text of a JSpinner before entering new text.
       </action>
+      <action dev="alruiz" type="add" issue="306" due-to="Juhos Csaba-Zsolt">
+        org.fest.swing.driver.JSpinnerDriver sets the focus on the editor and waits for the editor to be focused before
+        entering new text.
+      </action>
       <action dev="alruiz" type="fix" issue="308" due-to="Ken Geis">
         org.fest.swing.driver.JTableTextComponentEditorCellWriter now correctly catches ActionFailedException when
         the cell editor cannot be activated by pressing the key 'F2'.

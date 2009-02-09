@@ -229,7 +229,7 @@ public class JSpinnerDriver extends JComponentDriver {
     JTextComponent editor = findEditor(spinner);
     validate(spinner, editor);
     robot.waitForIdle();
-    robot.focus(editor);
+    robot.focusAndWaitForFocusGain(editor);
     invokeAction(editor, selectAllAction);    
     robot.enterText(text);
   }
