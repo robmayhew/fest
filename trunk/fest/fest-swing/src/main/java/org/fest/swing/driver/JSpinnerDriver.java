@@ -32,6 +32,8 @@ import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.UnexpectedException;
 
+import static javax.swing.text.DefaultEditorKit.selectAllAction;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.JSpinnerSetValueTask.setValue;
@@ -225,9 +227,10 @@ public class JSpinnerDriver extends JComponentDriver {
   public void enterText(JSpinner spinner, String text) {
     assertIsEnabledAndShowing(spinner);
     JTextComponent editor = findEditor(spinner);
-    validateAndSelectAllTextInEditor(spinner, editor);
+    validate(spinner, editor);
     robot.waitForIdle();
     robot.focus(editor);
+    invokeAction(editor, selectAllAction);    
     robot.enterText(text);
   }
   
@@ -241,20 +244,14 @@ public class JSpinnerDriver extends JComponentDriver {
   }
 
   @RunsInEDT
-  private static void validateAndSelectAllTextInEditor(final JSpinner spinner, final JTextComponent editor) {
+  private static void validate(final JSpinner spinner, final JTextComponent editor) {
     execute(new GuiTask() {
       protected void executeInEDT() {
-        validateJSpinnerEditor(spinner, editor);
-        editor.selectAll();
+        if (editor == null) throw actionFailure(concat("Unable to find editor for ", format(spinner)));
       }
     });
   }
 
-  @RunsInCurrentThread
-  private static void validateJSpinnerEditor(final JSpinner spinner, final JTextComponent editor) {
-    if (editor == null) throw actionFailure(concat("Unable to find editor for ", format(spinner)));
-  }
-  
   /**
    * Selects the given value in the given <code>{@link JSpinner}</code>. 
    * @param spinner the target <code>JSpinner</code>.
