@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fest</groupId>
   <artifactId>fest-reflect</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
   <name>FEST Reflection</name>
   <description>Fluent Interface that simplifies usage of Java
     Reflection</description>

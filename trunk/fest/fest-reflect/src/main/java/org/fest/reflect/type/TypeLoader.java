@@ -23,6 +23,8 @@ import static org.fest.util.Strings.quote;
  * Understands loading a class dynamically using a specific <code>{@link ClassLoader}</code>.
  *
  * @author Alex Ruiz
+ * 
+ * @since 1.1
  */
 public final class TypeLoader {
 

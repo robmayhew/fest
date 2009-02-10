@@ -39,6 +39,8 @@ import static org.fest.util.Strings.isEmpty;
  * </p>
  *
  * @author Alex Ruiz
+ * 
+ * @since 1.1
  */
 public final class StaticInnerClassName {
 

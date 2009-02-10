@@ -21,6 +21,8 @@ import static org.fest.util.Strings.concat;
  * Understands how to obtain a reference to a static inner class.
  *
  * @author Alex Ruiz
+ * 
+ * @since 1.1
  */
 public class Invoker {
 

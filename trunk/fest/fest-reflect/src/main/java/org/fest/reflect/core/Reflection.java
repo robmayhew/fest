@@ -112,6 +112,7 @@ public final class Reflection {
    * @return the starting point of the method chain.
    * @throws NullPointerException if the given name is <code>null</code>.
    * @throws IllegalArgumentException if the given name is empty.
+   * @since 1.1
    */
   public static Type type(String name) { return new Type(name); }
   
@@ -121,6 +122,7 @@ public final class Reflection {
    * @return the starting point of the method chain.
    * @throws NullPointerException if the given name is <code>null</code>.
    * @throws IllegalArgumentException if the given name is empty.
+   * @since 1.1
    */
   public static StaticInnerClassName staticInnerClass(String name) { return new StaticInnerClassName(name); }
   

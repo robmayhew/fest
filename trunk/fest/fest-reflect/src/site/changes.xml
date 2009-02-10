@@ -5,7 +5,7 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="1.1" date="TBD" description="Subsequent release">
+    <release version="1.1" date="2009-02-10" description="Subsequent release">
       <action dev="alruiz" type="add" issue="117" due-to="Xavier Dury">
         Added class org.fest.reflect.type.TypeRef based on Neal Gafter's TypeReference.
       </action>
@@ -15,7 +15,7 @@
       <action dev="alruiz" type="add" issue="117" due-to="Xavier Dury">
         Added support for TypeRef as method return type in the fluent interface of the package org.fest.reflect.method.
       </action>
-      <action dev="alruiz" type="add" issue="194">
+      <action dev="alruiz" type="add" issue="194" due-to="Leo Jay">
         Added support for accessing static inner classes (code in package org.fest.reflect.innerclass.)
       </action>
       <action dev="alruiz" type="add" issue="278" due-to="Stephen Colebourne">
