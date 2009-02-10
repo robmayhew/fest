@@ -79,6 +79,7 @@ public final class MethodName extends NameTemplate {
    * @param type the return type reference of the method to invoke.
    * @return the created return type holder.
    * @throws NullPointerException if the given type reference is <code>null</code>.
+   * @since 1.1
    */
   public <T> MethodReturnTypeRef<T> withReturnType(TypeRef<T> type) {
     return new MethodReturnTypeRef<T>(type, this);

@@ -26,6 +26,8 @@ import org.fest.reflect.exception.ReflectionError;
  * 
  * @author crazybob@google.com (Bob Lee)
  * @author Alex Ruiz
+ * 
+ * @since 1.1
  */
 public abstract class TypeRef<T> {
 

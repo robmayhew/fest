@@ -20,6 +20,8 @@ import org.fest.reflect.reference.TypeRef;
  * Understands a template for the return type reference of the method to invoke.
  *
  * @author Alex Ruiz
+ * 
+ * @since 1.1
  */
 abstract class ReturnTypeRefTemplate<T> {
 

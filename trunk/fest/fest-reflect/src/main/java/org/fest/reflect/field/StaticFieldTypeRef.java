@@ -35,6 +35,8 @@ import org.fest.reflect.reference.TypeRef;
  * @param <T> the generic type of the field. 
  *
  * @author Alex Ruiz
+ * 
+ * @since 1.1
  */
 public class StaticFieldTypeRef<T> extends TypeRefTemplate<T> {
 

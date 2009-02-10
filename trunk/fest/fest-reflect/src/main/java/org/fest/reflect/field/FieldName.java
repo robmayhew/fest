@@ -77,6 +77,7 @@ public final class FieldName extends NameTemplate {
    * @param type the type of the field to access.
    * @return a recipient for the field type.
    * @throws NullPointerException if the given type reference is <code>null</code>.
+   * @since 1.1
    */
   public <T> FieldTypeRef<T> ofType(TypeRef<T> type) {
     return new FieldTypeRef<T>(type, this);

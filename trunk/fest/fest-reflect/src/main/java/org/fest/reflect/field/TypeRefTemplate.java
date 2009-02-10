@@ -21,6 +21,8 @@ import org.fest.reflect.reference.TypeRef;
  * Java generics.
  *
  * @author Alex Ruiz
+ * 
+ * @since 1.1
  */
 abstract class TypeRefTemplate<T> {
 

@@ -31,6 +31,8 @@ import org.fest.reflect.reference.TypeRef;
  * @param <T> the generic type of the method's return type reference. 
  *
  * @author Alex Ruiz
+ * 
+ * @since 1.1
  */
 public class MethodReturnTypeRef<T> extends ReturnTypeRefTemplate<T> {
   
