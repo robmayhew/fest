@@ -22,10 +22,12 @@ import javax.swing.JTabbedPane;
 
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
+import org.fest.swing.data.Index;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.exception.LocationUnavailableException;
 import org.fest.swing.util.Pair;
 
+import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.JTabbedPaneSelectTabTask.setSelectedTab;
 import static org.fest.swing.driver.JTabbedPaneTabTitlesQuery.tabTitlesOf;
@@ -150,5 +152,22 @@ public class JTabbedPaneDriver extends JComponentDriver {
         return tabbedPane.getSelectedComponent();
       }
     });
+  }
+
+  /**
+   * Asserts that the title of the tab at the given index is equal to the given title.
+   * @param tabbedPane the target <code>JTabbedPane</code>.
+   * @param title the expected title.
+   * @param index the index of the tab.
+   * @throws AssertionError if the title of the tab at the given index is not equal to the given one.
+   */
+  @RunsInEDT
+  public void requireTitle(final JTabbedPane tabbedPane, String title, final Index index) {
+    String actualTitle = execute(new GuiQuery<String>() {
+      protected String executeInEDT() {
+        return tabbedPane.getTitleAt(index.value);
+      }
+    });
+    assertThat(actualTitle).as(propertyName(tabbedPane, "titleAt")).isEqualTo(title);
   }
 }

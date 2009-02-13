@@ -29,6 +29,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.data.Index.atIndex;
 import static org.fest.swing.test.builder.JButtons.button;
 import static org.fest.swing.test.builder.JTabbedPanes.tabbedPane;
 import static org.fest.util.Arrays.array;
@@ -80,6 +81,19 @@ import static org.fest.util.Arrays.array;
       
       protected void codeToTest() {
         assertThat(fixture.selectedComponent()).isSameAs(selected);
+      }
+    }.run();
+  }
+  
+  public void shouldRequireTitleAtTabIndex() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireTitle(target, "Hello", atIndex(1));
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireTitle("Hello", atIndex(1)));
       }
     }.run();
   }

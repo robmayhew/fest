@@ -23,6 +23,7 @@ import org.fest.swing.core.KeyPressInfo;
 import org.fest.swing.core.MouseButton;
 import org.fest.swing.core.MouseClickInfo;
 import org.fest.swing.core.Robot;
+import org.fest.swing.data.Index;
 import org.fest.swing.driver.JTabbedPaneDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.LocationUnavailableException;
@@ -292,6 +293,18 @@ public class JTabbedPaneFixture extends JPopupMenuInvokerFixture<JTabbedPane> im
    */
   public JTabbedPaneFixture requireNotVisible() {
     driver.requireNotVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that the title of the tab at the given index is equal to the given title.
+   * @param title the expected title.
+   * @param index the index of the tab.
+   * @return this fixture.
+   * @throws AssertionError if the title of the tab at the given index is not equal to the given one.
+   */
+  public JTabbedPaneFixture requireTitle(String title, Index index) {
+    driver.requireTitle(target, title, index);
     return this;
   }
 }

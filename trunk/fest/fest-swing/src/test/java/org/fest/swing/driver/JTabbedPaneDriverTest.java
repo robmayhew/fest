@@ -36,6 +36,7 @@ import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
+import static org.fest.swing.data.Index.atIndex;
 import static org.fest.swing.driver.JTabbedPaneSelectTabTask.setSelectedTab;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.test.core.CommonAssertions.*;
@@ -218,6 +219,29 @@ public class JTabbedPaneDriverTest {
     assertThat(driver.tabTitles(tabbedPane)).isEqualTo(array("One", "Two"));
   }
 
+  public void shouldFailIfActualTabTitleIsNotEqualToExpected() {
+    try {
+      driver.requireTitle(tabbedPane, "Hello", atIndex(0));
+      failWhenExpectingException();
+    } catch (AssertionError e) {
+      assertThat(e.getMessage()).contains("property:'titleAt'")
+                                .contains("expected:<'Hello'> but was:<'One'>"); 
+    }
+  }
+  
+  @Test(groups = GUI, dataProvider = "indicesAndTitles")
+  public void shouldPassIfActualTabTitleIsEqualToExpected(int index, String title) {
+    driver.requireTitle(tabbedPane, title, atIndex(index));
+  }
+
+  @DataProvider(name = "indicesAndTitles")
+  public Object[][] indicesAndTitles() {
+    return new Object[][] { 
+        { 0, "One" }, 
+        { 1, "Two" }
+    };
+  }
+  
   private static class MyWindow extends TestWindow {
     private static final long serialVersionUID = 1L;
 
