@@ -15,6 +15,9 @@
       <action dev="alruiz" type="add" issue="91" due-to="Andres Almiray">
         Added class org.fest.swing.testng.testing.FestSwingTestngTestCase.
       </action>
+      <action dev="alruiz" type="add" issue="230" due-to="Ken Geis">
+        Added method 'selectedComponent' to org.fest.swing.fixture.JTabbedPaneFixture.
+      </action>
       <action dev="alruiz" type="add" issue="282">
         Added methods moveMouse(Point), moveMouse(int, int) and pressMouse(Point, MouseButton) to 
         org.fest.swing.core.Robot.  
@@ -27,7 +30,7 @@
       </action>
       <action dev="alruiz" type="fix" issue="286" due-to="Ken Geis">
         Failure to activate cell editor in org.fest.swing.driver.AbstractJTableCellWriter now throw an 
-        ActionFailureException with the message "Unable to activate cell editor".
+        ActionFailureException with the message "Unable to find or activate cell editor".
       </action>
       <action dev="alruiz" type="fix" issue="293" due-to="Gino John">
         org.fest.swing.driver.JTreeDriver now adds the root to the path to expand, if the JTree has its root invisible.

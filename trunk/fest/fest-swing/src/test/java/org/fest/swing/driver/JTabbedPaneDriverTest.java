@@ -15,6 +15,7 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
@@ -156,29 +157,44 @@ public class JTabbedPaneDriverTest {
   }
 
   public void shouldSelectFirstTab() {
-    driver.selectTab(tabbedPane, "First");
+    driver.selectTab(tabbedPane, "One");
     assertThatSelectedTabIndexIsEqualTo(0);
   }
 
   public void shouldSelectSecondTab() {
-    driver.selectTab(tabbedPane, "Second");
+    driver.selectTab(tabbedPane, "Two");
     assertThatSelectedTabIndexIsEqualTo(1);
+  }
+
+  @Test(groups = GUI, dataProvider = "selectedComponents")
+  public void shouldReturnSelectedComponent(int index, String selectedName) {
+    driver.selectTab(tabbedPane, index);
+    Component selected = driver.selectedComponentOf(tabbedPane);
+    assertThat(selected.getName()).isEqualTo(selectedName);
+  }
+
+  @DataProvider(name = "selectedComponents")
+  public Object[][] selectedComponents() {
+    return new Object[][] { 
+        { 0, "panel1" }, 
+        { 1, "panel2" }
+    };
   }
 
   public void shouldThrowErrorWhenSelectingTabWithGivenTitleInDisabledTabbedPane() {
     disableTabbedPane();
     try {
-      driver.selectTab(tabbedPane, "Second");
+      driver.selectTab(tabbedPane, "Two");
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToDisabledComponent(e);
     }
   }
-
+  
   public void shouldThrowErrorWhenSelectingTabWithGivenTitleInNotShowingTabbedPane() {
     hideWindow();
     try {
-      driver.selectTab(tabbedPane, "Second");
+      driver.selectTab(tabbedPane, "Two");
       failWhenExpectingException();
     } catch (IllegalStateException e) {
       assertActionFailureDueToNotShowingComponent(e);
@@ -199,7 +215,7 @@ public class JTabbedPaneDriverTest {
   }
 
   public void shouldReturnTabTitles() {
-    assertThat(driver.tabTitles(tabbedPane)).isEqualTo(array("First", "Second"));
+    assertThat(driver.tabTitles(tabbedPane)).isEqualTo(array("One", "Two"));
   }
 
   private static class MyWindow extends TestWindow {
@@ -218,10 +234,16 @@ public class JTabbedPaneDriverTest {
 
     private MyWindow() {
       super(JTabbedPaneDriverTest.class);
-      tabbedPane.addTab("First", new JPanel());
-      tabbedPane.addTab("Second", new JPanel());
+      tabbedPane.addTab("One", panelWithName("panel1"));
+      tabbedPane.addTab("Two", panelWithName("panel2"));
       add(tabbedPane);
       setPreferredSize(new Dimension(300, 200));
+    }
+    
+    private JPanel panelWithName(String name) {
+      JPanel panel = new JPanel();
+      panel.setName(name);
+      return panel;
     }
   }
 }

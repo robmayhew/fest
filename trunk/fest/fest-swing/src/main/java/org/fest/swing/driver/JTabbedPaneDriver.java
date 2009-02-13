@@ -15,6 +15,7 @@
  */
 package org.fest.swing.driver;
 
+import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JTabbedPane;
@@ -135,5 +136,19 @@ public class JTabbedPaneDriver extends JComponentDriver {
   void setTabDirectly(JTabbedPane tabbedPane, int index) {
     setSelectedTab(tabbedPane, index);
     robot.waitForIdle();
+  }
+
+  /**
+   * Returns the currently selected component for the given <code>{@link JTabbedPane}</code>.
+   * @param tabbedPane the target <code>JTabbedPane</code>.
+   * @return the currently selected component for the given <code>JTabbedPane</code>.
+   */
+  @RunsInEDT
+  public Component selectedComponentOf(final JTabbedPane tabbedPane) {
+    return execute(new GuiQuery<Component>() {
+      protected Component executeInEDT() {
+        return tabbedPane.getSelectedComponent();
+      }
+    });
   }
 }

@@ -15,6 +15,8 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+
 import javax.swing.JTabbedPane;
 
 import org.fest.swing.core.KeyPressInfo;
@@ -102,6 +104,14 @@ public class JTabbedPaneFixture extends JPopupMenuInvokerFixture<JTabbedPane> im
   public JTabbedPaneFixture selectTab(String title) {
     driver.selectTab(target, title);
     return this;
+  }
+
+  /**
+   * Returns the currently selected component for this fixture's <code>{@link JTabbedPane}</code>.
+   * @return the currently selected component for this fixture's <code>JTabbedPane</code>.
+   */
+  public Component selectedComponent() {
+    return driver.selectedComponentOf(target);
   }
 
   /**

@@ -15,6 +15,8 @@
  */
 package org.fest.swing.fixture;
 
+import java.awt.Component;
+
 import javax.swing.JTabbedPane;
 
 import org.testng.annotations.Test;
@@ -27,6 +29,7 @@ import static org.easymock.EasyMock.*;
 import static org.easymock.classextension.EasyMock.createMock;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.swing.test.builder.JButtons.button;
 import static org.fest.swing.test.builder.JTabbedPanes.tabbedPane;
 import static org.fest.util.Arrays.array;
 
@@ -36,7 +39,7 @@ import static org.fest.util.Arrays.array;
  * @author Alex Ruiz
  * @author Yvonne Wang
  */
-public class JTabbedPaneFixtureTest extends CommonComponentFixtureTestCase<JTabbedPane> {
+@Test public class JTabbedPaneFixtureTest extends CommonComponentFixtureTestCase<JTabbedPane> {
 
   private JTabbedPaneDriver driver;
   private JTabbedPane target;
@@ -49,13 +52,13 @@ public class JTabbedPaneFixtureTest extends CommonComponentFixtureTestCase<JTabb
     fixture.updateDriver(driver);
   }
 
-  @Test public void shouldCreateFixtureWithGivenComponentName() {
+  public void shouldCreateFixtureWithGivenComponentName() {
     String name = "tabbedPane";
     expectLookupByName(name, JTabbedPane.class);
     verifyLookup(new JTabbedPaneFixture(robot(), name));
   }
 
-  @Test public void shouldSelectTabWithIndex() {
+  public void shouldSelectTabWithIndex() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.selectTab(target, 8);
@@ -67,8 +70,21 @@ public class JTabbedPaneFixtureTest extends CommonComponentFixtureTestCase<JTabb
       }
     }.run();
   }
+
+  public void shouldReturnSelectedComponent() {
+    final Component selected = button().createNew();
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        expect(driver.selectedComponentOf(target)).andReturn(selected);
+      }
+      
+      protected void codeToTest() {
+        assertThat(fixture.selectedComponent()).isSameAs(selected);
+      }
+    }.run();
+  }
   
-  @Test public void shouldSelectTabWithText() {
+  public void shouldSelectTabWithText() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.selectTab(target, "A Tab");
@@ -81,7 +97,7 @@ public class JTabbedPaneFixtureTest extends CommonComponentFixtureTestCase<JTabb
     }.run();
   }
 
-  @Test public void shouldReturnTabTitles() {
+  public void shouldReturnTabTitles() {
     final String[] titles = array("One", "Two");
     new EasyMockTemplate(driver) {
       protected void expectations() {
