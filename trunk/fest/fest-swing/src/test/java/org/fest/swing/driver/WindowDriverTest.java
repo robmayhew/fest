@@ -100,6 +100,14 @@ public class WindowDriverTest {
     assertThat(isActive(window)).isTrue();
   }
   
+  public void shouldMoveWindowToBack() {
+    TestWindow window2 = TestWindow.createNewWindow(getClass());
+    robot.showWindow(window2, new Dimension(50, 50));
+    assertThat(isActive(window2)).isTrue();
+    driver.moveToBack(window2);
+    assertThat(isActive(window2)).isFalse();
+  }
+
   @RunsInEDT
   private static boolean isActive(final Window w) {
     return execute(new GuiQuery<Boolean>() {

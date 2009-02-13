@@ -96,6 +96,19 @@ import static org.fest.swing.test.task.FrameShowTask.packAndShow;
     }.run();
   }
 
+  public void shouldMoveToBack() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.moveToBack(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.moveToBack());
+      }
+    }.run();
+  }
+
   public void shouldRequireSize() {
     final Dimension size = new Dimension(800, 600);
     new EasyMockTemplate(driver) {

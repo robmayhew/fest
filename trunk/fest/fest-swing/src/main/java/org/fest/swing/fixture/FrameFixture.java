@@ -370,6 +370,16 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
   }
 
   /**
+   * If the given <code>{@link Frame}</code> is visible, sends it to the back and may cause it to lose focus or 
+   * activation if it is the focused or active.
+   * @return this fixture.
+   */
+  public FrameFixture moveToBack() {
+    driver.moveToBack(target);
+    return this;
+  }
+
+  /**
    * Simulates a user closing this fixture's <code>{@link Frame}</code>.
    */
   public void close() {

@@ -35,8 +35,11 @@
       <action dev="alruiz" type="add" issue="297" due-to="rshulst">
         Added method 'selectFiles(File...)' to org.fest.swing.fixture.JFileChooserFixture.
       </action>
-      <action dev="alruiz" type="fix" issue="303" due-to="parilinsa">
+      <action dev="alruiz" type="fix" issue="303" due-to="Sergey Parilin">
         org.fest.swing.driver.JSpinnerDriver correctly selects the current text of a JSpinner before entering new text.
+      </action>
+      <action dev="alruiz" type="add" issue="305" due-to="ihenehan">
+        Added methods 'moveToFront' and 'moveToBack' to FrameFixture and DialogFixture.      
       </action>
       <action dev="alruiz" type="add" issue="306" due-to="Juhos Csaba-Zsolt">
         org.fest.swing.driver.JSpinnerDriver sets the focus on the editor and waits for the editor to be focused before

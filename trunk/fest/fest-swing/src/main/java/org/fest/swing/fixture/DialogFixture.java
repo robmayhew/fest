@@ -162,6 +162,17 @@ public class DialogFixture extends WindowFixture<Dialog> {
     return this;
   }
 
+
+  /**
+   * If the given <code>{@link Dialog}</code> is visible, sends it to the back and may cause it to lose focus or 
+   * activation if it is the focused or active.
+   * @return this fixture.
+   */
+  public DialogFixture moveToBack() {
+    driver.moveToBack(target);
+    return this;
+  }
+
   /**
    * Simulates a user pressing given key with the given modifiers on this fixture's <code>{@link Dialog}</code>.
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.

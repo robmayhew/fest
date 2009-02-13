@@ -150,4 +150,19 @@ public class WindowDriver extends ContainerDriver {
     });
     robot.waitForIdle();
   }
+
+  /**
+   * If the given <code>{@link Window}</code> is visible, sends it to the back and may cause it to lose focus or 
+   * activation if it is the focused or active.
+   * @param w the target <code>Window</code>.
+   */
+  @RunsInEDT
+  public void moveToBack(final Window w) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        w.toBack();
+      }
+    });    
+    robot.waitForIdle();
+  }
 }

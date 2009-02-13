@@ -74,4 +74,10 @@ public interface WindowLikeContainerFixture {
    * @return this fixture.
    */
   WindowLikeContainerFixture moveToFront();
+  
+  /**
+   * Sends this fixture's window-like component to the back.
+   * @return this fixture.
+   */
+  WindowLikeContainerFixture moveToBack();
 }

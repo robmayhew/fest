@@ -15,7 +15,6 @@
  */
 package org.fest.swing.driver;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.concurrent.CountDownLatch;
@@ -42,15 +41,16 @@ import static java.awt.event.KeyEvent.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.awt.AWT.centerOf;
+import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.core.KeyPressInfo.keyCode;
 import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.MouseClickInfo.*;
-import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
 import static org.fest.swing.driver.JTextComponentTextQuery.textOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.test.core.CommonAssertions.*;
 import static org.fest.swing.test.core.TestGroups.GUI;
+import static org.fest.swing.test.query.ComponentHasFocusQuery.hasFocus;
 import static org.fest.swing.test.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.test.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.test.util.StopWatch.startNewStopWatch;
@@ -324,14 +324,6 @@ public class ComponentDriverTest {
     stopWatch.stop();
     assertThat(hasFocus(button)).isTrue();
     assertThatWaited(stopWatch, PAUSE_TIME);
-  }
-
-  private static boolean hasFocus(final Component c) {
-    return execute(new GuiQuery<Boolean>() {
-      protected Boolean executeInEDT() throws Throwable {
-        return c.hasFocus();
-      }
-    });
   }
 
   public void shouldThrowErrorWhenGivingFocusToDisabledComponenAndWaiting() {
