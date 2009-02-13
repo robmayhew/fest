@@ -361,6 +361,15 @@ public class FrameFixture extends WindowFixture<Frame> implements FrameLikeFixtu
   }
 
   /**
+   * If fixture's <code>{@link Frame}</code> is visible, brings it to the front and may make it the focused one.
+   * @return this fixture.
+   */
+  public FrameFixture moveToFront() {
+    driver.moveToFront(target);
+    return this;
+  }
+
+  /**
    * Simulates a user closing this fixture's <code>{@link Frame}</code>.
    */
   public void close() {

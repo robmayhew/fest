@@ -21,6 +21,7 @@ import java.awt.Window;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiQuery;
+import org.fest.swing.edt.GuiTask;
 import org.fest.swing.exception.ActionFailedException;
 
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
@@ -116,7 +117,7 @@ public class WindowDriver extends ContainerDriver {
       }
     });
   }
-
+ 
   /**
    * Shows the <code>{@link Window}</code>.
    * @param w the target <code>Window</code>.
@@ -134,5 +135,19 @@ public class WindowDriver extends ContainerDriver {
   @RunsInEDT
   public void show(Window w, Dimension size) {
     robot.showWindow(w, size);
+  }
+
+  /**
+   * If the given <code>{@link Window}</code> is visible, brings it to the front and may make it the focused one.
+   * @param w the target <code>Window</code>.
+   */
+  @RunsInEDT
+  public void moveToFront(final Window w) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        w.toFront();
+      }
+    });
+    robot.waitForIdle();
   }
 }

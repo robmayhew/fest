@@ -18,19 +18,23 @@ package org.fest.swing.driver;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
+import java.awt.Window;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
+import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.test.awt.FluentDimension;
 import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.core.BasicRobot.robotWithNewAwtHierarchy;
+import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.query.ComponentLocationOnScreenQuery.locationOnScreen;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
@@ -88,6 +92,23 @@ public class WindowDriverTest {
     assertThat(locationOnScreen(window)).isEqualTo(newPosition);
   }
 
+  public void shouldMoveWindowToFront() {
+    TestWindow window2 = TestWindow.createNewWindow(getClass());
+    robot.showWindow(window2, new Dimension(100, 100));
+    assertThat(isActive(window)).isFalse();
+    driver.moveToFront(window);
+    assertThat(isActive(window)).isTrue();
+  }
+  
+  @RunsInEDT
+  private static boolean isActive(final Window w) {
+    return execute(new GuiQuery<Boolean>() {
+      protected Boolean executeInEDT() {
+        return w.isActive();
+      }
+    });
+  }
+  
   public void shouldCloseWindow() {
     driver.close(window);
     robot.waitForIdle();

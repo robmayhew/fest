@@ -23,6 +23,7 @@ import java.awt.Point;
  * <code>{@link java.awt.Window}</code>) and verification of the state of such window-like container.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
 public interface WindowLikeContainerFixture {
 
@@ -66,4 +67,11 @@ public interface WindowLikeContainerFixture {
    * @return this fixture.
    */
   WindowLikeContainerFixture moveTo(Point p);
+
+
+  /**
+   * Brings this fixture's window-like component to the front.
+   * @return this fixture.
+   */
+  WindowLikeContainerFixture moveToFront();
 }

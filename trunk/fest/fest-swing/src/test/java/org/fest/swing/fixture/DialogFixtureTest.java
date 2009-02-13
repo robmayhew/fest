@@ -98,6 +98,19 @@ public class DialogFixtureTest extends CommonComponentFixtureTestCase<Dialog> {
     }
   }
 
+  public void shouldMoveToFront() {
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.moveToFront(target);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.moveToFront());
+      }
+    }.run();
+  }
+
   public void shouldRequireModal() {
     new EasyMockTemplate(driver) {
       protected void expectations() {

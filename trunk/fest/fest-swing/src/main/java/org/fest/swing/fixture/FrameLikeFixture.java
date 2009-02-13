@@ -15,6 +15,7 @@
  */
 package org.fest.swing.fixture;
 
+
 /**
  * Understands simulation of user events on a frame-like component (not necessarily a subclass of 
  * <code>{@link java.awt.Frame}</code>) and verification of the state of such frame-like component.

@@ -154,6 +154,15 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
+   * If fixture's <code>{@link Dialog}</code> is visible, brings it to the front and may make it the focused one.
+   * @return this fixture.
+   */
+  public DialogFixture moveToFront() {
+    driver.moveToFront(target);
+    return this;
+  }
+
+  /**
    * Simulates a user pressing given key with the given modifiers on this fixture's <code>{@link Dialog}</code>.
    * Modifiers is a mask from the available <code>{@link java.awt.event.InputEvent}</code> masks.
    * @param keyPressInfo specifies the key and modifiers to press.
