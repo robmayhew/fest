@@ -6,6 +6,9 @@
   </properties>
   <body>
     <release version="1.1" date="TBD" description="Subsequent release">
+      <action dev="alruiz" type="add" issue="FEST-8" due-to="Michael Schnell">
+        Added method "requireFocused" to all component fixtures in package org.fest.swing.fixture.
+      </action>
       <action dev="alruiz" type="add" issue="91" due-to="Andres Almiray">
         Added class org.fest.swing.testing.FestSwingTestCase.
       </action>
