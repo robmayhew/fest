@@ -29,4 +29,11 @@ public interface FocusableComponentFixture {
    * @throws IllegalStateException if the component is not showing on the screen.
    */
   FocusableComponentFixture focus();
+  
+  /**
+   * Asserts that this fixture's GUI component has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this component does not have input focus.
+   */
+  //FocusableComponentFixture requireFocused();
 }

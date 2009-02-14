@@ -20,7 +20,7 @@ import java.awt.Component;
 import org.fest.swing.timing.Condition;
 
 import static org.fest.swing.format.Formatting.format;
-import static org.fest.swing.test.query.ComponentHasFocusQuery.hasFocus;
+import static org.fest.swing.query.ComponentHasFocusQuery.hasFocus;
 import static org.fest.util.Strings.concat;
 
 /**

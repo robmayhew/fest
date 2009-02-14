@@ -30,8 +30,8 @@ import org.fest.swing.test.swing.TestWindow;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.query.ComponentHasFocusQuery.hasFocus;
 import static org.fest.swing.test.core.TestGroups.*;
-import static org.fest.swing.test.query.ComponentHasFocusQuery.hasFocus;
 import static org.fest.swing.test.task.ComponentHasFocusCondition.untilFocused;
 import static org.fest.swing.timing.Pause.pause;
 

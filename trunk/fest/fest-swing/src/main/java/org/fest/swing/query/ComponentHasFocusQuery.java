@@ -13,7 +13,7 @@
  *
  * Copyright @2008-2009 the original author or authors.
  */
-package org.fest.swing.test.query;
+package org.fest.swing.query;
 
 import java.awt.Component;
 
@@ -31,6 +31,13 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
  */
 public final class ComponentHasFocusQuery {
 
+  /**
+   * Indicates whether the given <code>{@link Component}</code> has input focus or not. This action is executed in the 
+   * event dispatch thread.
+   * @param component the given <code>Component</code>.
+   * @return <code>true</code> if the given <code>Component</code> has input focus, <code>false</code> otherwise.
+   * @see Component#hasFocus()
+   */
   @RunsInEDT
   public static boolean hasFocus(final Component component) {
     return execute(new GuiQuery<Boolean>() {

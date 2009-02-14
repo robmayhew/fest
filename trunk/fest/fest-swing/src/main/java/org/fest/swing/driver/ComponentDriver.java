@@ -44,6 +44,7 @@ import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAnd
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.format.Formatting.format;
 import static org.fest.swing.query.ComponentEnabledQuery.isEnabled;
+import static org.fest.swing.query.ComponentHasFocusQuery.hasFocus;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.query.ComponentVisibleQuery.isVisible;
 import static org.fest.swing.timing.Pause.pause;
@@ -205,6 +206,21 @@ public class ComponentDriver {
     return propertyName(c, VISIBLE_PROPERTY);
   }
 
+  /**
+   * Asserts that the <code>{@link Component}</code> has input focus. 
+   * @param c the target component.
+   * @throws AssertionError if the <code>Component</code> does not have input focus.
+   */
+  @RunsInEDT
+  public void requireFocused(final Component c) {
+    Description msg = new GuiLazyLoadingDescription() {
+      protected String loadDescription() {
+        return concat("Expected component ", format(c), " to have input focus");
+      }
+    };
+    assertThat(hasFocus(c)).as(msg).isTrue();
+  }
+  
   /**
    * Asserts that the <code>{@link Component}</code> is enabled.
    * @param c the target component.

@@ -47,10 +47,10 @@ import static org.fest.swing.core.MouseButton.*;
 import static org.fest.swing.core.MouseClickInfo.*;
 import static org.fest.swing.driver.JTextComponentTextQuery.textOf;
 import static org.fest.swing.edt.GuiActionRunner.execute;
+import static org.fest.swing.query.ComponentHasFocusQuery.hasFocus;
 import static org.fest.swing.query.ComponentSizeQuery.sizeOf;
 import static org.fest.swing.test.core.CommonAssertions.*;
 import static org.fest.swing.test.core.TestGroups.GUI;
-import static org.fest.swing.test.query.ComponentHasFocusQuery.hasFocus;
 import static org.fest.swing.test.task.ComponentSetEnabledTask.disable;
 import static org.fest.swing.test.task.ComponentSetVisibleTask.setVisible;
 import static org.fest.swing.test.util.StopWatch.startNewStopWatch;
@@ -587,6 +587,20 @@ public class ComponentDriverTest {
         return hasFocus(button);
       }
     });
+  }
+  
+  public void shouldFailIfComponentDoesNotHaveFocus() {
+    try {
+      driver.requireFocused(button);
+      failWhenExpectingException();
+    } catch (AssertionError e) {
+      assertThat(e.getMessage()).contains("Expected component")
+                                .contains("to have input focus");
+    }
+  }
+  
+  public void shouldPassIfComponentHasFocus() {
+    driver.requireFocused(textField);
   }
 
   public void shouldThrowErrorWhenGivingFocusToDisabledComponent() {
