@@ -228,6 +228,16 @@ public class JCheckBoxFixture extends TwoStateButtonFixture<JCheckBox> {
   }
   
   /**
+   * Asserts that this fixture's <code>{@link JCheckBox}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JCheckBox</code> does not have input focus.
+   */
+  public JCheckBoxFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+
+  /**
    * Asserts that this fixture's <code>{@link JCheckBox}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JCheckBox</code> is disabled.

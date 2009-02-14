@@ -312,6 +312,16 @@ public class JTextComponentFixture extends JPopupMenuInvokerFixture<JTextCompone
   }
 
   /**
+   * Asserts that this fixture's <code>{@link JTextComponent}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTextComponent</code> does not have input focus.
+   */
+  public JTextComponentFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+  
+  /**
    * Asserts that this fixture's <code>{@link JTextComponent}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JTextComponent</code> is disabled.

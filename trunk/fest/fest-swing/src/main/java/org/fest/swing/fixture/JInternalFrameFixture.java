@@ -20,7 +20,10 @@ import java.awt.Point;
 
 import javax.swing.JInternalFrame;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JInternalFrameDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -300,22 +303,12 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JInternalFrame}</code> is visible.
+   * Asserts that this fixture's <code>{@link JInternalFrame}</code> has input focus.
    * @return this fixture.
-   * @throws AssertionError if the managed <code>JInternalFrame</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JInternalFrame</code> does not have input focus.
    */
-  public JInternalFrameFixture requireVisible() {
-    driver.requireVisible(target);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JInternalFrame}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if the managed <code>JInternalFrame</code> is visible.
-   */
-  public JInternalFrameFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JInternalFrameFixture requireFocused() {
+    driver.requireFocused(target);
     return this;
   }
 
@@ -347,6 +340,26 @@ public class JInternalFrameFixture extends ContainerFixture<JInternalFrame> impl
    */
   public JInternalFrameFixture requireDisabled() {
     driver.requireDisabled(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JInternalFrame}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JInternalFrame</code> is not visible.
+   */
+  public JInternalFrameFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JInternalFrame}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if the managed <code>JInternalFrame</code> is visible.
+   */
+  public JInternalFrameFixture requireNotVisible() {
+    driver.requireNotVisible(target);
     return this;
   }
 }

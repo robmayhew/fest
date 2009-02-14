@@ -341,6 +341,16 @@ public class JOptionPaneFixture extends ComponentFixture<JOptionPane> implements
   }
 
   /**
+   * Asserts that this fixture's <code>{@link JOptionPane}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JOptionPane</code> does not have input focus.
+   */
+  public JOptionPaneFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+
+  /**
    * Asserts that this fixture's <code>{@link JOptionPane}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JOptionPane</code> is disabled.

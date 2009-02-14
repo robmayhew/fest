@@ -16,7 +16,10 @@ package org.fest.swing.fixture;
 
 import javax.swing.JPanel;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JComponentDriver;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
@@ -176,22 +179,12 @@ public class JPanelFixture extends ContainerFixture<JPanel> implements CommonCom
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JPanel}</code> is visible.
+   * Asserts that this fixture's <code>{@link JPanel}</code> has input focus.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JPanel</code> is not visible.
+   * @throws AssertionError if this fixture's <code>JPanel</code> does not have input focus.
    */
-  public JPanelFixture requireVisible() {
-    driver.requireVisible(target);
-    return this;
-  }
-
-  /**
-   * Asserts that this fixture's <code>{@link JPanel}</code> is not visible.
-   * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JPanel</code> is visible.
-   */
-  public JPanelFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JPanelFixture requireFocused() {
+    driver.requireFocused(target);
     return this;
   }
 
@@ -223,6 +216,26 @@ public class JPanelFixture extends ContainerFixture<JPanel> implements CommonCom
    */
   public JPanelFixture requireDisabled() {
     driver.requireDisabled(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JPanel}</code> is visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JPanel</code> is not visible.
+   */
+  public JPanelFixture requireVisible() {
+    driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JPanel}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JPanel</code> is visible.
+   */
+  public JPanelFixture requireNotVisible() {
+    driver.requireNotVisible(target);
     return this;
   }
 }

@@ -296,6 +296,16 @@ public class JSpinnerFixture extends JPopupMenuInvokerFixture<JSpinner> implemen
   }
 
   /**
+   * Asserts that this fixture's <code>{@link JSpinner}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JSpinner</code> does not have input focus.
+   */
+  public JSpinnerFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+  
+  /**
    * Asserts that this fixture's <code>{@link JSpinner}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JSpinner</code> is disabled.

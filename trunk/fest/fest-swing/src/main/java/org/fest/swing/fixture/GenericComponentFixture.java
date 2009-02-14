@@ -16,7 +16,10 @@ package org.fest.swing.fixture;
 
 import java.awt.Component;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.ComponentDriver;
 import org.fest.swing.timing.Timeout;
 
@@ -186,6 +189,12 @@ public abstract class GenericComponentFixture<T extends Component> extends Compo
   /** {@inheritDoc} */
   public GenericComponentFixture<T> requireNotVisible() {
     driver.requireNotVisible(target);
+    return this;
+  }
+
+  /** {@inheritDoc} */
+  public GenericComponentFixture<T> requireFocused() {
+    driver.requireFocused(target);
     return this;
   }
 }

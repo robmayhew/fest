@@ -229,6 +229,16 @@ public class JRadioButtonFixture extends TwoStateButtonFixture<JRadioButton> {
   }
   
   /**
+   * Asserts that this fixture's <code>{@link JRadioButton}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JRadioButton</code> does not have input focus.
+   */
+  public JRadioButtonFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+
+  /**
    * Asserts that this fixture's <code>{@link JRadioButton}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError is this fixture's <code>JRadioButton</code> is disabled.

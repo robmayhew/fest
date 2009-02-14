@@ -225,6 +225,16 @@ public class DialogFixture extends WindowFixture<Dialog> {
   }
 
   /**
+   * Asserts that this fixture's <code>{@link Dialog}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>Dialog</code> does not have input focus.
+   */
+  public DialogFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+
+  /**
    * Asserts that this fixture's <code>{@link Dialog}</code> is disabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>Dialog</code> is enabled.

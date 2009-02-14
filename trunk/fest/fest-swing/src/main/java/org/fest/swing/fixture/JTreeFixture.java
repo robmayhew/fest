@@ -399,6 +399,16 @@ public class JTreeFixture extends JPopupMenuInvokerFixture<JTree> implements Com
   }
 
   /**
+   * Asserts that this fixture's <code>{@link JTree}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTree</code> does not have input focus.
+   */
+  public JTreeFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+  
+  /**
    * Asserts that this fixture's <code>{@link JTree}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JTree</code> is disabled.

@@ -211,6 +211,16 @@ public class JSplitPaneFixture extends JPopupMenuInvokerFixture<JSplitPane> impl
   }
   
   /**
+   * Asserts that this fixture's <code>{@link JSplitPane}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JSplitPane</code> does not have input focus.
+   */
+  public JSplitPaneFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+  
+  /**
    * Asserts that this fixture's <code>{@link JSplitPane}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JSplitPane</code> is disabled.

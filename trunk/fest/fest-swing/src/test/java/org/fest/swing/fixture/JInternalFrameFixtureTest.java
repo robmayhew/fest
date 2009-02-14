@@ -37,7 +37,7 @@ import static org.fest.swing.test.builder.JInternalFrames.internalFrame;
  *
  * @author Alex Ruiz
  */
-public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JInternalFrame> {
+@Test public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JInternalFrame> {
 
   private JInternalFrameDriver driver;
   private JInternalFrame target;
@@ -50,13 +50,13 @@ public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JI
     fixture.updateDriver(driver);
   }
 
-  @Test public void shouldCreateFixtureWithGivenComponentName() {
+  public void shouldCreateFixtureWithGivenComponentName() {
     String name = "internalFrame";
     expectLookupByName(name, JInternalFrame.class);
     verifyLookup(new JInternalFrameFixture(robot(), name));
   }
 
-  @Test public void shouldMoveToFront() {
+  public void shouldMoveToFront() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.moveToFront(target);
@@ -69,7 +69,7 @@ public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JI
     }.run();
   }
   
-  @Test public void shouldMoveToBack() {
+  public void shouldMoveToBack() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.moveToBack(target);
@@ -82,7 +82,7 @@ public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JI
     }.run();
   }
 
-  @Test public void shouldDeiconify() {
+  public void shouldDeiconify() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.deiconify(target);
@@ -95,7 +95,7 @@ public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JI
     }.run();
   }
 
-  @Test public void shouldIconify() {
+  public void shouldIconify() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.iconify(target);
@@ -108,7 +108,7 @@ public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JI
     }.run();
   }
 
-  @Test public void shouldMaximize() {
+  public void shouldMaximize() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.maximize(target);
@@ -121,7 +121,7 @@ public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JI
     }.run();
   }
 
-  @Test public void shouldNormalize() {
+  public void shouldNormalize() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.normalize(target);
@@ -134,7 +134,7 @@ public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JI
     }.run();
   }
 
-  @Test public void shouldClose() {
+  public void shouldClose() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.close(target);
@@ -147,7 +147,7 @@ public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JI
     }.run();
   }
 
-  @Test public void shouldRequireSize() {
+  public void shouldRequireSize() {
     final Dimension size = new Dimension(800, 600);
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -161,7 +161,7 @@ public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JI
     }.run();
   }
 
-  @Test public void shouldMoveToPoint() {
+  public void shouldMoveToPoint() {
     final Point p = new Point(6, 8);
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -175,7 +175,7 @@ public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JI
     }.run();
   }
   
-  @Test public void shouldResizeHeight() {
+  public void shouldResizeHeight() {
     final int height = 68;
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -189,7 +189,7 @@ public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JI
     }.run();
   }
   
-  @Test public void shouldResizeWidth() {
+  public void shouldResizeWidth() {
     final int width = 68;
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -203,7 +203,7 @@ public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JI
     }.run();
   }
 
-  @Test public void shouldResizeWidthAndHeight() {
+  public void shouldResizeWidthAndHeight() {
     final Dimension size = new Dimension(800, 600);
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -217,7 +217,7 @@ public class JInternalFrameFixtureTest extends CommonComponentFixtureTestCase<JI
     }.run();
   }
   
-  @Test public void shouldBeContainerFixture() {
+  public void shouldBeContainerFixture() {
     assertThat(fixture).isInstanceOf(ContainerFixture.class);
   }
   

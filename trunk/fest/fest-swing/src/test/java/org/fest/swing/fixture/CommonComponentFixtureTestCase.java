@@ -245,6 +245,19 @@ public abstract class CommonComponentFixtureTestCase<T extends Component> extend
     }.run();
   }
   
+  public void shouldRequireFocused() {
+    new EasyMockTemplate(driver()) {
+      protected void expectations() {
+        driver().requireFocused(target());
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture().requireFocused());
+      }
+    }.run();
+  }
+
   final void assertThatReturnsThis(Object result) {
     assertThat(result).isSameAs(fixture());
   }

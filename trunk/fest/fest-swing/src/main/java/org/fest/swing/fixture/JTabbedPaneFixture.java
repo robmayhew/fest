@@ -246,6 +246,16 @@ public class JTabbedPaneFixture extends JPopupMenuInvokerFixture<JTabbedPane> im
   }
 
   /**
+   * Asserts that this fixture's <code>{@link JTabbedPane}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTabbedPane</code> does not have input focus.
+   */
+  public JTabbedPaneFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+  
+  /**
    * Asserts that this fixture's <code>{@link JTabbedPane}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JTabbedPane</code> is disabled.

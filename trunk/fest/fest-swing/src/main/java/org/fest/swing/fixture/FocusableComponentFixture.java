@@ -35,5 +35,5 @@ public interface FocusableComponentFixture {
    * @return this fixture.
    * @throws AssertionError if this component does not have input focus.
    */
-  //FocusableComponentFixture requireFocused();
+  FocusableComponentFixture requireFocused();
 }

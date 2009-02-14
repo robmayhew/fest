@@ -519,6 +519,16 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
     driver.cellReader(cellReader);
     return this;
   }
+  
+  /**
+   * Asserts that this fixture's <code>{@link JTable}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTable</code> does not have input focus.
+   */
+  public JTableFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
 
   /**
    * Asserts that this fixture's <code>{@link JTable}</code> is enabled.

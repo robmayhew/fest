@@ -33,8 +33,9 @@ import static org.fest.swing.test.builder.JLabels.label;
  * Tests for <code>{@link JLabelFixture}</code>.
  *
  * @author Yvonne Wang
+ * @author Alex Ruiz
  */
-public class JLabelFixtureTest extends CommonComponentFixtureTestCase<JLabel> {
+@Test public class JLabelFixtureTest extends CommonComponentFixtureTestCase<JLabel> {
 
   private JLabelDriver driver;
   private JLabel target;
@@ -47,13 +48,13 @@ public class JLabelFixtureTest extends CommonComponentFixtureTestCase<JLabel> {
     fixture.updateDriver(driver);
   }
 
-  @Test public void shouldCreateFixtureWithGivenComponentName() {
+  public void shouldCreateFixtureWithGivenComponentName() {
     String name = "label";
     expectLookupByName(name, JLabel.class);
     verifyLookup(new JLabelFixture(robot(), name));
   }
 
-  @Test public void shouldReturnText() {
+  public void shouldReturnText() {
     final String text = "A Label";
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -66,7 +67,7 @@ public class JLabelFixtureTest extends CommonComponentFixtureTestCase<JLabel> {
     }.run();
   }
   
-  @Test public void shouldRequireText() {
+  public void shouldRequireText() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireText(target, "A Label");

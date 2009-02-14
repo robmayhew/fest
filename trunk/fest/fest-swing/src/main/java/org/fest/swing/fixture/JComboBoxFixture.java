@@ -319,6 +319,16 @@ public class JComboBoxFixture extends JPopupMenuInvokerFixture<JComboBox> implem
     driver.requireEnabled(target);
     return this;
   }
+  /**
+   * Asserts that this fixture's <code>{@link JComboBox}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JComboBox</code> does not have input focus.
+   */
+  public JComboBoxFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+
 
   /**
    * Asserts that this fixture's <code>{@link JComboBox}</code> is enabled.

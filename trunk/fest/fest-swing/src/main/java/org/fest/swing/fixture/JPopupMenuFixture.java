@@ -236,6 +236,16 @@ public class JPopupMenuFixture extends ComponentFixture<JPopupMenu> implements C
     driver.releaseKey(target, keyCode);
     return this;
   }
+  
+  /**
+   * Asserts that this fixture's <code>{@link JPopupMenu}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JPopupMenu</code> does not have input focus.
+   */
+  public JPopupMenuFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
 
   /**
    * Asserts that this fixture's <code>{@link JPopupMenu}</code> is enabled.

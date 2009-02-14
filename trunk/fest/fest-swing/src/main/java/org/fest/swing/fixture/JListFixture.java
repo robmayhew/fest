@@ -465,6 +465,16 @@ public class JListFixture extends JPopupMenuInvokerFixture<JList> implements Com
   }
 
   /**
+   * Asserts that this fixture's <code>{@link JList}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JList</code> does not have input focus.
+   */
+  public JListFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+
+  /**
    * Asserts that this fixture's <code>{@link JList}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JList</code> is disabled.

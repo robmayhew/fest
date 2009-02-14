@@ -222,6 +222,16 @@ public class JScrollPaneFixture extends JPopupMenuInvokerFixture<JScrollPane> im
   }
 
   /**
+   * Asserts that this fixture's <code>{@link JScrollPane}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JScrollPane</code> does not have input focus.
+   */
+  public JScrollPaneFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+  
+  /**
    * Asserts that this fixture's <code>{@link JScrollPane}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JScrollPane</code> is disabled.

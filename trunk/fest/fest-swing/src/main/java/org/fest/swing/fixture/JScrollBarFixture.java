@@ -340,6 +340,16 @@ public class JScrollBarFixture extends JPopupMenuInvokerFixture<JScrollBar> impl
     driver.requireValue(target, value);
     return this;
   }
+  
+  /**
+   * Asserts that this fixture's <code>{@link JScrollBar}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JScrollBar</code> does not have input focus.
+   */
+  public JScrollBarFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
 
   /**
    * Asserts that this fixture's <code>{@link JScrollBar}</code> is enabled.

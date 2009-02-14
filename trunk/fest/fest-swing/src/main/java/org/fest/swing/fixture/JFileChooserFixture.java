@@ -313,6 +313,16 @@ public class JFileChooserFixture extends ComponentFixture<JFileChooser> implemen
   }
 
   /**
+   * Asserts that this fixture's <code>{@link JFileChooser}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JFileChooser</code> does not have input focus.
+   */
+  public JFileChooserFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+
+  /**
    * Asserts that this fixture's <code>{@link JFileChooser}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JFileChooser</code> is disabled.

@@ -20,7 +20,10 @@ import java.awt.Point;
 
 import javax.swing.JToolBar;
 
-import org.fest.swing.core.*;
+import org.fest.swing.core.KeyPressInfo;
+import org.fest.swing.core.MouseButton;
+import org.fest.swing.core.MouseClickInfo;
+import org.fest.swing.core.Robot;
 import org.fest.swing.driver.JToolBarDriver;
 import org.fest.swing.exception.ActionFailedException;
 import org.fest.swing.exception.ComponentLookupException;
@@ -228,15 +231,15 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> implements Commo
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JToolBar}</code> is disabled.
+   * Asserts that this fixture's <code>{@link JToolBar}</code> has input focus.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JToolBar</code> is enabled.
+   * @throws AssertionError if this fixture's <code>JToolBar</code> does not have input focus.
    */
-  public JToolBarFixture requireDisabled() {
-    driver.requireDisabled(target);
+  public JToolBarFixture requireFocused() {
+    driver.requireFocused(target);
     return this;
   }
-
+  
   /**
    * Asserts that this fixture's <code>{@link JToolBar}</code> is enabled.
    * @return this fixture.
@@ -259,12 +262,12 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> implements Commo
   }
 
   /**
-   * Asserts that this fixture's <code>{@link JToolBar}</code> is not visible.
+   * Asserts that this fixture's <code>{@link JToolBar}</code> is disabled.
    * @return this fixture.
-   * @throws AssertionError if this fixture's <code>JToolBar</code> is visible.
+   * @throws AssertionError if this fixture's <code>JToolBar</code> is enabled.
    */
-  public JToolBarFixture requireNotVisible() {
-    driver.requireNotVisible(target);
+  public JToolBarFixture requireDisabled() {
+    driver.requireDisabled(target);
     return this;
   }
 
@@ -275,6 +278,16 @@ public class JToolBarFixture extends ContainerFixture<JToolBar> implements Commo
    */
   public JToolBarFixture requireVisible() {
     driver.requireVisible(target);
+    return this;
+  }
+
+  /**
+   * Asserts that this fixture's <code>{@link JToolBar}</code> is not visible.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JToolBar</code> is visible.
+   */
+  public JToolBarFixture requireNotVisible() {
+    driver.requireNotVisible(target);
     return this;
   }
 }

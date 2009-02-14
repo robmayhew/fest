@@ -218,6 +218,16 @@ public class JLabelFixture extends JPopupMenuInvokerFixture<JLabel> implements C
   }
 
   /**
+   * Asserts that this fixture's <code>{@link JLabel}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JLabel</code> does not have input focus.
+   */
+  public JLabelFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+
+  /**
    * Asserts that this fixture's <code>{@link JLabel}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError if this fixture's <code>JLabel</code> is disabled.

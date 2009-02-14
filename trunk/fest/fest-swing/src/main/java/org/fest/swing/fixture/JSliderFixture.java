@@ -235,6 +235,16 @@ public class JSliderFixture extends JPopupMenuInvokerFixture<JSlider> implements
   }
 
   /**
+   * Asserts that this fixture's <code>{@link JSlider}</code> has input focus.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JSlider</code> does not have input focus.
+   */
+  public JSliderFixture requireFocused() {
+    driver.requireFocused(target);
+    return this;
+  }
+  
+  /**
    * Asserts that this fixture's <code>{@link JSlider}</code> is enabled.
    * @return this fixture.
    * @throws AssertionError is this fixture's <code>JSlider</code> is disabled.

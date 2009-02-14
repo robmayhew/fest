@@ -246,7 +246,7 @@ public class DialogFixtureTest extends CommonComponentFixtureTestCase<Dialog> {
       }
     }.run();
   }
-
+  
   ComponentDriver driver() { return driver; }
   Dialog target() { return target; }
   DialogFixture fixture() { return fixture; }

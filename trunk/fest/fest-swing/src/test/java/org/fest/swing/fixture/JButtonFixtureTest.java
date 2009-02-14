@@ -35,7 +35,7 @@ import static org.fest.swing.test.builder.JButtons.button;
  * @author Yvonne Wang
  * @author Alex Ruiz
  */
-public class JButtonFixtureTest extends CommonComponentFixtureTestCase<JButton> {
+@Test public class JButtonFixtureTest extends CommonComponentFixtureTestCase<JButton> {
 
   private AbstractButtonDriver driver;
   private JButton target;
@@ -48,13 +48,13 @@ public class JButtonFixtureTest extends CommonComponentFixtureTestCase<JButton> 
     fixture.updateDriver(driver);
   }
   
-  @Test public void shouldCreateFixtureWithGivenComponentName() {
+  public void shouldCreateFixtureWithGivenComponentName() {
     String name = "button";
     expectLookupByName(name, JButton.class);
     verifyLookup(new JButtonFixture(robot(), name));
   }
 
-  @Test public void shouldReturnText() {
+  public void shouldReturnText() {
     final String text = "A Button";
     new EasyMockTemplate(driver) {
       protected void expectations() {
@@ -67,7 +67,7 @@ public class JButtonFixtureTest extends CommonComponentFixtureTestCase<JButton> 
     }.run();
   }
   
-  @Test public void shouldRequireText() {
+  public void shouldRequireText() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
         driver.requireText(target, "A Button");
