@@ -88,7 +88,7 @@ import static org.fest.util.Arrays.array;
   public void shouldRequireTitleAtTabIndex() {
     new EasyMockTemplate(driver) {
       protected void expectations() {
-        driver.requireTitle(target, "Hello", atIndex(1));
+        driver.requireTabTitle(target, "Hello", atIndex(1));
         expectLastCall().once();
       }
       
@@ -96,6 +96,21 @@ import static org.fest.util.Arrays.array;
         assertThatReturnsThis(fixture.requireTitle("Hello", atIndex(1)));
       }
     }.run();
+  }
+  
+  public void shouldRequireTabTitles() {
+    final String[] titles = array("One", "Two");
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireTabTitles(target, titles);
+        expectLastCall().once();
+      }
+      
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireTabTitles(titles));
+      }
+    }.run();
+    
   }
   
   public void shouldSelectTabWithText() {

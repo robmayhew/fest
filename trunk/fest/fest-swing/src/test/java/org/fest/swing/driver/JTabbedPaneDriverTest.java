@@ -221,7 +221,7 @@ public class JTabbedPaneDriverTest {
 
   public void shouldFailIfActualTabTitleIsNotEqualToExpected() {
     try {
-      driver.requireTitle(tabbedPane, "Hello", atIndex(0));
+      driver.requireTabTitle(tabbedPane, "Hello", atIndex(0));
       failWhenExpectingException();
     } catch (AssertionError e) {
       assertThat(e.getMessage()).contains("property:'titleAt'")
@@ -231,7 +231,7 @@ public class JTabbedPaneDriverTest {
   
   @Test(groups = GUI, dataProvider = "indicesAndTitles")
   public void shouldPassIfActualTabTitleIsEqualToExpected(int index, String title) {
-    driver.requireTitle(tabbedPane, title, atIndex(index));
+    driver.requireTabTitle(tabbedPane, title, atIndex(index));
   }
 
   @DataProvider(name = "indicesAndTitles")
@@ -240,6 +240,16 @@ public class JTabbedPaneDriverTest {
         { 0, "One" }, 
         { 1, "Two" }
     };
+  }
+  
+  public void shouldFailIfTabTitlesAreNotEqualToExpectedOnes() {
+    try {
+      driver.requireTabTitles(tabbedPane, array("Three", "Four"));
+      failWhenExpectingException();
+    } catch (AssertionError e) {
+      assertThat(e.getMessage()).contains("property:'tabTitles'")
+                                .contains("expected:<['Three', 'Four']> but was:<['One', 'Two']>"); 
+    }
   }
   
   private static class MyWindow extends TestWindow {

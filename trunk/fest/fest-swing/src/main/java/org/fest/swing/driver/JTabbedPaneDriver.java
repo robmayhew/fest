@@ -17,6 +17,8 @@ package org.fest.swing.driver;
 
 import java.awt.Component;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JTabbedPane;
 
@@ -162,12 +164,34 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * @throws AssertionError if the title of the tab at the given index is not equal to the given one.
    */
   @RunsInEDT
-  public void requireTitle(final JTabbedPane tabbedPane, String title, final Index index) {
+  public void requireTabTitle(final JTabbedPane tabbedPane, String title, final Index index) {
     String actualTitle = execute(new GuiQuery<String>() {
       protected String executeInEDT() {
         return tabbedPane.getTitleAt(index.value);
       }
     });
     assertThat(actualTitle).as(propertyName(tabbedPane, "titleAt")).isEqualTo(title);
+  }
+
+  /**
+   * Asserts that the tabs of the given <code>{@link JTabbedPane}</code> have the given titles. The tab titles are
+   * evaluated by index order, for example, the first tab is expected to have the first title in the given array, and so 
+   * on.
+   * @param tabbedPane the target <code>JTabbedPane</code>.
+   * @param titles the expected titles.
+   * @throws AssertionError if the title of any of the tabs is not equal to the expected titles.
+   */
+  @RunsInEDT
+  public void requireTabTitles(final JTabbedPane tabbedPane, String[] titles) {
+    String[] actualTitles = execute(new GuiQuery<String[]>() {
+      protected String[] executeInEDT() {
+        List<String> allTitles = new ArrayList<String>();
+        int tabCount = tabbedPane.getTabCount();
+        for (int i = 0; i < tabCount; i++)
+          allTitles.add(tabbedPane.getTitleAt(i));
+        return allTitles.toArray(new String[allTitles.size()]);
+      }
+    });
+    assertThat(actualTitles).as(propertyName(tabbedPane, "tabTitles")).isEqualTo(titles);
   }
 }

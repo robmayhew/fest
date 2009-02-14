@@ -304,7 +304,20 @@ public class JTabbedPaneFixture extends JPopupMenuInvokerFixture<JTabbedPane> im
    * @throws AssertionError if the title of the tab at the given index is not equal to the given one.
    */
   public JTabbedPaneFixture requireTitle(String title, Index index) {
-    driver.requireTitle(target, title, index);
+    driver.requireTabTitle(target, title, index);
+    return this;
+  }
+
+  /**
+   * Asserts that the tabs of this fixture's <code>{@link JTabbedPane}</code> have the given titles. The tab titles are
+   * evaluated by index order, for example, the first tab is expected to have the first title in the given array, and so 
+   * on.
+   * @param titles the expected titles.
+   * @return this fixture.
+   * @throws AssertionError if the title of any of the tabs is not equal to the expected titles.
+   */
+  public JTabbedPaneFixture requireTabTitles(String... titles) {
+    driver.requireTabTitles(target, titles);
     return this;
   }
 }

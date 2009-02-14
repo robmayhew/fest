@@ -18,6 +18,12 @@
       <action dev="alruiz" type="add" issue="230" due-to="Ken Geis">
         Added method 'selectedComponent' to org.fest.swing.fixture.JTabbedPaneFixture.
       </action>
+      <action dev="alruiz" type="add" issue="253" due-to="Michael Schnell">
+        Added method 'requireTabTitle(String, Index)' to org.fest.swing.fixture.JTabbedPaneFixture.
+      </action>
+      <action dev="alruiz" type="add" issue="253" due-to="Michael Schnell">
+        Added method 'requireTabTitles(String...)' to org.fest.swing.fixture.JTabbedPaneFixture.
+      </action>
       <action dev="alruiz" type="add" issue="282">
         Added methods moveMouse(Point), moveMouse(int, int) and pressMouse(Point, MouseButton) to 
         org.fest.swing.core.Robot.  
