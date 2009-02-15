@@ -1,1 +1,0 @@
-JIRA is the new issue tracker for FEST. You can find it at [http://kenai.com/jira/browse/FEST Project Kenai].
