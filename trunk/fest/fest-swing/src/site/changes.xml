@@ -13,10 +13,10 @@
         Added class org.fest.swing.testing.FestSwingTestCase.
       </action>
       <action dev="alruiz" type="add" issue="FEST-9" due-to="Andres Almiray">
-        Added class org.fest.swing.junit.testing.FestSwingJUnitTestCase.
+        Added class org.fest.swing.junit.testcase.FestSwingJUnitTestCase.
       </action>
       <action dev="alruiz" type="add" issue="FEST-9" due-to="Andres Almiray">
-        Added class org.fest.swing.testng.testing.FestSwingTestngTestCase.
+        Added class org.fest.swing.testng.testcase.FestSwingTestngTestCase.
       </action>
       <action dev="alruiz" type="add" issue="FEST-10" due-to="Ken Geis">
         Added method 'selectedComponent' to org.fest.swing.fixture.JTabbedPaneFixture.
@@ -60,6 +60,13 @@
       <action dev="alruiz" type="fix" issue="FEST-20" due-to="Ken Geis">
         org.fest.swing.driver.JTableTextComponentEditorCellWriter now correctly catches ActionFailedException when
         the cell editor cannot be activated by pressing the key 'F2'.
+      </action>
+      <action dev="alruiz" type="fix" issue="FEST-48" due-to="vnguyen.sqa">
+        Parameters values in TestNG test methods are now used to generate name of image file containing desktop 
+        screenshot.
+      </action>
+      <action dev="alruiz" type="fix" issue="FEST-61">
+        Moved classes in package org.fest.swing.testng to the package org.fest.swing.testng.listener.
       </action>
     </release>
     <release version="1.0" date="2009-01-15" description="Subsequent release">

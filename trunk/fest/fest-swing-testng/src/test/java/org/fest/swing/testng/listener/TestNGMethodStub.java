@@ -13,7 +13,7 @@
  * 
  * Copyright @2007-2009  the original author or authors.
  */
-package org.fest.swing.testng;
+package org.fest.swing.testng.listener;
 
 import java.lang.reflect.Method;
 

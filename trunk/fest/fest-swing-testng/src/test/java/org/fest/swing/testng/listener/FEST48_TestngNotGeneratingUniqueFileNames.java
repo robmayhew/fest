@@ -13,13 +13,13 @@
  * 
  * Copyright @2009 the original author or authors.
  */
-package org.fest.swing.testng;
+package org.fest.swing.testng.listener;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.swing.testng.ScreenshotFileNameGenerator.screenshotFileNameFrom;
+import static org.fest.swing.testng.listener.ScreenshotFileNameGenerator.screenshotFileNameFrom;
 import static org.fest.util.Arrays.array;
 
 /**
