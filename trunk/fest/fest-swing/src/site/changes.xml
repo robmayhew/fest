@@ -68,6 +68,10 @@
       <action dev="alruiz" type="fix" issue="FEST-61">
         Moved classes in package org.fest.swing.testng to the package org.fest.swing.testng.listener.
       </action>
+      <action dev="alruiz" type="fix" issue="FEST-61">
+        Deprecated org.fest.swing.testng.ScreenshotOnFailureListener. Users should use 
+        org.fest.swing.testng.listener.ScreenshotOnFailureListener instead.
+      </action>
     </release>
     <release version="1.0" date="2009-01-15" description="Subsequent release">
       <action dev="alruiz" type="add" issue="238" due-to="Juhos Csaba-Zsolt">
