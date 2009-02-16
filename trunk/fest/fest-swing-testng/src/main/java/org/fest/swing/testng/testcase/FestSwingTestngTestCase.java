@@ -13,31 +13,31 @@
  * 
  * Copyright @2009 the original author or authors.
  */
-package org.fest.swing.junit.testing;
+package org.fest.swing.testng.testcase;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 
 import org.fest.swing.core.Robot;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.testing.FestSwingTestCaseTemplate;
 
 /**
- * Understands a template for test cases that use FEST-Swing and JUnit. This template installs a 
+ * Understands a template for test cases that use FEST-Swing and TestNG. This template installs a 
  * <code>{@link FailOnThreadViolationRepaintManager} to verify violations of Swing thread rules and manages both
  * creation and clean up of a <code>{@link Robot}</code>.
  * @since 1.1
  *
  * @author Alex Ruiz
  */
-public abstract class FestSwingJUnitTestCase extends FestSwingTestCaseTemplate {
+public abstract class FestSwingTestngTestCase extends FestSwingTestCaseTemplate {
 
   @BeforeClass public final void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
   }
   
-  @Before public final void setUp() {
+  @BeforeMethod public final void setUp() {
     setUpRobot();
     onSetUp();
   }
@@ -48,7 +48,7 @@ public abstract class FestSwingJUnitTestCase extends FestSwingTestCaseTemplate {
    */
   protected abstract void onSetUp();
   
-  @After public final void tearDown() {
+  @AfterMethod public final void tearDown() {
     try {
       onTearDown();
     } finally {
