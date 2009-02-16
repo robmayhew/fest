@@ -26,8 +26,10 @@ public class TestResultStub implements ITestResult {
 
   private static final long serialVersionUID = 1L;
   
-  private ClassStub testClass = new ClassStub();
-  private TestNGMethodStub method = new TestNGMethodStub();
+  private final ClassStub testClass = new ClassStub();
+  private final TestNGMethodStub method = new TestNGMethodStub();
+
+  private Object[] parameters;
 
   /** @see org.testng.ITestResult#getEndMillis() */
   public long getEndMillis() {
@@ -51,7 +53,7 @@ public class TestResultStub implements ITestResult {
 
   /** @see org.testng.ITestResult#getParameters() */
   public Object[] getParameters() {
-    return null;
+    return parameters;
   }
 
   /** @see org.testng.ITestResult#getStartMillis() */
@@ -83,7 +85,9 @@ public class TestResultStub implements ITestResult {
   public void setEndMillis(long millis) {}
 
   /** @see org.testng.ITestResult#setParameters(java.lang.Object[]) */
-  public void setParameters(Object[] parameters) {}
+  public void setParameters(Object[] newParameters) {
+    parameters = newParameters;
+  }
 
   /** @see org.testng.ITestResult#setStatus(int) */
   public void setStatus(int status) {}

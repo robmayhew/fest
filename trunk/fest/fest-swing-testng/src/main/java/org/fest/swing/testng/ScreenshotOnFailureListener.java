@@ -14,23 +14,22 @@
  */
 package org.fest.swing.testng;
 
-import static java.io.File.separator;
-import static java.util.logging.Level.SEVERE;
-import static org.fest.swing.image.ScreenshotTaker.PNG_EXTENSION;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.isEmpty;
-import static org.fest.util.Strings.join;
-import static org.fest.util.Strings.quote;
-
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
+
+import org.testng.ITestContext;
+import org.testng.ITestResult;
+import org.testng.Reporter;
 
 import org.fest.swing.annotation.GUITestFinder;
 import org.fest.swing.image.ImageException;
 import org.fest.swing.image.ScreenshotTaker;
-import org.testng.ITestContext;
-import org.testng.ITestResult;
-import org.testng.Reporter;
+
+import static java.io.File.separator;
+import static java.util.logging.Level.SEVERE;
+
+import static org.fest.swing.testng.ScreenshotFileNameGenerator.screenshotFileNameFrom;
+import static org.fest.util.Strings.*;
 
 /**
  * Understands a <a href="http://testng.org" target="_blank">TestNG</a> listener that takes a screenshot when a GUI test 
@@ -108,7 +107,7 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
   }
   
   private String takeScreenshotAndReturnFileName(ITestResult result) {
-    String imageName = join(classNameFrom(result), methodNameFrom(result), PNG_EXTENSION).with(".");
+    String imageName = screenshotFileNameFrom(result);
     String imagePath = concat(output, separator, imageName);
     try {
       screenshotTaker.saveDesktopAsPng(imagePath);
@@ -117,13 +116,5 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
       return null;
     }
     return imageName;
-  }
-
-  private String methodNameFrom(ITestResult result) {
-    return result.getMethod().getMethodName();
-  }
-
-  private String classNameFrom(ITestResult result) {
-    return result.getTestClass().getName();
   }
 }
