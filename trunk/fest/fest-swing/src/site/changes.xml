@@ -9,55 +9,55 @@
       <action dev="alruiz" type="add" issue="FEST-8" due-to="Michael Schnell">
         Added method "requireFocused" to all component fixtures in package org.fest.swing.fixture.
       </action>
-      <action dev="alruiz" type="add" issue="91" due-to="Andres Almiray">
+      <action dev="alruiz" type="add" issue="FEST-9" due-to="Andres Almiray">
         Added class org.fest.swing.testing.FestSwingTestCase.
       </action>
-      <action dev="alruiz" type="add" issue="91" due-to="Andres Almiray">
+      <action dev="alruiz" type="add" issue="FEST-9" due-to="Andres Almiray">
         Added class org.fest.swing.junit.testing.FestSwingJUnitTestCase.
       </action>
-      <action dev="alruiz" type="add" issue="91" due-to="Andres Almiray">
+      <action dev="alruiz" type="add" issue="FEST-9" due-to="Andres Almiray">
         Added class org.fest.swing.testng.testing.FestSwingTestngTestCase.
       </action>
-      <action dev="alruiz" type="add" issue="230" due-to="Ken Geis">
+      <action dev="alruiz" type="add" issue="FEST-10" due-to="Ken Geis">
         Added method 'selectedComponent' to org.fest.swing.fixture.JTabbedPaneFixture.
       </action>
-      <action dev="alruiz" type="add" issue="253" due-to="Michael Schnell">
+      <action dev="alruiz" type="add" issue="FEST-11" due-to="Michael Schnell">
         Added method 'requireTabTitle(String, Index)' to org.fest.swing.fixture.JTabbedPaneFixture.
       </action>
-      <action dev="alruiz" type="add" issue="253" due-to="Michael Schnell">
+      <action dev="alruiz" type="add" issue="FEST-11" due-to="Michael Schnell">
         Added method 'requireTabTitles(String...)' to org.fest.swing.fixture.JTabbedPaneFixture.
       </action>
-      <action dev="alruiz" type="add" issue="282">
+      <action dev="alruiz" type="add" issue="FEST-12">
         Added methods moveMouse(Point), moveMouse(int, int) and pressMouse(Point, MouseButton) to 
         org.fest.swing.core.Robot.  
       </action>
-      <action dev="alruiz" type="add" issue="283">
+      <action dev="alruiz" type="add" issue="FEST-13">
         Replaced org.fest.swing.driver.DragAndDrop with org.fest.swing.core.ComponentDragAndDrop. 
       </action>
-      <action dev="alruiz" type="add" issue="283">
+      <action dev="alruiz" type="add" issue="FEST-13">
         Class org.fest.swing.driver.DragAndDrop is now deprecated and will be removed in version 2.0. 
       </action>
-      <action dev="alruiz" type="fix" issue="286" due-to="Ken Geis">
+      <action dev="alruiz" type="fix" issue="FEST-14" due-to="Ken Geis">
         Failure to activate cell editor in org.fest.swing.driver.AbstractJTableCellWriter now throw an 
         ActionFailureException with the message "Unable to find or activate cell editor".
       </action>
-      <action dev="alruiz" type="fix" issue="293" due-to="Gino John">
+      <action dev="alruiz" type="fix" issue="FEST-15" due-to="Gino John">
         org.fest.swing.driver.JTreeDriver now adds the root to the path to expand, if the JTree has its root invisible.
       </action>
-      <action dev="alruiz" type="add" issue="297" due-to="rshulst">
+      <action dev="alruiz" type="add" issue="FEST-16" due-to="rshulst">
         Added method 'selectFiles(File...)' to org.fest.swing.fixture.JFileChooserFixture.
       </action>
-      <action dev="alruiz" type="fix" issue="303" due-to="Sergey Parilin">
+      <action dev="alruiz" type="fix" issue="FEST-17" due-to="Sergey Parilin">
         org.fest.swing.driver.JSpinnerDriver correctly selects the current text of a JSpinner before entering new text.
       </action>
-      <action dev="alruiz" type="add" issue="305" due-to="ihenehan">
+      <action dev="alruiz" type="add" issue="FEST-18" due-to="Ian Henehan">
         Added methods 'moveToFront' and 'moveToBack' to FrameFixture and DialogFixture.      
       </action>
-      <action dev="alruiz" type="add" issue="306" due-to="Juhos Csaba-Zsolt">
+      <action dev="alruiz" type="add" issue="FEST-19" due-to="Juhos Csaba-Zsolt">
         org.fest.swing.driver.JSpinnerDriver sets the focus on the editor and waits for the editor to be focused before
         entering new text.
       </action>
-      <action dev="alruiz" type="fix" issue="308" due-to="Ken Geis">
+      <action dev="alruiz" type="fix" issue="FEST-20" due-to="Ken Geis">
         org.fest.swing.driver.JTableTextComponentEditorCellWriter now correctly catches ActionFailedException when
         the cell editor cannot be activated by pressing the key 'F2'.
       </action>
