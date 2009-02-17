@@ -10,6 +10,9 @@
         When cancelling or stopping cell editing, JTableTextComponentEditorCellWriter and JTableComboBoxEditorCellWriter
         use the same TableCellEditor obtained when cell editing started.
       </action>
+      <action dev="wanghy" type="add" issue="FEST-7" due-to="Michael Schnell">
+        Added methods "requireRowCount" and "requireColumnCount" to org.fest.swing.fixture.JTableFixture.
+      </action>
       <action dev="alruiz" type="add" issue="FEST-8" due-to="Michael Schnell">
         Added method "requireFocused" to all component fixtures in package org.fest.swing.fixture.
       </action>

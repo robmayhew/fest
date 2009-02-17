@@ -501,6 +501,20 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
     }.run();
   }
 
+  public void shouldRequireColumnCount() {
+    final int columnCount = 6;
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireColumnCount(target, columnCount);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireColumnCount(columnCount));
+      }
+    }.run();
+  }
+
   ComponentDriver driver() { return driver; }
   JTable target() { return target; }
   JTableFixture fixture() { return fixture; }

@@ -599,6 +599,20 @@ public class JTableDriverTest {
     driver.requireRowCount(dragTable, ROW_COUNT);
   }
 
+  public void shouldFailIfColumnCountNotEqualToExpected() {
+    try {
+      driver.requireColumnCount(dragTable, 12);
+      failWhenExpectingException();
+    } catch (AssertionError e) {
+      assertThat(e.getMessage()).contains("property:'columnCount'")
+                                .contains("expected:<12> but was:<6>");
+    }
+  }
+
+  public void shouldPassIfColumnCountIsEqualToExpected() {
+    driver.requireColumnCount(dragTable, COLUMN_COUNT);
+  }
+
   @RunsInEDT
   private void disableDragTable() {
     disable(dragTable);

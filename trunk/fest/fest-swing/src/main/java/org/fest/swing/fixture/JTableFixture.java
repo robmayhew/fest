@@ -532,6 +532,18 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
     return this;
   }
 
+
+  /**
+   * Asserts that this fixture's <code>{@link JTable}</code> has the given number of columns.
+   * @param expected the expected number of columns.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTable</code> does not have the given number of columns.
+   */
+  public JTableFixture requireColumnCount(int expected) {
+    driver.requireColumnCount(target, expected);
+    return this;
+  }
+
   /**
    * Asserts that this fixture's <code>{@link JTable}</code> has input focus.
    * @return this fixture.

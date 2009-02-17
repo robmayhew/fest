@@ -48,6 +48,7 @@ import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAnd
 import static org.fest.swing.driver.JTableCellEditableQuery.isCellEditable;
 import static org.fest.swing.driver.JTableCellValidator.*;
 import static org.fest.swing.driver.JTableColumnByIdentifierQuery.columnIndexByIdentifier;
+import static org.fest.swing.driver.JTableColumnCountQuery.columnCountOf;
 import static org.fest.swing.driver.JTableContentsQuery.tableContents;
 import static org.fest.swing.driver.JTableHasSelectionQuery.hasSelection;
 import static org.fest.swing.driver.JTableHeaderQuery.tableHeader;
@@ -751,5 +752,16 @@ public class JTableDriver extends JComponentDriver {
   @RunsInEDT
   public void requireRowCount(JTable table, int rowCount) {
     assertThat(rowCountOf(table)).as(propertyName(table, "rowCount")).isEqualTo(rowCount);
+  }
+
+  /**
+   * Asserts that the given <code>{@link JTable}</code> has the given number of columns.
+   * @param table the target <code>JTable</code>.
+   * @param columnCount the expected number of columns.
+   * @throws AssertionError if the given <code>JTable</code> does not have the given number of columns.
+   */
+  @RunsInEDT
+  public void requireColumnCount(JTable table, int columnCount) {
+    assertThat(columnCountOf(table)).as(propertyName(table, "columnCount")).isEqualTo(columnCount);
   }
 }
