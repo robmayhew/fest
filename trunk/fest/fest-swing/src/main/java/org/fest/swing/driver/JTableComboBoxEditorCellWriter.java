@@ -41,7 +41,7 @@ public class JTableComboBoxEditorCellWriter extends AbstractJTableCellWriter {
     super(robot);
     driver = new JComboBoxDriver(robot);
   }
-  
+
   /** {@inheritDoc} */
   @RunsInEDT
   public void enterValue(JTable table, int row, int column, String value) {
@@ -49,7 +49,7 @@ public class JTableComboBoxEditorCellWriter extends AbstractJTableCellWriter {
     driver.selectItem(editor, value);
     stopEditing(table, row, column);
   }
-  
+
   /** {@inheritDoc} */
   @RunsInEDT
   public void startCellEditing(JTable table, int row, int column) {
@@ -60,7 +60,9 @@ public class JTableComboBoxEditorCellWriter extends AbstractJTableCellWriter {
   private JComboBox doStartCellEditing(JTable table, int row, int column) {
     Point cellLocation = cellLocation(table, row, column, location);
     robot.click(table, cellLocation); // activate JComboBox editor
-    return waitForEditorActivation(table, row, column);
+    JComboBox comboBox = waitForEditorActivation(table, row, column);
+    cellEditor(cellEditor(table, row, column));
+    return comboBox;
   }
 
   @RunsInEDT

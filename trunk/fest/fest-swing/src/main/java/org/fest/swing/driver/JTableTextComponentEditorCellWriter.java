@@ -28,7 +28,6 @@ import org.fest.swing.exception.ActionFailedException;
 import static java.awt.event.KeyEvent.VK_F2;
 
 import static org.fest.swing.core.MouseButton.LEFT_BUTTON;
-import static org.fest.swing.driver.JTableStopCellEditingTask.stopEditing;
 
 /**
  * Understands an implementation of <code>{@link JTableCellWriter}</code> that knows how to use
@@ -51,21 +50,7 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
   public void enterValue(JTable table, int row, int column, String value) {
     JTextComponent editor = doStartCellEditing(table, row, column);
     driver.replaceText(editor, value);
-    driver.robot.printer().printComponents(System.out, table);
-    doStopEditing(table, row, column);
-  }
-  
-  /**
-   * Stops editing the given cell of the <code>{@link JTable}</code>. Unlike 
-   * <code>{@link JTableCellWriter#stopCellEditing(JTable, int, int)}</code>, this method does <b>not</b> perform any
-   * validation on the given table or indices.
-   * @param table the target <code>JTable</code>.
-   * @param row the row index of the cell.
-   * @param column the column index of the cell.
-   */
-  @RunsInEDT
-  protected void doStopEditing(JTable table, int row, int column) {
-    stopEditing(table, row, column);
+    stopCellEditing(table, row, column);
   }
 
   /** {@inheritDoc} */
@@ -77,11 +62,14 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
   @RunsInEDT
   private JTextComponent doStartCellEditing(JTable table, int row, int column) {
     Point cellLocation = cellLocation(table, row, column, location);
+    JTextComponent textComponent = null;
     try {
-      return activateEditorWithF2Key(table, row, column, cellLocation);
+      textComponent = activateEditorWithF2Key(table, row, column, cellLocation);
     } catch (ActionFailedException e) {
-      return activateEditorWithDoubleClick(table, row, column, cellLocation);
+      textComponent = activateEditorWithDoubleClick(table, row, column, cellLocation);
     }
+    cellEditor(cellEditor(table, row, column));
+    return textComponent;
   }
 
   @RunsInEDT
@@ -90,7 +78,7 @@ public class JTableTextComponentEditorCellWriter extends AbstractJTableCellWrite
     robot.pressAndReleaseKeys(VK_F2);
     return waitForEditorActivation(table, row, column);
   }
-  
+
   @RunsInEDT
   private JTextComponent activateEditorWithDoubleClick(JTable table, int row, int column, Point cellLocation) {
     robot.click(table, cellLocation, LEFT_BUTTON, 2);

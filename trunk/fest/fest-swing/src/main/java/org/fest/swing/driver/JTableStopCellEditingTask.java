@@ -34,6 +34,15 @@ import static org.fest.swing.edt.GuiActionRunner.execute;
 final class JTableStopCellEditingTask {
 
   @RunsInEDT
+  static void stopEditing(final TableCellEditor cellEditor) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        doStopCellEditing(cellEditor);
+      }
+    });
+  }
+
+  @RunsInEDT
   static void stopEditing(final JTable table, final int row, final int column) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -41,7 +50,7 @@ final class JTableStopCellEditingTask {
       }
     });
   }
-  
+
   @RunsInEDT
   static void validateAndStopEditing(final JTable table, final int row, final int column) {
     execute(new GuiTask() {
@@ -52,13 +61,17 @@ final class JTableStopCellEditingTask {
       }
     });
   }
-  
+
   @RunsInCurrentThread
   private static void doStopCellEditing(JTable table, int row, int column) {
-    TableCellEditor cellEditor = table.getCellEditor(row, column);
+    doStopCellEditing(table.getCellEditor(row, column));
+  }
+
+  @RunsInCurrentThread
+  private static void doStopCellEditing(TableCellEditor cellEditor) {
     if (cellEditor == null) return;
     cellEditor.stopCellEditing();
   }
-  
+
   private JTableStopCellEditingTask() {}
 }

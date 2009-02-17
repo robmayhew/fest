@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JTable;
+import javax.swing.table.TableCellEditor;
 
 import org.fest.swing.annotation.RunsInCurrentThread;
 import org.fest.swing.annotation.RunsInEDT;
@@ -37,7 +38,7 @@ import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAnd
 import static org.fest.swing.driver.JTableCancelCellEditingTask.cancelEditing;
 import static org.fest.swing.driver.JTableCellEditorQuery.cellEditorIn;
 import static org.fest.swing.driver.JTableCellValidator.*;
-import static org.fest.swing.driver.JTableStopCellEditingTask.validateAndStopEditing;
+import static org.fest.swing.driver.JTableStopCellEditingTask.*;
 import static org.fest.swing.edt.GuiActionRunner.execute;
 import static org.fest.swing.exception.ActionFailedException.actionFailure;
 import static org.fest.swing.timing.Pause.pause;
@@ -53,9 +54,10 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
 
   protected final Robot robot;
   protected final JTableLocation location = new JTableLocation();
+  private TableCellEditor cellEditor;
 
   private static final long EDITOR_LOOKUP_TIMEOUT = 5000;
-  
+
   public AbstractJTableCellWriter(Robot robot) {
     this.robot = robot;
   }
@@ -63,21 +65,67 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
   /** {@inheritDoc} */
   @RunsInEDT
   public void cancelCellEditing(JTable table, int row, int column) {
+    if (cellEditor == null) {
+      doCancelCellEditing(table, row, column);
+      return;
+    }
+    doCancelCellEditing();
+  }
+
+  @RunsInEDT
+  private void doCancelCellEditing(JTable table, int row, int column) {
     cancelEditing(table, row, column);
     robot.waitForIdle();
   }
-  
+
+  @RunsInEDT
+  private void doCancelCellEditing() {
+    cancelEditing(cellEditor);
+    robot.waitForIdle();
+  }
+
   /** {@inheritDoc} */
   @RunsInEDT
   public void stopCellEditing(JTable table, int row, int column) {
+    if (cellEditor == null) {
+      doStopCellEditing(table, row, column);
+      return;
+    }
+    doStopCellEditing();
+  }
+
+  @RunsInEDT
+  private void doStopCellEditing(JTable table, int row, int column) {
     validateAndStopEditing(table, row, column);
     robot.waitForIdle();
+  }
+
+  @RunsInEDT
+  private void doStopCellEditing() {
+    stopEditing(cellEditor);
+    robot.waitForIdle();
+  }
+
+  /**
+   * Returns the editor for the given table cell. This method is executed in the EDT.
+   * @param table the target <code>JTable</code>.
+   * @param row the row index of the cell.
+   * @param column the column index of the cell.
+   * @return the editor for the given table cell.
+   */
+  @RunsInEDT
+  protected final TableCellEditor cellEditor(final JTable table, final int row, final int column) {
+    return execute(new GuiQuery<TableCellEditor>() {
+      protected TableCellEditor executeInEDT() throws Throwable {
+        return table.getCellEditor(row, column);
+      }
+    });
   }
 
   /**
    * Scrolls the given <code>{@link JTable}</code> to the given cell.
    * <p>
-   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for
    * invoking this method in the EDT.
    * </p>
    * @param table the target <code>JTable</code>.
@@ -93,11 +141,11 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
   /** {@inheritDoc} */
   @RunsInEDT
   public Component editorForCell(JTable table, int row, int column) {
-    return cellEditor(table, row, column);
+    return cellEditorComponent(table, row, column);
   }
-  
+
   @RunsInEDT
-  private static Component cellEditor(final JTable table, final int row, final int column) {
+  private static Component cellEditorComponent(final JTable table, final int row, final int column) {
     return execute(new GuiQuery<Component>() {
       protected Component executeInEDT() {
         validateIndices(table, row, column);
@@ -109,7 +157,7 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
   /**
    * Finds the component used as editor for the given <code>{@link JTable}</code>.
    * <p>
-   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for
    * invoking this method in the EDT.
    * </p>
    * @param <T> the generic type of the supported editor type.
@@ -134,9 +182,9 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
     if (supportedType.isInstance(editor)) return supportedType.cast(editor);
     throw cannotFindOrActivateEditor(row, column);
   }
-  
+
   /**
-   * Returns the location of the given table cell. 
+   * Returns the location of the given table cell.
    * @param table the target <code>JTable</code>.
    * @param row the row index of the cell.
    * @param column the column index of the cell.
@@ -167,7 +215,7 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
    * <li>the table cell at the given indices is editable</li>
    * </ol>
    * <p>
-   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for 
+   * <b>Note:</b> This method is <b>not</b> executed in the event dispatch thread (EDT.) Clients are responsible for
    * invoking this method in the EDT.
    * </p>
    * @param table the target <code>JTable</code>.
@@ -197,11 +245,11 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
    * @throws ActionFailedException if an editor for the given cell cannot be found or cannot be activated.
    */
   @RunsInEDT
-  protected final <T extends Component> T waitForEditorActivation(JTable table, int row, 
+  protected final <T extends Component> T waitForEditorActivation(JTable table, int row,
       int column, Class<T> supportedType) {
     return waitForEditorActivation(new TypeMatcher(supportedType, true), table, row, column, supportedType);
-  }  
-  
+  }
+
   /**
    * Waits until the editor of the given table cell is showing on the screen.
    * @param <T> the generic type of the cell editor.
@@ -214,7 +262,7 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
    * @throws ActionFailedException if an editor for the given cell cannot be found or cannot be activated.
    */
   @RunsInEDT
-  protected final <T extends Component> T waitForEditorActivation(ComponentMatcher matcher, JTable table, int row, 
+  protected final <T extends Component> T waitForEditorActivation(ComponentMatcher matcher, JTable table, int row,
       int column, Class<T> supportedType) {
     ComponentFoundCondition condition = new ComponentFoundCondition("", robot.finder(), matcher, table);
     try {
@@ -223,7 +271,7 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
       throw cannotFindOrActivateEditor(row, column);
     }
     return supportedType.cast(condition.found());
-  }  
+  }
 
   /**
    * Throws a <code>{@link ActionFailedException}</code> if this <code>{@link JTableCellWriter}</code> could not find or
@@ -235,5 +283,21 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
   protected static ActionFailedException cannotFindOrActivateEditor(int row, int column) {
     String msg = concat("Unable to find or activate editor for cell [", valueOf(row), ",", valueOf(column), "]");
     throw actionFailure(msg);
+  }
+
+
+  /**
+   * Returns the cell editor being currently used. This method will return <code>null</code> if no table cell is being
+   * currently edited.
+   * @return the cell editor being currently used, or <code>null</code> if no table cell is being currently edited.
+   */
+  protected final TableCellEditor cellEditor() { return cellEditor; }
+
+  /**
+   * Sets the cell editor being currently used.
+   * @param newCellEditor the cell editor being currently used.
+   */
+  protected final void cellEditor(TableCellEditor newCellEditor) {
+    cellEditor = newCellEditor;
   }
 }

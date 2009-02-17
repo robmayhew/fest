@@ -40,12 +40,11 @@ public class JTableTextComponentEditorCellWriterTest extends JTableCellWriterTes
     assertThat(valueAt(4, 3)).isEqualTo(8);
   }
 
-  public void shouldCancelEditingIfDropDownVisible() {
+  public void shouldCancelEditingIfTextComponentVisible() {
     int row = 0;
     int column = 3;
     assertThat(valueAt(row, column)).isEqualTo(5);
     writer().startCellEditing(table(), row, column);
-    writer().editorForCell(table(), row, column);
     writer().cancelCellEditing(table(), row, column);
     assertThat(valueAt(row, column)).isEqualTo(5);
   }

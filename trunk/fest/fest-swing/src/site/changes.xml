@@ -6,6 +6,10 @@
   </properties>
   <body>
     <release version="1.1" date="TBD" description="Subsequent release">
+      <action dev="wanghy" type="fix" issue="FEST-3">
+        When cancelling or stopping cell editing, JTableTextComponentEditorCellWriter and JTableComboBoxEditorCellWriter
+        use the same TableCellEditor obtained when cell editing started.
+      </action>
       <action dev="alruiz" type="add" issue="FEST-8" due-to="Michael Schnell">
         Added method "requireFocused" to all component fixtures in package org.fest.swing.fixture.
       </action>

@@ -40,11 +40,25 @@ final class JTableCancelCellEditingTask {
         validateIndices(table, row, column);
         validateCellIsEditable(table, row, column);
         TableCellEditor cellEditor = table.getCellEditor(row, column);
-        if (cellEditor == null) return;
-        cellEditor.cancelCellEditing();
+        doCancelEditing(cellEditor);
       }
     });
   }
 
+  @RunsInEDT
+  static void cancelEditing(final TableCellEditor cellEditor) {
+    execute(new GuiTask() {
+      protected void executeInEDT() {
+        doCancelEditing(cellEditor);
+      }
+    });
+  }
+
+  private static void doCancelEditing(TableCellEditor cellEditor) {
+    if (cellEditor == null) return;
+    cellEditor.cancelCellEditing();
+  }
+
   private JTableCancelCellEditingTask() {}
+
 }
