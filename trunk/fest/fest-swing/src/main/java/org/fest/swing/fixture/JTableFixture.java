@@ -1,15 +1,15 @@
 /*
  * Created on Jul 12, 2007
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
- * 
+ *
  * Copyright @2007-2009 the original author or authors.
  */
 package org.fest.swing.fixture;
@@ -50,7 +50,7 @@ import static org.fest.util.Strings.concat;
  * renderer is performed by a <code>{@link JTableCellReader}</code>. This fixture uses a
  * <code>{@link BasicJTableCellReader}</code> by default.
  * </p>
- * 
+ *
  * @author Alex Ruiz
  * @author Yvonne Wang
  * @author Fabien Barbero
@@ -197,7 +197,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
   public String selectionValue() {
     return driver.selectionValue(target);
   }
-  
+
   /**
    * Converts the given cell into a coordinate pair.
    * @param cell the given cell.
@@ -208,7 +208,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
   public Point pointAt(TableCell cell) {
     return driver.pointAt(target, cell);
   }
-  
+
   /**
    * Returns the <code>String</code> representation of the cells in the in this fixture's <code>{@link JTable}</code>,
    * using this fixture's <code>{@link JTableCellReader}</code>.
@@ -218,7 +218,7 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
   public String[][] contents() {
     return driver.contents(target);
   }
-  
+
   /**
    * Returns the number of rows that can be shown in this fixture's <code>{@link JTable}</code>, given unlimited space.
    * @return the number of rows shown in this fixture's <code>JTable</code>.
@@ -227,9 +227,9 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
   public int rowCount() {
     return driver.rowCountOf(target);
   }
-  
+
   /**
-   * Returns the <code>String</code> representation of the value of a cell in this fixture's 
+   * Returns the <code>String</code> representation of the value of a cell in this fixture's
    * <code>{@link JTable}</code>, using this fixture's <code>{@link JTableCellReader}</code>.
    * @param cell the given cell.
    * @return the <code>String</code> representation of the value of a cell in this fixture's <code>JTable</code>.
@@ -519,7 +519,19 @@ public class JTableFixture extends JPopupMenuInvokerFixture<JTable> implements C
     driver.cellReader(cellReader);
     return this;
   }
-  
+
+
+  /**
+   * Asserts that this fixture's <code>{@link JTable}</code> has the given number of rows.
+   * @param expected the expected number of rows.
+   * @return this fixture.
+   * @throws AssertionError if this fixture's <code>JTable</code> does not have the given number of rows.
+   */
+  public JTableFixture requireRowCount(int expected) {
+    driver.requireRowCount(target, expected);
+    return this;
+  }
+
   /**
    * Asserts that this fixture's <code>{@link JTable}</code> has input focus.
    * @return this fixture.

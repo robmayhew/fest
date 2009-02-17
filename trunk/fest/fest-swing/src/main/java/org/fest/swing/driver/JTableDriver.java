@@ -109,7 +109,7 @@ public class JTableDriver extends JComponentDriver {
   public String selectionValue(JTable table) {
     return selectionValue(table, cellReader);
   }
-  
+
   @RunsInEDT
   private static String selectionValue(final JTable table, final JTableCellReader cellReader) {
     return execute(new GuiQuery<String>() {
@@ -161,7 +161,7 @@ public class JTableDriver extends JComponentDriver {
   public TableCell cell(JTable table, String value) {
     return cellWithValue(table, value, cellReader);
   }
-  
+
 
   /**
    * Returns the <code>String</code> representation of the value at the given cell, using this driver's
@@ -205,7 +205,7 @@ public class JTableDriver extends JComponentDriver {
   }
 
   @RunsInEDT
-  private static String cellValue(final JTable table, final int row, final int column, 
+  private static String cellValue(final JTable table, final int row, final int column,
       final JTableCellReader cellReader) {
     return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
@@ -214,7 +214,7 @@ public class JTableDriver extends JComponentDriver {
       }
     });
   }
-  
+
   /**
    * Returns the font of the given table cell.
    * @param table the target <code>JTable</code>.
@@ -238,7 +238,7 @@ public class JTableDriver extends JComponentDriver {
       }
     });
   }
-  
+
   /**
    * Returns the background color of the given table cell.
    * @param table the target <code>JTable</code>.
@@ -262,7 +262,7 @@ public class JTableDriver extends JComponentDriver {
       }
     });
   }
-  
+
   /**
    * Returns the foreground color of the given table cell.
    * @param table the target <code>JTable</code>.
@@ -331,8 +331,8 @@ public class JTableDriver extends JComponentDriver {
     execute(new GuiTask() {
       protected void executeInEDT() {
         if (!hasSelection(table)) return;
-        String message = concat("[", propertyName(table, SELECTION_PROPERTY).value(), 
-            "] expected no selection but was:<rows=", format(table.getSelectedRows()), ", columns=", 
+        String message = concat("[", propertyName(table, SELECTION_PROPERTY).value(),
+            "] expected no selection but was:<rows=", format(table.getSelectedRows()), ", columns=",
             format(table.getSelectedColumns()), ">");
         fail(message);
       }
@@ -368,7 +368,7 @@ public class JTableDriver extends JComponentDriver {
     });
   }
 
-  
+
   /**
    * Clicks the given cell, using the specified mouse button, the given number of times.
    * @param table the target <code>JTable</code>.
@@ -443,7 +443,7 @@ public class JTableDriver extends JComponentDriver {
       }
     });
   }
-  
+
   @RunsInCurrentThread
   private static void scrollToCell(final JTable table, final TableCell cell, final JTableLocation location) {
     validateIsEnabledAndShowing(table);
@@ -485,7 +485,7 @@ public class JTableDriver extends JComponentDriver {
   @RunsInEDT
   public void requireContents(JTable table, String[][] contents) {
     String[][] actual = contents(table);
-    
+
     if (!equal(actual, contents))
       failNotEqual(actual, contents, propertyName(table, CONTENTS_PROPERTY));
   }
@@ -507,7 +507,7 @@ public class JTableDriver extends JComponentDriver {
   public String[][] contents(JTable table) {
     return tableContents(table, cellReader);
   }
-  
+
   /**
    * Asserts that the value of the given cell is equal to the expected one.
    * @param table the target <code>JTable</code>.
@@ -584,7 +584,7 @@ public class JTableDriver extends JComponentDriver {
     });
     assertThat(cellEditable).as(cellProperty(table, concat(EDITABLE_PROPERTY, " ", cell))).isEqualTo(editable);
   }
-  
+
   /**
    * Returns the editor in the given cell of the <code>{@link JTable}</code>, using this driver's
    * <code>{@link JTableCellWriter}</code>.
@@ -673,7 +673,7 @@ public class JTableDriver extends JComponentDriver {
   public void validate(JTable table, TableCell cell) {
     validateCellIndexBounds(table, cell);
   }
-  
+
   private static void validateCellIndexBounds(final JTable table, final TableCell cell) {
     execute(new GuiTask() {
       protected void executeInEDT() {
@@ -681,7 +681,7 @@ public class JTableDriver extends JComponentDriver {
       }
     });
   }
-  
+
   /**
    * Updates the implementation of <code>{@link JTableCellReader}</code> to use when comparing internal values of a
    * <code>{@link JTable}</code> and the values expected in a test.
@@ -740,5 +740,16 @@ public class JTableDriver extends JComponentDriver {
 
   private static ActionFailedException failColumnIndexNotFound(Object columnId) {
     throw actionFailure(concat("Unable to find a column with id ", quote(columnId)));
+  }
+
+  /**
+   * Asserts that the given <code>{@link JTable}</code> has the given number of rows.
+   * @param table the target <code>JTable</code>.
+   * @param rowCount the expected number of rows.
+   * @throws AssertionError if the given <code>JTable</code> does not have the given number of rows.
+   */
+  @RunsInEDT
+  public void requireRowCount(JTable table, int rowCount) {
+    assertThat(rowCountOf(table)).as(propertyName(table, "rowCount")).isEqualTo(rowCount);
   }
 }

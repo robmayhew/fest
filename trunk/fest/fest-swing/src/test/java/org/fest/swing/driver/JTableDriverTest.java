@@ -88,7 +88,7 @@ public class JTableDriverTest {
   @BeforeClass public void setUpOnce() {
     FailOnThreadViolationRepaintManager.install();
   }
-  
+
   @BeforeMethod public void setUp() {
     robot = robotWithNewAwtHierarchy();
     cellReader = new JTableCellReaderStub();
@@ -103,7 +103,7 @@ public class JTableDriverTest {
   @AfterMethod public void tearDown() {
     robot.cleanUp();
   }
-  
+
   @Test(expectedExceptions = NullPointerException.class)
   public void shouldThrowErrorIfCellToValidateIsNull() {
     driver.validate(dragTable, null);
@@ -115,7 +115,7 @@ public class JTableDriverTest {
     assertThat(isCellSelected(dragTable, row, column)).isTrue();
   }
 
-  @DataProvider(name = "cellsAndEventModes") 
+  @DataProvider(name = "cellsAndEventModes")
   public Object[][] cellsAndEventModes() {
     return new Object[][] { { 6, 5 }, { 0, 0 }, { 8, 3 }, { 5, 2 } };
   }
@@ -123,7 +123,7 @@ public class JTableDriverTest {
   public void shouldReturnRowCount() {
     assertThat(driver.rowCountOf(dragTable)).isEqualTo(ROW_COUNT);
   }
-  
+
   public void shouldThrowErrorWhenSelectingCellInDisabledJTable() {
     disableDragTable();
     try {
@@ -234,7 +234,7 @@ public class JTableDriverTest {
     assertThat(cell.column).isEqualTo(column);
     assertCellReaderWasCalled();
   }
-  
+
   @DataProvider(name = "cells") public Object[][] cells() {
     return new Object[][] { { 6, 5 }, { 0, 0 }, { 8, 3 }, { 5, 2 } };
   }
@@ -254,7 +254,7 @@ public class JTableDriverTest {
     assertThat(cell.row).isEqualTo(0);
     assertThat(cell.column).isEqualTo(parseInt(columnName));
   }
-  
+
   public void shouldThrowErrorWhenCreatingCellWithColumnNameIfGivenCellIsNull() {
     try {
       driver.cell(dragTable, (TableCellByColumnId)null);
@@ -263,12 +263,12 @@ public class JTableDriverTest {
       assertThat(e.getMessage()).contains("The instance of TableCellByColumnId should not be null");
     }
   }
-  
+
   @Test(groups = GUI, expectedExceptions = IndexOutOfBoundsException.class)
   public void shouldThrowErrorWhenCreatingCellWithColumnNameIfRowIndexIsOutOfBounds() {
     driver.cell(dragTable, TableCellByColumnId.row(-1).columnId("Hello"));
   }
-  
+
   @Test(groups = GUI, expectedExceptions = ActionFailedException.class)
   public void shouldThrowErrorWhenCreatingCellWithColumnNameIfColumnWithMatchingNameNotFound() {
     driver.cell(dragTable, TableCellByColumnId.row(0).columnId("Hello"));
@@ -282,7 +282,7 @@ public class JTableDriverTest {
   @DataProvider(name = "columnNames") public Object[][] columnNameArray() {
     return new Object[][] { { "0" }, { "1" }, { "2" }, { "3" } };
   }
-  
+
   public void shouldThrowErrorIfColumnWithGivenNameNotFound() {
     try {
       driver.columnIndex(dragTable, "Hello World");
@@ -583,6 +583,20 @@ public class JTableDriverTest {
 
   public void shouldReturnJTableHeader() {
     assertThat(driver.tableHeaderOf(dragTable)).isSameAs(window.dragTableHeader);
+  }
+
+  public void shouldFailIfRowCountNotEqualToExpected() {
+    try {
+      driver.requireRowCount(dragTable, 12);
+      failWhenExpectingException();
+    } catch (AssertionError e) {
+      assertThat(e.getMessage()).contains("property:'rowCount'")
+                                .contains("expected:<12> but was:<10>");
+    }
+  }
+
+  public void shouldPassIfRowCountIsEqualToExpected() {
+    driver.requireRowCount(dragTable, ROW_COUNT);
   }
 
   @RunsInEDT

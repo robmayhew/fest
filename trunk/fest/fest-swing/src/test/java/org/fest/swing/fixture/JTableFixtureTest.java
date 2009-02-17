@@ -487,6 +487,20 @@ public class JTableFixtureTest extends CommonComponentFixtureTestCase<JTable> {
     }.run();
   }
 
+  public void shouldRequireRowCount() {
+    final int rowCount = 6;
+    new EasyMockTemplate(driver) {
+      protected void expectations() {
+        driver.requireRowCount(target, rowCount);
+        expectLastCall().once();
+      }
+
+      protected void codeToTest() {
+        assertThatReturnsThis(fixture.requireRowCount(rowCount));
+      }
+    }.run();
+  }
+
   ComponentDriver driver() { return driver; }
   JTable target() { return target; }
   JTableFixture fixture() { return fixture; }
