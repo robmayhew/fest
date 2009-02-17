@@ -30,7 +30,7 @@ import static org.fest.util.Strings.join;
  */
 final class ScreenshotFileNameGenerator {
 
-  private static final String NULL_PARAMETER_VALUE = "<null>";
+  private static final String NULL_PARAMETER_VALUE = "[null]";
 
   static String screenshotFileNameFrom(ITestResult result) {
     List<String> parts = namePartsFrom(result);

@@ -15,7 +15,7 @@
  */
 package org.fest.swing.testng.listener;
 
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -31,7 +31,7 @@ import static org.fest.util.Arrays.array;
 
   private TestResultStub testResult;
 
-  @BeforeClass public void setUp() {
+  @BeforeMethod public void setUp() {
     testResult = new TestResultStub();
   }
 
@@ -41,5 +41,12 @@ import static org.fest.util.Arrays.array;
     assertThat(screenshotFileNameFrom(testResult)).isEqualTo("MyClass.myMethod.png");
     testResult.setParameters(array("one", "two"));
     assertThat(screenshotFileNameFrom(testResult)).isEqualTo("MyClass.myMethod.one.two.png");
+  }
+  
+  public void shouldGenerateFileNamesEvenIfParameterValueIsNull() {
+    testResult.getMethod().setMethodName("myMethod");
+    testResult.getTestClass().setName("MyClass");
+    testResult.setParameters(array("one", null));
+    assertThat(screenshotFileNameFrom(testResult)).isEqualTo("MyClass.myMethod.one.[null].png");
   }
 }
