@@ -26,7 +26,7 @@ import org.fest.swing.cell.JListCellReader;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.util.Pair;
 
-import static org.fest.swing.awt.AWT.centerOf;
+import static org.fest.swing.awt.AWT.*;
 import static org.fest.swing.driver.ComponentStateValidator.validateIsEnabledAndShowing;
 import static org.fest.swing.driver.JListCellBoundsQuery.cellBounds;
 import static org.fest.swing.driver.JListItemIndexValidator.validateIndex;
@@ -105,7 +105,20 @@ final class JListScrollToItemTask {
   private static Point scrollToItemWithIndex(JList list, int index) {
     Rectangle cellBounds = cellBounds(list, index);
     list.scrollRectToVisible(cellBounds);
-    return centerOf(cellBounds);
+    return cellCenter(list, cellBounds);
+  }
+
+  /*
+   * Sometimes the cell can be a lot longer than the JList (e.g. when a list item has long text and the JList is in 
+   * a JScrollPane.) In this case, we return the center of visible rectangle of the JList (issue FEST-65.)
+   */
+  private static Point cellCenter(JList list, Rectangle cellBounds) {
+    Point cellCenter = centerOf(cellBounds);
+    Point translatedCellCenter = translate(list, cellCenter.x, cellCenter.y);
+    int listVisibleWidth = list.getVisibleRect().width;
+    if (translatedCellCenter.x < listVisibleWidth) return cellCenter;
+    Point listCenter = centerOfVisibleRect(list);
+    return new Point(listCenter.x, cellCenter.y);
   }
   
   private JListScrollToItemTask() {}
