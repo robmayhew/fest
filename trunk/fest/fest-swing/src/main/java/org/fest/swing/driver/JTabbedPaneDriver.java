@@ -148,7 +148,12 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * @return the currently selected component for the given <code>JTabbedPane</code>.
    */
   @RunsInEDT
-  public Component selectedComponentOf(final JTabbedPane tabbedPane) {
+  public Component selectedComponentOf(JTabbedPane tabbedPane) {
+    return selectedComponent(tabbedPane);
+  }
+
+  @RunsInEDT
+  private static Component selectedComponent(final JTabbedPane tabbedPane) {
     return execute(new GuiQuery<Component>() {
       protected Component executeInEDT() {
         return tabbedPane.getSelectedComponent();
@@ -164,13 +169,18 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * @throws AssertionError if the title of the tab at the given index is not equal to the given one.
    */
   @RunsInEDT
-  public void requireTabTitle(final JTabbedPane tabbedPane, String title, final Index index) {
-    String actualTitle = execute(new GuiQuery<String>() {
+  public void requireTabTitle(JTabbedPane tabbedPane, String title, Index index) {
+    String actualTitle = titleAt(tabbedPane, index);
+    assertThat(actualTitle).as(propertyName(tabbedPane, "titleAt")).isEqualTo(title);
+  }
+
+  @RunsInEDT
+  private static String titleAt(final JTabbedPane tabbedPane, final Index index) {
+    return execute(new GuiQuery<String>() {
       protected String executeInEDT() {
         return tabbedPane.getTitleAt(index.value);
       }
     });
-    assertThat(actualTitle).as(propertyName(tabbedPane, "titleAt")).isEqualTo(title);
   }
 
   /**
@@ -182,8 +192,14 @@ public class JTabbedPaneDriver extends JComponentDriver {
    * @throws AssertionError if the title of any of the tabs is not equal to the expected titles.
    */
   @RunsInEDT
-  public void requireTabTitles(final JTabbedPane tabbedPane, String[] titles) {
-    String[] actualTitles = execute(new GuiQuery<String[]>() {
+  public void requireTabTitles(JTabbedPane tabbedPane, String[] titles) {
+    String[] actualTitles = allTabTitlesIn(tabbedPane);
+    assertThat(actualTitles).as(propertyName(tabbedPane, "tabTitles")).isEqualTo(titles);
+  }
+
+  @RunsInEDT
+  private static String[] allTabTitlesIn(final JTabbedPane tabbedPane) {
+    return execute(new GuiQuery<String[]>() {
       protected String[] executeInEDT() {
         List<String> allTitles = new ArrayList<String>();
         int tabCount = tabbedPane.getTabCount();
@@ -192,6 +208,5 @@ public class JTabbedPaneDriver extends JComponentDriver {
         return allTitles.toArray(new String[allTitles.size()]);
       }
     });
-    assertThat(actualTitles).as(propertyName(tabbedPane, "tabTitles")).isEqualTo(titles);
   }
 }

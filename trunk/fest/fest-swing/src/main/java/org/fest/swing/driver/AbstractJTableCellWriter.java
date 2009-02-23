@@ -114,7 +114,7 @@ public abstract class AbstractJTableCellWriter implements JTableCellWriter {
    * @return the editor for the given table cell.
    */
   @RunsInEDT
-  protected final TableCellEditor cellEditor(final JTable table, final int row, final int column) {
+  protected static TableCellEditor cellEditor(final JTable table, final int row, final int column) {
     return execute(new GuiQuery<TableCellEditor>() {
       protected TableCellEditor executeInEDT() throws Throwable {
         return table.getCellEditor(row, column);

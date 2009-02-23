@@ -51,7 +51,7 @@
       <action dev="alruiz" type="fix" issue="FEST-15" due-to="Gino John">
         org.fest.swing.driver.JTreeDriver now adds the root to the path to expand, if the JTree has its root invisible.
       </action>
-      <action dev="alruiz" type="add" issue="FEST-16" due-to="rshulst">
+      <action dev="alruiz" type="add" issue="FEST-16" due-to="Peter Hulst">
         Added method 'selectFiles(File...)' to org.fest.swing.fixture.JFileChooserFixture.
       </action>
       <action dev="alruiz" type="fix" issue="FEST-17" due-to="Sergey Parilin">
@@ -78,6 +78,10 @@
       <action dev="alruiz" type="fix" issue="FEST-61">
         Deprecated org.fest.swing.testng.ScreenshotOnFailureListener. Users should use 
         org.fest.swing.testng.listener.ScreenshotOnFailureListener instead.
+      </action>
+      <action dev="alruiz" type="fix" issue="FEST-65" due-to="Cimballi">
+        org.fest.swing.driver.JListDriver now clicks in the middle of the visible rectangle of a cell, when selecting
+        an item in a JList.
       </action>
     </release>
     <release version="1.0" date="2009-01-15" description="Subsequent release">

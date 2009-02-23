@@ -212,13 +212,16 @@ public class ComponentDriver {
    * @throws AssertionError if the <code>Component</code> does not have input focus.
    */
   @RunsInEDT
-  public void requireFocused(final Component c) {
-    Description msg = new GuiLazyLoadingDescription() {
+  public void requireFocused(Component c) {
+    assertThat(hasFocus(c)).as(requiredFocusedErrorMessage(c)).isTrue();
+  }
+  
+  private static Description requiredFocusedErrorMessage(final Component c) {
+    return new GuiLazyLoadingDescription() {
       protected String loadDescription() {
         return concat("Expected component ", format(c), " to have input focus");
       }
     };
-    assertThat(hasFocus(c)).as(msg).isTrue();
   }
   
   /**

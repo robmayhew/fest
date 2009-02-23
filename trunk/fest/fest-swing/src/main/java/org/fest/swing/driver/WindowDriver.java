@@ -142,13 +142,18 @@ public class WindowDriver extends ContainerDriver {
    * @param w the target <code>Window</code>.
    */
   @RunsInEDT
-  public void moveToFront(final Window w) {
+  public void moveToFront(Window w) {
+    doMoveToFront(w);
+    robot.waitForIdle();
+  }
+
+  @RunsInEDT
+  private static void doMoveToFront(final Window w) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         w.toFront();
       }
     });
-    robot.waitForIdle();
   }
 
   /**
@@ -157,12 +162,17 @@ public class WindowDriver extends ContainerDriver {
    * @param w the target <code>Window</code>.
    */
   @RunsInEDT
-  public void moveToBack(final Window w) {
+  public void moveToBack(Window w) {
+    doMoveToBack(w);    
+    robot.waitForIdle();
+  }
+
+  @RunsInEDT
+  private static void doMoveToBack(final Window w) {
     execute(new GuiTask() {
       protected void executeInEDT() {
         w.toBack();
       }
-    });    
-    robot.waitForIdle();
+    });
   }
 }

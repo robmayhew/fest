@@ -28,6 +28,10 @@ public abstract class FestSwingTestCaseTemplate {
 
   private Robot robot;
 
+  public FestSwingTestCaseTemplate() {
+    robot = null; // Just to satisfy FindBugs
+  }
+  
   /**
    * Creates this test's <code>{@link Robot}</code> using a new AWT hierarchy.
    */
