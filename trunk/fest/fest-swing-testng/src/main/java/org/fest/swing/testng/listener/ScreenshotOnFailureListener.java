@@ -110,7 +110,7 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
     String imageName = screenshotFileNameFrom(result);
     String imagePath = concat(output, separator, imageName);
     try {
-      //screenshotTaker.saveDesktopAsPng(imagePath);
+      screenshotTaker.saveDesktopAsPng(imagePath);
     } catch (ImageException e) {
       logger.log(SEVERE, e.getMessage(), e);
       return null;
