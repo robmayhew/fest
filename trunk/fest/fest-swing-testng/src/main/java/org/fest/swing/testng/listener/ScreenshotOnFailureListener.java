@@ -41,7 +41,7 @@ import static org.fest.util.Strings.*;
  * <p>
  * To use this listener, we just need to make TestNG aware of it. The following is an example using Ant:
  * <pre>
- * &lt;testng <strong><span style="text-decoration: underline">listeners=&quot;org.fest.swing.testng.ScreenshotOnFailureListener&quot;</span></strong> outputDir=&quot;${target.test.results.dir}&quot; haltOnFailure=&quot;true&quot; verbose=&quot;2&quot;&gt;
+ * &lt;testng <strong><span style="text-decoration: underline">listeners=&quot;org.fest.swing.testng.listener.ScreenshotOnFailureListener&quot;</span></strong> outputDir=&quot;${target.test.results.dir}&quot; haltOnFailure=&quot;true&quot; verbose=&quot;2&quot;&gt;
  *   &lt;classfileset dir=&quot;${target.test.classes.dir}&quot; includes=&quot;&#42;&#42;/&#42;Test.class&quot; /&gt;
  *   &lt;classpath location=&quot;${target.test.classes.dir}&quot; /&gt;
  *   &lt;classpath location=&quot;${target.classes.dir}&quot; /&gt;

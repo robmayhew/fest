@@ -17,7 +17,7 @@ package org.fest.swing.testng;
 /**
  * Understands a <a href="http://testng.org" target="_blank">TestNG</a> listener that takes a screenshot when a GUI test 
  * fails.
- * @deprecated use <code>{@link org.fest.swing.testng.listener.ScreenshotOnFailureListener}</code> instead.
+ * @deprecated Use <code>{@link org.fest.swing.testng.listener.ScreenshotOnFailureListener}</code> instead.
  * 
  * @author Alex Ruiz
  */
