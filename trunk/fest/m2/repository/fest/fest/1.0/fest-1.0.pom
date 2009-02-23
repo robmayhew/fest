@@ -97,6 +97,10 @@
       <name>Wim Boffe</name>
     </contributor>
     <contributor>
+      <name>Cimballi</name>
+      <url>http://cimballisblog.blogspot.com/</url>
+    </contributor>
+    <contributor>
       <name>Stephen Colebourne</name>
       <url>http://www.jroller.com/scolebourne/</url>
     </contributor>
@@ -151,6 +155,15 @@
     </contributor>
     <contributor>
       <name>Slava Gurilev</name>
+    </contributor>
+    <contributor>
+      <name>Ian Henehan</name>
+      <organization>Edward Douglas Inc.</organization>
+      <organizationUrl>http://www.edward-douglas.com</organizationUrl>
+      <url>http://aviation.northcoastsound.com/</url>
+    </contributor>
+    <contributor>
+      <name>Peter Hulst</name>
     </contributor>
     <contributor>
       <name>Leo Jay</name>
