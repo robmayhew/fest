@@ -5,7 +5,7 @@
     <author email="alex.ruiz.05@gmail.com">Alex Ruiz</author>
   </properties>
   <body>
-    <release version="1.1" date="TBD" description="Subsequent release">
+    <release version="1.1" date="2009-02-23" description="Subsequent release">
       <action dev="wanghy" type="fix" issue="FEST-3">
         When cancelling or stopping cell editing, JTableTextComponentEditorCellWriter and JTableComboBoxEditorCellWriter
         use the same TableCellEditor obtained when cell editing started.
