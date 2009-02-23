@@ -75,6 +75,9 @@ public class ScreenshotOnFailureListener extends AbstractTestListener {
     }
   }
 
+  // For testing only.
+  String output() { return output; }
+  
   /**
    * Gets the output directory from the given context after the test class is instantiated and before any configuration 
    * method is called.

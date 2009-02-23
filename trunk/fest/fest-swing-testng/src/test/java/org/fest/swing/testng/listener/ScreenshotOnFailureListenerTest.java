@@ -15,23 +15,22 @@
  */
 package org.fest.swing.testng.listener;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.fest.assertions.ImageAssert.read;
-import static org.fest.reflect.core.Reflection.field;
-import static org.fest.util.Files.temporaryFolderPath;
-import static org.fest.util.Strings.concat;
-import static org.fest.util.Strings.join;
-
 import java.awt.Toolkit;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.fest.swing.annotation.GUITest;
 import org.testng.Reporter;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import org.fest.swing.annotation.GUITest;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.ImageAssert.read;
+import static org.fest.util.Files.temporaryFolderPath;
+import static org.fest.util.Strings.*;
 
 /**
  * Tests for <code>{@link ScreenshotOnFailureListener}</code>.
@@ -60,8 +59,7 @@ public class ScreenshotOnFailureListenerTest {
     String outputFolder = temporaryFolderPath();
     testContext.setOutputDirectory(outputFolder);
     listener.onStart(testContext);
-    String actualOutputFolder = field("output").ofType(String.class).in(listener).get();
-    assertThat(actualOutputFolder).isEqualTo(outputFolder);
+    assertThat(listener.output()).isEqualTo(outputFolder);
   }
 
   @Test(dependsOnMethods = "shouldGetOutputFolderOnStart")
