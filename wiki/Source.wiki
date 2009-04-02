@@ -14,3 +14,7 @@ http://svn.codehaus.org/fest/
 Committer access over HTTPS + WebDAV is suitable for all users (including behind firewalls), although tends to be slower than SVN+SSH access. 
 
 https://svn.codehaus.org/fest/
+
+==Old Google Code SVN repository==
+
+You can browse the old SVN repository (at Google Code) [http://code.google.com/p/fest/source/checkout here].
