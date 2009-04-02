@@ -1,7 +1,8 @@
+===New CodeHaus SVN repository===
+
 *Browse the source code*
 
 Explore the source code [http://fisheye.codehaus.org/browse/fest/ here].
-
 
 *Anonymous*
 
@@ -15,6 +16,8 @@ Committer access over HTTPS + WebDAV is suitable for all users (including behind
 
 https://svn.codehaus.org/fest/
 
-==Old Google Code SVN repository==
+<br/>
+
+===Old Google Code SVN repository===
 
 You can browse the old SVN repository (at Google Code) [http://code.google.com/p/fest/source/checkout here].
