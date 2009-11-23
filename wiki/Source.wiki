@@ -8,7 +8,7 @@ Explore the source code [http://fisheye.codehaus.org/browse/fest/ here].
 
 Non-committer access is allowed over normal non-SSL WebDAV.
 
-http://svn.codehaus.org/fest/
+http://svn.codehaus.org/fest/trunk
 
 *Committer*
 
