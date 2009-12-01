@@ -1,10 +1,10 @@
 =Blogs=
  * [http://alexruiz.developerblogs.com Alex Ruiz]
- * [http://steveonjava.com Stephen Chin]
  * [http://michaelhuettermann.blogspot.com Michael Hüttermann]
  * [http://www.mseedsoft.com Simeon Fitch] 
  * [http://tedyoung.blogsome.com Ted Young] 
  * [http://monkeyisland.pl Szczepan Faber] 
+ * [http://steveonjava.com Stephen Chin]
 
 =Twitter==
  * [http://twitter.com/alexRuiz Alex Ruiz]
