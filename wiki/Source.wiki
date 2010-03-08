@@ -2,7 +2,7 @@
 
 *Browse the source code*
 
-Explore the source code [http://fisheye.codehaus.org/browse/fest/ here].
+Explore the source code [http://fisheye2.atlassian.com/browse/fest/ here].
 
 *Anonymous*
 
