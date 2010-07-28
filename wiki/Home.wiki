@@ -2,7 +2,7 @@ Detailed information (e.g. documentation, test and code coverage reports, depend
 
 Alternatively, you can visit each module's home page: 
   * [http://fest.easytesting.org/swing Swing GUI Testing]
-  * [http://fest.easytesting.org/javafx JavaFX GUI Testing]
+  * [http://fest.easytesting.org/javafx JavaFX support]
   * [http://fest.easytesting.org/assert Flexible Assertions]
   * [http://fest.easytesting.org/reflect Fluent Reflection]
   * [http://fest.easytesting.org/mocks Mock Template]
