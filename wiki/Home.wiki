@@ -1,9 +1,4 @@
 #labels Featured
 Detailed information (e.g. documentation, test and code coverage reports, dependencies, etc.) can be found at the project's [http://fest.easytesting.org/ home page].
 
-Alternatively, you can visit each module's home page: 
-  * [http://fest.easytesting.org/swing Swing GUI Testing]
-  * [http://fest.easytesting.org/javafx JavaFX Support]
-  * [http://fest.easytesting.org/assert Flexible Assertions]
-  * [http://fest.easytesting.org/reflect Fluent Reflection]
-  * [http://fest.easytesting.org/mocks Mock Template]
+Alternatively, you can visit our [http://docs.codehaus.org/display/FEST/Home wiki] (or its [http://fest.codehaus.org HTML version].)
