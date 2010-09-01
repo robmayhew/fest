@@ -1,20 +1,8 @@
 ===New CodeHaus SVN repository===
 
-*Browse the source code*
-
-Explore the source code [http://fisheye2.atlassian.com/browse/fest/ here].
-
-*Anonymous*
-
-Non-committer access is allowed over normal non-SSL WebDAV.
-
-http://svn.codehaus.org/fest/trunk
-
-*Committer*
-
-Committer access over HTTPS + WebDAV is suitable for all users (including behind firewalls), although tends to be slower than SVN+SSH access. 
-
-https://svn.codehaus.org/fest/
+  * Explore the source code [http://fisheye2.atlassian.com/browse/fest/ here].
+  * Non-committer (anonymous) access is allowed over normal non-SSL WebDAV http://svn.codehaus.org/fest/trunk
+  * Committer access over HTTPS + WebDAV is suitable for all users (including behind firewalls), although tends to be slower than SVN+SSH access: https://svn.codehaus.org/fest/
 
 <br/>
 
