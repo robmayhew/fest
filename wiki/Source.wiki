@@ -1,3 +1,4 @@
+#labels Featured
 ===New github repository===
 
 Now we have a separate git repository per module in FEST:
@@ -7,7 +8,6 @@ Now we have a separate git repository per module in FEST:
    * Fluent Reflection: https://github.com/alexruiz/fest-reflect
    * Common Utilities: https://github.com/alexruiz/fest-util
 
-<br/>
 
 ===Old CodeHaus SVN repository===
 
@@ -15,7 +15,6 @@ Now we have a separate git repository per module in FEST:
   * Non-committer (anonymous) access is allowed over normal non-SSL WebDAV http://svn.codehaus.org/fest/trunk
   * Committer access over HTTPS + WebDAV is suitable for all users (including behind firewalls), although tends to be slower than SVN+SSH access: https://svn.codehaus.org/fest/
 
-<br/>
 
 ===Old Google Code SVN repository===
 
