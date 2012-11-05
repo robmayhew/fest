@@ -1,5 +1,5 @@
 #labels Featured
-===New github repository===
+===New github repositories===
 
 All the FEST modules have a separate git repository. Each repository contains its own documentation and issue tracker.
 
