@@ -1,4 +1,0 @@
-#labels Featured
-Detailed information (e.g. documentation, test and code coverage reports, dependencies, etc.) can be found at the project's [http://fest.easytesting.org/ home page].
-
-Alternatively, you can visit our [http://docs.codehaus.org/display/FEST/Home wiki] (or its [http://fest.codehaus.org HTML version].)
