@@ -1,21 +1,10 @@
 #labels Featured
 ===New github repository===
 
-Now we have a separate git repository per module in FEST:
+All the FEST modules have a separate git repository. Each repository contains its own documentation and issue tracker.
+
    * Swing Testing 1.x: https://github.com/alexruiz/fest-swing-1.x
    * Fluent Assertions 1.x: https://github.com/alexruiz/fest-assert-1.x
    * Fluent Assertions 2.x: https://github.com/alexruiz/fest-assert-2.x
    * Fluent Reflection: https://github.com/alexruiz/fest-reflect
    * Common Utilities: https://github.com/alexruiz/fest-util
-
-
-===Old CodeHaus SVN repository===
-
-  * Explore the source code [http://fisheye2.atlassian.com/browse/fest/ here].
-  * Non-committer (anonymous) access is allowed over normal non-SSL WebDAV http://svn.codehaus.org/fest/trunk
-  * Committer access over HTTPS + WebDAV is suitable for all users (including behind firewalls), although tends to be slower than SVN+SSH access: https://svn.codehaus.org/fest/
-
-
-===Old Google Code SVN repository===
-
-You can browse the old SVN repository (at Google Code) [http://code.google.com/p/fest/source/checkout here].
