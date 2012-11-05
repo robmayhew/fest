@@ -1,7 +1,7 @@
 #labels Featured
 ===New github repositories===
 
-All the FEST modules have a separate git repository. Each repository contains its own documentation and issue tracker.
+All the FEST modules have a separate github project. Each github project has its own documentation and issue tracker.
 
    * Swing Testing 1.x: https://github.com/alexruiz/fest-swing-1.x
    * Fluent Assertions 1.x: https://github.com/alexruiz/fest-assert-1.x
